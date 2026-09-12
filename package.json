@@ -16,7 +16,8 @@
     "test:behaviour": "node test/behaviour.test.js",
     "test:difficulty": "node test/difficulty.test.js",
     "test:live": "node test/live.test.js",
-    "ablate": "node test/ablation.js"
+    "ablate": "node test/ablation.js",
+    "test:remote": "node test/remote.test.js"
   },
   "keywords": [
     "pokemon",
@@ -32,5 +33,6 @@
     "@smogon/calc": "^0.11.0",
     "pokemon-showdown": "^0.11.11",
     "ws": "^8.21.3"
-  }
+  },
+  "homepage": "https://velvet-bunny-showdown.onrender.com"
 }

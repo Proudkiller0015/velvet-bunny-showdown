@@ -11,6 +11,14 @@ the teambuilder, team validation, replays, spectating — nothing is reimplement
 you ──► play.pokemonshowdown.com/~~your-server/ ──► this server ──► Velvet Bunny
 ```
 
+## Live
+
+**https://velvet-bunny-showdown.onrender.com** - open it and the server bounces you into
+the official Showdown client, already pointed at itself. Challenge **Velvet Bunny**.
+
+On Render's free tier the service sleeps after 15 minutes idle, so the first visit
+after a quiet spell takes about a minute to wake.
+
 ## What it does
 
 **Brings a legal team to anything.** Every format Showdown ships — 283 of them at
