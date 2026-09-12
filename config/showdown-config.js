@@ -68,6 +68,30 @@ if (!groupBySymbol('&')) {
 
 // Render and most hosts hand the port in through the environment.
 exports.port = Number(process.env.PORT) || 8000;
+
+/**
+ * The address players actually reach this server on.
+ *
+ * Needed because anything this server puts in chat is rendered inside the
+ * *client*, which is served from another domain entirely. A root-relative
+ * '/avatars/x.png' resolves against the client, where nothing of ours exists, so
+ * the images simply fail to load - which is exactly how the avatar list came out.
+ * The client has the same problem and solves it the same way, building an
+ * absolute URL from the server it is connected to.
+ *
+ * Render publishes the external address in the environment, so on the real host
+ * this configures itself; the fallback is only for running it locally.
+ */
+// The real host is the last resort rather than the first: if the environment
+// ever stops carrying the external address, falling back to localhost would
+// break the images on the live server - the very fault this exists to fix -
+// while falling back to the live host only means a local run shows the live
+// avatars. Set PS_PUBLIC_URL to point a local run at itself.
+exports.publicurl = String(
+	process.env.RENDER_EXTERNAL_URL ||
+	process.env.PS_PUBLIC_URL ||
+	'https://velvet-bunny-showdown.onrender.com'
+).replace(/\/+$/, '');
 exports.bindaddress = '0.0.0.0';
 // Battles run in the main process. Each battle subprocess costs ~80MB, which
 // on a 512MB free tier is the difference between booting and being OOM-killed.
@@ -228,7 +252,7 @@ exports.commands = {
 				}).join(', ')
 				: '<span style="color:#888">none</span>';
 			return `<tr><td style="padding:3px 8px">` +
-				`<img src="/avatars/${encodeURIComponent(file)}" width="40" height="40" ` +
+				`<img src="${Config.publicurl}/avatars/${encodeURIComponent(file)}" width="40" height="40" ` +
 				`style="image-rendering:pixelated;vertical-align:middle" alt=""></td>` +
 				`<td style="padding:3px 8px"><code>${esc(file)}</code></td>` +
 				`<td style="padding:3px 8px">${names}</td></tr>`;
