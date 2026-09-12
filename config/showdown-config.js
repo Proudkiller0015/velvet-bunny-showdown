@@ -53,6 +53,11 @@ exports.noipchecks = true;
  */
 exports.startuphook = function () {
 	const botId = toID(process.env.PS_BOT_NAME || 'Velvet Bunny');
+	// The people who run the place. Promoted the same way as the bot and for the
+	// same reason: with no login server, anyone listed in usergroups.csv counts
+	// as trusted and is then refused a guest login entirely.
+	const owners = (process.env.PS_OWNERS || 'Unseen Face,SlimeQueenSamantha')
+		.split(',').map(n => toID(n)).filter(n => n);
 	setInterval(() => {
 		const bot = Users.get(botId);
 		// Admin, not just bot rank: posting the lobby format picker as a room
@@ -66,7 +71,12 @@ exports.startuphook = function () {
 		// would leave the difficulty picker unreachable - so on this server every
 		// guest counts as autoconfirmed.
 		for (const user of Users.users.values()) {
-			if (user.connected && !user.autoconfirmed) user.autoconfirmed = user.id;
+			if (!user.connected) continue;
+			if (!user.autoconfirmed) user.autoconfirmed = user.id;
+			if (owners.includes(user.id) && user.tempGroup !== '~') {
+				user.setGroup('~');
+				console.log(`[config] promoted ${user.id} to owner`);
+			}
 		}
 	}, 2000).unref();
 };

@@ -65,9 +65,26 @@ function startServer() {
 		console.log('[boot] PS_NO_BOT=1, not starting the bot');
 		return;
 	}
+	const url = `ws://${HOST}:${PORT}/showdown/websocket`;
 	const { ShowdownBot } = require('./bot');
-	const bot = new ShowdownBot({ url: `ws://${HOST}:${PORT}/showdown/websocket` });
+	const bot = new ShowdownBot({ url });
 	bot.connect();
+
+	const { describeBrain } = require('./brain');
+	console.log(`[boot] ${describeBrain()}`);
+
+	// Queues so that the client's own Battle! button finds the bot, and the
+	// result counts on a real ladder. One connection per format, because an
+	// account can only queue for one at a time.
+	const { startLadderBots } = require('./ladder');
+	const ladder = startLadderBots({
+		url,
+		baseName: bot.name,
+		builder: bot.builder,
+		difficulty: bot.defaultDifficulty,
+		log: (...a) => console.log('[ladder]', ...a),
+	});
+	console.log(`[boot] ${ladder.length} ladder queue(s) starting`);
 })().catch(err => {
 	console.error('[boot] failed:', err);
 	process.exit(1);

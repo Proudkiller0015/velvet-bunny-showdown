@@ -37,16 +37,22 @@ fs.writeFileSync(usergroups, '');
 console.log(`usergroups -> ${usergroups} (empty; the bot is promoted at runtime)`);
 
 // ---------------------------------------------------------------- the client
-// Serve our own build of the Showdown client from this server, so players open
-// the server's own URL and land straight in it - with the Challenge-the-bot
-// panel on the main menu - instead of being bounced to a client hosted
-// elsewhere. Showdown's static server serves ./server/static from the package
-// root, so the build goes there, replacing the stock redirect page.
+// Our own build goes at /play/, NOT at the root.
+//
+// The root keeps Showdown's stock page, which bounces players into the official
+// client. That client can sign them in with their real Pokemon Showdown account
+// and shows the real news; ours cannot, because signing in means talking to
+// Smogon's login server, and their cross-domain bridge only answers for hosts
+// they have whitelisted. Ours is worth keeping for the main-menu bot panel, but
+// it is the alternative rather than the default.
+//
+// The bot menu itself does not depend on either: it is published as the lobby's
+// room introduction, which is server-side HTML and shows up in any client.
 const clientSrc = path.join(__dirname, '..', 'client');
-const clientDest = path.join(pkgRoot, 'server', 'static');
+const clientDest = path.join(pkgRoot, 'server', 'static', 'play');
 if (fs.existsSync(clientSrc)) {
 	fs.cpSync(clientSrc, clientDest, { recursive: true, force: true });
-	console.log(`client -> ${clientDest}`);
+	console.log(`client -> ${clientDest} (served at /play/)`);
 } else {
-	console.log('no client/ directory; leaving the stock redirect page in place');
+	console.log('no client/ directory; only the stock page will be served');
 }
