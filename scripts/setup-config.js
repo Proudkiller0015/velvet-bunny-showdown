@@ -48,6 +48,18 @@ console.log(`usergroups -> ${usergroups} (empty; the bot is promoted at runtime)
 //
 // The bot menu itself does not depend on either: it is published as the lobby's
 // room introduction, which is server-side HTML and shows up in any client.
+// An earlier version of this script copied the client over the package's own
+// server/static, overwriting its index.html. node_modules survives between
+// deploys, so that overwrite outlived the change that stopped doing it and the
+// root kept serving our client - which cannot sign anyone in. Restore the stock
+// page from our copy every boot, rather than trusting the package to be intact.
+const stockPage = path.join(__dirname, '..', 'server-static', 'index.html');
+if (fs.existsSync(stockPage)) {
+	fs.mkdirSync(path.join(pkgRoot, 'server', 'static'), { recursive: true });
+	fs.copyFileSync(stockPage, path.join(pkgRoot, 'server', 'static', 'index.html'));
+	console.log('root page -> restored to the stock redirect');
+}
+
 const clientSrc = path.join(__dirname, '..', 'client');
 const clientDest = path.join(pkgRoot, 'server', 'static', 'play');
 if (fs.existsSync(clientSrc)) {
