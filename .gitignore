@@ -5,3 +5,6 @@ databases/
 *.log
 .env
 .DS_Store
+
+# The marathon stop signal is a local thing, not a result.
+data/marathon/STOP
