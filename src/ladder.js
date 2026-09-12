@@ -25,8 +25,7 @@ const { BattleState } = require('./battle');
 // worth exactly the same. Kept to one format by default so the four ratings are
 // directly comparable, which also makes them a real measurement of the bots
 // against each other.
-const DEFAULT_FORMATS = ['gen9randombattle'];
-const DEFAULT_DIFFICULTIES = ['easy', 'normal', 'hard', 'champion', 'stockfish'];
+const { DEFAULT_FORMATS, DEFAULT_DIFFICULTIES } = require('./ladder-defaults');
 
 // Shared with the server's matchmaking rules, which have to know which accounts
 // are bots. See src/queue-names.js for why the names are as short as they are.

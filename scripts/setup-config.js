@@ -113,10 +113,18 @@ if (fs.existsSync(avatarSrc)) {
 // picture. The avatar directory is shared by the whole server, so a file called
 // milim.png is claimed the moment someone named Milim turns up wanting one of
 // their own - and there is only one of each name to go round.
-const ladderNames = (process.env.PS_LADDER_DIFFICULTIES || 'easy,normal,hard,champion')
-	.split(',').map(d => d.trim()).filter(d => d);   // mirrors DEFAULT_DIFFICULTIES in src/ladder.js
+// Straight from the module the queues are named by, rather than worked out again
+// here. Guessing produced "Velvet Bunny Easy" long after the queues had been
+// renamed to fit Showdown's eighteen-character limit, so the avatar was granted
+// to four accounts that do not exist and to none of the ones that do - and every
+// queue was quietly refused its own face.
+const { queueName, botAccountIds, toId } = require('../src/queue-names');
+const { DEFAULT_DIFFICULTIES, DEFAULT_FORMATS } = require('../src/ladder-defaults');
+const ladderNames = (process.env.PS_LADDER_DIFFICULTIES || DEFAULT_DIFFICULTIES.join(','))
+	.split(',').map(d => d.trim()).filter(d => d);
+const ladderFormats = (process.env.PS_LADDER_FORMATS || DEFAULT_FORMATS.join(','))
+	.split(',').map(f => f.trim()).filter(f => f);
 const botBase = process.env.PS_BOT_NAME || 'Velvet Bunny';
-const toId = s => String(s).toLowerCase().replace(/[^a-z0-9]/g, '');
 
 const avatarRights = {
 	[toId(botBase)]: ['bunny.png'],
@@ -132,7 +140,9 @@ const avatarRights = {
 	// claimed out from under you.
 };
 // Every rung of the ladder wears the same face - they are all the same bot.
-for (const d of ladderNames) avatarRights[toId(`${botBase} ${d}`)] = ['bunny.png'];
+const botIds = botAccountIds(botBase, ladderNames, ladderFormats);
+for (const id of botIds) avatarRights[id] = ['bunny.png'];
+void queueName;
 
 // Merged, not overwritten. Choosing an avatar with /avatar writes it back to
 // this file as that account's default, and replacing the file wholesale threw
@@ -174,6 +184,19 @@ for (const [userid, allowed] of Object.entries(avatarRights)) {
 	existing.allowed = kept.length ? kept : [allowed[0] || null];
 	// A default pointing at a file that no longer ships would apply nothing.
 	if (existing.default && !onDisk.has(existing.default)) delete existing.default;
+}
+// Drop rights belonging to a bot account that no longer exists. Only entries
+// whose entire entitlement is the bot's own avatar and which nobody has chosen
+// anything on - a real person is never in that position, so this cannot take
+// somebody's avatar away while clearing out four renamed queues.
+for (const [userid, entry] of Object.entries(avatarsJson)) {
+	if (botIds.has(userid)) continue;
+	const allowed = (entry && entry.allowed) || [];
+	const onlyBotFile = allowed.length && allowed.every(f => !f || f === 'bunny.png');
+	if (onlyBotFile && !entry.default) {
+		delete avatarsJson[userid];
+		console.log(`avatar rights -> forgot ${userid}, which is not a queue any more`);
+	}
 }
 fs.writeFileSync(avatarsPath, JSON.stringify(avatarsJson, null, '\t'));
 console.log(`avatar rights -> ${Object.keys(avatarsJson).length} account(s)`);
