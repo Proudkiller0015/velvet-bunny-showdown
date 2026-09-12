@@ -82,3 +82,32 @@ if (fs.existsSync(avatarSrc)) {
 	}
 	console.log(`avatars -> ${avatarDest} (${fs.readdirSync(avatarSrc).join(', ')})`);
 }
+
+// Who is allowed to wear what.
+//
+// Showdown used to take this from Config.customavatars. It now keeps it in
+// config/avatars.json and crash-logs on every single boot while the old key is
+// still present, so the file is written here directly. It has to be written on
+// every boot regardless: this host throws its disk away when it restarts.
+//
+// The first entry is what the account is given automatically when it logs in.
+// A null in that slot means the avatar is only PERMITTED - the player switches
+// it on themselves with /avatar <file>, which is the difference between giving
+// someone an avatar and putting one on them.
+const ladderNames = (process.env.PS_LADDER_DIFFICULTIES || 'easy,normal,hard,champion')
+	.split(',').map(d => d.trim()).filter(d => d);   // mirrors DEFAULT_DIFFICULTIES in src/ladder.js
+const botBase = process.env.PS_BOT_NAME || 'Velvet Bunny';
+const toId = s => String(s).toLowerCase().replace(/[^a-z0-9]/g, '');
+
+const avatarRights = {
+	[toId(botBase)]: ['bunny.png'],
+	slimequeensamantha: ['queen.png'],
+	dana3166: [null, 'dana.png'],
+};
+// Every rung of the ladder wears the same face - they are all the same bot.
+for (const d of ladderNames) avatarRights[toId(`${botBase} ${d}`)] = ['bunny.png'];
+
+const avatarsJson = {};
+for (const [userid, allowed] of Object.entries(avatarRights)) avatarsJson[userid] = { allowed };
+fs.writeFileSync(path.join(pkgRoot, 'config', 'avatars.json'), JSON.stringify(avatarsJson, null, '\t'));
+console.log(`avatar rights -> ${Object.keys(avatarsJson).length} account(s)`);

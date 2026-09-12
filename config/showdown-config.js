@@ -38,14 +38,11 @@ exports.repl = false;
 exports.backdoor = false;
 exports.watchconfig = false;
 
-// Custom avatars. The file lives in avatars/ here and is copied into the
-// package's config/avatars before boot; the client asks this server for
-// /avatars/<file>, so the name has to keep its extension.
-// Permitted, not applied: the player sets it themselves with /avatar <file>.
-exports.customavatars = {
-	slimequeensamantha: 'queen.png',
-	dana3166: 'dana.png',
-};
+// Custom avatars are NOT configured here. Showdown reads config/avatars.json
+// now and crash-logs on every boot if `customavatars` is still set, so the
+// rights are written straight to that file by scripts/setup-config.js. The
+// images live in avatars/ here and are copied into the package before boot;
+// the client fetches them from this server at /avatars/<file>.
 
 // One bot answering every challenge: rate limits only get in its way.
 exports.nothrottle = true;
