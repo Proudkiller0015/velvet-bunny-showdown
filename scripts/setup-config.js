@@ -124,6 +124,8 @@ const avatarRights = {
 	// Offered rather than applied, at her own request, so she picks it herself.
 	dana3166: [null, 'dana.png'],
 	keikosama: ['keiko-milim.png'],
+	// milim.png is built and served but deliberately granted to nobody yet - the
+	// account it is for does not exist. Add her here once she has a username.
 };
 // Every rung of the ladder wears the same face - they are all the same bot.
 for (const d of ladderNames) avatarRights[toId(`${botBase} ${d}`)] = ['bunny.png'];
