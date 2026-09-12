@@ -18,6 +18,7 @@ const DIFFICULTY_BLURB = {
 	normal: 'Clicks the strongest attack. No tricks.',
 	hard: 'Plays the matchup: switches, sets up, values its win condition.',
 	champion: 'As above, and it counts the speed tiers before it commits.',
+	stockfish: 'EXPERIMENTAL - searches its options against your likely replies. Strength comes from self-play training, so it will change over time.',
 };
 
 class ShowdownBot {
@@ -218,9 +219,10 @@ class ShowdownBot {
 	 */
 	lobbyPanelHTML() {
 		const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+		const label = d => `${d[0].toUpperCase()}${d.slice(1)}` + (d === 'stockfish' ? ' *' : '');
 		const diffButtons = BattleAI.difficulties().map(d =>
 			`<button class="button" name="send" value="/msg ${esc(this.name)}, difficulty ${d}">` +
-			`${d[0].toUpperCase()}${d.slice(1)}</button>`).join(' ');
+			`${esc(label(d))}</button>`).join(' ');
 
 		// Dex order matches the order the client lists formats in, so the sections
 		// come out in the order players already expect to see them.

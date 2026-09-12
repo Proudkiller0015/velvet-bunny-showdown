@@ -70,7 +70,9 @@ Config.defaultLanguage = 'en';
 // The main-menu panel. Editing this file is enough - no rebuild needed.
 Config.botChallenge = {
 	name: 'Velvet Bunny',
-	difficulties: ['easy', 'normal', 'hard', 'champion'],
+	difficulties: ['easy', 'normal', 'hard', 'champion', 'stockfish'],
+	// Rungs listed here are marked as experimental in the panel.
+	experimental: ['stockfish'],
 	defaultFormat: 'gen9randombattle',
 };
 /*** end Velvet Bunny ***/

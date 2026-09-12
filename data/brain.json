@@ -1,0 +1,20 @@
+{
+  "weights": {
+    "ourHp": 1.0346756618690491,
+    "theirHp": 1.0152902418804168,
+    "koBonus": 55.839992537498475,
+    "faintPenalty": 67.70076659088134,
+    "switchCost": 12.174226363334656,
+    "pessimism": 0.6751208471670151,
+    "valueWeight": 0.3081830324168205,
+    "chipDiscount": 0.780753997701168,
+    "searchWeight": 0.43369982335567475
+  },
+  "trained": true,
+  "games": 270,
+  "generation": 1,
+  "winRateVsBaseline": 60,
+  "trainedOn": "gen9ou",
+  "baselineOpponent": "champion",
+  "updatedAt": "2026-09-12T11:06:40.954Z"
+}

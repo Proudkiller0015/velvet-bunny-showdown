@@ -21,6 +21,8 @@
 const { Generations } = require('@pkmn/data');
 const { Dex: PkmnDex } = require('@pkmn/dex');
 const calc = require('@smogon/calc');
+const { TurnSearch, DEFAULT_WEIGHTS } = require('./search');
+const { loadBrain } = require('./brain');
 
 const GENS = new Generations(PkmnDex);
 
@@ -73,6 +75,10 @@ const DIFFICULTIES = {
 	normal:   { blunder: 0.10, greedy: true,  noise: 20, switching: false, tempo: false, predict: false, tera: true,  switchMargin: 999 },
 	hard:     { blunder: 0,    greedy: false, noise: 6,  switching: true,  tempo: true,  predict: false, tera: true,  switchMargin: 35 },
 	champion: { blunder: 0,    greedy: false, noise: 0,  switching: true,  tempo: true,  predict: true,  tera: true,  switchMargin: 25 },
+	// Experimental. Everything champion does, plus a one-turn search over our
+	// options against their likely replies, weighted by numbers the trainer
+	// tuned from self-play rather than by hand.
+	stockfish: { blunder: 0,   greedy: false, noise: 0,  switching: true,  tempo: true,  predict: true,  tera: true,  switchMargin: 25, search: true },
 };
 const DEFAULT_DIFFICULTY = 'hard';
 
@@ -84,6 +90,9 @@ function toName(id, kind) {
 class BattleAI {
 	constructor(options = {}) {
 		this.log = options.log || (() => {});
+		// Weights the trainer produced, if there are any; otherwise the defaults.
+		this.brain = options.brain || loadBrain();
+		this.search = new TurnSearch(this, this.brain.weights);
 		this.setDifficulty(options.difficulty);
 	}
 
@@ -603,6 +612,7 @@ class BattleAI {
 		}
 
 		let best = null;
+		const ranked = [];
 		for (const move of legal) {
 			const name = move.move || toName(move.id, 'moves');
 			const data = PkmnDex.forGen(gen.num).moves.get(name);
@@ -632,6 +642,25 @@ class BattleAI {
 			}
 			score += this.jitter();
 			if (!best || score > best.score) best = { score, n: move.n, target, name };
+			// Keep every option around; the search re-ranks them by what the
+			// opponent can do about it, which the heuristic score cannot see.
+			ranked.push({
+				kind: 'move', n: move.n, target, name, score,
+				damage: data && data.category !== 'Status'
+					? Math.max(0, ...foes.map(f => this.damagePct(gen, me, this.foePokemon(gen, f), name, field)))
+					: 0,
+				priority: data ? (data.priority || 0) : 0,
+				heuristic: data && data.category === 'Status' ? score : 0,
+			});
+		}
+
+		// Search: play each of our options out against each of their likely
+		// replies and score where the turn ends, rather than scoring the move
+		// against a position the opponent is assumed not to touch.
+		if (this.cfg.search && ranked.length) {
+			const shortlist = ranked.slice().sort((a, b) => b.score - a.score).slice(0, 5);
+			const searched = this.search.choose(gen, active, entry, request, state, field, shortlist, incoming);
+			if (searched) best = { score: searched.score, n: searched.n, target: searched.target, name: searched.name };
 		}
 
 		// Would anything on the bench do better than what we are about to do here?

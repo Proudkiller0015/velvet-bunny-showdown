@@ -63,7 +63,9 @@ Config.server = Config.defaultserver;
 // The main-menu bot panel. Editing this file is enough to change the list.
 Config.botChallenge = {
 	name: 'Velvet Bunny',
-	difficulties: ['easy', 'normal', 'hard', 'champion'],
+	difficulties: ['easy', 'normal', 'hard', 'champion', 'stockfish'],
+	// Shown after the name of any rung listed here.
+	experimental: ['stockfish'],
 	formats: [
 		{ id: 'gen9randombattle', name: 'Random Battle', instant: true },
 		{ id: 'gen9ou', name: 'OU' },
