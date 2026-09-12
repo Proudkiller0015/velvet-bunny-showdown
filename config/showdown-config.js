@@ -275,6 +275,30 @@ function fixMatchmaking(botIds) {
 	console.log('[config] matchmaking now goes by rating, and bots do not play each other');
 }
 
+/**
+ * Put someone's avatar on them.
+ *
+ * `getDefault` returns the avatar they picked last if they have picked one and
+ * the one they were granted otherwise, so re-applying it is both correct and
+ * idempotent - it will not fight a choice, and it costs nothing on the rounds
+ * where nothing has changed.
+ */
+function applyAvatar(user) {
+	const avatars = Users.Avatars;
+	if (!avatars || typeof avatars.getDefault !== 'function') return;
+	let want;
+	try { want = avatars.getDefault(user.id); } catch (e) { return; }
+	if (!want || user.avatar === want) return;
+	user.avatar = want;
+	try {
+		// Two different audiences. updateIdentity refreshes how the rooms see them;
+		// update() sends the frame their own client reads its avatar out of, without
+		// which everyone else sees the new one and they go on looking at the old.
+		user.updateIdentity();
+		user.update();
+	} catch (e) { /* they are on their way out */ }
+}
+
 exports.startuphook = function () {
 	const botId = toID(process.env.PS_BOT_NAME || 'Velvet Bunny');
 	// The people who run the place. Promoted the same way as the bot and for the
@@ -314,7 +338,16 @@ exports.startuphook = function () {
 		for (const user of Users.users.values()) {
 			if (!user.connected) continue;
 			if (!user.autoconfirmed) user.autoconfirmed = user.id;
-			if (botIds.has(user.id)) continue;   // handled above
+			// The avatar someone has been given, actually put on them.
+			//
+			// Showdown applies it in handleLogin, which only runs for registered
+			// accounts - and with no login server every account here is a guest, so
+			// it never ran for anyone. Being granted an avatar meant being allowed to
+			// go and ask for it, which is not what granting one is supposed to mean.
+			// What goes on is whatever they picked, falling back to what they were
+			// given, so this puts an avatar on and never takes one back off.
+			applyAvatar(user);
+			if (botIds.has(user.id)) continue;   // ranks for the bot are handled above
 			if (owners.includes(user.id) && user.tempGroup !== '~') {
 				user.setGroup('~');
 				console.log(`[config] ${user.id} is now an owner`);
