@@ -90,10 +90,16 @@ if (fs.existsSync(avatarSrc)) {
 // still present, so the file is written here directly. It has to be written on
 // every boot regardless: this host throws its disk away when it restarts.
 //
-// The first entry is what the account is given automatically when it logs in.
-// A null in that slot means the avatar is only PERMITTED - the player switches
-// it on themselves with /avatar <file>, which is the difference between giving
-// someone an avatar and putting one on them.
+// Each account gets a list, because people collect these. The first entry is
+// what they are given on login and the rest are theirs to switch to with
+// /avatar <file>; a null in that first slot means every avatar in the list is
+// only PERMITTED, which is the difference between giving someone an avatar and
+// putting one on them.
+//
+// Files are named for the account that owns them, not for the character in the
+// picture. The avatar directory is shared by the whole server, so a file called
+// milim.png is claimed the moment someone named Milim turns up wanting one of
+// their own - and there is only one of each name to go round.
 const ladderNames = (process.env.PS_LADDER_DIFFICULTIES || 'easy,normal,hard,champion')
 	.split(',').map(d => d.trim()).filter(d => d);   // mirrors DEFAULT_DIFFICULTIES in src/ladder.js
 const botBase = process.env.PS_BOT_NAME || 'Velvet Bunny';
@@ -102,8 +108,9 @@ const toId = s => String(s).toLowerCase().replace(/[^a-z0-9]/g, '');
 const avatarRights = {
 	[toId(botBase)]: ['bunny.png'],
 	slimequeensamantha: ['queen.png'],
+	// Offered rather than applied, at her own request, so she picks it herself.
 	dana3166: [null, 'dana.png'],
-	keikosama: [null, 'keiko.png'],
+	keikosama: ['keiko-milim.png'],
 };
 // Every rung of the ladder wears the same face - they are all the same bot.
 for (const d of ladderNames) avatarRights[toId(`${botBase} ${d}`)] = ['bunny.png'];
@@ -113,6 +120,10 @@ for (const d of ladderNames) avatarRights[toId(`${botBase} ${d}`)] = ['bunny.png
 // that away - so anyone whose avatar is offered rather than applied had to pick
 // it again after every single restart.
 const avatarsPath = path.join(pkgRoot, 'config', 'avatars.json');
+// What actually exists to be worn. An avatar that has been renamed or removed
+// lingers in everyone's list otherwise, and a stale name in the applied slot
+// means logging in asks the server for a file that is not there.
+const onDisk = new Set(fs.existsSync(avatarSrc) ? fs.readdirSync(avatarSrc) : []);
 let avatarsJson = {};
 try { avatarsJson = JSON.parse(fs.readFileSync(avatarsPath, 'utf8')) || {}; } catch (e) { avatarsJson = {}; }
 for (const [userid, allowed] of Object.entries(avatarRights)) {
@@ -124,14 +135,26 @@ for (const [userid, allowed] of Object.entries(avatarRights)) {
 	// Keep whatever they have chosen, and make sure everything they are entitled
 	// to is still in the list. Index 0 is the one applied on login, so it is only
 	// filled in when it is empty - that is what keeps "offered" from becoming
-	// "imposed" behind their back.
+	// "imposed" behind their back, and what stops a restart replacing the one they
+	// picked with the one they were given.
 	const merged = existing.allowed.slice();
 	if (!merged.length) merged.push(null);
 	if (allowed[0] && !merged[0]) merged[0] = allowed[0];
 	for (const file of allowed) {
 		if (file && !merged.includes(file)) merged.push(file);
 	}
-	existing.allowed = merged;
+	// Filling the applied slot from the list leaves the same file in it twice,
+	// and anything that has since been renamed away should not stay on the list.
+	const seen = new Set();
+	const kept = merged.filter((file, i) => {
+		if (!file) return i === 0;          // only the first slot may be empty
+		if (seen.has(file) || !onDisk.has(file)) return false;
+		seen.add(file);
+		return true;
+	});
+	existing.allowed = kept.length ? kept : [allowed[0] || null];
+	// A default pointing at a file that no longer ships would apply nothing.
+	if (existing.default && !onDisk.has(existing.default)) delete existing.default;
 }
 fs.writeFileSync(avatarsPath, JSON.stringify(avatarsJson, null, '\t'));
 console.log(`avatar rights -> ${Object.keys(avatarsJson).length} account(s)`);
