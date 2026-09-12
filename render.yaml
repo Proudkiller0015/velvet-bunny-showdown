@@ -1,0 +1,25 @@
+# Render blueprint: one web service running the Showdown server and the bot.
+#
+# Render sets PORT; the server binds it and the bot connects back over
+# localhost, so the whole thing is a single process tree on a single port.
+services:
+  - type: web
+    name: velvet-bunny-showdown
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /
+    envVars:
+      - key: NODE_VERSION
+        value: "20"
+      - key: PS_BOT_NAME
+        value: Velvet Bunny
+      - key: PS_DIFFICULTY
+        value: hard
+      - key: PS_SERVERID
+        value: velvetbunny
+      # Smogon set data is cached here between requests. Render's free disk is
+      # ephemeral, which is fine: a cold cache just re-fetches on first use.
+      - key: PS_CACHE_DIR
+        value: /tmp/ps-cache

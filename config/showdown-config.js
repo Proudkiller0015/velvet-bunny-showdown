@@ -1,0 +1,67 @@
+'use strict';
+/**
+ * Pokemon Showdown server configuration for the Velvet Bunny battle server.
+ *
+ * This file is copied into node_modules/pokemon-showdown/config/config.js by
+ * scripts/setup-config.js before the server boots, because that is the only
+ * place Showdown looks. Edit it here - the copy is generated and disposable.
+ *
+ * It starts from Showdown's own config-example so that everything we do not
+ * care about (group lists, room defaults, chat filters) keeps working, and then
+ * changes only what this server actually needs.
+ */
+
+Object.assign(exports, require('./config-example.js'));
+
+// Render and most hosts hand the port in through the environment.
+exports.port = Number(process.env.PORT) || 8000;
+exports.bindaddress = '0.0.0.0';
+exports.subprocesses = 1;
+
+// No login server: anyone can pick a name and play immediately. This is a
+// casual battle server, not a ladder, and there are no accounts to protect.
+exports.noguestsecurity = true;
+exports.loginserver = '';
+exports.serverid = process.env.PS_SERVERID || 'velvetbunny';
+exports.servertoken = '';
+
+// Quieter, and nothing written that a free host would only throw away.
+exports.loglevel = 2;
+exports.logchat = false;
+exports.logchallenges = false;
+exports.loguserstats = 0;
+exports.crashguardemail = null;
+exports.repl = false;
+exports.backdoor = false;
+exports.watchconfig = false;
+
+// One bot answering every challenge: rate limits only get in its way.
+exports.nothrottle = true;
+exports.noipchecks = true;
+
+/**
+ * Give the bot the rank it needs to post the difficulty picker as an HTML box.
+ *
+ * It cannot simply be listed in usergroups.csv: with no login server the bot
+ * signs in as a guest, and guest login is refused for any account the server
+ * considers trusted - which being in usergroups.csv would make it. Promoting it
+ * after it connects sidesteps that, and because the account is unregistered
+ * setGroup does not write the rank back to disk, so the next login still works.
+ */
+exports.startuphook = function () {
+	const botId = toID(process.env.PS_BOT_NAME || 'Velvet Bunny');
+	setInterval(() => {
+		const bot = Users.get(botId);
+		if (bot && bot.connected && bot.tempGroup !== '*') {
+			bot.setGroup('*');
+			console.log(`[config] promoted ${botId} to bot rank`);
+		}
+		// Showdown blocks private messages for anyone who is neither registered
+		// nor autoconfirmed. With no login server nobody can ever be either, which
+		// would leave the difficulty picker unreachable - so on this server every
+		// guest counts as autoconfirmed.
+		for (const user of Users.users.values()) {
+			if (user.connected && !user.autoconfirmed) user.autoconfirmed = user.id;
+		}
+	}, 2000).unref();
+};

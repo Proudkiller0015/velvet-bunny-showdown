@@ -1,0 +1,148 @@
+'use strict';
+/**
+ * Behaviour tests: the specific judgements the AI is supposed to make.
+ * Win rate alone cannot tell us whether it set up for the right reason.
+ */
+
+const { BattleAI } = require('../src/ai');
+const { BattleState } = require('../src/battle');
+
+let pass = 0, fail = 0;
+function check(name, got, want) {
+	const ok = typeof want === 'function' ? want(got) : got === want;
+	if (ok) { pass++; console.log(`  ok   ${name}`); }
+	else { fail++; console.log(`  FAIL ${name} -> got ${JSON.stringify(got)}`); }
+}
+
+/** Build a request/state pair for a one-on-one situation. */
+function scenario({ me, myMoves, myItem, foe, foeMoves = [], foeHp = 100, trickRoom = false, bench = [], myHp = 100, myStatus = '' }) {
+	const state = new BattleState('test');
+	state.myPlayer = 'p2';
+	state.gen = 9;
+	state.opponent.a = {
+		species: foe, level: 100, hp: foeHp, maxhp: 100, status: '', fainted: false,
+		boosts: {}, moves: new Set(foeMoves), item: null, ability: null, tera: null,
+	};
+	state.mine.a = { species: me, level: 100, hp: myHp, maxhp: 100, status: myStatus, fainted: false, boosts: {}, moves: new Set(), tera: null };
+	if (trickRoom) state.pseudo['Trick Room'] = true;
+
+	const active = [{ moves: myMoves.map(m => ({ move: m, id: m.toLowerCase().replace(/\W/g, ''), pp: 16, maxpp: 16, target: 'normal', disabled: false })) }];
+	const side = {
+		name: 'Bot', id: 'p2',
+		pokemon: [
+			{
+				ident: `p2a: ${me}`, details: `${me}, M`, condition: `${myHp}/100${myStatus ? ' ' + myStatus : ''}`,
+				active: true, moves: myMoves.map(m => m.toLowerCase().replace(/\W/g, '')),
+				baseAbility: '', ability: '', item: myItem || '', stats: { atk: 200, def: 200, spa: 200, spd: 200, spe: 200 },
+			},
+			...bench,
+		],
+	};
+	return { request: { active, side, rqid: 1 }, state };
+}
+
+function benchMon(species, moves, opts = {}) {
+	return {
+		ident: `p2b: ${species}`, details: `${species}, M`,
+		condition: opts.condition || '100/100',
+		active: false, moves: moves.map(m => m.toLowerCase().replace(/\W/g, '')),
+		baseAbility: '', ability: '', item: opts.item || '',
+		stats: opts.stats || { atk: 200, def: 200, spa: 200, spd: 200, spe: 200 },
+	};
+}
+
+console.log('\n--- setup gating ---');
+{
+	const ai = new BattleAI({ difficulty: 'champion' });
+	// The rule the setup logic exists to encode: a foe that is about to run away
+	// makes the boost turn free, so pressure must raise the value of setting up.
+	// (Asserted on the score rather than the final click: against a specific foe
+	// the boost and the attack can legitimately land within a point of each other,
+	// and which one wins there is not the behaviour under test.)
+	const gen = ai.gen(9);
+	const field = new (require('@smogon/calc').Field)({});
+	const a = scenario({ me: 'Gyarados', myMoves: ['Dragon Dance', 'Waterfall', 'Ice Fang'], foe: 'Heatran', foeMoves: ['Magma Storm'] });
+	const meMon = ai.myPokemon(gen, a.request.side.pokemon[0], a.state);
+	ai.myMoveNames = ['Dragon Dance', 'Waterfall', 'Ice Fang'];
+
+	const scaredFoe = [{ species: 'Heatran', level: 100, hp: 25, maxhp: 100, status: '', boosts: {}, moves: new Set(['Magma Storm']) }];
+	const happyFoe = [{ species: 'Raging Bolt', level: 100, hp: 100, maxhp: 100, status: '', boosts: {}, moves: new Set(['Thunderclap', 'Draco Meteor']) }];
+	const ctxFor = foes => ({ foes, field, entry: a.request.side.pokemon[0] });
+
+	check('pressure makes setting up more attractive',
+		ai.switchPressure(gen, meMon, scaredFoe, field) > ai.switchPressure(gen, meMon, happyFoe, field), true);
+	const scoreScared = ai.statusScore(gen, 'Dragon Dance', meMon, ai.foePokemon(gen, scaredFoe[0]), a.state, 15, ctxFor(scaredFoe));
+	const scoreHappy = ai.statusScore(gen, 'Dragon Dance', meMon, ai.foePokemon(gen, happyFoe[0]), a.state, 95, ctxFor(happyFoe));
+	check('setup scores higher vs a foe that must leave', scoreScared > scoreHappy, true);
+	check('setup is rejected outright in front of a lethal, comfortable foe', scoreHappy < 0, true);
+
+	// ...but a kill on the board beats any amount of setup.
+	const k = scenario({ me: 'Gyarados', myMoves: ['Dragon Dance', 'Waterfall', 'Earthquake'], foe: 'Charizard', foeMoves: ['Flamethrower'] });
+	check('takes the KO instead of setting up', ai.decide(k.request, k.state), c => /move 2\b/.test(c));
+
+	// In front of something that threatens to OHKO and is happy to stay.
+	const b = scenario({ me: 'Gyarados', myMoves: ['Dragon Dance', 'Waterfall', 'Earthquake'], foe: 'Raging Bolt', foeMoves: ['Thunderclap', 'Draco Meteor'], myHp: 35 });
+	check('does not set up into a lethal attacker', ai.decide(b.request, b.state), c => !/move 1\b/.test(c));
+}
+
+console.log('\n--- tempo / win-condition value ---');
+{
+	const ai = new BattleAI({ difficulty: 'champion' });
+	const gen = ai.gen(9);
+	const s = scenario({ me: 'Blissey', myMoves: ['Seismic Toss'], foe: 'Great Tusk' });
+
+	const scarfCleaner = benchMon('Dragapult', ['Dragon Darts', 'U-turn'], { item: 'choicescarf', condition: '1/100', stats: { atk: 220, def: 100, spa: 220, spd: 100, spe: 350 } });
+	const spentWall = benchMon('Torkoal', ['Lava Plume'], { condition: '100/100', stats: { atk: 90, def: 200, spa: 90, spd: 90, spe: 20 } });
+	s.request.side.pokemon.push(scarfCleaner, spentWall);
+
+	const cleanerValue = ai.monValue(gen, scarfCleaner, s.state, s.request);
+	const wallValue = ai.monValue(gen, spentWall, s.state, s.request);
+	check('a 1 HP Choice Scarf cleaner outvalues a healthy slow wall', cleanerValue > wallValue, true);
+
+	const dead = benchMon('Dragapult', ['Dragon Darts'], { item: 'choicescarf', condition: '0 fnt' });
+	check('a fainted Pokemon is worth nothing', ai.monValue(gen, dead, s.state, s.request), 0);
+
+	const paralysed = benchMon('Dragapult', ['Dragon Darts'], { item: 'choicescarf', condition: '100/100 par', stats: { atk: 220, def: 100, spa: 220, spd: 100, spe: 350 } });
+	const healthy = benchMon('Dragapult', ['Dragon Darts'], { item: 'choicescarf', condition: '100/100', stats: { atk: 220, def: 100, spa: 220, spd: 100, spe: 350 } });
+	check('paralysis cuts a cleaner down', ai.monValue(gen, paralysed, s.state, s.request) < ai.monValue(gen, healthy, s.state, s.request), true);
+}
+
+console.log('\n--- trick room ---');
+{
+	const ai = new BattleAI({ difficulty: 'champion' });
+	const gen = ai.gen(9);
+	const slow = benchMon('Torkoal', ['Lava Plume', 'Body Press'], { stats: { atk: 90, def: 200, spa: 130, spd: 90, spe: 20 } });
+
+	const plain = scenario({ me: 'Blissey', myMoves: ['Seismic Toss'], foe: 'Great Tusk' });
+	plain.request.side.pokemon.push(slow);
+	const plainValue = ai.monValue(gen, slow, plain.state, plain.request);
+
+	const tr = scenario({ me: 'Blissey', myMoves: ['Seismic Toss'], foe: 'Great Tusk', trickRoom: true });
+	tr.request.side.pokemon.push(slow);
+	const trValue = ai.monValue(gen, slow, tr.state, tr.request);
+	check('Trick Room makes a slow Pokemon more valuable', trValue > plainValue, true);
+
+	// Trick Room merely available on the team should soften the speed penalty.
+	const avail = scenario({ me: 'Hatterene', myMoves: ['Trick Room', 'Psychic'], foe: 'Great Tusk' });
+	avail.request.side.pokemon.push(slow);
+	const availValue = ai.monValue(gen, slow, avail.state, avail.request);
+	check('Trick Room on the team softens the slowness penalty', availValue > plainValue, true);
+}
+
+console.log('\n--- difficulty ladder ---');
+{
+	const easy = new BattleAI({ difficulty: 'easy' });
+	const champ = new BattleAI({ difficulty: 'champion' });
+	check('easy does not voluntarily switch', easy.cfg.switching, false);
+	check('champion predicts', champ.cfg.predict, true);
+	check('unknown difficulty falls back to the default', new BattleAI({ difficulty: 'banana' }).difficultyName, 'hard');
+	check('difficulty list is exposed for the UI', BattleAI.difficulties().length >= 4, true);
+
+	// Easy should never terastallize; champion may.
+	const s = scenario({ me: 'Gyarados', myMoves: ['Waterfall'], foe: 'Charizard' });
+	s.request.active[0].canTerastallize = 'Water';
+	check('easy never terastallizes', /terastallize/.test(easy.decide(s.request, s.state) || ''), false);
+}
+
+console.log(`\n=== ${pass} passed, ${fail} failed`);
+process.exit(fail ? 1 : 0);

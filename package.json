@@ -1,0 +1,36 @@
+{
+  "name": "velvet-bunny-showdown",
+  "version": "1.0.0",
+  "description": "A hosted Pokemon Showdown server whose resident bot accepts a challenge in any format, builds a legal team for it, and plays a decent game.",
+  "main": "src/index.js",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node src/index.js",
+    "setup": "node scripts/setup-config.js",
+    "postinstall": "node scripts/setup-config.js",
+    "test": "node test/teams.test.js && node test/behaviour.test.js && node test/ai.test.js 20 gen9ou",
+    "test:teams": "node test/teams.test.js",
+    "test:ai": "node test/ai.test.js",
+    "test:behaviour": "node test/behaviour.test.js",
+    "test:difficulty": "node test/difficulty.test.js",
+    "test:live": "node test/live.test.js",
+    "ablate": "node test/ablation.js"
+  },
+  "keywords": [
+    "pokemon",
+    "pokemon-showdown",
+    "bot",
+    "ai",
+    "teambuilder"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@pkmn/data": "^0.10.11",
+    "@pkmn/dex": "^0.10.11",
+    "@smogon/calc": "^0.11.0",
+    "pokemon-showdown": "^0.11.11",
+    "ws": "^8.21.3"
+  }
+}
