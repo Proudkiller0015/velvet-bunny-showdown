@@ -8,7 +8,7 @@ Because it is a real Showdown server, players get the real client: every format,
 the teambuilder, team validation, replays, spectating — nothing is reimplemented.
 
 ```
-you ──► play.pokemonshowdown.com/~~your-server/ ──► this server ──► Velvet Bunny
+you ──► your-server ──► (it bounces you to the official client) ──► Velvet Bunny
 ```
 
 ## Live
@@ -71,8 +71,7 @@ npm install          # also writes the Showdown config into place
 npm start            # server + bot on $PORT (default 8000)
 ```
 
-Then open `https://play.pokemonshowdown.com/~~localhost:8000/` and challenge
-**Velvet Bunny**.
+Then open `http://localhost:8000` and challenge **Velvet Bunny**.
 
 ### Configuration
 
@@ -92,11 +91,16 @@ Then open `https://play.pokemonshowdown.com/~~localhost:8000/` and challenge
 runs. Any host that runs Node and gives you a `PORT` works the same way; the
 server and bot are one process tree on one port.
 
-Players connect through the official client using the `~~` prefix:
+Players just open the server's own URL. It serves a one-line page that
+redirects into the official client with the right host baked in:
 
 ```
-https://play.pokemonshowdown.com/~~your-host.onrender.com/
+https://your-host.onrender.com  →  https://your--host-onrender-com.psim.us/
 ```
+
+Do **not** hand out `play.pokemonshowdown.com/~~your-host/`. That page is
+served over HTTPS, so the browser refuses to open a socket back to a host it
+cannot verify. The redirect above picks the right scheme for you.
 
 ## Tests
 
