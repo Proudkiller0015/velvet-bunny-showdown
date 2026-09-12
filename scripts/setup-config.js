@@ -107,7 +107,30 @@ const avatarRights = {
 // Every rung of the ladder wears the same face - they are all the same bot.
 for (const d of ladderNames) avatarRights[toId(`${botBase} ${d}`)] = ['bunny.png'];
 
-const avatarsJson = {};
-for (const [userid, allowed] of Object.entries(avatarRights)) avatarsJson[userid] = { allowed };
-fs.writeFileSync(path.join(pkgRoot, 'config', 'avatars.json'), JSON.stringify(avatarsJson, null, '\t'));
+// Merged, not overwritten. Choosing an avatar with /avatar writes it back to
+// this file as that account's default, and replacing the file wholesale threw
+// that away - so anyone whose avatar is offered rather than applied had to pick
+// it again after every single restart.
+const avatarsPath = path.join(pkgRoot, 'config', 'avatars.json');
+let avatarsJson = {};
+try { avatarsJson = JSON.parse(fs.readFileSync(avatarsPath, 'utf8')) || {}; } catch (e) { avatarsJson = {}; }
+for (const [userid, allowed] of Object.entries(avatarRights)) {
+	const existing = avatarsJson[userid];
+	if (!existing || !Array.isArray(existing.allowed)) {
+		avatarsJson[userid] = { allowed };
+		continue;
+	}
+	// Keep whatever they have chosen, and make sure everything they are entitled
+	// to is still in the list. Index 0 is the one applied on login, so it is only
+	// filled in when it is empty - that is what keeps "offered" from becoming
+	// "imposed" behind their back.
+	const merged = existing.allowed.slice();
+	if (!merged.length) merged.push(null);
+	if (allowed[0] && !merged[0]) merged[0] = allowed[0];
+	for (const file of allowed) {
+		if (file && !merged.includes(file)) merged.push(file);
+	}
+	existing.allowed = merged;
+}
+fs.writeFileSync(avatarsPath, JSON.stringify(avatarsJson, null, '\t'));
 console.log(`avatar rights -> ${Object.keys(avatarsJson).length} account(s)`);
