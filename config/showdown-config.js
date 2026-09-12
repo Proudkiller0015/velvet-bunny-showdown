@@ -27,42 +27,60 @@ Object.assign(exports, require('./config-example.js'));
  * console, the lockdown or the ability to promote another Owner - those stay
  * with the owners. The bot sits on '*', the rank that exists for bots.
  */
+/**
+ * Ranks are Showdown's own, unchanged.
+ *
+ * This server briefly had a relabelled '~' and an invented '&' sitting under
+ * it, which was wrong twice over: the rename only changed what the same rank
+ * was called, and '&' is not a rank this version has at all, so it meant
+ * nothing to the client and carried whatever permissions it was handed.
+ *
+ * What Showdown actually offers globally is '~' Administrator, then '@'
+ * Moderator, '%' Driver, '*' Bot and '+' Voice. '#' Room Owner and '\u2605' Host
+ * are room ranks and cannot be held globally. '~' is the top - console,
+ * bypasses everything, and the only rank that can promote another - so it is
+ * the owner rank whatever it is called, and it is left called Administrator
+ * because that is what it is.
+ */
 exports.grouplist = exports.grouplist.map(group => ({ ...group }));
 
-const groupBySymbol = symbol => exports.grouplist.find(g => g.symbol === symbol);
-
-const ownerGroup = groupBySymbol('~');
-if (ownerGroup) ownerGroup.name = 'Owner';
-
-// Bots post the lobby's format picker, and a room introduction is an edit to
-// the room - a permission the bot rank does not carry, which is the only reason
-// the bot was ever given anything higher.
-const botGroup = groupBySymbol('*');
+// Bots post the lobby's format picker, and a room intro is an edit to the room.
+// Granting that one permission to the bot rank is what lets the bot sit on '*'
+// instead of being handed the keys to the server.
+const botGroup = exports.grouplist.find(g => g.symbol === '*');
 if (botGroup) botGroup.editroom = true;
 
-if (!groupBySymbol('&')) {
-	const ownerIndex = exports.grouplist.findIndex(g => g.symbol === '~');
-	exports.grouplist.splice(ownerIndex + 1, 0, {
+/**
+ * Owner, above Administrator.
+ *
+ * Showdown has no rank above '~' - on the main server the person who wrote it
+ * holds '~' like everyone else at the top, and the thing named after him in the
+ * source is `isSysop`, which is a support backdoor into other people's servers
+ * rather than a rank, and is switched off here. A server with an owner and
+ * staff under them has to define the tier itself, which is what side servers do.
+ *
+ * Defined rather than relabelled, which was the mistake the first time round:
+ * it has its own symbol, it inherits '~' so it genuinely holds everything
+ * Administrator holds, and it sits at the top of the list, which is what
+ * Showdown reads rank order from. '&' because it is the symbol Showdown itself
+ * used for the rank above moderator for years, so clients already know it.
+ */
+if (!exports.grouplist.some(g => g.symbol === '&')) {
+	exports.grouplist.unshift({
 		symbol: '&',
-		id: 'globaladmin',
-		name: 'Admin',
-		inherit: '@',
+		id: 'owner',
+		name: 'Owner',
+		inherit: '~',          // everything Administrator can do, and then the list below
 		jurisdiction: 'u',
 		globalonly: true,
 
-		editroom: true,
-		declare: true,
-		addhtml: true,
-		globalban: true,
-		rangeban: true,
-		makeroom: true,
-		gamemanagement: true,
-		tournaments: true,
-		disableladder: true,
-		forcewin: true,
-		bypassafktimer: true,
-		// Everything up to moderator, so an owner is only ever made by an owner.
-		promote: '★@*%+u',
+		// The only powers worth spelling out separately: an owner may promote
+		// anyone, including another owner, and may demote an administrator. '~'
+		// stops at promoting up to '~'.
+		promote: '&~\u2605@*%+u',
+		bypassall: true,
+		console: true,
+		lockdown: true,
 	});
 }
 
@@ -393,10 +411,15 @@ exports.startuphook = function () {
 	// The people who run the place. Promoted the same way as the bot and for the
 	// same reason: with no login server, anyone listed in usergroups.csv counts
 	// as trusted and is then refused a guest login entirely.
-	const owners = (process.env.PS_OWNERS || 'Unseen Face,SlimeQueenSamantha')
+	const owners = (process.env.PS_OWNERS || 'SlimeQueenSamantha')
+		.split(',').map(n => toID(n)).filter(n => n);
+	// Global administrators: everything short of owner.
+	const admins = (process.env.PS_ADMINS || 'Unseen Face')
 		.split(',').map(n => toID(n)).filter(n => n);
 	// Staff who help run the place, but do not own it.
-	const admins = (process.env.PS_ADMINS || 'Keiko_Sama')
+	// Global moderators: the real staff rank below Administrator. They moderate
+	// every room, and cannot reach the console, the lockdown or promotion.
+	const mods = (process.env.PS_MODS || 'Keiko_Sama')
 		.split(',').map(n => toID(n)).filter(n => n);
 	// Voiced regulars. Same reasoning as the owners: this cannot go in
 	// usergroups.csv without locking them out of logging in at all.
@@ -437,13 +460,17 @@ exports.startuphook = function () {
 			// given, so this puts an avatar on and never takes one back off.
 			applyAvatar(user);
 			if (botIds.has(user.id)) continue;   // ranks for the bot are handled above
-			if (owners.includes(user.id) && user.tempGroup !== '~') {
-				user.setGroup('~');
-				console.log(`[config] ${user.id} is now an owner`);
-			}
-			else if (admins.includes(user.id) && user.tempGroup !== '&') {
+			if (owners.includes(user.id) && user.tempGroup !== '&') {
 				user.setGroup('&');
-				console.log(`[config] ${user.id} is now an admin`);
+				console.log(`[config] ${user.id} is now the owner`);
+			}
+			else if (admins.includes(user.id) && user.tempGroup !== '~') {
+				user.setGroup('~');
+				console.log(`[config] ${user.id} is now a global administrator`);
+			}
+			else if (mods.includes(user.id) && user.tempGroup !== '@') {
+				user.setGroup('@');
+				console.log(`[config] ${user.id} is now a global moderator`);
 			}
 			// Only lift them up to voice, never down: this runs every couple of
 			// seconds, and it should not undo a promotion someone made by hand.
