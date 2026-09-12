@@ -30,7 +30,23 @@ const os = require('os');
 const path = require('path');
 
 const SIZE = 80;
-const SHARPEN = 0.55;
+
+// How much of the artwork's substance to keep inside the frame, by weight.
+//
+// The transparent border is not the only thing worth trimming. A sprite wreathed
+// in flame, or with an aura, or a long thin tail, has a bounding box far larger
+// than the figure in it - fitting all of that into 80 pixels leaves the character
+// itself occupying half the frame and unreadable. Sparse outer wisps carry almost
+// no weight, so dropping the last percent and a half of it takes the tendrils and
+// leaves the body. Raise it towards 1 to keep everything.
+const KEEP = Number(process.env.AVATAR_KEEP || 0.985);
+const SHARPEN = Number(process.env.AVATAR_SHARPEN || 0.55);
+
+// Averaging a red box with white lettering gives pink. That is arithmetically
+// right and visually wrong: what should survive is the impression of a saturated
+// mark, not its average. A modest push on saturation after the fact puts the red
+// back without touching the greys.
+const SATURATE = Number(process.env.AVATAR_SATURATE || 1.18);
 
 const [, , sourceArg, nameArg] = process.argv;
 if (!sourceArg || !nameArg) {
@@ -84,6 +100,8 @@ fs.writeFileSync(pageFile, `<!doctype html>
 <script>
 const SIZE = ${SIZE};
 const SHARPEN = ${SHARPEN};
+const KEEP = ${KEEP};
+const SATURATE = ${SATURATE};
 const img = new Image();
 img.onload = () => {
 	const w = img.width, h = img.height;
@@ -107,6 +125,40 @@ img.onload = () => {
 		}
 	}
 	if (maxX < 0) { document.getElementById('OUT').textContent = 'RESULT:' + JSON.stringify({ error: 'the image is entirely transparent' }); return; }
+	const loose = { w: maxX - minX + 1, h: maxY - minY + 1 };
+
+	// Pull the edges in over whatever carries almost none of the artwork's weight.
+	// Rows and columns are weighted by opacity, so a solid arm holds its ground and
+	// a scatter of embers does not.
+	if (KEEP < 1) {
+		const colWeight = new Float64Array(w), rowWeight = new Float64Array(h);
+		let total = 0;
+		for (let y = minY; y <= maxY; y++) {
+			for (let x = minX; x <= maxX; x++) {
+				const alpha = alphaAt(x, y);
+				if (!alpha) continue;
+				colWeight[x] += alpha; rowWeight[y] += alpha; total += alpha;
+			}
+		}
+		const budget = total * (1 - KEEP) / 2;   // the same allowance at each edge
+		const eat = (from, to, step, weight) => {
+			let spent = 0, edge = from;
+			for (let i = from; i !== to; i += step) {
+				if (spent + weight[i] > budget) break;
+				spent += weight[i];
+				edge = i + step;
+			}
+			return edge;
+		};
+		const nx0 = eat(minX, maxX, 1, colWeight);
+		const nx1 = eat(maxX, minX, -1, colWeight);
+		const ny0 = eat(minY, maxY, 1, rowWeight);
+		const ny1 = eat(maxY, minY, -1, rowWeight);
+		// Never let it collapse to nothing on a very diffuse image.
+		if (nx1 - nx0 > loose.w * 0.4 && ny1 - ny0 > loose.h * 0.4) {
+			minX = nx0; maxX = nx1; minY = ny0; maxY = ny1;
+		}
+	}
 	const cw = maxX - minX + 1, ch = maxY - minY + 1;
 
 	// Is this real pixel art that was blown up? If every run of identical pixels
@@ -124,28 +176,57 @@ img.onload = () => {
 	const solid = runs.filter(r => r >= 3);
 	const nativeGrid = solid.length ? solid.reduce((g, r) => gcd(g, r), 0) : 1;
 
+	// sRGB is not a linear measure of light, so averaging its numbers is not
+	// averaging light: mid grey is about a fifth of the brightness its 128 implies.
+	// Shrinking in sRGB therefore drags saturated colour towards mud - a red box
+	// with white lettering on it comes out an even pink rather than a red mark.
+	// Converting to linear light, averaging there, and converting back is the
+	// difference between the Supreme box reading as red and reading as washed out.
+	const TO_LINEAR = new Float32Array(256);
+	for (let i = 0; i < 256; i++) {
+		const v = i / 255;
+		TO_LINEAR[i] = v <= 0.04045 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+	}
+	const toSrgb = v => {
+		const c = v <= 0.0031308 ? v * 12.92 : 1.055 * Math.pow(v, 1 / 2.4) - 0.055;
+		return Math.max(0, Math.min(255, Math.round(c * 255)));
+	};
+
 	function shrink(sx, sy, sw, sh, dw, dh) {
-		let cur = document.createElement('canvas');
-		cur.width = sw; cur.height = sh;
-		let cx = cur.getContext('2d');
-		cx.imageSmoothingEnabled = true; cx.imageSmoothingQuality = 'high';
-		cx.drawImage(src, sx, sy, sw, sh, 0, 0, sw, sh);
-		let curW = sw, curH = sh;
-		while (curW > dw * 2 && curH > dh * 2) {
-			const nw = Math.max(dw, Math.round(curW / 2));
-			const nh = Math.max(dh, Math.round(curH / 2));
-			const next = document.createElement('canvas');
-			next.width = nw; next.height = nh;
-			const nx = next.getContext('2d');
-			nx.imageSmoothingEnabled = true; nx.imageSmoothingQuality = 'high';
-			nx.drawImage(cur, 0, 0, curW, curH, 0, 0, nw, nh);
-			cur = next; curW = nw; curH = nh;
-		}
+		const region = sctx.getImageData(sx, sy, sw, sh).data;
 		const out = document.createElement('canvas');
 		out.width = dw; out.height = dh;
 		const ox = out.getContext('2d');
-		ox.imageSmoothingEnabled = true; ox.imageSmoothingQuality = 'high';
-		ox.drawImage(cur, 0, 0, curW, curH, 0, 0, dw, dh);
+		const dest = ox.createImageData(dw, dh);
+		const dst = dest.data;
+		for (let dy = 0; dy < dh; dy++) {
+			const y0 = Math.floor(dy * sh / dh), y1 = Math.max(y0 + 1, Math.floor((dy + 1) * sh / dh));
+			for (let dx = 0; dx < dw; dx++) {
+				const x0 = Math.floor(dx * sw / dw), x1 = Math.max(x0 + 1, Math.floor((dx + 1) * sw / dw));
+				let r = 0, g = 0, b = 0, a = 0, n = 0;
+				for (let y = y0; y < y1; y++) {
+					for (let x = x0; x < x1; x++) {
+						const i = (y * sw + x) * 4;
+						// Weighted by alpha, or a transparent pixel's colour - often
+						// black - would be averaged in and darken every soft edge.
+						const alpha = region[i + 3] / 255;
+						r += TO_LINEAR[region[i]] * alpha;
+						g += TO_LINEAR[region[i + 1]] * alpha;
+						b += TO_LINEAR[region[i + 2]] * alpha;
+						a += alpha;
+						n++;
+					}
+				}
+				const o = (dy * dw + dx) * 4;
+				if (a > 0) {
+					dst[o] = toSrgb(r / a);
+					dst[o + 1] = toSrgb(g / a);
+					dst[o + 2] = toSrgb(b / a);
+				}
+				dst[o + 3] = Math.round(a / n * 255);
+			}
+		}
+		ox.putImageData(dest, 0, 0);
 		return out;
 	}
 
@@ -180,6 +261,13 @@ img.onload = () => {
 				blur /= n;
 				dst[i + ch2] = Math.max(0, Math.min(255, px[i + ch2] + (px[i + ch2] - blur) * SHARPEN));
 			}
+			// Push colour away from its own grey, leaving anything already grey alone.
+			if (SATURATE !== 1) {
+				const grey = dst[i] * 0.299 + dst[i + 1] * 0.587 + dst[i + 2] * 0.114;
+				for (let ch2 = 0; ch2 < 3; ch2++) {
+					dst[i + ch2] = Math.max(0, Math.min(255, grey + (dst[i + ch2] - grey) * SATURATE));
+				}
+			}
 			dst[i + 3] = px[i + 3];
 		}
 	}
@@ -188,6 +276,7 @@ img.onload = () => {
 	document.getElementById('OUT').textContent = 'RESULT:' + JSON.stringify({
 		source: w + 'x' + h,
 		trimmed: cw + 'x' + ch,
+		loose: loose.w + 'x' + loose.h,
 		fitted: dw + 'x' + dh,
 		reduction: (Math.max(cw, ch) / SIZE).toFixed(1) + ':1',
 		nativeGrid,
@@ -228,7 +317,8 @@ fs.writeFileSync(dest, Buffer.from(result.png.replace(/^data:image\/png;base64,/
 try { fs.rmSync(work, { recursive: true, force: true }); } catch (e) { /* temp dir, leave it */ }
 
 console.log(`${path.basename(source)}  ${result.source}`);
-console.log(`  trimmed   ${result.trimmed}`);
+console.log(`  trimmed   ${result.trimmed}` +
+	(result.loose !== result.trimmed ? `   (${result.loose} before the sparse edges came off)` : ''));
 console.log(`  fitted    ${result.fitted} inside ${SIZE}x${SIZE}   (${result.reduction})`);
 console.log(result.nativeGrid > 1
 	? `  note      the artwork has a native ${result.nativeGrid}px grid`

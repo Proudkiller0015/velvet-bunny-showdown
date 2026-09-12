@@ -125,6 +125,7 @@ const avatarRights = {
 	dana3166: [null, 'dana.png'],
 	keikosama: ['keiko-milim.png'],
 	ladymilim: ['milim.png'],
+	simiaignis: ['simia-ignis.png'],
 };
 // Every rung of the ladder wears the same face - they are all the same bot.
 for (const d of ladderNames) avatarRights[toId(`${botBase} ${d}`)] = ['bunny.png'];
