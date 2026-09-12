@@ -64,13 +64,24 @@ exports.startuphook = function () {
 	// as trusted and is then refused a guest login entirely.
 	const owners = (process.env.PS_OWNERS || 'Unseen Face,SlimeQueenSamantha')
 		.split(',').map(n => toID(n)).filter(n => n);
+	// Voiced regulars. Same reasoning as the owners: this cannot go in
+	// usergroups.csv without locking them out of logging in at all.
+	const voiced = (process.env.PS_VOICED || 'dana3166')
+		.split(',').map(n => toID(n)).filter(n => n);
+
+	// '~' is the highest global rank Showdown has - it carries the console, it
+	// bypasses everything, and there is nothing above it - but it is labelled
+	// Administrator. On a server with actual owners that reads as a job title
+	// rather than ownership, so it is relabelled. Nothing about the rank changes.
+	const top = Config.groups && Config.groups['~'];
+	if (top && top.name === 'Administrator') top.name = 'Owner';
 	setInterval(() => {
 		const bot = Users.get(botId);
-		// Admin, not just bot rank: posting the lobby format picker as a room
+		// Top rank, not just bot rank: posting the lobby format picker as a room
 		// introduction needs `declare`, which bot rank does not carry.
 		if (bot && bot.connected && bot.tempGroup !== '~') {
 			bot.setGroup('~');
-			console.log(`[config] promoted ${botId} to admin`);
+			console.log(`[config] promoted ${botId} to owner`);
 		}
 		// Showdown blocks private messages for anyone who is neither registered
 		// nor autoconfirmed. With no login server nobody can ever be either, which
@@ -82,6 +93,12 @@ exports.startuphook = function () {
 			if (owners.includes(user.id) && user.tempGroup !== '~') {
 				user.setGroup('~');
 				console.log(`[config] promoted ${user.id} to owner`);
+			}
+			// Only lift them up to voice, never down: this runs every couple of
+			// seconds, and it should not undo a promotion someone made by hand.
+			else if (voiced.includes(user.id) && user.tempGroup === Users.Auth.defaultSymbol()) {
+				user.setGroup('+');
+				console.log(`[config] gave ${user.id} voice`);
 			}
 		}
 	}, 2000).unref();
