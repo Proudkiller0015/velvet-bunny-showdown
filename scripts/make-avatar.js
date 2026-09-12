@@ -48,6 +48,11 @@ const SHARPEN = Number(process.env.AVATAR_SHARPEN || 0.55);
 // back without touching the greys.
 const SATURATE = Number(process.env.AVATAR_SATURATE || 1.18);
 
+// How close to the corner colour a pixel must be to count as background, when
+// the artwork arrives painted onto one instead of cut out. 0 disables keying and
+// keeps the background as part of the picture.
+const KEY = Number(process.env.AVATAR_KEY || 42);
+
 const [, , sourceArg, nameArg] = process.argv;
 if (!sourceArg || !nameArg) {
 	console.error('usage: node scripts/make-avatar.js <source image> <name>');
@@ -101,6 +106,7 @@ fs.writeFileSync(pageFile, `<!doctype html>
 const SIZE = ${SIZE};
 const SHARPEN = ${SHARPEN};
 const KEEP = ${KEEP};
+const KEY = ${KEY};
 const SATURATE = ${SATURATE};
 const img = new Image();
 img.onload = () => {
@@ -110,6 +116,57 @@ img.onload = () => {
 	const sctx = src.getContext('2d');
 	sctx.drawImage(img, 0, 0);
 	const data = sctx.getImageData(0, 0, w, h).data;
+
+	// Some artwork arrives cut out and some arrives painted onto a flat background.
+	// Everything below works off transparency, so a painted background has to become
+	// one first - otherwise there is nothing to trim, nothing to weight, and the
+	// avatar is a small subject marooned in a square of colour.
+	//
+	// Filled inwards from the edges rather than keyed by colour outright, so the
+	// black *behind* the picture goes and the black *in* it - outlines, shadow, the
+	// dark side of a toaster - stays. A glow that fades to the background keeps its
+	// soft edge, because the fill stops as soon as the pixels stop matching.
+	let keyed = 0;
+	if (KEY > 0) {
+		let clear = 0;
+		for (let i = 3; i < data.length; i += 4) if (data[i] < 8) clear++;
+		// Only when it is essentially opaque; a cut-out image is left alone.
+		if (clear < w * h * 0.01) {
+			const corners = [[0, 0], [w - 1, 0], [0, h - 1], [w - 1, h - 1]];
+			let br = 0, bg = 0, bb = 0;
+			for (const [cx, cy] of corners) {
+				const i = (cy * w + cx) * 4;
+				br += data[i]; bg += data[i + 1]; bb += data[i + 2];
+			}
+			br /= corners.length; bg /= corners.length; bb /= corners.length;
+
+			const near = i => {
+				const dr = data[i] - br, dg = data[i + 1] - bg, db = data[i + 2] - bb;
+				return Math.sqrt(dr * dr + dg * dg + db * db) <= KEY;
+			};
+			const seen = new Uint8Array(w * h);
+			const stack = [];
+			for (let x = 0; x < w; x++) { stack.push(x, 0); stack.push(x, h - 1); }
+			for (let y = 0; y < h; y++) { stack.push(0, y); stack.push(w - 1, y); }
+			while (stack.length) {
+				const y = stack.pop(), x = stack.pop();
+				if (x < 0 || y < 0 || x >= w || y >= h) continue;
+				const pos = y * w + x;
+				if (seen[pos]) continue;
+				if (!near(pos * 4)) continue;
+				seen[pos] = 1;
+				data[pos * 4 + 3] = 0;
+				keyed++;
+				stack.push(x + 1, y); stack.push(x - 1, y);
+				stack.push(x, y + 1); stack.push(x, y - 1);
+			}
+			// Put the edit back, so the resampler reads the keyed version.
+			const edited = sctx.createImageData(w, h);
+			edited.data.set(data);
+			sctx.putImageData(edited, 0, 0);
+		}
+	}
+
 	const alphaAt = (x, y) => data[(y * w + x) * 4 + 3];
 
 	// Trim the transparent border; the margin is not part of the artwork.
@@ -277,6 +334,8 @@ img.onload = () => {
 		source: w + 'x' + h,
 		trimmed: cw + 'x' + ch,
 		loose: loose.w + 'x' + loose.h,
+		keyed: keyed,
+		keyedPct: (keyed / (w * h) * 100).toFixed(0),
 		fitted: dw + 'x' + dh,
 		reduction: (Math.max(cw, ch) / SIZE).toFixed(1) + ':1',
 		nativeGrid,
@@ -320,6 +379,7 @@ console.log(`${path.basename(source)}  ${result.source}`);
 console.log(`  trimmed   ${result.trimmed}` +
 	(result.loose !== result.trimmed ? `   (${result.loose} before the sparse edges came off)` : ''));
 console.log(`  fitted    ${result.fitted} inside ${SIZE}x${SIZE}   (${result.reduction})`);
+if (result.keyed) console.log(`  keyed     ${result.keyedPct}% of the image was a painted background, now transparent`);
 console.log(result.nativeGrid > 1
 	? `  note      the artwork has a native ${result.nativeGrid}px grid`
 	: `  note      no native pixel grid, so it is averaged rather than nearest-neighboured`);

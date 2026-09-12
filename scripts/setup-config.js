@@ -126,6 +126,10 @@ const avatarRights = {
 	keikosama: ['keiko-milim.png'],
 	ladymilim: ['milim.png'],
 	simiaignis: ['simia-ignis.png'],
+	// ttr.png is built and served but granted to nobody - its owner has not said
+	// what account it is for yet. Rename it to that account when they do: TTR is
+	// the emblem, not the owner, and a bare emblem name is the sort that gets
+	// claimed out from under you.
 };
 // Every rung of the ladder wears the same face - they are all the same bot.
 for (const d of ladderNames) avatarRights[toId(`${botBase} ${d}`)] = ['bunny.png'];

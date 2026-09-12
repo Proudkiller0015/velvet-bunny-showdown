@@ -182,6 +182,71 @@ exports.commands = {
 		// have set it themselves.
 		this.parse(`/msg ${BOT_BASE}, difficulty ${choice}`);
 	},
+	customavatars: 'avatarlist',
+	avatars2: 'avatarlist',
+	/**
+	 * Every custom avatar on the server and who wears it.
+	 *
+	 * Showdown's own /avatars only ever answers for one account, which is no help
+	 * at all when the question is what the server has. This reads the directory
+	 * rather than the rights file, so an avatar that has been built and granted to
+	 * nobody still shows up - under nobody, which is the case worth being able to
+	 * see.
+	 */
+	avatarlist(target, room, user) {
+		this.runBroadcast();
+		let files = [];
+		try {
+			files = require('fs').readdirSync('config/avatars').filter(f => /\.(png|gif|jpg|jpeg|webp)$/i.test(f));
+		} catch (e) {
+			throw new Chat.ErrorMessage('There is no avatar directory on this server.');
+		}
+		if (!files.length) return this.sendReplyBox('No custom avatars on this server yet.');
+
+		// Who is entitled to each file. One avatar can belong to several accounts -
+		// the bot's is worn by every ladder queue - so this is a list, not a name.
+		const wearers = new Map(files.map(f => [f, []]));
+		const rights = (Users.Avatars && Users.Avatars.avatars) || {};
+		for (const [userid, entry] of Object.entries(rights)) {
+			for (const file of (entry && entry.allowed) || []) {
+				if (file && wearers.has(file)) wearers.get(file).push(userid);
+			}
+		}
+
+		const esc = Chat.escapeHTML;
+		const rows = files.sort().map(file => {
+			const who = wearers.get(file);
+			const applied = who.filter(id => {
+				try { return Users.Avatars.getDefault(id) === file; } catch (e) { return false; }
+			});
+			const names = who.length
+				? who.map(id => {
+					const online = Users.get(id);
+					const label = online && online.connected ? `<b>${esc(online.name)}</b>` : esc(id);
+					// An avatar someone merely may wear is not the same as one they wear.
+					return applied.includes(id) ? label : `${label} <small>(offered)</small>`;
+				}).join(', ')
+				: '<span style="color:#888">none</span>';
+			return `<tr><td style="padding:3px 8px">` +
+				`<img src="/avatars/${encodeURIComponent(file)}" width="40" height="40" ` +
+				`style="image-rendering:pixelated;vertical-align:middle" alt=""></td>` +
+				`<td style="padding:3px 8px"><code>${esc(file)}</code></td>` +
+				`<td style="padding:3px 8px">${names}</td></tr>`;
+		}).join('');
+
+		const spare = files.filter(f => !wearers.get(f).length).length;
+		this.sendReplyBox(
+			`<b>Custom avatars on this server</b> &mdash; ${files.length} ` +
+			`(${spare} unassigned)<br/>` +
+			`<table style="border-collapse:collapse">${rows}</table>` +
+			`<small>Bold means they are wearing it; <i>offered</i> means they may switch to it ` +
+			`with <code>/avatar [file]</code>.</small>`
+		);
+	},
+	avatarlisthelp: [
+		`/avatarlist - show every custom avatar on the server and who wears it.`,
+	],
+
 	bothelp: [
 		`/bot - pick who the ladder should match you against.`,
 		`/bot [difficulty] - always face that rung. /bot pvp - players only, no bots.`,
