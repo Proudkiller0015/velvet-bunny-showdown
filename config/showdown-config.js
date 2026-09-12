@@ -38,6 +38,13 @@ exports.repl = false;
 exports.backdoor = false;
 exports.watchconfig = false;
 
+// Custom avatars. The file lives in avatars/ here and is copied into the
+// package's config/avatars before boot; the client asks this server for
+// /avatars/<file>, so the name has to keep its extension.
+exports.customavatars = {
+	slimequeensamantha: 'queen.png',
+};
+
 // One bot answering every challenge: rate limits only get in its way.
 exports.nothrottle = true;
 exports.noipchecks = true;

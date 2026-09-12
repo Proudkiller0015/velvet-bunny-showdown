@@ -56,3 +56,16 @@ if (fs.existsSync(clientSrc)) {
 } else {
 	console.log('no client/ directory; only the stock page will be served');
 }
+
+// ---------------------------------------------------------------- avatars
+// Custom avatars are served from the package's config/avatars, which npm owns,
+// so they are copied in from avatars/ here the same way the config is.
+const avatarSrc = path.join(__dirname, '..', 'avatars');
+const avatarDest = path.join(pkgRoot, 'config', 'avatars');
+if (fs.existsSync(avatarSrc)) {
+	fs.mkdirSync(avatarDest, { recursive: true });
+	for (const file of fs.readdirSync(avatarSrc)) {
+		fs.copyFileSync(path.join(avatarSrc, file), path.join(avatarDest, file));
+	}
+	console.log(`avatars -> ${avatarDest} (${fs.readdirSync(avatarSrc).join(', ')})`);
+}
