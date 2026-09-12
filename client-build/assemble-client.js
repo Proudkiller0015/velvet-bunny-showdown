@@ -34,6 +34,48 @@ copyDir(path.join(SRC, 'style'), path.join(OUT, 'style'));
 // text file containing its target path, so take the real one from the root.
 fs.mkdirSync(path.join(OUT, 'config'), { recursive: true });
 fs.copyFileSync(ROOTCFG, path.join(OUT, 'config', 'config.js'));
+
+// `node build` regenerates config/config.js, so our settings have to be applied
+// to the assembled copy rather than to the source - appending them before a
+// build silently loses them, which is exactly how testclient kept disappearing.
+const OURS = `
+/*** Velvet Bunny ***/
+// Pin the client to our server whatever hostname it is served from:
+// client-connection only falls back to defaultserver when Config.server is unset.
+Config.defaultserver = {
+	id: 'velvetbunny',
+	host: 'velvet-bunny-showdown.onrender.com',
+	port: 443,
+	httpport: 443,
+	altport: 80,
+	registered: false,
+};
+Config.server = Config.defaultserver;
+
+// Without this the client, cross-origin to routes.client, injects a hidden
+// crossdomain.php iframe into play.pokemonshowdown.com and waits forever for a
+// postMessage that never comes - it never even attempts our server. Its only
+// other effect is loading battle text relatively, which already falls back to
+// the official CDN.
+Config.testclient = true;
+
+// English unless the viewer chooses otherwise in Options. Without this the
+// client follows the browser's Accept-Language list, so a French browser gets a
+// French interface with no obvious cause.
+Config.defaultLanguage = 'en';
+
+// routes.client deliberately stays on the official host, so sprites, audio and
+// dex data load from their CDN and this bundle stays small and never stale.
+
+// The main-menu panel. Editing this file is enough - no rebuild needed.
+Config.botChallenge = {
+	name: 'Velvet Bunny',
+	difficulties: ['easy', 'normal', 'hard', 'champion'],
+	defaultFormat: 'gen9randombattle',
+};
+/*** end Velvet Bunny ***/
+`;
+fs.appendFileSync(path.join(OUT, 'config', 'config.js'), OURS);
 for (const f of ['colors.json', 'coil.json']) {
 	const real = path.join(__dirname, 'psclient', 'config', f);
 	if (fs.existsSync(real)) fs.copyFileSync(real, path.join(OUT, 'config', f));

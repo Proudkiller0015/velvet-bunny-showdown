@@ -35,3 +35,18 @@ for (const file of ['logs/errors.txt', 'logs/chatlog-access.txt']) {
 const usergroups = path.join(pkgRoot, 'config', 'usergroups.csv');
 fs.writeFileSync(usergroups, '');
 console.log(`usergroups -> ${usergroups} (empty; the bot is promoted at runtime)`);
+
+// ---------------------------------------------------------------- the client
+// Serve our own build of the Showdown client from this server, so players open
+// the server's own URL and land straight in it - with the Challenge-the-bot
+// panel on the main menu - instead of being bounced to a client hosted
+// elsewhere. Showdown's static server serves ./server/static from the package
+// root, so the build goes there, replacing the stock redirect page.
+const clientSrc = path.join(__dirname, '..', 'client');
+const clientDest = path.join(pkgRoot, 'server', 'static');
+if (fs.existsSync(clientSrc)) {
+	fs.cpSync(clientSrc, clientDest, { recursive: true, force: true });
+	console.log(`client -> ${clientDest}`);
+} else {
+	console.log('no client/ directory; leaving the stock redirect page in place');
+}

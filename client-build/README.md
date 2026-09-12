@@ -1,11 +1,12 @@
 # Building the custom client
 
-The client at **https://proudkiller0015.github.io/arcade/showdown/** is a build of
-the real Pokémon Showdown client with a *Battle Velvet Bunny* group added to the
-main menu, directly under the ladder's Battle! button. It lives in the `arcade`
-repo (`arcade/showdown/`) because that repo already publishes to GitHub Pages.
+`../client/` is a build of the real Pokémon Showdown client with a *Battle Velvet
+Bunny* group added to the main menu, directly under the ladder's Battle! button.
 
-It is static, so it costs nothing to host and never touches the server's memory.
+**The server serves it itself.** `scripts/setup-config.js` copies `client/` into
+`node_modules/pokemon-showdown/server/static/` before boot, so opening the
+server's own URL lands a player straight in it, already connected. There is no
+separate host and no second URL to keep in sync.
 
 ## Rebuild it
 
@@ -13,49 +14,53 @@ It is static, so it costs nothing to host and never touches the server's memory.
 git clone --depth 1 https://github.com/smogon/pokemon-showdown-client.git psclient
 cd psclient && npm install && cd ..
 
-node patch-client.js                    # adds the panel + pins the server
+node patch-client.js                 # adds the main-menu panel
+node patch-language.js               # default to English, not the browser locale
 cd psclient && node build && cd ..
-node assemble-client.js ./client-dist   # static bundle, ~6MB
+node assemble-client.js ./dist       # static bundle + our config, ~6MB
 node build-log-misc.js \
   psclient/play.pokemonshowdown.com/src/battle-log-misc.js \
   ../node_modules/pokemon-showdown/dist/server/chat-formatter.js \
-  client-dist/src/battle-log-misc.js
-node fix-client-paths.js ./client-dist
+  dist/src/battle-log-misc.js
+node fix-client-paths.js ./dist
 
-cp -r client-dist/* ../../arcade/showdown/   # then commit and push
+rm -rf ../client && cp -r dist ../client
 ```
 
-## The four things that are not obvious
+Then commit and deploy the server. Nothing else needs doing — the copy into the
+package happens at boot.
 
-**The panel is a `TeamForm`.** That is the component the ladder itself uses, so
-the bot group gets the identical format dropdown and team selector and the
-player picks a team exactly as they would for a ladder game. Submitting sends
-the same `/utm <packed team>` handshake the ladder sends, then the challenge.
+## The five things that are not obvious
+
+**`node build` regenerates `config/config.js`.** Anything appended to it before
+building is silently lost, which is why our settings are applied to the
+*assembled* copy in `assemble-client.js` instead.
 
 **`Config.testclient = true` is load-bearing.** Served from any host other than
 `Config.routes.client`, the client injects a hidden `crossdomain.php` iframe into
 play.pokemonshowdown.com and waits for a `postMessage` that never arrives for a
 host it does not know. It sits on *Connecting…* and never attempts our server at
-all — no request to it even appears in the network log. `testclient` skips that
-handshake. Its only other effect is loading battle text by relative path, which
-already falls back to the official CDN.
+all — the give-away is zero requests to it in the network log.
 
 **`src/battle-log-misc.js` has to be generated.** Upstream builds it by compiling
-the *server's* `chat-formatter.ts` into it (see `build-tools/update`, which needs
-a pokemon-showdown checkout in `caches/`). A plain clone ships a stale copy with
-no `formatText`, and the official CDN's copy is missing it too, so anything that
-renders a chat line throws. `build-log-misc.js` wraps the compiled formatter out
-of the `pokemon-showdown` package we actually run, which also keeps client and
-server rendering identical.
+the *server's* `chat-formatter.ts` into it (`build-tools/update`, which wants a
+pokemon-showdown checkout in `caches/`). A plain clone ships a stale copy with no
+`formatText`, and the official CDN's copy lacks it too, so anything that renders
+a chat line throws. `build-log-misc.js` wraps the compiled formatter out of the
+`pokemon-showdown` package we actually run, so client and server format messages
+identically.
 
-**`Config.routes.client` deliberately stays on the official host.** Sprites,
-audio and dex data then load from their CDN, which keeps this bundle at ~6MB
-instead of ~60MB and means the data never goes stale. Only paths that must be
-ours are rewritten to be relative, so the site works from a subdirectory.
+**The panel is a `TeamForm`** — the same component the ladder uses — so it gets
+the identical format dropdown and team selector and submits with the same
+`/utm <packed team>` handshake.
 
-## Changing the panel
+**`Config.routes.client` deliberately stays on the official host**, so sprites,
+audio and dex data load from their CDN: ~6MB shipped instead of ~60MB, and the
+data never goes stale. Only our own paths are rewritten to be relative.
 
-The bot name, difficulty list and default format all come from `config.js`:
+## Changing the panel without rebuilding
+
+`client/config/config.js` holds the lot:
 
 ```js
 Config.botChallenge = {
@@ -63,8 +68,8 @@ Config.botChallenge = {
 	difficulties: ['easy', 'normal', 'hard', 'champion'],
 	defaultFormat: 'gen9randombattle',
 };
+Config.defaultLanguage = 'en';
 ```
 
-Editing that file in `arcade/showdown/config/config.js` is enough — no rebuild.
-Run `fix-client-paths.js` afterwards so the cachebuster is restamped, or browsers
-will keep serving the old config.
+Edit it, then run `fix-client-paths.js ../client` so the cachebuster is
+restamped — without that, browsers keep serving the config they already have.
