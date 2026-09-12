@@ -111,6 +111,74 @@ exports.noipchecks = true;
  * setGroup does not write the rank back to disk, so the next login still works.
  */
 /**
+ * Which rung each player has asked for, and the accounts that play them.
+ *
+ * This is the difference between a difficulty picker and a difficulty. Picking
+ * one used to tell the *bot process* what to play as, which worked for a direct
+ * challenge and did nothing at all on the ladder: the ladder queues each play a
+ * fixed rung, and the server handed you whichever one was nearest your rating.
+ * So you could click Stockfish and be sent to Normal, which is the one thing the
+ * picker exists to prevent.
+ *
+ * Showdown loads the config as a chat plugin, so the command below lives here,
+ * next to the matchmaking that has to honour it.
+ */
+const { botAccountIds, botDifficulties, toId: queueId } = require('../../../src/queue-names');
+
+const BOT_BASE = process.env.PS_BOT_NAME || 'Velvet Bunny';
+const BOT_DIFFICULTIES = (process.env.PS_LADDER_DIFFICULTIES || 'easy,normal,hard,champion,stockfish')
+	.split(',').map(d => d.trim()).filter(d => d);
+const BOT_FORMATS = (process.env.PS_LADDER_FORMATS || 'gen9randombattle')
+	.split(',').map(f => f.trim()).filter(f => f);
+
+const BOT_IDS = botAccountIds(BOT_BASE, BOT_DIFFICULTIES, BOT_FORMATS);
+const BOT_RUNG = botDifficulties(BOT_BASE, BOT_DIFFICULTIES, BOT_FORMATS);
+/** userid -> the rung they want to be matched against on the ladder. */
+const wantedRung = new Map();
+
+exports.commands = {
+	botdifficulty: 'bot',
+	difficulty: 'bot',
+	bot(target, room, user) {
+		const choice = toID(target);
+		const names = BOT_DIFFICULTIES.slice();
+
+		if (!choice) {
+			const current = wantedRung.get(user.id);
+			const buttons = names.map(name => {
+				const on = name === current;
+				return `<button class="button${on ? ' disabled' : ''}" name="send" value="/bot ${name}">` +
+					`${on ? '<b>' : ''}${name.charAt(0).toUpperCase()}${name.slice(1)}${on ? '</b>' : ''}</button>`;
+			}).join(' ');
+			return this.sendReplyBox(
+				`<b>Which bot do you want to play?</b><br/>${buttons} ` +
+				`<button class="button" name="send" value="/bot anyone">Anyone</button><br/>` +
+				`<small>Then hit <b>Battle!</b> and you will be matched with that one. ` +
+				`${current ? `Currently <b>${current}</b>.` : 'Currently whoever is closest to your rating.'}</small>`
+			);
+		}
+
+		if (choice === 'anyone' || choice === 'any' || choice === 'off' || choice === 'none') {
+			wantedRung.delete(user.id);
+			return this.sendReply('You will be matched with whichever bot is closest to your rating.');
+		}
+		if (!names.includes(choice)) {
+			throw new Chat.ErrorMessage(`No such difficulty. Pick one of: ${names.join(', ')}.`);
+		}
+		wantedRung.set(user.id, choice);
+		this.sendReply(`Set to ${choice}. Hit Battle! and you will be matched with that one - it may take a moment if it is already in a game.`);
+		// Keep the bot's own preference in step, so a direct challenge plays the
+		// same rung as the ladder would. Sent as the user, which is how they would
+		// have set it themselves.
+		this.parse(`/msg ${BOT_BASE}, difficulty ${choice}`);
+	},
+	bothelp: [
+		`/bot - pick which difficulty of bot the ladder should match you against.`,
+		`/bot [difficulty] - set it. /bot anyone - go back to matching on rating.`,
+	],
+};
+
+/**
  * Make the ladder queue pair people sensibly.
  *
  * Two things were wrong with it, and they had the same cause.
@@ -155,6 +223,21 @@ function fixMatchmaking(botIds) {
 		// all day, and beat each other into meaningless ratings.
 		if (users.every(user => botIds.has(user.id))) return false;
 
+		// If someone picked a rung, give them that rung and nothing else. Rating
+		// proximity is how you find a fair opponent when you have not asked for
+		// one; it has no business overruling someone who has.
+		const bots = users.filter(user => botIds.has(user.id));
+		const asked = users
+			.filter(user => !botIds.has(user.id))
+			.map(user => wantedRung.get(user.id))
+			.filter(rung => rung);
+		if (bots.length && asked.length) {
+			if (!bots.every(bot => asked.includes(BOT_RUNG.get(bot.id)))) return false;
+			for (let i = 0; i < users.length; i++) users[i].lastMatch = users[(i + 1) % users.length].id;
+			return true;
+		}
+		void queueId;
+
 		// Rating proximity, which is what a ladder is. Same shape as Showdown's
 		// own: a tight window that opens up the longer someone is left waiting.
 		const times = matches.map(([search]) => search.time);
@@ -190,17 +273,12 @@ exports.startuphook = function () {
 	// usergroups.csv without locking them out of logging in at all.
 	const voiced = (process.env.PS_VOICED || 'dana3166')
 		.split(',').map(n => toID(n)).filter(n => n);
-	// Every account the bot plays under, including one per ladder queue. Taken
-	// from the same module the queues name themselves with - when these two were
-	// worked out separately they disagreed, and the rules below applied to nobody.
-	const { botAccountIds } = require('../../../src/queue-names');
-	const botIds = botAccountIds(
-		process.env.PS_BOT_NAME || 'Velvet Bunny',
-		(process.env.PS_LADDER_DIFFICULTIES || 'easy,normal,hard,champion,stockfish').split(',').map(d => d.trim()).filter(d => d),
-		(process.env.PS_LADDER_FORMATS || 'gen9randombattle').split(',').map(f => f.trim()).filter(f => f)
-	);
+	// Every account the bot plays under, worked out once at the top of this file
+	// from the same module the queues name themselves with. When these were worked
+	// out separately they disagreed, and the rules below applied to nobody.
+	const botIds = BOT_IDS;
 
-	fixMatchmaking(botIds);
+	fixMatchmaking(BOT_IDS);
 
 	setInterval(() => {
 		// Bot rank for the bot, which is what it is for. It can post the lobby

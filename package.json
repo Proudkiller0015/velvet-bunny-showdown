@@ -20,7 +20,9 @@
     "test:remote": "node test/remote.test.js",
     "test:lobby": "node test/lobby.test.js",
     "train": "node test/train.js",
-    "test:elo": "node test/elo.test.js"
+    "test:elo": "node test/elo.test.js",
+    "marathon": "node test/marathon.js",
+    "marathon:stop": "node test/marathon.js --stop"
   },
   "keywords": [
     "pokemon",

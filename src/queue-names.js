@@ -50,4 +50,14 @@ function botAccountIds(base, difficulties, formats) {
 	return ids;
 }
 
-module.exports = { queueName, botAccountIds, toId, MAX_USERID };
+/** Which rung each bot account plays as: userid -> difficulty. */
+function botDifficulties(base, difficulties, formats) {
+	const map = new Map();
+	const multi = formats.length > 1;
+	for (const format of formats) {
+		for (const difficulty of difficulties) map.set(toId(queueName(base, difficulty, format, multi)), difficulty);
+	}
+	return map;
+}
+
+module.exports = { queueName, botAccountIds, botDifficulties, toId, MAX_USERID };

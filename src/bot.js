@@ -224,8 +224,12 @@ class ShowdownBot {
 	lobbyPanelHTML() {
 		const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 		const label = d => `${d[0].toUpperCase()}${d.slice(1)}` + (d === 'stockfish' ? ' *' : '');
+		// /bot rather than a PM: the PM only ever reached this process, which picks
+		// the difficulty for challenges. The ladder is matched by the server, so the
+		// server has to be told too - clicking Stockfish and being sent to Normal is
+		// what happens when it is not. /bot records it there and forwards it here.
 		const diffButtons = BattleAI.difficulties().map(d =>
-			`<button class="button" name="send" value="/msg ${esc(this.name)}, difficulty ${d}">` +
+			`<button class="button" name="send" value="/bot ${d}">` +
 			`${esc(label(d))}</button>`).join(' ');
 
 		// Dex order matches the order the client lists formats in, so the sections
@@ -278,14 +282,14 @@ class ShowdownBot {
 		const current = this.difficultyFor.get(userId) || this.defaultDifficulty;
 		const buttons = BattleAI.difficulties().map(d => {
 			const mark = d === current ? ' style="font-weight:bold;border:1px solid #8a2be2"' : '';
-			return `<button class="button" name="send" value="/msg ${this.name}, difficulty ${d}"${mark}>` +
+			return `<button class="button" name="send" value="/bot ${d}"${mark}>` +
 				`${d[0].toUpperCase()}${d.slice(1)}</button>`;
 		}).join(' ');
 		const rows = BattleAI.difficulties()
 			.map(d => `<li><b>${d}</b> - ${DIFFICULTY_BLURB[d] || ''}</li>`).join('');
 
 		const html = `<div style="padding:6px">` +
-			`<b>Pick a difficulty, then challenge me in any format.</b><br/>` +
+			`<b>Pick a difficulty, then hit Battle! or challenge me in any format.</b><br/>` +
 			`<div style="margin:6px 0">${buttons}</div>` +
 			`<small>Currently: <b>${current}</b></small>` +
 			`<ul style="margin:6px 0 0 16px;padding:0;font-size:10px">${rows}</ul>` +

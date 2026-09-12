@@ -107,35 +107,10 @@ const GAMES = +(process.argv[2] || 40);
 const FORMAT = process.argv[3] || 'gen9randombattle';
 const WORKERS = +(process.argv[4] || Math.max(1, os.cpus().length - 1));
 
-/**
- * Fit a rating to every rung from the whole round robin.
- *
- * Straight maximum likelihood on the logistic model Elo is defined by: nudge
- * each rating toward what would have predicted the results, repeat until it
- * stops moving. Unlike game-by-game updates this cannot be skewed by the order
- * the games came in, and every game counts once.
- */
-function fitRatings(results) {
-	const rating = {};
-	for (const r of RUNGS) rating[r] = ANCHOR;
-	for (let step = 0; step < 4000; step++) {
-		const grad = {};
-		for (const r of RUNGS) grad[r] = 0;
-		for (const { a, b, score, played } of results) {
-			if (!played) continue;
-			const expected = 1 / (1 + Math.pow(10, (rating[b] - rating[a]) / SCALE));
-			const err = score - expected * played;
-			grad[a] += err;
-			grad[b] -= err;
-		}
-		for (const r of RUNGS) rating[r] += grad[r] * 0.5;
-		// Elo is only meaningful as differences, so pin the average to the number
-		// the ladder starts everyone at.
-		const mean = RUNGS.reduce((s, r) => s + rating[r], 0) / RUNGS.length;
-		for (const r of RUNGS) rating[r] += ANCHOR - mean;
-	}
-	return rating;
-}
+// Fitting the whole round robin at once, rather than updating game by game, so
+// the answer does not depend on the order the games came in. Shared with the
+// marathon in test/marathon.js.
+const { fitRatings } = require('../src/elo');
 
 (async () => {
 	const pairs = [];
@@ -185,7 +160,7 @@ function fitRatings(results) {
 	}
 
 	const results = [...totals.values()];
-	const rating = fitRatings(results);
+	const rating = fitRatings(results, RUNGS);
 
 	console.log('\nrating:');
 	for (const r of RUNGS.slice().sort((x, y) => rating[y] - rating[x])) {
