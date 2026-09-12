@@ -57,6 +57,10 @@ class BattleState {
 			level: level ? +level : 100,
 			hp: 100, maxhp: 100, status: '', fainted: false,
 			boosts: {}, moves: new Set(), item: null, ability: null, tera: null, transformed: null,
+			// What the battle itself has told us about its ability. A move that
+			// lands rules out every ability that would have made it immune; one
+			// that is shrugged off points straight at the ability that did it.
+			immuneTo: new Set(), notImmuneTo: new Set(), keptItem: false,
 		};
 	}
 
@@ -97,6 +101,12 @@ class BattleState {
 			if (!id || !cond) break;
 			const store = id.side === this.myPlayer ? this.mine : this.opponent;
 			if (store[id.slot]) Object.assign(store[id.slot], cond);
+			// Our move landing on them proves they are NOT immune to it, which
+			// rules out every ability that would have absorbed it.
+			if (cmd === '-damage' && id.side !== this.myPlayer && store[id.slot]) {
+				const lm = this.lastMove;
+				if (lm && lm.side === this.myPlayer && lm.name) store[id.slot].notImmuneTo.add(lm.name);
+			}
 			break;
 		}
 		case '-status': {
@@ -160,6 +170,16 @@ class BattleState {
 			if (id && this.opponent[id.slot] && id.side !== this.myPlayer) this.opponent[id.slot].item = args[1];
 			break;
 		}
+		case '-fail': {
+			// Knock Off that fails to take the item is Sticky Hold, near enough.
+			const id = this.slotOf(args[0]);
+			const lm = this.lastMove;
+			if (id && id.side !== this.myPlayer && this.opponent[id.slot] &&
+				lm && lm.side === this.myPlayer && /knock off/i.test(lm.name || '')) {
+				this.opponent[id.slot].keptItem = true;
+			}
+			break;
+		}
 		case '-enditem': {
 			const id = this.slotOf(args[0]);
 			if (id && this.opponent[id.slot] && id.side !== this.myPlayer) this.opponent[id.slot].item = null;
@@ -172,7 +192,20 @@ class BattleState {
 		}
 		case 'move': {
 			const id = this.slotOf(args[0]);
-			if (id && id.side !== this.myPlayer && this.opponent[id.slot]) this.opponent[id.slot].moves.add(args[1]);
+			if (!id) break;
+			if (id.side !== this.myPlayer && this.opponent[id.slot]) this.opponent[id.slot].moves.add(args[1]);
+			// Remember what was just used, so the result line that follows can be
+			// attributed to it.
+			this.lastMove = { side: id.side, name: args[1], target: args[2] || '' };
+			break;
+		}
+		case '-immune': {
+			// Whatever just bounced off, its type is one this Pokemon is immune to.
+			const id = this.slotOf(args[0]);
+			if (!id || id.side === this.myPlayer) break;
+			const mon = this.opponent[id.slot];
+			const lm = this.lastMove;
+			if (mon && lm && lm.side === this.myPlayer && lm.name) mon.immuneTo.add(lm.name);
 			break;
 		}
 		case '-weather': this.weather = args[0] === 'none' ? '' : args[0]; break;

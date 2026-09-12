@@ -212,5 +212,58 @@ console.log('\n--- dynamax ---');
 	check('dynamaxes on a strong attacking turn while healthy', ai.dynamaxWorthIt(100, 20, { score: 70 }), true);
 }
 
+
+console.log('\n--- learning abilities during the battle ---');
+{
+	const ai = new BattleAI({ difficulty: 'champion' });
+	const gen = ai.gen(9);
+	const calcLib = require('@smogon/calc');
+	const field = new calcLib.Field({});
+	const atk = new calcLib.Pokemon(gen, 'Walking Wake', { level: 100, evs: { spa: 252 } });
+
+	const gastro = () => ({
+		species: 'Gastrodon', level: 100, hp: 100, maxhp: 100, status: '', fainted: false,
+		boosts: {}, moves: new Set(), item: null, ability: null, tera: null, transformed: null,
+		immuneTo: new Set(), notImmuneTo: new Set(), keptItem: false,
+	});
+
+	// Nothing known: the possible Water immunity has to drag the estimate down.
+	const blind = ai.damageToFoe(gen, atk, gastro(), 'Surf', field);
+	check('an unknown Gastrodon discounts Surf for possible Storm Drain', blind < 40, true);
+
+	// It switched in on Surf and took nothing: that is Storm Drain, for good.
+	const absorbed = gastro();
+	absorbed.immuneTo.add('Surf');
+	check('Surf that did nothing is remembered as an immunity',
+		ai.damageToFoe(gen, atk, absorbed, 'Surf', field), 0);
+
+	// It took the Surf: it cannot be Storm Drain, so stop discounting.
+	const landed = gastro();
+	landed.notImmuneTo.add('Surf');
+	check('Surf that landed rules the immunity out for the rest of the battle',
+		ai.damageToFoe(gen, atk, landed, 'Surf', field) > blind, true);
+
+	// Knock Off failed to take the item: Sticky Hold, so not Storm Drain either.
+	const sticky = gastro();
+	sticky.keptItem = true;
+	check('an item that would not come off points at Sticky Hold',
+		ai.damageToFoe(gen, atk, sticky, 'Surf', field) > blind, true);
+
+	// The protocol itself must feed those flags in.
+	const st = new BattleState('t');
+	st.myPlayer = 'p2';
+	st.line(['switch', 'p1a: Gastrodon', 'Gastrodon, M', '100/100']);
+	st.line(['move', 'p2a: Walking Wake', 'Surf', 'p1a: Gastrodon']);
+	st.line(['-immune', 'p1a: Gastrodon']);
+	check('the tracker records an immunity from the log', st.opponent.a.immuneTo.has('Surf'), true);
+
+	const st2 = new BattleState('t');
+	st2.myPlayer = 'p2';
+	st2.line(['switch', 'p1a: Gastrodon', 'Gastrodon, M', '100/100']);
+	st2.line(['move', 'p2a: Walking Wake', 'Surf', 'p1a: Gastrodon']);
+	st2.line(['-damage', 'p1a: Gastrodon', '60/100']);
+	check('the tracker records a move that landed', st2.opponent.a.notImmuneTo.has('Surf'), true);
+}
+
 console.log(`\n=== ${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

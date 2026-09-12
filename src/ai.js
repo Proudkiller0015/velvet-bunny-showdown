@@ -51,6 +51,18 @@ const SPECIAL_PROBES = {
 	Steel: 'Flash Cannon', Fairy: 'Moonblast',
 };
 
+/**
+ * Abilities that make a Pokemon outright immune to a type. Used both ways: a
+ * move that lands rules these out, and a move that bounces off points at them.
+ */
+const ABILITY_IMMUNITY = {
+	'Levitate': 'Ground', 'Earth Eater': 'Ground',
+	'Water Absorb': 'Water', 'Storm Drain': 'Water', 'Dry Skin': 'Water',
+	'Volt Absorb': 'Electric', 'Lightning Rod': 'Electric', 'Motor Drive': 'Electric',
+	'Flash Fire': 'Fire', 'Well-Baked Body': 'Fire',
+	'Sap Sipper': 'Grass',
+};
+
 /** Move targets that must be given an explicit slot number in doubles. */
 const NEEDS_TARGET = new Set(['normal', 'any', 'adjacentFoe', 'adjacentAlly', 'adjacentAllyOrSelf']);
 
@@ -188,6 +200,79 @@ class BattleAI {
 		}
 	}
 
+	/**
+	 * Every ability the opponent might actually have, as calc Pokemon.
+	 *
+	 * The calculator assumes the species' first ability slot when none is known,
+	 * and that is frequently the wrong one: a Gastrodon is taken to have Sticky
+	 * Hold rather than Storm Drain, so Surf reads as 33% when the real answer is
+	 * often zero. Anything that has not been revealed has to be treated as any of
+	 * its possibilities, not as slot zero.
+	 */
+	foeVariants(gen, foe) {
+		if (foe.ability) return [{ mon: this.foePokemon(gen, foe), weight: 1 }];
+		const name = foe.transformed || foe.species;
+		const species = PkmnDex.forGen(gen.num).species.get(name);
+		const abilities = species ? [...new Set(Object.values(species.abilities || {}).filter(a => a))] : [];
+		if (abilities.length < 2) return [{ mon: this.foePokemon(gen, foe), weight: 1 }];
+
+		// Weight by what people in this format actually run, when we know. A
+		// Gastrodon is overwhelmingly Storm Drain rather than Sticky Hold, and
+		// treating those as equally likely under-rates the immunity badly.
+		const stats = this.usage && (this.usage[name] || this.usage[species.baseSpecies]);
+		const table = stats && stats.abilities;
+
+		// Narrow by what the battle has shown. A Surf that did nothing says Storm
+		// Drain; a Surf that landed says it is not Storm Drain, and never will be.
+		const dex = PkmnDex.forGen(gen.num);
+		const typeOf = moveName => { const m = dex.moves.get(moveName); return m && m.exists ? m.type : null; };
+		const immuneTypes = new Set([...(foe.immuneTo || [])].map(typeOf).filter(t => t));
+		const landedTypes = new Set([...(foe.notImmuneTo || [])].map(typeOf).filter(t => t));
+
+		let plausible = abilities.filter(a => {
+			const blocks = ABILITY_IMMUNITY[a];
+			if (blocks && landedTypes.has(blocks)) return false;          // it would have absorbed that
+			if (immuneTypes.size) {
+				// Something bounced off: prefer abilities that explain it.
+				if (blocks && immuneTypes.has(blocks)) return true;
+				return ![...immuneTypes].some(t => Object.values(ABILITY_IMMUNITY).includes(t) &&
+					abilities.some(x => ABILITY_IMMUNITY[x] === t));
+			}
+			return true;
+		});
+		if (foe.keptItem) {
+			const sticky = plausible.filter(a => a === 'Sticky Hold');
+			if (sticky.length) plausible = sticky;   // Knock Off failed: that is Sticky Hold
+		}
+		if (!plausible.length) plausible = abilities;
+		if (plausible.length === 1) return [{ mon: this.foePokemon(gen, { ...foe, ability: plausible[0] }), weight: 1 }];
+
+		return plausible.map(ability => ({
+			mon: this.foePokemon(gen, { ...foe, ability }),
+			weight: table ? (table[ability] || 0.02) : 1,
+		}));
+	}
+
+	/**
+	 * Damage one of our moves does to a foe, averaged over the abilities it could
+	 * have. An ability that grants immunity drags the average down hard, which is
+	 * exactly the caution wanted: clicking a move that might do nothing at all is
+	 * a far worse mistake than clicking a slightly weaker one that always lands.
+	 */
+	damageToFoe(gen, attacker, foe, moveName, field) {
+		const variants = this.foeVariants(gen, foe);
+		if (variants.length === 1) return this.damagePct(gen, attacker, variants[0].mon, moveName, field);
+		let total = 0, weight = 0;
+		for (const v of variants) {
+			total += this.damagePct(gen, attacker, v.mon, moveName, field) * v.weight;
+			weight += v.weight;
+		}
+		return weight > 0 ? total / weight : 0;
+	}
+
+	/** Usage statistics for the format being played, if the bot handed them over. */
+	setUsage(usage) { this.usage = usage || null; }
+
 	/** Percent of the target's remaining HP a move is expected to remove. */
 	damagePct(gen, attacker, defender, moveName, field) {
 		try {
@@ -257,7 +342,7 @@ class BattleAI {
 			let best = 0;
 			for (const foe of foes) {
 				const them = this.foePokemon(gen, foe);
-				for (const m of entry.moves || []) best = Math.max(best, this.damagePct(gen, me, them, toName(m, 'moves'), field));
+				for (const m of entry.moves || []) best = Math.max(best, this.damageToFoe(gen, me, foe, toName(m, 'moves'), field));
 			}
 			value += Math.min(45, best * 0.45);
 		}
@@ -299,7 +384,7 @@ class BattleAI {
 		for (const foe of foes) {
 			const them = this.foePokemon(gen, foe);
 			let ourBest = 0;
-			for (const m of this.myMoveNames) ourBest = Math.max(ourBest, this.damagePct(gen, me, them, m, field));
+			for (const m of this.myMoveNames) ourBest = Math.max(ourBest, this.damageToFoe(gen, me, foe, m, field));
 			const seen = [...foe.moves];
 			const theirBest = seen.length
 				? Math.max(...seen.map(m => this.damagePct(gen, them, me, m, field)))
@@ -330,7 +415,7 @@ class BattleAI {
 		let best = 0, fasterThanAll = true;
 		for (const foe of foes) {
 			const them = this.foePokemon(gen, foe);
-			for (const m of this.myMoveNames) best = Math.max(best, this.damagePct(gen, boosted, them, m, field));
+			for (const m of this.myMoveNames) best = Math.max(best, this.damageToFoe(gen, boosted, foe, m, field));
 			const theirSpe = (them.stats && them.stats.spe) || 0;
 			const mySpe = (boosted.stats && boosted.stats.spe) || 0;
 			if (state.trickRoom ? mySpe > theirSpe : mySpe < theirSpe) fasterThanAll = false;
@@ -423,7 +508,7 @@ class BattleAI {
 		let best = 0, worst = 0;
 		for (const foe of foes) {
 			const them = this.foePokemon(gen, foe);
-			const mine = (entry.moves || []).map(m => this.damagePct(gen, me, them, toName(m, 'moves'), field));
+			const mine = (entry.moves || []).map(m => this.damageToFoe(gen, me, foe, toName(m, 'moves'), field));
 			best = Math.max(best, ...(mine.length ? mine : [0]));
 			const seen = [...foe.moves];
 			const back = seen.length
@@ -535,8 +620,8 @@ class BattleAI {
 		for (const foe of foes) {
 			const them = this.foePokemon(gen, foe);
 			if (best && best.name) {
-				plainOut = Math.max(plainOut, this.damagePct(gen, me, them, best.name, field));
-				teraOut = Math.max(teraOut, this.damagePct(gen, teraMe, them, best.name, field));
+				plainOut = Math.max(plainOut, this.damageToFoe(gen, me, foe, best.name, field));
+				teraOut = Math.max(teraOut, this.damageToFoe(gen, teraMe, foe, best.name, field));
 			}
 			const seen = [...foe.moves];
 			if (seen.length) {
@@ -630,7 +715,7 @@ class BattleAI {
 				score = -Infinity;
 				for (const foe of foes) {
 					const them = this.foePokemon(gen, foe);
-					const pct = this.damagePct(gen, me, them, name, field);
+					const pct = this.damageToFoe(gen, me, foe, name, field);
 					let s = pct;
 					if (pct >= 100) s += 60;                                  // a kill is worth more than damage
 					if (pct >= 100 && data && data.priority > 0) s += 25;      // and a priority kill even more

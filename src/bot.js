@@ -297,6 +297,18 @@ class ShowdownBot {
 		if (!battle) {
 			battle = { state: new BattleState(roomid), ai: new BattleAI({ difficulty: this.defaultDifficulty }), greeted: false };
 			battle.state.myName = this.name;
+			// Hand the AI this format's usage statistics, so when it has to guess
+			// which ability the opponent has it guesses the one people run.
+			const format = /^battle-([a-z0-9]+)-/.exec(roomid);
+			if (format) {
+				const usage = this.builder.usage.get(format[1]);
+				if (usage) battle.ai.setUsage(usage);
+				else {
+					this.builder.prefetch(format[1])
+						.then(() => battle.ai.setUsage(this.builder.usage.get(format[1])))
+						.catch(() => {});
+				}
+			}
 			this.battles.set(roomid, battle);
 		}
 		const { state, ai } = battle;
