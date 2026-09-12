@@ -26,7 +26,9 @@ class ShowdownBot {
 		this.url = options.url || `ws://localhost:${process.env.PORT || 8000}/showdown/websocket`;
 		this.name = options.name || process.env.PS_BOT_NAME || 'Velvet Bunny';
 		this.password = options.password || process.env.PS_BOT_PASSWORD || '';
-		this.avatar = options.avatar || process.env.PS_BOT_AVATAR || '';
+		// Showdown only applies a default avatar to registered accounts, and with
+		// no login server the bot is a guest, so it has to ask for its own.
+		this.avatar = options.avatar || process.env.PS_BOT_AVATAR || 'bunny.png';
 		this.defaultDifficulty = options.difficulty || process.env.PS_DIFFICULTY || 'hard';
 		this.homeRoom = options.homeRoom || process.env.PS_HOME_ROOM || 'lobby';
 

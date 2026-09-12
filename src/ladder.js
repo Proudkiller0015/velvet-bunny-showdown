@@ -55,6 +55,9 @@ class LadderBot {
 		this.difficulty = options.difficulty || 'hard';
 		this.log = options.log || (() => {});
 		this.baseName = options.baseName || 'Velvet Bunny';
+		// Every rung wears the bot's face. Like the main account these are guests,
+		// so the avatar has to be asked for rather than left to login to apply.
+		this.avatar = options.avatar || process.env.PS_BOT_AVATAR || 'bunny.png';
 		this.battles = new Map();
 		this.searching = false;
 		this.ws = null;
@@ -108,6 +111,7 @@ class LadderBot {
 		case 'updateuser':
 			if (parts[2] === '1' && !this.ready) {
 				this.ready = true;
+				if (this.avatar) this.send(`|/avatar ${this.avatar}`);
 				this.log(`${this.name} queueing for ${this.format}`);
 				void this.search();
 			}
