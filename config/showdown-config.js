@@ -16,7 +16,10 @@ Object.assign(exports, require('./config-example.js'));
 // Render and most hosts hand the port in through the environment.
 exports.port = Number(process.env.PORT) || 8000;
 exports.bindaddress = '0.0.0.0';
-exports.subprocesses = 1;
+// Battles run in the main process. Each battle subprocess costs ~80MB, which
+// on a 512MB free tier is the difference between booting and being OOM-killed.
+// A casual server with a handful of concurrent battles does not need them.
+exports.subprocesses = Number(process.env.PS_SUBPROCESSES || 0);
 
 // No login server: anyone can pick a name and play immediately. This is a
 // casual battle server, not a ladder, and there are no accounts to protect.

@@ -35,7 +35,11 @@ function waitForPort(port, timeoutMs = 90000) {
 function startServer() {
 	const entry = require.resolve('pokemon-showdown/dist/server/index.js');
 	const child = spawn(process.execPath, [entry, String(PORT)], {
-		cwd: path.dirname(path.dirname(require.resolve('pokemon-showdown/package.json'))),
+		// The package root, not its parent: Showdown resolves its static files
+		// (server/static/404.html and friends) relative to the working directory.
+		// Forked battle workers happened to resolve them anyway, so getting this
+		// wrong only showed up once battles moved in-process.
+		cwd: path.dirname(require.resolve('pokemon-showdown/package.json')),
 		env: { ...process.env, PORT: String(PORT) },
 		stdio: ['ignore', 'inherit', 'inherit'],
 	});

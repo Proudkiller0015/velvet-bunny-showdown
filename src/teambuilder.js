@@ -83,7 +83,12 @@ function shuffled(rng, a) {
 
 class TeamBuilder {
 	constructor() {
-		this.formats = new Map();
+		// Each cached format context costs roughly 4MB (its own TeamValidator, a
+		// format-specific Dex and a species pool). Caching all 283 formats would
+		// be well over a gigabyte, so this is an LRU with a hard cap: a busy
+		// server stays flat no matter how many formats players wander through.
+		this.maxContexts = Number(process.env.PS_FORMAT_CACHE || 8);
+		this.formats = new Map();     // insertion order is used as LRU order
 		this.speciesOk = new Map();   // `${formatId}|${speciesid}` -> boolean
 		this.smogon = new Map();      // formatId -> strategy-dex sets | null
 		this.usage = new Map();       // formatId -> usage stats | null
@@ -93,6 +98,23 @@ class TeamBuilder {
 	needsTeam(formatId) {
 		const format = Dex.formats.get(formatId);
 		return format.exists && !format.team;
+	}
+
+	/** Drop the least recently used format contexts once over the cap. */
+	evict() {
+		while (this.formats.size > this.maxContexts) {
+			const oldest = this.formats.keys().next().value;
+			this.formats.delete(oldest);
+			// Its per-species verdicts are only meaningful for that format.
+			const prefix = `${oldest}|`;
+			for (const k of this.speciesOk.keys()) {
+				if (k.startsWith(prefix)) this.speciesOk.delete(k);
+			}
+			// The Smogon/usage payloads for a format we are no longer building
+			// are on disk anyway, so let them go too.
+			this.smogon.delete(oldest);
+			this.usage.delete(oldest);
+		}
 	}
 
 	// ------------------------------------------------------- remote Smogon data
@@ -151,7 +173,13 @@ class TeamBuilder {
 
 	context(formatId) {
 		const key = Dex.formats.get(formatId).id;
-		if (this.formats.has(key)) return this.formats.get(key);
+		if (this.formats.has(key)) {
+			// Re-insert so the most recently used format is last in iteration order.
+			const cached = this.formats.get(key);
+			this.formats.delete(key);
+			this.formats.set(key, cached);
+			return cached;
+		}
 
 		const format = Dex.formats.get(key);
 		if (!format.exists) throw new Error(`Unknown format: ${formatId}`);
@@ -185,6 +213,7 @@ class TeamBuilder {
 			pool, items,
 		};
 		this.formats.set(key, ctx);
+		this.evict();
 		return ctx;
 	}
 
