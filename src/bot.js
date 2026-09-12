@@ -228,6 +228,8 @@ class ShowdownBot {
 		// the difficulty for challenges. The ladder is matched by the server, so the
 		// server has to be told too - clicking Stockfish and being sent to Normal is
 		// what happens when it is not. /bot records it there and forwards it here.
+		// Players only belongs next to the difficulties: it is the same question.
+		const pvpButton = `<button class="button" name="send" value="/bot pvp">Players only</button>`;
 		const diffButtons = BattleAI.difficulties().map(d =>
 			`<button class="button" name="send" value="/bot ${d}">` +
 			`${esc(label(d))}</button>`).join(' ');
@@ -264,7 +266,7 @@ class ShowdownBot {
 			`<b>${esc(this.name)}</b>. It brings its own legal team to all ${total} of them. ` +
 			`&#9889; needs no team from you - the battle starts as soon as you confirm; ` +
 			`the rest will ask you to choose one of your teams first.</small></p>` +
-			`<div style="margin:0 0 8px">Difficulty: ${diffButtons}</div>` +
+			`<div style="margin:0 0 8px">Difficulty: ${diffButtons} ${pvpButton}</div>` +
 			blocks.join('') +
 			`</div>`;
 	}

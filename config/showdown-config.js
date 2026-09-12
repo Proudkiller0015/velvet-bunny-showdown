@@ -133,8 +133,10 @@ const BOT_FORMATS = (process.env.PS_LADDER_FORMATS || 'gen9randombattle')
 
 const BOT_IDS = botAccountIds(BOT_BASE, BOT_DIFFICULTIES, BOT_FORMATS);
 const BOT_RUNG = botDifficulties(BOT_BASE, BOT_DIFFICULTIES, BOT_FORMATS);
-/** userid -> the rung they want to be matched against on the ladder. */
+/** userid -> the rung they want to be matched against, or PVP for no bots. */
 const wantedRung = new Map();
+// Not a difficulty, so it can never match one: it is the absence of them.
+const PVP = 'pvp';
 
 exports.commands = {
 	botdifficulty: 'bot',
@@ -145,25 +147,33 @@ exports.commands = {
 
 		if (!choice) {
 			const current = wantedRung.get(user.id);
-			const buttons = names.map(name => {
-				const on = name === current;
-				return `<button class="button${on ? ' disabled' : ''}" name="send" value="/bot ${name}">` +
-					`${on ? '<b>' : ''}${name.charAt(0).toUpperCase()}${name.slice(1)}${on ? '</b>' : ''}</button>`;
-			}).join(' ');
+			const pick = (value, text) => {
+				const on = value === current;
+				return `<button class="button${on ? ' disabled' : ''}" name="send" value="/bot ${value}">` +
+					`${on ? '<b>' : ''}${text}${on ? '</b>' : ''}</button>`;
+			};
+			const buttons = names.map(name => pick(name, name.charAt(0).toUpperCase() + name.slice(1))).join(' ');
+			const now = current === PVP ? 'players only - no bots'
+				: current ? `<b>${current}</b>`
+				: 'whoever is closest to your rating';
 			return this.sendReplyBox(
-				`<b>Which bot do you want to play?</b><br/>${buttons} ` +
-				`<button class="button" name="send" value="/bot anyone">Anyone</button><br/>` +
-				`<small>Then hit <b>Battle!</b> and you will be matched with that one. ` +
-				`${current ? `Currently <b>${current}</b>.` : 'Currently whoever is closest to your rating.'}</small>`
+				`<b>Who do you want to play?</b><br/>${buttons}<br/>` +
+				`<div style="margin-top:4px">${pick(PVP, 'Players only')} ${pick('anyone', 'Anyone')}</div>` +
+				`<small>Then hit <b>Battle!</b>. Currently ${now}.<br/>` +
+				`<b>Players only</b> keeps you out of every bot's queue, so you will wait for a real opponent.</small>`
 			);
 		}
 
-		if (choice === 'anyone' || choice === 'any' || choice === 'off' || choice === 'none') {
+		if (choice === 'anyone' || choice === 'any' || choice === 'off') {
 			wantedRung.delete(user.id);
 			return this.sendReply('You will be matched with whichever bot is closest to your rating.');
 		}
+		if (choice === PVP || choice === 'players' || choice === 'human' || choice === 'humans' || choice === 'none' || choice === 'nobots') {
+			wantedRung.set(user.id, PVP);
+			return this.sendReply('Players only. The bots will leave you alone - you will wait for a real opponent.');
+		}
 		if (!names.includes(choice)) {
-			throw new Chat.ErrorMessage(`No such difficulty. Pick one of: ${names.join(', ')}.`);
+			throw new Chat.ErrorMessage(`No such difficulty. Pick one of: ${names.join(', ')}, or "pvp" for players only.`);
 		}
 		wantedRung.set(user.id, choice);
 		this.sendReply(`Set to ${choice}. Hit Battle! and you will be matched with that one - it may take a moment if it is already in a game.`);
@@ -173,8 +183,9 @@ exports.commands = {
 		this.parse(`/msg ${BOT_BASE}, difficulty ${choice}`);
 	},
 	bothelp: [
-		`/bot - pick which difficulty of bot the ladder should match you against.`,
-		`/bot [difficulty] - set it. /bot anyone - go back to matching on rating.`,
+		`/bot - pick who the ladder should match you against.`,
+		`/bot [difficulty] - always face that rung. /bot pvp - players only, no bots.`,
+		`/bot anyone - go back to matching on rating.`,
 	],
 };
 
@@ -231,6 +242,11 @@ function fixMatchmaking(botIds) {
 			.filter(user => !botIds.has(user.id))
 			.map(user => wantedRung.get(user.id))
 			.filter(rung => rung);
+		// Players only: no bot may be in this game at all. Checked before the rest,
+		// because it is a refusal rather than a preference - there is no rung that
+		// would satisfy it.
+		if (bots.length && asked.includes(PVP)) return false;
+
 		if (bots.length && asked.length) {
 			if (!bots.every(bot => asked.includes(BOT_RUNG.get(bot.id)))) return false;
 			for (let i = 0; i < users.length; i++) users[i].lastMatch = users[(i + 1) % users.length].id;
