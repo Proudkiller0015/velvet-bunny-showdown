@@ -82,6 +82,8 @@ const NEEDS_TARGET = new Set(['normal', 'any', 'adjacentFoe', 'adjacentAlly', 'a
  *              with - the difference between guessing and knowing
  *   readsSets  and which moves and Tera types come with it, before they are used
  *   switchMargin how much better the bench must look before spending a turn
+ *   revenge    prefer a switch-in that can kill before it is killed (on unless
+ *              switched off for a measurement)
  *
  * Every one of these was measured over hundreds of games rather than reasoned
  * about, and the measurements were unkind. Not calculating damage at all is worth
@@ -165,6 +167,30 @@ class BattleAI {
 	static difficulties() { return Object.keys(DIFFICULTIES); }
 
 	jitter() { return this.cfg.noise ? (Math.random() - 0.5) * 2 * this.cfg.noise : 0; }
+
+	/**
+	 * How fast something actually is right now.
+	 *
+	 * The damage calculator takes boosts into account when it calculates damage,
+	 * but it does not write them back into `stats` - a Quaquaval six Aqua Steps
+	 * into a sweep still reads at its base speed. Every speed comparison in here
+	 * used `stats.spe` directly, so the bot kept sending Pokemon in against a
+	 * sweeper it believed it outran, and they died in the order they were listed
+	 * without ever getting a move off.
+	 */
+	speedOf(mon, boosts, status) {
+		let spe = (mon && mon.stats && mon.stats.spe) || 0;
+		const stage = Math.max(-6, Math.min(6, (boosts && boosts.spe) || 0));
+		spe = stage >= 0 ? spe * (2 + stage) / 2 : spe * 2 / (2 - stage);
+		if (status === 'par') spe *= 0.5;
+		if (String((mon && mon.item) || '').toLowerCase().replace(/\W/g, '') === 'choicescarf') spe *= 1.5;
+		return spe;
+	}
+
+	/** The speed of an opponent as the battle has actually left it. */
+	foeSpeed(gen, foe) {
+		return this.speedOf(this.foePokemon(gen, foe), foe.boosts, foe.status);
+	}
 
 	gen(n) { return GENS.get(Math.max(1, Math.min(9, n || 9))); }
 
@@ -425,8 +451,8 @@ class BattleAI {
 		const foes = state.foes();
 		let speedEdge = 0;
 		if (foes.length) {
-			const mySpe = (me.stats && me.stats.spe) || 0;
-			const theirSpe = foes.map(f => { const t = this.foePokemon(gen, f); return (t.stats && t.stats.spe) || 0; });
+			const mySpe = this.speedOf(me, me.boosts, me.status);
+			const theirSpe = foes.map(f => this.foeSpeed(gen, f));
 			const faster = theirSpe.filter(sp => mySpe > sp).length / theirSpe.length;
 			speedEdge = (faster - 0.5) * 2;              // -1 (outsped by all) .. +1 (outspeeds all)
 		}
@@ -619,6 +645,35 @@ class BattleAI {
 		}
 
 		let score = best - worst;
+
+		// Whether it can win the exchange, which matters far more than how hard it
+		// hits. Against a sweeper that outruns the whole team, every Pokemon looks
+		// equally doomed on damage alone, so the bot sent them in listing order and
+		// they died one a turn without attacking. The one that kills first - by
+		// outrunning it, or with a priority move - ends the sweep instead.
+		if (best >= 100 && this.cfg.revenge !== false) {
+			const mySpe = this.speedOf(me, me.boosts, me.status);
+			const outruns = foes.every(foe => {
+				const theirSpe = this.foeSpeed(gen, foe);
+				return state.trickRoom ? mySpe < theirSpe : mySpe > theirSpe;
+			});
+			let priorityKill = false;
+			if (!outruns) {
+				const dex = PkmnDex.forGen(gen.num);
+				for (const m of entry.moves || []) {
+					const name = toName(m, 'moves');
+					const data = dex.moves.get(name);
+					if (!data || !(data.priority > 0)) continue;
+					for (const foe of foes) {
+						if (this.damageToFoe(gen, me, foe, name, field) >= 100) { priorityKill = true; break; }
+					}
+					if (priorityKill) break;
+				}
+			}
+			if (outruns || priorityKill) score += 70;
+			else score += 15;             // it still trades, which beats dying for nothing
+		}
+
 		if (this.cfg.tempo && request) {
 			const cond = /^(\d+)\/(\d+)/.exec(entry.condition || '');
 			const hpPct = cond ? (+cond[1] / +cond[2]) * 100 : 100;
@@ -810,9 +865,9 @@ class BattleAI {
 		// is worth anything, and otherwise the right answer is to leave.
 		let outsped = false;
 		if (this.cfg.predict && foes.length) {
-			const mySpe = (me.stats && me.stats.spe) || 0;
+			const mySpe = this.speedOf(me, me.boosts, me.status);
 			const order = foes.map(foe => {
-				const theirSpe = (this.foePokemon(gen, foe).stats || {}).spe || 0;
+				const theirSpe = this.foeSpeed(gen, foe);
 				return state.trickRoom ? mySpe < theirSpe : mySpe > theirSpe;
 			});
 			movesFirst = order.every(Boolean);

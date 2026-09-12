@@ -22,14 +22,14 @@
 const fs = require('fs');
 const path = require('path');
 
-// From `node test/elo.test.js 150 gen9randombattle`: 10 pairings, 150 games each.
-// Re-run it and update these together if the difficulties change.
+// From a 7,480-game marathon (test/marathon.js), refitted after the rating fit
+// itself was corrected. Re-run it and update these together if the rungs change.
 const MEASURED = {
-	easy: 792,
-	normal: 973,
-	hard: 1053,
-	champion: 1082,
-	stockfish: 1101,
+	easy: 777,
+	normal: 985,
+	hard: 1057,
+	champion: 1076,
+	stockfish: 1106,
 };
 
 const HEADER = 'Elo\tUsername\tW\tL\tT\tLast update';
