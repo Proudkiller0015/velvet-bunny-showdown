@@ -301,10 +301,13 @@ class ShowdownBot {
 		if (!battle) {
 			battle = { state: new BattleState(roomid), ai: new BattleAI({ difficulty: this.defaultDifficulty }), greeted: false };
 			battle.state.myName = this.name;
-			// Hand the AI this format's usage statistics, so when it has to guess
-			// which ability the opponent has it guesses the one people run.
+			// Tell the AI what it is playing. The format decides both what it may
+			// assume about the other side - Random Battle publishes its sets, a built
+			// format does not - and, when it still has to guess an ability, which
+			// guess the people who play that format would make.
 			const format = /^battle-([a-z0-9]+)-/.exec(roomid);
 			if (format) {
+				battle.ai.setFormat(format[1]);
 				const usage = this.builder.usage.get(format[1]);
 				if (usage) battle.ai.setUsage(usage);
 				else {

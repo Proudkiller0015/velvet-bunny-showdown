@@ -23,6 +23,7 @@ const { Dex: PkmnDex } = require('@pkmn/dex');
 const calc = require('@smogon/calc');
 const { TurnSearch, DEFAULT_WEIGHTS } = require('./search');
 const { loadBrain } = require('./brain');
+const { presetsFor } = require('./presets');
 
 const GENS = new Generations(PkmnDex);
 
@@ -76,29 +77,51 @@ const NEEDS_TARGET = new Set(['normal', 'any', 'adjacentFoe', 'adjacentAlly', 'a
  *   noise      random points added to every score, for small misjudgements
  *   switching  may voluntarily switch out of a bad matchup
  *   tempo      values Pokemon by what they can still win, and sacrifices cheaply
- *   predict    assumes the opponent answers with its own best move
+ *   predict    reads turn order, both for landing a kill and for surviving one
+ *   knowsSets  in Random Battle, knows which ability the species is generated
+ *              with - the difference between guessing and knowing
+ *   readsSets  and which moves and Tera types come with it, before they are used
  *   switchMargin how much better the bench must look before spending a turn
  *
- * The rungs differ in what they can do, not just in how often they slip, so the
- * ladder holds up over a run of games instead of dissolving into variance.
+ * Every one of these was measured over hundreds of games rather than reasoned
+ * about, and the measurements were unkind. Not calculating damage at all is worth
+ * about 250 points of Elo and attacking without ever using a status or setup move
+ * is worth about 60, but switching out of bad matchups measured at nothing
+ * whatsoever, and neither reading turn order nor knowing the Random Battle sets
+ * moved a single game. Both of those are still switched on at the top, because
+ * being right about the position is worth having even when it does not win - a
+ * bot that clicks Surf into a Storm Drain Gastrodon looks stupid, and now does
+ * not - but the ladder is spaced by the things that measured.
+ *
+ * Both sides draw a random team every game, which decides a great deal on its
+ * own, so anything short of a large difference is buried by it. Take nothing here
+ * on fewer than a few hundred games; see test/elo.test.js.
  */
 const DIFFICULTIES = {
-	// An in-game trainer, not a slot machine. It picks a sensible attack, almost
-	// always the strongest one it has, and simply never switches or plays around
-	// anything - which is exactly how the NPCs in the games behave. It should
-	// feel beatable but not stupid.
-	easy:     { blunder: 0.10, greedy: true,  naive: true, noise: 18, switching: false, tempo: false, predict: false, tera: true, switchMargin: 999 },
-	// Knows what its status moves are for and will leave a losing matchup, but
-	// does not think past this turn.
-	normal:   { blunder: 0.02, greedy: false, noise: 12, switching: true,  tempo: false, predict: false, tera: true, switchMargin: 55 },
-	// Values what each Pokemon can still win, and spends them accordingly.
-	hard:     { blunder: 0,    greedy: false, noise: 4,  switching: true,  tempo: true,  predict: false, tera: true, switchMargin: 35 },
-	// Counts the speed tiers before committing to anything.
-	champion: { blunder: 0,    greedy: false, noise: 0,  switching: true,  tempo: true,  predict: true,  tera: true, switchMargin: 25 },
-	// Experimental. Everything champion does, plus a one-turn search over our
-	// options against their likely replies, weighted by numbers the trainer
-	// tuned from self-play rather than by hand.
-	stockfish: { blunder: 0,   greedy: false, noise: 0,  switching: true,  tempo: true,  predict: true,  tera: true, switchMargin: 25, search: true },
+	// An in-game trainer. It reaches for whatever move has the biggest number on
+	// it, without working out what that move would actually do, and it never
+	// leaves a matchup however badly it is going. Losing to it should take
+	// carelessness, and beating it should not feel like an achievement.
+	easy:     { blunder: 0.15, greedy: true,  naive: true,  noise: 25, switching: false, tempo: false, predict: false, tera: true, switchMargin: 999 },
+	// Reads the type chart properly - it will not throw Ground at something that
+	// is Flying - and it leaves a matchup it cannot win. What it never does is
+	// anything but attack: no hazards, no status, no setup, no thinking about a
+	// turn it is not currently taking.
+	normal:   { blunder: 0.10, greedy: true,  noise: 20, switching: true,  tempo: false, predict: false, tera: true, switchMargin: 55 },
+	// The whole machinery, and the default opponent. It knows what its status and
+	// setup moves are for, what each of its Pokemon is still worth, and which
+	// ability the thing in front of it is generated with. It still misjudges a
+	// position now and again, which is the difference between a strong opponent
+	// and an unbeatable one.
+	hard:     { blunder: 0.06, greedy: false, noise: 12, switching: true,  tempo: true,  predict: false, tera: true, switchMargin: 40, knowsSets: true },
+	// Everything Hard does and no lapses at all: it counts the speed tiers before
+	// committing, and in Random Battle it knows the whole set - moves and Tera
+	// types included - before any of it is used.
+	champion: { blunder: 0,    greedy: false, noise: 0,  switching: true,  tempo: true,  predict: true,  tera: true, switchMargin: 25, knowsSets: true, readsSets: true },
+	// Experimental. Everything Champion does, plus a one-turn search over our
+	// options against their likely replies, weighted by numbers the trainer tuned
+	// from self-play rather than by hand.
+	stockfish: { blunder: 0,   greedy: false, noise: 0,  switching: true,  tempo: true,  predict: true,  tera: true, switchMargin: 25, knowsSets: true, readsSets: true, search: true },
 };
 const DEFAULT_DIFFICULTY = 'hard';
 
@@ -237,8 +260,19 @@ class BattleAI {
 		if (foe.ability) return [{ mon: this.foePokemon(gen, foe), weight: 1 }];
 		const name = foe.transformed || foe.species;
 		const species = PkmnDex.forGen(gen.num).species.get(name);
-		const abilities = species ? [...new Set(Object.values(species.abilities || {}).filter(a => a))] : [];
-		if (abilities.length < 2) return [{ mon: this.foePokemon(gen, foe), weight: 1 }];
+		let abilities = species ? [...new Set(Object.values(species.abilities || {}).filter(a => a))] : [];
+
+		// In Random Battle the species is generated with a known ability - usually
+		// exactly one - so there is nothing to guess. This is what turns a Gastrodon
+		// from "a third of a Surf, probably" into the Storm Drain wall it always was.
+		const generated = this.knownAbilities(name) || this.knownAbilities(species && species.baseSpecies);
+		if (generated) {
+			const narrowed = abilities.filter(a => generated.includes(a));
+			if (narrowed.length) abilities = narrowed;
+		}
+		if (abilities.length < 2) {
+			return [{ mon: this.foePokemon(gen, abilities.length ? { ...foe, ability: abilities[0] } : foe), weight: 1 }];
+		}
 
 		// Weight by what people in this format actually run, when we know. A
 		// Gastrodon is overwhelmingly Storm Drain rather than Sticky Hold, and
@@ -296,6 +330,49 @@ class BattleAI {
 
 	/** Usage statistics for the format being played, if the bot handed them over. */
 	setUsage(usage) { this.usage = usage || null; }
+
+	/**
+	 * Tell the bot which format it is in, so it can look up the standard sets.
+	 *
+	 * Only Random Battle has any: a built team can carry anything, and pretending
+	 * to know it would be worse than admitting we do not.
+	 */
+	setFormat(format) {
+		this.format = format || '';
+		this.presets = format ? presetsFor(format) : null;
+		this.presetDamaging = new Map();
+		return this.presets;
+	}
+
+	/** The abilities this species is actually generated with, if we may look. */
+	knownAbilities(species) {
+		if (!this.cfg.knowsSets || !this.presets) return null;
+		return this.presets.abilities(species);
+	}
+
+	/**
+	 * The damaging moves the species can turn up with.
+	 *
+	 * Cached per species: the movepool is fixed for the battle, and working out
+	 * which entries are attacks costs a dex lookup each time it is asked.
+	 */
+	knownAttacks(gen, species) {
+		if (!this.cfg.readsSets || !this.presets) return null;
+		const key = String(species || '').toLowerCase();
+		if (this.presetDamaging.has(key)) return this.presetDamaging.get(key);
+		const ids = this.presets.moves(species);
+		let attacks = null;
+		if (ids) {
+			const dex = PkmnDex.forGen(gen.num);
+			attacks = ids
+				.map(id => dex.moves.get(id))
+				.filter(m => m && m.exists && m.category !== 'Status')
+				.map(m => m.name);
+			if (!attacks.length) attacks = null;
+		}
+		this.presetDamaging.set(key, attacks);
+		return attacks;
+	}
 
 	/** Percent of the target's remaining HP a move is expected to remove. */
 	damagePct(gen, attacker, defender, moveName, field) {
@@ -582,6 +659,16 @@ class BattleAI {
 
 	/** Worst-case estimate when the opponent has revealed nothing. */
 	roughIncoming(gen, them, me, field) {
+		// If the format generated this Pokemon from a known list, guessing is
+		// unnecessary: work out what its actual attacks would do. A probe has to
+		// assume a typical move of each type, which over-rates a wall with nothing
+		// to hit back with and under-rates anything carrying coverage.
+		const attacks = this.knownAttacks(gen, them.species && them.species.name);
+		if (attacks) {
+			let hardest = 0;
+			for (const move of attacks) hardest = Math.max(hardest, this.damagePct(gen, them, me, move, field));
+			return hardest;
+		}
 		const species = PkmnDex.forGen(gen.num).species.get(them.name);
 		if (!species) return 35;
 		// Probe with the side of the attacker that actually hits hard. Guessing a

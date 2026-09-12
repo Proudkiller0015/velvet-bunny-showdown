@@ -2,122 +2,212 @@
 /**
  * Rate the difficulties against each other on a real Elo scale.
  *
- * Each rung has its own ladder account on the server, so its rating is only
- * meaningful if the rungs genuinely differ in strength. This plays a round robin
- * in the simulator and turns the results into Elo, which is the same arithmetic
- * the server's ladder uses - so it says what a player should expect to gain for
- * beating each one, and whether the ladder is worth anything at all.
+ * Every rung has its own account on the ladder, so its rating is only worth
+ * anything if the rungs genuinely differ in strength - otherwise beating
+ * Champion and beating Easy are the same achievement wearing different names.
+ * This plays a round robin in the simulator and turns the results into Elo, on
+ * the same scale the server's ladder uses, which says what a player should
+ * expect for beating each one and whether the ladder means anything at all.
  *
- *   node test/elo.test.js [gamesPerPair] [format]
+ * The ratings are fitted to the whole round robin at once rather than updated
+ * game by game. A ladder has to update as it goes because it cannot see the
+ * future; a measurement can see every game, and fitting them together gets the
+ * same answer without depending on what order they happened to be played in.
+ *
+ *   node test/elo.test.js [gamesPerPair] [format] [workers]
  */
 
-const { BattleStream, getPlayerStreams } = require('pokemon-showdown');
-const { BattleAI } = require('../src/ai');
-const { BattleState } = require('../src/battle');
-const { TeamBuilder } = require('../src/teambuilder');
+const { execFile } = require('child_process');
+const os = require('os');
+const path = require('path');
 
-const GAMES = +(process.argv[2] || 20);
-const FORMAT = process.argv[3] || 'gen9randombattle';
 const RUNGS = ['easy', 'normal', 'hard', 'champion', 'stockfish'];
-const START = 1000;
-const K = 32;
+const ANCHOR = 1000;        // where the ladder starts, so the numbers are comparable
+const SCALE = 400;          // Elo's scale factor
+const CHUNK = 4;            // games per child, small enough to keep every core busy
 
-async function playGame(builder, a, b, aIsP1) {
-	const stream = new BattleStream();
-	const streams = getPlayerStreams(stream);
-	const bots = {
-		p1: new BattleAI({ difficulty: aIsP1 ? a : b }),
-		p2: new BattleAI({ difficulty: aIsP1 ? b : a }),
-	};
-	const teams = {
-		p1: builder.needsTeam(FORMAT) ? builder.build(FORMAT) : null,
-		p2: builder.needsTeam(FORMAT) ? builder.build(FORMAT) : null,
-	};
-	void streams.omniscient.write(
-		`>start ${JSON.stringify({ formatid: FORMAT })}\n` +
-		`>player p1 ${JSON.stringify({ name: 'P1', team: teams.p1 })}\n` +
-		`>player p2 ${JSON.stringify({ name: 'P2', team: teams.p2 })}\n`
-	);
+// --------------------------------------------------------------- child mode
+// One child plays a handful of games between two rungs and prints the score.
+// Battles are entirely CPU-bound, so the only way to use the machine is to run
+// several of them in separate processes.
+if (process.argv[2] === '--play') {
+	const [, , , A, B, gamesArg, format] = process.argv;
+	const games = +gamesArg;
 
-	const run = async (who) => {
-		const state = new BattleState('elo');
-		state.myPlayer = who;
-		for await (const chunk of streams[who]) {
-			for (const line of chunk.split('\n')) {
-				if (!line.startsWith('|')) continue;
-				const parts = line.slice(1).split('|');
-				if (parts[0] === 'request') {
-					const raw = parts.slice(1).join('|');
-					if (!raw) continue;
-					const choice = bots[who].decide(JSON.parse(raw), state);
-					if (choice) void streams[who].write(choice);
-					continue;
+	const { BattleStream, getPlayerStreams } = require('pokemon-showdown');
+	const { BattleAI } = require('../src/ai');
+	const { BattleState } = require('../src/battle');
+	const { TeamBuilder } = require('../src/teambuilder');
+
+	const playGame = async (builder, aIsP1) => {
+		const stream = new BattleStream();
+		const streams = getPlayerStreams(stream);
+		const bots = {
+			p1: new BattleAI({ difficulty: aIsP1 ? A : B }),
+			p2: new BattleAI({ difficulty: aIsP1 ? B : A }),
+		};
+		for (const bot of Object.values(bots)) bot.setFormat(format);
+		const team = () => (builder.needsTeam(format) ? builder.build(format) : null);
+		void streams.omniscient.write(
+			`>start ${JSON.stringify({ formatid: format })}\n` +
+			`>player p1 ${JSON.stringify({ name: 'P1', team: team() })}\n` +
+			`>player p2 ${JSON.stringify({ name: 'P2', team: team() })}\n`
+		);
+
+		const run = async (who) => {
+			const state = new BattleState('elo');
+			state.myPlayer = who;
+			for await (const chunk of streams[who]) {
+				for (const line of chunk.split('\n')) {
+					if (!line.startsWith('|')) continue;
+					const parts = line.slice(1).split('|');
+					if (parts[0] === 'request') {
+						const raw = parts.slice(1).join('|');
+						if (!raw) continue;
+						const choice = bots[who].decide(JSON.parse(raw), state);
+						if (choice) void streams[who].write(choice);
+						continue;
+					}
+					state.line(parts);
 				}
-				state.line(parts);
 			}
-		}
+		};
+
+		let winner = null;
+		const watch = (async () => {
+			for await (const chunk of streams.omniscient) {
+				for (const line of chunk.split('\n')) {
+					if (line.startsWith('|win|')) winner = line.slice(5).trim();
+					if (line.startsWith('|tie')) winner = 'tie';
+				}
+			}
+		})();
+
+		await Promise.all([run('p1'), run('p2'), watch]);
+		if (winner === 'tie') return 0.5;
+		return winner === (aIsP1 ? 'P1' : 'P2') ? 1 : 0;
 	};
 
-	let winner = null;
-	const watch = (async () => {
-		for await (const chunk of streams.omniscient) {
-			for (const line of chunk.split('\n')) {
-				if (line.startsWith('|win|')) winner = line.slice(5).trim();
-				if (line.startsWith('|tie')) winner = 'tie';
-			}
+	(async () => {
+		const builder = new TeamBuilder();
+		try { await builder.prefetch(format); } catch (e) { /* offline is fine */ }
+		let score = 0, played = 0;
+		for (let i = 0; i < games; i++) {
+			// Alternate sides: moving first is worth something, and neither rung
+			// should collect that advantage more often than the other.
+			try { score += await playGame(builder, i % 2 === 0); played++; } catch (e) { /* skip */ }
 		}
+		process.stdout.write(`\n${JSON.stringify({ score, played })}\n`);
 	})();
+	return;
+}
 
-	await Promise.all([run('p1'), run('p2'), watch]);
-	if (winner === 'tie') return 0.5;
-	return winner === (aIsP1 ? 'P1' : 'P2') ? 1 : 0;
+// -------------------------------------------------------------- parent mode
+const GAMES = +(process.argv[2] || 40);
+const FORMAT = process.argv[3] || 'gen9randombattle';
+const WORKERS = +(process.argv[4] || Math.max(1, os.cpus().length - 1));
+
+/**
+ * Fit a rating to every rung from the whole round robin.
+ *
+ * Straight maximum likelihood on the logistic model Elo is defined by: nudge
+ * each rating toward what would have predicted the results, repeat until it
+ * stops moving. Unlike game-by-game updates this cannot be skewed by the order
+ * the games came in, and every game counts once.
+ */
+function fitRatings(results) {
+	const rating = {};
+	for (const r of RUNGS) rating[r] = ANCHOR;
+	for (let step = 0; step < 4000; step++) {
+		const grad = {};
+		for (const r of RUNGS) grad[r] = 0;
+		for (const { a, b, score, played } of results) {
+			if (!played) continue;
+			const expected = 1 / (1 + Math.pow(10, (rating[b] - rating[a]) / SCALE));
+			const err = score - expected * played;
+			grad[a] += err;
+			grad[b] -= err;
+		}
+		for (const r of RUNGS) rating[r] += grad[r] * 0.5;
+		// Elo is only meaningful as differences, so pin the average to the number
+		// the ladder starts everyone at.
+		const mean = RUNGS.reduce((s, r) => s + rating[r], 0) / RUNGS.length;
+		for (const r of RUNGS) rating[r] += ANCHOR - mean;
+	}
+	return rating;
 }
 
 (async () => {
-	const builder = new TeamBuilder();
-	try { await builder.prefetch(FORMAT); } catch (e) { /* offline is fine */ }
-
-	const elo = {};
-	const record = {};
-	for (const r of RUNGS) { elo[r] = START; record[r] = { w: 0, l: 0, d: 0 }; }
-
 	const pairs = [];
 	for (let i = 0; i < RUNGS.length; i++) {
 		for (let j = i + 1; j < RUNGS.length; j++) pairs.push([RUNGS[i], RUNGS[j]]);
 	}
 
-	console.log(`round robin on ${FORMAT}: ${pairs.length} pairs x ${GAMES} games\n`);
+	const jobs = [];
 	for (const [a, b] of pairs) {
-		let scoreA = 0;
-		for (let i = 0; i < GAMES; i++) {
-			let s;
-			try { s = await playGame(builder, a, b, i % 2 === 0); } catch (e) { continue; }
-			scoreA += s;
-			if (s === 1) { record[a].w++; record[b].l++; } else if (s === 0) { record[a].l++; record[b].w++; } else { record[a].d++; record[b].d++; }
-			// Update after every game, the way a ladder does.
-			const expA = 1 / (1 + Math.pow(10, (elo[b] - elo[a]) / 400));
-			elo[a] += K * (s - expA);
-			elo[b] += K * ((1 - s) - (1 - expA));
-		}
-		console.log(`${a.padEnd(10)} vs ${b.padEnd(10)} ${(scoreA / GAMES * 100).toFixed(0)}%`);
+		for (let left = GAMES; left > 0; left -= CHUNK) jobs.push({ a, b, games: Math.min(CHUNK, left) });
 	}
 
-	console.log('\nrating after the round robin:');
-	const sorted = RUNGS.slice().sort((x, y) => elo[y] - elo[x]);
-	for (const r of sorted) {
-		const { w, l, d } = record[r];
-		console.log(`  ${r.padEnd(10)} ${Math.round(elo[r])}   ${w}W ${l}L ${d}D`);
+	const totals = new Map(pairs.map(([a, b]) => [`${a}|${b}`, { a, b, score: 0, played: 0 }]));
+	console.log(`round robin on ${FORMAT}: ${pairs.length} pairs x ${GAMES} games, ${WORKERS} at a time\n`);
+
+	let next = 0, finished = 0;
+	const runNext = () => new Promise(resolve => {
+		const step = () => {
+			if (next >= jobs.length) return resolve();
+			const job = jobs[next++];
+			execFile(process.execPath,
+				[__filename, '--play', job.a, job.b, String(job.games), FORMAT],
+				{ maxBuffer: 1 << 26 },
+				(err, stdout) => {
+					if (!err) {
+						try {
+							const r = JSON.parse(stdout.trim().split('\n').pop());
+							const t = totals.get(`${job.a}|${job.b}`);
+							t.score += r.score;
+							t.played += r.played;
+						} catch (e) { /* a lost chunk is not worth failing over */ }
+					}
+					finished++;
+					process.stderr.write(`\r  ${finished}/${jobs.length} chunks`);
+					step();
+				});
+		};
+		step();
+	});
+	await Promise.all(Array.from({ length: WORKERS }, runNext));
+	process.stderr.write('\r' + ' '.repeat(30) + '\r');
+
+	for (const [a, b] of pairs) {
+		const t = totals.get(`${a}|${b}`);
+		const pct = t.played ? (t.score / t.played * 100).toFixed(0) : '--';
+		console.log(`${a.padEnd(10)} vs ${b.padEnd(10)} ${String(pct).padStart(3)}%  (${t.played} games)`);
 	}
 
-	// The ladder is only worth having if the rungs are actually ordered.
-	const order = ['easy', 'normal', 'hard'];
-	let monotonic = true;
-	for (let i = 0; i < order.length - 1; i++) {
-		if (elo[order[i]] >= elo[order[i + 1]]) monotonic = false;
+	const results = [...totals.values()];
+	const rating = fitRatings(results);
+
+	console.log('\nrating:');
+	for (const r of RUNGS.slice().sort((x, y) => rating[y] - rating[x])) {
+		console.log(`  ${r.padEnd(10)} ${String(Math.round(rating[r])).padStart(5)}`);
 	}
-	const spread = Math.round(Math.max(...RUNGS.map(r => elo[r])) - Math.min(...RUNGS.map(r => elo[r])));
-	console.log(`\nspread: ${spread} points`);
-	console.log(monotonic ? 'PASS - easy < normal < hard, so beating a harder one is worth more'
-		: 'FAIL - the rungs are not ordered, so their ratings would not mean anything');
-	process.exit(monotonic ? 0 : 1);
+
+	// The ladder is only worth having if the rungs come out in the order they are
+	// offered in. Stockfish is left out of the check on purpose: it trains, so
+	// where it lands is a result rather than a promise.
+	const promised = ['easy', 'normal', 'hard', 'champion'];
+	const gaps = [];
+	let ordered = true;
+	for (let i = 0; i < promised.length - 1; i++) {
+		const gap = rating[promised[i + 1]] - rating[promised[i]];
+		gaps.push(`${promised[i]}->${promised[i + 1]} ${gap > 0 ? '+' : ''}${Math.round(gap)}`);
+		if (gap <= 0) ordered = false;
+	}
+	const spread = Math.round(Math.max(...RUNGS.map(r => rating[r])) - Math.min(...RUNGS.map(r => rating[r])));
+	console.log(`\ngaps: ${gaps.join(', ')}`);
+	console.log(`spread: ${spread} points`);
+	console.log(ordered
+		? 'PASS - each rung outrates the one below, so beating a harder one is worth more'
+		: 'FAIL - the rungs are out of order, so their ratings would not mean anything');
+	process.exit(ordered ? 0 : 1);
 })();

@@ -153,6 +153,9 @@ class LadderBot {
 		if (!battle) {
 			battle = { state: new BattleState(roomid), ai: new BattleAI({ difficulty: this.difficulty }), greeted: false };
 			battle.state.myName = this.name;
+			// The format decides what the bot may assume about the other side: in
+			// Random Battle the sets are published, in a built format they are not.
+			battle.ai.setFormat(this.format);
 			const usage = this.builder.usage.get(this.format);
 			if (usage) battle.ai.setUsage(usage);
 			this.battles.set(roomid, battle);
