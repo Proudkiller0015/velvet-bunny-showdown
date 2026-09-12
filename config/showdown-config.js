@@ -110,6 +110,72 @@ exports.noipchecks = true;
  * after it connects sidesteps that, and because the account is unregistered
  * setGroup does not write the rank back to disk, so the next login still works.
  */
+/**
+ * Make the ladder queue pair people sensibly.
+ *
+ * Two things were wrong with it, and they had the same cause.
+ *
+ * Showdown checks that two searchers are within a rating window of each other
+ * before pairing them, and that window is the whole point of a ladder: it is
+ * what makes the opponent you get mean something. But the check sits *after* an
+ * early return for `noipchecks`, which this server sets so that the bot is not
+ * refused for sharing a host with itself. So matchmaking never looked at rating
+ * at all - it paired whoever happened to be queued. Searching got you a random
+ * difficulty.
+ *
+ * And with a queue for every difficulty sitting in the same pool, the bots were
+ * overwhelmingly each other's nearest searcher: five of every six battles on the
+ * server were bot against bot. That burns a free tier's single CPU on games
+ * nobody watches, and it moves the ratings around at random, which is the other
+ * half of why the ladder meant nothing.
+ *
+ * So: bots never play each other, and the rating window is restored. The window
+ * widens with how long the *newest* searcher has been waiting rather than the
+ * oldest, because a bot waits indefinitely by design - measured from the oldest
+ * it would be wide open within minutes of boot and we would be back to random.
+ */
+function fixMatchmaking(botIds) {
+	// `Ladders` is a lookup function with properties hung off it, not the class -
+	// so its prototype is empty and patching it silently did nothing. Take the
+	// prototype from an actual instance, which does not care how it is exported.
+	let proto = null;
+	try { proto = Object.getPrototypeOf(Ladders('gen9randombattle')); } catch (e) { /* below */ }
+	if (!proto || typeof proto.matchmakingOK !== 'function') {
+		console.log('[config] could not reach matchmaking; leaving it alone');
+		return;
+	}
+	if (proto.velvetMatchmaking) return;
+	proto.velvetMatchmaking = true;
+
+	proto.matchmakingOK = function (matches) {
+		const users = matches.map(([, user]) => user);
+		if (new Set(users).size !== users.length) return false;
+
+		// The bots are here for people. Left to themselves they play each other
+		// all day, and beat each other into meaningless ratings.
+		if (users.every(user => botIds.has(user.id))) return false;
+
+		// Rating proximity, which is what a ladder is. Same shape as Showdown's
+		// own: a tight window that opens up the longer someone is left waiting.
+		const times = matches.map(([search]) => search.time);
+		const waiting = Date.now() - Math.max(...times);
+		let range = toID(this.formatid) === `gen${Dex.gen}randombattle` ? 50 : 100;
+		range += waiting / 300;
+		if (range > 300) range = 300 + (range - 300) / 10;
+		if (range > 600) range = 600;
+
+		const ratings = matches.map(([search]) => search.rating);
+		if (Math.max(...ratings) - Math.min(...ratings) > range) return false;
+
+		// Showdown records this to avoid pairing the same two people twice in a
+		// row. Here the bot is often the only opponent there is, so a rematch has
+		// to stay allowed - it is recorded but not enforced.
+		for (let i = 0; i < users.length; i++) users[i].lastMatch = users[(i + 1) % users.length].id;
+		return true;
+	};
+	console.log('[config] matchmaking now goes by rating, and bots do not play each other');
+}
+
 exports.startuphook = function () {
 	const botId = toID(process.env.PS_BOT_NAME || 'Velvet Bunny');
 	// The people who run the place. Promoted the same way as the bot and for the
@@ -124,12 +190,17 @@ exports.startuphook = function () {
 	// usergroups.csv without locking them out of logging in at all.
 	const voiced = (process.env.PS_VOICED || 'dana3166')
 		.split(',').map(n => toID(n)).filter(n => n);
-	// Every account the bot plays under, including one per ladder queue.
-	const botIds = new Set([botId]);
-	for (const d of (process.env.PS_LADDER_DIFFICULTIES || 'easy,normal,hard,champion').split(',')) {
-		const name = d.trim();
-		if (name) botIds.add(toID(`${process.env.PS_BOT_NAME || 'Velvet Bunny'} ${name}`));
-	}
+	// Every account the bot plays under, including one per ladder queue. Taken
+	// from the same module the queues name themselves with - when these two were
+	// worked out separately they disagreed, and the rules below applied to nobody.
+	const { botAccountIds } = require('../../../src/queue-names');
+	const botIds = botAccountIds(
+		process.env.PS_BOT_NAME || 'Velvet Bunny',
+		(process.env.PS_LADDER_DIFFICULTIES || 'easy,normal,hard,champion,stockfish').split(',').map(d => d.trim()).filter(d => d),
+		(process.env.PS_LADDER_FORMATS || 'gen9randombattle').split(',').map(f => f.trim()).filter(f => f)
+	);
+
+	fixMatchmaking(botIds);
 
 	setInterval(() => {
 		// Bot rank for the bot, which is what it is for. It can post the lobby

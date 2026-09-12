@@ -54,15 +54,29 @@ function startServer() {
 	// Ratings live in a file inside the package, on a disk this host wipes every
 	// restart, so pull the saved copy back before Showdown reads it.
 	//
-	// Nothing is seeded: every account starts at 1000 and earns its rating like
-	// anyone else. The rungs separate on their own, because they meet each other
-	// in the queue as well as meeting players.
+	// The bot rungs are seeded from the round robin in test/elo.test.js, so a
+	// player is matched against one near their own strength from their very first
+	// search and beating Champion is worth more than beating Easy straight away.
+	// Only missing rows are added - a rating earned against people always stands.
 	const pkgRoot = path.dirname(require.resolve('pokemon-showdown/package.json'));
 	const ladderDir = path.join(pkgRoot, 'config', 'ladders');
 	const { LadderStore } = require('./ladder-store');
 	const store = new LadderStore(ladderDir, (...a) => console.log('[ladder-store]', ...a));
 	await store.connect();
 	await store.restore();
+
+	const { seedLadder } = require('./ladder-seed');
+	const { queueName, DEFAULT_FORMATS, DEFAULT_DIFFICULTIES } = require('./ladder');
+	const seedFormats = (process.env.PS_LADDER_FORMATS || DEFAULT_FORMATS.join(','))
+		.split(',').map(f => f.trim()).filter(f => f);
+	const seedDifficulties = (process.env.PS_LADDER_DIFFICULTIES || DEFAULT_DIFFICULTIES.join(','))
+		.split(',').map(d => d.trim()).filter(d => d);
+	for (const format of seedFormats) {
+		seedLadder(ladderDir, format, seedDifficulties.map(difficulty => ({
+			name: queueName(process.env.PS_BOT_NAME || 'Velvet Bunny', difficulty, format, seedFormats.length > 1),
+			difficulty,
+		})), msg => console.log('[ladder-seed]', msg));
+	}
 
 	console.log(`[boot] starting Pokemon Showdown on port ${PORT}`);
 	const server = startServer();

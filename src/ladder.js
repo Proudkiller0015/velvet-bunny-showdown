@@ -26,15 +26,11 @@ const { BattleState } = require('./battle');
 // directly comparable, which also makes them a real measurement of the bots
 // against each other.
 const DEFAULT_FORMATS = ['gen9randombattle'];
-const DEFAULT_DIFFICULTIES = ['easy', 'normal', 'hard', 'champion'];
+const DEFAULT_DIFFICULTIES = ['easy', 'normal', 'hard', 'champion', 'stockfish'];
 
-/** "Velvet Bunny" + hard -> "Velvet Bunny Hard"; a second format gets a tag. */
-function queueName(base, difficulty, format, multiFormat) {
-	const pretty = difficulty.charAt(0).toUpperCase() + difficulty.slice(1);
-	if (!multiFormat) return `${base} ${pretty}`;
-	const tag = format.replace(/^gen\d+/, '').replace(/randombattle/, 'RB').replace(/randomdoublesbattle/, 'RDB');
-	return `${base} ${pretty} ${tag || format}`.slice(0, 18);
-}
+// Shared with the server's matchmaking rules, which have to know which accounts
+// are bots. See src/queue-names.js for why the names are as short as they are.
+const { queueName } = require('./queue-names');
 
 class LadderBot {
 	/**
@@ -62,9 +58,10 @@ class LadderBot {
 		this.searching = false;
 		this.ws = null;
 		this.reconnectDelay = 2000;
-		// How long to sit out after a game against another rung. Long enough that
-		// self-play is occasional rather than constant; a human still matches
-		// instantly, because the other queues are still waiting.
+		// A pause after a game against another rung. The server refuses to pair two
+		// bots at all now, so this should never come up; it is kept as a brake in
+		// case one ever slips through, because four queues left to play each other
+		// filled five battle rooms in six and moved every rating at random.
 		this.selfPlayCooldown = Number(process.env.PS_LADDER_SELFPLAY_COOLDOWN || 120000);
 		this.stopped = false;
 	}
