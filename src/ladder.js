@@ -19,12 +19,22 @@ const { TeamBuilder } = require('./teambuilder');
 const { BattleAI } = require('./ai');
 const { BattleState } = require('./battle');
 
-const DEFAULT_FORMATS = [
-	'gen9randombattle',
-	'gen9ou',
-	'gen9randomdoublesbattle',
-	'gen9vgc2024regh',
-];
+// One queue per difficulty, so each carries its OWN rating. That is the whole
+// point: if a single account played at whatever difficulty each opponent asked
+// for, its Elo would mean nothing - beating it at easy and at champion would be
+// worth exactly the same. Kept to one format by default so the four ratings are
+// directly comparable, which also makes them a real measurement of the bots
+// against each other.
+const DEFAULT_FORMATS = ['gen9randombattle'];
+const DEFAULT_DIFFICULTIES = ['easy', 'normal', 'hard', 'champion'];
+
+/** "Velvet Bunny" + hard -> "Velvet Bunny Hard"; a second format gets a tag. */
+function queueName(base, difficulty, format, multiFormat) {
+	const pretty = difficulty.charAt(0).toUpperCase() + difficulty.slice(1);
+	if (!multiFormat) return `${base} ${pretty}`;
+	const tag = format.replace(/^gen\d+/, '').replace(/randombattle/, 'RB').replace(/randomdoublesbattle/, 'RDB');
+	return `${base} ${pretty} ${tag || format}`.slice(0, 18);
+}
 
 class LadderBot {
 	/**
@@ -39,12 +49,20 @@ class LadderBot {
 		this.name = options.name;
 		this.format = options.format;
 		this.builder = options.builder;
+		// Fixed for the life of this queue. Deliberately NOT taken from the
+		// player's preference: a rating only means something if the thing being
+		// rated played the same way every game.
 		this.difficulty = options.difficulty || 'hard';
 		this.log = options.log || (() => {});
+		this.baseName = options.baseName || 'Velvet Bunny';
 		this.battles = new Map();
 		this.searching = false;
 		this.ws = null;
 		this.reconnectDelay = 2000;
+		// How long to sit out after a game against another rung. Long enough that
+		// self-play is occasional rather than constant; a human still matches
+		// instantly, because the other queues are still waiting.
+		this.selfPlayCooldown = Number(process.env.PS_LADDER_SELFPLAY_COOLDOWN || 120000);
 		this.stopped = false;
 	}
 
@@ -129,7 +147,7 @@ class LadderBot {
 	onBattleLine(roomid, parts) {
 		let battle = this.battles.get(roomid);
 		if (!battle) {
-			battle = { state: new BattleState(roomid), ai: new BattleAI({ difficulty: this.difficulty }) };
+			battle = { state: new BattleState(roomid), ai: new BattleAI({ difficulty: this.difficulty }), greeted: false };
 			battle.state.myName = this.name;
 			const usage = this.builder.usage.get(this.format);
 			if (usage) battle.ai.setUsage(usage);
@@ -140,7 +158,19 @@ class LadderBot {
 		switch (parts[0]) {
 		case 'player': {
 			const id = (parts[2] || '').trim().toLowerCase().replace(/[^a-z0-9]/g, '');
-			if (id === this.name.toLowerCase().replace(/[^a-z0-9]/g, '')) state.myPlayer = parts[1];
+			const mine = this.name.toLowerCase().replace(/[^a-z0-9]/g, '');
+			if (id === mine) { state.myPlayer = parts[1]; break; }
+			if (!id) break;
+			// Every rung queues the same format, so left alone they would spend all
+			// day playing each other on an instance with one shared CPU. Note when
+			// the opponent is one of us and back off afterwards, which keeps a queue
+			// waiting for real players without burning the box between games.
+			const baseId = this.baseName.toLowerCase().replace(/[^a-z0-9]/g, '');
+			battle.versusBot = id.startsWith(baseId);
+			if (!battle.greeted) {
+				battle.greeted = true;
+				this.send(`${roomid}|Good luck! Playing on **${ai.difficultyName}**.`);
+			}
 			break;
 		}
 		case 'request': {
@@ -155,35 +185,47 @@ class LadderBot {
 		case 'error':
 			this.send(`${roomid}|/choose default`);
 			return;
-		case 'win': case 'tie':
+		case 'win': case 'tie': {
+			const wait = battle.versusBot ? this.selfPlayCooldown : 4000;
 			setTimeout(() => {
 				this.send(`${roomid}|/leave`);
 				this.battles.delete(roomid);
 				void this.search();
-			}, 4000);
+			}, wait);
 			break;
+		}
 		}
 		state.line(parts);
 	}
 }
 
-/** Start one queue per format. */
+/** Start one queue for every difficulty, in every laddered format. */
 function startLadderBots(options) {
 	const formats = (process.env.PS_LADDER_FORMATS || DEFAULT_FORMATS.join(','))
 		.split(',').map(f => f.trim()).filter(f => f);
-	if (process.env.PS_LADDER === '0' || !formats.length) return [];
+	const difficulties = (process.env.PS_LADDER_DIFFICULTIES || DEFAULT_DIFFICULTIES.join(','))
+		.split(',').map(d => d.trim()).filter(d => d);
+	if (process.env.PS_LADDER === '0' || !formats.length || !difficulties.length) return [];
 
 	const builder = options.builder || new TeamBuilder();
-	const bots = formats.map((format, i) => new LadderBot({
-		url: options.url,
-		name: `${options.baseName || 'Velvet Bunny'} ${i + 2}`,
-		format,
-		builder,
-		difficulty: options.difficulty,
-		log: options.log,
-	}));
+	const base = options.baseName || 'Velvet Bunny';
+	const multi = formats.length > 1;
+	const bots = [];
+	for (const format of formats) {
+		for (const difficulty of difficulties) {
+			bots.push(new LadderBot({
+				url: options.url,
+				name: queueName(base, difficulty, format, multi),
+				format,
+				builder,
+				difficulty,
+				baseName: base,
+				log: options.log,
+			}));
+		}
+	}
 	for (const bot of bots) bot.connect();
 	return bots;
 }
 
-module.exports = { LadderBot, startLadderBots, DEFAULT_FORMATS };
+module.exports = { LadderBot, startLadderBots, queueName, DEFAULT_FORMATS, DEFAULT_DIFFICULTIES };

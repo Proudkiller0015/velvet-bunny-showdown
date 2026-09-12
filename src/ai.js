@@ -83,14 +83,22 @@ const NEEDS_TARGET = new Set(['normal', 'any', 'adjacentFoe', 'adjacentAlly', 'a
  * ladder holds up over a run of games instead of dissolving into variance.
  */
 const DIFFICULTIES = {
-	easy:     { blunder: 0.55, greedy: true,  noise: 40, switching: false, tempo: false, predict: false, tera: false, switchMargin: 999 },
-	normal:   { blunder: 0.10, greedy: true,  noise: 20, switching: false, tempo: false, predict: false, tera: true,  switchMargin: 999 },
-	hard:     { blunder: 0,    greedy: false, noise: 6,  switching: true,  tempo: true,  predict: false, tera: true,  switchMargin: 35 },
-	champion: { blunder: 0,    greedy: false, noise: 0,  switching: true,  tempo: true,  predict: true,  tera: true,  switchMargin: 25 },
+	// An in-game trainer, not a slot machine. It picks a sensible attack, almost
+	// always the strongest one it has, and simply never switches or plays around
+	// anything - which is exactly how the NPCs in the games behave. It should
+	// feel beatable but not stupid.
+	easy:     { blunder: 0.10, greedy: true,  naive: true, noise: 18, switching: false, tempo: false, predict: false, tera: true, switchMargin: 999 },
+	// Knows what its status moves are for and will leave a losing matchup, but
+	// does not think past this turn.
+	normal:   { blunder: 0.02, greedy: false, noise: 12, switching: true,  tempo: false, predict: false, tera: true, switchMargin: 55 },
+	// Values what each Pokemon can still win, and spends them accordingly.
+	hard:     { blunder: 0,    greedy: false, noise: 4,  switching: true,  tempo: true,  predict: false, tera: true, switchMargin: 35 },
+	// Counts the speed tiers before committing to anything.
+	champion: { blunder: 0,    greedy: false, noise: 0,  switching: true,  tempo: true,  predict: true,  tera: true, switchMargin: 25 },
 	// Experimental. Everything champion does, plus a one-turn search over our
 	// options against their likely replies, weighted by numbers the trainer
 	// tuned from self-play rather than by hand.
-	stockfish: { blunder: 0,   greedy: false, noise: 0,  switching: true,  tempo: true,  predict: true,  tera: true,  switchMargin: 25, search: true },
+	stockfish: { blunder: 0,   greedy: false, noise: 0,  switching: true,  tempo: true,  predict: true,  tera: true, switchMargin: 25, search: true },
 };
 const DEFAULT_DIFFICULTY = 'hard';
 
@@ -715,7 +723,12 @@ class BattleAI {
 				score = -Infinity;
 				for (const foe of foes) {
 					const them = this.foePokemon(gen, foe);
-					const pct = this.damageToFoe(gen, me, foe, name, field);
+					// A naive trainer reaches for the move with the biggest number on
+					// it. No calculation, no notion that Ground does nothing to a
+					// Flying type - which is exactly how it loses.
+					const pct = this.cfg.naive
+						? (data.basePower || 0) * (me.types && me.types.includes(data.type) ? 1.5 : 1) * 0.6
+						: this.damageToFoe(gen, me, foe, name, field);
 					let s = pct;
 					if (pct >= 100) s += 60;                                  // a kill is worth more than damage
 					if (pct >= 100 && data && data.priority > 0) s += 25;      // and a priority kill even more

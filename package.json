@@ -19,7 +19,8 @@
     "ablate": "node test/ablation.js",
     "test:remote": "node test/remote.test.js",
     "test:lobby": "node test/lobby.test.js",
-    "train": "node test/train.js"
+    "train": "node test/train.js",
+    "test:elo": "node test/elo.test.js"
   },
   "keywords": [
     "pokemon",
@@ -34,6 +35,7 @@
     "@pkmn/dex": "^0.10.11",
     "@smogon/calc": "^0.11.0",
     "pokemon-showdown": "^0.11.11",
+    "redis": "^6.2.1",
     "ws": "^8.21.3"
   },
   "homepage": "https://velvet-bunny-showdown.onrender.com"

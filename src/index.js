@@ -51,10 +51,29 @@ function startServer() {
 }
 
 (async () => {
+	// Ratings live in a file inside the package, on a disk this host wipes every
+	// restart, so pull the saved copy back before Showdown reads it.
+	//
+	// Nothing is seeded: every account starts at 1000 and earns its rating like
+	// anyone else. The rungs separate on their own, because they meet each other
+	// in the queue as well as meeting players.
+	const pkgRoot = path.dirname(require.resolve('pokemon-showdown/package.json'));
+	const ladderDir = path.join(pkgRoot, 'config', 'ladders');
+	const { LadderStore } = require('./ladder-store');
+	const store = new LadderStore(ladderDir, (...a) => console.log('[ladder-store]', ...a));
+	await store.connect();
+	await store.restore();
+
 	console.log(`[boot] starting Pokemon Showdown on port ${PORT}`);
 	const server = startServer();
 
-	const shutdown = () => { try { server.kill(); } catch (e) { /* already gone */ } process.exit(0); };
+	const shutdown = () => {
+		// Flush the ratings before the process goes, or the last games are lost.
+		store.stop().catch(() => {}).finally(() => {
+			try { server.kill(); } catch (e) { /* already gone */ }
+			process.exit(0);
+		});
+	};
 	process.on('SIGINT', shutdown);
 	process.on('SIGTERM', shutdown);
 
@@ -66,8 +85,11 @@ function startServer() {
 		return;
 	}
 	const url = `ws://${HOST}:${PORT}/showdown/websocket`;
+	// One map, written by whoever the player talks to and read by every queue.
+	const difficultyFor = new Map();
+
 	const { ShowdownBot } = require('./bot');
-	const bot = new ShowdownBot({ url });
+	const bot = new ShowdownBot({ url, difficultyFor });
 	bot.connect();
 
 	const { describeBrain } = require('./brain');
@@ -82,9 +104,11 @@ function startServer() {
 		baseName: bot.name,
 		builder: bot.builder,
 		difficulty: bot.defaultDifficulty,
+		difficultyFor,
 		log: (...a) => console.log('[ladder]', ...a),
 	});
 	console.log(`[boot] ${ladder.length} ladder queue(s) starting`);
+	store.start();
 })().catch(err => {
 	console.error('[boot] failed:', err);
 	process.exit(1);

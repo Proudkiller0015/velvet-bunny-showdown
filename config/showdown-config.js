@@ -41,8 +41,10 @@ exports.watchconfig = false;
 // Custom avatars. The file lives in avatars/ here and is copied into the
 // package's config/avatars before boot; the client asks this server for
 // /avatars/<file>, so the name has to keep its extension.
+// Permitted, not applied: the player sets it themselves with /avatar <file>.
 exports.customavatars = {
 	slimequeensamantha: 'queen.png',
+	dana3166: 'dana.png',
 };
 
 // One bot answering every challenge: rate limits only get in its way.

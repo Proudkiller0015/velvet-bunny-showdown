@@ -138,10 +138,12 @@ console.log('\n--- difficulty ladder ---');
 	check('unknown difficulty falls back to the default', new BattleAI({ difficulty: 'banana' }).difficultyName, 'hard');
 	check('difficulty list is exposed for the UI', BattleAI.difficulties().length >= 4, true);
 
-	// Easy should never terastallize; champion may.
-	const s = scenario({ me: 'Gyarados', myMoves: ['Waterfall'], foe: 'Charizard' });
-	s.request.active[0].canTerastallize = 'Water';
-	check('easy never terastallizes', /terastallize/.test(easy.decide(s.request, s.state) || ''), false);
+	// Easy is meant to play like an in-game trainer: it uses its gimmick, but it
+	// never switches and never plans past the turn.
+	check('easy still uses its Tera, like an NPC would', easy.cfg.tera, true);
+	check('easy never switches out', easy.cfg.switching, false);
+	check('easy does not weigh tempo', easy.cfg.tempo, false);
+	check('easy blunders occasionally but is not random', easy.cfg.blunder > 0 && easy.cfg.blunder < 0.25, true);
 }
 
 

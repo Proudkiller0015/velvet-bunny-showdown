@@ -21,7 +21,8 @@ console.log(`config -> ${target}`);
 
 // Showdown writes logs eagerly and crashes on boot if the directories are not
 // already there - npm does not ship empty directories, so make them.
-for (const dir of ['logs', 'logs/chat', 'logs/modlog', 'logs/repl', 'logs/responder', 'config/chat-plugins', 'databases']) {
+for (const dir of ['logs', 'logs/chat', 'logs/modlog', 'logs/repl', 'logs/responder',
+	'config/chat-plugins', 'config/ladders', 'databases']) {
 	fs.mkdirSync(path.join(pkgRoot, dir), { recursive: true });
 }
 for (const file of ['logs/errors.txt', 'logs/chatlog-access.txt']) {

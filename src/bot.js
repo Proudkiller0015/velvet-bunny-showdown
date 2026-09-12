@@ -32,7 +32,9 @@ class ShowdownBot {
 
 		this.builder = new TeamBuilder();
 		this.battles = new Map();        // roomid -> {state, ai}
-		this.difficultyFor = new Map();  // userid -> difficulty
+		// Shared with the ladder queues, so a difficulty picked here applies to a
+		// ladder game too rather than only to a direct challenge.
+		this.difficultyFor = options.difficultyFor || new Map();  // userid -> difficulty
 		this.log = options.log || ((...a) => console.log('[bot]', ...a));
 		this.ws = null;
 		this.reconnectDelay = 1000;
