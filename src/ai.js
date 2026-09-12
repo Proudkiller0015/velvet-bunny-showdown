@@ -102,6 +102,20 @@ const DIFFICULTIES = {
 };
 const DEFAULT_DIFFICULTY = 'hard';
 
+/**
+ * What tempo charges, in the same percent-of-health units as the rest of the
+ * score - which is the point. Priced in the 0-100 "still worth this much"
+ * units these came from, one of these terms could reach 80 and no matchup
+ * calculation could ever outvote it, so the bot picked its cheapest Pokemon
+ * and ignored what it was walking into.
+ *
+ *   death  losing it outright, on top of the damage already counted
+ *   entry  the extra hit a voluntary switch eats on the way in
+ *
+ * Exported so the tuner can search them.
+ */
+const TEMPO = { death: 45, entry: 30 };
+
 function toName(id, kind) {
 	const entry = PkmnDex.forGen(9)[kind].get(id);
 	return entry ? entry.name : id;
@@ -113,13 +127,15 @@ class BattleAI {
 		// Weights the trainer produced, if there are any; otherwise the defaults.
 		this.brain = options.brain || loadBrain();
 		this.search = new TurnSearch(this, this.brain.weights);
-		this.setDifficulty(options.difficulty);
+		this.setDifficulty(options.difficulty, options.cfg);
 	}
 
-	setDifficulty(name) {
+	/** @param {object} [overrides] individual knobs, for tuning experiments. */
+	setDifficulty(name, overrides) {
 		const key = String(name || DEFAULT_DIFFICULTY).toLowerCase();
 		this.difficultyName = DIFFICULTIES[key] ? key : DEFAULT_DIFFICULTY;
-		this.cfg = DIFFICULTIES[this.difficultyName];
+		const base = DIFFICULTIES[this.difficultyName];
+		this.cfg = overrides ? { ...base, ...overrides } : base;
 		return this.difficultyName;
 	}
 
@@ -509,7 +525,7 @@ class BattleAI {
 	 * bot will happily walk a spent wall into a hit but will not throw its last
 	 * fast cleaner in front of one.
 	 */
-	benchScore(gen, entry, state, field, request) {
+	benchScore(gen, entry, state, field, request, costEntry) {
 		const foes = state.foes();
 		if (!foes.length) return 0;
 		const me = this.switchInAs(gen, entry, state, foes);
@@ -529,11 +545,15 @@ class BattleAI {
 		if (this.cfg.tempo && request) {
 			const cond = /^(\d+)\/(\d+)/.exec(entry.condition || '');
 			const hpPct = cond ? (+cond[1] / +cond[2]) * 100 : 100;
-			const value = this.monValue(gen, entry, state, request);
-			// Bringing it in costs a hit; losing it outright costs its whole value.
-			const dies = worst >= hpPct;
-			score -= (worst / 100) * value * 0.5;
-			if (dies) score -= value * 0.8;
+			// Relative to the rest of the team, not absolute: what matters is which
+			// of these six is the expensive one, and a team of six walls should still
+			// be willing to spend one.
+			const rank = this.valueRank(gen, entry, state, request);
+			if (worst >= hpPct) score -= TEMPO.death * (0.4 + 0.6 * rank);
+			// Only a voluntary switch pays for the hit on the way in. Replacing a
+			// fainted Pokemon is free, and charging it there is what made the bot
+			// send in whatever it cared least about after every knockout.
+			if (costEntry) score -= (worst / 100) * TEMPO.entry * (0.4 + 0.6 * rank);
 		}
 		return score;
 	}
@@ -696,12 +716,21 @@ class BattleAI {
 		// "that move kills" and "that move kills in time". If we move first and
 		// the KO is there, whatever they were going to do never happens.
 		let movesFirst = false;
+		// The other half of turn order, and the half that was missing: when we are
+		// slower and the hit coming at us is lethal, this turn is the last one this
+		// Pokemon gets. Setting up, chipping, healing into a KO - all of it happens
+		// in a turn that never arrives. Only a kill of our own or a priority move
+		// is worth anything, and otherwise the right answer is to leave.
+		let outsped = false;
 		if (this.cfg.predict && foes.length) {
 			const mySpe = (me.stats && me.stats.spe) || 0;
-			movesFirst = foes.every(foe => {
+			const order = foes.map(foe => {
 				const theirSpe = (this.foePokemon(gen, foe).stats || {}).spe || 0;
 				return state.trickRoom ? mySpe < theirSpe : mySpe > theirSpe;
 			});
+			movesFirst = order.every(Boolean);
+			const myHp = (me.originalCurHP / me.maxHP()) * 100;
+			outsped = !order.some(Boolean) && incoming >= myHp;
 		}
 
 		let best = null;
@@ -718,6 +747,8 @@ class BattleAI {
 				else score = foe
 					? this.statusScore(gen, name, me, this.foePokemon(gen, foe), state, incoming, { foes, field, entry })
 					: 5;
+				// Nothing set up on the turn we are knocked out ever gets used.
+				if (outsped && score > 0) score *= 0.2;
 				if (foes.length > 1 && foe) target = foe.slot === 'b' ? 2 : 1;
 			} else {
 				score = -Infinity;
@@ -735,6 +766,8 @@ class BattleAI {
 					// A KO we land first costs us nothing, so it beats retreating.
 					if (pct >= 100 && (movesFirst || (data && data.priority > 0))) s += 40;
 					if (data && data.recoil && pct < 100) s -= 6;
+					// We are dead before this lands unless it kills or it has priority.
+					if (outsped && pct < 100 && !(data && data.priority > 0)) s *= 0.35;
 					if (s > score) { score = s; target = foe.slot === 'b' ? 2 : 1; }
 				}
 			}
@@ -765,14 +798,17 @@ class BattleAI {
 		if (this.cfg.switching && request.side.pokemon.length > 1 && !active.trapped && !active.maybeTrapped) {
 			const myHpPct = (me.originalCurHP / me.maxHP()) * 100;
 			const doomed = incoming >= myHpPct;
-			const losing = incoming >= myHpPct * 0.5 && best.score < 55;
+			const losing = (incoming >= myHpPct * 0.5 && best.score < 55) ||
+				// Outsped and dying, with nothing lethal of our own to fire back:
+				// staying is a free knockout for them.
+				(outsped && best.score < 100);
 			if (losing) {
 				const bench = request.side.pokemon
 					.map((p, i) => ({ p, i: i + 1 }))
 					.filter(({ p }) => !p.active && !/fnt/.test(p.condition));
 				let alt = null;
 				for (const opt of bench) {
-					const score = this.benchScore(gen, opt.p, state, field, request) + this.jitter();
+					const score = this.benchScore(gen, opt.p, state, field, request, true) + this.jitter();
 					if (!alt || score > alt.score) alt = { score, i: opt.i };
 				}
 				// Tempo: when this one is dying anyway, letting it fall is often
@@ -815,4 +851,4 @@ class BattleAI {
 	}
 }
 
-module.exports = { BattleAI };
+module.exports = { BattleAI, TEMPO };
