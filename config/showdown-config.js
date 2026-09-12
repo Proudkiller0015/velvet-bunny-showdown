@@ -283,7 +283,7 @@ exports.startuphook = function () {
 	const owners = (process.env.PS_OWNERS || 'Unseen Face,SlimeQueenSamantha')
 		.split(',').map(n => toID(n)).filter(n => n);
 	// Staff who help run the place, but do not own it.
-	const admins = (process.env.PS_ADMINS || '')
+	const admins = (process.env.PS_ADMINS || 'Keiko_Sama')
 		.split(',').map(n => toID(n)).filter(n => n);
 	// Voiced regulars. Same reasoning as the owners: this cannot go in
 	// usergroups.csv without locking them out of logging in at all.
