@@ -56,7 +56,7 @@ class BattleState {
 			species: (details || name || '').split(',')[0].trim(),
 			level: level ? +level : 100,
 			hp: 100, maxhp: 100, status: '', fainted: false,
-			boosts: {}, moves: new Set(), item: null, ability: null, tera: null,
+			boosts: {}, moves: new Set(), item: null, ability: null, tera: null, transformed: null,
 		};
 	}
 
@@ -138,6 +138,16 @@ class BattleState {
 			}
 			break;
 		}
+		case '-transform': {
+			// |-transform|POKEMON|SPECIES - the user now has the target's stats,
+			// types, moves and ability. Its HP is its own, and so is its level.
+			const id = this.slotOf(args[0]);
+			if (!id) break;
+			const store = id.side === this.myPlayer ? this.mine : this.opponent;
+			const mon = store[id.slot];
+			if (mon) mon.transformed = (args[1] || '').split(',')[0].replace(/^p[12][a-c]?: /, '').trim() || null;
+			break;
+		}
 		case '-terastallize': {
 			const id = this.slotOf(args[0]);
 			if (!id) break;
@@ -195,6 +205,14 @@ class BattleState {
 	}
 
 	get trickRoom() { return !!this.pseudo['Trick Room']; }
+
+	/** What this side's Pokemon is effectively acting as right now. */
+	actingAs(side, slot) {
+		const store = side === this.myPlayer ? this.mine : this.opponent;
+		const mon = store[slot];
+		if (!mon) return null;
+		return mon.transformed || mon.species;
+	}
 
 	/** Opposing Pokemon currently on the field. */
 	foes() {

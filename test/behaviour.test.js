@@ -144,5 +144,73 @@ console.log('\n--- difficulty ladder ---');
 	check('easy never terastallizes', /terastallize/.test(easy.decide(s.request, s.state) || ''), false);
 }
 
+
+console.log('\n--- transform / Imposter ---');
+{
+	const ai = new BattleAI({ difficulty: 'champion' });
+	const gen = ai.gen(9);
+
+	// A Ditto that has copied Hydreigon must be judged as Hydreigon, not as Ditto.
+	const s = scenario({ me: 'Ditto', myMoves: ['Dark Pulse'], foe: 'Dachsbun' });
+	const entry = s.request.side.pokemon[0];
+	delete entry.stats;                       // transformed stats are not reported
+	const plain = ai.myPokemon(gen, entry, s.state);
+	s.state.mine.a.transformed = 'Hydreigon';
+	const copied = ai.myPokemon(gen, entry, s.state);
+	check('a transformed Ditto is modelled as what it copied',
+		copied.species.name === 'Hydreigon' && plain.species.name === 'Ditto', true);
+
+	// A benched Imposter Ditto mirrors whatever is in front of it.
+	const s2 = scenario({ me: 'Blissey', myMoves: ['Seismic Toss'], foe: 'Iron Boulder' });
+	const ditto = benchMon('Ditto', ['Transform'], { item: 'choicescarf' });
+	ditto.ability = 'imposter'; ditto.baseAbility = 'imposter';
+	delete ditto.stats;
+	const asSwitchIn = ai.switchInAs(gen, ditto, s2.state, s2.state.foes());
+	check('a benched Imposter is judged as a mirror of the foe',
+		asSwitchIn.species.name === 'Iron Boulder', true);
+
+	// ...and so it should be preferred over something that is 4x weak to it.
+	const articuno = benchMon('Articuno', ['Ice Beam', 'Hurricane'], {});
+	s2.request.side.pokemon.push(ditto, articuno);
+	const field = new (require('@smogon/calc').Field)({});
+	s2.state.opponent.a.moves = new Set(['Mighty Cleave', 'Close Combat']);
+	const dScore = ai.benchScore(gen, ditto, s2.state, field, s2.request);
+	const aScore = ai.benchScore(gen, articuno, s2.state, field, s2.request);
+	check('Imposter beats a Pokemon that is 4x weak to what is out', dScore > aScore, true);
+}
+
+console.log('\n--- terastallizing ---');
+{
+	const ai = new BattleAI({ difficulty: 'champion' });
+	const gen = ai.gen(9);
+	const field = new (require('@smogon/calc').Field)({});
+
+	// The exact situation that lost a Gallade: Play Rough is ~96% into it, and
+	// Tera Steel resists Fairy. Spending Tera here is correct; it survives.
+	const s = scenario({ me: 'Gallade', myMoves: ['Close Combat'], foe: 'Dachsbun', foeMoves: ['Play Rough'] });
+	s.request.active[0].canTerastallize = 'Steel';
+	const entry = s.request.side.pokemon[0];
+	delete entry.stats;
+	const best = { name: 'Close Combat', score: 50, n: 1 };
+	check('teras defensively to survive a hit that would knock it out',
+		ai.teraWorthIt(gen, s.request.active[0], entry, s.state, s.state.foes(), field, best, 96), true);
+
+	// A Tera that neither adds damage nor removes the threat is hoarded.
+	const s2 = scenario({ me: 'Gallade', myMoves: ['Close Combat'], foe: 'Dachsbun', foeMoves: ['Play Rough'] });
+	s2.request.active[0].canTerastallize = 'Fighting';
+	const entry2 = s2.request.side.pokemon[0];
+	delete entry2.stats;
+	check('does not tera into a type that leaves it just as dead',
+		ai.teraWorthIt(gen, s2.request.active[0], entry2, s2.state, s2.state.foes(), field, best, 96), false);
+}
+
+console.log('\n--- dynamax ---');
+{
+	const ai = new BattleAI({ difficulty: 'champion' });
+	check('dynamaxes to survive a hit that doubling HP would live through', ai.dynamaxWorthIt(40, 60, { score: 10 }), true);
+	check('does not dynamax when it dies either way', ai.dynamaxWorthIt(20, 90, { score: 80 }), false);
+	check('dynamaxes on a strong attacking turn while healthy', ai.dynamaxWorthIt(100, 20, { score: 70 }), true);
+}
+
 console.log(`\n=== ${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

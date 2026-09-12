@@ -29,6 +29,26 @@ const RECOVERY = ['Recover', 'Roost', 'Soft-Boiled', 'Slack Off', 'Synthesis', '
 	'Morning Sun', 'Rest', 'Shore Up', 'Milk Drink', 'Heal Order', 'Strength Sap'];
 const PIVOT = ['U-turn', 'Volt Switch', 'Flip Turn', 'Parting Shot', 'Teleport', 'Baton Pass'];
 
+/**
+ * One representative attack per type, for estimating what an opponent that has
+ * revealed nothing might do. Kept in both flavours so the guess matches whether
+ * the attacker is physically or specially inclined.
+ */
+const PHYSICAL_PROBES = {
+	Normal: 'Body Slam', Fire: 'Flare Blitz', Water: 'Waterfall', Electric: 'Wild Charge',
+	Grass: 'Power Whip', Ice: 'Icicle Crash', Fighting: 'Close Combat', Poison: 'Gunk Shot',
+	Ground: 'Earthquake', Flying: 'Brave Bird', Psychic: 'Zen Headbutt', Bug: 'U-turn',
+	Rock: 'Stone Edge', Ghost: 'Poltergeist', Dragon: 'Outrage', Dark: 'Knock Off',
+	Steel: 'Iron Head', Fairy: 'Play Rough',
+};
+const SPECIAL_PROBES = {
+	Normal: 'Hyper Voice', Fire: 'Flamethrower', Water: 'Surf', Electric: 'Thunderbolt',
+	Grass: 'Energy Ball', Ice: 'Ice Beam', Fighting: 'Aura Sphere', Poison: 'Sludge Bomb',
+	Ground: 'Earth Power', Flying: 'Air Slash', Psychic: 'Psychic', Bug: 'Bug Buzz',
+	Rock: 'Power Gem', Ghost: 'Shadow Ball', Dragon: 'Draco Meteor', Dark: 'Dark Pulse',
+	Steel: 'Flash Cannon', Fairy: 'Moonblast',
+};
+
 /** Move targets that must be given an explicit slot number in doubles. */
 const NEEDS_TARGET = new Set(['normal', 'any', 'adjacentFoe', 'adjacentAlly', 'adjacentAllyOrSelf']);
 
@@ -82,11 +102,20 @@ class BattleAI {
 
 	/** Build a calc Pokemon for one of our own mon (we know everything). */
 	myPokemon(gen, entry, state) {
-		const species = (entry.details || entry.ident || '').split(',')[0].replace(/^p[12][a-c]?: /, '').trim();
+		const ownSpecies = (entry.details || entry.ident || '').split(',')[0].replace(/^p[12][a-c]?: /, '').trim();
 		const level = (/, L(\d+)/.exec(entry.details || '') || [])[1];
 		const cond = /^(\d+)\/(\d+)/.exec(entry.condition || '');
 		const status = (/ (brn|psn|tox|par|slp|frz)/.exec(entry.condition || '') || [])[1];
-		const live = state && Object.values(state.mine).find(m => m.species === species);
+		// Look the live state up by the Pokemon's own name - that is what the
+		// protocol calls it even after it has transformed.
+		const live = state && state.mine && Object.values(state.mine).find(m => m && m.species === ownSpecies);
+
+		// A transformed Pokemon fights with the copied species' stats, types and
+		// moves. Modelling it as its own species (Ditto: base 48 across the board)
+		// makes it look useless, and the bot throws it away or refuses to send it
+		// in. Its HP stays its own, which is why the condition is still applied.
+		const transformed = live && live.transformed ? live.transformed : null;
+		const species = transformed || ownSpecies;
 
 		const opts = {
 			level: level ? +level : 100,
@@ -97,15 +126,31 @@ class BattleAI {
 			teraType: live && live.tera ? live.tera : undefined,
 		};
 		if (cond) { opts.curHP = +cond[1]; opts.originalCurHP = +cond[1]; }
-		if (entry.stats) {
+		if (entry.stats && !transformed) {
 			// Showdown hands us final stats; feed them back as the calc's own.
+			// Skipped when transformed, because the reported stats are still the
+			// original Pokemon's while the copied ones are what it actually uses.
 			opts.overrides = { baseStats: undefined };
 			opts.rawStats = entry.stats;
 		}
 		try {
 			const mon = new calc.Pokemon(gen, species, opts);
-			if (entry.stats) for (const k of ['atk', 'def', 'spa', 'spd', 'spe']) if (entry.stats[k]) mon.stats[k] = entry.stats[k];
-			if (cond) { mon.originalCurHP = +cond[1]; mon.maxHP && (mon.stats.hp = +cond[2]); }
+			if (entry.stats && !transformed) {
+				for (const k of ['atk', 'def', 'spa', 'spd', 'spe']) if (entry.stats[k]) mon.stats[k] = entry.stats[k];
+			}
+			if (cond) {
+				// maxHP() reads rawStats.hp, and Showdown's request stats carry no
+				// hp field at all - so without this the current and maximum HP were
+				// in different units and every "what fraction of my HP is that"
+				// judgement (setup, switching, Tera, Dynamax) was working off a
+				// number that could be out by a factor of two or more.
+				const maxhp = +cond[2];
+				if (maxhp > 0) {
+					if (mon.rawStats) mon.rawStats.hp = maxhp;
+					if (mon.stats) mon.stats.hp = maxhp;
+				}
+				mon.originalCurHP = +cond[1];
+			}
 			return mon;
 		} catch (e) {
 			return new calc.Pokemon(gen, species, { level: opts.level });
@@ -114,6 +159,7 @@ class BattleAI {
 
 	/** Build a calc Pokemon for an opponent we can only partially see. */
 	foePokemon(gen, foe) {
+		const species = foe.transformed || foe.species;
 		const opts = {
 			level: foe.level || 100,
 			boosts: foe.boosts,
@@ -125,7 +171,7 @@ class BattleAI {
 			evs: { hp: 85, atk: 85, def: 85, spa: 85, spd: 85, spe: 85 },
 		};
 		try {
-			const mon = new calc.Pokemon(gen, foe.species, opts);
+			const mon = new calc.Pokemon(gen, species, opts);
 			if (foe.maxhp === 100 && foe.hp < 100) mon.originalCurHP = Math.max(1, Math.round(mon.maxHP() * foe.hp / 100));
 			return mon;
 		} catch (e) {
@@ -364,7 +410,7 @@ class BattleAI {
 	benchScore(gen, entry, state, field, request) {
 		const foes = state.foes();
 		if (!foes.length) return 0;
-		const me = this.myPokemon(gen, entry, state);
+		const me = this.switchInAs(gen, entry, state, foes);
 		let best = 0, worst = 0;
 		for (const foe of foes) {
 			const them = this.foePokemon(gen, foe);
@@ -390,17 +436,40 @@ class BattleAI {
 		return score;
 	}
 
+	/**
+	 * What this Pokemon would actually be once it is on the field.
+	 *
+	 * Imposter copies the Pokemon it comes in on, so a benched Ditto is not the
+	 * 48-base-stat blob the dex says it is - it is a mirror of whatever is out
+	 * there. Judging it on its own stats is why it loses switch-ins it should win.
+	 */
+	switchInAs(gen, entry, state, foes) {
+		const ability = String(entry.ability || entry.baseAbility || '').toLowerCase();
+		if (ability === 'imposter' && foes.length) {
+			const copy = this.foePokemon(gen, foes[0]);
+			// It arrives with its own HP, and Imposter does not copy HP.
+			const cond = /^(\d+)\/(\d+)/.exec(entry.condition || '');
+			if (cond) {
+				const pct = +cond[1] / +cond[2];
+				copy.originalCurHP = Math.max(1, Math.round(copy.maxHP() * pct));
+			}
+			return copy;
+		}
+		return this.myPokemon(gen, entry, state);
+	}
+
 	/** Worst-case estimate when the opponent has revealed nothing. */
 	roughIncoming(gen, them, me, field) {
 		const species = PkmnDex.forGen(gen.num).species.get(them.name);
 		if (!species) return 35;
+		// Probe with the side of the attacker that actually hits hard. Guessing a
+		// special move against a physical attacker badly under-rates the threat -
+		// it is what let a Gallade stand in front of an unrevealed Dachsbun.
+		const physical = ((them.stats && them.stats.atk) || 0) >= ((them.stats && them.stats.spa) || 0);
+		const PROBES = physical ? PHYSICAL_PROBES : SPECIAL_PROBES;
 		let worst = 0;
 		for (const type of species.types) {
-			const probe = { Normal: 'Body Slam', Fire: 'Flamethrower', Water: 'Surf', Electric: 'Thunderbolt',
-				Grass: 'Energy Ball', Ice: 'Ice Beam', Fighting: 'Close Combat', Poison: 'Sludge Bomb',
-				Ground: 'Earthquake', Flying: 'Air Slash', Psychic: 'Psychic', Bug: 'Bug Buzz',
-				Rock: 'Rock Slide', Ghost: 'Shadow Ball', Dragon: 'Dragon Claw', Dark: 'Dark Pulse',
-				Steel: 'Iron Head', Fairy: 'Moonblast' }[type];
+			const probe = PROBES[type];
 			if (probe) worst = Math.max(worst, this.damagePct(gen, them, me, probe, field));
 		}
 		return worst;
@@ -432,6 +501,66 @@ class BattleAI {
 			choices.push(this.chooseForSlot(gen, active, entry, index, request, state, field));
 		});
 		return choices.join(', ');
+	}
+
+	/**
+	 * Would Terastallizing right now actually change anything?
+	 *
+	 * Tera cuts both ways and the defensive half is the half people win with:
+	 * changing type to resist the hit coming at you can turn a knockout into a
+	 * free turn. Both directions are measured against the same Tera type, because
+	 * the type is fixed by the set (Random Battle sets pick it in advance), so
+	 * the only real question is whether *this* is the turn to spend it.
+	 */
+	teraWorthIt(gen, active, entry, state, foes, field, best, incoming) {
+		const teraType = typeof active.canTerastallize === 'string' ? active.canTerastallize : null;
+		if (!teraType || !foes.length) return false;
+
+		const me = this.myPokemon(gen, entry, state);
+		const teraMe = this.myPokemon(gen, entry, state);
+		teraMe.teraType = teraType;
+		const hpPct = (me.originalCurHP / me.maxHP()) * 100;
+
+		let plainOut = 0, teraOut = 0;     // what we deal
+		let plainIn = 0, teraIn = 0;       // what we take
+		for (const foe of foes) {
+			const them = this.foePokemon(gen, foe);
+			if (best && best.name) {
+				plainOut = Math.max(plainOut, this.damagePct(gen, me, them, best.name, field));
+				teraOut = Math.max(teraOut, this.damagePct(gen, teraMe, them, best.name, field));
+			}
+			const seen = [...foe.moves];
+			if (seen.length) {
+				for (const m of seen) {
+					plainIn = Math.max(plainIn, this.damagePct(gen, them, me, m, field));
+					teraIn = Math.max(teraIn, this.damagePct(gen, them, teraMe, m, field));
+				}
+			} else {
+				plainIn = Math.max(plainIn, this.roughIncoming(gen, them, me, field));
+				teraIn = Math.max(teraIn, this.roughIncoming(gen, them, teraMe, field));
+			}
+		}
+
+		// Offensive: it turns something that was not a kill into one.
+		if (teraOut >= 100 && plainOut < 100) return true;
+		// Defensive: it turns a hit we do not survive into one we do. This is the
+		// case that saves a Pokemon outright, so it beats hoarding the Tera.
+		if (plainIn >= hpPct && teraIn < hpPct) return true;
+		// Beyond that, do not spend it on a turn we are knocked out anyway.
+		if (plainIn >= hpPct) return false;
+		// A worthwhile margin in either direction.
+		return teraOut > plainOut * 1.25 || teraIn < plainIn * 0.6;
+	}
+
+	/**
+	 * Dynamax (gen 8) doubles HP as well as boosting moves, so like Tera it has a
+	 * defensive use: a hit that would knock us out may not once the HP bar is
+	 * twice the size.
+	 */
+	dynamaxWorthIt(hpPct, incoming, best) {
+		if (incoming >= hpPct && incoming < hpPct * 2) return true;   // survives it
+		if (incoming >= hpPct) return false;                          // dies regardless
+		return best ? best.score >= 40 : false;
 	}
 
 	chooseForSlot(gen, active, entry, index, request, state, field) {
@@ -543,12 +672,18 @@ class BattleAI {
 			choice += ` ${slot}`;
 		}
 
-		// Tera when it turns a non-kill into a kill, or when we are healthy and
-		// committing to an attack anyway. Never on a turn we expect to die.
-		if (active.canTerastallize && incoming < 60 && best.score >= 40) choice += ' terastallize';
+		// Terastallizing is once per battle, so spend it only when this turn is
+		// measurably better for it. Committing it on a turn we are knocked out
+		// anyway - which is how a Gallade burned its Tera and fainted without
+		// moving - is the single worst way to use it.
+		if (this.cfg.tera && active.canTerastallize && this.teraWorthIt(gen, active, entry, state, foes, field, best, incoming)) {
+			choice += ' terastallize';
+		}
 		else if (active.canMegaEvo) choice += ' mega';
 		else if (active.canUltraBurst) choice += ' ultra';
-		else if (active.canDynamax && incoming < 50) choice += ' dynamax';
+		else if (active.canDynamax && this.dynamaxWorthIt((me.originalCurHP / me.maxHP()) * 100, incoming, best)) {
+			choice += ' dynamax';
+		}
 		return choice;
 	}
 }
