@@ -73,14 +73,27 @@ if (fs.existsSync(clientSrc)) {
 // ---------------------------------------------------------------- avatars
 // Custom avatars are served from the package's config/avatars, which npm owns,
 // so they are copied in from avatars/ here the same way the config is.
+//
+// Mirrored, not just copied into. The destination lives inside node_modules,
+// which this host caches between deploys, so anything copied there once stays
+// there - a renamed or deleted avatar went on being served from its old name
+// indefinitely, on a directory the whole internet can read. Everything in that
+// directory is put there by this script, so removing what is no longer in
+// avatars/ takes nothing that is not ours.
 const avatarSrc = path.join(__dirname, '..', 'avatars');
 const avatarDest = path.join(pkgRoot, 'config', 'avatars');
 if (fs.existsSync(avatarSrc)) {
 	fs.mkdirSync(avatarDest, { recursive: true });
-	for (const file of fs.readdirSync(avatarSrc)) {
+	const shipped = fs.readdirSync(avatarSrc);
+	for (const file of shipped) {
 		fs.copyFileSync(path.join(avatarSrc, file), path.join(avatarDest, file));
 	}
-	console.log(`avatars -> ${avatarDest} (${fs.readdirSync(avatarSrc).join(', ')})`);
+	const stale = fs.readdirSync(avatarDest).filter(file => !shipped.includes(file));
+	for (const file of stale) {
+		try { fs.unlinkSync(path.join(avatarDest, file)); } catch (e) { /* already gone */ }
+	}
+	console.log(`avatars -> ${avatarDest} (${shipped.join(', ')})` +
+		(stale.length ? ` - removed ${stale.join(', ')}` : ''));
 }
 
 // Who is allowed to wear what.
