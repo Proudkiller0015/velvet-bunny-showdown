@@ -42,9 +42,11 @@ class ShowdownBot {
 		this.log(`connecting to ${this.url}`);
 		this.ws = new WebSocket(this.url);
 		this.ws.on('open', () => { this.log('connected'); this.reconnectDelay = 1000; });
-		this.ws.on('message', data => {
-			for (const block of String(data).split('\n\n')) this.onData(block);
-		});
+		// One frame is one room's payload: an optional ">roomid" line followed by
+		// its protocol lines. Splitting on blank lines used to cut the roomid away
+		// from everything after the first blank line in a room's backlog, so room
+		// messages arrived looking global.
+		this.ws.on('message', data => this.onData(String(data)));
 		this.ws.on('error', err => this.log('socket error:', err.message));
 		this.ws.on('close', () => {
 			this.log(`disconnected, retrying in ${this.reconnectDelay}ms`);
@@ -99,6 +101,15 @@ class ShowdownBot {
 		case 'popup':
 			this.log('popup:', parts.slice(1).join('|').slice(0, 200));
 			return;
+		case 'init': {
+			// Showdown omits the ">roomid" line for the default room, so an empty
+			// roomid here means the lobby rather than "no room".
+			const room = roomid || 'lobby';
+			// The room is ready - put the format picker up. Re-published on every
+			// boot so a new Showdown version's format list is picked up.
+			if (room === this.homeRoom) setTimeout(() => this.publishLobbyPanel(), 2500);
+			return;
+		}
 		}
 
 		if (roomid && roomid.startsWith('battle-')) this.onBattleLine(roomid, parts, raw);
@@ -193,6 +204,66 @@ class ShowdownBot {
 			return;
 		}
 		this.showDifficulty(from);
+	}
+
+	/**
+	 * The lobby panel: every format the server will accept, as a button.
+	 *
+	 * Challenging through a PM conversation is a poor first experience - you have
+	 * to know the bot's name, know the format id, and type both. This puts the
+	 * whole format list one click away in the first room every player lands in.
+	 *
+	 * Formats that build their own teams are marked, because those start the
+	 * moment you click; the rest open the client's team picker first.
+	 */
+	lobbyPanelHTML() {
+		const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+		const diffButtons = BattleAI.difficulties().map(d =>
+			`<button class="button" name="send" value="/msg ${esc(this.name)}, difficulty ${d}">` +
+			`${d[0].toUpperCase()}${d.slice(1)}</button>`).join(' ');
+
+		// Dex order matches the order the client lists formats in, so the sections
+		// come out in the order players already expect to see them.
+		const sections = new Map();
+		for (const f of Dex.formats.all()) {
+			if (f.effectType !== 'Format' || !f.exists) continue;
+			if (f.challengeShow === false) continue;
+			const name = f.section || 'Other';
+			if (!sections.has(name)) sections.set(name, []);
+			sections.get(name).push(f);
+		}
+
+		let total = 0;
+		const blocks = [];
+		for (const [name, formats] of sections) {
+			const buttons = formats.map(f => {
+				total++;
+				const instant = !!f.team;   // random-team formats need no team from the player
+				const label = esc(f.name.replace(/^\[Gen \d+\] /, ''));
+				return `<button class="button" name="send" value="/challenge ${esc(this.name)}, ${f.id}" ` +
+					`title="${esc(f.name)}">${instant ? '&#9889; ' : ''}${label}</button>`;
+			}).join(' ');
+			const open = blocks.length < 2 ? ' open' : '';
+			blocks.push(`<details${open}><summary><b>${esc(name)}</b> <small>(${formats.length})</small></summary>` +
+				`<div style="padding:4px 0">${buttons}</div></details>`);
+		}
+
+		return `<div style="padding:4px">` +
+			`<h3 style="margin:0 0 4px">Battle the house bot</h3>` +
+			`<p style="margin:0 0 6px"><small>Pick a difficulty, then click any format below to challenge ` +
+			`<b>${esc(this.name)}</b>. It brings its own legal team to all ${total} of them. ` +
+			`&#9889; needs no team from you - the battle starts as soon as you confirm; ` +
+			`the rest will ask you to choose one of your teams first.</small></p>` +
+			`<div style="margin:0 0 8px">Difficulty: ${diffButtons}</div>` +
+			blocks.join('') +
+			`</div>`;
+	}
+
+	/** Publish the panel as the lobby's introduction, so every visitor sees it. */
+	publishLobbyPanel() {
+		const html = this.lobbyPanelHTML();
+		this.log(`publishing lobby panel (${html.length} bytes)`);
+		this.room(this.homeRoom, `/roomintro ${html}`);
 	}
 
 	/** The difficulty picker, as its own box in the PM window. */

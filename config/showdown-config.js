@@ -55,9 +55,11 @@ exports.startuphook = function () {
 	const botId = toID(process.env.PS_BOT_NAME || 'Velvet Bunny');
 	setInterval(() => {
 		const bot = Users.get(botId);
-		if (bot && bot.connected && bot.tempGroup !== '*') {
-			bot.setGroup('*');
-			console.log(`[config] promoted ${botId} to bot rank`);
+		// Admin, not just bot rank: posting the lobby format picker as a room
+		// introduction needs `declare`, which bot rank does not carry.
+		if (bot && bot.connected && bot.tempGroup !== '~') {
+			bot.setGroup('~');
+			console.log(`[config] promoted ${botId} to admin`);
 		}
 		// Showdown blocks private messages for anyone who is neither registered
 		// nor autoconfirmed. With no login server nobody can ever be either, which

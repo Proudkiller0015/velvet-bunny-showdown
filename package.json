@@ -17,7 +17,8 @@
     "test:difficulty": "node test/difficulty.test.js",
     "test:live": "node test/live.test.js",
     "ablate": "node test/ablation.js",
-    "test:remote": "node test/remote.test.js"
+    "test:remote": "node test/remote.test.js",
+    "test:lobby": "node test/lobby.test.js"
   },
   "keywords": [
     "pokemon",
