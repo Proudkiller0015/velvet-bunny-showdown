@@ -36,6 +36,9 @@
 
 const https = require('https');
 
+/** Built on first use: the web worker serves replays, it does not save them. */
+let replayStore = null;
+
 const UPSTREAM_HOST = 'play.pokemonshowdown.com';
 // Showdown's own id. What comes back is bound to our challstr either way, and
 // the id inside the assertion is not checked unless `legalhosts` says to.
@@ -173,6 +176,83 @@ function revalidate(res) {
 }
 
 /**
+ * A replay, as a page.
+ *
+ * Showdown's own replay page is a preact app with a search index and an
+ * archive behind it, none of which applies to one server's worth of replays.
+ * This is the other thing they ship: the embed, which is what a downloaded
+ * replay file uses. It takes a log in a script tag and plays it, loading the
+ * battle engine and sprites it needs by itself.
+ *
+ * Samantha's data goes in alongside it for the same reason it goes into the
+ * client: the engine draws a question mark for anything it has never heard of,
+ * and a replay of her battle is exactly where she has to be recognisable.
+ */
+function replayPage(replay) {
+	const escape = text => String(text || '')
+		.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+	const players = (replay.players || []).map(escape);
+	const title = players.length ? `${players.join(' vs. ')}` : 'Replay';
+	const cdn = 'https://play.pokemonshowdown.com';
+
+	return `<!DOCTYPE html>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width" />
+<title>${title} - ${escape(replay.format)} replay</title>
+<link rel="stylesheet" href="${cdn}/style/font-awesome.css" />
+<link rel="stylesheet" href="${cdn}/style/battle.css" />
+<link rel="stylesheet" href="${cdn}/style/replay.css" />
+<link rel="stylesheet" href="${cdn}/style/utilichart.css" />
+<script src="/config/config.js"></script>
+<script src="${cdn}/js/lib/jquery-1.11.0.min.js"></script>
+<script src="/js/velvet-data.js"></script>
+<div class="wrapper replay-wrapper">
+<div class="battle"></div><div class="battle-log"></div><div class="replay-controls"></div><div class="replay-controls-2"></div>
+</div>
+<script type="text/plain" class="battle-log-data">${String(replay.log || '').replace(/<\/script/gi, '<\/script')}</script>
+<script src="/js/replay-embed.js"></script>
+`;
+}
+
+/**
+ * `/replay/<id>` and `/replay/<id>.json`.
+ *
+ * Asynchronous because a replay this instance did not save has to be fetched
+ * back out of the repository - which is the normal case after a restart, since
+ * everything else here is wiped.
+ */
+function serveReplay(url, res, log) {
+	const path = url.split('?')[0];
+	const match = /^\/replay\/([A-Za-z0-9_-]+)(\.json)?$/.exec(path);
+	if (!match) return false;
+
+	const [, id, asJson] = match;
+	const { ReplayStore } = require('./replay-store');
+	const store = replayStore || (replayStore = new ReplayStore(log));
+
+	void store.get(id).then(replay => {
+		if (!replay) {
+			res.writeHead(404, { 'Content-Type': 'text/html; charset=utf-8' });
+			res.end('<!DOCTYPE html><meta charset="utf-8" /><title>No such replay</title>' +
+				'<p>No replay by that name. It may never have been saved, or it may have been removed.</p>');
+			return;
+		}
+		if (asJson) {
+			res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'max-age=600' });
+			res.end(JSON.stringify(replay));
+			return;
+		}
+		res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'max-age=600' });
+		res.end(replayPage(replay));
+	}).catch(e => {
+		log(`replay ${id}: ${e.message}`);
+		if (!res.headersSent) res.writeHead(500, { 'Content-Type': 'text/plain' });
+		res.end('That replay could not be read.');
+	});
+	return true;
+}
+
+/**
  * Answer that one path before Showdown's own web server sees it.
  *
  * Showdown serves HTTP from a worker process, and its request handler is wired
@@ -202,6 +282,8 @@ function hookServer(server, log) {
 				res.end();
 				return true;
 			}
+			if (serveReplay(req.url, res, log)) return true;
+
 			if (isPage(req.url)) revalidate(res);
 		}
 		return emit.apply(this, [event, ...args]);
