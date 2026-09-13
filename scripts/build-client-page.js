@@ -92,8 +92,16 @@ function build(upstream) {
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&display=swap">
-<link rel="stylesheet" href="style/velvet.css" />`
+`
 	);
+
+	// Our stylesheet goes after every one of theirs, or it loses: CSS of equal
+	// specificity is decided by which was loaded last, and half of what we
+	// correct is a rule of theirs with exactly the same weight.
+	const lastStylesheet = /<link rel="stylesheet" href="\/\/play\.pokemonshowdown\.com\/style\/[^"]*"[^>]*>(?![\s\S]*<link rel="stylesheet" href="\/\/play\.pokemonshowdown\.com\/style\/)/;
+	if (!lastStylesheet.test(html)) throw new Error('could not find their stylesheets to follow');
+	html = html.replace(lastStylesheet, match => `${match}
+<link rel="stylesheet" href="style/velvet.css" />`);
 
 	// Prefs and teams, without the cross-domain iframe that never answers.
 	const storage = /<script src="\/\/play\.pokemonshowdown\.com\/js\/oldclient\/storage\.js[^"]*"><\/script>/;
@@ -154,7 +162,7 @@ function build(upstream) {
 	console.log(`wrote ${OUT} (${Math.round(html.length / 1024)}KB)`);
 
 	// A page that has lost one of our own scripts is worse than no page.
-	for (const needed of ['config/config.js', 'js/velvet-storage.js', 'js/velvet-data.js', '/showdex/main.js', 'manifest.json']) {
+	for (const needed of ['style/velvet.css', 'config/config.js', 'js/velvet-storage.js', 'js/velvet-data.js', '/showdex/main.js', 'manifest.json']) {
 		if (!html.includes(needed)) throw new Error(`${needed} is missing from the built page`);
 	}
 	for (const banned of ['googletagmanager', 'hb.vntsm.com', 'window.__VM']) {
