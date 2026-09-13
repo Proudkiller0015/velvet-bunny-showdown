@@ -312,12 +312,25 @@
 			var name = pokemon;
 			if (name && typeof name !== 'string' && name.getSpeciesForme) name = name.getSpeciesForme();
 			if (typeof name === 'string' && window.toID(name) === 'samantha') {
-				data.url = SPRITES + (isFront ? 'samantha.png' : 'samantha-back.png');
-				data.w = isFront ? 95 : 68;
-				data.h = isFront ? 140 : 116;
+				// Animated unless this viewer has turned animation off, which is the
+				// same pair of preferences the client checks for everyone else - so
+				// the 2D/animated switch in Options does something for her too.
+				var animated = true;
+				try {
+					animated = !window.Dex.prefs('noanim') && !window.Dex.prefs('nogif');
+				} catch (e) { /* no prefs yet; animation is the default */ }
+
+				var art = animated ?
+					(isFront ? ['samantha-front.gif', 80, 140] : ['samantha-back.gif', 74, 116]) :
+					(isFront ? ['samantha.png', 95, 140] : ['samantha-back.png', 68, 116]);
+
+				data.url = SPRITES + art[0];
+				data.w = art[1];
+				data.h = art[2];
 				data.y = isFront ? -14 : -6;
 				data.pixelated = true;
-				// She has no animated form, so do not let the client ask for one.
+				// Whatever she is drawn from, it is one file - there is no sprite sheet
+				// for the client to index into and no cry to play.
 				data.isBackSprite = !isFront;
 				data.cryurl = '';
 			}

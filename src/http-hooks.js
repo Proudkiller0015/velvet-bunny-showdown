@@ -143,6 +143,36 @@ function dataRedirect(url) {
 }
 
 /**
+ * Let the page itself go stale for an hour and nothing else matters.
+ *
+ * Showdown's static server stamps everything `max-age=3600`, which is right
+ * for the files it was written for - sprites and dex data that never change
+ * under the same name. Our client's page is not one of those: it names the
+ * scripts it loads, with a build stamp on each, so a browser holding an hour-old
+ * copy of the page keeps loading an hour-old client and a deploy appears to do
+ * nothing. Revalidating the page costs one request and fixes that; everything
+ * it points at keeps the long cache it deserves.
+ */
+function isPage(url) {
+	const path = url.split('?')[0];
+	if (path === '/' || path === '/index.html') return true;
+	// A client route (/ladder, /teambuilder, /battle-gen9ou-1) - anything the
+	// static server will answer with index.html because it is not a file.
+	return !path.slice(1).includes('.');
+}
+
+/** Make one response revalidate, whatever headers the static server picks. */
+function revalidate(res) {
+	const writeHead = res.writeHead;
+	res.writeHead = function (status, reason, headers) {
+		const given = typeof reason === 'object' && reason ? reason : headers;
+		if (given) given['cache-control'] = 'no-cache';
+		else this.setHeader('Cache-Control', 'no-cache');
+		return writeHead.apply(this, arguments);
+	};
+}
+
+/**
  * Answer that one path before Showdown's own web server sees it.
  *
  * Showdown serves HTTP from a worker process, and its request handler is wired
@@ -172,6 +202,7 @@ function hookServer(server, log) {
 				res.end();
 				return true;
 			}
+			if (isPage(req.url)) revalidate(res);
 		}
 		return emit.apply(this, [event, ...args]);
 	};
