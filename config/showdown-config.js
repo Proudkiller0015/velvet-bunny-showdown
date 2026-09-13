@@ -486,6 +486,42 @@ function fixMatchmaking(botIds) {
 }
 
 /**
+ * Let the bot in without an account, and nobody else.
+ *
+ * Requiring real accounts is the point - a name should belong to the person
+ * who registered it. But the bot claims six names of its own, and registering
+ * six accounts to run a bot on your own server is a chore with no security in
+ * it: the passwords would sit in the environment of the machine the bot runs
+ * on, which is the same machine as the server.
+ *
+ * So the bot is exempted, and the exemption is pinned to where it connects
+ * from. The bot talks to the server over the loopback address, from inside the
+ * same host; nobody on the internet can reach it that way. A remote connection
+ * claiming to be Velvet Bunny is refused exactly like any other unproven name.
+ */
+function exemptBots(botIds) {
+	const proto = Users && Users.User && Users.User.prototype;
+	if (!proto || typeof proto.validateToken !== 'function') {
+		console.log('[config] could not reach the login check; the bot will need an account');
+		return;
+	}
+	if (proto.velvetBotExemption) return;
+	proto.velvetBotExemption = true;
+
+	const LOOPBACK = ['127.0.0.1', '::1', '::ffff:127.0.0.1'];
+	const original = proto.validateToken;
+	proto.validateToken = function (token, name, userid, connection) {
+		const from = connection && connection.ip;
+		if (!token && botIds.has(userid) && LOOPBACK.includes(from)) {
+			// '1' is what Showdown itself returns for an accepted unproven name.
+			return Promise.resolve('1');
+		}
+		return original.call(this, token, name, userid, connection);
+	};
+	console.log('[config] the bot may log in from this host without an account; everyone else must prove their name');
+}
+
+/**
  * Ranks handed out in chat, remembered.
  *
  * Showdown saves a promotion in setGroup only `if (this.registered)`, and with
@@ -581,6 +617,7 @@ exports.startuphook = function () {
 	if (savedCount) console.log(`[config] ${savedCount} remembered rank(s) restored`);
 
 	fixMatchmaking(BOT_IDS);
+	exemptBots(BOT_IDS);
 
 	setInterval(() => {
 		// Bot rank for the bot, which is what it is for. It can post the lobby
