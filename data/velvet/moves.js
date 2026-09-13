@@ -22,7 +22,7 @@ exports.Moves = {
 		category: "Physical",
 		basePower: 250,
 		accuracy: true,
-		pp: 5,
+		pp: 30,
 		priority: 0,
 
 		// Abilities do not get a say: not the immunities, not the damage cuts.
@@ -59,7 +59,7 @@ exports.Moves = {
 		category: "Status",
 		basePower: 0,
 		accuracy: true,
-		pp: 5,
+		pp: 30,
 		priority: 0,
 		onHit(target, source, move) {
 			this.boost({ atk: 12, def: 12, spa: 12, spd: 12, spe: 12 }, source, source, move);
@@ -87,7 +87,7 @@ exports.Moves = {
 		category: "Status",
 		basePower: 0,
 		accuracy: true,
-		pp: 5,
+		pp: 30,
 		priority: 0,
 		onHit(target) {
 			// heal() reports the amount; cureStatus clears burn, poison, paralysis,

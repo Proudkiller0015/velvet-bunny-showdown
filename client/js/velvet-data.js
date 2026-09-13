@@ -38,7 +38,7 @@
 	var MOVES = {
 		queenbeam: {
 			num: -1, accuracy: true, basePower: 250, category: "Physical",
-			name: "Queen Beam", pp: 5, priority: 0,
+			name: "Queen Beam", pp: 30, priority: 0,
 			flags: { protect: 1, mirror: 1, metronome: 1 },
 			secondary: null, target: "normal", type: "Fairy",
 			shortDesc: "Fairy and Dark effectiveness together. Never misses. Ignores abilities.",
@@ -47,7 +47,7 @@
 		},
 		queensdance: {
 			num: -2, accuracy: true, basePower: 0, category: "Status",
-			name: "Queen's Dance", pp: 5, priority: 0,
+			name: "Queen's Dance", pp: 30, priority: 0,
 			flags: { snatch: 1, dance: 1, metronome: 1 },
 			boosts: { atk: 6, def: 6, spa: 6, spd: 6, spe: 6 },
 			secondary: null, target: "self", type: "Fairy",
@@ -57,7 +57,7 @@
 		},
 		queensheal: {
 			num: -3, accuracy: true, basePower: 0, category: "Status",
-			name: "Queen's Heal", pp: 5, priority: 0,
+			name: "Queen's Heal", pp: 30, priority: 0,
 			flags: { snatch: 1, heal: 1, metronome: 1 },
 			secondary: null, target: "self", type: "Fairy",
 			shortDesc: "Heals the user fully and cures its status.",
