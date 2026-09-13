@@ -38,6 +38,21 @@ exports.Formats = [
 			'Default Level = 100',
 		],
 
+		/**
+		 * The stat overflow the cartridge has, which Custom Game turns off.
+		 *
+		 * Nature multipliers are applied as `trunc(trunc(stat * 110, 16) / 100)` -
+		 * truncated to sixteen bits, the way the games do it. A stat above 595 with
+		 * a boosting nature overflows: Samantha's 599 Speed becomes 65890, which
+		 * wraps to 354, which divides to 3. She was outrun by everything.
+		 *
+		 * Custom Game sidesteps it by replacing the battle's `trunc` with one that
+		 * ignores the bit width, which is exactly what a format allowing level 9999
+		 * and 250 base stats needs. This format allows the same things, so it needs
+		 * the same treatment.
+		 */
+		battle: { trunc: Math.trunc },
+
 		// Challengeable and usable in the builder, but kept off the ladder: nothing
 		// with no rules at all belongs on a rating.
 		searchShow: false,
