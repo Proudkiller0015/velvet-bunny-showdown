@@ -81,6 +81,23 @@ Config.server = {
 	registered: false,
 };
 
+// Without this the client, cross-origin to routes.client, injects a hidden
+// crossdomain.php iframe into play.pokemonshowdown.com and waits forever for a
+// postMessage that never comes - Showdown answers that handshake for hosts they
+// route themselves and returns an empty page for ours. Skipping it costs
+// nothing else: it only loads battle text relatively, which already falls back
+// to the official CDN, and logging in goes through the server rather than that
+// iframe (see src/login-relay.js).
+Config.testclient = true;
+
+// English unless the viewer chooses otherwise in Options. Without this the
+// client follows the browser's Accept-Language list, so a French browser gets a
+// French interface with no obvious cause.
+Config.defaultLanguage = 'en';
+
+// routes.client deliberately stays on the official host, so sprites, audio and
+// dex data load from their CDN and this bundle stays small and never stale.
+
 // The main-menu bot panel. Editing this file is enough to change the list.
 Config.botChallenge = {
 	name: 'Velvet Bunny',
@@ -94,41 +111,5 @@ Config.botChallenge = {
 		{ id: 'gen9doublesou', name: 'Doubles OU' },
 		{ id: 'gen9randomdoublesbattle', name: 'Random Doubles', instant: true },
 	],
-};
-/*** end Velvet Bunny ***/
-
-/*** Velvet Bunny ***/
-// Pin the client to our server whatever hostname it is served from:
-// client-connection only falls back to defaultserver when Config.server is unset.
-Config.defaultserver = {
-	id: 'velvetbunny',
-	host: 'velvet-bunny-showdown.onrender.com',
-	port: 443,
-	httpport: 443,
-	altport: 80,
-	registered: false,
-};
-Config.server = Config.defaultserver;
-
-// Without this the client, cross-origin to routes.client, injects a hidden
-// crossdomain.php iframe into play.pokemonshowdown.com and waits forever for a
-// postMessage that never comes - it never even attempts our server. Its only
-// other effect is loading battle text relatively, which already falls back to
-// the official CDN.
-Config.testclient = true;
-
-// English unless the viewer chooses otherwise in Options. Without this the
-// client follows the browser's Accept-Language list, so a French browser gets a
-// French interface with no obvious cause.
-Config.defaultLanguage = 'en';
-
-// routes.client deliberately stays on the official host, so sprites, audio and
-// dex data load from their CDN and this bundle stays small and never stale.
-
-// The main-menu panel. Editing this file is enough - no rebuild needed.
-Config.botChallenge = {
-	name: 'Velvet Bunny',
-	difficulties: ['easy', 'normal', 'hard', 'champion'],
-	defaultFormat: 'gen9randombattle',
 };
 /*** end Velvet Bunny ***/

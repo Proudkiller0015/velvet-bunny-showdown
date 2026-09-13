@@ -131,34 +131,47 @@ exports.bindaddress = '0.0.0.0';
 exports.subprocesses = Number(process.env.PS_SUBPROCESSES || 0);
 
 /**
- * Accounts: real Pokemon Showdown ones, or none at all.
+ * Accounts: real Pokemon Showdown ones.
  *
- * With PS_REAL_ACCOUNTS set, this server uses Showdown's own login server. A
- * player proves who they are the same way they do on the official client: the
- * server issues a challstr, the login server signs an assertion binding it to
- * their account, and this server checks that signature against Showdown's
- * public key - which ships in Showdown's own config. Nothing needs to be
- * registered with anybody; the account does the proving, not the server.
+ * There is no account database here and nothing registered with Smogon. The
+ * official login server does the proving and this server checks its work: it
+ * issues a challstr, the login server signs an assertion binding that challstr
+ * to a userid, and the signature is verified against Showdown's public key,
+ * which ships in their own config. An assertion names one account and one
+ * challstr, so it is worth nothing anywhere else.
  *
- * That makes names mean something for the first time. Ranks stop being
- * assigned to whoever typed a name first, avatars belong to accounts, and the
- * hand-rolled rank store becomes a convenience rather than the only option.
+ * Names mean something because of that. A rank or an avatar belongs to an
+ * account rather than to whoever typed the name first, registering is real
+ * registration on Pokemon Showdown, and someone who has not registered still
+ * gets a name - the login server signs an assertion for unregistered userids
+ * too, marked as such, so they appear exactly as unregistered players do on
+ * the official client.
  *
- * It is behind a switch because turning it on has a cost that has to be paid
- * first: unproven names stop being accepted, and the bot claims six of them.
- * The bot and every ladder queue need registered accounts and their passwords
- * in the environment, or they simply cannot log in and the server has no
- * opponent. Register them, set the passwords, then set PS_REAL_ACCOUNTS=1.
+ * Where the password goes depends on which address the client came from, and
+ * the difference is worth knowing:
+ *
+ *   - on the psim.us address the client is served by Showdown, so it asks its
+ *     own origin and nothing to do with logging in ever touches this server
+ *   - on our own domain, which is where the bot panel and Samantha live, their
+ *     crossdomain handshake returns nothing for our hostname and their login
+ *     server sends no CORS headers, so the browser cannot reach them at all;
+ *     src/login-relay.js forwards that one request, which means a password
+ *     typed there passes through this process on its way to Showdown
+ *
+ * PS_REAL_ACCOUNTS=0 goes back to the old behaviour - any name, no proof, no
+ * login server - which is worth having for local testing without an account.
  */
-const realAccounts = !!process.env.PS_REAL_ACCOUNTS && process.env.PS_REAL_ACCOUNTS !== '0';
-if (!realAccounts) {
+const realAccounts = process.env.PS_REAL_ACCOUNTS !== '0';
+if (realAccounts) {
+	// `loginserver` and the public key it is checked against are inherited from
+	// Showdown's own config; only the forwarding has to be set up here.
+	require('../../../src/login-relay').installLoginRelay(msg => console.log('[login]', msg));
+} else {
 	// Open server: anyone picks a name and plays immediately, and nobody's name
 	// is proof of anything.
 	exports.noguestsecurity = true;
 	exports.loginserver = '';
 }
-// Otherwise both are inherited from Showdown's own config, which already
-// carries the login server's address and the public key used to check it.
 exports.serverid = process.env.PS_SERVERID || 'velvetbunny';
 exports.servertoken = '';
 
