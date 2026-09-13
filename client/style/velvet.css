@@ -1,0 +1,16 @@
+/*
+ * Our own corrections, loaded after the client's own stylesheets.
+ *
+ * Kept in one file so their CSS can be replaced wholesale when the client is
+ * updated, without hunting for edits inside it.
+ */
+
+/* Touch targets. The client is built for a mouse: rows that are precise enough
+   with a pointer are not with a thumb. */
+@media (max-width: 700px) {
+	.mainmenu .menugroup p a.button,
+	.roomlist .blocklink,
+	.ilink {
+		min-height: 40px;
+	}
+}

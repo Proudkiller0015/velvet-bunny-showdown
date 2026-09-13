@@ -81,14 +81,15 @@ Config.server = {
 	registered: false,
 };
 
-// Without this the client, cross-origin to routes.client, injects a hidden
-// crossdomain.php iframe into play.pokemonshowdown.com and waits forever for a
-// postMessage that never comes - Showdown answers that handshake for hosts they
-// route themselves and returns an empty page for ours. Skipping it costs
-// nothing else: it only loads battle text relatively, which already falls back
-// to the official CDN, and logging in goes through the server rather than that
-// iframe (see src/http-hooks.js).
-Config.testclient = true;
+// The client is the classic one, served from our own domain.
+//
+// `testclient` must stay off here. It is meant for a client opened from a file
+// on disk, and it sends the login request to play.pokemonshowdown.com instead
+// of to the server the client is talking to - which, from our origin, a browser
+// refuses to read the answer of. With it off the request goes to our own
+// /~~velvetbunny/action.php, which src/http-hooks.js forwards to the real login
+// server. Its other effect - looking for prefs and teams on Showdown's domain -
+// is handled by js/velvet-storage.js.
 
 // English unless the viewer chooses otherwise in Options. Without this the
 // client follows the browser's Accept-Language list, so a French browser gets a

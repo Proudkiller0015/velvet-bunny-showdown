@@ -170,7 +170,7 @@ if (!stock && fs.existsSync(clientSrc)) {
 
 	const page = fs.readFileSync(indexPath, 'utf8')
 
-		.replace(/(src|href)="((?:js|style|config|showdex)\/[^"?]+)(\?[^"]*)?"/g, `$1="$2?${stamp}"`);
+		.replace(/(src|href)="(\/?(?:js|style|config|showdex)\/[^"?]+)(\?[^"]*)?"/g, `$1="$2?${stamp}"`);
 
 	fs.writeFileSync(indexPath, page);
 
