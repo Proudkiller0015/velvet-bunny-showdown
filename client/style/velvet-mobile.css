@@ -1,0 +1,41 @@
+/*
+ * Our own corrections on top of the client's stylesheet.
+ *
+ * Kept in one file, loaded last, so upstream's CSS can be replaced wholesale
+ * when the client is updated without hunting for edits inside it.
+ */
+
+/*
+ * Upstream's beta notice.
+ *
+ * It offers "Use Rewrite always / Use Rewrite with URL / Back to the old
+ * client" - three choices that mean something on play.pokemonshowdown.com,
+ * where two clients are being compared, and nothing here, where there is one.
+ * The last one is actively wrong: it reloads this site. On a phone it also
+ * costs a third of the screen to say it. The news it sits above is ours.
+ */
+.construction {
+	display: none !important;
+}
+
+/*
+ * Room tabs on a phone.
+ *
+ * The drawer is 280px of a screen that is often 360-400, so a tab that sets a
+ * minimum width wider than that pushes the drawer's own contents sideways and
+ * leaves the room list scrolling horizontally as well as vertically.
+ */
+@media (max-width: 700px) {
+	.roomtab, .roomtab a {
+		max-width: 100%;
+		box-sizing: border-box;
+	}
+
+	/* Touch targets. The client is built for a mouse: 20px rows are precise
+	   enough with a pointer and are not with a thumb. */
+	.pm-log .pm-window h3 button,
+	.roomlist .blocklink,
+	.mainmenu .menugroup p a.button {
+		min-height: 40px;
+	}
+}
