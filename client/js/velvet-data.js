@@ -113,7 +113,8 @@
 		var orderIn = installMoveOrder();
 		var spritesIn = installSprites();
 		var iconIn = installIcon();
-		return tableIn && orderIn && spritesIn && iconIn;
+		var builderIn = installTeambuilderSprite();
+		return tableIn && orderIn && spritesIn && iconIn && builderIn;
 	}
 
 	/**
@@ -343,6 +344,34 @@
 				data.cryurl = '';
 			}
 			return data;
+		};
+		return true;
+	}
+
+	/**
+	 * The sprite in the teambuilder's own set box.
+	 *
+	 * Not the same call as the battle sprite: the builder asks for a CSS
+	 * background rather than an image, and builds the URL from the species name
+	 * against Showdown's CDN, where she does not exist. The box was simply empty.
+	 *
+	 * Her art is tall where a Pokemon sprite is square, so it is given a size as
+	 * well as a URL - left to itself the browser would draw it at full height and
+	 * push it out of the box.
+	 */
+	function installTeambuilderSprite() {
+		if (!window.Dex || !window.Dex.getTeambuilderSprite) return false;
+		if (window.Dex.__velvetBuilderSprite) return true;
+		window.Dex.__velvetBuilderSprite = true;
+
+		var original = window.Dex.getTeambuilderSprite;
+		window.Dex.getTeambuilderSprite = function (set, gen) {
+			var name = set && (set.species || set.speciesForme || set.name || '');
+			if (window.toID(name) === 'samantha') {
+				return 'background-image:url(' + SPRITES + 'samantha.png);' +
+					'background-position:25px 4px;background-size:65px 96px;background-repeat:no-repeat;';
+			}
+			return original.call(this, set, gen);
 		};
 		return true;
 	}
