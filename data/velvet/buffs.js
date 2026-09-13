@@ -73,9 +73,9 @@ const MONKEY_STATUS = [
  * So: each sets its own weather, each gets the standard moves of its type that
  * its whole type received and it did not, each gets the 50 BP Speed-raising move
  * of its own type (Trailblaze, Flame Charge, and Wave Charge, which had to be
- * written because Water never got one), and each gets Simian Rush - a move that
- * is fast precisely when their own weather is up, which is the reason to bring
- * one.
+ * written because Water never got one), and each gets its own Rush move - Jungle,
+ * Cinder and Torrent - which is fast precisely when that monkey's own weather
+ * is up, and is the reason to bring one.
  *
  * The attacking moves were not picked by taste. Each list is what at least 45%
  * of that type learns and this Pokemon does not, which is how "everyone got this
@@ -86,7 +86,7 @@ const MONKEYS = {
 		abilities: ['Verdant Surge'],
 		moves: [
 			'grassyglide', 'grassyterrain', 'trailblaze',
-			'growth', 'endure', 'terablast', 'simianrush',
+			'growth', 'endure', 'terablast', 'junglerush',
 			...MONKEY_STATUS,
 		],
 	},
@@ -94,7 +94,7 @@ const MONKEYS = {
 		abilities: ['Solar Surge'],
 		moves: [
 			'temperflare', 'burningjealousy', 'flamecharge', 'ember',
-			'endure', 'terablast', 'simianrush',
+			'endure', 'terablast', 'cinderrush',
 			...MONKEY_STATUS,
 		],
 	},
@@ -102,7 +102,7 @@ const MONKEYS = {
 		abilities: ['Tidal Surge'],
 		moves: [
 			'liquidation', 'chillingwater', 'muddywater', 'whirlpool', 'wavecharge',
-			'endure', 'terablast', 'simianrush',
+			'endure', 'terablast', 'torrentrush',
 			...MONKEY_STATUS,
 		],
 	},

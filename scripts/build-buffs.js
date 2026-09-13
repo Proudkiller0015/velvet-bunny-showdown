@@ -55,10 +55,14 @@ const LABEL = 'Awakened';
  * Surge shipped to the server and not to the client, leaving two of the three
  * monkeys with an ability the builder could not draw.
  */
-const OUR_MOVES = ['simianrush', 'wavecharge'];
 const OUR_ITEMS = ['elementalbanana'];
+const OUR_MOVES = [];
 const OUR_ABILITIES = [];
 for (const buff of Object.values(Buffs)) {
+	for (const name of buff.moves || []) {
+		const move = Dex.moves.get(name);
+		if (move.exists && move.num < 0 && !OUR_MOVES.includes(move.id)) OUR_MOVES.push(move.id);
+	}
 	for (const name of buff.abilities || []) {
 		const ability = Dex.abilities.get(name);
 		if (ability.exists && ability.num < 0 && !OUR_ABILITIES.includes(ability.id)) OUR_ABILITIES.push(ability.id);

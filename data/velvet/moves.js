@@ -14,6 +14,18 @@
  * all - not 100%, which can still be dodged past by evasion. It cannot miss.
  */
 
+/**
+ * Whichever attacking stat is better, the way Photon Geyser does it.
+ *
+ * The third argument to getStat asks for the unmodified number, so a Swords
+ * Dance cannot silently turn a special attacker physical mid-battle.
+ */
+function betterAttackingStat(move, pokemon) {
+	if (pokemon.getStat('atk', false, true) < pokemon.getStat('spa', false, true)) {
+		move.category = 'Special';
+	}
+}
+
 exports.Moves = {
 	queenbeam: {
 		num: -1,
@@ -163,76 +175,100 @@ exports.Moves = {
 		contestType: "Cool",
 		shortDesc: "100% chance to raise the user's Speed by 1.",
 		desc: "Has a 100% chance to raise the user's Speed by 1 stage.",
+
+		// Not a signature move, and not to be treated as one however few Pokemon
+		// happen to have it today. It exists to be handed out to whoever needs a
+		// Water Flame Charge, and the signature table is told to skip it so that
+		// being new does not make it somebody's.
+		velvetShared: true,
 	},
 
-	simianrush: {
+	/**
+	 * One per monkey: the Rush moves.
+	 *
+	 * These started as a single move that took the user's own type, which made it
+	 * three Pokemon's move and therefore nobody's signature - the table only
+	 * counts a move one evolution family can learn. Splitting it into three
+	 * fixes that, and costs nothing: each monkey only ever used it as its own
+	 * type anyway.
+	 *
+	 * Identical apart from type and the weather each cares about. 80 BP, 100%
+	 * accurate, 15 PP - the classic strong-but-not-broken statline - using
+	 * whichever attacking stat is better, and +1 priority in that monkey's own
+	 * weather, which is the reason to bring one and the reason its ability sets
+	 * that weather on entry.
+	 *
+	 * The type is on the move rather than read off the user, so Terastallizing
+	 * cannot move it. Simisear's move is a Fire move whatever it Terastallizes
+	 * into; there is one of these per type and it stays that way.
+	 */
+
+	junglerush: {
 		num: -4,
 		gen: 9,   // negative `num` leaves this 0, and gen 0 is "does not exist yet"
-		name: "Simian Rush",
-		type: "Normal",   // replaced by the user's own type, below
+		name: "Jungle Rush",
+		type: "Grass",
 		category: "Physical",
 		basePower: 80,
 		accuracy: 100,
 		pp: 15,
 		priority: 0,
-
-		/**
-		 * Their own type - the one they were born with.
-		 *
-		 * Read off the species rather than through getTypes(), which answers with
-		 * the Tera type once a Pokemon has Terastallized and would have the move
-		 * swinging to whatever was picked that battle. The whole point is that
-		 * there is one of these per type and it stays that way: Simisear's Simian
-		 * Rush is a Fire move on a Fire monkey, Terastallized or not. Anything
-		 * else that rewrites types mid-battle - Soak, Forest's Curse - is ignored
-		 * for the same reason.
-		 */
-		onModifyType(move, pokemon) {
-			const type = pokemon.baseSpecies.types[0];
-			move.type = !type || type === '???' ? 'Normal' : type;
-		},
-
-		// Whichever attacking stat is better, the way Photon Geyser does it. The
-		// third argument to getStat asks for the unmodified number, so a Swords
-		// Dance does not silently turn a special attacker physical.
-		onModifyMove(move, pokemon) {
-			if (pokemon.getStat('atk', false, true) < pokemon.getStat('spa', false, true)) {
-				move.category = 'Special';
-			}
-		},
-
-		/**
-		 * First strike, but only in their own weather.
-		 *
-		 * effectiveWeather() rather than the field's weather: under Air Lock the
-		 * sun is still nominally up and does nothing, and a move that reads the
-		 * field directly would still get its priority from weather that has been
-		 * switched off.
-		 */
+		onModifyMove(move, pokemon) { betterAttackingStat(move, pokemon); },
 		onModifyPriority(priority, source, target, move) {
-			// The same born-with type the move itself uses, so Terastallizing can
-			// never hand the priority to a monkey standing in somebody else's
-			// weather, nor take it from one standing in its own.
-			const type = source.baseSpecies.types[0];
-			const weather = source.effectiveWeather();
-			const sunny = ['sunnyday', 'desolateland'].includes(weather);
-			const rainy = ['raindance', 'primordialsea'].includes(weather);
-			const grassy = this.field.isTerrain('grassyterrain') && source.isGrounded();
-
-			if ((type === 'Fire' && sunny) || (type === 'Water' && rainy) || (type === 'Grass' && grassy)) {
-				return priority + 1;
-			}
+			// Grounded, because Grassy Terrain does not reach anything in the air.
+			if (this.field.isTerrain('grassyterrain') && source.isGrounded()) return priority + 1;
 		},
-
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
 		secondary: null,
 		target: "normal",
 		contestType: "Cool",
-		shortDesc: "User's type. Better attacking stat. Goes first in the user's own weather.",
-		desc: "This move's type is the user's primary type and it uses whichever of the user's Attack or Special Attack is higher. It gains +1 priority while the user is Fire-type in harsh sunlight, Water-type in rain, or Grass-type on Grassy Terrain.",
-		// Deliberately standard. A buff belongs to this server's National Dex, so
-		// it has to pass the same legality check every RP tier enforces.
-		// `isNonstandard: 'Custom'` is what keeps Samantha out of everything, and
-		// wearing it here made this illegal in RP OU alongside her.
+		shortDesc: "Uses the user's better attacking stat. +1 priority on Grassy Terrain.",
+		desc: "This move uses whichever of the user's Attack or Special Attack is higher, before any boosts. It gains +1 priority while Grassy Terrain is active and the user is grounded.",
+	},
+
+	cinderrush: {
+		num: -6,
+		gen: 9,
+		name: "Cinder Rush",
+		type: "Fire",
+		category: "Physical",
+		basePower: 80,
+		accuracy: 100,
+		pp: 15,
+		priority: 0,
+		onModifyMove(move, pokemon) { betterAttackingStat(move, pokemon); },
+		onModifyPriority(priority, source, target, move) {
+			// effectiveWeather(), not the field's: under Air Lock the sun is still
+			// nominally up and doing nothing, and this should be nothing too.
+			if (['sunnyday', 'desolateland'].includes(source.effectiveWeather())) return priority + 1;
+		},
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		secondary: null,
+		target: "normal",
+		contestType: "Cool",
+		shortDesc: "Uses the user's better attacking stat. +1 priority in harsh sunlight.",
+		desc: "This move uses whichever of the user's Attack or Special Attack is higher, before any boosts. It gains +1 priority in harsh sunlight.",
+	},
+
+	torrentrush: {
+		num: -7,
+		gen: 9,
+		name: "Torrent Rush",
+		type: "Water",
+		category: "Physical",
+		basePower: 80,
+		accuracy: 100,
+		pp: 15,
+		priority: 0,
+		onModifyMove(move, pokemon) { betterAttackingStat(move, pokemon); },
+		onModifyPriority(priority, source, target, move) {
+			if (['raindance', 'primordialsea'].includes(source.effectiveWeather())) return priority + 1;
+		},
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		secondary: null,
+		target: "normal",
+		contestType: "Cool",
+		shortDesc: "Uses the user's better attacking stat. +1 priority in rain.",
+		desc: "This move uses whichever of the user's Attack or Special Attack is higher, before any boosts. It gains +1 priority in rain.",
 	},
 };

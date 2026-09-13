@@ -99,10 +99,12 @@ function build() {
 	for (const [family, moves] of familyMoves) {
 		const own = [...moves]
 			.filter(moveid => ownersOf(moveid).size === 1 && ownersOf(moveid).has(family))
-			// Z-moves and Max moves are not moves anyone chooses in the builder.
+			// Z-moves and Max moves are not moves anyone chooses in the builder,
+			// and a move marked `velvetShared` is one of ours meant to be handed
+			// out later - being new is not the same as being somebody's.
 			.filter(moveid => {
 				const move = Dex.moves.get(moveid);
-				return move.exists && !move.isZ && !move.isMax;
+				return move.exists && !move.isZ && !move.isMax && !move.velvetShared;
 			})
 			.sort((a, b) => Dex.moves.get(a).name.localeCompare(Dex.moves.get(b).name));
 		if (own.length) signatures[family] = own;
