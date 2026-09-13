@@ -322,8 +322,17 @@
 				// not need them, so fall back rather than take the whole sprite down.
 				data = { gen: 9, w: 96, h: 96, y: 0, url: '', pixelated: true, isFrontSprite: !!isFront, cryurl: '', shiny: false };
 			}
+			// Who is being drawn. The client passes a name in some places and a
+			// Pokemon in others, and the two kinds of Pokemon it has do not agree on
+			// how to ask: the battle's own objects carry `speciesForme` as a plain
+			// property, while a set from the builder answers `getSpeciesForme()`.
+			// Reading only one of them is why she rendered everywhere except the
+			// team preview.
 			var name = pokemon;
-			if (name && typeof name !== 'string' && name.getSpeciesForme) name = name.getSpeciesForme();
+			if (name && typeof name === 'object') {
+				name = (name.getSpeciesForme && name.getSpeciesForme()) ||
+					name.speciesForme || name.species || name.name || '';
+			}
 			if (typeof name === 'string' && window.toID(name) === 'samantha') {
 				// Animated unless this viewer has turned animation off, which is the
 				// same pair of preferences the client checks for everyone else - so
