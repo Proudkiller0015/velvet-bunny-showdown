@@ -195,4 +195,41 @@ exports.Abilities = {
 		rating: 5,
 		num: -2,
 	},
+	/**
+	 * Verdant Surge - Grassy Surge, and then some.
+	 *
+	 * Grassy Surge sets the terrain; the terrain gives every grounded Pokemon's
+	 * Grass moves a 1.3x boost, including the opponent's. This does the same
+	 * thing and takes the holder's own share of it from 1.3x to 1.5x - so the
+	 * Pokemon that made the field gets more out of it than anyone standing on it.
+	 *
+	 * The multiplier is the ratio between the two, not 1.5: the terrain has
+	 * already applied its own 1.3 by the time this runs, and applying 1.5 on top
+	 * would come to 1.95.
+	 */
+	verdantsurge: {
+		name: "Verdant Surge",
+		onStart(source) {
+			this.field.setTerrain('grassyterrain');
+		},
+		// After the terrain's own handler, so this multiplies what it produced.
+		onBasePowerPriority: 21,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.type !== 'Grass') return;
+			if (!this.field.isTerrain('grassyterrain') || !attacker.isGrounded()) return;
+			// 1.5 / 1.3, in the 4096ths the engine multiplies in.
+			this.debug('Verdant Surge boost');
+			return this.chainModify([4726, 4096]);
+		},
+		flags: {},
+		rating: 4,
+		num: -3,
+		gen: 9,   // negative `num` leaves this 0, and gen 0 is "does not exist yet"
+		shortDesc: "Sets Grassy Terrain on entry; this Pokemon's Grass moves get 1.5x from it instead of 1.3x.",
+		desc: "On switch-in, this Pokemon summons Grassy Terrain. While Grassy Terrain is active and this Pokemon is grounded, its Grass-type moves are boosted to 1.5x rather than the usual 1.3x.",
+		// Deliberately standard. A buff belongs to this server's National Dex, so
+		// it has to pass the same legality check every RP tier enforces.
+		// `isNonstandard: 'Custom'` is what keeps Samantha out of everything, and
+		// wearing it here made this illegal in RP OU alongside her.
+	},
 };

@@ -121,4 +121,118 @@ exports.Moves = {
 		shortDesc: "Heals the user fully and cures its status.",
 		desc: "The user is restored to full HP and any non-volatile status condition is cured.",
 	},
+	/**
+	 * Simian Rush - the elemental monkeys' reason to exist.
+	 *
+	 * Grassy Glide is a 60 base power Grass move that moves first in Grassy
+	 * Terrain, and it is the whole of Rillaboom. This is that idea handed to the
+	 * three Pokemon who set the weather it keys off: 80 base power, the user's
+	 * own type, its better attacking stat, and first strike exactly when its own
+	 * ability has done its work - sun for the fire one, rain for the water one,
+	 * grass underfoot for the grass one.
+	 *
+	 * Away from that weather it is an ordinary 80 power move, which is the trade:
+	 * they have to set the field they want before they get anything for it.
+	 */
+	/**
+	 * The Water Flame Charge, which somehow never existed.
+	 *
+	 * Fire has Flame Charge and Grass got Trailblaze, both 50 BP with a free
+	 * Speed stage on top; Water has nothing of the kind. Aqua Step is the closest
+	 * thing and it is Quaquaval's signature, so borrowing it would take a
+	 * signature move away from a Pokemon that is defined by it.
+	 *
+	 * This is not the monkeys' move. It is a hole in the Water type that they
+	 * happen to be the first to use, and it goes out to whoever else needs it -
+	 * which is also why it never registers as a signature move: that table only
+	 * counts a move one evolution family can learn, and three already have this.
+	 */
+	wavecharge: {
+		num: -5,
+		gen: 9,   // negative `num` leaves this 0, and gen 0 is "does not exist yet"
+		name: "Wave Charge",
+		type: "Water",
+		category: "Physical",
+		basePower: 50,
+		accuracy: 100,
+		pp: 20,
+		priority: 0,
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		secondary: { chance: 100, self: { boosts: { spe: 1 } } },
+		target: "normal",
+		contestType: "Cool",
+		shortDesc: "100% chance to raise the user's Speed by 1.",
+		desc: "Has a 100% chance to raise the user's Speed by 1 stage.",
+	},
+
+	simianrush: {
+		num: -4,
+		gen: 9,   // negative `num` leaves this 0, and gen 0 is "does not exist yet"
+		name: "Simian Rush",
+		type: "Normal",   // replaced by the user's own type, below
+		category: "Physical",
+		basePower: 80,
+		accuracy: 100,
+		pp: 15,
+		priority: 0,
+
+		/**
+		 * Their own type - the one they were born with.
+		 *
+		 * Read off the species rather than through getTypes(), which answers with
+		 * the Tera type once a Pokemon has Terastallized and would have the move
+		 * swinging to whatever was picked that battle. The whole point is that
+		 * there is one of these per type and it stays that way: Simisear's Simian
+		 * Rush is a Fire move on a Fire monkey, Terastallized or not. Anything
+		 * else that rewrites types mid-battle - Soak, Forest's Curse - is ignored
+		 * for the same reason.
+		 */
+		onModifyType(move, pokemon) {
+			const type = pokemon.baseSpecies.types[0];
+			move.type = !type || type === '???' ? 'Normal' : type;
+		},
+
+		// Whichever attacking stat is better, the way Photon Geyser does it. The
+		// third argument to getStat asks for the unmodified number, so a Swords
+		// Dance does not silently turn a special attacker physical.
+		onModifyMove(move, pokemon) {
+			if (pokemon.getStat('atk', false, true) < pokemon.getStat('spa', false, true)) {
+				move.category = 'Special';
+			}
+		},
+
+		/**
+		 * First strike, but only in their own weather.
+		 *
+		 * effectiveWeather() rather than the field's weather: under Air Lock the
+		 * sun is still nominally up and does nothing, and a move that reads the
+		 * field directly would still get its priority from weather that has been
+		 * switched off.
+		 */
+		onModifyPriority(priority, source, target, move) {
+			// The same born-with type the move itself uses, so Terastallizing can
+			// never hand the priority to a monkey standing in somebody else's
+			// weather, nor take it from one standing in its own.
+			const type = source.baseSpecies.types[0];
+			const weather = source.effectiveWeather();
+			const sunny = ['sunnyday', 'desolateland'].includes(weather);
+			const rainy = ['raindance', 'primordialsea'].includes(weather);
+			const grassy = this.field.isTerrain('grassyterrain') && source.isGrounded();
+
+			if ((type === 'Fire' && sunny) || (type === 'Water' && rainy) || (type === 'Grass' && grassy)) {
+				return priority + 1;
+			}
+		},
+
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		secondary: null,
+		target: "normal",
+		contestType: "Cool",
+		shortDesc: "User's type. Better attacking stat. Goes first in the user's own weather.",
+		desc: "This move's type is the user's primary type and it uses whichever of the user's Attack or Special Attack is higher. It gains +1 priority while the user is Fire-type in harsh sunlight, Water-type in rain, or Grass-type on Grassy Terrain.",
+		// Deliberately standard. A buff belongs to this server's National Dex, so
+		// it has to pass the same legality check every RP tier enforces.
+		// `isNonstandard: 'Custom'` is what keeps Samantha out of everything, and
+		// wearing it here made this illegal in RP OU alongside her.
+	},
 };

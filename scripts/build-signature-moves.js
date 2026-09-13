@@ -42,15 +42,31 @@ function familyOf(species) {
 	return current.id;
 }
 
-/** Every move a species can learn, from its own learnset and its formes'. */
+/**
+ * Every move a species can learn, split by how.
+ *
+ * `all` is everything; `real` leaves out the moves it can only get from a
+ * one-off event distribution, whose sources are written `<gen>S<n>`.
+ *
+ * That distinction is the whole difference between this table and a wrong one.
+ * Roar of Time is Dialga's move, but the Gen 4 event Darkrai and the event
+ * Arceus were each handed it once, so counting raw learnsets gives it three
+ * owners and drops it off the list - and with it Spacial Rend, Shadow Force and
+ * a long tail of legendary signatures. Bulbapedia does not count those
+ * distributions either, and neither does anybody describing the move.
+ */
 function movesOf(species) {
 	const data = Dex.species.getLearnsetData(species.id);
-	return data && data.learnset ? Object.keys(data.learnset) : [];
+	if (!data || !data.learnset) return { all: [], real: [] };
+	const all = Object.keys(data.learnset);
+	const real = all.filter(moveid => data.learnset[moveid].some(source => source.charAt(1) !== 'S'));
+	return { all, real };
 }
 
 function build() {
-	const familyMoves = new Map();     // family id -> Set of move ids
-	const moveFamilies = new Map();    // move id -> Set of family ids
+	const familyMoves = new Map();     // family id -> Set of move ids it can get at all
+	const moveFamilies = new Map();    // move id -> Set of families, events included
+	const moveOwners = new Map();      // move id -> Set of families that learn it properly
 
 	for (const species of Dex.species.all()) {
 		// CAP Pokemon are not real, and our own are worse than that: Samantha
@@ -58,18 +74,31 @@ function build() {
 		// move in the dex shared and left the whole table with three entries.
 		if (species.isNonstandard === 'CAP' || species.isNonstandard === 'Custom') continue;
 		const family = familyOf(species);
-		for (const moveid of movesOf(species)) {
+		const { all, real } = movesOf(species);
+		for (const moveid of all) {
 			if (!familyMoves.has(family)) familyMoves.set(family, new Set());
 			familyMoves.get(family).add(moveid);
 			if (!moveFamilies.has(moveid)) moveFamilies.set(moveid, new Set());
 			moveFamilies.get(moveid).add(family);
 		}
+		for (const moveid of real) {
+			if (!moveOwners.has(moveid)) moveOwners.set(moveid, new Set());
+			moveOwners.get(moveid).add(family);
+		}
 	}
+
+	/**
+	 * Who the move belongs to: the families that learn it properly, falling back
+	 * to every family that can reach it at all when nobody learns it properly.
+	 * The fallback keeps moves that only ever came from an event - they are still
+	 * that Pokemon's move - while the first clause is what saves Roar of Time.
+	 */
+	const ownersOf = moveid => moveOwners.get(moveid) || moveFamilies.get(moveid);
 
 	const signatures = {};
 	for (const [family, moves] of familyMoves) {
 		const own = [...moves]
-			.filter(moveid => moveFamilies.get(moveid).size === 1)
+			.filter(moveid => ownersOf(moveid).size === 1 && ownersOf(moveid).has(family))
 			// Z-moves and Max moves are not moves anyone chooses in the builder.
 			.filter(moveid => {
 				const move = Dex.moves.get(moveid);

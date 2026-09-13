@@ -26,12 +26,32 @@ const { Moves } = require('./moves.js');
 const { FormatsData } = require('./formats-data.js');
 const { Learnsets } = require('./learnsets.js');
 const { patchItems } = require('./items.js');
+const { applyBuffs } = require('./buffs.js');
+const { unnerfMoves, unnerfAbilities } = require('./unnerfs.js');
 
-exports.pokedex = data => Object.assign(data, Pokedex);
-exports.abilities = data => Object.assign(data, Abilities);
-exports.moves = data => Object.assign(data, Moves);
+// The buffed Pokemon are Showdown's own, so they are changed in place rather
+// than added - and the learnsets they need are added when that file is loaded,
+// which is a separate hook. Both sides pass the same table, so whichever loads
+// second finds the other's work already done.
+let buffedPokedex = null;
+let buffedLearnsets = null;
+function buffWhatWeHave() {
+	if (buffedPokedex && buffedLearnsets) applyBuffs(buffedPokedex, buffedLearnsets);
+}
+
+exports.pokedex = data => {
+	Object.assign(data, Pokedex);
+	buffedPokedex = data;
+	buffWhatWeHave();
+};
+exports.abilities = data => unnerfAbilities(Object.assign(data, Abilities));
+exports.moves = data => unnerfMoves(Object.assign(data, Moves));
 exports.formatsData = data => Object.assign(data, FormatsData);
-exports.learnsets = data => Object.assign(data, Learnsets);
+exports.learnsets = data => {
+	Object.assign(data, Learnsets);
+	buffedLearnsets = data;
+	buffWhatWeHave();
+};
 
 // Items is the odd one out: Light Ball already exists and only two of its
 // handlers change, so replacing the whole entry would mean copying its number,

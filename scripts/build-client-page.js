@@ -18,7 +18,9 @@
  *     client asks Showdown for prefs and teams through a cross-domain iframe
  *     that answers for their hosts and not for ours, and would otherwise wait
  *     on it forever
- *   - `js/velvet-data.js` adds Samantha to the dex the client loaded
+ *   - `js/velvet-data.js` adds Samantha to the dex the client loaded, and
+ *     `js/velvet-buffs.js` before it carries the Pokemon this server
+ *     buffs - both must come after their data files and before the search
  *   - `/showdex/main.js` is the damage calculator, served rather than installed
  *   - the head gains a manifest and icons, so a phone can install this
  *   - the news panel says what this server is
@@ -112,6 +114,7 @@ function build(upstream) {
 	const teambuilderTables = /<script src="\/\/play\.pokemonshowdown\.com\/data\/teambuilder-tables\.js[^"]*"><\/script>/;
 	if (!teambuilderTables.test(html)) throw new Error('could not find the teambuilder tables to follow');
 	html = html.replace(teambuilderTables, match => `${match}\n<script src="js/velvet-signatures.js"></script>
+<script src="js/velvet-buffs.js"></script>
 <script src="js/velvet-data.js"></script>`);
 
 	// What this server is, in the panel their news would have been in.
@@ -163,7 +166,7 @@ function build(upstream) {
 	console.log(`wrote ${OUT} (${Math.round(html.length / 1024)}KB)`);
 
 	// A page that has lost one of our own scripts is worse than no page.
-	for (const needed of ['js/velvet-signatures.js', 'style/velvet.css', 'config/config.js', 'js/velvet-storage.js', 'js/velvet-data.js', '/showdex/main.js', 'manifest.json']) {
+	for (const needed of ['js/velvet-signatures.js', 'js/velvet-buffs.js', 'style/velvet.css', 'config/config.js', 'js/velvet-storage.js', 'js/velvet-data.js', '/showdex/main.js', 'manifest.json']) {
 		if (!html.includes(needed)) throw new Error(`${needed} is missing from the built page`);
 	}
 	for (const banned of ['googletagmanager', 'hb.vntsm.com', 'window.__VM']) {

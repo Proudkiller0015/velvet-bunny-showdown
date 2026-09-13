@@ -120,7 +120,11 @@
 		var tipsIn = installTooltipStats();
 		var rpIn = installRpTiers();
 		var listIn = installPokemonOrder();
-		return tableIn && orderIn && spritesIn && iconIn && builderIn && tipsIn && rpIn && listIn;
+		var buffsIn = installBuffs();
+		var abilitiesIn = installBuffedAbilities();
+		var itemIn = installItemIcon();
+		return tableIn && orderIn && spritesIn && iconIn && builderIn && tipsIn && rpIn &&
+			listIn && buffsIn && abilitiesIn && itemIn;
 	}
 
 	/**
@@ -194,8 +198,10 @@
 
 			var species = this.species;
 			if (species && typeof species !== 'string') species = species.species || species.name || '';
-			var own = signatureMovesFor(window.toID(species || ''));
-			if (!own.length) return results;
+			var speciesid = window.toID(species || '');
+			var own = signatureMovesFor(speciesid);
+			var buffed = buffedMovesFor(speciesid);
+			if (!own.length && !buffed.length) return results;
 
 			// Only the ones this list actually offers: a signature move the format
 			// has banned, or that this forme cannot use, should not be conjured up.
@@ -203,19 +209,36 @@
 			for (var i = 0; i < results.length; i++) {
 				if (results[i][0] === 'move') offered[results[i][1]] = true;
 			}
+
 			var hoist = [];
 			for (var j = 0; j < own.length; j++) {
 				if (offered[own[j]]) hoist.push(own[j]);
 			}
-			if (!hoist.length) return results;
+			// A move can be both - Simian Rush is Simisage's own and something this
+			// server added - and it is listed once, as a signature move.
+			var gained = [];
+			for (var g = 0; g < buffed.length; g++) {
+				if (offered[buffed[g]] && hoist.indexOf(buffed[g]) < 0) gained.push(buffed[g]);
+			}
+			if (!hoist.length && !gained.length) return results;
 
-			var hoisted = [['header', hoist.length === 1 ? 'Signature move' : 'Signature moves']];
-			for (var k = 0; k < hoist.length; k++) hoisted.push(['move', hoist[k]]);
+			var buffs = window.VelvetBuffs;
+			var label = (buffs && buffs.label) || 'Awakened';
+			var hoisted = [];
+			if (hoist.length) {
+				hoisted.push(['header', hoist.length === 1 ? 'Signature move' : 'Signature moves']);
+				for (var k = 0; k < hoist.length; k++) hoisted.push(['move', hoist[k]]);
+			}
+			if (gained.length) {
+				hoisted.push(['header', label + (gained.length === 1 ? ' move' : ' moves')]);
+				for (var b = 0; b < gained.length; b++) hoisted.push(['move', gained[b]]);
+			}
 
+			var taken = hoist.concat(gained);
 			var rest = [];
 			for (var m = 0; m < results.length; m++) {
 				var row = results[m];
-				if (row[0] === 'move' && hoist.indexOf(row[1]) >= 0) continue;
+				if (row[0] === 'move' && taken.indexOf(row[1]) >= 0) continue;
 				rest.push(row);
 			}
 			return hoisted.concat(rest);
@@ -297,6 +320,12 @@
 			['queenwrath', 'ability', '0000011111'],
 			['queensmorph', 'ability', '00000122222'],
 		];
+
+		// Everything the buffs added - Simian Rush, Wave Charge, Verdant Surge,
+		// the Elemental Banana - comes from the generated file rather than being
+		// listed twice, so adding a buff does not mean remembering to come here.
+		var buffs = window.VelvetBuffs;
+		if (buffs && buffs.search) rows = rows.concat(buffs.search);
 
 		for (var r = 0; r < rows.length; r++) {
 			var id = rows[r][0];
@@ -572,6 +601,165 @@
 		};
 		return true;
 	}
+	/**
+	 * The buffs: what this server added to Pokemon that already existed.
+	 *
+	 * Everything here is read from window.VelvetBuffs, which is generated from
+	 * data/velvet/buffs.js - see scripts/build-buffs.js. Nothing about which
+	 * Pokemon or which moves is written twice, so a new buff needs no change in
+	 * this file.
+	 *
+	 * Three separate things have to happen before a buffed Pokemon looks right:
+	 * the moves and abilities we invented need rows in the client's dex, the
+	 * Pokemon's own entry needs its new ability slots, and the builder's learnset
+	 * table needs the moves. Miss the last one and the ability shows up while the
+	 * movepool stays exactly as it was.
+	 */
+	function installBuffs() {
+		var buffs = window.VelvetBuffs;
+		if (!buffs) return false;
+		var ready = true;
+
+		// The rows the CDN has no idea about.
+		if (window.BattleMovedex) {
+			for (var m in buffs.moves) if (!window.BattleMovedex[m]) window.BattleMovedex[m] = buffs.moves[m];
+		} else ready = false;
+		if (window.BattleAbilities) {
+			for (var a in buffs.abilities) if (!window.BattleAbilities[a]) window.BattleAbilities[a] = buffs.abilities[a];
+		} else ready = false;
+		if (window.BattleItems) {
+			for (var i in buffs.items) if (!window.BattleItems[i]) window.BattleItems[i] = buffs.items[i];
+		} else ready = false;
+
+		// The ability slots, straight from the server's own table - including any
+		// slot past the four a species is built with, which is how a buffed
+		// Pokemon ends up with more than three abilities to choose from.
+		if (window.BattlePokedex) {
+			for (var id in buffs.bySpecies) {
+				var entry = window.BattlePokedex[id];
+				if (entry) entry.abilities = buffs.bySpecies[id].slots;
+			}
+		} else ready = false;
+
+		// The movepool. Merged into what is already there, never replacing it:
+		// this table is the only copy of the Pokemon's real learnset the builder
+		// has, and a species whose entry got overwritten would be left with the
+		// nineteen moves we added and nothing it was born with.
+		var table = window.BattleTeambuilderTable;
+		if (table && table.learnsets) {
+			for (var id2 in buffs.bySpecies) {
+				var learnset = table.learnsets[id2] || (table.learnsets[id2] = {});
+				var added = buffs.bySpecies[id2].moves;
+				for (var k = 0; k < added.length; k++) {
+					// '9a' is generation 9 plus the region-born letter the builder
+					// insists on before it will list a move in a ninth-generation
+					// format. These Pokemon were never in Scarlet and Violet, so
+					// their real entries stop at '...9pq' and a buff written without
+					// the 'a' is listed in National Dex and invisible everywhere else.
+					if (!learnset[added[k]]) learnset[added[k]] = '9a';
+				}
+			}
+		} else ready = false;
+
+		return ready;
+	}
+
+	/** The buffed moves this Pokemon got, if any. */
+	function buffedMovesFor(speciesid) {
+		var buffs = window.VelvetBuffs;
+		var record = buffs && buffs.get ? buffs.get(speciesid) : null;
+		return record ? record.moves : [];
+	}
+
+	/**
+	 * More than three abilities, and a name on the ones that are ours.
+	 *
+	 * The builder reads a species' abilities out of four fixed slots - the two
+	 * ordinary ones, the hidden one, and the event one - so an ability in a fifth
+	 * slot is simply never drawn, and an ability we added to a slot that happened
+	 * to be free is drawn as though it had always been there. Both are wrong for
+	 * the same reason: a player cannot tell what this server changed.
+	 *
+	 * So the ones a buff added are pulled out of wherever they landed and shown
+	 * together at the top, under a heading of their own, and anything past the
+	 * four known slots is picked up on the way - which is what makes a fourth,
+	 * fifth or sixth ability possible at all.
+	 */
+	function installBuffedAbilities() {
+		var search = window.BattleAbilitySearch;
+		if (!search || !search.prototype || !search.prototype.getBaseResults) return false;
+		if (search.__velvetBuffedAbilities) return true;
+		search.__velvetBuffedAbilities = true;
+
+		var original = search.prototype.getBaseResults;
+		search.prototype.getBaseResults = function () {
+			var results = original.apply(this, arguments);
+			var buffs = window.VelvetBuffs;
+			if (!results || !buffs) return results;
+
+			var species = this.species;
+			if (species && typeof species !== 'string') species = species.species || species.name || '';
+			var record = buffs.get(window.toID(species || ''));
+			if (!record || !record.abilities.length) return results;
+
+			// By id, because the rows carry ids and the record carries names.
+			var ours = {};
+			for (var i = 0; i < record.abilities.length; i++) ours[window.toID(record.abilities[i])] = true;
+
+			var listed = {};
+			var rest = [];
+			for (var j = 0; j < results.length; j++) {
+				var row = results[j];
+				if (row[0] === 'ability' && ours[row[1]]) { listed[row[1]] = true; continue; }
+				rest.push(row);
+			}
+
+			// Anything in a slot the builder does not know how to draw never made
+			// it into the results at all, so it is added here rather than moved.
+			var hoist = [];
+			for (var k = 0; k < record.abilities.length; k++) {
+				var abilityid = window.toID(record.abilities[k]);
+				if (window.BattleAbilities && !window.BattleAbilities[abilityid]) continue;
+				hoist.push(abilityid);
+			}
+			if (!hoist.length) return results;
+
+			var header = [['header', buffs.label + (hoist.length === 1 ? ' ability' : ' abilities')]];
+			var rows = [];
+			for (var n = 0; n < hoist.length; n++) rows.push(['ability', hoist[n]]);
+			return header.concat(rows, rest);
+		};
+		return true;
+	}
+
+	/**
+	 * The Elemental Banana's icon.
+	 *
+	 * Item icons are cut out of one shared sprite sheet by number, so an item
+	 * that is not on Showdown's sheet has no number to cut at and draws whatever
+	 * happens to sit at position zero. Ours is a file of its own, served from
+	 * this server, the same way her sprites are.
+	 */
+	function installItemIcon() {
+		if (!window.Dex || !window.Dex.getItemIcon) return false;
+		if (window.Dex.__velvetItemIcon) return true;
+		var original = window.Dex.getItemIcon;
+		window.Dex.__velvetItemIcon = true;
+		window.Dex.getItemIcon = function (item) {
+			var name = item;
+			if (name && typeof name === 'object') name = name.name || name.id || '';
+			if (typeof name === 'string' && window.toID(name) === 'elementalbanana') {
+				return 'background:transparent url(' + SPRITES + 'elemental-banana.png) no-repeat scroll 0px 0px';
+			}
+			try {
+				return original.call(this, item);
+			} catch (e) {
+				return '';
+			}
+		};
+		return true;
+	}
+
 	// The data files come from a CDN and arrive in their own time, so each piece
 	// is installed as soon as the thing it extends turns up rather than all at
 	// once. Every step guards itself, so running repeatedly is harmless.
