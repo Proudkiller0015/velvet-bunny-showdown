@@ -28,6 +28,24 @@ exports.Moves = {
 		// Abilities do not get a say: not the immunities, not the damage cuts.
 		ignoreAbility: true,
 
+		/**
+		 * Struck with whichever of her attacking stats is higher.
+		 *
+		 * Photon Geyser's trick: the move is written as one category and swaps to
+		 * the other when that stat is bigger. Changing the *category* rather than
+		 * just the stat matters, because it decides which of the defender's
+		 * defences answers it - taking her Attack against a special wall would be
+		 * a different move entirely.
+		 *
+		 * The stats are read unboosted-by-the-other-side and without their own
+		 * modifiers cancelling out, which is what the two flags to getStat do.
+		 */
+		onModifyMove(move, pokemon) {
+			if (pokemon.getStat('spa', false, true) > pokemon.getStat('atk', false, true)) {
+				move.category = 'Special';
+			}
+		},
+
 		// The Flying Press mechanic, with Dark in Flying's place.
 		onEffectiveness(typeMod, target, type, move) {
 			return typeMod + this.dex.getEffectiveness('Dark', type);
@@ -37,7 +55,7 @@ exports.Moves = {
 		secondary: null,
 		target: "normal",
 		contestType: "Cool",
-		shortDesc: "Fairy and Dark effectiveness together. Never misses. Ignores abilities.",
+		shortDesc: "Uses her better attacking stat. Fairy and Dark effectiveness. Never misses, ignores abilities.",
 		desc:
 			"Deals damage with both Fairy and Dark type effectiveness applied, the way Flying Press " +
 			"combines Fighting and Flying. This move does not check accuracy and ignores the target's Ability.",

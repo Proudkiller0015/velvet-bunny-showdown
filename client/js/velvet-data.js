@@ -41,7 +41,7 @@
 			name: "Queen Beam", pp: 30, priority: 0,
 			flags: { protect: 1, mirror: 1, metronome: 1 },
 			secondary: null, target: "normal", type: "Fairy",
-			shortDesc: "Fairy and Dark effectiveness together. Never misses. Ignores abilities.",
+			shortDesc: "Uses her better attacking stat. Fairy and Dark effectiveness. Never misses, ignores abilities.",
 			desc: "Deals damage with both Fairy and Dark type effectiveness applied, the way Flying Press combines Fighting and Flying. Does not check accuracy and ignores the target's Ability.",
 			isNonstandard: "Custom",
 		},
@@ -112,8 +112,65 @@
 			}
 		}
 
+		var tableIn = installTeambuilder();
 		installSprites();
+		installIcon();
+		// Not finished until the builder's own table has her too.
+		return tableIn;
+	}
+
+	/**
+	 * Put her in the builder's list.
+	 *
+	 * The species list is not the dex - it comes from BattleTeambuilderTable,
+	 * a separate file of tier listings, which is why adding her to BattlePokedex
+	 * made her lookupable but left the builder empty of her.
+	 *
+	 * Appended rather than inserted. The table carries `formatSlices`, a set of
+	 * indexes into this very array that each format slices from, so putting her
+	 * anywhere but the end would silently shift every tier boundary after her.
+	 * At the end she is inside every slice, which is the wanted behaviour: she
+	 * shows up wherever you look for her, marked illegal everywhere she is
+	 * illegal, and selectable in Custom Game.
+	 */
+	function installTeambuilder() {
+		var table = window.BattleTeambuilderTable;
+		if (!table) return false;
+
+		// The current generation's list sits at the top level; older ones are
+		// nested under their own key. Both shapes get her.
+		var targets = [table];
+		for (var key in table) {
+			if (key.indexOf('gen9') === 0 && table[key] && typeof table[key] === 'object') targets.push(table[key]);
+		}
+
+		var landed = false;
+		for (var i = 0; i < targets.length; i++) {
+			var t = targets[i];
+
+			// Either form: the raw list, or the one already built from it.
+			if (t.tiers && t.tiers.push) {
+				if (!hasHer(t.tiers)) t.tiers.push(['header', 'Custom'], 'samantha');
+				landed = true;
+			}
+			if (t.tierSet && t.tierSet.push) {
+				if (!hasHer(t.tierSet)) t.tierSet.push(['header', 'Custom'], ['pokemon', 'samantha']);
+				landed = true;
+			}
+			// The builder asks the table what tier something is in.
+			if (t.overrideTier && !t.overrideTier.samantha) t.overrideTier.samantha = 'Custom';
+		}
+		if (!landed) return false;
 		return true;
+	}
+
+	function hasHer(list) {
+		for (var i = 0; i < list.length; i++) {
+			var row = list[i];
+			if (row === 'samantha') return true;
+			if (row && row.length === 2 && row[1] === 'samantha') return true;
+		}
+		return false;
 	}
 
 	/**
@@ -154,11 +211,40 @@
 		};
 	}
 
-	// The data scripts load from a CDN, so they may not have arrived yet.
-	if (!install()) {
-		var tries = 0;
-		var timer = setInterval(function () {
-			if (install() || ++tries > 100) clearInterval(timer);
-		}, 100);
+	/**
+	 * The little icon beside her name in lists.
+	 *
+	 * Showdown builds these as a background-position into one big sheet of 40x30
+	 * cells, indexed by national dex number. She has no number and is not on the
+	 * sheet, so the default lands on cell zero - somebody else entirely. Hers is
+	 * a standalone file served by this server, so the rule is replaced rather
+	 * than the index.
+	 */
+	function installIcon() {
+		if (!window.Dex || !window.Dex.getPokemonIcon || window.Dex.__velvetIcon) return;
+		var original = window.Dex.getPokemonIcon;
+		window.Dex.__velvetIcon = true;
+		window.Dex.getPokemonIcon = function (pokemon, facingLeft) {
+			var name = pokemon;
+			if (name && typeof name === 'object') name = name.species || name.speciesForme || name.name;
+			if (typeof name === 'string' && window.toID(name) === 'samantha') {
+				return 'background:transparent url(' + SPRITES + 'samantha-icon.png) no-repeat scroll 0px 0px';
+			}
+			try {
+				return original.call(this, pokemon, facingLeft);
+			} catch (e) {
+				return '';
+			}
+		};
 	}
+	// The data files come from a CDN and arrive in their own time, so each piece
+	// is installed as soon as the thing it extends turns up rather than all at
+	// once. Every step guards itself, so running repeatedly is harmless.
+	var tries = 0;
+	function attempt() {
+		var done = install();
+		if (done || ++tries > 150) clearInterval(timer);
+	}
+	var timer = setInterval(attempt, 100);
+	attempt();
 })();
