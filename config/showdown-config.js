@@ -44,11 +44,25 @@ Object.assign(exports, require('./config-example.js'));
  */
 exports.grouplist = exports.grouplist.map(group => ({ ...group }));
 
-// Bots post the lobby's format picker, and a room intro is an edit to the room.
-// Granting that one permission to the bot rank is what lets the bot sit on '*'
-// instead of being handed the keys to the server.
+/**
+ * The bot rank, with an administrator's reach.
+ *
+ * An account has exactly one rank in Showdown - there is no wearing two - so
+ * 'the bot should be a bot and an administrator' has to be done by giving the
+ * bot rank the powers rather than the bot a second symbol. It keeps '*', which
+ * is what tells everyone it is a bot, and inherits '~', which is what lets it
+ * do the job.
+ *
+ * Worth knowing what this rests on: '*' is only ever handed out by the config
+ * below, to the bot's own accounts. It is the same assumption every rank here
+ * already makes - that nobody takes somebody else's name - which is what a
+ * server with no login server is.
+ */
 const botGroup = exports.grouplist.find(g => g.symbol === '*');
-if (botGroup) botGroup.editroom = true;
+if (botGroup) {
+	botGroup.inherit = '~';
+	botGroup.editroom = true;   // a room intro is an edit to the room
+}
 
 /**
  * Owner, above Administrator.
@@ -224,6 +238,70 @@ exports.commands = {
 		// have set it themselves.
 		this.parse(`/msg ${BOT_BASE}, difficulty ${choice}`);
 	},
+	rank: 'setrank',
+	/**
+	 * Give somebody a rank, and remember it.
+	 *
+	 * /globalpromote cannot be used here: it refuses an unregistered account, and
+	 * with no login server every account is unregistered, so there was no way to
+	 * promote anyone in chat at all. Showdown's own promotion would not have
+	 * survived the session either - setGroup only writes a rank down for a
+	 * registered user.
+	 */
+	setrank(target, room, user) {
+		this.checkCan('bypassall');   // owner and administrator only
+		const [rawName, rawSymbol] = String(target || '').split(',').map(part => part.trim());
+		if (!rawName || !rawSymbol) return this.parse('/help setrank');
+
+		const id = toID(rawName);
+		if (!id) throw new Chat.ErrorMessage('Who?');
+
+		// Accept the symbol or the name of the rank, since nobody remembers which
+		// squiggle is which.
+		const wanted = rawSymbol.toLowerCase();
+		const group = exports.grouplist.find(g =>
+			g.symbol === rawSymbol || String(g.id).toLowerCase() === wanted || String(g.name).toLowerCase() === wanted);
+		const clearing = ['none', 'reset', 'remove', 'user', 'regular'].includes(wanted);
+		if (!group && !clearing) {
+			const offered = exports.grouplist.filter(g => !g.roomonly && g.id && g.name)
+				.map(g => `${g.symbol} ${g.name}`).join(', ');
+			throw new Chat.ErrorMessage(`No such rank. Try one of: ${offered}, or "none".`);
+		}
+		if (group && group.roomonly) {
+			throw new Chat.ErrorMessage(`${group.name} is a room rank - use /roomauth in the room instead.`);
+		}
+
+		// Nobody hands out a rank they do not hold themselves.
+		// Compare the symbols directly. The Auth instance looks a user up in the
+		// global auth map, which only holds registered accounts - nobody here is
+		// registered, so it reads every rank back as a regular user, including the
+		// owner's. What everyone actually holds is tempGroup.
+		if (group && !Users.Auth.atLeast(user.tempGroup, group.symbol)) {
+			throw new Chat.ErrorMessage(`You cannot give out ${group.name}; it is above your own rank.`);
+		}
+
+		const symbol = clearing ? Users.Auth.defaultSymbol() : group.symbol;
+		if (clearing) delete savedRanks[id];
+		else savedRanks[id] = symbol;
+		saveRanks(savedRanks);
+		lastApplied.set(id, symbol);
+
+		const online = Users.get(id);
+		if (online && online.connected) {
+			online.setGroup(symbol);
+			try { online.updateIdentity(); online.update(); } catch (e) { /* on their way out */ }
+		}
+
+		const what = clearing ? 'a regular user' : `${symbol} ${group.name}`;
+		this.addModAction(`${user.name} set ${id} to ${what}.`);
+		this.modlog('SETRANK', id, what);
+		this.sendReply(`${id} is ${what}${online && online.connected ? '' : ', and will be when they next connect'}. This is remembered across restarts.`);
+	},
+	setrankhelp: [
+		`/setrank [username], [rank] - give someone a global rank that survives restarts.`,
+		`Rank can be the symbol or the name, eg "@" or "moderator". /setrank [username], none removes it.`,
+		`Requires: & ~`,
+	],
 	customavatars: 'avatarlist',
 	avatars2: 'avatarlist',
 	/**
@@ -383,6 +461,50 @@ function fixMatchmaking(botIds) {
 }
 
 /**
+ * Ranks handed out in chat, remembered.
+ *
+ * Showdown saves a promotion in setGroup only `if (this.registered)`, and with
+ * no login server nobody here is ever registered - so /globalpromote lasted
+ * until the person disconnected and not a moment longer. Restarting was not
+ * even required to lose it.
+ *
+ * Its own file rather than usergroups.csv, which is the obvious place and the
+ * wrong one: being listed there makes an account *trusted*, and a trusted
+ * account is refused a guest login, so writing someone's rank down there is how
+ * you lock them out of the server entirely.
+ *
+ * It lives in the package's config directory, which is inside node_modules and
+ * therefore survives restarts and deploys on this host - the same reason the
+ * avatar rights outlive them. That is a property of the host's caching rather
+ * than a guarantee; with GITHUB_TOKEN set the ladder store already commits its
+ * own state to the repository, and this could ride along with it.
+ */
+const RANK_FILE = require('path').join(__dirname, 'velvet-ranks.json');
+
+// Shared between the command that sets a rank and the loop that applies it.
+let savedRanks = {};
+const lastApplied = new Map();   // what we set, so a change by anyone else is visible
+
+function loadRanks() {
+	try {
+		const data = JSON.parse(require('fs').readFileSync(RANK_FILE, 'utf8'));
+		return data && typeof data === 'object' ? data : {};
+	} catch (e) {
+		return {};   // nothing saved yet, which is the normal first boot
+	}
+}
+
+function saveRanks(ranks) {
+	try {
+		require('fs').writeFileSync(RANK_FILE, JSON.stringify(ranks, null, '\t'));
+	} catch (e) {
+		console.log(`[config] could not save ranks: ${e.message}`);
+	}
+}
+
+savedRanks = loadRanks();
+
+/**
  * Put someone's avatar on them.
  *
  * `getDefault` returns the avatar they picked last if they have picked one and
@@ -414,12 +536,12 @@ exports.startuphook = function () {
 	const owners = (process.env.PS_OWNERS || 'SlimeQueenSamantha')
 		.split(',').map(n => toID(n)).filter(n => n);
 	// Global administrators: everything short of owner.
-	const admins = (process.env.PS_ADMINS || 'Unseen Face')
+	const admins = (process.env.PS_ADMINS || 'Unseen Face,Keiko_Sama')
 		.split(',').map(n => toID(n)).filter(n => n);
 	// Staff who help run the place, but do not own it.
 	// Global moderators: the real staff rank below Administrator. They moderate
 	// every room, and cannot reach the console, the lockdown or promotion.
-	const mods = (process.env.PS_MODS || 'Keiko_Sama')
+	const mods = (process.env.PS_MODS || '')
 		.split(',').map(n => toID(n)).filter(n => n);
 	// Voiced regulars. Same reasoning as the owners: this cannot go in
 	// usergroups.csv without locking them out of logging in at all.
@@ -429,6 +551,9 @@ exports.startuphook = function () {
 	// from the same module the queues name themselves with. When these were worked
 	// out separately they disagreed, and the rules below applied to nobody.
 	const botIds = BOT_IDS;
+
+	const savedCount = Object.keys(savedRanks).length;
+	if (savedCount) console.log(`[config] ${savedCount} remembered rank(s) restored`);
 
 	fixMatchmaking(BOT_IDS);
 
@@ -460,23 +585,40 @@ exports.startuphook = function () {
 			// given, so this puts an avatar on and never takes one back off.
 			applyAvatar(user);
 			if (botIds.has(user.id)) continue;   // ranks for the bot are handled above
-			if (owners.includes(user.id) && user.tempGroup !== '&') {
-				user.setGroup('&');
-				console.log(`[config] ${user.id} is now the owner`);
+
+			// The rank this account is supposed to have: whatever was last set for
+			// them in chat, otherwise whatever the config declares. Owners are the
+			// exception and always come from the config - a server that can be
+			// permanently demoted out of its own ownership by one mistyped command is
+			// a server nobody can get back into.
+			const declared = owners.includes(user.id) ? '&'
+				: admins.includes(user.id) ? '~'
+				: mods.includes(user.id) ? '@'
+				: voiced.includes(user.id) ? '+'
+				: null;
+			const want = owners.includes(user.id) ? '&' : (savedRanks[user.id] || declared);
+			const now = user.tempGroup;
+
+			if (lastApplied.has(user.id) && now !== lastApplied.get(user.id) && now !== want) {
+				// Someone changed it since the last pass, so that is the new answer.
+				// Recording it here is what makes /globalpromote outlive the session.
+				if (now === Users.Auth.defaultSymbol()) delete savedRanks[user.id];
+				else savedRanks[user.id] = now;
+				saveRanks(savedRanks);
+				lastApplied.set(user.id, now);
+				console.log(`[config] remembered ${user.id} as ${now === Users.Auth.defaultSymbol() ? 'a regular user' : now}`);
 			}
-			else if (admins.includes(user.id) && user.tempGroup !== '~') {
-				user.setGroup('~');
-				console.log(`[config] ${user.id} is now a global administrator`);
+			else if (want && now !== want) {
+				user.setGroup(want);
+				// setGroup changes the rank and tells nobody. The rooms carry the symbol
+				// in front of the name and the client keeps its own copy, so without
+				// these two the rank is real and invisible until they rejoin.
+				try { user.updateIdentity(); user.update(); } catch (e) { /* on their way out */ }
+				lastApplied.set(user.id, want);
+				console.log(`[config] ${user.id} is ${want}${savedRanks[user.id] ? ' (remembered)' : ''}`);
 			}
-			else if (mods.includes(user.id) && user.tempGroup !== '@') {
-				user.setGroup('@');
-				console.log(`[config] ${user.id} is now a global moderator`);
-			}
-			// Only lift them up to voice, never down: this runs every couple of
-			// seconds, and it should not undo a promotion someone made by hand.
-			else if (voiced.includes(user.id) && user.tempGroup === Users.Auth.defaultSymbol()) {
-				user.setGroup('+');
-				console.log(`[config] gave ${user.id} voice`);
+			else {
+				lastApplied.set(user.id, now);
 			}
 		}
 	}, 2000).unref();
