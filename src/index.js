@@ -72,8 +72,11 @@ function startServer() {
 	const seedDifficulties = (process.env.PS_LADDER_DIFFICULTIES || DEFAULT_DIFFICULTIES.join(','))
 		.split(',').map(d => d.trim()).filter(d => d);
 	for (const format of seedFormats) {
+		// Matches the tagging startLadderBots() uses, or the seeded rows would be
+		// named for queues that never existed.
+		const tagging = seedFormats.length > 1 && { primary: format === seedFormats[0] };
 		seedLadder(ladderDir, format, seedDifficulties.map(difficulty => ({
-			name: queueName(process.env.PS_BOT_NAME || 'Velvet Bunny', difficulty, format, seedFormats.length > 1),
+			name: queueName(process.env.PS_BOT_NAME || 'Velvet Bunny', difficulty, format, tagging),
 			difficulty,
 		})), msg => console.log('[ladder-seed]', msg));
 	}

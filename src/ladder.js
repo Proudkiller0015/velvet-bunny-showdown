@@ -18,6 +18,9 @@ const WebSocket = require('ws');
 const { TeamBuilder } = require('./teambuilder');
 const { BattleAI } = require('./ai');
 const { BattleState } = require('./battle');
+const fs = require('fs');
+const os = require('os');
+const path = require('path');
 const { logIn } = require('./login');
 
 // One queue per difficulty, so each carries its OWN rating. That is the whole
@@ -77,9 +80,13 @@ class LadderBot {
 		this.ws = new WebSocket(this.url);
 		this.ws.on('open', () => { this.reconnectDelay = 2000; });
 		this.ws.on('message', d => this.onData(String(d)));
-		this.ws.on('error', () => {});
+		this.ws.on('error', err => {
+			noteQueue(this.name, { connected: false, error: `socket: ${err && err.message ? err.message : err}` });
+		});
 		this.ws.on('close', () => {
 			this.searching = false;
+			this.ready = false;
+			noteQueue(this.name, { connected: false });
 			if (this.stopped) return;
 			setTimeout(() => this.connect(), this.reconnectDelay);
 			this.reconnectDelay = Math.min(this.reconnectDelay * 2, 60000);
@@ -122,7 +129,12 @@ class LadderBot {
 				this.ready = true;
 				if (this.avatar) this.send(`|/avatar ${this.avatar}`);
 				this.log(`${this.name} queueing for ${this.format}`);
+				noteQueue(this.name, { connected: true, named: parts[1], error: null, since: new Date().toISOString() });
 				void this.search();
+			} else if (parts[2] !== '1') {
+				// Still a guest. Either the assertion never arrived or the server
+				// refused the name, and this is the only place that can tell.
+				noteQueue(this.name, { connected: false, named: parts[1], error: 'still a guest after login' });
 			}
 			return;
 		case 'updatesearch': {
@@ -215,23 +227,64 @@ class LadderBot {
 	}
 }
 
+/**
+ * What the queues are doing, written where something else can read it.
+ *
+ * The bots run in this process; the HTTP server runs in a socket worker. There
+ * is no shared memory between the two, and this host gives no way to read the
+ * logs, so "are the bots up?" had no answer short of opening the site and
+ * waiting. A small file on the disk they share is the cheapest thing that does
+ * answer it.
+ *
+ * Deliberately boring: names, formats, connected or not, and the last error.
+ * Nothing secret - every one of these names is visible to anyone who plays one.
+ */
+const STATUS_FILE = path.join(process.env.PS_CACHE_DIR || os.tmpdir(), 'velvet-ladder-status.json');
+const status = { startedAt: new Date().toISOString(), reason: 'not started yet', queues: {} };
+
+function writeStatus() {
+	try {
+		fs.mkdirSync(path.dirname(STATUS_FILE), { recursive: true });
+		fs.writeFileSync(STATUS_FILE, JSON.stringify(Object.assign({}, status, { updatedAt: new Date().toISOString() }), null, 1));
+	} catch (e) {
+		// Diagnostics must never be the thing that breaks the ladder.
+	}
+}
+
+function noteQueue(name, fields) {
+	status.queues[name] = Object.assign(status.queues[name] || { name }, fields);
+	writeStatus();
+}
+
 /** Start one queue for every difficulty, in every laddered format. */
 function startLadderBots(options) {
 	const formats = (process.env.PS_LADDER_FORMATS || DEFAULT_FORMATS.join(','))
 		.split(',').map(f => f.trim()).filter(f => f);
 	const difficulties = (process.env.PS_LADDER_DIFFICULTIES || DEFAULT_DIFFICULTIES.join(','))
 		.split(',').map(d => d.trim()).filter(d => d);
-	if (process.env.PS_LADDER === '0' || !formats.length || !difficulties.length) return [];
+	if (process.env.PS_LADDER === '0' || !formats.length || !difficulties.length) {
+		status.reason = process.env.PS_LADDER === '0' ?
+			'PS_LADDER=0, so the queues are switched off' :
+			`nothing to run: ${formats.length} format(s), ${difficulties.length} difficulty(ies)`;
+		writeStatus();
+		return [];
+	}
+	status.reason = 'starting';
+	status.formats = formats;
+	status.difficulties = difficulties;
 
 	const builder = options.builder || new TeamBuilder();
 	const base = options.baseName || 'Velvet Bunny';
-	const multi = formats.length > 1;
 	const bots = [];
 	for (const format of formats) {
+		// The first format's queues keep their plain names, so adding a second
+		// format does not rename - and so re-rate from nothing - the rungs that
+		// have been laddering since the start.
+		const tagging = formats.length > 1 && { primary: format === formats[0] };
 		for (const difficulty of difficulties) {
 			bots.push(new LadderBot({
 				url: options.url,
-				name: queueName(base, difficulty, format, multi),
+				name: queueName(base, difficulty, format, tagging),
 				format,
 				builder,
 				difficulty,
@@ -240,7 +293,12 @@ function startLadderBots(options) {
 			}));
 		}
 	}
-	for (const bot of bots) bot.connect();
+	status.reason = `${bots.length} queue(s) starting`;
+	for (const bot of bots) {
+		noteQueue(bot.name, { format: bot.format, difficulty: bot.difficulty, connected: false, error: null });
+		bot.connect();
+	}
+	writeStatus();
 	return bots;
 }
 

@@ -19,6 +19,32 @@
  */
 
 /**
+ * The recovery moves, back to ten PP.
+ *
+ * Generation 9 halved the PP of every reliable recovery move - ten to five, so
+ * eight to sixteen once PP Ups are in - and that single change is most of what
+ * happened to defensive play. It does not make a wall weaker in any exchange it
+ * is in; it just runs the clock out, so the way past a Blissey became waiting
+ * for it rather than beating it.
+ *
+ * These are the Generation 8 numbers, not invented ones. Rest is in the list
+ * because it was cut alongside the others and is the same move to the same
+ * Pokemon.
+ *
+ * Measured rather than remembered: these seven are every move whose PP is lower
+ * in Generation 9 than it was in Generation 8.
+ */
+const RECOVERY_PP = {
+	recover: 10,
+	roost: 10,
+	softboiled: 10,
+	slackoff: 10,
+	milkdrink: 10,
+	shoreup: 10,
+	rest: 10,
+};
+
+/**
  * Dark Void, at the accuracy it had before Generation 7.
  *
  * Darkrai's signature move was cut from 80% to 50% and simultaneously locked to
@@ -28,6 +54,12 @@
  * Pokemon whose move it is, so it goes back.
  */
 function unnerfMoves(Moves) {
+	if (Moves) {
+		for (const [id, pp] of Object.entries(RECOVERY_PP)) {
+			if (Moves[id] && Moves[id].pp < pp) Moves[id].pp = pp;
+		}
+	}
+
 	const darkVoid = Moves && Moves.darkvoid;
 	if (darkVoid) {
 		darkVoid.accuracy = 80;

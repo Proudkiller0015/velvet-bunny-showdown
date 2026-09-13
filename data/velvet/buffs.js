@@ -70,6 +70,9 @@ const MONKEY_COVERAGE = [
 	'icepunch', 'firepunch', 'thunderpunch',
 	'rockslide', 'stoneedge',
 	'uturn', 'knockoff',
+	// The monkey move. Ambipom, Infernape, Passimian and Rillaboom all have it;
+	// these three are the primates who did not, which is the whole pattern here.
+	'fakeout',
 ];
 
 const MONKEY_STATUS = [

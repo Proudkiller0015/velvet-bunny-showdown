@@ -40,7 +40,8 @@ window.VelvetBuffs = {
 				"firepunch",
 				"thunderpunch",
 				"stoneedge",
-				"uturn"
+				"uturn",
+				"fakeout"
 			],
 			"abilities": [
 				"Verdant Surge"
@@ -77,7 +78,8 @@ window.VelvetBuffs = {
 				"icepunch",
 				"thunderpunch",
 				"stoneedge",
-				"uturn"
+				"uturn",
+				"fakeout"
 			],
 			"abilities": [
 				"Solar Surge"
@@ -116,7 +118,8 @@ window.VelvetBuffs = {
 				"firepunch",
 				"thunderpunch",
 				"stoneedge",
-				"uturn"
+				"uturn",
+				"fakeout"
 			],
 			"abilities": [
 				"Tidal Surge"
