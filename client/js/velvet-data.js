@@ -159,13 +159,28 @@
 	}
 
 	/**
-	 * Her own moves first, and only while she is the one being edited.
+	 * Signature moves first, for whoever is being edited.
 	 *
-	 * She learns everything, so the move box opens on fourteen hundred moves in
-	 * alphabetical order with hers somewhere under Q. The list is built per
-	 * species, so hoisting them costs nothing to anyone else: every other Pokemon
-	 * gets the list exactly as the client built it.
+	 * A signature move is one only that evolution family can learn - Ivy Cudgel,
+	 * Kowtow Cleave, Dark Void - and it is usually the move the list was opened
+	 * to find. Alphabetical order buries it: Ogerpon's list starts at Acrobatics.
+	 *
+	 * Which moves those are is worked out from the dex at build time by
+	 * scripts/build-signature-moves.js and shipped as a table: 148 families in
+	 * 11KB. Working it out here would mean walking every learnset in the game on
+	 * every page load.
+	 *
+	 * Samantha is not in that table and cannot be - she learns everything, so by
+	 * the definition she owns nothing - so her three are named here.
 	 */
+	var HER_MOVES = ['queenbeam', 'queensdance', 'queensheal'];
+
+	function signatureMovesFor(speciesid) {
+		if (speciesid === 'samantha') return HER_MOVES;
+		var table = window.VelvetSignatureMoves;
+		return (table && table.get && table.get(speciesid)) || [];
+	}
+
 	function installMoveOrder() {
 		var search = window.BattleMoveSearch;
 		if (!search) return false;
@@ -175,25 +190,38 @@
 		var original = search.prototype.getBaseResults;
 		search.prototype.getBaseResults = function () {
 			var results = original.apply(this, arguments);
+			if (!results) return results;
+
 			var species = this.species;
 			if (species && typeof species !== 'string') species = species.species || species.name || '';
-			if (!results || window.toID(species || '') !== 'samantha') return results;
+			var own = signatureMovesFor(window.toID(species || ''));
+			if (!own.length) return results;
 
-			var hers = ['queenbeam', 'queensdance', 'queensheal'];
-			var hoisted = [['header', 'Signature moves']];
-			for (var i = 0; i < hers.length; i++) hoisted.push(['move', hers[i]]);
+			// Only the ones this list actually offers: a signature move the format
+			// has banned, or that this forme cannot use, should not be conjured up.
+			var offered = {};
+			for (var i = 0; i < results.length; i++) {
+				if (results[i][0] === 'move') offered[results[i][1]] = true;
+			}
+			var hoist = [];
+			for (var j = 0; j < own.length; j++) {
+				if (offered[own[j]]) hoist.push(own[j]);
+			}
+			if (!hoist.length) return results;
+
+			var hoisted = [['header', hoist.length === 1 ? 'Signature move' : 'Signature moves']];
+			for (var k = 0; k < hoist.length; k++) hoisted.push(['move', hoist[k]]);
 
 			var rest = [];
-			for (var j = 0; j < results.length; j++) {
-				var row = results[j];
-				if (row[0] === 'move' && hers.indexOf(row[1]) >= 0) continue;
+			for (var m = 0; m < results.length; m++) {
+				var row = results[m];
+				if (row[0] === 'move' && hoist.indexOf(row[1]) >= 0) continue;
 				rest.push(row);
 			}
 			return hoisted.concat(rest);
 		};
 		return true;
 	}
-
 	/**
 	 * Show National Dex tiers when building for an RP tier.
 	 *
