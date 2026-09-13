@@ -81,11 +81,46 @@ function startServer() {
 	console.log(`[boot] starting Pokemon Showdown on port ${PORT}`);
 	const server = startServer();
 
+	/**
+	 * Leave slowly enough for the server to say goodbye.
+	 *
+	 * A restart cannot preserve a battle - it lives in this process's memory and
+	 * there is nowhere to put it - so the next best thing is to not lose it
+	 * silently: the server is given a few seconds to warn everyone in a battle,
+	 * save a replay of it, and let people finish reading the room before the
+	 * socket closes under them (see the shutdown notice in the config).
+	 *
+	 * The window is deliberately shorter than the one the host allows between
+	 * asking a process to stop and killing it outright, which on Render is 30
+	 * seconds. Going over that would mean being killed mid-sentence, which is
+	 * the thing this exists to avoid.
+	 */
+	const GOODBYE_MS = Number(process.env.PS_SHUTDOWN_GRACE_MS || 22000);
+	let leaving = false;
+
 	const shutdown = () => {
-		// Flush the ratings before the process goes, or the last games are lost.
-		store.stop().catch(() => {}).finally(() => {
-			try { server.kill(); } catch (e) { /* already gone */ }
-			process.exit(0);
+		if (leaving) return;   // a second Ctrl-C should not cut the first one short
+		leaving = true;
+
+		// Ask the server to wind down. It has its own handler for this, and it
+		// exits on its own when it is done.
+		try { server.kill('SIGTERM'); } catch (e) { /* already gone */ }
+
+		const done = () => {
+			// Ratings last, so anything the wind-down changed is included.
+			store.stop().catch(() => {}).finally(() => process.exit(0));
+		};
+
+		const deadline = setTimeout(() => {
+			console.log('[boot] the server is taking too long; closing anyway');
+			try { server.kill('SIGKILL'); } catch (e) {}
+			done();
+		}, GOODBYE_MS);
+		if (deadline.unref) deadline.unref();
+
+		server.once('exit', () => {
+			clearTimeout(deadline);
+			done();
 		});
 	};
 	process.on('SIGINT', shutdown);
