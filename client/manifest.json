@@ -1,23 +1,19 @@
 {
-  "short_name": "Showdown!",
-  "name": "Pokémon Showdown!",
+  "short_name": "Velvet Bunny",
+  "name": "Velvet Bunny Showdown",
+  "description": "A Pokémon Showdown server with a house bot, a ladder of its own, and a damage calculator built in.",
   "icons": [
-    {
-      "src": "favicon-16.png",
-      "type": "image/png",
-      "sizes": "16x16"
-    },
-    {
-      "src": "favicon-32.png",
-      "type": "image/png",
-      "sizes": "32x32"
-    },
-    {
-      "src": "favicon-256.png",
-      "type": "image/png",
-      "sizes": "256x256"
-    }
+    { "src": "icon-192.png", "type": "image/png", "sizes": "192x192", "purpose": "any" },
+    { "src": "icon-512.png", "type": "image/png", "sizes": "512x512", "purpose": "any" },
+    { "src": "icon-512.png", "type": "image/png", "sizes": "512x512", "purpose": "maskable" },
+    { "src": "favicon-256.png", "type": "image/png", "sizes": "256x256" },
+    { "src": "favicon-32.png", "type": "image/png", "sizes": "32x32" },
+    { "src": "favicon-16.png", "type": "image/png", "sizes": "16x16" }
   ],
-  "start_url": "/?utm_source=homescreen",
-  "display": "standalone"
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#1a0d1a",
+  "theme_color": "#1a0d1a"
 }
