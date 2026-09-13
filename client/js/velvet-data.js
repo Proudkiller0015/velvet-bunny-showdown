@@ -102,13 +102,18 @@
 		}
 
 		installSearch();
-		installMoveOrder();
 
+		// Each of these needs something that loads after this file - the builder's
+		// table, the search class, the sprite helpers - so none of them is allowed
+		// to say the job is done on its own. The retry below keeps going until they
+		// all agree, which is how the move-ordering hook used to get skipped: the
+		// table landed first, the loop stopped, and the class it needed arrived to
+		// an empty room.
 		var tableIn = installTeambuilder();
-		installSprites();
-		installIcon();
-		// Not finished until the builder's own table has her too.
-		return tableIn;
+		var orderIn = installMoveOrder();
+		var spritesIn = installSprites();
+		var iconIn = installIcon();
+		return tableIn && orderIn && spritesIn && iconIn;
 	}
 
 	/**
@@ -121,7 +126,8 @@
 	 */
 	function installMoveOrder() {
 		var search = window.BattleMoveSearch;
-		if (!search || search.__velvetOrder) return;
+		if (!search) return false;
+		if (search.__velvetOrder) return true;
 		search.__velvetOrder = true;
 
 		var original = search.prototype.getBaseResults;
@@ -143,6 +149,7 @@
 			}
 			return hoisted.concat(rest);
 		};
+		return true;
 	}
 
 	/**
@@ -297,7 +304,8 @@
 	 * logic for everybody else exactly as it was.
 	 */
 	function installSprites() {
-		if (!window.Dex || !window.Dex.getSpriteData || window.Dex.__velvetSprites) return;
+		if (!window.Dex || !window.Dex.getSpriteData) return false;
+		if (window.Dex.__velvetSprites) return true;
 		var original = window.Dex.getSpriteData;
 		window.Dex.__velvetSprites = true;
 		window.Dex.getSpriteData = function (pokemon, isFront, options) {
@@ -336,6 +344,7 @@
 			}
 			return data;
 		};
+		return true;
 	}
 
 	/**
@@ -348,7 +357,8 @@
 	 * than the index.
 	 */
 	function installIcon() {
-		if (!window.Dex || !window.Dex.getPokemonIcon || window.Dex.__velvetIcon) return;
+		if (!window.Dex || !window.Dex.getPokemonIcon) return false;
+		if (window.Dex.__velvetIcon) return true;
 		var original = window.Dex.getPokemonIcon;
 		window.Dex.__velvetIcon = true;
 		window.Dex.getPokemonIcon = function (pokemon, facingLeft) {
@@ -363,6 +373,7 @@
 				return '';
 			}
 		};
+		return true;
 	}
 	// The data files come from a CDN and arrive in their own time, so each piece
 	// is installed as soon as the thing it extends turns up rather than all at
