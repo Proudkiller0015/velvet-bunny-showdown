@@ -369,7 +369,7 @@
 			var name = set && (set.species || set.speciesForme || set.name || '');
 			if (window.toID(name) === 'samantha') {
 				return 'background-image:url(' + SPRITES + 'samantha.png);' +
-					'background-position:25px 4px;background-size:65px 96px;background-repeat:no-repeat;';
+					'background-position:28px 2px;background-size:50px 74px;background-repeat:no-repeat;';
 			}
 			return original.call(this, set, gen);
 		};
