@@ -57,7 +57,7 @@ Where a password goes depends on which address you use:
   own origin and nothing to do with logging in touches this server.
 - On **our own domain** the browser cannot reach them — Showdown's cross-domain
   handshake returns an empty page for hosts they do not route, and their login
-  server sends no CORS headers — so `src/login-relay.js` forwards that one
+  server sends no CORS headers — so `src/http-hooks.js` forwards that one
   request. A password typed there passes through this server on its way to
   Showdown. It is never stored or logged, but it does pass through.
 

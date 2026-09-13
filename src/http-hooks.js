@@ -1,6 +1,9 @@
 'use strict';
 /**
- * Borrow Showdown's login server instead of running one.
+ * Two things this server answers itself, before Showdown's web server sees
+ * them: the login request, and the old /play/ address.
+ *
+ * ## Borrowing Showdown's login server instead of running one.
  *
  * Accounts on this server are real Pokemon Showdown accounts. Nothing is
  * registered with Smogon and no account database lives here - the official
@@ -103,6 +106,23 @@ function relay(req, res, log) {
 }
 
 /**
+ * Where the client used to live.
+ *
+ * It was served at /play/ while the root belonged to Showdown's redirect. It
+ * is the root itself now - it has to be, because the client reads the room out
+ * of the path and writes it back the same way, so every link it made under
+ * /play/ pointed at the root regardless. Old links and bookmarks still work:
+ * they are sent to the same path one level up. 302 rather than 301, so nothing
+ * is cached into a browser that we cannot take back.
+ */
+function playRedirect(url) {
+	if (!url.startsWith('/play')) return null;
+	const rest = url.slice('/play'.length);
+	if (rest && !rest.startsWith('/') && !rest.startsWith('?')) return null;
+	return rest.startsWith('?') ? `/${rest}` : (rest || '/');
+}
+
+/**
  * Answer that one path before Showdown's own web server sees it.
  *
  * Showdown serves HTTP from a worker process, and its request handler is wired
@@ -116,13 +136,22 @@ function relay(req, res, log) {
  * their handler discards it before config would ever get a look in.
  */
 function hookServer(server, log) {
-	if (server.velvetLoginRelay) return;
-	server.velvetLoginRelay = true;
+	if (server.velvetHttpHooks) return;
+	server.velvetHttpHooks = true;
 	const emit = server.emit;
 	server.emit = function (event, ...args) {
-		if (event === 'request' && args[0] && isLoginRequest(args[0].url)) {
-			relay(args[0], args[1], log);
-			return true;
+		if (event === 'request' && args[0] && args[0].url) {
+			const [req, res] = args;
+			if (isLoginRequest(req.url)) {
+				relay(req, res, log);
+				return true;
+			}
+			const moved = playRedirect(req.url);
+			if (moved) {
+				res.writeHead(302, { Location: moved, 'Cache-Control': 'no-store' });
+				res.end();
+				return true;
+			}
 		}
 		return emit.apply(this, [event, ...args]);
 	};
@@ -135,10 +164,10 @@ function hookServer(server, log) {
  * serves HTTP, but it is loaded before that server exists - so the hook is on
  * the constructor rather than on a server we could be handed.
  */
-function installLoginRelay(log = () => {}) {
+function installHttpHooks(log = () => {}) {
 	const http = require('http');
-	if (http.velvetLoginRelay) return;
-	http.velvetLoginRelay = true;
+	if (http.velvetHttpHooks) return;
+	http.velvetHttpHooks = true;
 	const createServer = http.createServer;
 	http.createServer = function (...args) {
 		const server = createServer.apply(this, args);
@@ -147,4 +176,4 @@ function installLoginRelay(log = () => {}) {
 	};
 }
 
-module.exports = { installLoginRelay, isLoginRequest, UPSTREAM_HOST, UPSTREAM_PATH };
+module.exports = { installHttpHooks, isLoginRequest, UPSTREAM_HOST, UPSTREAM_PATH };

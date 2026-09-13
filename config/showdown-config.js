@@ -155,7 +155,7 @@ exports.subprocesses = Number(process.env.PS_SUBPROCESSES || 0);
  *   - on our own domain, which is where the bot panel and Samantha live, their
  *     crossdomain handshake returns nothing for our hostname and their login
  *     server sends no CORS headers, so the browser cannot reach them at all;
- *     src/login-relay.js forwards that one request, which means a password
+ *     src/http-hooks.js forwards that one request, which means a password
  *     typed there passes through this process on its way to Showdown
  *
  * PS_REAL_ACCOUNTS=0 goes back to the old behaviour - any name, no proof, no
@@ -165,7 +165,7 @@ const realAccounts = process.env.PS_REAL_ACCOUNTS !== '0';
 if (realAccounts) {
 	// `loginserver` and the public key it is checked against are inherited from
 	// Showdown's own config; only the forwarding has to be set up here.
-	require('../../../src/login-relay').installLoginRelay(msg => console.log('[login]', msg));
+	require('../../../src/http-hooks').installHttpHooks(msg => console.log('[login]', msg));
 } else {
 	// Open server: anyone picks a name and plays immediately, and nobody's name
 	// is proof of anything.

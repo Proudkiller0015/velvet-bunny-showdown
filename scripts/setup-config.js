@@ -38,39 +38,51 @@ fs.writeFileSync(usergroups, '');
 console.log(`usergroups -> ${usergroups} (empty; the bot is promoted at runtime)`);
 
 // ---------------------------------------------------------------- the client
-// Our own build serves the root, and /play/ as well.
+// Our own build IS the site, served from the root.
 //
-// It was the alternative until now, kept at /play/ while the root bounced
-// players to the official client, for one reason: it could not sign anyone in.
-// Showdown's cross-domain bridge answers only for hosts they route, so a browser
-// on our domain could not reach their login server at all. The server forwards
-// that one request itself now (src/login-relay.js), so this client logs people
-// in with their real Pokemon Showdown account exactly as the official one does -
-// and unlike the official one it has the bot panel and knows about Samantha.
+// It lived at /play/ while the root bounced players to the official client,
+// for one reason: it could not sign anyone in. Showdown's cross-domain bridge
+// answers only for hosts they route, so a browser on our domain could not reach
+// their login server at all. The server forwards that one request itself now
+// (src/http-hooks.js), so this client logs people in with their real Pokemon
+// Showdown account - and unlike the official one it has the bot panel and knows
+// about Samantha.
 //
-// The root page is a redirect rather than a second copy of the client, so there
-// is one build to keep straight. PS_ROOT_CLIENT=stock puts Showdown's own
-// redirect back, which sends players to the official client on psim.us - worth
-// having if the login relay ever breaks, since that route does not use it.
+// It has to be the root and not a subdirectory. The client reads the room out
+// of the path (`location.pathname.slice(1)`) and writes it back the same way, so
+// under /play/ every link it produced pointed at the root anyway - and a deep
+// link like /play/ladder is not a file, so it 404ed. At the root, Showdown's
+// static server already falls back to index.html for paths that are not files,
+// which is exactly the routing the client expects. /play/ is kept alive by a
+// redirect in src/http-hooks.js rather than by a second copy.
 //
-// It is written every boot rather than trusted to be intact: node_modules
-// survives between deploys on this host, so whatever was copied here once
-// outlives the change that stopped copying it.
-const rootPage = process.env.PS_ROOT_CLIENT === 'stock' ? 'index.html' : 'velvet-index.html';
-const stockPage = path.join(__dirname, '..', 'server-static', rootPage);
-if (fs.existsSync(stockPage)) {
-	fs.mkdirSync(path.join(pkgRoot, 'server', 'static'), { recursive: true });
-	fs.copyFileSync(stockPage, path.join(pkgRoot, 'server', 'static', 'index.html'));
-	console.log(`root page -> ${rootPage === 'index.html' ? "Showdown's own redirect" : 'our client'}`);
-}
-
+// PS_ROOT_CLIENT=stock puts Showdown's own redirect back, which sends players to
+// the official client on psim.us - worth having if the relay ever breaks, since
+// that route does not use it.
+//
+// Everything here is written every boot rather than trusted to be intact:
+// node_modules survives between deploys on this host, so whatever was copied
+// once outlives the change that stopped copying it.
+const staticDir = path.join(pkgRoot, 'server', 'static');
 const clientSrc = path.join(__dirname, '..', 'client');
-const clientDest = path.join(pkgRoot, 'server', 'static', 'play');
-if (fs.existsSync(clientSrc)) {
-	fs.cpSync(clientSrc, clientDest, { recursive: true, force: true });
-	console.log(`client -> ${clientDest} (served at /play/)`);
+const stock = process.env.PS_ROOT_CLIENT === 'stock';
+fs.mkdirSync(staticDir, { recursive: true });
+
+// The copy at /play/ from when this was the alternative. It would shadow the
+// redirect and serve a second, stale client, so it goes.
+fs.rmSync(path.join(staticDir, 'play'), { recursive: true, force: true });
+
+if (!stock && fs.existsSync(clientSrc)) {
+	fs.cpSync(clientSrc, staticDir, { recursive: true, force: true });
+	console.log(`client -> ${staticDir} (served at the root; /play/ redirects here)`);
 } else {
-	console.log('no client/ directory; only the stock page will be served');
+	const stockPage = path.join(__dirname, '..', 'server-static', 'index.html');
+	if (fs.existsSync(stockPage)) {
+		fs.copyFileSync(stockPage, path.join(staticDir, 'index.html'));
+		console.log("root page -> Showdown's own redirect, to the official client");
+	} else {
+		console.log('no client and no stock page; the root will 404');
+	}
 }
 
 // ------------------------------------------------------------- custom data

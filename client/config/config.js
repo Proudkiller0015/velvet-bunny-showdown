@@ -87,7 +87,7 @@ Config.server = {
 // route themselves and returns an empty page for ours. Skipping it costs
 // nothing else: it only loads battle text relatively, which already falls back
 // to the official CDN, and logging in goes through the server rather than that
-// iframe (see src/login-relay.js).
+// iframe (see src/http-hooks.js).
 Config.testclient = true;
 
 // English unless the viewer chooses otherwise in Options. Without this the
