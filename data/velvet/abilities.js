@@ -207,6 +207,48 @@ exports.Abilities = {
 	 * already applied its own 1.3 by the time this runs, and applying 1.5 on top
 	 * would come to 1.95.
 	 */
+	/**
+	 * Sun and rain, under our own names.
+	 *
+	 * These do exactly what Drought and Drizzle do, and exist only because of
+	 * what a name costs. National Dex UU bans weather by ability name, so a
+	 * Simisear holding Drought is refused in UU, RU and everything below - the
+	 * tiers a 480-stat monkey actually belongs to - while Simisage sailed through
+	 * on Verdant Surge purely because that one happens to be ours.
+	 *
+	 * Naming the other two is the smaller change. Unbanning Drought and Drizzle
+	 * in those tiers would have legalised Torkoal, Ninetales, Politoed and
+	 * Pelipper alongside them, which is a tiering decision about sun and rain
+	 * teams and has nothing to do with these three.
+	 *
+	 * No bonus attached, unlike Verdant Surge. Sun already multiplies Fire by 1.5
+	 * and rain does the same for Water; Grassy Terrain only manages 1.3, which is
+	 * the whole reason that one has a clause and these two do not.
+	 */
+	solarsurge: {
+		name: "Solar Surge",
+		onStart(source) {
+			this.field.setWeather('sunnyday');
+		},
+		flags: {},
+		rating: 4,
+		num: -4,
+		gen: 9,   // negative `num` leaves this 0, and gen 0 is "does not exist yet"
+		shortDesc: "On switch-in, this Pokemon summons harsh sunlight.",
+		desc: "On switch-in, the weather becomes harsh sunlight, which lasts until the weather is changed or five turns have passed. Held Heat Rock extends it to eight.",
+	},
+	tidalsurge: {
+		name: "Tidal Surge",
+		onStart(source) {
+			this.field.setWeather('raindance');
+		},
+		flags: {},
+		rating: 4,
+		num: -5,
+		gen: 9,   // negative `num` leaves this 0, and gen 0 is "does not exist yet"
+		shortDesc: "On switch-in, this Pokemon summons rain.",
+		desc: "On switch-in, the weather becomes rain, which lasts until the weather is changed or five turns have passed. Held Damp Rock extends it to eight.",
+	},
 	verdantsurge: {
 		name: "Verdant Surge",
 		onStart(source) {

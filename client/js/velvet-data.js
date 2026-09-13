@@ -123,8 +123,9 @@
 		var buffsIn = installBuffs();
 		var abilitiesIn = installBuffedAbilities();
 		var itemIn = installItemIcon();
+		var sigItemIn = installSignatureItem();
 		return tableIn && orderIn && spritesIn && iconIn && builderIn && tipsIn && rpIn &&
-			listIn && buffsIn && abilitiesIn && itemIn;
+			listIn && buffsIn && abilitiesIn && itemIn && sigItemIn;
 	}
 
 	/**
@@ -728,6 +729,58 @@
 			var rows = [];
 			for (var n = 0; n < hoist.length; n++) rows.push(['ability', hoist[n]]);
 			return header.concat(rows, rest);
+		};
+		return true;
+	}
+
+	/**
+	 * A signature item, at the top of the item list, for everyone it belongs to.
+	 *
+	 * The builder does float an item towards the top for the species named in
+	 * its `itemUser`, which is how Pikachu finds the Light Ball - but it is a
+	 * nudge in the sort order with nothing said about why, and an item that
+	 * exists for exactly one family deserves the same treatment its moves get.
+	 *
+	 * Driven entirely by `itemUser`, so this covers the pre-evolutions without
+	 * naming them: the Elemental Banana lists all six of the simi family, and a
+	 * Pansear sees it at the top for the same reason a Simisear does.
+	 */
+	function installSignatureItem() {
+		var search = window.BattleItemSearch;
+		if (!search || !search.prototype || !search.prototype.getBaseResults) return false;
+		if (search.__velvetSignatureItem) return true;
+		search.__velvetSignatureItem = true;
+
+		var original = search.prototype.getBaseResults;
+		search.prototype.getBaseResults = function () {
+			var results = original.apply(this, arguments);
+			var buffs = window.VelvetBuffs;
+			if (!results || !buffs || !buffs.items) return results;
+
+			var species = this.species;
+			if (species && typeof species !== 'string') species = species.species || species.name || '';
+			var speciesid = window.toID(species || '');
+			if (!speciesid) return results;
+
+			var mine = [];
+			for (var id in buffs.items) {
+				var users = buffs.items[id].itemUser || [];
+				for (var u = 0; u < users.length; u++) {
+					if (window.toID(users[u]) === speciesid) { mine.push(id); break; }
+				}
+			}
+			if (!mine.length) return results;
+
+			var rest = [];
+			for (var i = 0; i < results.length; i++) {
+				var row = results[i];
+				if (row[0] === 'item' && mine.indexOf(row[1]) >= 0) continue;
+				rest.push(row);
+			}
+
+			var hoisted = [['header', mine.length === 1 ? 'Signature item' : 'Signature items']];
+			for (var k = 0; k < mine.length; k++) hoisted.push(['item', mine[k]]);
+			return hoisted.concat(rest);
 		};
 		return true;
 	}

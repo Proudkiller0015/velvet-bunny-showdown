@@ -45,7 +45,7 @@ const FIELD_SETTERS = [
 	'desolateland', 'primordialsea', 'deltastream',
 	'orichalcumpulse', 'hadronengine',
 	'grassysurge', 'electricsurge', 'psychicsurge', 'mistysurge',
-	'verdantsurge',
+	'verdantsurge', 'solarsurge', 'tidalsurge',
 ];
 
 /** Whose item this is. Anyone else holding it is holding a banana. */

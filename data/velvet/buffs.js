@@ -91,7 +91,7 @@ const MONKEYS = {
 		],
 	},
 	simisear: {
-		abilities: ['Drought'],
+		abilities: ['Solar Surge'],
 		moves: [
 			'temperflare', 'burningjealousy', 'flamecharge', 'ember',
 			'endure', 'terablast', 'simianrush',
@@ -99,7 +99,7 @@ const MONKEYS = {
 		],
 	},
 	simipour: {
-		abilities: ['Drizzle'],
+		abilities: ['Tidal Surge'],
 		moves: [
 			'liquidation', 'chillingwater', 'muddywater', 'whirlpool', 'wavecharge',
 			'endure', 'terablast', 'simianrush',

@@ -46,10 +46,24 @@ const { applied, Buffs } = require(path.join(PACKAGE, 'dist', 'data', 'velvet', 
  */
 const LABEL = 'Awakened';
 
-/** Everything we invented, as opposed to everything we changed. */
+/**
+ * Everything we invented, as opposed to everything we changed.
+ *
+ * The abilities are worked out rather than listed: anything a buff hands out
+ * with a negative number is ours, because that is how this project numbers what
+ * Showdown has no row for. Listing them by hand is how Solar Surge and Tidal
+ * Surge shipped to the server and not to the client, leaving two of the three
+ * monkeys with an ability the builder could not draw.
+ */
 const OUR_MOVES = ['simianrush', 'wavecharge'];
-const OUR_ABILITIES = ['verdantsurge'];
 const OUR_ITEMS = ['elementalbanana'];
+const OUR_ABILITIES = [];
+for (const buff of Object.values(Buffs)) {
+	for (const name of buff.abilities || []) {
+		const ability = Dex.abilities.get(name);
+		if (ability.exists && ability.num < 0 && !OUR_ABILITIES.includes(ability.id)) OUR_ABILITIES.push(ability.id);
+	}
+}
 
 /**
  * Where each character of an id sits in the display name.

@@ -65,11 +65,11 @@ window.VelvetBuffs = {
 				"raindance"
 			],
 			"abilities": [
-				"Drought"
+				"Solar Surge"
 			],
 			"slots": {
 				"0": "Gluttony",
-				"1": "Drought",
+				"1": "Solar Surge",
 				"H": "Blaze"
 			}
 		},
@@ -97,19 +97,19 @@ window.VelvetBuffs = {
 				"sunnyday"
 			],
 			"abilities": [
-				"Drizzle"
+				"Tidal Surge"
 			],
 			"slots": {
 				"0": "Gluttony",
-				"1": "Drizzle",
+				"1": "Tidal Surge",
 				"H": "Torrent"
 			}
 		}
 	},
 	moves: {"simianrush":{"num":-4,"name":"Simian Rush","type":"Normal","category":"Physical","basePower":80,"accuracy":100,"pp":15,"priority":0,"target":"normal","flags":{"contact":1,"protect":1,"mirror":1,"metronome":1},"secondary":null,"shortDesc":"User's type. Better attacking stat. Goes first in the user's own weather.","desc":"This move's type is the user's primary type and it uses whichever of the user's Attack or Special Attack is higher. It gains +1 priority while the user is Fire-type in harsh sunlight, Water-type in rain, or Grass-type on Grassy Terrain."},"wavecharge":{"num":-5,"name":"Wave Charge","type":"Water","category":"Physical","basePower":50,"accuracy":100,"pp":20,"priority":0,"target":"normal","flags":{"contact":1,"protect":1,"mirror":1,"metronome":1},"secondary":{"chance":100,"self":{"boosts":{"spe":1}}},"shortDesc":"100% chance to raise the user's Speed by 1.","desc":"Has a 100% chance to raise the user's Speed by 1 stage."}},
-	abilities: {"verdantsurge":{"num":-3,"name":"Verdant Surge","rating":4,"shortDesc":"Sets Grassy Terrain on entry; this Pokemon's Grass moves get 1.5x from it instead of 1.3x.","desc":"On switch-in, this Pokemon summons Grassy Terrain. While Grassy Terrain is active and this Pokemon is grounded, its Grass-type moves are boosted to 1.5x rather than the usual 1.3x."}},
+	abilities: {"verdantsurge":{"num":-3,"name":"Verdant Surge","rating":4,"shortDesc":"Sets Grassy Terrain on entry; this Pokemon's Grass moves get 1.5x from it instead of 1.3x.","desc":"On switch-in, this Pokemon summons Grassy Terrain. While Grassy Terrain is active and this Pokemon is grounded, its Grass-type moves are boosted to 1.5x rather than the usual 1.3x."},"solarsurge":{"num":-4,"name":"Solar Surge","rating":4,"shortDesc":"On switch-in, this Pokemon summons harsh sunlight.","desc":"On switch-in, the weather becomes harsh sunlight, which lasts until the weather is changed or five turns have passed. Held Heat Rock extends it to eight."},"tidalsurge":{"num":-5,"name":"Tidal Surge","rating":4,"shortDesc":"On switch-in, this Pokemon summons rain.","desc":"On switch-in, the weather becomes rain, which lasts until the weather is changed or five turns have passed. Held Damp Rock extends it to eight."}},
 	items: {"elementalbanana":{"num":-1,"name":"Elemental Banana","spritenum":0,"itemUser":["Pansage","Simisage","Pansear","Simisear","Panpour","Simipour"],"fling":{"basePower":30},"gen":9,"shortDesc":"Simi family: 1.3x Atk, SpA and Speed, and cannot be removed. 1.5x after Tera/Dynamax, which also re-sets their weather.","desc":"If held by a Pansage, Pansear, Panpour, Simisage, Simisear or Simipour, that Pokemon's Attack, Special Attack and Speed are multiplied by 1.3, and the item cannot be removed by Knock Off, Trick, Thief or anything else. Once that Pokemon Terastallizes or Dynamaxes the multiplier becomes 1.5, and its weather- or terrain-setting Ability activates again."}},
-	search: [["simianrush","move","0000001111"],["wavecharge","move","0000111111"],["verdantsurge","ability","000000011111"],["elementalbanana","item","000000000111111"]],
+	search: [["simianrush","move","0000001111"],["wavecharge","move","0000111111"],["verdantsurge","ability","000000011111"],["solarsurge","ability","0000011111"],["tidalsurge","ability","0000011111"],["elementalbanana","item","000000000111111"]],
 
 	/** What this Pokemon gained, or an empty record. */
 	get: function (speciesid) {
