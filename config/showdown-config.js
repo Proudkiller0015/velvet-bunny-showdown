@@ -676,8 +676,12 @@ function battleLog() {
 		room = Rooms.get('logs');
 	}
 	if (room) {
+		// Hidden from everyone below driver, and opened automatically for everyone
+		// at or above it: nobody should have to remember a room exists to read the
+		// record of what happened on the server.
 		room.settings.isPrivate = 'hidden';
 		room.settings.modjoin = '%';
+		room.settings.autojoin = true;
 		room.settings.modchat = '~';   // nobody talks in here; it is a record
 		room.settings.introMessage = '<h2>Battle log</h2><p>Every battle on this server, ' +
 			'as it starts and as it ends. Kept in the repository as well, one file a month, ' +
