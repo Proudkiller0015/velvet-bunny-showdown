@@ -114,7 +114,8 @@
 		var spritesIn = installSprites();
 		var iconIn = installIcon();
 		var builderIn = installTeambuilderSprite();
-		return tableIn && orderIn && spritesIn && iconIn && builderIn;
+		var tipsIn = installTooltipStats();
+		return tableIn && orderIn && spritesIn && iconIn && builderIn && tipsIn;
 	}
 
 	/**
@@ -344,6 +345,56 @@
 				data.cryurl = '';
 			}
 			return data;
+		};
+		return true;
+	}
+
+	/**
+	 * Show what her ability and her Light Ball are actually doing.
+	 *
+	 * The tooltip does not read stats off the server - it recalculates them, and
+	 * applies the modifiers it knows about by name: Huge Power doubles Attack,
+	 * Light Ball doubles Pikachu's. Neither test matches her, so her numbers were
+	 * shown raw while the damage told a different story.
+	 *
+	 * Both halves double both attacking stats, and they stack the way the server
+	 * stacks them. A ceiling is applied at the end for the same reason the server
+	 * needs none: this is only a display, and four digits is where the box stops
+	 * being readable.
+	 */
+	function installTooltipStats() {
+		var tips = window.BattleTooltips;
+		if (!tips || !tips.prototype || !tips.prototype.calculateModifiedStats) return false;
+		if (tips.__velvetStats) return true;
+		tips.__velvetStats = true;
+
+		var original = tips.prototype.calculateModifiedStats;
+		tips.prototype.calculateModifiedStats = function (clientPokemon, serverPokemon, statStagesOnly) {
+			var stats = original.apply(this, arguments);
+			var mon = serverPokemon || clientPokemon;
+			if (!stats || !mon) return stats;
+
+			var species = mon.speciesForme || mon.species || (mon.getSpeciesForme && mon.getSpeciesForme()) || '';
+			if (window.toID(species) !== 'samantha') return stats;
+
+			var ability = window.toID(
+				(clientPokemon && clientPokemon.ability) || (serverPokemon && serverPokemon.ability) || ''
+			);
+			var item = window.toID(mon.item || '');
+
+			if (ability === 'queenwrath') {
+				stats.atk *= 2;
+				stats.spa *= 2;
+			}
+			if (item === 'lightball') {
+				stats.atk *= 2;
+				stats.spa *= 2;
+			}
+
+			for (var name in stats) {
+				if (stats[name] > 9999) stats[name] = 9999;
+			}
+			return stats;
 		};
 		return true;
 	}
