@@ -121,6 +121,17 @@ if (fs.existsSync(dataSrc)) {
 	console.log(`custom data -> ${added ? `hooked into ${added} dex file(s)` : 'already hooked'}`);
 }
 
+// The formats this server adds. dist/config, not config: dex-formats.js resolves
+// the path relative to dist/sim, which is a different directory to the one the
+// server config lives in.
+const formatsSrc = path.join(__dirname, '..', 'config', 'custom-formats.js');
+if (fs.existsSync(formatsSrc)) {
+	const formatsDest = path.join(pkgRoot, 'dist', 'config', 'custom-formats.js');
+	fs.mkdirSync(path.dirname(formatsDest), { recursive: true });
+	fs.copyFileSync(formatsSrc, formatsDest);
+	console.log('custom formats -> copied');
+}
+
 // ---------------------------------------------------------------- avatars
 // Custom avatars are served from the package's config/avatars, which npm owns,
 // so they are copied in from avatars/ here the same way the config is.

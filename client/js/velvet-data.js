@@ -160,10 +160,35 @@
 			// The builder asks the table what tier something is in.
 			if (t.overrideTier && !t.overrideTier.samantha) t.overrideTier.samantha = 'Custom';
 		}
+		installLearnset(table);
 		if (!landed) return false;
 		return true;
 	}
 
+	/**
+	 * What the builder offers her, and in what order.
+	 *
+	 * She learns everything, so without a learnset the builder shows nothing and
+	 * with a plain one it shows eight hundred moves in dex order, her own three
+	 * buried somewhere in the middle of them.
+	 *
+	 * The builder walks the learnset in the order its keys were added, so adding
+	 * hers first is all it takes to put them first - no sorting to hook, and
+	 * nothing that has to be kept in step with how the search ranks results.
+	 */
+	function installLearnset(table) {
+		var learnsets = table.learnsets || (table.learnsets = {});
+		if (learnsets.samantha) return;
+		if (!window.BattleMovedex) return;
+
+		var mine = {};
+		var signature = ['queenbeam', 'queensdance', 'queensheal'];
+		for (var i = 0; i < signature.length; i++) mine[signature[i]] = '9M';
+		for (var id in window.BattleMovedex) {
+			if (!mine[id]) mine[id] = '9M';
+		}
+		learnsets.samantha = mine;
+	}
 	function hasHer(list) {
 		for (var i = 0; i < list.length; i++) {
 			var row = list[i];
