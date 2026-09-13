@@ -38,27 +38,30 @@ fs.writeFileSync(usergroups, '');
 console.log(`usergroups -> ${usergroups} (empty; the bot is promoted at runtime)`);
 
 // ---------------------------------------------------------------- the client
-// Our own build goes at /play/, NOT at the root.
+// Our own build serves the root, and /play/ as well.
 //
-// The root keeps Showdown's stock page, which bounces players into the official
-// client. That client can sign them in with their real Pokemon Showdown account
-// and shows the real news; ours cannot, because signing in means talking to
-// Smogon's login server, and their cross-domain bridge only answers for hosts
-// they have whitelisted. Ours is worth keeping for the main-menu bot panel, but
-// it is the alternative rather than the default.
+// It was the alternative until now, kept at /play/ while the root bounced
+// players to the official client, for one reason: it could not sign anyone in.
+// Showdown's cross-domain bridge answers only for hosts they route, so a browser
+// on our domain could not reach their login server at all. The server forwards
+// that one request itself now (src/login-relay.js), so this client logs people
+// in with their real Pokemon Showdown account exactly as the official one does -
+// and unlike the official one it has the bot panel and knows about Samantha.
 //
-// The bot menu itself does not depend on either: it is published as the lobby's
-// room introduction, which is server-side HTML and shows up in any client.
-// An earlier version of this script copied the client over the package's own
-// server/static, overwriting its index.html. node_modules survives between
-// deploys, so that overwrite outlived the change that stopped doing it and the
-// root kept serving our client - which cannot sign anyone in. Restore the stock
-// page from our copy every boot, rather than trusting the package to be intact.
-const stockPage = path.join(__dirname, '..', 'server-static', 'index.html');
+// The root page is a redirect rather than a second copy of the client, so there
+// is one build to keep straight. PS_ROOT_CLIENT=stock puts Showdown's own
+// redirect back, which sends players to the official client on psim.us - worth
+// having if the login relay ever breaks, since that route does not use it.
+//
+// It is written every boot rather than trusted to be intact: node_modules
+// survives between deploys on this host, so whatever was copied here once
+// outlives the change that stopped copying it.
+const rootPage = process.env.PS_ROOT_CLIENT === 'stock' ? 'index.html' : 'velvet-index.html';
+const stockPage = path.join(__dirname, '..', 'server-static', rootPage);
 if (fs.existsSync(stockPage)) {
 	fs.mkdirSync(path.join(pkgRoot, 'server', 'static'), { recursive: true });
 	fs.copyFileSync(stockPage, path.join(pkgRoot, 'server', 'static', 'index.html'));
-	console.log('root page -> restored to the stock redirect');
+	console.log(`root page -> ${rootPage === 'index.html' ? "Showdown's own redirect" : 'our client'}`);
 }
 
 const clientSrc = path.join(__dirname, '..', 'client');
