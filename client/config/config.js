@@ -58,7 +58,28 @@ Config.defaultserver = {
 	altport: 80,
 	registered: false,
 };
-Config.server = Config.defaultserver;
+// This server, not Showdown's.
+//
+// `defaultserver` is the official one - it is what the bundled config ships
+// with and what play.pokemonshowdown.com itself uses. Pointing Config.server at
+// it sent this client to sim3.psim.us, so the copy served from our own domain
+// was playing on Smogon's server and none of our formats or Pokemon existed.
+//
+// It has to be set explicitly because testclient skips the crossdomain handshake
+// that would normally work the address out, and that handshake could not tell us
+// anyway: it asks Smogon which server a hostname belongs to, and for a host they
+// have never heard of the answer is theirs.
+Config.server = {
+	id: 'velvetbunny',
+	host: window.location.hostname,
+	port: window.location.protocol === 'https:' ? 443 : Number(window.location.port) || 80,
+	httpport: window.location.protocol === 'https:' ? 443 : Number(window.location.port) || 80,
+	altport: 80,
+	https: window.location.protocol === 'https:',
+	// Not registered with Smogon, which is what decides whether the client tries
+	// to authenticate a name against their login server.
+	registered: false,
+};
 
 // The main-menu bot panel. Editing this file is enough to change the list.
 Config.botChallenge = {
