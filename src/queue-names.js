@@ -32,8 +32,13 @@ function queueName(base, difficulty, format, multiFormat) {
 	const pretty = difficulty.charAt(0).toUpperCase() + difficulty.slice(1);
 	let name = `${short} ${pretty}`;
 	if (multiFormat) {
+		// The first format keeps the plain name. A queue's rating belongs to its
+		// account, so tagging every format the moment a second one is added would
+		// rename the four accounts that have been laddering since the start and
+		// hand each of them a fresh, empty rating. Adding a format should cost
+		// nothing to the formats already running.
 		const tag = format.replace(/^gen\d+/, '').replace(/randombattle/, 'RB').replace(/randomdoublesbattle/, 'RDB');
-		if (tag) name = `${name} ${tag}`;
+		if (tag && !multiFormat.primary) name = `${name} ${tag}`;
 	}
 	// Trim the difficulty rather than the name, so it still reads as the bot.
 	while (toId(name).length > MAX_USERID) name = name.slice(0, -1).trim();
@@ -43,9 +48,9 @@ function queueName(base, difficulty, format, multiFormat) {
 /** Every account the bot plays under: the main one, and one per queue. */
 function botAccountIds(base, difficulties, formats) {
 	const ids = new Set([toId(base)]);
-	const multi = formats.length > 1;
 	for (const format of formats) {
-		for (const difficulty of difficulties) ids.add(toId(queueName(base, difficulty, format, multi)));
+		const tagging = formats.length > 1 && { primary: format === formats[0] };
+		for (const difficulty of difficulties) ids.add(toId(queueName(base, difficulty, format, tagging)));
 	}
 	return ids;
 }
@@ -53,9 +58,9 @@ function botAccountIds(base, difficulties, formats) {
 /** Which rung each bot account plays as: userid -> difficulty. */
 function botDifficulties(base, difficulties, formats) {
 	const map = new Map();
-	const multi = formats.length > 1;
 	for (const format of formats) {
-		for (const difficulty of difficulties) map.set(toId(queueName(base, difficulty, format, multi)), difficulty);
+		const tagging = formats.length > 1 && { primary: format === formats[0] };
+		for (const difficulty of difficulties) map.set(toId(queueName(base, difficulty, format, tagging)), difficulty);
 	}
 	return map;
 }

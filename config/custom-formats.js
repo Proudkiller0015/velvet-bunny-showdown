@@ -1,4 +1,14 @@
 'use strict';
+/* eslint-disable no-empty */
+try {
+	// RP Random Battle needs the random team generator taught about the Pokemon
+	// this server buffs. Done here because this file is loaded inside the
+	// simulator process, which is the process that builds the teams - patching
+	// it from the server's own entry point would never reach them.
+	require('../data/velvet/random-sets.js').installRandomSets();
+} catch (e) {
+	console.log('[velvet] RP Random Battle sets unavailable: ' + e.message);
+}
 /**
  * Formats this server adds, on top of Showdown's own.
  *
@@ -221,6 +231,32 @@ exports.Formats = [
 	 * NU, PU and ZU need a list that does not exist yet and are missing rather
 	 * than present and wrong. See scripts/build-rp-tiers.js when they arrive.
 	 */
+	{
+		name: "[Gen 9] RP Random Battle",
+		desc: "Random teams on this server's own dex - buffs, un-nerfs and all.",
+
+		/**
+		 * Random Battle, but played on our data.
+		 *
+		 * Every change this server makes lives in the base dex, so a random
+		 * battle here already hands out the un-nerfed Protean, the Battle Bond
+		 * that still transforms, and Dark Void at the accuracy it used to have.
+		 * What it could not do was roll a buffed Pokemon: Showdown's set table
+		 * has no entry for a Simisage, so the one format meant to show this
+		 * server off was the one that never showed any of it.
+		 *
+		 * data/velvet/random-sets.js fills that in, for this format only.
+		 */
+		mod: 'gen9',
+		team: 'random',
+		ruleset: ['Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Illusion Level Mod'],
+
+		searchShow: true,
+		challengeShow: true,
+		tournamentShow: true,
+		rated: true,
+	},
+
 	rpTier('Ubers', '[Gen 9] National Dex Ubers'),
 	rpTier('OU', '[Gen 9] National Dex'),
 	rpTier('UU', '[Gen 9] National Dex UU'),

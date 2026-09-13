@@ -52,6 +52,26 @@
  * Sunny Day, beyond nobody ever looking. Anything a monkey already learns is
  * skipped rather than duplicated, so this list is safe to grow.
  */
+/**
+ * Coverage, of the kind a monkey ought to have.
+ *
+ * These three are primates with fists and nothing to hit anything with. Every
+ * other monkey in the game got the punches, the Fighting moves, or both -
+ * Infernape, Primeape and Rillaboom are built out of them - while the simi
+ * family was left with its own type and Acrobatics.
+ *
+ * So: the Fighting coverage that makes a monkey a monkey, the three elemental
+ * punches, and enough rock to answer the birds that wall them. Shared across all
+ * three for the same reason the status list is: there was never a reason for
+ * them to differ, only an oversight.
+ */
+const MONKEY_COVERAGE = [
+	'closecombat', 'focusblast', 'drainpunch', 'machpunch',
+	'icepunch', 'firepunch', 'thunderpunch',
+	'rockslide', 'stoneedge',
+	'uturn', 'knockoff',
+];
+
 const MONKEY_STATUS = [
 	'nastyplot', 'swordsdance', 'bulkup',
 	'focusenergy', 'screech', 'scaryface',
@@ -88,6 +108,7 @@ const MONKEYS = {
 			'grassyglide', 'grassyterrain', 'trailblaze',
 			'growth', 'endure', 'terablast', 'junglerush',
 			...MONKEY_STATUS,
+			...MONKEY_COVERAGE,
 		],
 	},
 	simisear: {
@@ -96,6 +117,7 @@ const MONKEYS = {
 			'temperflare', 'burningjealousy', 'flamecharge', 'ember',
 			'endure', 'terablast', 'cinderrush',
 			...MONKEY_STATUS,
+			...MONKEY_COVERAGE,
 		],
 	},
 	simipour: {
@@ -104,6 +126,7 @@ const MONKEYS = {
 			'liquidation', 'chillingwater', 'muddywater', 'whirlpool', 'wavecharge',
 			'endure', 'terablast', 'torrentrush',
 			...MONKEY_STATUS,
+			...MONKEY_COVERAGE,
 		],
 	},
 };

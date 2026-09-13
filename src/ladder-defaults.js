@@ -14,8 +14,18 @@
  * refused its own face.
  */
 
-// One format by default, so the ratings are directly comparable.
-const DEFAULT_FORMATS = ['gen9randombattle'];
+/**
+ * Random Battle, and our own.
+ *
+ * Random Battle stays first, which is load-bearing: the first format's queues
+ * keep their plain account names, so the ratings those four have been building
+ * since the start survive a second format being added.
+ *
+ * RP Random Battle is here because a tier nobody is queuing for is a tier
+ * nobody can play. It is also the only RP format the bots can take on cheaply -
+ * the server generates both teams, so there is nothing for them to build.
+ */
+const DEFAULT_FORMATS = ['gen9randombattle', 'gen9rprandombattle'];
 
 // One queue per difficulty, each carrying its own rating.
 const DEFAULT_DIFFICULTIES = ['easy', 'normal', 'hard', 'champion', 'stockfish'];

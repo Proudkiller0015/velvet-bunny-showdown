@@ -32,7 +32,15 @@ window.VelvetBuffs = {
 				"curse",
 				"quickguard",
 				"metronome",
-				"raindance"
+				"raindance",
+				"closecombat",
+				"drainpunch",
+				"machpunch",
+				"icepunch",
+				"firepunch",
+				"thunderpunch",
+				"stoneedge",
+				"uturn"
 			],
 			"abilities": [
 				"Verdant Surge"
@@ -62,7 +70,14 @@ window.VelvetBuffs = {
 				"curse",
 				"quickguard",
 				"metronome",
-				"raindance"
+				"raindance",
+				"closecombat",
+				"drainpunch",
+				"machpunch",
+				"icepunch",
+				"thunderpunch",
+				"stoneedge",
+				"uturn"
 			],
 			"abilities": [
 				"Solar Surge"
@@ -94,7 +109,14 @@ window.VelvetBuffs = {
 				"curse",
 				"quickguard",
 				"metronome",
-				"sunnyday"
+				"sunnyday",
+				"closecombat",
+				"drainpunch",
+				"machpunch",
+				"firepunch",
+				"thunderpunch",
+				"stoneedge",
+				"uturn"
 			],
 			"abilities": [
 				"Tidal Surge"
