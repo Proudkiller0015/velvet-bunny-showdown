@@ -1,0 +1,12 @@
+{
+	"id": "gen9randombattle-1",
+	"format": "[Gen 9] Random Battle",
+	"players": [
+		"ReplayTesterA",
+		"ReplayTesterB"
+	],
+	"rating": null,
+	"log": "|j|☆ReplayTesterA\n|j|☆ReplayTesterB\n|t:|1789338082\n|gametype|singles\n|player|p1|ReplayTesterA|170|1000\n|player|p2|ReplayTesterB|170|1000\n|gen|9\n|tier|[Gen 9] Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1789338082\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Vikavolt|Vikavolt, L83, M|263/263\n|switch|p2a: Palkia|Palkia, L75|259/259\n|-ability|p2a: Palkia|Pressure\n|turn|1\n|-message|ReplayTesterA forfeited.\n|\n|win|ReplayTesterB\n|raw|ReplayTesterA's rating: 1000 &rarr; <strong>1000</strong><br />(+0 for losing)\n|raw|ReplayTesterB's rating: 1000 &rarr; <strong>1045</strong><br />(+45 for winning)\n",
+	"inputlog": ">start {\"formatid\":\"gen9randombattle\",\"seed\":\"sodium,4de89bd39810e9f8369935f2f24be565\",\"rated\":\"Rated battle\"}\n>player p1 {\"name\":\"ReplayTesterA\",\"avatar\":\"170\",\"rating\":1000,\"seed\":\"sodium,1a1c8db7d081fd5a019b21d62ce917ad\"}\n>player p2 {\"name\":\"ReplayTesterB\",\"avatar\":\"170\",\"rating\":1000,\"seed\":\"sodium,37d4943a66268d95a979243b36c8cf82\"}\n>forcelose p1",
+	"uploadtime": 1789338097
+}
