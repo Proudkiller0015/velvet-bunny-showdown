@@ -15,8 +15,11 @@
 (function () {
 	'use strict';
 
-	// Sprites are served by this server, next to the client itself.
-	var SPRITES = 'sprites/';
+	// Sprites are served by this server, from its root - absolute, not relative.
+	// A replay lives at /replay/<id>, so a relative path would look for them
+	// under /replay/ and find nothing: she rendered as a broken image in every
+	// replay while being perfectly fine in the client.
+	var SPRITES = '/sprites/';
 
 	var SPECIES = {
 		samantha: {
