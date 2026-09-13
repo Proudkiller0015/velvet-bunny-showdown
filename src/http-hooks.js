@@ -205,6 +205,13 @@ function replayPage(replay) {
 <link rel="stylesheet" href="${cdn}/style/utilichart.css" />
 <script src="/config/config.js"></script>
 <script src="${cdn}/js/lib/jquery-1.11.0.min.js"></script>
+<!-- The dex itself. The replay player fetches a cut-down copy of it for
+     sprites, but not the tables Samantha has to be added to - without these
+     she is a question mark with no typing and no moves. -->
+<script src="${cdn}/data/pokedex.js"></script>
+<script src="${cdn}/data/moves.js"></script>
+<script src="${cdn}/data/abilities.js"></script>
+<script src="${cdn}/data/items.js"></script>
 <script src="/js/velvet-data.js"></script>
 <div class="wrapper replay-wrapper">
 <div class="battle"></div><div class="battle-log"></div><div class="replay-controls"></div><div class="replay-controls-2"></div>
