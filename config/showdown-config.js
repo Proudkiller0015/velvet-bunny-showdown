@@ -655,6 +655,35 @@ function goodbye() {
 }
 
 /**
+ * RP at the top of the format list.
+ *
+ * Formats are listed in the order the simulator loaded them, and anything this
+ * server adds is merged in after all of Showdown's own - which puts our own
+ * tiers below thirty sections of theirs, at the bottom of every dropdown. The
+ * list is built once and cached, so moving our section to the front here, and
+ * dropping the cached text, is enough for every client that connects after.
+ *
+ * Sorting the array rather than rewriting the text means the client gets a list
+ * built by Showdown's own code, in the shape it expects.
+ */
+function rpSectionFirst() {
+	const formats = Dex.formats.all();
+	const ours = formats.filter(format => format.section === 'RP');
+	if (!ours.length) {
+		console.log('[formats] no RP section found; leaving the list alone');
+		return;
+	}
+
+	const rest = formats.filter(format => format.section !== 'RP');
+	formats.length = 0;
+	formats.push(...ours, ...rest);
+
+	// Built on first use and cached; drop it so the new order is what gets sent.
+	Rooms.global.formatList = null;
+	console.log(`[formats] RP first: ${ours.map(f => f.name).join(', ')}`);
+}
+
+/**
  * A room that keeps every battle, and a file that outlives the room.
  *
  * The lobby announces battles as they start, but a chat room is a scrollback:
@@ -821,6 +850,7 @@ exports.startuphook = function () {
 	fixMatchmaking(BOT_IDS);
 	exemptBots(BOT_IDS);
 	hostReplays();
+	rpSectionFirst();
 	battleLog();
 	goodbye();
 

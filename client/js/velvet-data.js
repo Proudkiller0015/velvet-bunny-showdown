@@ -118,7 +118,8 @@
 		var iconIn = installIcon();
 		var builderIn = installTeambuilderSprite();
 		var tipsIn = installTooltipStats();
-		return tableIn && orderIn && spritesIn && iconIn && builderIn && tipsIn;
+		var rpIn = installRpTiers();
+		return tableIn && orderIn && spritesIn && iconIn && builderIn && tipsIn && rpIn;
 	}
 
 	/**
@@ -153,6 +154,41 @@
 				rest.push(row);
 			}
 			return hoisted.concat(rest);
+		};
+		return true;
+	}
+
+	/**
+	 * Show National Dex tiers when building for an RP tier.
+	 *
+	 * RP is this server's own National Dex, and the tiers stand on Smogon's ND
+	 * lists - but the builder works out which list to show from the format's
+	 * *name*, looking for 'nationaldex' or 'natdex' in it. `gen9rpou` matches
+	 * nothing, so it fell back to the plain ninth-generation list: past-generation
+	 * Pokemon marked illegal, and tiers that do not match what the server will
+	 * actually accept.
+	 *
+	 * So the search - and only the search - is told the National Dex name instead.
+	 * The team keeps its own format, the server validates against the real one,
+	 * and the builder shows the tiers the tier is built from.
+	 */
+	var RP_TIERS = {
+		gen9rpou: 'gen9nationaldex',
+		gen9rpubers: 'gen9nationaldexubers',
+		gen9rpuu: 'gen9nationaldexuu',
+		gen9rpru: 'gen9nationaldexru',
+	};
+
+	function installRpTiers() {
+		var search = window.DexSearch;
+		if (!search || !search.prototype || !search.prototype.getTypedSearch) return false;
+		if (search.__velvetRpTiers) return true;
+		search.__velvetRpTiers = true;
+
+		var original = search.prototype.getTypedSearch;
+		search.prototype.getTypedSearch = function (searchType, format, speciesOrSet) {
+			var mapped = RP_TIERS[window.toID(format || '')];
+			return original.call(this, searchType, mapped || format, speciesOrSet);
 		};
 		return true;
 	}
