@@ -98,18 +98,8 @@ Config.defaultLanguage = 'en';
 // routes.client deliberately stays on the official host, so sprites, audio and
 // dex data load from their CDN and this bundle stays small and never stale.
 
-// The main-menu bot panel. Editing this file is enough to change the list.
-Config.botChallenge = {
-	name: 'Velvet Bunny',
-	difficulties: ['easy', 'normal', 'hard', 'champion', 'stockfish'],
-	// Shown after the name of any rung listed here.
-	experimental: ['stockfish'],
-	formats: [
-		{ id: 'gen9randombattle', name: 'Random Battle', instant: true },
-		{ id: 'gen9ou', name: 'OU' },
-		{ id: 'gen9vgc2024regh', name: 'VGC' },
-		{ id: 'gen9doublesou', name: 'Doubles OU' },
-		{ id: 'gen9randomdoublesbattle', name: 'Random Doubles', instant: true },
-	],
-};
+// The bot's own panel lives in the lobby now, posted by the server as the room
+// introduction: it picks who the ladder matches you against, which is what the
+// Battle! button then acts on. A second copy on the main menu could only send a
+// direct challenge, which is not how anyone plays the bot any more.
 /*** end Velvet Bunny ***/

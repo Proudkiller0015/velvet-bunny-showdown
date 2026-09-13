@@ -756,27 +756,6 @@ if(!(cfg!=null&&cfg.name))return;
 PS.send("/utm "+((team==null?void 0:team.packedTeam)||''));
 PS.send("/challenge "+cfg.name+", "+format);
 };return _this4;}_inheritsLoose(MainMenuPanel,_PSRoomPanel2);MainMenuPanel.getTitle=function getTitle(){return TL(["Home"]);};var _proto3=MainMenuPanel.prototype;_proto3.componentDidMount=function componentDidMount(){_PSRoomPanel2.prototype.componentDidMount.call(this);this.subscribeTo(PSBackground);};_proto3.focus=function focus(options){var _this$base;if(!(options!=null&&options.preventScroll))PSView.scrollToRoom();if(PSView.hasTapped)return;PSView.politeFocus((_this$base=this.base)==null?void 0:_this$base.querySelector('.formatselect'));};_proto3.renderMiniRoom=function renderMiniRoom(room){return preact.h(PSPanelErrorBoundary,{key:room.id,room:room});};_proto3.renderMiniRooms=function renderMiniRooms(){var _this5=this;return PS.miniRoomList.map(function(roomid){var room=PS.rooms[roomid];var notifying=room.notifications.length?' notifying':room.isSubtleNotifying?' subtle-notifying':'';return preact.h("div",{"class":"mini-window"+(room.minimized?' collapsed':'')+(room===PS.room?' focused':''),key:roomid,"data-roomid":roomid},preact.h("h3",{"class":"mini-window-header"+notifying,draggable:true,onDragStart:_this5.handleDragStart,onClick:_this5.handleClickMinimize},preact.h("button",{"class":"closebutton","data-cmd":"/close","aria-label":TL(["[Close]"]),tabIndex:-1},preact.h("i",{"class":"fa fa-times-circle","aria-hidden":true})),preact.h("button",{"class":"maximizebutton","data-cmd":"/maximize",tabIndex:-1,"aria-label":TL(["[Maximize]"])},preact.h("i",{"class":"fa fa-stop-circle","aria-hidden":true})),preact.h("button",{"class":"minimizebutton",tabIndex:-1,"aria-label":TL(["[Expand/collapse]"])},preact.h("i",{"class":"fa fa-minus-circle","aria-hidden":true})),room.getTitle()),_this5.renderMiniRoom(room));});};_proto3.renderGames=function renderGames(){if(!PS.mainmenu.search.games)return null;return preact.h("div",{"class":"menugroup"},preact.h("p",{"class":"label"},TL(["You are in:"])),Object.entries(PS.mainmenu.search.games).map(function(_ref4){var roomid=_ref4[0],gameName=_ref4[1];return preact.h("div",null,preact.h("a",{"class":"blocklink",href:""+roomid},gameName));}));};_proto3.renderSearchButton=function renderSearchButton(){if(PS.down){return preact.h("div",{"class":"menugroup",style:"background: rgba(10,10,10,.6)"},PS.down==='ddos'?preact.h("p",{"class":"error"},preact.h("strong",null,"Pok\xE9mon Showdown is offline due to a DDoS attack!")):preact.h("p",{"class":"error"},preact.h("strong",null,"Pok\xE9mon Showdown is offline due to technical difficulties!")),preact.h("p",null,preact.h("div",{style:{textAlign:'center'}},preact.h("img",{width:"96",height:"96",src:"//"+Config.routes.client+"/sprites/gen5/teddiursa.png",alt:""})),"Bear with us as we freak out."),preact.h("p",null,"(We'll be back up in a few hours.)"));}if(!PS.user.userid||PS.isOffline){return preact.h(TeamForm,{"class":"menugroup",onSubmit:this.submitSearch,selectType:"search"},preact.h("button",{"class":"mainmenu1 mainmenu big button disabled",disabled:true,name:"search"},preact.h("em",null,PS.isOffline?[preact.h("span",{"class":"fa-stack fa-lg"},preact.h("i",{"class":"fa fa-plug fa-flip-horizontal fa-stack-1x","aria-hidden":true}),preact.h("i",{"class":"fa fa-ban fa-stack-2x text-danger","aria-hidden":true})),' ',TL(["Disconnected"])]:TL(["Connecting..."]))),PS.isOffline&&preact.h("p",{"class":"buttonbar"},preact.h("button",{"class":"button","data-cmd":"/reconnect"},preact.h("i",{"class":"fa fa-plug","aria-hidden":true})," ",preact.h("strong",null,TL(["[Reconnect]"])))," ",preact.h(ReconnectTimer,null)));}return preact.h(TeamForm,{"class":"menugroup",format:PS.mainmenu.searchingFormat()||undefined,selectType:"search",onSubmit:this.submitSearch},preact.h("p",null,preact.h("button",{"class":"button small","data-href":"battleoptions"},TL(["[Battle options]"])," ",preact.h("i",{"class":"fa fa-caret-down","aria-hidden":true}))),PS.mainmenu.searchCountdown?preact.h(preact.Fragment,null,preact.h("button",{"class":"mainmenu1 mainmenu big button disabled",disabled:true},preact.h("strong",null,preact.h("i",{"class":"fa fa-refresh fa-spin","aria-hidden":true})," ",TL(["Searching in ","..."],PS.mainmenu.searchCountdown.countdown))),preact.h("p",{"class":"buttonbar"},preact.h("button",{"class":"button","data-cmd":"/cancelsearch"},TL(["[Cancel]"])))):PS.mainmenu.searchingFormat()?preact.h(preact.Fragment,null,preact.h("button",{"class":"mainmenu1 mainmenu big button disabled",disabled:true},preact.h("strong",null,preact.h("i",{"class":"fa fa-refresh fa-spin","aria-hidden":true})," ",TL(["Searching..."]))),preact.h("p",{"class":"buttonbar"},preact.h("button",{"class":"button","data-cmd":"/cancelsearch"},TL(["[Cancel]"])))):preact.h("button",{"class":"mainmenu1 mainmenu big button",type:"submit"},preact.h("strong",null,TL(["[Battle!]"])),preact.h("br",null),preact.h("small",null,TL(["Find a random opponent"]))));};_proto3.
-renderBotChallenge=function renderBotChallenge(){
-var cfg=Config.botChallenge;
-if(!(cfg!=null&&cfg.name)||PS.isOffline||!PS.user.userid)return null;
-var difficulties=cfg.difficulties||[];
-return preact.h(TeamForm,{
-"class":"menugroup",selectType:"challenge",onSubmit:this.submitBotChallenge,
-defaultFormat:cfg.defaultFormat||undefined},
-
-preact.h("p",null,preact.h("strong",null,"Battle "+cfg.name)),
-!!difficulties.length&&preact.h("p",{"class":"buttonbar"},
-difficulties.map(function(d){return preact.h("button",{
-key:d,type:"button","class":"button",
-"data-cmd":"/msg "+cfg.name+", difficulty "+d},
-d.charAt(0).toUpperCase()+d.slice(1));})
-),
-preact.h("button",{"class":"mainmenu2 mainmenu big button",type:"submit"},
-preact.h("strong",null,"Challenge "+cfg.name),preact.h("br",null),
-preact.h("small",null,"It brings its own legal team")
-)
-);
-};_proto3.
 renderBackgroundCredit=function renderBackgroundCredit(){
 var attrib=PSBackground.attrib;
 if(!attrib)return null;
@@ -804,7 +783,6 @@ this.renderGames(),
 
 this.renderSearchButton(),
 
-this.renderBotChallenge(),
 
 preact.h("div",{"class":"menugroup"},
 preact.h("p",null,preact.h("a",{"class":"mainmenu2 mainmenu button",href:"teambuilder"},TL(["[Teambuilder]"]))),

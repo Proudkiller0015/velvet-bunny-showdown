@@ -101,22 +101,107 @@
 			window.BattleItems.lightball.itemUser = users;
 		}
 
-		// Searchable by name, like anything else.
-		if (window.BattleSearchIndex && window.BattleSearchIndex.push) {
-			var known = {};
-			for (var i = 0; i < window.BattleSearchIndex.length; i++) known[window.BattleSearchIndex[i][0]] = true;
-			var extra = [['samantha', 'pokemon'], ['queenbeam', 'move'], ['queensdance', 'move'],
-				['queensheal', 'move'], ['queenwrath', 'ability'], ['queensmorph', 'ability']];
-			for (var j = 0; j < extra.length; j++) {
-				if (!known[extra[j][0]]) window.BattleSearchIndex.push(extra[j]);
-			}
-		}
+		installSearch();
+		installMoveOrder();
 
 		var tableIn = installTeambuilder();
 		installSprites();
 		installIcon();
 		// Not finished until the builder's own table has her too.
 		return tableIn;
+	}
+
+	/**
+	 * Her own moves first, and only while she is the one being edited.
+	 *
+	 * She learns everything, so the move box opens on fourteen hundred moves in
+	 * alphabetical order with hers somewhere under Q. The list is built per
+	 * species, so hoisting them costs nothing to anyone else: every other Pokemon
+	 * gets the list exactly as the client built it.
+	 */
+	function installMoveOrder() {
+		var search = window.BattleMoveSearch;
+		if (!search || search.__velvetOrder) return;
+		search.__velvetOrder = true;
+
+		var original = search.prototype.getBaseResults;
+		search.prototype.getBaseResults = function () {
+			var results = original.apply(this, arguments);
+			var species = this.species;
+			if (species && typeof species !== 'string') species = species.species || species.name || '';
+			if (!results || window.toID(species || '') !== 'samantha') return results;
+
+			var hers = ['queenbeam', 'queensdance', 'queensheal'];
+			var hoisted = [['header', 'Signature moves']];
+			for (var i = 0; i < hers.length; i++) hoisted.push(['move', hers[i]]);
+
+			var rest = [];
+			for (var j = 0; j < results.length; j++) {
+				var row = results[j];
+				if (row[0] === 'move' && hers.indexOf(row[1]) >= 0) continue;
+				rest.push(row);
+			}
+			return hoisted.concat(rest);
+		};
+	}
+
+	/**
+	 * Make her findable by typing, not just by scrolling.
+	 *
+	 * The search box does not scan the dex. It binary-searches BattleSearchIndex,
+	 * a list sorted by id, so an entry appended to the end is unreachable: the
+	 * search walks past it every time and a name that is really there comes back
+	 * as no results. That is why she only turned up if you scrolled the whole
+	 * Custom Game list.
+	 *
+	 * So each entry goes in at its sorted position, and two things have to move
+	 * with it. BattleSearchIndexOffset is a parallel array - one string per row,
+	 * mapping each character of the id to where it sits in the display name, which
+	 * is how "queen beam" highlights correctly - and it is indexed by row number,
+	 * so an insert that skips it shifts every offset after it onto the wrong row.
+	 * Alias rows are worse: they carry the row number of the entry they point at,
+	 * so every one of them after the insert has to be pushed along by one or it
+	 * starts naming the wrong Pokemon.
+	 *
+	 * The offsets: '0' means the character sits where it does in the id, and each
+	 * step up counts one extra character in the display name before it - a space
+	 * in "Queen Beam", an apostrophe and a space in "Queen's Dance".
+	 */
+	function installSearch() {
+		var index = window.BattleSearchIndex;
+		if (!index || !index.length) return;
+		var offsets = window.BattleSearchIndexOffset;
+
+		var rows = [
+			['samantha', 'pokemon', ''],
+			['queenbeam', 'move', '000001111'],
+			['queensdance', 'move', '00000122222'],
+			['queensheal', 'move', '0000012222'],
+			['queenwrath', 'ability', '0000011111'],
+			['queensmorph', 'ability', '00000122222'],
+		];
+
+		for (var r = 0; r < rows.length; r++) {
+			var id = rows[r][0];
+
+			// Where it belongs, by the same comparison the search itself uses.
+			var low = 0, high = index.length;
+			while (low < high) {
+				var mid = (low + high) >> 1;
+				if (index[mid][0] < id) low = mid + 1;
+				else high = mid;
+			}
+			if (index[low] && index[low][0] === id) continue;
+
+			index.splice(low, 0, [id, rows[r][1]]);
+			if (offsets) offsets.splice(low, 0, rows[r][2]);
+
+			// Every alias pointing at or past the insert now points one row early.
+			for (var i = 0; i < index.length; i++) {
+				var entry = index[i];
+				if (entry.length > 2 && typeof entry[2] === 'number' && entry[2] >= low) entry[2]++;
+			}
+		}
 	}
 
 	/**
@@ -181,11 +266,15 @@
 		if (learnsets.samantha) return;
 		if (!window.BattleMovedex) return;
 
+		// '9a': generation 9, obtainable in Paldea. The 'a' is not decoration -
+		// in gen 9 the builder throws away every move whose entry lacks it, which
+		// is region-born legality, so a learnset of '9M' listed her whole movepool
+		// and the move box still came up empty.
 		var mine = {};
 		var signature = ['queenbeam', 'queensdance', 'queensheal'];
-		for (var i = 0; i < signature.length; i++) mine[signature[i]] = '9M';
+		for (var i = 0; i < signature.length; i++) mine[signature[i]] = '9a';
 		for (var id in window.BattleMovedex) {
-			if (!mine[id]) mine[id] = '9M';
+			if (!mine[id]) mine[id] = '9a';
 		}
 		learnsets.samantha = mine;
 	}

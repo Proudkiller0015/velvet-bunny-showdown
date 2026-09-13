@@ -13,6 +13,27 @@
  */
 
 /**
+ * Say what just happened, once a turn at most.
+ *
+ * Half of what these abilities do is invisible: damage quietly halved, chip
+ * damage quietly ignored, an attack quietly doubled. The battle log shows the
+ * result and never the reason, which reads as the numbers being wrong rather
+ * than as an ability working.
+ *
+ * Once a turn per kind of event, because the ones worth announcing are exactly
+ * the ones that can fire several times in a turn - every hit of a multi-hit
+ * move, every source of residual damage - and a line for each would bury the
+ * battle.
+ */
+function announce(battle, pokemon, key, text) {
+	if (!pokemon) return;
+	const said = pokemon.m.velvetSaid || (pokemon.m.velvetSaid = {});
+	if (said[key] === battle.turn) return;
+	said[key] = battle.turn;
+	battle.add('-message', text);
+}
+
+/**
  * Magic Guard and Sturdy, sharing the one handler they both need.
  *
  * Order matters. Magic Guard goes first because it answers a different question:
@@ -26,10 +47,12 @@ function guardAndEndure(name) {
 		if (!effect) return;
 		if (effect.effectType !== 'Move') {
 			if (effect.effectType === 'Ability') this.add('-activate', source, 'ability: ' + effect.name);
+			announce(this, target, 'guard', `${target.name} pays no attention to ${effect.name || 'that'}.`);
 			return false;
 		}
 		if (target.hp === target.maxhp && damage >= target.hp) {
 			this.add('-ability', target, name);
+			announce(this, target, 'endure', `${target.name} refuses to fall.`);
 			return target.hp - 1;
 		}
 	};
@@ -50,6 +73,7 @@ function shadowShield(label) {
 	return function (damage, source, target, move) {
 		if (target.hp >= target.maxhp) {
 			this.debug(label + ' weaken');
+			announce(this, target, 'shield', `${target.name} is unharmed - the blow barely lands.`);
 			return this.chainModify(0.5);
 		}
 	};
@@ -62,6 +86,7 @@ exports.Abilities = {
 		// they are looking at rather than working it out from the damage.
 		onStart(pokemon) {
 			this.add('-ability', pokemon, 'Queen Wrath');
+			this.add('-message', `${pokemon.name} holds court: doubled power, no abilities in her way, and nothing moves before her.`);
 		},
 
 		// Mold Breaker: her moves ignore abilities that would blunt them.
@@ -130,6 +155,7 @@ exports.Abilities = {
 				// Transforming replaces her ability with the copied one, so the boost
 				// has to happen here, on the way in, or it never happens at all.
 				this.boost({ spe: 6 }, pokemon, pokemon, ability);
+				this.add('-message', `${pokemon.name} wears ${target.name}'s shape, and wears it faster.`);
 			}
 
 			// And the defensive half applies either way - whether she found something

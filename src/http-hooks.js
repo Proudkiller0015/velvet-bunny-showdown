@@ -123,6 +123,26 @@ function playRedirect(url) {
 }
 
 /**
+ * Dex data the client asks us for, which was never ours to serve.
+ *
+ * The client is configured to skip Showdown's cross-domain handshake - it
+ * returns an empty page for our hostname and the client waits on it forever -
+ * and one consequence is that it looks for `data/text/<lang>.js` relative to
+ * wherever it is served from. That file is where every move and ability
+ * description lives, so when this server answered for it (it does not have it)
+ * the whole client came up with no descriptions at all.
+ *
+ * Sending it to their CDN is both the fix and the right answer: the dex data is
+ * theirs, it changes every time they patch a move, and a copy kept here would
+ * be wrong within a week. Only /data/ is forwarded - /sprites/ is ours, and
+ * hers live in it.
+ */
+function dataRedirect(url) {
+	if (!url.startsWith('/data/')) return null;
+	return 'https://' + UPSTREAM_HOST + url;
+}
+
+/**
  * Answer that one path before Showdown's own web server sees it.
  *
  * Showdown serves HTTP from a worker process, and its request handler is wired
@@ -146,7 +166,7 @@ function hookServer(server, log) {
 				relay(req, res, log);
 				return true;
 			}
-			const moved = playRedirect(req.url);
+			const moved = playRedirect(req.url) || dataRedirect(req.url);
 			if (moved) {
 				res.writeHead(302, { Location: moved, 'Cache-Control': 'no-store' });
 				res.end();
