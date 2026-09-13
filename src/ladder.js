@@ -18,6 +18,7 @@ const WebSocket = require('ws');
 const { TeamBuilder } = require('./teambuilder');
 const { BattleAI } = require('./ai');
 const { BattleState } = require('./battle');
+const { logIn } = require('./login');
 
 // One queue per difficulty, so each carries its OWN rating. That is the whole
 // point: if a single account played at whatever difficulty each opponent asked
@@ -53,6 +54,12 @@ class LadderBot {
 		// Every rung wears the bot's face. Like the main account these are guests,
 		// so the avatar has to be asked for rather than left to login to apply.
 		this.avatar = options.avatar || process.env.PS_BOT_AVATAR || 'bunny.png';
+		// Each queue is its own account, so each needs its own proof of identity
+		// once the server stops accepting unproven names. One password for all of
+		// them is the usual arrangement; PS_LADDER_PASSWORD_<RUNG> overrides it.
+		const perRung = process.env[`PS_LADDER_PASSWORD_${String(options.difficulty || '').toUpperCase()}`];
+		this.password = options.password || perRung || process.env.PS_LADDER_PASSWORD ||
+			process.env.PS_BOT_PASSWORD || '';
 		this.battles = new Map();
 		this.searching = false;
 		this.ws = null;
@@ -102,7 +109,13 @@ class LadderBot {
 	onLine(roomid, parts) {
 		switch (parts[0]) {
 		case 'challstr':
-			this.send(`|/trn ${this.name},0,`);
+			void logIn({
+				name: this.name,
+				password: this.password,
+				challstr: `${parts[1]}|${parts[2]}`,
+				send: line => this.send(line),
+				log: this.log,
+			});
 			return;
 		case 'updateuser':
 			if (parts[2] === '1' && !this.ready) {

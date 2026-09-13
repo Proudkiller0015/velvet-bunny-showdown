@@ -130,10 +130,35 @@ exports.bindaddress = '0.0.0.0';
 // A casual server with a handful of concurrent battles does not need them.
 exports.subprocesses = Number(process.env.PS_SUBPROCESSES || 0);
 
-// No login server: anyone can pick a name and play immediately. This is a
-// casual battle server, not a ladder, and there are no accounts to protect.
-exports.noguestsecurity = true;
-exports.loginserver = '';
+/**
+ * Accounts: real Pokemon Showdown ones, or none at all.
+ *
+ * With PS_REAL_ACCOUNTS set, this server uses Showdown's own login server. A
+ * player proves who they are the same way they do on the official client: the
+ * server issues a challstr, the login server signs an assertion binding it to
+ * their account, and this server checks that signature against Showdown's
+ * public key - which ships in Showdown's own config. Nothing needs to be
+ * registered with anybody; the account does the proving, not the server.
+ *
+ * That makes names mean something for the first time. Ranks stop being
+ * assigned to whoever typed a name first, avatars belong to accounts, and the
+ * hand-rolled rank store becomes a convenience rather than the only option.
+ *
+ * It is behind a switch because turning it on has a cost that has to be paid
+ * first: unproven names stop being accepted, and the bot claims six of them.
+ * The bot and every ladder queue need registered accounts and their passwords
+ * in the environment, or they simply cannot log in and the server has no
+ * opponent. Register them, set the passwords, then set PS_REAL_ACCOUNTS=1.
+ */
+const realAccounts = !!process.env.PS_REAL_ACCOUNTS && process.env.PS_REAL_ACCOUNTS !== '0';
+if (!realAccounts) {
+	// Open server: anyone picks a name and plays immediately, and nobody's name
+	// is proof of anything.
+	exports.noguestsecurity = true;
+	exports.loginserver = '';
+}
+// Otherwise both are inherited from Showdown's own config, which already
+// carries the login server's address and the public key used to check it.
 exports.serverid = process.env.PS_SERVERID || 'velvetbunny';
 exports.servertoken = '';
 
