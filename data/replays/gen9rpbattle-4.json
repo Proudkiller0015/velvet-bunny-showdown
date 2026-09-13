@@ -1,0 +1,12 @@
+{
+	"id": "gen9rpbattle-4",
+	"format": "[Gen 9] RP Battle",
+	"players": [
+		"Sexnow!!67",
+		"Velvet Bunny"
+	],
+	"rating": null,
+	"log": "|j|☆Sexnow!!67\n|j|☆Velvet Bunny\n|t:|1789316364\n|gametype|singles\n|player|p1|Sexnow!!67|101|\n|player|p2|Velvet Bunny|bunny.png|\n|gen|9\n|tier|[Gen 9] RP Battle\n|clearpoke\n|poke|p1|Samantha, F|\n|poke|p2|Ribombee-Totem|\n|poke|p2|Iron Valiant|\n|poke|p2|Cresselia|\n|poke|p2|Great Tusk|\n|poke|p2|Kingambit|\n|poke|p2|Zamazenta-*|\n|teampreview\n|c|☆Velvet Bunny|Good luck! Playing on **stockfish**. (PM me to change it.)\n|inactive|Battle timer is ON: inactive players will automatically lose when time's up. (requested by Sexnow!!67)\n|inactiveoff|Battle timer is now OFF.\n|-message|Sexnow!!67 forfeited.\n|\n|win|Velvet Bunny\n|c|☆Velvet Bunny|Good game - rematch any time.\n",
+	"inputlog": ">start {\"formatid\":\"gen9rpbattle\",\"seed\":\"sodium,4539befd41b1305eaefb2546aa5504c2\"}\n>player p1 {\"name\":\"Sexnow!!67\",\"avatar\":\"101\",\"team\":\"Samantha||LightBall|QueenWrath|QueensDance,QueenBeam,QueensHeal,TeraStarstorm|Brave|,252,,,,252|F||||,,,,,Stellar\",\"rating\":0}\n>player p2 {\"name\":\"Velvet Bunny\",\"avatar\":\"bunny.png\",\"team\":\"Ribombee|RibombeeTotem|FocusSash|ShieldDust|StickyWeb,Moonblast,StunSpore,PsychicNoise|Timid|,,,252,4,252|N||||,,,,,Ghost]Iron Valiant||BoosterEnergy|QuarkDrive|CalmMind,Moonblast,Thunderbolt,VacuumWave|Timid|,,,252,4,252|N||||,,,,,Ghost]Cresselia||Leftovers|Levitate|CalmMind,Thunderbolt,IceBeam,Moonlight|Bold|252,,204,,,52|N||||,,,,,Electric]Great Tusk||HeavyDutyBoots|Protosynthesis|HeadlongRush,IceSpinner,RapidSpin,StealthRock|Jolly|252,4,,,,252|N||||,,,,,Steel]Kingambit||Leftovers|SupremeOverlord|SwordsDance,SuckerPunch,LowKick,IronHead|Adamant|,252,4,,,252|N||||,,,,,Ghost]Zamazenta||Leftovers|DauntlessShield|IronDefense,BodyPress,Crunch,Roar|Jolly|252,,88,,,168|N||||,,,,,Fire\",\"rating\":0}\n>chat ☆Velvet Bunny|Good luck! Playing on **stockfish**. (PM me to change it.)\n>forcelose p1",
+	"uploadtime": 1789316541
+}
