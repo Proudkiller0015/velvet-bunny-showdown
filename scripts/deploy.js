@@ -53,9 +53,52 @@ function get(url, method = 'GET') {
 	});
 }
 
+/**
+ * Who is on the server right now.
+ *
+ * A deploy restarts the server, and a restart drops every connection - which
+ * is what "the site crashed" used to mean here. So look before deploying: join
+ * the lobby the way a client does and read the user list it sends back. The bot
+ * and its ladder queues do not count; they reconnect on their own.
+ */
+function playersOnline() {
+	const WebSocket = require('ws');
+	const url = SITE.replace(/^http/, 'ws') + '/showdown/websocket';
+	return new Promise(resolve => {
+		const ws = new WebSocket(url);
+		const done = names => { try { ws.close(); } catch (e) {} resolve(names); };
+		// Never let a stuck socket stop a deploy; assume an empty server.
+		const timer = setTimeout(() => done([]), 20000);
+		ws.on('open', () => ws.send('|/join lobby'));
+		ws.on('error', () => { clearTimeout(timer); done([]); });
+		ws.on('message', raw => {
+			for (const line of raw.toString().split('\n')) {
+				if (!line.startsWith('|users|')) continue;
+				clearTimeout(timer);
+				const names = line.slice('|users|'.length).split(',').slice(1)
+					.map(entry => entry.slice(1).trim())
+					.filter(name => name && !/^(velvet ?bunny|bunny )/i.test(name) && !/^Guest \d+$/.test(name));
+				done(names);
+			}
+		});
+	});
+}
+
 const wait = ms => new Promise(r => setTimeout(r, ms));
 
 (async () => {
+	const force = process.argv.includes('--force');
+	const players = await playersOnline();
+	if (players.length && !force) {
+		console.error(
+			`[deploy] ${players.length} player(s) on the server right now: ${players.join(', ')}.
+` +
+			`A deploy restarts it and drops them, mid-battle included. Wait, or pass --force.`
+		);
+		process.exit(1);
+	}
+	if (players.length) console.log(`[deploy] --force, dropping ${players.join(', ')}`);
+
 	const before = await get(SITE).catch(() => ({ headers: {} }));
 	const mark = before.headers['last-modified'] || '';
 	console.log(`[deploy] currently serving a build from ${mark || 'an unknown time'}`);
