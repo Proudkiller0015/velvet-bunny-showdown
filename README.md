@@ -28,12 +28,43 @@ visit after a quiet spell takes about a minute to wake.
 ### A second client, at `/play/`
 
 `/play/` serves our own build of the client, which puts the bot panel on the
-main menu next to the ladder button. It cannot sign anyone in: that means
-talking to Smogon's login server, and their cross-domain bridge only answers for
-hosts they have whitelisted. The root is the official client for that reason.
+main menu next to the ladder button and is the only one that knows about
+Samantha. Both clients sign people in the same way.
 
-Names on this server are **not verified against Smogon** — with no login server,
-anyone could type any name. Owners are granted rank by name in the config.
+### Accounts
+
+Accounts here are **real Pokémon Showdown accounts**, and this server runs no
+account system of its own. Logging in works the way it does on the official
+client: this server issues a challstr, Showdown's login server signs an
+assertion binding that challstr to a userid, and this server checks the
+signature against Showdown's public key. An assertion names one account and one
+challstr, so it is worth nothing anywhere else.
+
+- **Already have an account?** Log in with it. Nothing to re-register.
+- **Don't want one?** Pick a name and play — the login server signs assertions
+  for unregistered userids too, so you appear as an unregistered player exactly
+  as you would on Showdown.
+- **Registering** from either client is real registration on Pokémon Showdown.
+
+Because a name now belongs to whoever owns it, ranks and avatars are granted to
+accounts rather than to whoever typed the name first. A name nobody has
+registered is still anybody's to take, so any name carrying rank should be a
+registered one.
+
+Where a password goes depends on which address you use:
+
+- On the **psim.us** address the client is served by Showdown, so it asks its
+  own origin and nothing to do with logging in touches this server.
+- On **our own domain** the browser cannot reach them — Showdown's cross-domain
+  handshake returns an empty page for hosts they do not route, and their login
+  server sends no CORS headers — so `src/login-relay.js` forwards that one
+  request. A password typed there passes through this server on its way to
+  Showdown. It is never stored or logged, but it does pass through.
+
+The bot's own accounts are exempt: they are unregistered names accepted only
+from the loopback address, so they work without passwords and cannot be claimed
+from anywhere else. `PS_REAL_ACCOUNTS=0` turns the whole thing off and goes back
+to any-name-no-proof, which is useful for local testing.
 
 ## What it does
 
