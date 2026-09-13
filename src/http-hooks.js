@@ -263,7 +263,11 @@ function serveReplay(url, res, log) {
 			res.end(JSON.stringify(replay));
 			return;
 		}
-		res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'max-age=600' });
+		// The page is a shell around the log, and it names scripts by their build
+		// stamp - so it has to be re-read, or a browser keeps an old shell pointing
+		// at scripts that have moved on. The log itself is in the JSON, which does
+		// get a long cache.
+		res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-cache' });
 		res.end(replayPage(replay));
 	}).catch(e => {
 		log(`replay ${id}: ${e.message}`);
