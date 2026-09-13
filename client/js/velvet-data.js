@@ -119,7 +119,43 @@
 		var builderIn = installTeambuilderSprite();
 		var tipsIn = installTooltipStats();
 		var rpIn = installRpTiers();
-		return tableIn && orderIn && spritesIn && iconIn && builderIn && tipsIn && rpIn;
+		var listIn = installPokemonOrder();
+		return tableIn && orderIn && spritesIn && iconIn && builderIn && tipsIn && rpIn && listIn;
+	}
+
+	/**
+	 * Samantha at the top of the Pokemon list, in her own tier, in every format.
+	 *
+	 * The list a format offers is a slice of one big array ordered by tier, so
+	 * there is no single position in it that is inside every tier: at the end she
+	 * appears in OU and vanishes from Custom Game, above AG the reverse. Adding
+	 * her to the results instead - after the list has been sliced - puts her in
+	 * all of them, under a header of her own.
+	 *
+	 * Display only. Whether she is *legal* is the server's business, and the
+	 * answer is no everywhere except RP Battle; the builder still marks her
+	 * illegal in a tier she cannot be used in, which is the honest thing to show.
+	 */
+	function installPokemonOrder() {
+		var search = window.BattlePokemonSearch;
+		if (!search || !search.prototype || !search.prototype.getBaseResults) return false;
+		if (search.__velvetOrder) return true;
+		search.__velvetOrder = true;
+
+		var original = search.prototype.getBaseResults;
+		search.prototype.getBaseResults = function () {
+			var results = original.apply(this, arguments);
+			if (!results || !results.length) return results;
+
+			var already = false;
+			for (var i = 0; i < results.length; i++) {
+				if (results[i][1] === 'samantha') { already = true; break; }
+			}
+			if (already) return results;
+
+			return [['header', 'Dev'], ['pokemon', 'samantha']].concat(results);
+		};
+		return true;
 	}
 
 	/**
@@ -177,6 +213,11 @@
 		gen9rpubers: 'gen9nationaldexubers',
 		gen9rpuu: 'gen9nationaldexuu',
 		gen9rpru: 'gen9nationaldexru',
+		// Below RU there is no National Dex list, so these stand on the ninth
+		// generation's own - which is also what the builder should show for them.
+		gen9rpnu: 'gen9nu',
+		gen9rppu: 'gen9pu',
+		gen9rpzu: 'gen9zu',
 	};
 
 	function installRpTiers() {
@@ -277,21 +318,21 @@
 			if (key.indexOf('gen9') === 0 && table[key] && typeof table[key] === 'object') targets.push(table[key]);
 		}
 
+		// Her place in the list is not decided here, and cannot be: every tier's
+		// list is a *slice* of this array, so any single position is inside some
+		// tiers and outside others - at the end she shows up in OU and not in the
+		// Custom Game browse list; above AG, the reverse. installPokemonOrder()
+		// puts her at the top of the results instead, which is one place that is
+		// inside every tier.
+
 		var landed = false;
 		for (var i = 0; i < targets.length; i++) {
 			var t = targets[i];
-
-			// Either form: the raw list, or the one already built from it.
-			if (t.tiers && t.tiers.push) {
-				if (!hasHer(t.tiers)) t.tiers.push(['header', 'Custom'], 'samantha');
+			// What the builder calls her tier when it labels her.
+			if (t.overrideTier) {
+				t.overrideTier.samantha = 'Dev';
 				landed = true;
 			}
-			if (t.tierSet && t.tierSet.push) {
-				if (!hasHer(t.tierSet)) t.tierSet.push(['header', 'Custom'], ['pokemon', 'samantha']);
-				landed = true;
-			}
-			// The builder asks the table what tier something is in.
-			if (t.overrideTier && !t.overrideTier.samantha) t.overrideTier.samantha = 'Custom';
 		}
 		installLearnset(table);
 		if (!landed) return false;

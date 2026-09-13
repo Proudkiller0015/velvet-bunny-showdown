@@ -225,4 +225,23 @@ exports.Formats = [
 	rpTier('OU', '[Gen 9] National Dex'),
 	rpTier('UU', '[Gen 9] National Dex UU'),
 	rpTier('RU', '[Gen 9] National Dex RU'),
+
+	/**
+	 * Below RU, where National Dex stops.
+	 *
+	 * National Dex tiers everything weaker than RU *as* RU - one pool of nearly
+	 * six hundred Pokemon - so there is no ND list to stand on down here. These
+	 * three stand on the ninth generation's own NU, PU and ZU instead, which are
+	 * real lists maintained from real usage.
+	 *
+	 * The trade is that a Pokemon with no ninth-generation tier - anything that
+	 * did not make it into Scarlet and Violet - is not in them, so these are the
+	 * three RP tiers that are not full National Dex. Fixing that means tiering
+	 * several hundred Pokemon from usage statistics, which is a job of its own
+	 * and a list that has to be maintained; until then, being narrower than
+	 * promised beats being wrong about who belongs.
+	 */
+	rpTier('NU', '[Gen 9] NU'),
+	rpTier('PU', '[Gen 9] PU'),
+	rpTier('ZU', '[Gen 9] ZU'),
 ];
