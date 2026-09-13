@@ -54,11 +54,13 @@ function allGimmicks() {
 		side.canDynamaxNow = function () { return !this.dynamaxUsed; };
 
 		for (const pokemon of side.pokemon) {
-			// A Mega Stone rules out the other two before a battle even starts:
-			// Terastallization is refused to anyone holding one, and the Dynamax
-			// request checks the same thing. Neither is a rule anybody chose, so
-			// both are undone and the Pokemon decides for itself.
-			if (pokemon.canMegaEvo && !pokemon.canTerastallize) {
+			// Terastallization is taken away from two kinds of Pokemon before a
+			// battle starts: anyone holding a Mega Stone (the engine keeping two
+			// mechanics apart) and everyone at all under National Dex's Terastal
+			// Clause. RP offers all three, so it is handed back here - at the start
+			// of the battle, where the tier's own rules have already been applied and
+			// undoing one cannot take the format list down with it.
+			if (!pokemon.canTerastallize && pokemon.teraType && !pokemon.getItem().zMove) {
 				pokemon.canTerastallize = pokemon.teraType;
 			}
 
@@ -131,10 +133,16 @@ function levelFreeMoves(move, species, setSources, set) {
  *
  * `!Obtainable Misc` is where the evolution level lives: under that rule the
  * validator refuses a Charizard below level 36, and nothing else governs it.
- * `!Terastal Clause` undoes National Dex's ban on Terastallization, because RP
- * offers all three gimmicks rather than none.
+ *
+ * Terastallization is *not* switched back on here, and this is the sharp edge:
+ * removing a rule that a format does not have is an error, not a no-op, and it
+ * is thrown while building the format list that every connecting client asks
+ * for - so one `!Terastal Clause` too many took the whole server down, not just
+ * the format. National Dex bans Terastal; its sub-tiers do not all inherit that
+ * ban; and there is no way to ask from here. allGimmicks() hands Terastal back
+ * at the start of the battle instead, where the question can actually be asked.
  */
-const RP_RULES = ['!Obtainable Misc', '!Terastal Clause'];
+const RP_RULES = ['!Obtainable Misc'];
 
 /** One RP tier, standing on the National Dex tier of the same shape. */
 function rpTier(name, base, extra = {}) {
