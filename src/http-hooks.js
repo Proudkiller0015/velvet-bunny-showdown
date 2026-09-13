@@ -219,6 +219,12 @@ function replayPage(replay) {
 <link rel="stylesheet" href="${cdn}/style/utilichart.css" />
 <script src="/config/config.js?${stamp}"></script>
 <script src="${cdn}/js/lib/jquery-1.11.0.min.js"></script>
+<!-- The battle engine, loaded here rather than left to the replay player.
+     It loads the engine itself, but only once it has parsed the log - and it
+     draws the team preview immediately after, which is a race our own hooks
+     lose about half the time. Loading it first means Samantha is known to
+     the engine before anything is drawn. -->
+<script src="${cdn}/js/battledata.js"></script>
 <!-- The dex itself. The replay player fetches a cut-down copy of it for
      sprites, but not the tables Samantha has to be added to - without these
      she is a question mark with no typing and no moves. -->
