@@ -70,6 +70,57 @@ if (fs.existsSync(clientSrc)) {
 	console.log('no client/ directory; only the stock page will be served');
 }
 
+// ------------------------------------------------------------- custom data
+// Samantha, her abilities, her move and her learnset.
+//
+// Showdown compiles its dex into its own package and offers no hook for adding
+// a species. A mod would be tidier, but a Pokemon inside a mod does not exist
+// anywhere else at all - not searchable, not in the builder, not lookupable -
+// and what is wanted is the opposite: findable everywhere, legal only in Custom
+// Game, which is how Showdown already treats MissingNo.
+//
+// So each data file gets one line appended, calling into ours. The package's own
+// contents are never rewritten, only added to, and the marker makes it safe to
+// run on every boot and again after a reinstall restores the originals.
+const dataSrc = path.join(__dirname, '..', 'data', 'velvet');
+const dataDest = path.join(pkgRoot, 'dist', 'data');
+const MARKER = '/* velvet-bunny */';
+const EXTENSIONS = [
+	['pokedex.js', 'Pokedex', 'pokedex'],
+	['abilities.js', 'Abilities', 'abilities'],
+	['moves.js', 'Moves', 'moves'],
+	['items.js', 'Items', 'items'],
+	['formats-data.js', 'FormatsData', 'formatsData'],
+	['learnsets.js', 'Learnsets', 'learnsets'],
+];
+if (fs.existsSync(dataSrc)) {
+	const velvetDir = path.join(dataDest, 'velvet');
+	fs.mkdirSync(velvetDir, { recursive: true });
+	for (const file of fs.readdirSync(dataSrc)) {
+		fs.copyFileSync(path.join(dataSrc, file), path.join(velvetDir, file));
+	}
+
+	let added = 0;
+	for (const [file, key, fn] of EXTENSIONS) {
+		const target = path.join(dataDest, file);
+		if (!fs.existsSync(target)) continue;
+		const body = fs.readFileSync(target, 'utf8');
+		if (body.includes(MARKER)) continue;
+		fs.appendFileSync(target, [
+			'',
+			MARKER,
+			'try {',
+			`\trequire('./velvet/index.js').${fn}(module.exports.${key});`,
+			'} catch (e) {',
+			`\tconsole.log('[velvet] could not extend ${key}: ' + e.message);`,
+			'}',
+			'',
+		].join('\n'));
+		added++;
+	}
+	console.log(`custom data -> ${added ? `hooked into ${added} dex file(s)` : 'already hooked'}`);
+}
+
 // ---------------------------------------------------------------- avatars
 // Custom avatars are served from the package's config/avatars, which npm owns,
 // so they are copied in from avatars/ here the same way the config is.
