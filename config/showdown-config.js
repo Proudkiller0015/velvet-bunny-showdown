@@ -698,6 +698,69 @@ function rpSectionFirst() {
 }
 
 /**
+ * Make a room, set it up, and make sure it actually opens for people.
+ *
+ * The last part is the one that bites. Showdown builds its two autojoin lists
+ * once, at boot, out of the saved room file - public rooms in one, rooms behind
+ * a modjoin in the other - and `checkAutojoin` only ever walks those lists. A
+ * room created at runtime and then told `autojoin = true`, which is what this
+ * config was doing, is in neither: the setting is saved, it reads correctly in
+ * /roomsettings, and the room never opens for anybody.
+ *
+ * So the room is added to whichever list its settings actually mean.
+ */
+function makeRoom(title, settings) {
+	const id = toID(title);
+	let room = Rooms.get(id);
+	if (!room) {
+		Rooms.global.addChatRoom(title);
+		room = Rooms.get(id);
+	}
+	if (!room) {
+		console.log(`[config] could not create the ${title} room`);
+		return null;
+	}
+
+	Object.assign(room.settings, settings);
+	room.saveSettings();
+
+	if (settings.autojoin) {
+		const global = Rooms.global;
+		const list = settings.modjoin ? global.modjoinedAutojoinList : global.autojoinList;
+		if (list && !list.includes(id)) list.push(id);
+	}
+	return room;
+}
+
+/**
+ * Somewhere to ask.
+ *
+ * A public room, separate from the lobby, so a question does not have to
+ * compete with whatever the lobby is doing - and so the answer is somewhere a
+ * person can be pointed at later.
+ *
+ * Not autojoined. Two rooms opening on every connection is how people learn to
+ * close rooms; this one is in the room list, which is where someone looking for
+ * help looks.
+ */
+function helpRoom() {
+	const room = makeRoom('Help', {
+		isPrivate: false,
+		modjoin: false,
+		modchat: false,
+		autojoin: false,
+		introMessage: '<h2>Help</h2>' +
+			'<p>Ask here. Anything about this server, the custom Pok&eacute;mon and moves, ' +
+			'the RP tiers, or Pok&eacute;mon Showdown itself.</p>' +
+			'<p>This server is a custom Pok&eacute;mon Showdown server: your account is a real ' +
+			'Showdown account, and you can also play without one. What is different here ' +
+			'is the RP tiers, a house bot with a ladder of its own, a few buffed ' +
+			'Pok&eacute;mon, and one that exists nowhere else.</p>',
+	});
+	if (room) console.log('[config] the help room is open');
+}
+
+/**
  * A room that keeps every battle, and a file that outlives the room.
  *
  * The lobby announces battles as they start, but a chat room is a scrollback:
@@ -713,25 +776,19 @@ function battleLog() {
 	const { BattleLogStore } = require('../../../src/battle-log-store');
 	const store = new BattleLogStore(msg => console.log('[battle-log]', msg));
 
-	let room = Rooms.get('logs');
-	if (!room) {
-		Rooms.global.addChatRoom('Logs');
-		room = Rooms.get('logs');
-	}
-	if (room) {
-		// Hidden from everyone below driver, and opened automatically for everyone
-		// at or above it: nobody should have to remember a room exists to read the
-		// record of what happened on the server.
-		room.settings.isPrivate = 'hidden';
-		room.settings.modjoin = '%';
-		room.settings.autojoin = true;
-		room.settings.modchat = '~';   // nobody talks in here; it is a record
-		room.settings.introMessage = '<h2>Battle log</h2><p>Every battle on this server, ' +
+	// Hidden from everyone below driver, and opened automatically for everyone at
+	// or above it: nobody should have to remember a room exists to read the
+	// record of what happened on the server.
+	const room = makeRoom('Logs', {
+		isPrivate: 'hidden',
+		modjoin: '%',
+		autojoin: true,
+		modchat: '~',   // nobody talks in here; it is a record
+		introMessage: '<h2>Battle log</h2><p>Every battle on this server, ' +
 			'as it starts and as it ends. Kept in the repository as well, one file a month, ' +
-			'because a chat room forgets and a restart forgets faster.</p>';
-		room.saveSettings();
-		console.log('[battle-log] the logs room is open; battles are kept in the repository');
-	}
+			'because a chat room forgets and a restart forgets faster.</p>',
+	});
+	if (room) console.log('[battle-log] the logs room is open; battles are kept in the repository');
 
 	// Where a battle ends. Showdown writes its own log here, into a folder this
 	// host wipes on every deploy; this rides along and keeps the summary.
@@ -866,6 +923,7 @@ exports.startuphook = function () {
 	hostReplays();
 	rpSectionFirst();
 	battleLog();
+	helpRoom();
 	goodbye();
 
 	setInterval(() => {
