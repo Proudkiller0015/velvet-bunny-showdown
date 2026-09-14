@@ -79,6 +79,35 @@ function shadowShield(label) {
 	};
 }
 
+/**
+ * Clear Body, as a handler both queens can share.
+ *
+ * Nothing another Pokemon does lowers her stats - Intimidate on the way in,
+ * Sticky Web, a secondary off a move, King's Shield, any of it. Her own
+ * Queen's Dance still works, because that is her doing it to herself.
+ *
+ * Written once and used in three places: on Queen Wrath, on Queen's Morph, and
+ * inside Queen's Morph's volatile, which is what carries her effects after the
+ * transform has replaced the ability itself.
+ */
+function clearBody(name) {
+	return function (boost, target, source, effect) {
+		if (source && target === source) return;
+		let stopped = false;
+		for (const stat in boost) {
+			if (boost[stat] < 0) {
+				delete boost[stat];
+				stopped = true;
+			}
+		}
+		// Silent for a move's side effect, the way Clear Body itself is: a message
+		// per secondary would drown the log.
+		if (stopped && !effect.secondaries && effect.id !== 'octolock') {
+			this.add('-fail', target, 'unboost', `[from] ability: ${name}`, `[of] ${target}`);
+		}
+	};
+}
+
 exports.Abilities = {
 	queenwrath: {
 		name: "Queen Wrath",
@@ -125,6 +154,9 @@ exports.Abilities = {
 				return false;
 			}
 		},
+
+		// Nothing the other side does lowers her stats.
+		onTryBoost: clearBody('Queen Wrath'),
 
 		flags: {
 			/*
@@ -202,6 +234,7 @@ exports.Abilities = {
 		onSourceModifyDamage: shadowShield("Queen's Morph"),
 		onDamage: guardAndEndure("Queen's Morph"),
 		onTryHit: ignoreOhko("Queen's Morph"),
+		onTryBoost: clearBody("Queen's Morph"),
 
 		condition: {
 			noCopy: true,   // not something Baton Pass hands on
@@ -211,6 +244,7 @@ exports.Abilities = {
 			onSourceModifyDamage: shadowShield("Queen's Morph"),
 			onDamage: guardAndEndure("Queen's Morph"),
 			onTryHit: ignoreOhko("Queen's Morph"),
+			onTryBoost: clearBody("Queen's Morph"),
 		},
 
 		flags: {
