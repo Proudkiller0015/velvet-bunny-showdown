@@ -503,6 +503,95 @@ class TeamBuilder {
 	}
 
 	/**
+	 * This Pokemon's Mega Stone, if it has one and the format allows it.
+	 *
+	 * The item list the builder draws from is a short list of the items people
+	 * actually run - eleven of them - so a Mega Stone was never a candidate and
+	 * the bot has never Mega Evolved in its life. On a server whose main format
+	 * exists to allow Megas, Dynamax and Tera, that is the one thing it should
+	 * be doing.
+	 *
+	 * Whether Megas work here is asked of the Mega itself rather than of the
+	 * rules: in a plain ninth-generation format every Mega forme is Illegal, and
+	 * under National Dex they carry a real tier. That is the same signal the
+	 * teambuilder uses, and it needs no list of which formats are which.
+	 */
+	megaStonesWork(ctx) {
+		if (this._megasWork && this._megasWork.has(ctx.id)) return this._megasWork.get(ctx.id);
+		this._megasWork = this._megasWork || new Map();
+
+		let answer = false;
+		try {
+			const rules = ctx.validator ? ctx.validator.ruleTable : null;
+			const gen = ctx.gen;
+			if (gen === 6 || gen === 7) answer = true;                    // native
+			else if (rules && (rules.has('standardnatdex') || rules.has('natdexmod'))) answer = true;
+			// A format that does not police formes at all - Custom Game, and RP
+			// Battle, whose whole point is that everything is allowed.
+			else if (rules && !rules.has('obtainableformes')) answer = true;
+		} catch (e) {
+			answer = false;
+		}
+		this._megasWork.set(ctx.id, answer);
+		return answer;
+	}
+
+	megaStoneFor(ctx, species) {
+		if (!this.megaStonesWork(ctx)) return null;
+		const base = species.baseSpecies || species.name;
+		const forme = (species.otherFormes || []).find(name => name.includes('-Mega'));
+		if (!forme) return null;
+
+		/*
+		 * `Past` is not `no`.
+		 *
+		 * Every classic Mega and every classic stone is marked Past in the ninth
+		 * generation, because that is where they came from - and National Dex
+		 * exists precisely to let Past things be played. Refusing anything with a
+		 * mark left the bot with only the Z-A stones, which are the ones this
+		 * server unmarked, and none of the forty that were there all along.
+		 */
+		const barred = mark => mark && mark !== 'Past';
+		const mega = ctx.dex.species.get(forme);
+		if (!mega.exists || barred(mega.isNonstandard)) return null;
+
+		for (const item of ctx.dex.items.all()) {
+			if (!item.exists || !item.megaStone || barred(item.isNonstandard)) continue;
+			/*
+			 * `megaStone` is written two ways.
+			 *
+			 * In the simulator's own data it is the name of the forme; in the
+			 * table this server ships for the Z-A stones it is a map of base name
+			 * to forme, because that is the shape the *client* reads. Both turn up
+			 * here, and checking only one of them is why the bot went on never
+			 * Mega Evolving after the stones were already in its hands.
+			 */
+			const target = item.megaStone;
+			const matches = typeof target === 'string' ?
+				(target === mega.name || item.megaEvolves === base) :
+				!!(target && (target[base] || target[species.name]));
+			if (matches) return item.name;
+		}
+		return null;
+	}
+
+	/**
+	 * Hand it over, sometimes.
+	 *
+	 * A third of the time, so a team is not six Pokemon all wishing they were
+	 * the one that gets to Mega Evolve - build() keeps the first and strips the
+	 * rest, and a team that proposes five is a team of five wasted items before
+	 * it strips them. A third across six Pokemon means most teams bring one and
+	 * some bring none, which is what a real team looks like.
+	 */
+	considerMegaStone(ctx, species, set, rng) {
+		if (this.gimmickOf(ctx, set.item)) return;     // it already has one
+		if (rng() > 0.33) return;
+		const stone = this.megaStoneFor(ctx, species);
+		if (stone) set.item = stone;
+	}
+
+	/**
 	 * The moves this server invented, that this Pokemon can actually learn.
 	 *
 	 * Worked out from the dex rather than listed, by the same convention the rest
@@ -646,6 +735,7 @@ class TeamBuilder {
 		if (!constraints.onlyMove) this.considerOurMoves(ctx, species, set, rng);
 		if (set.ability) this.considerOurAbilities(ctx, species, set, rng);
 		if (set.item !== undefined && !constraints.noItems) this.considerOurItems(ctx, species, set, rng);
+		if (set.item !== undefined && !constraints.noItems) this.considerMegaStone(ctx, species, set, rng);
 		this.sanitize(ctx, species, set, rng);
 		// Cross Evolution: the set is validated as the target species, so the
 		// ability has to be one the target can legally have.
@@ -917,6 +1007,29 @@ class TeamBuilder {
 	}
 
 	/**
+	 * Which gimmick an item commits a Pokemon to, if any.
+	 *
+	 * A Mega Stone and a Z-crystal are both once-per-team things: one Pokemon
+	 * Mega Evolves, one uses a Z-move, and every other stone or crystal on the
+	 * team is a held item that does nothing at all. Six Pokemon carrying Mega
+	 * Stones is five wasted item slots and a team that loses to the same team
+	 * holding Leftovers.
+	 *
+	 * Terastallization is deliberately not in this list. It is not a held item,
+	 * every Pokemon has a Tera type whether it uses it or not, and nothing is
+	 * given up by having one - so there is nothing to ration.
+	 */
+	gimmickOf(ctx, itemName) {
+		if (!itemName) return null;
+		const item = ctx.dex.items.get(itemName);
+		if (!item.exists) return null;
+		if (item.megaStone) return 'mega';
+		if (item.zMove) return 'z';
+		if (item.isPrimalOrb) return 'mega';       // the same decision by another name
+		return null;
+	}
+
+	/**
 	 * @param {string} formatId
 	 * @returns {string|null} packed team, or null when the server generates it
 	 */
@@ -932,6 +1045,8 @@ class TeamBuilder {
 			const team = [];
 			const teamHas = {};
 			const usedItems = new Set();
+			// 'mega' and 'z', at most once each - see gimmickOf.
+			const gimmicksUsed = new Set();
 			for (const species of this.candidates(ctx, constraints, rng)) {
 				if (team.length >= ctx.size) break;
 				if (team.some(t => ctx.dex.species.get(t.species).baseSpecies === species.baseSpecies)) continue;
@@ -940,6 +1055,25 @@ class TeamBuilder {
 				if (constraints.uniqueItems && set.item) {
 					if (usedItems.has(set.item)) set.item = ctx.items.find(i => !usedItems.has(i)) || '';
 					if (set.item) usedItems.add(set.item);
+				}
+
+				/*
+				 * One Mega and one Z-move per team, because the game allows one of
+				 * each and the second is a dead item slot.
+				 *
+				 * The Pokemon is kept - it was drawn for a reason - and only the
+				 * item is replaced, with something ordinary from the format's own
+				 * list. That is the difference between "this team has two Mega
+				 * Stones" and "this team is now five Pokemon".
+				 */
+				const gimmick = this.gimmickOf(ctx, set.item);
+				if (gimmick) {
+					if (gimmicksUsed.has(gimmick)) {
+						const plain = ctx.items.filter(name => !this.gimmickOf(ctx, name) && !usedItems.has(name));
+						set.item = plain.length ? pick(rng, plain) : '';
+					} else {
+						gimmicksUsed.add(gimmick);
+					}
 				}
 				team.push(set);
 			}

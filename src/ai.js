@@ -780,6 +780,23 @@ class BattleAI {
 		const teraType = typeof active.canTerastallize === 'string' ? active.canTerastallize : null;
 		if (!teraType || !foes.length) return false;
 
+		/*
+		 * Do not spend the Tera on the Pokemon that is here to Mega Evolve.
+		 *
+		 * On this server a side gets one Mega, one Dynamax and one Tera per
+		 * battle, and a Pokemon that uses one cannot use another - so
+		 * Terastallizing the Mega Stone holder does not use two of the three, it
+		 * *throws one away*. The stone becomes an item that does nothing and the
+		 * Tera is spent on a Pokemon that had a better transformation waiting.
+		 *
+		 * The exception is the whole point of the rule: if the Tera is what stops
+		 * this Pokemon dying on this turn, take it. A Mega that never happens
+		 * because its holder fainted first is worth nothing either. So this only
+		 * blocks the ordinary "this looks like a good turn for it" cases below -
+		 * the two survival tests are checked first and answer for themselves.
+		 */
+		const carryingAGimmick = this.hasUnusedGimmick(entry);
+
 		const me = this.myPokemon(gen, entry, state);
 		const teraMe = this.myPokemon(gen, entry, state);
 		teraMe.teraType = teraType;
@@ -805,15 +822,44 @@ class BattleAI {
 			}
 		}
 
-		// Offensive: it turns something that was not a kill into one.
-		if (teraOut >= 100 && plainOut < 100) return true;
 		// Defensive: it turns a hit we do not survive into one we do. This is the
-		// case that saves a Pokemon outright, so it beats hoarding the Tera.
+		// case that saves a Pokemon outright, so it beats hoarding the Tera - and
+		// it is the "unless it is the only way out" the rule above allows for.
 		if (plainIn >= hpPct && teraIn < hpPct) return true;
+		// Offensive: it turns something that was not a kill into one. Worth the
+		// Tera on its own, but not worth throwing a Mega away for.
+		if (teraOut >= 100 && plainOut < 100) return !carryingAGimmick;
 		// Beyond that, do not spend it on a turn we are knocked out anyway.
 		if (plainIn >= hpPct) return false;
-		// A worthwhile margin in either direction.
+		// A worthwhile margin in either direction - and never on the Mega.
+		if (carryingAGimmick) return false;
 		return teraOut > plainOut * 1.25 || teraIn < plainIn * 0.6;
+	}
+
+	/**
+	 * Is this Pokemon holding a transformation it has not used yet?
+	 *
+	 * A Mega Stone or a Z-crystal in the item slot, on a Pokemon that has not
+	 * Mega Evolved. Read off the item rather than from anything the battle tells
+	 * us, because the battle has no line for "this one is your Mega" - the item
+	 * is the whole declaration.
+	 */
+	hasUnusedGimmick(entry) {
+		if (!entry || !entry.item) return false;
+		let item;
+		try {
+			// The same dex every other lookup in this file uses. `this.dex` is not
+			// one of them and does not exist, which is why this answered "no" for a
+			// Charizard holding a Charizardite.
+			item = PkmnDex.forGen(9).items.get(entry.item);
+		} catch (e) {
+			return false;
+		}
+		if (!item || !item.exists) return false;
+		// Already Mega Evolved: the stone has done its job and the Tera is free.
+		const species = String(entry.details || entry.speciesForme || '');
+		if (/-Mega|-Primal/.test(species)) return false;
+		return !!(item.megaStone || item.zMove || item.isPrimalOrb);
 	}
 
 	/**
