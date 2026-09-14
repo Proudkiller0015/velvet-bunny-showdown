@@ -250,16 +250,17 @@ const { botAccountIds, botDifficulties, toId: queueId } = require('../../../src/
  * spent their lives as Guest 7 while the five Random Battle rungs beside them
  * worked perfectly. Two lists of the same thing, one of them stale.
  */
-const { DEFAULT_FORMATS, DEFAULT_DIFFICULTIES } = require('../../../src/ladder-defaults');
+const { ladderQueues } = require('../../../src/ladder-defaults');
 
 const BOT_BASE = process.env.PS_BOT_NAME || 'Velvet Bunny';
-const BOT_DIFFICULTIES = (process.env.PS_LADDER_DIFFICULTIES || DEFAULT_DIFFICULTIES.join(','))
-	.split(',').map(d => d.trim()).filter(d => d);
-const BOT_FORMATS = (process.env.PS_LADDER_FORMATS || DEFAULT_FORMATS.join(','))
-	.split(',').map(f => f.trim()).filter(f => f);
+// Straight from the module the queues are built by, rather than worked out
+// again here. These two lists disagreeing is not hypothetical: it is how the
+// matchmaking rules once applied to nobody.
+const BOT_QUEUES = ladderQueues(BOT_BASE);
+const BOT_DIFFICULTIES = [...new Set(BOT_QUEUES.map(queue => queue.difficulty))];
 
-const BOT_IDS = botAccountIds(BOT_BASE, BOT_DIFFICULTIES, BOT_FORMATS);
-const BOT_RUNG = botDifficulties(BOT_BASE, BOT_DIFFICULTIES, BOT_FORMATS);
+const BOT_IDS = botAccountIds(BOT_BASE, BOT_QUEUES);
+const BOT_RUNG = botDifficulties(BOT_BASE, BOT_QUEUES);
 /** userid -> the rung they want to be matched against, or PVP for no bots. */
 const wantedRung = new Map();
 // Not a difficulty, so it can never match one: it is the absence of them.

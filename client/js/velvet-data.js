@@ -50,12 +50,24 @@
 				'background-size:50px 74px;background-repeat:no-repeat;',
 		},
 		nuzleafsold: {
-			// One drawing, shown from both sides: the back is the front mirrored
-			// and a little larger, the way a Pokemon nearer the camera is drawn.
-			// A real rear view would be better and there isn't one.
-			still: { front: ['nuzleaf-sold.png', 86, 96], back: ['nuzleaf-sold-back.png', 93, 104] },
-			y: { front: 0, back: 0 },
+			/*
+			 * An ordinary sprite, deliberately.
+			 *
+			 * Both files are 96x96 canvases with the Pokemon standing where the
+			 * real Nuzleaf stands inside its own (scripts/make-nuzleaf-sold.js
+			 * measures that rather than guessing), so nothing here has to say how
+			 * big it is or where to put it - `standard` means swap the URL and
+			 * leave every number the client worked out alone. The first version
+			 * was cropped to its own edges at 86x96, which is not a shape anything
+			 * in the client expects: it was too big in the battle, too low in the
+			 * teambuilder, and wrong in a third way in the list icon.
+			 */
+			standard: true,
+			still: { front: ['nuzleaf-sold.png', 96, 96], back: ['nuzleaf-sold-back.png', 96, 96] },
 			icon: 'nuzleaf-sold-icon.png',
+			// The set box draws a sprite the way gen 5 sprites are drawn there.
+			builder: 'background-image:url(#SPRITES#nuzleaf-sold.png);' +
+				'background-position:10px 5px;background-repeat:no-repeat;',
 		},
 	};
 
@@ -654,9 +666,15 @@
 				var art = isFront ? set.front : set.back;
 
 				data.url = SPRITES + art[0];
-				data.w = art[1];
-				data.h = art[2];
-				data.y = (ours.y && (isFront ? ours.y.front : ours.y.back)) || 0;
+				// A standard 96x96 sheet needs none of the rest: whatever the
+				// client computed for a sprite it could not find is exactly right
+				// for one of these, and overriding it is how a sprite ends up
+				// drawn at the wrong size in one place and not another.
+				if (!ours.standard) {
+					data.w = art[1];
+					data.h = art[2];
+					data.y = (ours.y && (isFront ? ours.y.front : ours.y.back)) || 0;
+				}
 				data.pixelated = true;
 				// Whatever it is drawn from, it is one file - there is no sprite sheet
 				// for the client to index into and no cry to play.

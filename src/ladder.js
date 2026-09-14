@@ -29,7 +29,7 @@ const { logIn } = require('./login');
 // worth exactly the same. Kept to one format by default so the four ratings are
 // directly comparable, which also makes them a real measurement of the bots
 // against each other.
-const { DEFAULT_FORMATS, DEFAULT_DIFFICULTIES } = require('./ladder-defaults');
+const { DEFAULT_FORMATS, DEFAULT_DIFFICULTIES, ladderQueues } = require('./ladder-defaults');
 
 // Shared with the server's matchmaking rules, which have to know which accounts
 // are bots. See src/queue-names.js for why the names are as short as they are.
@@ -273,41 +273,29 @@ function noteQueue(name, fields) {
 
 /** Start one queue for every difficulty, in every laddered format. */
 function startLadderBots(options) {
-	const formats = (process.env.PS_LADDER_FORMATS || DEFAULT_FORMATS.join(','))
-		.split(',').map(f => f.trim()).filter(f => f);
-	const difficulties = (process.env.PS_LADDER_DIFFICULTIES || DEFAULT_DIFFICULTIES.join(','))
-		.split(',').map(d => d.trim()).filter(d => d);
-	if (process.env.PS_LADDER === '0' || !formats.length || !difficulties.length) {
+	const base = options.baseName || process.env.PS_BOT_NAME || 'Velvet Bunny';
+	const queues = process.env.PS_LADDER === '0' ? [] : ladderQueues(base);
+	if (!queues.length) {
 		status.reason = process.env.PS_LADDER === '0' ?
 			'PS_LADDER=0, so the queues are switched off' :
-			`nothing to run: ${formats.length} format(s), ${difficulties.length} difficulty(ies)`;
+			'nothing to run: no formats or no difficulties';
 		writeStatus();
 		return [];
 	}
 	status.reason = 'starting';
-	status.formats = formats;
-	status.difficulties = difficulties;
+	status.formats = [...new Set(queues.map(queue => queue.format))];
+	status.difficulties = [...new Set(queues.map(queue => queue.difficulty))];
 
 	const builder = options.builder || new TeamBuilder();
-	const base = options.baseName || 'Velvet Bunny';
-	const bots = [];
-	for (const format of formats) {
-		// The first format's queues keep their plain names, so adding a second
-		// format does not rename - and so re-rate from nothing - the rungs that
-		// have been laddering since the start.
-		const tagging = formats.length > 1 && { primary: format === formats[0] };
-		for (const difficulty of difficulties) {
-			bots.push(new LadderBot({
-				url: options.url,
-				name: queueName(base, difficulty, format, tagging),
-				format,
-				builder,
-				difficulty,
-				baseName: base,
-				log: options.log,
-			}));
-		}
-	}
+	const bots = queues.map(queue => new LadderBot({
+		url: options.url,
+		name: queue.name,
+		format: queue.format,
+		builder,
+		difficulty: queue.difficulty,
+		baseName: base,
+		log: options.log,
+	}));
 	/*
 	 * One at a time, a few seconds apart.
 	 *
@@ -328,4 +316,4 @@ function startLadderBots(options) {
 	return bots;
 }
 
-module.exports = { LadderBot, startLadderBots, queueName, DEFAULT_FORMATS, DEFAULT_DIFFICULTIES };
+module.exports = { LadderBot, startLadderBots, queueName, ladderQueues, DEFAULT_FORMATS, DEFAULT_DIFFICULTIES };

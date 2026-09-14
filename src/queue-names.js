@@ -21,6 +21,31 @@ const MAX_USERID = 18;
 const toId = s => String(s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
 
 /**
+ * A short name for a format, to hang on the end of a queue's name.
+ *
+ * Short because the whole name has to survive the eighteen-character limit, and
+ * a name is trimmed from the right when it does not - which spells "Bunny
+ * Champion rpbat", and reads as a bug. Two or three characters leaves room for
+ * the longest rung.
+ */
+const TAGS = {
+	randombattle: 'RB',
+	randomdoublesbattle: 'RDB',
+	rprandombattle: 'rpRB',
+	rpbattle: 'RP',
+};
+
+function tagFor(format) {
+	const rest = String(format || '').replace(/^gen\d+/, '');
+	if (TAGS[rest]) return TAGS[rest];
+	// A tier of our own: keep the rp, shout the tier. rpou -> rpOU, rpubers ->
+	// rpUbers, which is as much as fits.
+	const tier = rest.startsWith('rp') ? rest.slice(2) : rest;
+	const shouted = tier.length <= 3 ? tier.toUpperCase() : tier.charAt(0).toUpperCase() + tier.slice(1);
+	return (rest.startsWith('rp') ? 'rp' : '') + shouted;
+}
+
+/**
  * The display name for one queue.
  *
  * Deliberately not the bot's full name plus the difficulty: that is too long for
@@ -37,7 +62,7 @@ function queueName(base, difficulty, format, multiFormat) {
 		// rename the four accounts that have been laddering since the start and
 		// hand each of them a fresh, empty rating. Adding a format should cost
 		// nothing to the formats already running.
-		const tag = format.replace(/^gen\d+/, '').replace(/randombattle/, 'RB').replace(/randomdoublesbattle/, 'RDB');
+		const tag = tagFor(format);
 		if (tag && !multiFormat.primary) name = `${name} ${tag}`;
 	}
 	// Trim the difficulty rather than the name, so it still reads as the bot.
@@ -45,24 +70,25 @@ function queueName(base, difficulty, format, multiFormat) {
 	return name;
 }
 
-/** Every account the bot plays under: the main one, and one per queue. */
-function botAccountIds(base, difficulties, formats) {
+/**
+ * Every account the bot plays under: the main one, and one per queue.
+ *
+ * Given the queues rather than two lists to cross, because the crossing is not
+ * uniform any more - a format can run three rungs where another runs five - and
+ * because doing it here as well was how these two ever came to disagree with
+ * the ladder in the first place. src/ladder-defaults.js owns the list.
+ */
+function botAccountIds(base, queues) {
 	const ids = new Set([toId(base)]);
-	for (const format of formats) {
-		const tagging = formats.length > 1 && { primary: format === formats[0] };
-		for (const difficulty of difficulties) ids.add(toId(queueName(base, difficulty, format, tagging)));
-	}
+	for (const queue of queues) ids.add(queue.id || toId(queue.name));
 	return ids;
 }
 
 /** Which rung each bot account plays as: userid -> difficulty. */
-function botDifficulties(base, difficulties, formats) {
+function botDifficulties(base, queues) {
 	const map = new Map();
-	for (const format of formats) {
-		const tagging = formats.length > 1 && { primary: format === formats[0] };
-		for (const difficulty of difficulties) map.set(toId(queueName(base, difficulty, format, tagging)), difficulty);
-	}
+	for (const queue of queues) map.set(queue.id || toId(queue.name), queue.difficulty);
 	return map;
 }
 
-module.exports = { queueName, botAccountIds, botDifficulties, toId, MAX_USERID };
+module.exports = { queueName, botAccountIds, botDifficulties, tagFor, toId, MAX_USERID };

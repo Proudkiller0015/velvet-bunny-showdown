@@ -208,12 +208,8 @@ if (fs.existsSync(avatarSrc)) {
 // renamed to fit Showdown's eighteen-character limit, so the avatar was granted
 // to four accounts that do not exist and to none of the ones that do - and every
 // queue was quietly refused its own face.
-const { queueName, botAccountIds, toId } = require('../src/queue-names');
-const { DEFAULT_DIFFICULTIES, DEFAULT_FORMATS } = require('../src/ladder-defaults');
-const ladderNames = (process.env.PS_LADDER_DIFFICULTIES || DEFAULT_DIFFICULTIES.join(','))
-	.split(',').map(d => d.trim()).filter(d => d);
-const ladderFormats = (process.env.PS_LADDER_FORMATS || DEFAULT_FORMATS.join(','))
-	.split(',').map(f => f.trim()).filter(f => f);
+const { botAccountIds, toId } = require('../src/queue-names');
+const { ladderQueues } = require('../src/ladder-defaults');
 const botBase = process.env.PS_BOT_NAME || 'Velvet Bunny';
 
 const avatarRights = {
@@ -228,9 +224,8 @@ const avatarRights = {
 	thegloriousfemboy: ['thegloriousfemboy.png'],
 };
 // Every rung of the ladder wears the same face - they are all the same bot.
-const botIds = botAccountIds(botBase, ladderNames, ladderFormats);
+const botIds = botAccountIds(botBase, ladderQueues(botBase));
 for (const id of botIds) avatarRights[id] = ['bunny.png'];
-void queueName;
 
 // Merged, not overwritten. Choosing an avatar with /avatar writes it back to
 // this file as that account's default, and replacing the file wholesale threw

@@ -113,6 +113,22 @@ The **Opponent** row on the search form, the Lobby panel, a PM to the bot, or
 Measured over 60 games each: `normal` beats `easy` 73%, `hard` beats `normal`
 70%, and `stockfish` beats `champion` 60%.
 
+**Which rungs are queued depends on the format.** A queue is an account and a
+socket, and this host is short of memory, so the two Random Battles carry the
+whole ladder while the team formats carry the middle of it - nobody is learning
+a tier against Easy, and Stockfish thinks longest for the smallest difference.
+The table is `LADDER` in `src/ladder-defaults.js`:
+
+| format | rungs |
+| --- | --- |
+| Random Battle | easy, normal, hard, champion, stockfish |
+| RP Random Battle | easy, normal, hard, champion, stockfish |
+| RP Battle | normal, hard, champion |
+| RP OU | normal, hard |
+
+Every other format is still playable against the bot - challenge it directly,
+or use the Lobby panel - it simply has nobody sitting in that queue.
+
 ## Training
 
 Training runs on a PC, not on the server — 512MB and a disk wiped on every
@@ -143,7 +159,8 @@ npm start            # server + bot on $PORT (default 8000)
 | `PS_BOT_NAME` | `Velvet Bunny` | the bot's display name |
 | `PS_DIFFICULTY` | `hard` | difficulty before a player picks one |
 | `PS_OWNERS` | `Unseen Face,SlimeQueenSamantha` | promoted to owner on sight |
-| `PS_LADDER_FORMATS` | four popular formats | which formats the bot queues for |
+| `PS_LADDER_FORMATS` | see `src/ladder-defaults.js` | which formats the bot queues for, overriding the table there |
+| `PS_LADDER_DIFFICULTIES` | per format | which rungs queue, overriding the table there |
 | `PS_LADDER` | — | set to `0` to keep the bot off the ladder |
 | `PS_FORMAT_CACHE` | `8` | format contexts held in memory |
 | `PS_BRAIN` | `data/brain.json` | trained search weights |

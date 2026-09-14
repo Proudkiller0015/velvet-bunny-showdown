@@ -66,19 +66,13 @@ function startServer() {
 	await store.restore();
 
 	const { seedLadder } = require('./ladder-seed');
-	const { queueName, DEFAULT_FORMATS, DEFAULT_DIFFICULTIES } = require('./ladder');
-	const seedFormats = (process.env.PS_LADDER_FORMATS || DEFAULT_FORMATS.join(','))
-		.split(',').map(f => f.trim()).filter(f => f);
-	const seedDifficulties = (process.env.PS_LADDER_DIFFICULTIES || DEFAULT_DIFFICULTIES.join(','))
-		.split(',').map(d => d.trim()).filter(d => d);
-	for (const format of seedFormats) {
-		// Matches the tagging startLadderBots() uses, or the seeded rows would be
-		// named for queues that never existed.
-		const tagging = seedFormats.length > 1 && { primary: format === seedFormats[0] };
-		seedLadder(ladderDir, format, seedDifficulties.map(difficulty => ({
-			name: queueName(process.env.PS_BOT_NAME || 'Velvet Bunny', difficulty, format, tagging),
-			difficulty,
-		})), msg => console.log('[ladder-seed]', msg));
+	const { ladderQueues } = require('./ladder');
+	// The same list the queues themselves are built from, so a seeded row can
+	// never be named for a queue that does not exist.
+	const queues = ladderQueues(process.env.PS_BOT_NAME || 'Velvet Bunny');
+	for (const format of new Set(queues.map(queue => queue.format))) {
+		seedLadder(ladderDir, format, queues.filter(queue => queue.format === format),
+			msg => console.log('[ladder-seed]', msg));
 	}
 
 	console.log(`[boot] starting Pokemon Showdown on port ${PORT}`);
