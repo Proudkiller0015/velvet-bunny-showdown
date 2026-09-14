@@ -67,6 +67,7 @@ function allGimmicks() {
 	const hasMega = battle.gen >= 6;
 	const hasDynamax = battle.gen >= 8;
 	const hasTera = battle.gen >= 9;
+	const hasZMove = battle.gen >= 7;
 
 	for (const side of battle.sides) {
 		// Everything Dynamax needs - the volatile, the Max moves, the base power
@@ -84,7 +85,7 @@ function allGimmicks() {
 			// Clause. RP offers all three, so it is handed back here - at the start
 			// of the battle, where the tier's own rules have already been applied and
 			// undoing one cannot take the format list down with it.
-			if (hasTera && !pokemon.canTerastallize && pokemon.teraType && !pokemon.getItem().zMove) {
+			if (hasTera && !pokemon.canTerastallize && pokemon.teraType) {
 				pokemon.canTerastallize = pokemon.teraType;
 			}
 
@@ -92,12 +93,19 @@ function allGimmicks() {
 				const dynamaxRequest = pokemon.getDynamaxRequest.bind(pokemon);
 				pokemon.getDynamaxRequest = function (skipChecks) {
 					if (this.m.rpGimmickUsed) return undefined;
+					// The engine refuses Dynamax to anyone holding a Mega Stone or a
+					// Z-crystal - two rules about not mixing generations rather than
+					// about balance, which is the one thing this format is for. Both
+					// are hidden for the length of the question and put straight back.
 					const stone = this.canMegaEvo;
+					const item = this.item;
 					this.canMegaEvo = null;
+					if (this.getItem().zMove) this.item = '';
 					try {
 						return dynamaxRequest(skipChecks);
 					} finally {
 						this.canMegaEvo = stone;
+						this.item = item;
 					}
 				};
 			}
@@ -125,6 +133,32 @@ function allGimmicks() {
 
 	// Dynamax has no method of its own - the battle applies it inline - so it is
 	// caught where the action is run rather than where it is written.
+	/*
+	 * Z-moves are the fourth gimmick, and they play by the same rule.
+	 *
+	 * A Z-crystal holder can Mega Evolve, Dynamax or Terastallize instead - the
+	 * engine forbids all three, for the same not-mixing-generations reason it
+	 * forbids everything else here - and doing so costs them the Z-move.
+	 * Firing the Z-move first costs them the other three. One per Pokemon,
+	 * whichever they reach for.
+	 */
+	if (hasZMove && actions.canZMove) {
+		const canZMove = actions.canZMove.bind(actions);
+		actions.canZMove = function (pokemon) {
+			if (pokemon.m.rpGimmickUsed) return undefined;
+			return canZMove(pokemon);
+		};
+
+		// Where a Z-move is actually fired: the engine sets `side.zMoveUsed` here
+		// and nowhere else, so this is the one place that knows it happened.
+		const runMove = actions.runMove.bind(actions);
+		actions.runMove = function (moveOrMoveName, pokemon, targetLoc, options) {
+			const result = runMove(moveOrMoveName, pokemon, targetLoc, options);
+			if (options && options.zMove) spend(pokemon);
+			return result;
+		};
+	}
+
 	if (hasDynamax) {
 		const runAction = battle.runAction.bind(battle);
 		battle.runAction = function (action) {
