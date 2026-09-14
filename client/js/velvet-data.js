@@ -268,6 +268,20 @@
 	 * and the builder shows the tiers the tier is built from.
 	 */
 	var RP_TIERS = {
+		/*
+		 * RP Battle bans nothing at all, and had the smallest list in the builder.
+		 *
+		 * The client works out which Pokemon a format offers from the format's
+		 * name. `gen9rpbattle` matches nothing it knows, so it fell back to the
+		 * plain ninth-generation table - 866 Pokemon, no National Dex, and none
+		 * of the past-generation Pokemon that are the whole point of the tier.
+		 * Simisage, buffed to the teeth, could not be picked in the one format
+		 * where everything is legal.
+		 *
+		 * National Dex AG is the honest match: everything that ever existed, with
+		 * nothing taken out, which is what this format's rules actually say.
+		 */
+		gen9rpbattle: 'gen9nationaldexag',
 		gen9rpag: 'gen9nationaldexag',
 		gen9rpou: 'gen9nationaldex',
 		gen9rpubers: 'gen9nationaldexubers',
