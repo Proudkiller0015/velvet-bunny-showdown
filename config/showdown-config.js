@@ -584,11 +584,32 @@ function hostReplays() {
 	const store = new ReplayStore(msg => console.log('[replays]', msg));
 	const original = LoginServer.request.bind(LoginServer);
 
+	/**
+	 * Which boot this is, so two battles cannot be filed under one name.
+	 *
+	 * A battle room is called `gen9rpbattle-2`, and that number comes from a
+	 * counter that lives in memory and starts again at one every time the server
+	 * restarts. The replay was filed under exactly that name - so the second
+	 * battle after a deploy overwrote the second battle before it. It is not a
+	 * rare case: this server restarts on every deploy, and it cost somebody their
+	 * replay within a day of the feature existing.
+	 *
+	 * The suffix is fixed for the lifetime of the process rather than generated
+	 * per upload, and that distinction is the whole point. A room uploads its
+	 * replay again every time the battle goes on - three times, in the case that
+	 * lost the replay - and each upload has to land on the same file, or one
+	 * battle becomes six replays and the link a player already shared stops
+	 * being the newest one. Within a boot the room number is unique; across
+	 * boots this makes it unique too.
+	 */
+	const BOOT = Math.trunc(Date.now() / 1000).toString(36);
+
 	LoginServer.request = async function (action, data) {
 		if (action !== 'addreplay') return original(action, data);
 
-		const id = String(data.id || '').trim();
-		if (!id) return [{ errorip: 'no id' }, null];
+		const roomid = String(data.id || '').trim();
+		if (!roomid) return [{ errorip: 'no id' }, null];
+		const id = `${roomid}-${BOOT}`;
 		try {
 			await store.save({
 				id,

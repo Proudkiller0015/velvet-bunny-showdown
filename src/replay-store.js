@@ -17,6 +17,19 @@
  *
  * Without a token nothing is lost immediately: replays are held in memory and
  * still play back, they just do not survive a restart, and the log says so.
+ *
+ * **The id is not the battle room's name.** It is the room's name plus a suffix
+ * fixed for the life of the process - see hostReplays() in
+ * config/showdown-config.js. A room is called `gen9rpbattle-2` and that number
+ * comes from a counter that starts again at one on every restart, so filing by
+ * room name meant the second battle after a deploy overwrote the second battle
+ * before it. It cost somebody their replay within a day. The suffix is per boot
+ * rather than per upload because a room saves its replay repeatedly as the
+ * battle goes on, and every one of those has to land on the same file.
+ *
+ * Overwritten replays are recoverable, because every save is a commit: see
+ * scripts/recover-replays.js, which reads them back out of the file history and
+ * re-files them under ids that cannot collide.
  */
 
 const fs = require('fs');
