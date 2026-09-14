@@ -43,10 +43,11 @@ function familyOf(species) {
 }
 
 /**
- * Every move a species can learn, split by how.
+ * Every move a species can learn, and which generations it learns each one in.
  *
- * `all` is everything; `real` leaves out the moves it can only get from a
- * one-off event distribution, whose sources are written `<gen>S<n>`.
+ * `all` is everything. `gens` skips the moves it can only get from a one-off
+ * event distribution - those sources are written `<gen>S<n>` - while still
+ * leaving them in `all`.
  *
  * That distinction is the whole difference between this table and a wrong one.
  * Roar of Time is Dialga's move, but the Gen 4 event Darkrai and the event
@@ -57,16 +58,23 @@ function familyOf(species) {
  */
 function movesOf(species) {
 	const data = Dex.species.getLearnsetData(species.id);
-	if (!data || !data.learnset) return { all: [], real: [] };
+	if (!data || !data.learnset) return { all: [], gens: new Map() };
 	const all = Object.keys(data.learnset);
-	const real = all.filter(moveid => data.learnset[moveid].some(source => source.charAt(1) !== 'S'));
-	return { all, real };
+	const gens = new Map();
+	for (const moveid of all) {
+		const learned = data.learnset[moveid]
+			.filter(source => source.charAt(1) !== 'S')
+			.map(source => parseInt(source.charAt(0), 10))
+			.filter(gen => gen >= 1);
+		if (learned.length) gens.set(moveid, learned);
+	}
+	return { all, gens };
 }
 
 function build() {
 	const familyMoves = new Map();     // family id -> Set of move ids it can get at all
-	const moveFamilies = new Map();    // move id -> Set of families, events included
-	const moveOwners = new Map();      // move id -> Set of families that learn it properly
+	const everyOwner = new Map();      // move id -> Set of families, events included
+	const genOwners = new Map();       // move id -> gen -> Set of families
 
 	for (const species of Dex.species.all()) {
 		// CAP Pokemon are not real, and our own are worse than that: Samantha
@@ -74,31 +82,59 @@ function build() {
 		// move in the dex shared and left the whole table with three entries.
 		if (species.isNonstandard === 'CAP' || species.isNonstandard === 'Custom') continue;
 		const family = familyOf(species);
-		const { all, real } = movesOf(species);
+		const { all, gens } = movesOf(species);
 		for (const moveid of all) {
 			if (!familyMoves.has(family)) familyMoves.set(family, new Set());
 			familyMoves.get(family).add(moveid);
-			if (!moveFamilies.has(moveid)) moveFamilies.set(moveid, new Set());
-			moveFamilies.get(moveid).add(family);
+			if (!everyOwner.has(moveid)) everyOwner.set(moveid, new Set());
+			everyOwner.get(moveid).add(family);
 		}
-		for (const moveid of real) {
-			if (!moveOwners.has(moveid)) moveOwners.set(moveid, new Set());
-			moveOwners.get(moveid).add(family);
+		for (const [moveid, learned] of gens) {
+			if (!genOwners.has(moveid)) genOwners.set(moveid, new Map());
+			const byGen = genOwners.get(moveid);
+			for (const gen of learned) {
+				if (!byGen.has(gen)) byGen.set(gen, new Set());
+				byGen.get(gen).add(family);
+			}
 		}
 	}
 
 	/**
-	 * Who the move belongs to: the families that learn it properly, falling back
-	 * to every family that can reach it at all when nobody learns it properly.
-	 * The fallback keeps moves that only ever came from an event - they are still
-	 * that Pokemon's move - while the first clause is what saves Roar of Time.
+	 * Who owns a move, judged in the most recent generation that still has it.
+	 *
+	 * This is the line between a useful table and a wrong one, and counting
+	 * every generation at once gets it wrong in both directions.
+	 *
+	 * Pay Day was a Generation 1 TM that twenty-one families learned, and is now
+	 * a move only Meowth's line gets. Everybody calls it Meowth's move; a table
+	 * that is still counting 1996 says it belongs to nobody. Water Shuriken is
+	 * the same story with Accelgor, who did not make it into Scarlet and Violet.
+	 *
+	 * Judging by the current generation alone breaks the opposite case:
+	 * Bonemerang has had exactly one owner since Generation 1, but Cubone is not
+	 * in Scarlet and Violet either, so "who learns it in Generation 9" is nobody
+	 * and Marowak loses a move that has never belonged to anyone else.
+	 *
+	 * So: find the newest generation in which anybody properly learns the move,
+	 * and ask who learns it there. Pay Day resolves in Generation 9 to Meowth,
+	 * Bonemerang in Generation 8 to Cubone, and Sacred Fire in Generation 9 to
+	 * nobody - because Entei was given it alongside Ho-Oh, which is exactly what
+	 * it means for a move to stop being a signature.
 	 */
-	const ownersOf = moveid => moveOwners.get(moveid) || moveFamilies.get(moveid);
+	function ownersOf(moveid) {
+		const byGen = genOwners.get(moveid);
+		// Only ever handed out at an event: still that Pokemon's move.
+		if (!byGen || !byGen.size) return everyOwner.get(moveid) || new Set();
+		return byGen.get(Math.max(...byGen.keys()));
+	}
 
 	const signatures = {};
 	for (const [family, moves] of familyMoves) {
 		const own = [...moves]
-			.filter(moveid => ownersOf(moveid).size === 1 && ownersOf(moveid).has(family))
+			.filter(moveid => {
+				const owners = ownersOf(moveid);
+				return owners.size === 1 && owners.has(family);
+			})
 			// Z-moves and Max moves are not moves anyone chooses in the builder,
 			// and a move marked `velvetShared` is one of ours meant to be handed
 			// out later - being new is not the same as being somebody's.
@@ -166,7 +202,7 @@ const families = Object.keys(signatures).length;
 const species = Object.keys(bySpecies).length;
 console.log(`${families} families with signature moves, covering ${species} Pokemon`);
 console.log(`${lists.length} distinct lists, ${Math.round(file.length / 1024)}KB -> ${OUT}`);
-for (const sample of ['ogerpon', 'kingambit', 'pikachu', 'blissey', 'greninja']) {
+for (const sample of ['persian', 'meowth', 'greninja', 'marowak', 'ogerpon', 'dialga', 'hooh', 'metagross', 'kingambit']) {
 	const own = bySpecies[sample];
 	console.log(`  ${sample}: ${own ? own.map(m => Dex.moves.get(m).name).join(', ') : '(none)'}`);
 }
