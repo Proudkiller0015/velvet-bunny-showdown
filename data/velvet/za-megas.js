@@ -124,8 +124,11 @@ function tierFor(megaBst, baseTier) {
  * kept the same rather than allowed to drift, because two numbers describing
  * one Pokemon is how a Pokemon ends up legal in one place and not its mirror.
  */
+/** What tier each Z-A Mega ended up in, for whoever needs to ship it onward. */
+exports.assigned = {};
+
 exports.applyZaMegas = (Pokedex, FormatsData) => {
-	const assigned = {};
+	const assigned = exports.assigned;
 	for (const [id, species] of Object.entries(Pokedex)) {
 		const data = FormatsData[id];
 		if (!data || data.isNonstandard !== 'Future') continue;

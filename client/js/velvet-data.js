@@ -690,6 +690,18 @@
 		if (!buffs) return false;
 		var ready = true;
 
+		/*
+		 * Things this server brought into the game that the client still thinks
+		 * do not exist.
+		 *
+		 * The Z-A Megas and their stones ship marked 'Future', which the client
+		 * reads as "not in this generation" and draws as illegal. The server
+		 * cleared that flag weeks of work ago; the builder never heard, so Mega
+		 * Chandelure was refused in the one place a player actually picks it.
+		 */
+		unlock(window.BattlePokedex, buffs.unlocked && buffs.unlocked.species);
+		unlock(window.BattleItems, buffs.unlocked && buffs.unlocked.items);
+
 		// The rows the CDN has no idea about.
 		if (window.BattleMovedex) {
 			for (var m in buffs.moves) if (!window.BattleMovedex[m]) window.BattleMovedex[m] = buffs.moves[m];
@@ -737,6 +749,15 @@
 		} else ready = false;
 
 		return ready;
+	}
+
+	/** Stop the client calling something nonstandard that this server standardised. */
+	function unlock(table, ids) {
+		if (!table || !ids) return;
+		for (var i = 0; i < ids.length; i++) {
+			var entry = table[ids[i]];
+			if (entry && entry.isNonstandard) entry.isNonstandard = null;
+		}
 	}
 
 	/**

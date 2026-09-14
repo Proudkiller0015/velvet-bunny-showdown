@@ -128,6 +128,24 @@ for (const id of OUR_ABILITIES) abilities[id] = abilityRow(Dex.abilities.get(id)
  */
 const { CHANGED } = require(path.join(PACKAGE, 'dist', 'data', 'velvet', 'unnerfs.js'));
 const { TIERS } = require(path.join(PACKAGE, 'dist', 'data', 'velvet', 'tiering.js'));
+const za = require(path.join(PACKAGE, 'dist', 'data', 'velvet', 'za-megas.js'));
+
+/*
+ * Tiers the client has wrong, and things it still thinks do not exist.
+ *
+ * The Z-A Megas are the case that made this necessary: the server gave all 49
+ * of them real tiers and cleared the 'Future' flag off them and their stones,
+ * and the client - which builds its dex from Showdown's CDN - went on marking
+ * Mega Chandelure illegal and refusing the Chandelurite. The team validated and
+ * the builder said no, which is the worst way round.
+ *
+ * A deliberate decision in tiering.js wins over a derived one, so it goes last.
+ */
+const tiers = Object.assign({}, za.assigned, TIERS);
+const unlocked = {
+	species: Object.keys(za.assigned),
+	items: za.ZA_STONES.slice(),
+};
 const overrides = { moves: {}, abilities: {} };
 for (const id of CHANGED.moves) overrides.moves[id] = moveRow(Dex.moves.get(id));
 for (const id of CHANGED.abilities) overrides.abilities[id] = abilityRow(Dex.abilities.get(id));
@@ -179,7 +197,8 @@ window.VelvetBuffs = {
 \titems: ${JSON.stringify(items)},
 \tsearch: ${JSON.stringify(search)},
 \toverrides: ${JSON.stringify(overrides)},
-\ttiers: ${JSON.stringify(TIERS)},
+\ttiers: ${JSON.stringify(tiers)},
+\tunlocked: ${JSON.stringify(unlocked)},
 
 \t/** What this Pokemon gained, or an empty record. */
 \tget: function (speciesid) {
@@ -193,7 +212,7 @@ fs.writeFileSync(OUT, file);
 console.log(`${Object.keys(bySpecies).length} buffed Pokemon, ${Object.keys(moves).length} moves, ` +
 	`${Object.keys(abilities).length} abilities, ${Object.keys(items).length} items, ` +
 	`${Object.keys(overrides.moves).length + Object.keys(overrides.abilities).length} corrected rows, ` +
-	`${Object.keys(TIERS).length} re-tiered`);
+	`${Object.keys(tiers).length} re-tiered, ${unlocked.species.length + unlocked.items.length} unlocked`);
 console.log(`${Math.round(file.length / 1024)}KB -> ${OUT}`);
 for (const [id, record] of Object.entries(bySpecies)) {
 	console.log(`  ${Dex.species.get(id).name}: +${record.moves.length} move(s)` +
