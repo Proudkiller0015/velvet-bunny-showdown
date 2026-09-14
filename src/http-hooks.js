@@ -366,6 +366,32 @@ function serveHealth(url, res) {
 			limitMB: limit === 'max' ? null : mb(Number(limit)),
 		};
 		if (container.limitMB) container.usedPercent = Math.round(container.usedMB / container.limitMB * 100);
+
+		/*
+		 * And the half of that total that actually decides anything.
+		 *
+		 * `memory.current` counts cached file pages as well as memory the
+		 * processes are really holding, and the kernel drops that cache when it
+		 * needs the room rather than killing anything. So a container sitting at
+		 * 94% can be perfectly healthy or one battle from being killed, and the
+		 * difference is entirely in this split: `anon` is the part that has
+		 * nowhere to go.
+		 *
+		 * Reading the total alone is how a service gets declared full when it has
+		 * a hundred megabytes of evictable cache in it.
+		 */
+		const stat = fs.readFileSync('/sys/fs/cgroup/memory.stat', 'utf8');
+		const field = name => {
+			const found = new RegExp(`^${name} (\\d+)$`, 'm').exec(stat);
+			return found ? Number(found[1]) : null;
+		};
+		const anon = field('anon');
+		const file = field('file');
+		if (anon !== null) {
+			container.anonMB = mb(anon);
+			if (file !== null) container.cacheMB = mb(file);
+			if (container.limitMB) container.anonPercent = Math.round(container.anonMB / container.limitMB * 100);
+		}
 	} catch (e) {
 		// Not a Linux control group, so there is no container number to give.
 	}
