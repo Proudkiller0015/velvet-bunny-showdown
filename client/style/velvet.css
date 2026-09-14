@@ -42,3 +42,27 @@
 	padding-top: 5px;
 	overflow: hidden;
 }
+
+/*
+ * Keep the news and PM column off the main menu.
+ *
+ * The home screen is two columns: the menu on the left and `.activitymenu` -
+ * news, and every open DM - pinned beside it at a fixed `left: 325px`. The menu
+ * groups, though, are centred with `margin: 0 auto` inside `.mainmenu`, and
+ * `.mainmenu` spans the whole width rather than the left column. So they centre
+ * across both columns and land at x=172 to x=442, while the news column starts
+ * at 325 - straight through the format picker, the team picker and the Battle
+ * button, which is exactly the part of the page you need to click.
+ *
+ * Capping the menu at the width of the left column puts the groups back where
+ * the two-column layout assumes they are. Measured rather than nudged: the
+ * groups move from x=172 to x=27, and the news column is still at x=315.
+ *
+ * Only in the wide layout. Below about a thousand pixels the client adds
+ * `.tiny-layout`, which drops both columns into one and stacks the news above
+ * the menu - that already works, and capping the width there would squeeze the
+ * menu into a third of the screen.
+ */
+.ps-room:not(.tiny-layout) .mainmenuwrapper .mainmenu {
+	max-width: 324px;
+}
