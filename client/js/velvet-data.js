@@ -77,8 +77,8 @@
 	var ABILITIES = {
 		queenwrath: {
 			num: -1, name: "Queen Wrath", rating: 5,
-			shortDesc: "Doubles Atk and SpA, ignores abilities, blocks priority, Shadow Shield, Sturdy, Magic Guard.",
-			desc: "Attack and Special Attack are doubled. This Pokemon's moves ignore the target's Ability. Priority moves cannot touch this side. At full HP, damage taken is halved. Survives a killing blow from full HP and is immune to OHKO moves. Takes no damage from anything that is not a move. Cannot be suppressed by Neutralizing Gas.",
+			shortDesc: "Doubles Atk and SpA, ignores abilities, blocks priority, Shadow Shield, Sturdy, Magic Guard. Mold Breaker cannot touch it.",
+			desc: "Attack and Special Attack are doubled. This Pokemon's moves ignore the target's Ability. Priority moves cannot touch this side. At full HP, damage taken is halved. Survives a killing blow from full HP and is immune to OHKO moves. Takes no damage from anything that is not a move. Cannot be suppressed by Neutralizing Gas, and cannot be ignored by Mold Breaker, Teravolt or Turboblaze.",
 			isNonstandard: "Custom",
 		},
 		queensmorph: {

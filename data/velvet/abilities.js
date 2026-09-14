@@ -127,10 +127,20 @@ exports.Abilities = {
 		},
 
 		flags: {
-			// Mold Breaker can still push a move past the priority block, exactly as
-			// it can against Queenly Majesty.
-			breakable: 1,
-			// And Neutralizing Gas cannot switch any of it off.
+			/*
+			 * Not breakable, deliberately.
+			 *
+			 * `breakable` is the flag Mold Breaker keys on - an ability carrying it
+			 * is one that Mold Breaker, Teravolt and Turboblaze are allowed to
+			 * ignore, the way they ignore Queenly Majesty. It used to be here on
+			 * exactly that reasoning, treating her as a bigger Queenly Majesty.
+			 *
+			 * She is not. The rest of this ability cannot be broken either - it is
+			 * one effect, and half of it being switched off by a common ability is
+			 * worse than either answer. So the flag comes off and Mold Breaker goes
+			 * through the priority block no more than it goes through the rest.
+			 */
+			// Neutralizing Gas cannot switch any of it off either.
 			cantsuppress: 1,
 		},
 		rating: 5,
