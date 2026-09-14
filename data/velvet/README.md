@@ -66,10 +66,36 @@ re-transformed, and a Sheer Cold still came back `-immune`.
 | --- | --- |
 | **Queen Beam** | Fairy, physical, 250 BP. Never misses (`accuracy: true`, which evasion cannot beat). Ignores abilities. Applies **Fairy and Dark effectiveness together**, the Flying Press mechanic. |
 | **Queen's Dance** | Raises all five stats to +6. A *dance*, so Dancer copies it. |
-| **Queen's Heal** | Restores full HP and cures any status. |
+| **Queen's Heal** | Restores full HP, cures any status, and returns the item she came in with. Usable while asleep. |
+| **Queen's Blitz** | Dark, physical, 200 BP, 10 PP, never misses. Resolves **before every other action in the turn**, switches and Mega Evolution included. Always STAB, always a critical hit, neutral on every type, uses her better attacking stat, and doubles against a target wearing a gimmick. |
 
 Queen Beam's effectiveness, checked against the chart: resisted by Steel,
 super effective on Dark/Dragon and Dragon/Flying, neutral on Rock/Dark.
+
+**Queen's Blitz jumps the queue by action order, not by priority.** Priority
+only sorts moves against other moves; switching out and Mega Evolution are
+different kinds of action and resolve first whatever a move's priority is. So
+`beforeTurnCallback` finds this turn's action and sets `action.order = 102`,
+which sits below switch (103) and Mega Evolution (104) and above nothing that
+matters. Measured: a Blissey ordered to switch faints without leaving, and a
+Mega never forms. `priority: 6` on top of that settles it against other moves.
+
+**Queen's Heal reads her team sheet, not `lastItem`.** Recycle's `lastItem` is
+set when an item is *consumed*, and says nothing about one that was knocked off
+or stolen, which is most of the ways she loses one. `pokemon.set.item` is what
+she was built holding and nothing in a battle can change it. The item is
+recreated rather than taken back, so a thief keeps theirs.
+
+### Saying so in the battle log
+
+Several of these effects are invisible where it counts: the log prints a number
+and never the reason, so a Dark move hitting a Fairy for neutral damage, or a
+trap simply not holding, reads as the server being broken. Anything a player
+could reasonably mistake for a bug says so in the log - `-message` for the
+in-character line, `-hint` for the rule, which the client renders as a small
+italic note the way it does for Pursuit or the Sleep Clause. Each is said once
+per battle (or once a turn for the ones that can repeat), because an explanation
+printed every turn is not an explanation any more.
 
 **Light Ball** works on her as well as Pikachu — the item is hard-coded to one
 species, so it is patched rather than her.

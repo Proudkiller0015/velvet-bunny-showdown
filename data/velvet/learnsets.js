@@ -6,7 +6,7 @@
  * package - do not edit by hand, and re-run it after upgrading Showdown so the
  * list picks up whatever was added.
  *
- * 843 moves, as of this build.
+ * 849 moves, as of this build.
  */
 
 exports.Learnsets = {
@@ -116,6 +116,7 @@ exports.Learnsets = {
 			chillyreception: ['9M'],
 			chipaway: ['9M'],
 			chloroblast: ['9M'],
+			cinderrush: ['9M'],
 			circlethrow: ['9M'],
 			clamp: ['9M'],
 			clangingscales: ['9M'],
@@ -399,6 +400,7 @@ exports.Learnsets = {
 			judgment: ['9M'],
 			jumpkick: ['9M'],
 			junglehealing: ['9M'],
+			junglerush: ['9M'],
 			karatechop: ['9M'],
 			kinesis: ['9M'],
 			kingsshield: ['9M'],
@@ -573,8 +575,10 @@ exports.Learnsets = {
 			quash: ['9M'],
 			queenbeam: ['9M'],
 			queenbeam: ['9M'],
+			queensblitz: ['9M'],
 			queensdance: ['9M'],
 			queensdance: ['9M'],
+			queensheal: ['9M'],
 			queensheal: ['9M'],
 			quickattack: ['9M'],
 			quickguard: ['9M'],
@@ -794,6 +798,7 @@ exports.Learnsets = {
 			topsyturvy: ['9M'],
 			torchsong: ['9M'],
 			torment: ['9M'],
+			torrentrush: ['9M'],
 			toxic: ['9M'],
 			toxicspikes: ['9M'],
 			toxicthread: ['9M'],
@@ -832,6 +837,7 @@ exports.Learnsets = {
 			watershuriken: ['9M'],
 			watersport: ['9M'],
 			waterspout: ['9M'],
+			wavecharge: ['9M'],
 			wavecrash: ['9M'],
 			weatherball: ['9M'],
 			whirlpool: ['9M'],

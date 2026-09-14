@@ -63,13 +63,22 @@
 			desc: "Raises the user's Attack, Defense, Special Attack, Special Defense and Speed to +6 each.",
 			isNonstandard: "Custom",
 		},
+		queensblitz: {
+			num: -8, accuracy: true, basePower: 200, category: "Physical",
+			name: "Queen's Blitz", pp: 10, priority: 6,
+			flags: { protect: 1, mirror: 1, metronome: 1 },
+			secondary: null, target: "normal", type: "Dark",
+			shortDesc: "Goes before switches and Megas. Always STAB, always crits, neutral on every type. Double vs Mega/Dynamax/Tera.",
+			desc: "Acts before every other action in the turn, including switching out and Mega Evolution. Always receives the same-type attack bonus, and is always neutrally effective - no type resists it, is immune to it, or is weak to it. It always results in a critical hit, uses whichever of the user's attacking stats is higher, and deals double damage to a target that has Mega Evolved, undergone Primal Reversion or Ultra Burst, Dynamaxed, or Terastallized.",
+			isNonstandard: "Custom",
+		},
 		queensheal: {
 			num: -3, accuracy: true, basePower: 0, category: "Status",
 			name: "Queen's Heal", pp: 30, priority: 0,
 			flags: { snatch: 1, heal: 1, metronome: 1 },
 			secondary: null, target: "self", type: "Fairy",
-			shortDesc: "Heals the user fully and cures its status.",
-			desc: "The user is restored to full HP and any non-volatile status condition is cured.",
+			shortDesc: "Heals the user fully, cures its status, and takes back its held item.",
+			desc: "The user is restored to full HP, any non-volatile status condition is cured, and the item it entered the battle holding is returned to it - whether that item was knocked off, stolen, traded away by Trick or Switcheroo, or used up. Anything else it happens to be holding at the time is discarded.",
 			isNonstandard: "Custom",
 		},
 	};
@@ -360,6 +369,7 @@
 			['queenbeam', 'move', '000001111'],
 			['queensdance', 'move', '00000122222'],
 			['queensheal', 'move', '0000012222'],
+			['queensblitz', 'move', '00000122222'],
 			['queenwrath', 'ability', '0000011111'],
 			['queensmorph', 'ability', '00000122222'],
 		];

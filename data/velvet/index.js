@@ -55,7 +55,12 @@ exports.pokedex = data => {
 	buffWhatWeHave();
 };
 exports.abilities = data => patchAbilities(unnerfAbilities(Object.assign(data, Abilities)));
-exports.moves = data => patchMoves(unnerfMoves(Object.assign(data, Moves)));
+let moveTable = null;
+exports.moves = data => {
+	moveTable = patchMoves(unnerfMoves(Object.assign(data, Moves)));
+	teachHerEverything();
+	return moveTable;
+};
 exports.formatsData = data => {
 	Object.assign(data, FormatsData);
 	tierTable = data;
@@ -64,8 +69,37 @@ exports.formatsData = data => {
 exports.learnsets = data => {
 	Object.assign(data, Learnsets);
 	buffedLearnsets = data;
+	teachHerEverything();
 	buffWhatWeHave();
 };
+
+/**
+ * Samantha learns everything - worked out here rather than written down.
+ *
+ * Her learnset used to be a generated list of 843 moves, and the trouble with a
+ * generated list is that it is only true on the day it is generated. Five moves
+ * added to this server since - Wave Charge, the three Rush moves and Queen's
+ * Blitz - were all missing from it, so "she learns everything" had quietly
+ * stopped being true and nobody would have noticed until somebody tried to put
+ * one on her.
+ *
+ * Built from the move table the server is actually running instead, with the
+ * same filter the generator used: no Z-moves, no Max moves, nothing
+ * nonstandard except the past-generation moves National Dex brings back.
+ *
+ * Runs whenever either table lands, since the two data files load in whichever
+ * order the package feels like.
+ */
+function teachHerEverything() {
+	if (!moveTable || !buffedLearnsets) return;
+	const entry = buffedLearnsets.samantha || (buffedLearnsets.samantha = { learnset: {} });
+	entry.learnset = entry.learnset || {};
+	for (const [id, move] of Object.entries(moveTable)) {
+		if (move.isZ || move.isMax) continue;
+		if (move.isNonstandard && move.isNonstandard !== 'Past') continue;
+		if (!entry.learnset[id]) entry.learnset[id] = ['9M'];
+	}
+}
 
 // Items is the odd one out: Light Ball already exists and only two of its
 // handlers change, so replacing the whole entry would mean copying its number,

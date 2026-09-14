@@ -36,7 +36,7 @@ const { Dex } = require(path.join(PACKAGE, 'dist', 'sim', 'dex.js'));
 
 /** Everything this server invented, as opposed to everything it changed. */
 const SPECIES = ['samantha'];
-const MOVES = ['junglerush', 'cinderrush', 'torrentrush', 'wavecharge', 'queenbeam', 'queensdance', 'queensheal'];
+const MOVES = ['junglerush', 'cinderrush', 'torrentrush', 'wavecharge', 'queenbeam', 'queensdance', 'queensheal', 'queensblitz'];
 const ABILITIES = ['verdantsurge', 'solarsurge', 'tidalsurge', 'queenwrath', 'queensmorph'];
 const ITEMS = ['elementalbanana'];
 

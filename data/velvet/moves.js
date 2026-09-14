@@ -28,6 +28,68 @@ function betterAttackingStat(move, pokemon) {
 	}
 }
 
+/**
+ * Explain an effect the log cannot show, once.
+ *
+ * A move that ignores type charts, crits without saying so and resolves before
+ * the turn starts looks like a bug to the player on the other end - the log
+ * prints a number with no line above it explaining where the number came from.
+ * `-hint` is the channel the game itself uses for exactly this (Pursuit, the
+ * Sleep Clause, a failed Encore); it renders as a small italic note rather than
+ * as battle text, so it reads as an explanation instead of as flavour.
+ *
+ * Keyed per turn per Pokemon, because the handlers that want to speak fire once
+ * per hit - and Queen Wrath makes every one of her moves hit twice.
+ */
+function explain(battle, pokemon, key, hint) {
+	if (!pokemon) return;
+	const said = pokemon.m.velvetHinted || (pokemon.m.velvetHinted = {});
+	if (said[key] === battle.turn) return;
+	said[key] = battle.turn;
+	battle.add('-hint', hint);
+}
+
+/**
+ * The same thing, but said once in the whole battle.
+ *
+ * A rule only needs explaining the first time it comes up; a paragraph printed
+ * every turn stops being an explanation and becomes the thing being scrolled
+ * past. Used for the long ones.
+ */
+/**
+ * Give her back the item she walked in with.
+ *
+ * Knock Off, Thief, Covet, Trick, Switcheroo, Magician, Pickpocket, an eaten
+ * Berry: seven different ways to separate her from her item, and until now one
+ * of them was enough to keep it off her for the rest of the battle. Recycle only
+ * answers the last of those - `lastItem` is set when an item is consumed, not
+ * when it is taken - so the item she is owed is read off her team sheet instead,
+ * which nothing in a battle can change.
+ *
+ * Whatever she is holding instead is dropped. That matters exactly once, and in
+ * her favour: a foe who Tricked a Choice Scarf onto her gets no lock out of it.
+ * It also does not go looking for the thief - the item is restored, not stolen
+ * back, so somebody who Knocked it off is left holding their own.
+ */
+function restoreHerItem(battle, pokemon) {
+	const set = pokemon.set;
+	if (!set || !set.item) return false;
+	const home = battle.dex.items.get(set.item);
+	if (!home.exists || pokemon.item === home.id) return false;
+	if (!pokemon.setItem(home.id)) return false;
+	pokemon.lastItem = '';
+	battle.add('-item', pokemon, home.name, "[from] move: Queen's Heal");
+	return true;
+}
+
+function explainOnce(battle, pokemon, key, hint) {
+	if (!pokemon) return;
+	const said = pokemon.m.velvetHinted || (pokemon.m.velvetHinted = {});
+	if (said[key]) return;
+	said[key] = true;
+	battle.add('-hint', hint);
+}
+
 exports.Moves = {
 	queenbeam: {
 		num: -1,
@@ -112,6 +174,121 @@ exports.Moves = {
 	 * there was any healing left to do, so it is never a wasted turn against
 	 * Toxic.
 	 */
+	/**
+	 * Queen's Blitz - the one that does not wait.
+	 *
+	 * Dark, 200, always the same 200: it is neutral on everything, so nothing
+	 * resists it, nothing is immune to it, and no amount of typing helps. It
+	 * always gets its same-type bonus, whoever is holding it.
+	 *
+	 * And it goes first. Not "first among moves" - first, full stop, ahead of
+	 * switching out and ahead of Mega Evolving.
+	 *
+	 * That last part needs more than priority. The queue sorts on `order` before
+	 * it ever looks at priority, and a move's order is 200 against a switch's 103
+	 * and a Mega's 104, so the highest priority in the game still goes after
+	 * somebody running away. What does run early is `beforeTurnCallback`, at
+	 * order 4 - the hook Pursuit uses to catch a Pokemon on its way out - and
+	 * from there the action is still sitting in the queue waiting to be sorted.
+	 * So it reaches in and moves itself in front of them.
+	 */
+	queensblitz: {
+		num: -8,
+		gen: 9,   // negative `num` leaves this 0, and gen 0 is "does not exist yet"
+		name: "Queen's Blitz",
+		type: "Dark",
+		category: "Physical",
+		basePower: 200,
+		accuracy: true,
+		pp: 10,
+		// Highest bracket as well, so that among things that also jump the queue
+		// it still goes first.
+		priority: 6,
+
+		/**
+		 * Say what it is doing, because none of it shows up in the log.
+		 *
+		 * Four separate surprises land in one line of battle text: the turn order
+		 * was rearranged before the turn began, a Dark move hit a Fairy for
+		 * neutral, the critical hit was not luck, and the number doubled because
+		 * the target had Terastallized. Every one of those reads as the server
+		 * being broken if nobody says otherwise, which is the whole reason this is
+		 * here rather than only in the move's description.
+		 *
+		 * onTry runs once per use, so it survives Parental Bond doubling the hits.
+		 */
+		onTry(source, target) {
+			this.add('-message', `${source.name} strikes first by right.`);
+			explainOnce(this, source, 'blitz', "Queen's Blitz resolves before every other action in the turn, including switching out and Mega Evolution. It always gets STAB, always lands a critical hit, and is neutral on every type - nothing resists it and nothing is immune.");
+		},
+
+		// Same-type bonus regardless of who is using it.
+		forceSTAB: true,
+
+		// And whichever attacking stat is better, like the rest of her kit.
+		onModifyMove(move, pokemon) {
+			betterAttackingStat(move, pokemon);
+		},
+
+		// Neutral on everything: no immunity, no resistance, no weakness.
+		ignoreImmunity: true,
+		onEffectiveness() {
+			return 0;
+		},
+
+		// And it always crits.
+		willCrit: true,
+
+		/**
+		 * Double against anything wearing a gimmick.
+		 *
+		 * Mega Evolution, Primal Reversion, Ultra Burst, Dynamax and
+		 * Terastallization - the four ways a Pokemon stops being the Pokemon it
+		 * was in order to survive her. This is the answer to all of them, and the
+		 * reason to keep one in reserve: the turn they reach for the transformation
+		 * is the turn this hurts most.
+		 */
+		basePowerCallback(pokemon, target, move) {
+			if (!target) return move.basePower;
+			const species = target.species || {};
+			const transformed = species.isMega || species.isPrimal || species.forme === 'Ultra';
+			const maxed = !!(target.volatiles && target.volatiles['dynamax']);
+			const tera = !!target.terastallized;
+			if (transformed || maxed || tera) {
+				this.debug("Queen's Blitz: the gimmick is the target");
+				const what = maxed ? 'Dynamaxed' : tera ? 'Terastallized' : 'transformed';
+				explain(this, pokemon, 'blitzgimmick',
+					`${target.name} is ${what}, so Queen's Blitz hits for double power.`);
+				return move.basePower * 2;
+			}
+			return move.basePower;
+		},
+
+		/**
+		 * Move this turn's action in front of the switches and the Megas.
+		 *
+		 * 102 sits below switch (103) and Mega Evolution (104) and above the
+		 * handful of things that genuinely must come first - the team order, the
+		 * start of the battle, an instant switch forced by a move that already
+		 * resolved.
+		 */
+		beforeTurnCallback(pokemon) {
+			for (const action of this.queue.list) {
+				if (action.choice !== 'move' || action.pokemon !== pokemon) continue;
+				if (!action.move || action.move.id !== 'queensblitz') continue;
+				action.order = 102;
+			}
+			this.queue.sort();
+		},
+
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		secondary: null,
+		target: "normal",
+		contestType: "Cool",
+		shortDesc: "Goes before switches and Megas. Always STAB, always crits, neutral on every type. Double vs Mega/Dynamax/Tera.",
+		desc: "Acts before every other action in the turn, including switching out and Mega Evolution. Always receives the same-type attack bonus, and is always neutrally effective - no type resists it, is immune to it, or is weak to it. It always results in a critical hit, uses whichever of the user's attacking stats is higher, and deals double damage to a target that has Mega Evolved, undergone Primal Reversion or Ultra Burst, Dynamaxed, or Terastallized.",
+	},
+
 	queensheal: {
 		num: -3,
 		name: "Queen's Heal",
@@ -136,14 +313,15 @@ exports.Moves = {
 			// sleep and freeze alike.
 			const healed = this.heal(target.maxhp - target.hp, target, target);
 			const cured = target.cureStatus();
-			return healed || cured || null;
+			const regained = restoreHerItem(this, target);
+			return healed || cured || regained || null;
 		},
 		flags: { snatch: 1, heal: 1, metronome: 1 },
 		secondary: null,
 		target: "self",
 		contestType: "Beautiful",
-		shortDesc: "Heals the user fully and cures its status.",
-		desc: "The user is restored to full HP and any non-volatile status condition is cured.",
+		shortDesc: "Heals the user fully, cures its status, and takes back its held item.",
+		desc: "The user is restored to full HP, any non-volatile status condition is cured, and the item it entered the battle holding is returned to it - whether that item was knocked off, stolen, traded away by Trick or Switcheroo, or used up. Anything else it happens to be holding at the time is discarded.",
 	},
 	/**
 	 * Simian Rush - the elemental monkeys' reason to exist.
@@ -332,7 +510,10 @@ function patchImprison(Moves) {
 	const before = imprison.condition.onFoeBeforeMove;
 	if (typeof before === 'function') {
 		imprison.condition.onFoeBeforeMove = function (attacker, defender, move) {
-			if (queenProtected(attacker)) return;
+			if (queenProtected(attacker)) {
+				explain(this, attacker, 'imprison', "Imprison cannot take a queen's own moves from her.");
+				return;
+			}
 			return before.call(this, attacker, defender, move);
 		};
 	}

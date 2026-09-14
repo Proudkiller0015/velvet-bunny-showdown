@@ -10,7 +10,7 @@
  */
 window.__VELVET_CALC_DATA = {
 	species: {"Samantha":{"types":["Dark","Fairy"],"bs":{"hp":250,"at":250,"df":250,"sa":250,"sd":250,"sp":250},"weightkg":54}},
-	moves: {"Jungle Rush":{"bp":80,"type":"Grass","category":"Physical","makesContact":true},"Cinder Rush":{"bp":80,"type":"Fire","category":"Physical","makesContact":true},"Torrent Rush":{"bp":80,"type":"Water","category":"Physical","makesContact":true},"Wave Charge":{"bp":50,"type":"Water","category":"Physical","makesContact":true},"Queen Beam":{"bp":250,"type":"Fairy","category":"Physical"},"Queen's Dance":{"bp":0,"type":"Fairy","category":"Status"},"Queen's Heal":{"bp":0,"type":"Fairy","category":"Status"}},
+	moves: {"Jungle Rush":{"bp":80,"type":"Grass","category":"Physical","makesContact":true},"Cinder Rush":{"bp":80,"type":"Fire","category":"Physical","makesContact":true},"Torrent Rush":{"bp":80,"type":"Water","category":"Physical","makesContact":true},"Wave Charge":{"bp":50,"type":"Water","category":"Physical","makesContact":true},"Queen Beam":{"bp":250,"type":"Fairy","category":"Physical"},"Queen's Dance":{"bp":0,"type":"Fairy","category":"Status"},"Queen's Heal":{"bp":0,"type":"Fairy","category":"Status"},"Queen's Blitz":{"bp":200,"type":"Dark","category":"Physical","priority":6}},
 	abilities: ["Verdant Surge","Solar Surge","Tidal Surge","Queen Wrath","Queen's Morph"],
 	items: ["Elemental Banana"],
 };

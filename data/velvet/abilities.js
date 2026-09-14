@@ -164,6 +164,13 @@ function goodAsGold(name) {
 const untrappable = {
 	onTrapPokemonPriority: -10,
 	onTrapPokemon(pokemon) {
+		// Said once in the battle, not once a turn: the trap flag is recomputed
+		// at both ends of every turn, so a per-turn note prints twice a turn for
+		// as long as the trapper is out.
+		if (pokemon.trapped && !pokemon.m.velvetSaidTrap) {
+			pokemon.m.velvetSaidTrap = true;
+			this.add('-hint', `Nothing holds ${pokemon.name} in place - Shadow Tag, Arena Trap, Mean Look and the rest do not trap a queen.`);
+		}
 		pokemon.trapped = false;
 	},
 	onMaybeTrapPokemonPriority: -10,
@@ -527,7 +534,10 @@ function patchAbilities(Abilities) {
 		wandering.velvetQueenSafe = true;
 		wandering.onDamagingHit = function (damage, target, source, move) {
 			// `source` is whoever landed the hit; `target` holds Wandering Spirit.
-			if (queenProtected(source)) return;
+			if (queenProtected(source)) {
+				announce(this, source, 'wander', `${target.name} reaches for ${source.name}'s ability and comes away with nothing.`);
+				return;
+			}
 			return swap.call(this, damage, target, source, move);
 		};
 	}
