@@ -146,6 +146,8 @@ function startServer() {
 			fs.writeFileSync(wrapperStatus, JSON.stringify({
 				pid: process.pid,
 				uptimeSeconds: Math.round(process.uptime()),
+				heapLimit: require('v8').getHeapStatistics().heap_size_limit,
+				nodeOptions: process.env.NODE_OPTIONS || '',
 				rss: memory.rss,
 				heapUsed: memory.heapUsed,
 				heapTotal: memory.heapTotal,

@@ -413,6 +413,8 @@ function serveHealth(url, res) {
 			rssMB: mb(raw.rss),
 			heapUsedMB: mb(raw.heapUsed),
 			heapTotalMB: mb(raw.heapTotal),
+			heapLimitMB: raw.heapLimit ? mb(raw.heapLimit) : null,
+			nodeOptions: raw.nodeOptions || '',
 			uptimeSeconds: raw.uptimeSeconds,
 			secondsOld: Math.round((Date.now() - new Date(raw.at).getTime()) / 1000),
 		};
@@ -436,11 +438,17 @@ function serveHealth(url, res) {
 		 * `--max-old-space-size` is set in the host's configuration, and whether
 		 * that configuration reaches the running service is not something anyone
 		 * here can see - a blueprint is only applied to a service that is linked
-		 * to it, and a service created by hand ignores the file entirely. This is
-		 * the number that says which of those is true: near the configured cap
-		 * and the file is live, near Node's own default and it never was.
+		 * to it, and a service created by hand ignores the file entirely. This
+		 * says which of those is true.
+		 *
+		 * It is not the cap itself, and reading it as though it were will mislead
+		 * you: V8 adds the other spaces on top, and how much depends on the
+		 * version. Node 20 reports the cap plus about 3MB; Node 24 reports it
+		 * plus about 192. So `nodeOptions` is reported beside it - that is the
+		 * setting, verbatim, and needs no arithmetic.
 		 */
 		heapLimitMB: mb(require('v8').getHeapStatistics().heap_size_limit),
+		nodeOptions: process.env.NODE_OPTIONS || '',
 		host: {
 			totalMB: mb(os.totalmem()),
 			freeMB: mb(os.freemem()),

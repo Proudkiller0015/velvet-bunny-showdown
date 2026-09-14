@@ -13,18 +13,28 @@ services:
     envVars:
       - key: NODE_VERSION
         value: "20"
-      # This now applies to the wrapper only - the process this line starts.
-      # The Showdown server gets its own from src/index.js, which defaults to
-      # the same number, so nothing has changed yet.
+      # The wrapper's ceiling. The Showdown server gets its own, below.
       #
-      # It should change. A shared 400MB ceiling means 400 *each* in a box that
-      # is killed at 512MB for both together, so whichever grows first has no
-      # reason to collect until the container is already past saving. The right
-      # pair of numbers needs the live figure for this process, which nothing
-      # could see until now - /velvet/health.json reports both from this deploy
-      # on. Set PS_SERVER_HEAP_MB here once that has been read for a day.
+      # These were one number, and one number meant 400MB *each* in a box that
+      # is killed at 512MB for the pair - so neither had any reason to collect
+      # until it was alone past what the two could afford together. Measured
+      # live with every ladder queue up, which is the state that matters:
+      #
+      #   showdown   heap 192/203MB   non-heap ~95MB
+      #   wrapper    heap 108/116MB   non-heap ~95MB
+      #   container  435MB of 512
+      #
+      # So: about 40% above what each actually holds. Not enough to be a
+      # straitjacket, low enough that V8 starts working well before the kernel
+      # does - which at the moment it never does.
+      #
+      # The non-heap ~95MB each is the Node binary and V8's own code, twice
+      # over, and no cap touches it. That is the floor this container cannot
+      # get under without running one process instead of two.
       - key: NODE_OPTIONS
-        value: --max-old-space-size=400
+        value: --max-old-space-size=160
+      - key: PS_SERVER_HEAP_MB
+        value: "300"
       - key: PS_BOT_NAME
         value: Velvet Bunny
       - key: PS_DIFFICULTY
