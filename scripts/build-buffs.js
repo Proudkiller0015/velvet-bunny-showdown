@@ -154,10 +154,27 @@ const za = require(path.join(PACKAGE, 'dist', 'data', 'velvet', 'za-megas.js'));
  * The real tier still matters, and still applies - on the server, where the
  * team is validated. The client only needs to know the base form's.
  */
+/*
+ * Two tier tables, because a Mega's tier means different things in the two
+ * places the builder might read it.
+ *
+ * In a plain ninth-generation format there is no Mega Evolution at all, and
+ * Showdown marks every Mega forme Illegal there - correctly. Shipping our tiers
+ * into that table made ours the only Megas in the game that read as legal,
+ * which is the "Megas behave differently from other Megas" complaint.
+ *
+ * Under National Dex they are legal and tiered, and that is the table the RP
+ * tiers search against. There, a Mega with no tier reads Illegal for the
+ * opposite and equally wrong reason: it is perfectly legal and nobody has said
+ * what it is. That is where the Z-A Megas were - a stone the builder offered,
+ * attached to a Pokemon the builder called illegal.
+ */
 const isMegaForme = id => Dex.species.get(id).name.includes('-Mega');
 const tiers = {};
+const megaTiers = {};
 for (const [id, tier] of Object.entries(Object.assign({}, za.assigned, TIERS))) {
-	if (!isMegaForme(id)) tiers[id] = tier;
+	if (isMegaForme(id)) megaTiers[id] = tier;
+	else tiers[id] = tier;
 }
 const unlocked = {
 	species: Object.keys(za.assigned),
@@ -215,6 +232,7 @@ window.VelvetBuffs = {
 \tsearch: ${JSON.stringify(search)},
 \toverrides: ${JSON.stringify(overrides)},
 \ttiers: ${JSON.stringify(tiers)},
+\tmegaTiers: ${JSON.stringify(megaTiers)},
 \tunlocked: ${JSON.stringify(unlocked)},
 
 \t/** What this Pokemon gained, or an empty record. */
@@ -229,7 +247,8 @@ fs.writeFileSync(OUT, file);
 console.log(`${Object.keys(bySpecies).length} buffed Pokemon, ${Object.keys(moves).length} moves, ` +
 	`${Object.keys(abilities).length} abilities, ${Object.keys(items).length} items, ` +
 	`${Object.keys(overrides.moves).length + Object.keys(overrides.abilities).length} corrected rows, ` +
-	`${Object.keys(tiers).length} re-tiered, ${unlocked.species.length + unlocked.items.length} unlocked`);
+	`${Object.keys(tiers).length} re-tiered, ${Object.keys(megaTiers).length} Mega tiers, ` +
+	`${unlocked.species.length + unlocked.items.length} unlocked`);
 console.log(`${Math.round(file.length / 1024)}KB -> ${OUT}`);
 for (const [id, record] of Object.entries(bySpecies)) {
 	console.log(`  ${Dex.species.get(id).name}: +${record.moves.length} move(s)` +

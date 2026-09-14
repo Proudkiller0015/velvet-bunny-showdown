@@ -104,6 +104,25 @@ const LADDER = [
  */
 const UBER_BST = 700;
 
+/**
+ * The tiers worked out by scoring each Mega on paper, if they have been.
+ *
+ * Built by scripts/build-za-tiers.js, which reads every Mega's sheet - stats
+ * weighted by what a Pokemon can actually use, typing both ways, ability,
+ * movepool breadth - and promotes the handful that are a different weight class
+ * from their own tier. That scoring needs a working dex, and this file runs
+ * while the dex is still being built, so it is measured there and read here.
+ *
+ * Missing is fine and is the case on a fresh checkout: the rules below answer
+ * on their own, exactly as they did before the table existed.
+ */
+let SCORED = {};
+try {
+	SCORED = require('./za-tiers.json').tiers || {};
+} catch (e) {
+	SCORED = {};
+}
+
 function tierFor(megaBst, baseTier) {
 	if (baseTier === 'AG') return 'AG';
 	if (baseTier === 'Uber' || megaBst >= UBER_BST) return 'Uber';
@@ -146,7 +165,9 @@ exports.applyZaMegas = (Pokedex, FormatsData) => {
 		const baseId = String(species.baseSpecies).toLowerCase().replace(/[^a-z0-9]+/g, '');
 		const base = FormatsData[baseId];
 		const bst = Object.values(species.baseStats || {}).reduce((total, stat) => total + stat, 0);
-		const tier = tierFor(bst, base && base.natDexTier);
+		// The measured answer first, the rules as the fallback.
+		const scored = SCORED[id];
+		const tier = (scored && scored.tier) || tierFor(bst, base && base.natDexTier);
 
 		data.tier = tier;
 		data.natDexTier = tier;

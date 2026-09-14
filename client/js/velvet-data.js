@@ -544,8 +544,13 @@
 		// The current generation's list sits at the top level; older ones are
 		// nested under their own key. Both shapes get her.
 		var targets = [table];
+		var natdexTargets = [];
 		for (var key in table) {
-			if (key.indexOf('gen9') === 0 && table[key] && typeof table[key] === 'object') targets.push(table[key]);
+			if (!table[key] || typeof table[key] !== 'object') continue;
+			if (key.indexOf('gen9') === 0) targets.push(table[key]);
+			// The National Dex tables are where a Mega is a legal Pokemon at all,
+			// and they are what the RP tiers search against - see installRpTiers.
+			if (key.indexOf('natdex') >= 0) natdexTargets.push(table[key]);
 		}
 
 		// Her place in the list is not decided here, and cannot be: every tier's
@@ -581,6 +586,26 @@
 				landed = true;
 			}
 		}
+		/*
+		 * Mega tiers, and only where a Mega is a real thing.
+		 *
+		 * Not in the plain ninth-generation table: there is no Mega Evolution
+		 * there, Showdown marks every Mega forme Illegal, and it is right to.
+		 * Putting ours in it is what made ours the only Megas in the game that
+		 * read as legal in a format they cannot be used in.
+		 *
+		 * In National Dex they are legal, tiered, and ours had no tier at all -
+		 * so the builder offered the stone and called the Pokemon it makes
+		 * illegal. That is the complaint, and this is the half that was missing.
+		 */
+		if (buffs && buffs.megaTiers) {
+			for (var n = 0; n < natdexTargets.length; n++) {
+				var natdex = natdexTargets[n];
+				if (!natdex.overrideTier) natdex.overrideTier = {};
+				for (var megaId in buffs.megaTiers) natdex.overrideTier[megaId] = buffs.megaTiers[megaId];
+			}
+		}
+
 		installLearnset(table);
 		if (!landed) return false;
 		return true;
