@@ -128,16 +128,19 @@ for (const [id, row] of Object.entries(items)) search.push([id, 'item', offsetsF
 const bySpecies = {};
 for (const [id, record] of Object.entries(applied)) {
 	const species = Dex.species.get(id);
-	bySpecies[id] = {
-		moves: record.moves.slice(),
-		// The names a buff added, and the whole slot table it produced. Both are
-		// needed: the names say what to label as ours, and the table is what the
-		// client's own dex entry has to be replaced with before the builder will
-		// offer any of them. Slots past 0/1/H/S are ours - a species is only
-		// built for four - and the client lists those itself.
-		abilities: record.abilities.slice(),
-		slots: Object.assign({}, species.abilities),
-	};
+	const entry = { moves: record.moves.slice(), abilities: record.abilities.slice() };
+	/*
+	 * The slot table only ships when a buff actually changed the abilities.
+	 *
+	 * It is what the client's own dex entry has to be replaced with before the
+	 * builder will offer a new ability - including any slot past 0/1/H/S, which
+	 * is how a Pokemon ends up with more than three. But most buffed Pokemon
+	 * now are Water-types that were handed one move and had their abilities left
+	 * alone, and emitting an unchanged copy of Squirtle's abilities for each of
+	 * them took this file from 7KB to 34KB - on a page that loads it every time.
+	 */
+	if (record.abilities.length) entry.slots = Object.assign({}, species.abilities);
+	bySpecies[id] = entry;
 }
 
 const file = `/**
@@ -172,7 +175,8 @@ console.log(`${Object.keys(bySpecies).length} buffed Pokemon, ${Object.keys(move
 	`${Object.keys(abilities).length} abilities, ${Object.keys(items).length} items`);
 console.log(`${Math.round(file.length / 1024)}KB -> ${OUT}`);
 for (const [id, record] of Object.entries(bySpecies)) {
-	console.log(`  ${Dex.species.get(id).name}: +${record.moves.length} moves, abilities now ${Object.entries(record.slots).map(([slot, name]) => `${slot}:${name}`).join(' / ')}`);
+	console.log(`  ${Dex.species.get(id).name}: +${record.moves.length} move(s)` +
+		(record.slots ? `, abilities now ${Object.entries(record.slots).map(([slot, name]) => `${slot}:${name}`).join(' / ')}` : ''));
 }
 for (const [id, type, offsets] of search) {
 	console.log(`  searchable: ${id} (${type}) ${offsets}`);

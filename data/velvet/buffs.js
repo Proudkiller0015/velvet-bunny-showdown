@@ -242,6 +242,65 @@ function alreadyKnows(Pokedex, Learnsets, id, move) {
 }
 
 /**
+ * Moves handed to a whole type rather than to one Pokemon.
+ *
+ * Wave Charge was written because Water had no answer to Flame Charge, and it
+ * was never meant to stay the monkeys'. This is where it goes out.
+ *
+ * The shape of the distribution is copied rather than invented. Flame Charge is
+ * on 92% of Fire-types - 71 of 77 - and it does not care whether they attack
+ * physically or specially; Ogerpon-Hearthflame and Torkoal get it alike. The
+ * six it misses are almost all alternate formes of a Pokemon that is not really
+ * Fire: Rotom-Heat, Arceus-Fire, Ogerpon-Hearthflame. Trailblaze is the same
+ * story at 74% of Grass. So the honest mirror is "every Water-type", with the
+ * same kind of exception carved out, not a shortlist of the ones that would
+ * enjoy it most.
+ *
+ * `also` is the part no data field can answer: Pokemon that are plainly marine
+ * and happen not to be Water-typed. Eels, a sea urchin, two lots of coral, an
+ * anchor wrapped in seaweed, two whales and a penguin.
+ */
+const DISTRIBUTED = {
+	wavecharge: {
+		types: ['Water'],
+		also: [
+			'tynamo', 'eelektrik', 'eelektross',   // eels
+			'pincurchin',                          // sea urchin
+			'corsolagalar', 'cursola',             // coral
+			'dhelmise',                            // anchor and seaweed
+			'cetoddle', 'cetitan',                 // whales
+			'eiscue',                              // penguin
+		],
+		// Formes of a Pokemon that is not really of this type - the same ones
+		// Flame Charge skips on the Fire side.
+		except: ['rotomwash', 'arceuswater', 'ogerponwellspring', 'ogerponwellspringtera'],
+	},
+};
+
+/**
+ * Work out who a distributed move actually goes to.
+ *
+ * Mega Evolutions, Gigantamax formes and Totem Pokemon are left out: none of
+ * them is a Pokemon you build, they inherit what their base form knows, and
+ * listing them would triple the table for nothing.
+ */
+function distributionFor(Pokedex, rule) {
+	const skip = new Set(rule.except || []);
+	const out = [];
+	for (const [id, species] of Object.entries(Pokedex)) {
+		if (skip.has(id)) continue;
+		if (!species.types || !species.num || species.num < 0) continue;
+		if (/-(Mega|Gmax|Totem)/.test(species.name || '')) continue;
+		if (/-Tera$/.test(species.name || '')) continue;
+		if (rule.types.some(type => species.types.includes(type))) out.push(id);
+	}
+	for (const id of rule.also || []) {
+		if (Pokedex[id] && !out.includes(id)) out.push(id);
+	}
+	return out;
+}
+
+/**
  * What the buffs actually changed, filled in as they are applied.
  *
  * Not the same thing as the lists above. A buff names everything a Pokemon
@@ -256,6 +315,36 @@ exports.applied = {};
 
 /** Put the buffs into the dex the server is about to use. */
 exports.applyBuffs = (Pokedex, Learnsets) => {
+	/*
+	 * The type-wide moves first, so a Pokemon that also has a buff of its own
+	 * ends up with both and is recorded once for each.
+	 */
+	for (const [move, rule] of Object.entries(DISTRIBUTED)) {
+		for (const id of distributionFor(Pokedex, rule)) {
+			/*
+			 * No inheritance check here, unlike a per-Pokemon buff.
+			 *
+			 * The usual check walks back through the pre-evolutions, because a
+			 * move Pansage learns is a move Simisage has and announcing it twice
+			 * would be a lie. For a move that did not exist until this server
+			 * wrote it, that check only ever fires against our own distribution -
+			 * so Squirtle got Wave Charge and Blastoise was told it already knew
+			 * it, which left the evolution without an entry of its own and
+			 * without a line in the buff table the client reads.
+			 */
+			const entry = Learnsets[id] || (Learnsets[id] = { learnset: {} });
+			entry.learnset = entry.learnset || {};
+			if (!entry.learnset[move]) entry.learnset[move] = ['9M'];
+
+			// Recorded for every species that gets it, not just the first stage.
+			// The server lets an evolution inherit its baby's moves; the client's
+			// buff section reads this table per Pokemon, and a Blastoise whose
+			// section is empty because Squirtle was written first looks like a bug.
+			const record = exports.applied[id] || (exports.applied[id] = { moves: [], abilities: [] });
+			if (!record.moves.includes(move)) record.moves.push(move);
+		}
+	}
+
 	for (const [id, buff] of Object.entries(exports.Buffs)) {
 		const species = Pokedex[id];
 		if (!species) continue;   // a Pokemon that no longer exists is not an error

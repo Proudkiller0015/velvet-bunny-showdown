@@ -673,7 +673,10 @@
 		if (window.BattlePokedex) {
 			for (var id in buffs.bySpecies) {
 				var entry = window.BattlePokedex[id];
-				if (entry) entry.abilities = buffs.bySpecies[id].slots;
+				// Only the Pokemon whose abilities actually changed carry a slot
+				// table; everyone else keeps the one the client already has.
+				var slots = buffs.bySpecies[id].slots;
+				if (entry && slots) entry.abilities = slots;
 			}
 		} else ready = false;
 

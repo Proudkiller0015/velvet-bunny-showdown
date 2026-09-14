@@ -12,6 +12,1138 @@
 window.VelvetBuffs = {
 	label: "Awakened",
 	bySpecies: {
+		"squirtle": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"wartortle": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"blastoise": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"psyduck": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"golduck": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"poliwag": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"poliwhirl": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"poliwrath": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"tentacool": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"tentacruel": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"slowpoke": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"slowbro": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"seel": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"dewgong": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"shellder": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"cloyster": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"krabby": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"kingler": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"horsea": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"seadra": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"goldeen": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"seaking": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"staryu": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"starmie": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"taurospaldeaaqua": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"magikarp": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"gyarados": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"lapras": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"vaporeon": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"omanyte": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"omastar": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"kabuto": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"kabutops": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"totodile": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"croconaw": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"feraligatr": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"chinchou": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"lanturn": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"marill": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"azumarill": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"politoed": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"wooper": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"quagsire": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"slowking": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"qwilfish": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"corsola": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"remoraid": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"octillery": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"mantine": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"kingdra": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"suicune": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"mudkip": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"marshtomp": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"swampert": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"lotad": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"lombre": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"ludicolo": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"wingull": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"pelipper": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"surskit": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"carvanha": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"sharpedo": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"wailmer": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"wailord": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"barboach": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"whiscash": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"corphish": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"crawdaunt": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"feebas": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"milotic": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"castformrainy": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"spheal": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"sealeo": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"walrein": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"clamperl": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"huntail": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"gorebyss": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"relicanth": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"luvdisc": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"kyogre": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"kyogreprimal": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"piplup": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"prinplup": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"empoleon": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"bibarel": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"buizel": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"floatzel": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"shellos": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"gastrodon": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"finneon": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"lumineon": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"mantyke": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"palkia": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"palkiaorigin": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"phione": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"manaphy": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"oshawott": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"dewott": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"samurott": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"samurotthisui": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"panpour": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"simipour": {
+			"moves": [
+				"wavecharge",
+				"liquidation",
+				"chillingwater",
+				"muddywater",
+				"whirlpool",
+				"endure",
+				"terablast",
+				"torrentrush",
+				"swordsdance",
+				"bulkup",
+				"focusenergy",
+				"screech",
+				"scaryface",
+				"encore",
+				"psychup",
+				"spite",
+				"curse",
+				"quickguard",
+				"metronome",
+				"sunnyday",
+				"closecombat",
+				"drainpunch",
+				"machpunch",
+				"firepunch",
+				"thunderpunch",
+				"stoneedge",
+				"uturn",
+				"fakeout"
+			],
+			"abilities": [
+				"Tidal Surge"
+			],
+			"slots": {
+				"0": "Gluttony",
+				"1": "Tidal Surge",
+				"H": "Torrent"
+			}
+		},
+		"tympole": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"palpitoad": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"seismitoad": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"basculin": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"basculinbluestriped": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"basculinwhitestriped": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"tirtouga": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"carracosta": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"ducklett": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"swanna": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"frillish": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"jellicent": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"alomomola": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"keldeo": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"keldeoresolute": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"froakie": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"frogadier": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"greninja": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"greninjabond": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"greninjaash": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"binacle": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"barbaracle": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"skrelp": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"clauncher": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"clawitzer": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"volcanion": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"popplio": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"brionne": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"primarina": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"wishiwashi": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"wishiwashischool": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"mareanie": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"toxapex": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"dewpider": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"araquanid": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"wimpod": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"golisopod": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"pyukumuku": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"silvallywater": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"bruxish": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"tapufini": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"sobble": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"drizzile": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"inteleon": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"chewtle": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"drednaw": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"cramorant": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"cramorantgulping": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"cramorantgorging": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"arrokuda": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"barraskewda": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"dracovish": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"arctovish": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"urshifurapidstrike": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"basculegion": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"basculegionf": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"quaxly": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"quaxwell": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"quaquaval": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"wiglett": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"wugtrio": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"finizen": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"palafin": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"palafinhero": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"veluza": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"dondozo": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"tatsugiri": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"tatsugiridroopy": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"tatsugiristretchy": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"ironbundle": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"walkingwake": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"tynamo": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"eelektrik": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"eelektross": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"pincurchin": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"corsolagalar": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"cursola": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"dhelmise": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"cetoddle": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"cetitan": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"eiscue": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
 		"simisage": {
 			"moves": [
 				"grassyglide",
@@ -88,46 +1220,6 @@ window.VelvetBuffs = {
 				"0": "Gluttony",
 				"1": "Solar Surge",
 				"H": "Blaze"
-			}
-		},
-		"simipour": {
-			"moves": [
-				"liquidation",
-				"chillingwater",
-				"muddywater",
-				"whirlpool",
-				"wavecharge",
-				"endure",
-				"terablast",
-				"torrentrush",
-				"swordsdance",
-				"bulkup",
-				"focusenergy",
-				"screech",
-				"scaryface",
-				"encore",
-				"psychup",
-				"spite",
-				"curse",
-				"quickguard",
-				"metronome",
-				"sunnyday",
-				"closecombat",
-				"drainpunch",
-				"machpunch",
-				"firepunch",
-				"thunderpunch",
-				"stoneedge",
-				"uturn",
-				"fakeout"
-			],
-			"abilities": [
-				"Tidal Surge"
-			],
-			"slots": {
-				"0": "Gluttony",
-				"1": "Tidal Surge",
-				"H": "Torrent"
 			}
 		},
 		"litwick": {
