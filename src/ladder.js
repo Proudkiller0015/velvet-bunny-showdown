@@ -131,10 +131,25 @@ class LadderBot {
 				this.log(`${this.name} queueing for ${this.format}`);
 				noteQueue(this.name, { connected: true, named: parts[1], error: null, since: new Date().toISOString() });
 				void this.search();
-			} else if (parts[2] !== '1') {
-				// Still a guest. Either the assertion never arrived or the server
-				// refused the name, and this is the only place that can tell.
-				noteQueue(this.name, { connected: false, named: parts[1], error: 'still a guest after login' });
+			} else if (parts[2] !== '1' && !this.ready) {
+				/*
+				 * Still a guest, which used to be the end of it.
+				 *
+				 * Nothing closes the socket when a name is refused - the connection
+				 * is perfectly healthy, it just belongs to Guest 7 - so the reconnect
+				 * on 'close' never fired and the queue sat there, connected and
+				 * nameless, until the next deploy. Five of ten queues spent their
+				 * entire lives like that.
+				 *
+				 * So: try again, backing off, rather than wait for a restart.
+				 */
+				noteQueue(this.name, { connected: false, named: parts[1], error: 'still a guest, retrying login' });
+				if (!this.guestRetry) {
+					this.guestRetry = setTimeout(() => {
+						this.guestRetry = null;
+						try { this.ws.close(); } catch (e) {}
+					}, this.reconnectDelay);
+				}
 			}
 			return;
 		case 'updatesearch': {
@@ -293,11 +308,22 @@ function startLadderBots(options) {
 			}));
 		}
 	}
-	status.reason = `${bots.length} queue(s) starting`;
-	for (const bot of bots) {
+	/*
+	 * One at a time, a few seconds apart.
+	 *
+	 * Every queue asks Showdown's login server for an assertion the moment its
+	 * socket opens, and ten of them opening together is ten requests from one
+	 * address inside a second. The first five were answered and the last five
+	 * were not, which is exactly the shape the ladder was in: Random Battle up,
+	 * RP Random Battle stuck as guests.
+	 */
+	const spacing = Number(process.env.PS_LADDER_LOGIN_SPACING_MS || 4000);
+	status.reason = `${bots.length} queue(s) starting, ${spacing}ms apart`;
+	bots.forEach((bot, i) => {
 		noteQueue(bot.name, { format: bot.format, difficulty: bot.difficulty, connected: false, error: null });
-		bot.connect();
-	}
+		const timer = setTimeout(() => bot.connect(), i * spacing);
+		if (timer.unref) timer.unref();
+	});
 	writeStatus();
 	return bots;
 }
