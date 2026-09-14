@@ -1,4 +1,6 @@
 'use strict';
+
+const { queenProtected } = require('./queens.js');
 /**
  * Queen Beam, Samantha's signature move.
  *
@@ -300,17 +302,45 @@ exports.Moves = {
  * with four other handlers, and a Z-move effect, and copying all of that across
  * to change one line would mean keeping the copy in step forever.
  */
-const QUEEN_ABILITIES = ['queenwrath', 'queensmorph'];
 
-function queenProtected(pokemon) {
-	if (!pokemon) return false;
-	if (QUEEN_ABILITIES.includes(pokemon.ability)) return true;
-	// Queen's Morph replaces its own ability when it Transforms; the volatile is
-	// what carries her protections afterwards.
-	return !!(pokemon.volatiles && pokemon.volatiles['queensmorph']);
+/**
+ * Imprison cannot lock a queen out of her own moves.
+ *
+ * Imprison is a status move, but Good as Gold never sees it: it is aimed at its
+ * own user, who then carries a volatile that reaches across and disables the
+ * foe's moves. Nothing is ever targeted at her, so nothing on her side gets a
+ * say - which is why she was being imprisoned like anyone else, verified
+ * against a control that was refused the same move.
+ *
+ * Two handlers do the work and both are answered. `onFoeDisableMove` is what
+ * greys the moves out, and `onFoeBeforeMove` is what refuses them when used;
+ * patching only the first would leave her able to pick a move and then fail.
+ */
+function patchImprison(Moves) {
+	const imprison = Moves && Moves.imprison;
+	if (!imprison || !imprison.condition || imprison.condition.velvetQueenSafe) return;
+	imprison.condition.velvetQueenSafe = true;
+
+	const disable = imprison.condition.onFoeDisableMove;
+	if (typeof disable === 'function') {
+		imprison.condition.onFoeDisableMove = function (pokemon) {
+			if (queenProtected(pokemon)) return;
+			return disable.call(this, pokemon);
+		};
+	}
+
+	const before = imprison.condition.onFoeBeforeMove;
+	if (typeof before === 'function') {
+		imprison.condition.onFoeBeforeMove = function (attacker, defender, move) {
+			if (queenProtected(attacker)) return;
+			return before.call(this, attacker, defender, move);
+		};
+	}
 }
 
 function patchMoves(Moves) {
+	patchImprison(Moves);
+
 	const destinyBond = Moves && Moves.destinybond;
 	if (!destinyBond || !destinyBond.condition) return Moves;
 

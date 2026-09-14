@@ -1,4 +1,6 @@
 'use strict';
+
+const { queenProtected } = require('./queens.js');
 /**
  * Samantha's two abilities.
  *
@@ -330,7 +332,7 @@ exports.Abilities = {
 		rating: 5,
 		num: -1,
 		shortDesc: "Doubles Atk and SpA, hits twice, contact moves ignore Protect. Shadow Shield, Sturdy, Magic Guard, Clear Body, Good as Gold. Untrappable, uncopyable.",
-		desc: "Attack and Special Attack are doubled, and its attacks hit twice, the second at a quarter power. Its moves ignore the target's Ability, and its contact moves ignore Protect and its relatives. Priority moves cannot touch this side, and it moves before anything else in its priority bracket, Trick Room included. At full HP, damage taken is halved. Survives a killing blow from full HP and is immune to OHKO moves. Takes no damage from anything that is not a move. Its stats cannot be lowered, and no status move used by another Pokemon affects it. It cannot be trapped, cannot be copied or swapped away by anything - Transform, Imposter and Wandering Spirit included - and Destiny Bond cannot take it down. Mold Breaker, Teravolt and Turboblaze cannot ignore any of it.",
+		desc: "Attack and Special Attack are doubled, and its attacks hit twice, the second at a quarter power. Its moves ignore the target's Ability, and its contact moves ignore Protect and its relatives. Priority moves cannot touch this side, and it moves before anything else in its priority bracket, Trick Room included. At full HP, damage taken is halved. Survives a killing blow from full HP and is immune to OHKO moves. Takes no damage from anything that is not a move. Its stats cannot be lowered, and no status move used by another Pokemon affects it. It cannot be trapped, cannot be copied or swapped away by anything - Transform, Imposter and Wandering Spirit included - and neither Destiny Bond nor Imprison can touch it. Mold Breaker, Teravolt and Turboblaze cannot ignore any of it.",
 	},
 
 	queensmorph: {
@@ -397,7 +399,7 @@ exports.Abilities = {
 		rating: 5,
 		num: -2,
 		shortDesc: "Transforms into the foe on entry, then +6 Speed. Keeps Shadow Shield, Sturdy, Magic Guard, Clear Body and Good as Gold.",
-		desc: "On switch-in, this Pokemon Transforms into the opposing Pokemon and then raises its Speed by 6 stages. Afterwards it keeps taking half damage at full HP, surviving a killing blow from full HP, ignoring damage that is not from a move, refusing stat drops and status moves from anything other than itself, moving first in its priority bracket even under Trick Room, being untrappable, being safe from Destiny Bond, and being impossible to copy or swap away with Transform, Imposter or Wandering Spirit - all of which outlive the Transform replacing this Ability with the copied one.",
+		desc: "On switch-in, this Pokemon Transforms into the opposing Pokemon and then raises its Speed by 6 stages. Afterwards it keeps taking half damage at full HP, surviving a killing blow from full HP, ignoring damage that is not from a move, refusing stat drops and status moves from anything other than itself, moving first in its priority bracket even under Trick Room, being untrappable, being safe from Destiny Bond and Imprison, and being impossible to copy or swap away with Transform, Imposter or Wandering Spirit - all of which outlive the Transform replacing this Ability with the copied one.",
 	},
 	/**
 	 * Verdant Surge - Grassy Surge, and then some.
@@ -544,12 +546,5 @@ function patchAbilities(Abilities) {
 }
 
 /** Shared with data/velvet/moves.js, which patches Destiny Bond the same way. */
-const QUEEN_ABILITIES = ['queenwrath', 'queensmorph'];
-
-function queenProtected(pokemon) {
-	if (!pokemon) return false;
-	if (QUEEN_ABILITIES.includes(pokemon.ability)) return true;
-	return !!(pokemon.volatiles && pokemon.volatiles['queensmorph']);
-}
 
 exports.patchAbilities = patchAbilities;
