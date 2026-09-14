@@ -56,12 +56,26 @@ function allGimmicks() {
 		pokemon.canTerastallize = null;
 	};
 
+	/*
+	 * Each gimmick only exists from the generation that invented it.
+	 *
+	 * RP runs in eight generations now, and handing a Gen 4 battle the
+	 * Terastallization code is not "all three gimmicks", it is a crash waiting
+	 * for somebody to click something. Mega Evolution starts in 6, Dynamax in 8,
+	 * Terastallization in 9, and each block below is gated on its own.
+	 */
+	const hasMega = battle.gen >= 6;
+	const hasDynamax = battle.gen >= 8;
+	const hasTera = battle.gen >= 9;
+
 	for (const side of battle.sides) {
 		// Everything Dynamax needs - the volatile, the Max moves, the base power
 		// tables - is still in the ninth-generation data, marked as belonging to
 		// the past. Only the two refusals are in the way.
-		side.dynamaxUsed = false;
-		side.canDynamaxNow = function () { return !this.dynamaxUsed; };
+		if (hasDynamax) {
+			side.dynamaxUsed = false;
+			side.canDynamaxNow = function () { return !this.dynamaxUsed; };
+		}
 
 		for (const pokemon of side.pokemon) {
 			// Terastallization is taken away from two kinds of Pokemon before a
@@ -70,47 +84,55 @@ function allGimmicks() {
 			// Clause. RP offers all three, so it is handed back here - at the start
 			// of the battle, where the tier's own rules have already been applied and
 			// undoing one cannot take the format list down with it.
-			if (!pokemon.canTerastallize && pokemon.teraType && !pokemon.getItem().zMove) {
+			if (hasTera && !pokemon.canTerastallize && pokemon.teraType && !pokemon.getItem().zMove) {
 				pokemon.canTerastallize = pokemon.teraType;
 			}
 
-			const dynamaxRequest = pokemon.getDynamaxRequest.bind(pokemon);
-			pokemon.getDynamaxRequest = function (skipChecks) {
-				if (this.m.rpGimmickUsed) return undefined;
-				const stone = this.canMegaEvo;
-				this.canMegaEvo = null;
-				try {
-					return dynamaxRequest(skipChecks);
-				} finally {
-					this.canMegaEvo = stone;
-				}
-			};
+			if (hasDynamax) {
+				const dynamaxRequest = pokemon.getDynamaxRequest.bind(pokemon);
+				pokemon.getDynamaxRequest = function (skipChecks) {
+					if (this.m.rpGimmickUsed) return undefined;
+					const stone = this.canMegaEvo;
+					this.canMegaEvo = null;
+					try {
+						return dynamaxRequest(skipChecks);
+					} finally {
+						this.canMegaEvo = stone;
+					}
+				};
+			}
 		}
 	}
 
 	const actions = battle.actions;
-	const runMegaEvo = actions.runMegaEvo.bind(actions);
-	actions.runMegaEvo = function (pokemon) {
-		const evolved = runMegaEvo(pokemon);
-		if (evolved) spend(pokemon);
-		return evolved;
-	};
+	if (hasMega && actions.runMegaEvo) {
+		const runMegaEvo = actions.runMegaEvo.bind(actions);
+		actions.runMegaEvo = function (pokemon) {
+			const evolved = runMegaEvo(pokemon);
+			if (evolved) spend(pokemon);
+			return evolved;
+		};
+	}
 
-	const terastallize = actions.terastallize.bind(actions);
-	actions.terastallize = function (pokemon) {
-		const result = terastallize(pokemon);
-		spend(pokemon);
-		return result;
-	};
+	if (hasTera && actions.terastallize) {
+		const terastallize = actions.terastallize.bind(actions);
+		actions.terastallize = function (pokemon) {
+			const result = terastallize(pokemon);
+			spend(pokemon);
+			return result;
+		};
+	}
 
 	// Dynamax has no method of its own - the battle applies it inline - so it is
 	// caught where the action is run rather than where it is written.
-	const runAction = battle.runAction.bind(battle);
-	battle.runAction = function (action) {
-		const result = runAction(action);
-		if (action.choice === 'runDynamax') spend(action.pokemon);
-		return result;
-	};
+	if (hasDynamax) {
+		const runAction = battle.runAction.bind(battle);
+		battle.runAction = function (action) {
+			const result = runAction(action);
+			if (action.choice === 'runDynamax') spend(action.pokemon);
+			return result;
+		};
+	}
 }
 
 /**
@@ -154,12 +176,23 @@ function levelFreeMoves(move, species, setSources, set) {
  */
 const RP_RULES = ['!Obtainable Misc'];
 
-/** One RP tier, standing on the National Dex tier of the same shape. */
-function rpTier(name, base, extra = {}) {
+/**
+ * One RP tier, standing on the Smogon tier of the same shape.
+ *
+ * `gen` picks which generation it is played in, and with it which list it
+ * stands on: the ninth and eighth have National Dex, so those are what RP uses
+ * there; nothing before the eighth has a National Dex at all, so those stand on
+ * the ordinary tier of that generation.
+ *
+ * `rules` is for a base that has to be argued with - see the Terastal note at
+ * the call sites, which is the only thing that uses it and the only thing that
+ * has ever taken this server down.
+ */
+function rpTier(name, base, { gen = 9, rules = [], ...extra } = {}) {
 	return {
-		name: `[Gen 9] RP ${name}`,
-		mod: 'gen9',
-		ruleset: [base, ...RP_RULES],
+		name: `[Gen ${gen}] RP ${name}`,
+		mod: `gen${gen}`,
+		ruleset: [base, ...RP_RULES, ...rules],
 		checkCanLearn: levelFreeMoves,
 		onBegin: allGimmicks,
 		searchShow: true,
@@ -169,6 +202,43 @@ function rpTier(name, base, extra = {}) {
 		...extra,
 	};
 }
+
+/**
+ * Terastallization, handed back where the tier took it away.
+ *
+ * RP offers all three gimmicks, and this is the one that needs help: National
+ * Dex bans Terastallization outright, and its clause is not a validator rule
+ * but an `onBegin` that walks every Pokemon and sets `canTerastallize = null`.
+ * That runs after the format's own onBegin, so allGimmicks handing it back was
+ * being undone a moment later - which is why Tera could be used in RP Ubers,
+ * whose base has no clause, and not in RP OU, whose base does.
+ *
+ * The rule is therefore removed rather than worked around. Removing a rule a
+ * format does not have is an error, not a no-op, and it is thrown while
+ * building the format list that every connecting client asks for - one
+ * `!Terastal Clause` too many took the whole server down once. So this is
+ * applied only to the three bases that actually carry it, which was measured
+ * rather than assumed:
+ *
+ *   National Dex, National Dex UU, National Dex RU   carry it
+ *   National Dex Ubers, National Dex AG, NU, PU, ZU  do not
+ *
+ * The check that every format builds its rule table runs before each deploy and
+ * is what would catch this changing upstream.
+ */
+const UNBAN_TERA = ['!Terastal Clause'];
+
+/**
+ * And the same argument for Dynamax, in the eighth generation.
+ *
+ * National Dex bans Dynamax there exactly as it bans Terastallization in the
+ * ninth, and for the same reason: it is the tier's defining decision. RP's
+ * defining decision is the opposite one, so the clause comes off.
+ *
+ * Measured as well: both Gen 8 National Dex and Gen 8 National Dex Ubers carry
+ * it, so both Gen 8 RP tiers remove it and nothing else does.
+ */
+const UNBAN_DYNAMAX = ['!Dynamax Clause'];
 
 exports.Formats = [
 	{
@@ -257,10 +327,12 @@ exports.Formats = [
 		rated: true,
 	},
 
+	// Above Ubers: the tier with nothing taken out of it.
+	rpTier('AG', '[Gen 9] National Dex AG'),
 	rpTier('Ubers', '[Gen 9] National Dex Ubers'),
-	rpTier('OU', '[Gen 9] National Dex'),
-	rpTier('UU', '[Gen 9] National Dex UU'),
-	rpTier('RU', '[Gen 9] National Dex RU'),
+	rpTier('OU', '[Gen 9] National Dex', { rules: UNBAN_TERA }),
+	rpTier('UU', '[Gen 9] National Dex UU', { rules: UNBAN_TERA }),
+	rpTier('RU', '[Gen 9] National Dex RU', { rules: UNBAN_TERA }),
 
 	/**
 	 * Below RU, where National Dex stops.
@@ -280,4 +352,44 @@ exports.Formats = [
 	rpTier('NU', '[Gen 9] NU'),
 	rpTier('PU', '[Gen 9] PU'),
 	rpTier('ZU', '[Gen 9] ZU'),
+
+	/**
+	 * The same idea, in the generations that came before.
+	 *
+	 * OU and Ubers only. Those are the two tiers every generation has had for
+	 * its whole life, they are the two anybody asks for, and a past generation
+	 * with nine RP tiers in it would be nine empty queues.
+	 *
+	 * What each stands on differs, and has to: the eighth generation has a
+	 * National Dex and uses it, so RP there is the same "everything that ever
+	 * existed" idea as the ninth. Nothing earlier has a National Dex at all -
+	 * the concept did not exist - so those stand on that generation's own OU and
+	 * Ubers, which is what those words mean there.
+	 *
+	 * Gimmicks follow the generation rather than the tier. allGimmicks hands out
+	 * Mega Evolution from the sixth, Dynamax from the eighth and
+	 * Terastallization from the ninth, so a Gen 8 RP battle has Megas and
+	 * Dynamax and no Tera, and a Gen 3 RP battle has none of the three - which
+	 * is the point of playing Gen 3.
+	 */
+	{
+		section: "RP Past Gens",
+		column: 1,
+	},
+	rpTier('Ubers', '[Gen 8] National Dex Ubers', { gen: 8, rules: UNBAN_DYNAMAX }),
+	rpTier('OU', '[Gen 8] National Dex', { gen: 8, rules: UNBAN_DYNAMAX }),
+	rpTier('Ubers', '[Gen 7] Ubers', { gen: 7 }),
+	rpTier('OU', '[Gen 7] OU', { gen: 7 }),
+	rpTier('Ubers', '[Gen 6] Ubers', { gen: 6 }),
+	rpTier('OU', '[Gen 6] OU', { gen: 6 }),
+	rpTier('Ubers', '[Gen 5] Ubers', { gen: 5 }),
+	rpTier('OU', '[Gen 5] OU', { gen: 5 }),
+	rpTier('Ubers', '[Gen 4] Ubers', { gen: 4 }),
+	rpTier('OU', '[Gen 4] OU', { gen: 4 }),
+	rpTier('Ubers', '[Gen 3] Ubers', { gen: 3 }),
+	rpTier('OU', '[Gen 3] OU', { gen: 3 }),
+	rpTier('Ubers', '[Gen 2] Ubers', { gen: 2 }),
+	rpTier('OU', '[Gen 2] OU', { gen: 2 }),
+	rpTier('Ubers', '[Gen 1] Ubers', { gen: 1 }),
+	rpTier('OU', '[Gen 1] OU', { gen: 1 }),
 ];

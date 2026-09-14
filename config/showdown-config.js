@@ -681,20 +681,27 @@ function goodbye() {
  * built by Showdown's own code, in the shape it expects.
  */
 function rpSectionFirst() {
+	// Both of them, in this order: the current generation first, the older ones
+	// under it, and everything Showdown ships below that.
+	const SECTIONS = ['RP', 'RP Past Gens'];
+
 	const formats = Dex.formats.all();
-	const ours = formats.filter(format => format.section === 'RP');
+	const ours = [];
+	for (const section of SECTIONS) {
+		ours.push(...formats.filter(format => format.section === section));
+	}
 	if (!ours.length) {
 		console.log('[formats] no RP section found; leaving the list alone');
 		return;
 	}
 
-	const rest = formats.filter(format => format.section !== 'RP');
+	const rest = formats.filter(format => !SECTIONS.includes(format.section));
 	formats.length = 0;
 	formats.push(...ours, ...rest);
 
 	// Built on first use and cached; drop it so the new order is what gets sent.
 	Rooms.global.formatList = null;
-	console.log(`[formats] RP first: ${ours.map(f => f.name).join(', ')}`);
+	console.log(`[formats] RP first: ${ours.length} format(s) across ${SECTIONS.length} section(s)`);
 }
 
 /**

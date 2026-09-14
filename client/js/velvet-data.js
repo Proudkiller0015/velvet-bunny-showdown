@@ -268,6 +268,7 @@
 	 * and the builder shows the tiers the tier is built from.
 	 */
 	var RP_TIERS = {
+		gen9rpag: 'gen9nationaldexag',
 		gen9rpou: 'gen9nationaldex',
 		gen9rpubers: 'gen9nationaldexubers',
 		gen9rpuu: 'gen9nationaldexuu',
@@ -277,6 +278,26 @@
 		gen9rpnu: 'gen9nu',
 		gen9rppu: 'gen9pu',
 		gen9rpzu: 'gen9zu',
+
+		// The past generations, each pointed at whatever it actually stands on.
+		// The eighth has a National Dex and uses it; nothing older has one, so
+		// those show that generation's own OU and Ubers.
+		gen8rpou: 'gen8nationaldex',
+		gen8rpubers: 'gen8nationaldexubers',
+		gen7rpou: 'gen7ou',
+		gen7rpubers: 'gen7ubers',
+		gen6rpou: 'gen6ou',
+		gen6rpubers: 'gen6ubers',
+		gen5rpou: 'gen5ou',
+		gen5rpubers: 'gen5ubers',
+		gen4rpou: 'gen4ou',
+		gen4rpubers: 'gen4ubers',
+		gen3rpou: 'gen3ou',
+		gen3rpubers: 'gen3ubers',
+		gen2rpou: 'gen2ou',
+		gen2rpubers: 'gen2ubers',
+		gen1rpou: 'gen1ou',
+		gen1rpubers: 'gen1ubers',
 	};
 
 	function installRpTiers() {
