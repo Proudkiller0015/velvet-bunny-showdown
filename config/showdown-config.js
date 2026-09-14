@@ -340,6 +340,73 @@ const wantedRung = new Map();
  * repository is on a clock of its own anyway. On the way out it is flushed once
  * more, so the last arrival before a restart is not the one that gets lost.
  */
+/**
+ * The guest book as a table, for whoever is asking.
+ *
+ * Written once and used twice - the chat command and the page in the client -
+ * because two copies of a table are two tables that drift apart. Returns the
+ * HTML, or `{ error }` for the caller to raise in whichever way suits it.
+ */
+function velvetVisitorTable(target, limit) {
+	const rows = velvetRoster().all();
+	if (!rows.length) return `<b>Everyone who has been here</b><br/>Nobody has been written down yet.`;
+
+	const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+	const wanted = toID(target);
+	const shown = wanted ? rows.filter(row => row.id.includes(wanted)) : rows;
+	if (!shown.length) return { error: `Nobody here matches "${target}".` };
+
+	// A day is the useful unit: "who came by this week" rather than a timestamp
+	// nobody reads.
+	const when = stamp => {
+		const then = new Date(stamp);
+		if (isNaN(then)) return '?';
+		const days = Math.floor((Date.now() - then.getTime()) / 86400000);
+		if (days <= 0) return 'today';
+		if (days === 1) return 'yesterday';
+		if (days < 30) return `${days} days ago`;
+		return then.toISOString().slice(0, 10);
+	};
+
+	const table = shown.slice(0, limit).map(row => {
+		const here = Users.get(row.id);
+		const online = here && here.connected ? ' <small style="color:#3a3">online</small>' : '';
+		return `<tr><td style="padding:2px 8px">${esc(row.name)}${online}</td>` +
+			`<td style="padding:2px 8px">${when(row.last)}</td>` +
+			`<td style="padding:2px 8px">${when(row.first)}</td>` +
+			`<td style="padding:2px 8px;text-align:right">${row.visits}</td></tr>`;
+	}).join('');
+
+	return `<b>Everyone who has been here</b> &mdash; ${shown.length}` +
+		(wanted ? ` matching <code>${esc(target)}</code>` : ` account(s)`) + `<br/>` +
+		`<table style="border-collapse:collapse">` +
+		`<tr><th style="padding:2px 8px;text-align:left">Name</th>` +
+		`<th style="padding:2px 8px;text-align:left">Last seen</th>` +
+		`<th style="padding:2px 8px;text-align:left">First seen</th>` +
+		`<th style="padding:2px 8px;text-align:right">Visits</th></tr>${table}</table>` +
+		(shown.length > limit ? `<small>Showing the ${limit} most recent. Add a name to narrow it.</small>` : '');
+}
+
+/**
+ * And the same thing as a panel, which is where it belongs.
+ *
+ * A reply box is a message in a room: it scrolls away, it cannot be reopened,
+ * and a hundred names in one is unreadable. A page opens beside the rooms list
+ * like the ladder does, stays there, and can hold the whole list.
+ *
+ * Gated the same way as the command. `checkCan` works here too - a page has the
+ * same context - so there is one rule about who may see this, not two.
+ */
+exports.pages = {
+	players(query, user, connection) {
+		this.checkCan('bypassall');
+		const html = velvetVisitorTable((query || []).join('-'), 500);
+		if (typeof html !== 'string') throw new Chat.ErrorMessage(html.error);
+		this.title = '[Guest book]';
+		return `<div class="pad">${html}</div>`;
+	},
+};
+
 let roster = null;
 function velvetRoster() {
 	if (roster) return roster;
@@ -550,49 +617,11 @@ exports.commands = {
 	 */
 	visitors(target, room, user) {
 		this.checkCan('bypassall');   // owner and administrator only
-		const roster = velvetRoster();
-		const rows = roster.all();
-		if (!rows.length) {
-			return this.sendReplyBox(`Nobody has been written down yet.`);
-		}
-
-		const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-		const wanted = toID(target);
-		const shown = wanted ? rows.filter(row => row.id.includes(wanted)) : rows;
-		if (!shown.length) throw new Chat.ErrorMessage(`Nobody here matches "${target}".`);
-
-		// A day is the useful unit: "who came by this week" rather than a
-		// timestamp nobody reads.
-		const when = stamp => {
-			const then = new Date(stamp);
-			if (isNaN(then)) return '?';
-			const days = Math.floor((Date.now() - then.getTime()) / 86400000);
-			if (days <= 0) return 'today';
-			if (days === 1) return 'yesterday';
-			if (days < 30) return `${days} days ago`;
-			return then.toISOString().slice(0, 10);
-		};
-
-		const LIMIT = 100;
-		const table = shown.slice(0, LIMIT).map(row => {
-			const here = Users.get(row.id);
-			const online = here && here.connected ? ' <small style="color:#3a3">online</small>' : '';
-			return `<tr><td style="padding:2px 8px">${esc(row.name)}${online}</td>` +
-				`<td style="padding:2px 8px">${when(row.last)}</td>` +
-				`<td style="padding:2px 8px">${when(row.first)}</td>` +
-				`<td style="padding:2px 8px;text-align:right">${row.visits}</td></tr>`;
-		}).join('');
-
-		this.sendReplyBox(
-			`<b>Everyone who has been here</b> &mdash; ${shown.length}` +
-			(wanted ? ` matching <code>${esc(target)}</code>` : ` account(s)`) + `<br/>` +
-			`<table style="border-collapse:collapse">` +
-			`<tr><th style="padding:2px 8px;text-align:left">Name</th>` +
-			`<th style="padding:2px 8px;text-align:left">Last seen</th>` +
-			`<th style="padding:2px 8px;text-align:left">First seen</th>` +
-			`<th style="padding:2px 8px;text-align:right">Visits</th></tr>${table}</table>` +
-			(shown.length > LIMIT ? `<small>Showing the ${LIMIT} most recent. Add a name to narrow it.</small>` : '')
-		);
+		const html = velvetVisitorTable(target, 100);
+		if (typeof html !== 'string') throw new Chat.ErrorMessage(html.error);
+		this.sendReplyBox(html +
+			`<br/><small>A longer list, in its own panel: ` +
+			`<button class="button" name="joinRoom" value="view-players">Open the guest book</button></small>`);
 	},
 	visitorshelp: [
 		`/players - everyone who has ever been on this server, newest first. Owner and admin only.`,

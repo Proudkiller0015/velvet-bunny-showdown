@@ -134,6 +134,19 @@ const said = c => c.lines.join('\n');
 	check('the owner is shown the list', /Everyone who has been here/.test(ownerSaw));
 	check('the list names a visitor', /RosterVisitor/.test(ownerSaw));
 
+	// And the same list as a panel, which is what the button in the client
+	// opens. Same rule, and worth checking separately: a page is a different
+	// code path from a command and could easily be gated only by accident.
+	await say(owner, `/join view-players`);
+	const ownerPage = said(owner);
+	check('the owner can open the guest book page',
+		/pagehtml[\s\S]*Everyone who has been here/.test(ownerPage));
+
+	await say(visitor, `/join view-players`);
+	const visitorPage = said(visitor);
+	check('an ordinary player cannot open the page',
+		!/pagehtml[\s\S]*Everyone who has been here/.test(visitorPage));
+
 	// Nobody else may.
 	await say(visitor, `/players`);
 	const visitorSaw = said(visitor);

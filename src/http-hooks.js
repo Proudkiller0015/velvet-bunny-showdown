@@ -430,6 +430,17 @@ function serveHealth(url, res) {
 			heapTotalMB: mb(memory.heapTotal),
 			externalMB: mb(memory.external),
 		},
+		/*
+		 * The ceiling V8 is actually working to.
+		 *
+		 * `--max-old-space-size` is set in the host's configuration, and whether
+		 * that configuration reaches the running service is not something anyone
+		 * here can see - a blueprint is only applied to a service that is linked
+		 * to it, and a service created by hand ignores the file entirely. This is
+		 * the number that says which of those is true: near the configured cap
+		 * and the file is live, near Node's own default and it never was.
+		 */
+		heapLimitMB: mb(require('v8').getHeapStatistics().heap_size_limit),
 		host: {
 			totalMB: mb(os.totalmem()),
 			freeMB: mb(os.freemem()),

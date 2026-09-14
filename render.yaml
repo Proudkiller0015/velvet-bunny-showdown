@@ -31,6 +31,13 @@ services:
         value: hard
       - key: PS_SERVERID
         value: velvetbunny
+      # Showdown's friends system: requests, a friends list, and being told when
+      # one of them comes online. It costs a child process holding the database,
+      # measured at 51MB - see the note in config/showdown-config.js - which is
+      # why it is a switch rather than simply on. Turn it off by setting this to
+      # anything but 1 if the container starts running out of room.
+      - key: PS_FRIENDS
+        value: "1"
       # Smogon set data is cached here between requests. Render's free disk is
       # ephemeral, which is fine: a cold cache just re-fetches on first use.
       - key: PS_CACHE_DIR

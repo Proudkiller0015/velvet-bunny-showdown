@@ -83,6 +83,9 @@ function pickWeighted(rng, table, reject) {
 	return entries[0][0];
 }
 
+/** Showdown refuses a nickname longer than this, which Cross Evolution cares about. */
+const MAX_NICKNAME = 18;
+
 const NATURES_PHYS = ['Adamant', 'Jolly'];
 const NATURES_SPEC = ['Modest', 'Timid'];
 const NATURES_BULK = ['Careful', 'Bold', 'Impish', 'Calm'];
@@ -887,6 +890,21 @@ class TeamBuilder {
 		const wantStage3 = !!species.prevo;
 		const options = ctx.evoTargets.filter(s => {
 			if (s.baseSpecies === species.baseSpecies || s.name === avoid) return false;
+			/*
+			 * It has to fit in a nickname, because it *is* the nickname.
+			 *
+			 * Cross Evolution names the target by nicknaming the Pokemon after
+			 * it, and Showdown refuses a nickname over eighteen characters. So
+			 * Basculin-White-Striped and friends are not targets here however
+			 * legal the evolution is - the set comes back "20 characters long,
+			 * but should be 18 or less", which is not a complaint the repair pass
+			 * can do anything with.
+			 *
+			 * This was a third of team builds for this format failing outright,
+			 * and it looked like flakiness because it depends entirely on which
+			 * targets the draw happened to land on.
+			 */
+			if (s.name.length > MAX_NICKNAME) return false;
 			const prevo = ctx.dex.species.get(s.prevo);
 			return !!prevo.prevo === wantStage3;
 		});

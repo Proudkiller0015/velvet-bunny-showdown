@@ -116,7 +116,8 @@ function build(upstream) {
 	html = html.replace(teambuilderTables, match => `${match}\n<script src="js/velvet-signatures.js"></script>
 <script src="js/velvet-buffs.js"></script>
 <script src="js/velvet-data.js"></script>
-<script src="js/velvet-matchmaking.js"></script>`);
+<script src="js/velvet-matchmaking.js"></script>
+<script src="js/velvet-roster.js"></script>`);
 
 	// What this server is, in the panel their news would have been in.
 	html = html.replace(
