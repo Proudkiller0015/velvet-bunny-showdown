@@ -114,6 +114,22 @@ const moves = {};
 for (const id of OUR_MOVES) moves[id] = moveRow(Dex.moves.get(id));
 const abilities = {};
 for (const id of OUR_ABILITIES) abilities[id] = abilityRow(Dex.abilities.get(id));
+
+/*
+ * Everything this server changed about a move or ability that already existed.
+ *
+ * Not the same as the tables above, which are things no client has ever heard
+ * of. These are rows the client already has, and has wrong: Dark Void at 50%
+ * accuracy, Recover at 5 PP, Protean described as once per switch-in. A number
+ * a player reads and a number the game uses have to be the same number.
+ *
+ * The values come straight off the patched dex, so this cannot drift from what
+ * the server actually does.
+ */
+const { CHANGED } = require(path.join(PACKAGE, 'dist', 'data', 'velvet', 'unnerfs.js'));
+const overrides = { moves: {}, abilities: {} };
+for (const id of CHANGED.moves) overrides.moves[id] = moveRow(Dex.moves.get(id));
+for (const id of CHANGED.abilities) overrides.abilities[id] = abilityRow(Dex.abilities.get(id));
 const items = {};
 for (const id of OUR_ITEMS) items[id] = itemRow(Dex.items.get(id));
 
@@ -161,6 +177,7 @@ window.VelvetBuffs = {
 \tabilities: ${JSON.stringify(abilities)},
 \titems: ${JSON.stringify(items)},
 \tsearch: ${JSON.stringify(search)},
+\toverrides: ${JSON.stringify(overrides)},
 
 \t/** What this Pokemon gained, or an empty record. */
 \tget: function (speciesid) {
@@ -172,7 +189,8 @@ window.VelvetBuffs = {
 fs.writeFileSync(OUT, file);
 
 console.log(`${Object.keys(bySpecies).length} buffed Pokemon, ${Object.keys(moves).length} moves, ` +
-	`${Object.keys(abilities).length} abilities, ${Object.keys(items).length} items`);
+	`${Object.keys(abilities).length} abilities, ${Object.keys(items).length} items, ` +
+	`${Object.keys(overrides.moves).length + Object.keys(overrides.abilities).length} corrected rows`);
 console.log(`${Math.round(file.length / 1024)}KB -> ${OUT}`);
 for (const [id, record] of Object.entries(bySpecies)) {
 	console.log(`  ${Dex.species.get(id).name}: +${record.moves.length} move(s)` +

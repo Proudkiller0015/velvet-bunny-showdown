@@ -136,5 +136,23 @@ function unnerfAbilities(Abilities) {
 	return Abilities;
 }
 
+/**
+ * What this file changes, by name.
+ *
+ * The client builds its dex from Showdown's own data files, so anything
+ * corrected here is corrected on the server and nowhere else: the teambuilder
+ * went on saying Dark Void was 50% accurate long after it was 80% in every
+ * battle. A number a player reads and a number the game uses have to be the
+ * same number.
+ *
+ * scripts/build-buffs.js reads this list, takes the patched values straight off
+ * the dex, and ships them to the client. Add an un-nerf above and it reaches the
+ * builder without anything else being touched.
+ */
+exports.CHANGED = {
+	moves: ['darkvoid', ...Object.keys(RECOVERY_PP)],
+	abilities: ['protean', 'libero', 'battlebond'],
+};
+
 exports.unnerfMoves = unnerfMoves;
 exports.unnerfAbilities = unnerfAbilities;

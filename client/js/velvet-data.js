@@ -659,9 +659,11 @@
 		// The rows the CDN has no idea about.
 		if (window.BattleMovedex) {
 			for (var m in buffs.moves) if (!window.BattleMovedex[m]) window.BattleMovedex[m] = buffs.moves[m];
+			correct(window.BattleMovedex, buffs.overrides && buffs.overrides.moves);
 		} else ready = false;
 		if (window.BattleAbilities) {
 			for (var a in buffs.abilities) if (!window.BattleAbilities[a]) window.BattleAbilities[a] = buffs.abilities[a];
+			correct(window.BattleAbilities, buffs.overrides && buffs.overrides.abilities);
 		} else ready = false;
 		if (window.BattleItems) {
 			for (var i in buffs.items) if (!window.BattleItems[i]) window.BattleItems[i] = buffs.items[i];
@@ -701,6 +703,32 @@
 		} else ready = false;
 
 		return ready;
+	}
+
+	/**
+	 * Rows the client already has, and has wrong.
+	 *
+	 * The client builds its dex from Showdown's own data files, so anything this
+	 * server corrects is corrected in the battle and nowhere a player can read
+	 * it: the teambuilder went on saying Dark Void was 50% accurate long after
+	 * it was 80% in every battle, and Recover still claimed 5 PP. A number
+	 * somebody reads and the number the game uses have to be the same number,
+	 * and that goes for the description under it too.
+	 *
+	 * Fields are copied one at a time rather than the row being replaced: the
+	 * client keeps things on these objects that the server has never heard of,
+	 * and a wholesale swap would quietly drop them.
+	 */
+	function correct(table, rows) {
+		if (!table || !rows) return;
+		for (var id in rows) {
+			var target = table[id];
+			if (!target) continue;
+			var row = rows[id];
+			for (var key in row) {
+				if (row[key] !== undefined && row[key] !== null) target[key] = row[key];
+			}
+		}
 	}
 
 	/** The buffed moves this Pokemon got, if any. */
