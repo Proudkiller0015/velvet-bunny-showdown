@@ -192,6 +192,68 @@ exports.Moves = {
 	 * from there the action is still sitting in the queue waiting to be sorted.
 	 * So it reaches in and moves itself in front of them.
 	 */
+	/**
+	 * Nuzleaf's signature: the sale, called in.
+	 *
+	 * Final Gambit with priority - the user's remaining HP dealt as damage, and
+	 * the user faints for it. On its own that is a trade. Held with a Broken
+	 * Pact it is not a trade at all: the faint is the *point*, because the item
+	 * answers a faint by bringing the Nuzleaf back as Nuzleaf-SOLD with 190
+	 * Attack, 190 Special Attack and 190 Speed. Full HP spent as damage, then a
+	 * full bar back on a body built entirely out of revenge.
+	 *
+	 * Nothing here reaches for the item. The move faints the user the way Final
+	 * Gambit does, and the item is listening for exactly that - which is also
+	 * why being knocked out by an attack works identically. One hook, both
+	 * roads.
+	 *
+	 * Dark rather than Fighting, so nothing is immune to it: fixed damage still
+	 * checks type immunity, and a Ghost walking off Final Gambit untouched would
+	 * be a hole in a move whose whole function is to be paid in full.
+	 */
+	merchantscall: {
+		num: -9,
+		gen: 9,
+		name: "Merchant's Call",
+		type: "Dark",
+		category: "Special",
+		basePower: 0,
+		accuracy: 100,
+		pp: 5,
+		// Ahead of the ordinary bracket, so the trade happens on her terms.
+		priority: 1,
+
+		damageCallback(pokemon) {
+			const damage = pokemon.hp;
+			pokemon.faint();
+			return damage;
+		},
+		selfdestruct: "ifHit",
+
+		/*
+		 * Nobody else's move, enforced rather than implied.
+		 *
+		 * Samantha learns every move in the game, so "only Nuzleaf" has to be a
+		 * check rather than a learnset - and the SOLD forme passes it too, since
+		 * `baseSpecies` is still Nuzleaf, which is the correct and funnier answer:
+		 * it can sell itself again, for nothing, because the pact is already
+		 * spent.
+		 */
+		onTry(source) {
+			if (source.baseSpecies.baseSpecies === 'Nuzleaf') return;
+			this.add('-fail', source);
+			this.hint("Merchant's Call only works for Nuzleaf.");
+			return null;
+		},
+
+		flags: { protect: 1, mirror: 1, metronome: 1, noparentalbond: 1 },
+		secondary: null,
+		target: "normal",
+		contestType: "Tough",
+		shortDesc: "Deals damage equal to the user's HP. The user faints. Nuzleaf only.",
+		desc: "Deals damage to the target equal to the user's current HP, and the user faints. Fails unless the user is Nuzleaf. If the user is holding a Broken Pact, fainting this way returns it to the field as Nuzleaf-SOLD at full HP and uses the item up.",
+	},
+
 	queensblitz: {
 		num: -8,
 		gen: 9,   // negative `num` leaves this 0, and gen 0 is "does not exist yet"

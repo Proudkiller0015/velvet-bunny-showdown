@@ -452,6 +452,8 @@ const avatarRights = {
 
 	lavit: ['lavit.png'],
 
+	thegloriousfemboy: ['thegloriousfemboy.png'],
+
 };
 
 // Every rung of the ladder wears the same face - they are all the same bot.

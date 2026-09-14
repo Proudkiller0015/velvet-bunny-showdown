@@ -35,10 +35,10 @@ const OUT = path.join(ROOT, 'client', 'js', 'velvet-calc-data.js');
 const { Dex } = require(path.join(PACKAGE, 'dist', 'sim', 'dex.js'));
 
 /** Everything this server invented, as opposed to everything it changed. */
-const SPECIES = ['samantha'];
-const MOVES = ['junglerush', 'cinderrush', 'torrentrush', 'wavecharge', 'queenbeam', 'queensdance', 'queensheal', 'queensblitz'];
-const ABILITIES = ['verdantsurge', 'solarsurge', 'tidalsurge', 'queenwrath', 'queensmorph'];
-const ITEMS = ['elementalbanana'];
+const SPECIES = ['samantha', 'nuzleafsold'];
+const MOVES = ['junglerush', 'cinderrush', 'torrentrush', 'wavecharge', 'queenbeam', 'queensdance', 'queensheal', 'queensblitz', 'merchantscall'];
+const ABILITIES = ['verdantsurge', 'solarsurge', 'tidalsurge', 'queenwrath', 'queensmorph', 'norefunds'];
+const ITEMS = ['elementalbanana', 'brokenpact'];
 
 /**
  * The calculator's own field names, which are not Showdown's.

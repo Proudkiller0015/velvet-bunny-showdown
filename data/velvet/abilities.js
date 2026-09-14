@@ -209,6 +209,46 @@ function clearBody(name) {
 }
 
 exports.Abilities = {
+	/**
+	 * Nuzleaf-SOLD's, and the joke is the mechanic.
+	 *
+	 * Everything it does is a refusal to be sent back. It cannot be dragged out
+	 * by Roar, Whirlwind, Dragon Tail, Circle Throw or a Red Card, and it cannot
+	 * be talked down by Intimidate on the way in - the two things in the game
+	 * that amount to "no, go back". The sale is final.
+	 *
+	 * Nothing here props up its survival, deliberately. 10 HP behind 10 in both
+	 * defences is the design; an ability that made it durable would be an
+	 * apology for the spread.
+	 */
+	norefunds: {
+		name: "No Refunds",
+		num: -6,
+		gen: 9,
+		rating: 2,
+
+		// Suction Cups, verbatim: the drag-out is refused, not merely survived.
+		onDragOutPriority: 1,
+		onDragOut(pokemon) {
+			this.add('-activate', pokemon, 'ability: No Refunds');
+			return null;
+		},
+
+		// And Inner Focus's half of Intimidate immunity, written the way Oblivious
+		// writes it - the drop is deleted rather than the ability being asked to
+		// undo it afterwards.
+		onTryBoost(boost, target, source, effect) {
+			if (effect.name === 'Intimidate' && boost.atk) {
+				delete boost.atk;
+				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: No Refunds', `[of] ${target}`);
+			}
+		},
+
+		flags: {},
+		shortDesc: "Cannot be forced out, and is immune to Intimidate.",
+		desc: "This Pokemon cannot be forced to switch out by another Pokemon's attack or item, and its Attack cannot be lowered by Intimidate.",
+	},
+
 	queenwrath: {
 		name: "Queen Wrath",
 		// Announced on entry the way Mold Breaker is, so the other player knows what

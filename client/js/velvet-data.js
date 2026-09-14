@@ -26,7 +26,78 @@
 		pansage: 1, simisage: 1, pansear: 1, simisear: 1, panpour: 1, simipour: 1,
 	};
 
+	/**
+	 * The art this server serves itself, for Pokemon no CDN has a picture of.
+	 *
+	 * Three different calls want three different shapes of the same answer - the
+	 * battle sprite, the little list icon, the teambuilder's set box - so the
+	 * files are named once here and the three hooks below read this rather than
+	 * each carrying its own copy. Adding a Pokemon is adding a row.
+	 *
+	 * `still` is required; `animated` is optional and used only when the viewer
+	 * has animation on, which is the same pair of preferences the client checks
+	 * for everybody else. Each entry is [file, width, height], because these are
+	 * single images rather than cells in a sprite sheet and nothing else knows
+	 * how big they are.
+	 */
+	var ART = {
+		samantha: {
+			animated: { front: ['samantha-front.gif', 80, 140], back: ['samantha-back.gif', 74, 116] },
+			still: { front: ['samantha.png', 95, 140], back: ['samantha-back.png', 68, 116] },
+			y: { front: -14, back: -6 },
+			icon: 'samantha-icon.png',
+			builder: 'background-image:url(#SPRITES#samantha.png);background-position:28px 2px;' +
+				'background-size:50px 74px;background-repeat:no-repeat;',
+		},
+		nuzleafsold: {
+			// One drawing, shown from both sides: the back is the front mirrored
+			// and a little larger, the way a Pokemon nearer the camera is drawn.
+			// A real rear view would be better and there isn't one.
+			still: { front: ['nuzleaf-sold.png', 86, 96], back: ['nuzleaf-sold-back.png', 93, 104] },
+			y: { front: 0, back: 0 },
+			icon: 'nuzleaf-sold-icon.png',
+		},
+	};
+
+	// Which of ours this is, if it is one of ours at all. The client passes a
+	// name in some places and a Pokemon in others, and its two kinds of Pokemon
+	// do not agree on how to ask: a battle's own objects carry `speciesForme` as
+	// a plain property, while a set from the builder answers getSpeciesForme().
+	// Reading only one of them is why Samantha rendered everywhere except the
+	// team preview.
+	function oursFor(pokemon) {
+		var name = pokemon;
+		if (name && typeof name === 'object') {
+			name = (name.getSpeciesForme && name.getSpeciesForme()) ||
+				name.speciesForme || name.species || name.name || '';
+		}
+		if (typeof name !== 'string' || !name) return null;
+		return ART[window.toID(name)] || null;
+	}
+
 	var SPECIES = {
+		// Reachable only by a Nuzleaf fainting with a Broken Pact, so the
+		// teambuilder should never offer it: Custom keeps it out of every legal
+		// list, exactly as it does for Samantha. It is here at all because the
+		// battle sends `|detailschange|...|Nuzleaf-SOLD` the moment it happens,
+		// and a client with no row for that draws a substitute and reports the
+		// wrong types in every tooltip.
+		nuzleafsold: {
+			num: -2,
+			name: "Nuzleaf-SOLD",
+			baseSpecies: "Nuzleaf",
+			forme: "SOLD",
+			types: ["Grass", "Dark"],
+			baseStats: { hp: 10, atk: 190, def: 10, spa: 190, spd: 10, spe: 190 },
+			abilities: { 0: "No Refunds" },
+			heightm: 1,
+			weightkg: 28,
+			color: "Brown",
+			eggGroups: ["Field", "Grass"],
+			tier: "Illegal",
+			isNonstandard: "Custom",
+		},
+
 		samantha: {
 			num: -1,
 			name: "Samantha",
@@ -84,6 +155,12 @@
 	};
 
 	var ABILITIES = {
+		norefunds: {
+			num: -6, name: "No Refunds", rating: 2,
+			shortDesc: "Cannot be forced out, and is immune to Intimidate.",
+			desc: "This Pokemon cannot be forced to switch out by another Pokemon's attack or item, and its Attack cannot be lowered by Intimidate.",
+			isNonstandard: "Custom",
+		},
 		queenwrath: {
 			num: -1, name: "Queen Wrath", rating: 5,
 			shortDesc: "Doubles Atk and SpA, ignores abilities, blocks priority, Shadow Shield, Sturdy, Magic Guard. Mold Breaker cannot touch it.",
@@ -528,30 +605,25 @@
 			// property, while a set from the builder answers `getSpeciesForme()`.
 			// Reading only one of them is why she rendered everywhere except the
 			// team preview.
-			var name = pokemon;
-			if (name && typeof name === 'object') {
-				name = (name.getSpeciesForme && name.getSpeciesForme()) ||
-					name.speciesForme || name.species || name.name || '';
-			}
-			if (typeof name === 'string' && window.toID(name) === 'samantha') {
+			var ours = oursFor(pokemon);
+			if (ours) {
 				// Animated unless this viewer has turned animation off, which is the
 				// same pair of preferences the client checks for everyone else - so
-				// the 2D/animated switch in Options does something for her too.
+				// the 2D/animated switch in Options does something here too.
 				var animated = true;
 				try {
 					animated = !window.Dex.prefs('noanim') && !window.Dex.prefs('nogif');
 				} catch (e) { /* no prefs yet; animation is the default */ }
 
-				var art = animated ?
-					(isFront ? ['samantha-front.gif', 80, 140] : ['samantha-back.gif', 74, 116]) :
-					(isFront ? ['samantha.png', 95, 140] : ['samantha-back.png', 68, 116]);
+				var set = (animated && ours.animated) || ours.still;
+				var art = isFront ? set.front : set.back;
 
 				data.url = SPRITES + art[0];
 				data.w = art[1];
 				data.h = art[2];
-				data.y = isFront ? -14 : -6;
+				data.y = (ours.y && (isFront ? ours.y.front : ours.y.back)) || 0;
 				data.pixelated = true;
-				// Whatever she is drawn from, it is one file - there is no sprite sheet
+				// Whatever it is drawn from, it is one file - there is no sprite sheet
 				// for the client to index into and no cry to play.
 				data.isBackSprite = !isFront;
 				data.cryurl = '';
@@ -657,11 +729,8 @@
 
 		var original = window.Dex.getTeambuilderSprite;
 		window.Dex.getTeambuilderSprite = function (set, gen) {
-			var name = set && (set.species || set.speciesForme || set.name || '');
-			if (window.toID(name) === 'samantha') {
-				return 'background-image:url(' + SPRITES + 'samantha.png);' +
-					'background-position:28px 2px;background-size:50px 74px;background-repeat:no-repeat;';
-			}
+			var ours = oursFor(set);
+			if (ours && ours.builder) return ours.builder.split('#SPRITES#').join(SPRITES);
 			return original.call(this, set, gen);
 		};
 		return true;
@@ -682,10 +751,9 @@
 		var original = window.Dex.getPokemonIcon;
 		window.Dex.__velvetIcon = true;
 		window.Dex.getPokemonIcon = function (pokemon, facingLeft) {
-			var name = pokemon;
-			if (name && typeof name === 'object') name = name.species || name.speciesForme || name.name;
-			if (typeof name === 'string' && window.toID(name) === 'samantha') {
-				return 'background:transparent url(' + SPRITES + 'samantha-icon.png) no-repeat scroll 0px 0px';
+			var ours = oursFor(pokemon);
+			if (ours && ours.icon) {
+				return 'background:transparent url(' + SPRITES + ours.icon + ') no-repeat scroll 0px 0px';
 			}
 			try {
 				return original.call(this, pokemon, facingLeft);
@@ -1120,6 +1188,13 @@
 	 * happens to sit at position zero. Ours is a file of its own, served from
 	 * this server, the same way her sprites are.
 	 */
+	// Ours, so there is no cell for them on Showdown's item sheet - each is a
+	// file of its own in this server's sprites folder.
+	var ITEM_ICONS = {
+		elementalbanana: 'elemental-banana.png',
+		brokenpact: 'broken-pact.png',
+	};
+
 	function installItemIcon() {
 		if (!window.Dex || !window.Dex.getItemIcon) return false;
 		if (window.Dex.__velvetItemIcon) return true;
@@ -1128,8 +1203,9 @@
 		window.Dex.getItemIcon = function (item) {
 			var name = item;
 			if (name && typeof name === 'object') name = name.name || name.id || '';
-			if (typeof name === 'string' && window.toID(name) === 'elementalbanana') {
-				return 'background:transparent url(' + SPRITES + 'elemental-banana.png) no-repeat scroll 0px 0px';
+			var file = typeof name === 'string' ? ITEM_ICONS[window.toID(name)] : null;
+			if (file) {
+				return 'background:transparent url(' + SPRITES + file + ') no-repeat scroll 0px 0px';
 			}
 			try {
 				return original.call(this, item);

@@ -162,9 +162,24 @@ const CHANDELURE = {
 	chandeluremega: { abilities: ['Shadow Tag'], sole: true },
 };
 
+/**
+ * Nuzleaf, and the one move nobody else has any business with.
+ *
+ * Merchant's Call is Nuzleaf's alone - the move checks the species itself, so
+ * this learnset entry is only about who can *select* it - and it is here rather
+ * than in a learnset file because that is where every other addition of ours
+ * goes: one table, one record of what changed, one client section listing it.
+ *
+ * Not Seedot and not Shiftry. The pact was made with the one in the middle.
+ */
+const NUZLEAF = {
+	nuzleaf: { moves: ['merchantscall'] },
+};
+
 exports.Buffs = {
 	...MONKEYS,
 	...CHANDELURE,
+	...NUZLEAF,
 };
 
 /**

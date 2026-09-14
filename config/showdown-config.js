@@ -915,7 +915,7 @@ exports.startuphook = function () {
 		.split(',').map(n => toID(n)).filter(n => n);
 	// Voiced regulars. Same reasoning as the owners: this cannot go in
 	// usergroups.csv without locking them out of logging in at all.
-	const voiced = (process.env.PS_VOICED || 'dana3166,Lady Milim,Simia Ignis,lavit')
+	const voiced = (process.env.PS_VOICED || 'dana3166,Lady Milim,Simia Ignis,lavit,thegloriousfemboy')
 		.split(',').map(n => toID(n)).filter(n => n);
 	// Every account the bot plays under, worked out once at the top of this file
 	// from the same module the queues name themselves with. When these were worked

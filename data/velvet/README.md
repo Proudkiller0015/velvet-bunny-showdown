@@ -100,6 +100,72 @@ printed every turn is not an explanation any more.
 **Light Ball** works on her as well as Pikachu — the item is hard-coded to one
 species, so it is patched rather than her.
 
+## Nuzleaf, and the Broken Pact
+
+The other Pokémon in here, and the only one that is somebody else's: a real
+species, in every tier it was already in, carrying one item it should probably
+not have been given.
+
+| | |
+| --- | --- |
+| **Broken Pact** (item) | A reminder of a Trainer who abandoned their partner when it mattered most. A Nuzleaf that would faint while holding it does not faint: it returns at once as **Nuzleaf-SOLD**, at full HP, cured of status, with the item used up. Nuzleaf only, once per battle. |
+| **Nuzleaf-SOLD** (forme) | Grass / Dark, **10 / 190 / 10 / 190 / 10 / 190**. Six hundred points spent entirely on going first and hitting hardest, with nothing left over for surviving. Ability: **No Refunds** — cannot be forced out, immune to Intimidate. |
+| **Merchant's Call** (move) | Dark, priority +1, 5 PP. Final Gambit: the target takes damage equal to the user's current HP and the user faints. Fails for anybody who is not a Nuzleaf. |
+
+Held together, those three are one combo: Merchant's Call spends the whole HP
+bar as damage, the faint is what the item is listening for, and what comes back
+is a 190 / 190 / 190 sweeper. Which is why **the item is Ubers-only** — banned by
+name in RP OU, UU, RU, NU, PU and ZU, legal in Ubers, AG and RP Battle. Only the
+ninth generation needs the ban written down: the item is `gen: 9` and the
+validator refuses a later generation's item on its own.
+
+**Nuzleaf-SOLD cannot be selected**, only arrived at — and the obvious marker
+for that is the wrong one. `battleOnly` is what Zygarde-Complete and
+Ash-Greninja carry, but a battle-only forme with no required ability, item or
+move is quietly *rewritten to its base species* by the validator: picking
+Nuzleaf-SOLD in the builder handed back a plain Nuzleaf and said nothing about
+it. So it is marked `isNonstandard: 'Custom'` instead, the same as Samantha,
+which refuses it out loud in every tier that enforces legality — and leaves it
+selectable in RP Battle and Custom Game, where she is too. Nothing validates a
+`formeChange`, so the battle path is unaffected either way, and
+`formeRegression` puts the Nuzleaf back when it finally does faint.
+
+### The hook, and why it is that one
+
+Everything the item does happens in `onBeforeFaint`.
+
+The engine queues a faint the moment HP reaches zero and settles them later, in
+`faintMessages`, which asks one question first: `if (!pokemon.fainted &&
+this.runEvent('BeforeFaint', ...))`. Answering `false` calls the faint off
+before the `|faint|` line is written, before the side loses a Pokémon, and
+before anything that feeds on a knockout — Moxie, Destiny Bond, Grim Neigh — is
+told there was one. Which is correct: it did not die.
+
+It is also the only hook that catches both roads. A Sturdy-style `onDamage`
+guard would catch an attack and miss Merchant's Call entirely, because that move
+calls `pokemon.faint()` directly and never goes near the damage path. Nothing in
+Showdown's own dex implements `onBeforeFaint` — the event system resolves
+handler names off the holder's item and ability generically, so defining one is
+enough.
+
+Three things in that handler are load-bearing, each of which was wrong once:
+
+- **`faintQueued` has to be cleared.** `faint()` sets it and checks it on the
+  way in, so leaving it set does not undo one knockout — it makes the Nuzleaf
+  immortal for the rest of the battle.
+- **Heal before the forme change.** `formeChange` hands over the new forme's
+  ability through `setAbility`, which opens with `if (!this.hp) return false`.
+  Revived afterwards, it kept Chlorophyll while `baseAbility` quietly said No
+  Refunds.
+- **A null source, not the item.** `formeChange`'s permanent branch treats any
+  Item source as a Mega Stone and sends the client a `-mega` line.
+
+Measured, each against a control: knocked out by an attack and by its own move,
+it comes back at 224 HP with 526 / 374 / 416 offences; without the item, both
+faint. Roar drags an ordinary Nuzleaf out and is refused by No Refunds;
+Intimidate lands for −2 on the control and is refused here. The second knockout
+is real, and it reverts to Nuzleaf.
+
 ## How it is installed
 
 Showdown compiles its dex into its own package and offers no hook for adding a
@@ -118,9 +184,20 @@ restores the originals simply gets the line back.
 `learnsets.js` is generated — run `node scripts/build-velvet-learnset.js` after
 upgrading Showdown so "every move" picks up whatever was added.
 
-## What is not done
+## Sprites
 
-Her **sprites**. The battle client keeps its own copy of the dex, so a species
-that exists only on this server is unknown to it and will not draw correctly on
-Showdown's own client at `psim.us`. Serving sprites requires teaching the client
-build in `client/`, which is a separate piece of work.
+Since this was written, the client in `client/` learned to draw both of them:
+`ART` in `client/js/velvet-data.js` names the files, and three hooks — the
+battle sprite, the list icon, the teambuilder's set box — read it instead of
+building a URL against Showdown's CDN, where neither exists. The files are
+served from `client/sprites/` and built with
+
+    node scripts/make-sprite.js <source> <name> <height> [flip]
+
+which keys the background by flood fill from the edges, crops to what is left,
+and scales in linear light. Nuzleaf-SOLD's back sprite is its front mirrored and
+slightly enlarged; a real rear view would be better and there isn't one.
+
+This applies to **our** client. On Showdown's own client at `psim.us` neither
+Pokémon is in the dex at all, and both will draw as a substitute — there is no
+fixing that from here.

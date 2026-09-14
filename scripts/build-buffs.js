@@ -55,7 +55,7 @@ const LABEL = 'Awakened';
  * Surge shipped to the server and not to the client, leaving two of the three
  * monkeys with an ability the builder could not draw.
  */
-const OUR_ITEMS = ['elementalbanana'];
+const OUR_ITEMS = ['elementalbanana', 'brokenpact'];
 const OUR_MOVES = [];
 const OUR_ABILITIES = [];
 for (const buff of Object.values(Buffs)) {

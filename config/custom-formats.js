@@ -274,6 +274,22 @@ const UNBAN_TERA = ['!Terastal Clause'];
  */
 const UNBAN_DYNAMAX = ['!Dynamax Clause'];
 
+/**
+ * The Broken Pact, kept where it belongs.
+ *
+ * A Nuzleaf is an RU Pokemon holding a nine-hundred-point base stat total: the
+ * first knockout turns it into 190 / 190 / 190, and Merchant's Call means the
+ * knockout is on a five-PP timer the other player does not get a vote on. That
+ * is an Ubers item on a Pokemon nobody prepares for, which is funny exactly once
+ * per tier and then stops being funny.
+ *
+ * So it is banned by name everywhere below Ubers, and legal in Ubers, AG and RP
+ * Battle. Only the ninth generation needs saying: the item is `gen: 9`, and the
+ * validator refuses an item from a later generation than the format's on its
+ * own, so the past-gen RP tiers are already covered.
+ */
+const UBERS_ONLY_ITEM = { banlist: ['Broken Pact'] };
+
 exports.Formats = [
 	{
 		section: "RP",
@@ -364,9 +380,9 @@ exports.Formats = [
 	// Above Ubers: the tier with nothing taken out of it.
 	rpTier('AG', '[Gen 9] National Dex AG'),
 	rpTier('Ubers', '[Gen 9] National Dex Ubers'),
-	rpTier('OU', '[Gen 9] National Dex', { rules: UNBAN_TERA }),
-	rpTier('UU', '[Gen 9] National Dex UU', { rules: UNBAN_TERA }),
-	rpTier('RU', '[Gen 9] National Dex RU', { rules: UNBAN_TERA }),
+	rpTier('OU', '[Gen 9] National Dex', { rules: UNBAN_TERA, ...UBERS_ONLY_ITEM }),
+	rpTier('UU', '[Gen 9] National Dex UU', { rules: UNBAN_TERA, ...UBERS_ONLY_ITEM }),
+	rpTier('RU', '[Gen 9] National Dex RU', { rules: UNBAN_TERA, ...UBERS_ONLY_ITEM }),
 
 	/**
 	 * Below RU, where National Dex stops.
@@ -383,9 +399,9 @@ exports.Formats = [
 	 * and a list that has to be maintained; until then, being narrower than
 	 * promised beats being wrong about who belongs.
 	 */
-	rpTier('NU', '[Gen 9] NU'),
-	rpTier('PU', '[Gen 9] PU'),
-	rpTier('ZU', '[Gen 9] ZU'),
+	rpTier('NU', '[Gen 9] NU', UBERS_ONLY_ITEM),
+	rpTier('PU', '[Gen 9] PU', UBERS_ONLY_ITEM),
+	rpTier('ZU', '[Gen 9] ZU', UBERS_ONLY_ITEM),
 
 	/**
 	 * The same idea, in the generations that came before.

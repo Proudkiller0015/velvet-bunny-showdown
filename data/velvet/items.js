@@ -66,7 +66,115 @@ function ripeness(pokemon) {
 	return unleashed ? [6144, 4096] : [5324, 4096];
 }
 
+/**
+ * Bring a Nuzleaf back as the thing its trainer made of it.
+ *
+ * The whole item is one event, and picking the right one is the entire trick.
+ *
+ * `BeforeFaint` is the last moment a Pokemon is still alive. The engine queues
+ * a faint the instant HP reaches zero and settles them all later in
+ * `faintMessages`, which asks this question first: `if (!pokemon.fainted &&
+ * this.runEvent('BeforeFaint', ...))`. Answer `false` and the faint is called
+ * off before the `|faint|` line is written, before the side loses a Pokemon,
+ * and before anything that feeds on a knockout - Moxie, Destiny Bond, Grim
+ * Neigh - is told there was one. Which is correct: it did not die.
+ *
+ * It is also the only hook that catches *both* ways this is meant to happen.
+ * An `onDamage` guard the way Sturdy does it would catch an attack and miss
+ * Merchant's Call entirely, because that move calls `pokemon.faint()` directly
+ * and never goes near the damage path. Every road to a knockout ends in the
+ * faint queue, so that is where this waits.
+ *
+ * Nothing in the package uses the event - `onBeforeFaint` appears nowhere in
+ * the dex - but the event system resolves handler names generically off the
+ * holder's item, ability and volatiles, so an item that defines one is found
+ * like any other.
+ */
+function brokenPactReturn(battle, pokemon) {
+	const item = pokemon.getItem();
+
+	/*
+	 * Spend it by hand. `useItem()` opens with `if (!this.hp) return false`, and
+	 * zero HP is the only state this is ever called in.
+	 */
+	pokemon.item = '';
+	pokemon.itemState = { id: '', target: pokemon };
+	pokemon.lastItem = item.id;
+	pokemon.usedItemThisTurn = true;
+	battle.add('-enditem', pokemon, item.name);
+
+	/*
+	 * Call the faint off properly.
+	 *
+	 * `faintQueued` is set by `faint()` and checked on the way in - a Pokemon
+	 * already queued is never queued again. `faintMessages` has taken this entry
+	 * off the queue but has no idea the flag exists, so leaving it set does not
+	 * merely undo one knockout: it makes the Nuzleaf immortal for the rest of
+	 * the battle.
+	 */
+	pokemon.faintQueued = false;
+
+	/*
+	 * Order matters for the next three lines.
+	 *
+	 * `clearVolatile` ends with `setSpecies(this.baseSpecies)` and resets the
+	 * ability to the base one, so it has to happen before the forme change
+	 * rather than after, or it puts the Nuzleaf straight back. It is here at all
+	 * because this is a fresh Pokemon arriving: no Leech Seed, no Substitute, no
+	 * boosts carried over from the body it left behind.
+	 *
+	 * `formeChange` with a null source is deliberate. Passing the item as the
+	 * source sends the client a `-mega` line - the permanent branch treats any
+	 * Item source as a Mega Stone unless it is a Z-crystal or a Primal Orb - and
+	 * a null source instead leaves `formeRegression` set, which is what makes
+	 * the Nuzleaf go back to being a Nuzleaf at the end of the battle. It also
+	 * hands over the new forme's ability, which is how No Refunds arrives.
+	 *
+	 * And the healing comes first, which is the part that is easy to get wrong.
+	 * `formeChange` hands over the new ability through `setAbility`, which opens
+	 * with `if (!this.hp) return false` - so a Nuzleaf revived after the forme
+	 * change kept Chlorophyll while its `baseAbility` quietly said No Refunds.
+	 * Filling the bar first also lets `updateMaxHp` do the arithmetic: it scales
+	 * the new maximum by the damage taken, and there is none.
+	 */
+	pokemon.clearVolatile(false);
+	pokemon.hp = pokemon.maxhp;
+	pokemon.cureStatus(true);
+	pokemon.formeChange('Nuzleaf-SOLD', null, true);
+	battle.add('-heal', pokemon, pokemon.getHealth);
+
+	battle.add('-message', `${pokemon.name} was sold. It came back anyway.`);
+	battle.add('-hint', "Broken Pact: a Nuzleaf that would faint while holding it returns at once as Nuzleaf-SOLD, at full HP, with the item used up. It never faints, so nothing that keys off a knockout - Moxie, Destiny Bond, Grim Neigh - triggers.");
+	return false;
+}
+
 const Items = {
+	/**
+	 * A reminder of a Trainer who abandoned their partner when it mattered most.
+	 */
+	brokenpact: {
+		name: "Broken Pact",
+		num: -2,
+		gen: 9,
+		// Ours, so there is nothing to cut out of Showdown's item sheet - the
+		// client draws it from our sprites folder, like the Elemental Banana.
+		spritenum: 0,
+		itemUser: ["Nuzleaf"],
+		fling: { basePower: 10 },
+
+		onBeforeFaint(pokemon) {
+			// Only a Nuzleaf, and only the first time: the SOLD forme has nothing
+			// left to be sold as, and a Ditto wearing its face was never anybody's
+			// partner.
+			if (pokemon.baseSpecies.baseSpecies !== 'Nuzleaf') return;
+			if (pokemon.species.id === 'nuzleafsold' || pokemon.transformed) return;
+			return brokenPactReturn(this, pokemon);
+		},
+
+		shortDesc: "If Nuzleaf would faint while holding this, it returns at full HP as Nuzleaf-SOLD.",
+		desc: "A reminder of a Trainer who abandoned their partner when it mattered most. If Nuzleaf is knocked out while holding this item - by an attack, by an ally, or by its own Merchant's Call - it does not faint. It returns at once as Nuzleaf-SOLD, restored to full HP and cured of status, and this item is used up.",
+	},
+
 	elementalbanana: {
 		name: "Elemental Banana",
 		num: -1,
