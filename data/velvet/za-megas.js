@@ -108,11 +108,20 @@ function tierFor(megaBst, baseTier) {
 	if (baseTier === 'AG') return 'AG';
 	if (baseTier === 'Uber' || megaBst >= UBER_BST) return 'Uber';
 	const at = LADDER.indexOf(String(baseTier || '').replace(/[()]/g, ''));
-	// A base with no tier at all - an unevolved forme, something untiered - is
-	// treated as bottom of the ladder, so its Mega starts in RU rather than in a
-	// tier nothing else it could face is in.
-	if (at < 0) return 'RU';
-	return LADDER[Math.max(0, at - 1)];
+	if (at >= 0) return LADDER[Math.max(0, at - 1)];
+
+	/*
+	 * A base with no tier of its own - an unevolved Pokemon, something untiered.
+	 *
+	 * This used to answer RU flatly, which is how Floette-Mega ended up in RU on
+	 * 651 base stats, second only to Zygarde-Mega in the entire set: its base
+	 * form is an NFE, so there was no tier to step up from and the fallback did
+	 * not look at the Mega at all. Falling back to its own size is the least
+	 * wrong thing to do when there is nothing else to go on.
+	 */
+	if (megaBst >= 620) return 'OU';
+	if (megaBst >= 570) return 'UU';
+	return 'RU';
 }
 
 /**

@@ -49,6 +49,49 @@ const TIERS = {
 	// anywhere else. Derived tiering put it at RUBL off its base form, which is
 	// the right answer for a Mega and the wrong one for this Mega.
 	chandeluremega: 'Uber',
+
+	/*
+	 * The Z-A Megas that are not an OU problem so much as an OU ending.
+	 *
+	 * Derived tiering puts a Mega one step above its base form, which is the
+	 * right guess for most of forty-nine and visibly wrong for these. Each is
+	 * here for something specific rather than for being strong.
+	 */
+
+	// 651 base stats - second only to Zygarde-Mega in the whole set. It landed in
+	// RU because its base form is an unevolved Pokemon and the derived rule had
+	// nothing better to say; that is the rule failing, not a judgement.
+	floettemega: 'Uber',
+
+	// Huge Power. That is the ability that put Mega Mawile in Ubers, on 120
+	// Speed rather than 50.
+	starmiemega: 'Uber',
+
+	// Adaptability on 164 Special Attack at 151 Speed. There is no defensive
+	// answer to that below Ubers.
+	lucariomegaz: 'Uber',
+
+	// 154 Attack at 151 Speed behind Magic Bounce, so the hazards and status
+	// that would otherwise wear it down bounce back at whoever tried.
+	absolmegaz: 'Uber',
+
+	/*
+	 * And two that are our fault rather than Game Freak's.
+	 *
+	 * Both are Pokemon this server made stronger this session, and a tier that
+	 * was set against the weaker version does not describe them any more.
+	 */
+
+	// Protean, un-nerfed back to changing type on every move, on 630 base stats
+	// at 142 Speed. The OU tier it was derived into assumed the Generation 9
+	// once-per-switch-in version.
+	greninjamega: 'Uber',
+
+	// Battle Bond, un-nerfed back to becoming Ash-Greninja: 640 base stats, 153
+	// Special Attack, 132 Speed and a Water Shuriken that hits three times.
+	// That is precisely the set Smogon banned from OU when it last existed, and
+	// we put it back.
+	greninjabond: 'Uber',
 };
 
 /**
@@ -61,18 +104,35 @@ const TIERS = {
  * numbers describing one Pokemon is how it ends up legal in one place and not
  * its mirror.
  */
-exports.applyTiers = (FormatsData, log = () => {}) => {
+exports.applyTiers = (FormatsData, Pokedex, log = () => {}) => {
 	const applied = {};
 	for (const [id, tier] of Object.entries(TIERS)) {
 		if (!LADDER.includes(tier)) {
 			log(`${id} is set to "${tier}", which is not a tier - skipped`);
 			continue;
 		}
-		const data = FormatsData[id];
+
+		/*
+		 * A forme often has no tier row of its own and inherits its base form's.
+		 *
+		 * Greninja-Bond is the case that matters: it is a separate Pokemon you
+		 * can put on a team, and it had no row, so re-tiering it silently did
+		 * nothing and it went on being UUBL like ordinary Greninja. Giving it a
+		 * row of its own is the whole point - the two are not the same Pokemon
+		 * any more, one of them turns into Ash-Greninja.
+		 *
+		 * Only for something that actually exists, so a typo in the table above
+		 * is a warning rather than a row for a Pokemon nobody has heard of.
+		 */
+		let data = FormatsData[id];
 		if (!data) {
-			log(`${id} has no tier data, so it cannot be re-tiered`);
-			continue;
+			if (!Pokedex || !Pokedex[id]) {
+				log(`${id} is not a Pokemon, so it cannot be re-tiered`);
+				continue;
+			}
+			data = FormatsData[id] = {};
 		}
+
 		data.tier = tier;
 		data.natDexTier = tier;
 		applied[id] = tier;

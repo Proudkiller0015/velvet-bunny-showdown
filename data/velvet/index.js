@@ -45,7 +45,7 @@ function buffWhatWeHave() {
 	if (buffedPokedex && tierTable) {
 		applyZaMegas(buffedPokedex, tierTable);
 		// Last, so a deliberate decision beats a derived one.
-		applyTiers(tierTable, msg => console.log('[velvet] ' + msg));
+		applyTiers(tierTable, buffedPokedex, msg => console.log('[velvet] ' + msg));
 	}
 }
 
