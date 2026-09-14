@@ -436,20 +436,51 @@
 	 * step up counts one extra character in the display name before it - a space
 	 * in "Queen Beam", an apostrophe and a space in "Queen's Dance".
 	 */
+	/**
+	 * Where each character of an id sits in the display name.
+	 *
+	 * '0' means it sits where it does in the id; each step up counts one more
+	 * character in the name that is not part of the id - the space in "Queen
+	 * Beam", the apostrophe and space in "Queen's Dance", the hyphen in
+	 * "Nuzleaf-SOLD".
+	 */
+	function offsetsFor(name) {
+		var offset = 0;
+		var out = '';
+		for (var i = 0; i < name.length; i++) {
+			if (/[a-z0-9]/i.test(name.charAt(i))) out += String(Math.min(offset, 9));
+			else offset++;
+		}
+		return out;
+	}
+
 	function installSearch() {
 		var index = window.BattleSearchIndex;
 		if (!index || !index.length) return;
 		var offsets = window.BattleSearchIndexOffset;
 
+		/*
+		 * Named rather than spelled out, because the offsets are derivable.
+		 *
+		 * Every one of these strings is a mechanical function of the display name
+		 * - count the characters that are not letters or digits as you go - so
+		 *   writing them by hand is just a chance to get one wrong, and a wrong
+		 * one highlights the wrong letters rather than failing loudly. This is the
+		 * same derivation scripts/build-buffs.js uses for the generated rows.
+		 */
 		var rows = [
-			['samantha', 'pokemon', ''],
-			['queenbeam', 'move', '000001111'],
-			['queensdance', 'move', '00000122222'],
-			['queensheal', 'move', '0000012222'],
-			['queensblitz', 'move', '00000122222'],
-			['queenwrath', 'ability', '0000011111'],
-			['queensmorph', 'ability', '00000122222'],
-		];
+			['samantha', 'pokemon', 'Samantha'],
+			['nuzleafsold', 'pokemon', 'Nuzleaf-SOLD'],
+			['queenbeam', 'move', 'Queen Beam'],
+			['queensdance', 'move', "Queen's Dance"],
+			['queensheal', 'move', "Queen's Heal"],
+			['queensblitz', 'move', "Queen's Blitz"],
+			['queenwrath', 'ability', 'Queen Wrath'],
+			['queensmorph', 'ability', "Queen's Morph"],
+			['norefunds', 'ability', 'No Refunds'],
+		].map(function (row) {
+			return [row[0], row[1], offsetsFor(row[2])];
+		});
 
 		// Everything the buffs added - Simian Rush, Wave Charge, Verdant Surge,
 		// the Elemental Banana - comes from the generated file rather than being
@@ -519,6 +550,10 @@
 			// What the builder calls her tier when it labels her.
 			if (t.overrideTier) {
 				t.overrideTier.samantha = 'Dev';
+				// Not selectable and not meant to be - it is what a Nuzleaf becomes
+				// when the Broken Pact goes off, and the only way to it is that. But
+				// it should say so when looked up rather than simply not existing.
+				t.overrideTier.nuzleafsold = 'Illegal';
 
 				/*
 				 * And anywhere this server disagrees with Smogon about a tier.

@@ -119,7 +119,14 @@ name in RP OU, UU, RU, NU, PU and ZU, legal in Ubers, AG and RP Battle. Only the
 ninth generation needs the ban written down: the item is `gen: 9` and the
 validator refuses a later generation's item on its own.
 
-**Nuzleaf-SOLD cannot be selected**, only arrived at — and the obvious marker
+**Nuzleaf-SOLD is findable but not selectable.** Two different lists decide
+that, and it was missing from one: `BattlePokedex` makes it lookupable, while
+`BattleSearchIndex` - which the search box binary-searches, so an entry outside
+it is unreachable by typing - needs a row of its own. Without one it was not
+refused in the teambuilder, it simply did not exist there. `overrideTier` then
+labels it *Illegal*, which is the honest answer to someone who looks it up.
+
+It **cannot be selected**, only arrived at — and the obvious marker
 for that is the wrong one. `battleOnly` is what Zygarde-Complete and
 Ash-Greninja carry, but a battle-only forme with no required ability, item or
 move is quietly *rewritten to its base species* by the validator: picking
