@@ -41,6 +41,14 @@ const TIERS = {
 	// already in Ubers. Moved up rather than banned outright so it still has a
 	// tier to be played in.
 	gliscor: 'Uber',
+
+	// Its only ability is Shadow Tag. Base Chandelure can pick Flash Fire and go
+	// on being an RU Pokemon, and the ability ban in the tiers below Ubers
+	// already stops the trapping set there - but a Mega has one ability slot and
+	// this one is always the trapper, so there is no version of it that belongs
+	// anywhere else. Derived tiering put it at RUBL off its base form, which is
+	// the right answer for a Mega and the wrong one for this Mega.
+	chandeluremega: 'Uber',
 };
 
 /**

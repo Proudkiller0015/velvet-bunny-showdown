@@ -221,6 +221,16 @@ for (const [id, record] of Object.entries(bySpecies)) {
 for (const [id, type, offsets] of search) {
 	console.log(`  searchable: ${id} (${type}) ${offsets}`);
 }
-if (Object.keys(Buffs).length !== Object.keys(bySpecies).length) {
-	throw new Error('a buffed Pokemon did not make it into the table');
+/*
+ * Every Pokemon with a buff of its own has to be in the table.
+ *
+ * This used to compare counts, which was right when a per-Pokemon buff was the
+ * only kind there was. Type-wide distribution broke it - 192 in the table
+ * against 7 in `Buffs` - and because the file is written before the check runs,
+ * it failed silently for days: the build worked, the output was correct, and
+ * the script exited 1 where nobody was looking.
+ */
+const missing = Object.keys(Buffs).filter(id => !bySpecies[id]);
+if (missing.length) {
+	throw new Error(`buffed Pokemon missing from the client table: ${missing.join(', ')}`);
 }
