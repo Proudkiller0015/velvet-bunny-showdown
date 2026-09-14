@@ -21,6 +21,7 @@
     "test:lobby": "node test/lobby.test.js",
     "test:opponent": "node test/opponent.test.js",
     "test:nosack": "node test/nosack.test.js",
+    "test:crashfree": "node test/crashfree.test.js gen9rpbattle 25",
     "test:unaware": "node test/unaware.test.js",
     "test:ourstuff": "node test/ourstuff.test.js",
     "train": "node test/train.js",

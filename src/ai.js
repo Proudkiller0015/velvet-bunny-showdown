@@ -296,6 +296,36 @@ class BattleAI {
 				break;
 			}
 		}
+
+		/*
+		 * And if no generation has it, ask the simulator.
+		 *
+		 * Everything this server invented is in that category and in no other:
+		 * the Z-A Megas, Samantha, Nuzleaf-SOLD. The damage calculator has never
+		 * heard of any of them in any generation, which is not a gap to route
+		 * around - the simulator running the battle has their real sheets,
+		 * because we wrote them.
+		 *
+		 * This is not hypothetical and it is not rare. The bot was taught to
+		 * bring Mega Stones an hour ago, and eleven games in forty then died the
+		 * turn the Mega happened. A Nuzleaf turning into Nuzleaf-SOLD mid-battle
+		 * would have done the same to whoever was playing against it.
+		 */
+		if (!found) {
+			try {
+				const { Dex } = require('pokemon-showdown');
+				const real = Dex.species.get(key);
+				if (real && real.exists && real.baseStats) {
+					found = {
+						baseStats: real.baseStats,
+						types: real.types,
+						weightkg: real.weightkg,
+						abilities: real.abilities,
+					};
+				}
+			} catch (e) { /* no simulator here: the guess below is all there is */ }
+		}
+
 		this._pastSpecies.set(key, found);
 		return found;
 	}
