@@ -80,6 +80,30 @@ function shadowShield(label) {
 }
 
 /**
+ * Never trapped, the way a Shed Shell is never trapped.
+ *
+ * Shadow Tag, Arena Trap, Magnet Pull, Mean Look, Block, Spider Web, Fairy
+ * Lock - all of them work by setting a flag on the Pokemon they caught, and all
+ * of them are undone by clearing it afterwards. The low priority is what makes
+ * that work: it runs after every trapper has had its say, so there is nothing
+ * left to add the flag back.
+ *
+ * `maybeTrapped` is the same answer to the same question asked of the other
+ * player, who is not allowed to know whether the trap would have held. Clearing
+ * only the first leaves them told she might be stuck when she never is.
+ */
+const untrappable = {
+	onTrapPokemonPriority: -10,
+	onTrapPokemon(pokemon) {
+		pokemon.trapped = false;
+	},
+	onMaybeTrapPokemonPriority: -10,
+	onMaybeTrapPokemon(pokemon) {
+		pokemon.maybeTrapped = false;
+	},
+};
+
+/**
  * Clear Body, as a handler both queens can share.
  *
  * Nothing another Pokemon does lowers her stats - Intimidate on the way in,
@@ -157,6 +181,8 @@ exports.Abilities = {
 
 		// Nothing the other side does lowers her stats.
 		onTryBoost: clearBody('Queen Wrath'),
+		// And nothing holds her in place.
+		...untrappable,
 
 		flags: {
 			/*
@@ -237,6 +263,7 @@ exports.Abilities = {
 		onDamage: guardAndEndure("Queen's Morph"),
 		onTryHit: ignoreOhko("Queen's Morph"),
 		onTryBoost: clearBody("Queen's Morph"),
+		...untrappable,
 
 		condition: {
 			noCopy: true,   // not something Baton Pass hands on
@@ -247,6 +274,7 @@ exports.Abilities = {
 			onDamage: guardAndEndure("Queen's Morph"),
 			onTryHit: ignoreOhko("Queen's Morph"),
 			onTryBoost: clearBody("Queen's Morph"),
+			...untrappable,
 		},
 
 		flags: {
