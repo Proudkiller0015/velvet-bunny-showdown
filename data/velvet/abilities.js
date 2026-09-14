@@ -80,6 +80,35 @@ function shadowShield(label) {
 }
 
 /**
+ * She moves first, and Trick Room does not change that.
+ *
+ * Her 250 Speed already makes her first against almost anything - right up
+ * until somebody sets Trick Room, which reverses the order and turns the
+ * fastest Pokemon in the game into the slowest. "Nothing moves before her" is
+ * the thing the ability says on the way in, and an opponent being able to undo
+ * it with one move makes it a boast rather than an effect.
+ *
+ * Fractional priority is the right lever rather than a raw priority boost. The
+ * queue adds it to the move's own priority, and the bracket is compared before
+ * speed - which is the only thing Trick Room touches. So she goes first in her
+ * bracket either way, without every one of her moves becoming a priority move
+ * and picking up all the things that interact with those.
+ *
+ * Quick Draw's shape exactly, minus the dice roll.
+ */
+const firstAlways = {
+	onFractionalPriorityPriority: -1,
+	onFractionalPriority() {
+		// Every move, status ones included. Quick Draw excludes them because it is
+		// a lucky flinch of a thing; "nothing moves before her" is not, and the
+		// exclusion showed up immediately in testing - Queen's Morph copies the
+		// foe's moves, so hers were whatever they had, and a Transformed queen
+		// setting Trick Room was politely waiting her turn.
+		return 0.1;
+	},
+};
+
+/**
  * Run two onTryHit handlers as one.
  *
  * An effect gets a single onTryHit, and both of these need it: one refuses
@@ -256,6 +285,8 @@ exports.Abilities = {
 
 		// Nothing the other side does lowers her stats.
 		onTryBoost: clearBody('Queen Wrath'),
+		// And nothing goes before her, Trick Room or no Trick Room.
+		...firstAlways,
 		// And no status move from anybody else lands at all.
 		onTryHit: chainTryHit(goodAsGold('Queen Wrath'), ignoreOhko('Queen Wrath')),
 		// And nothing holds her in place.
@@ -299,7 +330,7 @@ exports.Abilities = {
 		rating: 5,
 		num: -1,
 		shortDesc: "Doubles Atk and SpA, hits twice, contact moves ignore Protect. Shadow Shield, Sturdy, Magic Guard, Clear Body, Good as Gold. Untrappable, uncopyable.",
-		desc: "Attack and Special Attack are doubled, and its attacks hit twice, the second at a quarter power. Its moves ignore the target's Ability, and its contact moves ignore Protect and its relatives. Priority moves cannot touch this side. At full HP, damage taken is halved. Survives a killing blow from full HP and is immune to OHKO moves. Takes no damage from anything that is not a move. Its stats cannot be lowered, and no status move used by another Pokemon affects it. It cannot be trapped, cannot be copied by Transform or Imposter, and Destiny Bond cannot take it down. Mold Breaker, Teravolt and Turboblaze cannot ignore any of it.",
+		desc: "Attack and Special Attack are doubled, and its attacks hit twice, the second at a quarter power. Its moves ignore the target's Ability, and its contact moves ignore Protect and its relatives. Priority moves cannot touch this side, and it moves before anything else in its priority bracket, Trick Room included. At full HP, damage taken is halved. Survives a killing blow from full HP and is immune to OHKO moves. Takes no damage from anything that is not a move. Its stats cannot be lowered, and no status move used by another Pokemon affects it. It cannot be trapped, cannot be copied by Transform or Imposter, and Destiny Bond cannot take it down. Mold Breaker, Teravolt and Turboblaze cannot ignore any of it.",
 	},
 
 	queensmorph: {
@@ -341,6 +372,7 @@ exports.Abilities = {
 		onTryHit: chainTryHit(goodAsGold("Queen's Morph"), ignoreOhko("Queen's Morph")),
 		onTryBoost: clearBody("Queen's Morph"),
 		...untrappable,
+		...firstAlways,
 
 		condition: {
 			noCopy: true,   // not something Baton Pass hands on
@@ -352,6 +384,7 @@ exports.Abilities = {
 			onTryHit: chainTryHit(goodAsGold("Queen's Morph"), ignoreOhko("Queen's Morph")),
 			onTryBoost: clearBody("Queen's Morph"),
 			...untrappable,
+			...firstAlways,
 		},
 
 		flags: {
@@ -364,7 +397,7 @@ exports.Abilities = {
 		rating: 5,
 		num: -2,
 		shortDesc: "Transforms into the foe on entry, then +6 Speed. Keeps Shadow Shield, Sturdy, Magic Guard, Clear Body and Good as Gold.",
-		desc: "On switch-in, this Pokemon Transforms into the opposing Pokemon and then raises its Speed by 6 stages. Afterwards it keeps taking half damage at full HP, surviving a killing blow from full HP, ignoring damage that is not from a move, refusing stat drops and status moves from anything other than itself, being untrappable, being safe from Destiny Bond, and being impossible to copy with Transform or Imposter - all of which outlive the Transform replacing this Ability with the copied one.",
+		desc: "On switch-in, this Pokemon Transforms into the opposing Pokemon and then raises its Speed by 6 stages. Afterwards it keeps taking half damage at full HP, surviving a killing blow from full HP, ignoring damage that is not from a move, refusing stat drops and status moves from anything other than itself, moving first in its priority bracket even under Trick Room, being untrappable, being safe from Destiny Bond, and being impossible to copy with Transform or Imposter - all of which outlive the Transform replacing this Ability with the copied one.",
 	},
 	/**
 	 * Verdant Surge - Grassy Surge, and then some.
