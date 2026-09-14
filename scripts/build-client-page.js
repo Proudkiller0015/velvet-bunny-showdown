@@ -135,6 +135,8 @@ function build(upstream) {
 	// Showdex and the service worker, last: both want the client to exist first.
 	html += `
 <!-- Ours, and only ours, below this line. -->
+<!-- Our custom data, before the calculator that is patched to read it. -->
+<script src="js/velvet-calc-data.js"></script>
 <script src="/showdex/main.js"></script>
 <script>
 	// Registering this is what lets a phone offer "Install app"; it caches
@@ -166,7 +168,7 @@ function build(upstream) {
 	console.log(`wrote ${OUT} (${Math.round(html.length / 1024)}KB)`);
 
 	// A page that has lost one of our own scripts is worse than no page.
-	for (const needed of ['js/velvet-signatures.js', 'js/velvet-buffs.js', 'style/velvet.css', 'config/config.js', 'js/velvet-storage.js', 'js/velvet-data.js', '/showdex/main.js', 'manifest.json']) {
+	for (const needed of ['js/velvet-signatures.js', 'js/velvet-buffs.js', 'js/velvet-calc-data.js', 'style/velvet.css', 'config/config.js', 'js/velvet-storage.js', 'js/velvet-data.js', '/showdex/main.js', 'manifest.json']) {
 		if (!html.includes(needed)) throw new Error(`${needed} is missing from the built page`);
 	}
 	for (const banned of ['googletagmanager', 'hb.vntsm.com', 'window.__VM']) {

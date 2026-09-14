@@ -180,10 +180,45 @@ exports.Abilities = {
 			this.add('-message', `${pokemon.name} holds court: doubled power, no abilities in her way, and nothing moves before her.`);
 		},
 
-		// Mold Breaker: her moves ignore abilities that would blunt them.
+		/*
+		 * Mold Breaker and Unseen Fist, in the one handler an effect gets.
+		 *
+		 * Her moves ignore abilities that would blunt them, and a contact move of
+		 * hers goes through Protect and its relatives - which is what Unseen Fist
+		 * is: it does not break the shield, it steps around it.
+		 */
 		onModifyMove(move) {
 			move.ignoreAbility = true;
+			if (move.flags && move.flags.contact) delete move.flags.protect;
 		},
+
+		/*
+		 * Parental Bond: every attack hits twice, the second at a quarter.
+		 *
+		 * The exclusions are the real content here and they are copied from the
+		 * ability itself rather than guessed: a status move has nothing to hit
+		 * twice, a move that already has its own hit count cannot be given
+		 * another, and two-turn, future and spread moves all break in ways that
+		 * are somebody else's bug to have found. `noparentalbond` is the flag the
+		 * game uses to say "not this one".
+		 */
+		onPrepareHit(source, target, move) {
+			if (move.category === 'Status' || move.multihit) return;
+			if (move.flags['noparentalbond'] || move.flags['charge'] || move.flags['futuremove']) return;
+			if (move.spreadHit || move.isZ || move.isMax) return;
+			move.multihit = 2;
+			move.multihitType = 'parentalbond';
+		},
+		/*
+		 * There is no handler for the second hit's damage, and that is correct.
+		 *
+		 * The quarter is applied by the engine itself, in modifyDamage, off the
+		 * `parentalbond` marker set above - the real ability has a comment saying
+		 * exactly that and no handler either. Adding one applies the quarter
+		 * twice: measured against a Mega Kangaskhan hitting the same Chansey, its
+		 * second hit was 16 after 76 and hers was 12 after 183, a sixteenth
+		 * instead of a quarter.
+		 */
 
 		// Huge Power on both halves. Light Ball doubles Attack and Special Attack
 		// together, which is the shape asked for here.
@@ -199,7 +234,9 @@ exports.Abilities = {
 		// Shadow Shield, Sturdy and Magic Guard.
 		onSourceModifyDamage: shadowShield('Queen Wrath'),
 		onDamage: guardAndEndure('Queen Wrath'),
-		onTryHit: ignoreOhko('Queen Wrath'),
+		// (onTryHit lives further down, chained with Good as Gold - an object
+		// literal keeps only the last of a repeated key, and a second one here
+		// silently replaced it.)
 
 		// Queenly Majesty: nothing reaches her or her side first. Copied from the
 		// original rather than approximated, including the three spread moves that
@@ -261,8 +298,8 @@ exports.Abilities = {
 		},
 		rating: 5,
 		num: -1,
-		shortDesc: "Doubles Atk and SpA, ignores abilities, blocks priority, Shadow Shield, Sturdy, Magic Guard, Clear Body, Good as Gold. Untrappable.",
-		desc: "Attack and Special Attack are doubled. This Pokemon's moves ignore the target's Ability. Priority moves cannot touch this side. At full HP, damage taken is halved. Survives a killing blow from full HP and is immune to OHKO moves. Takes no damage from anything that is not a move. Its stats cannot be lowered by anything other than itself. No status move used by another Pokemon affects it. It cannot be trapped, and Destiny Bond cannot take it down. Mold Breaker, Teravolt and Turboblaze cannot ignore any of it.",
+		shortDesc: "Doubles Atk and SpA, hits twice, contact moves ignore Protect. Shadow Shield, Sturdy, Magic Guard, Clear Body, Good as Gold. Untrappable, uncopyable.",
+		desc: "Attack and Special Attack are doubled, and its attacks hit twice, the second at a quarter power. Its moves ignore the target's Ability, and its contact moves ignore Protect and its relatives. Priority moves cannot touch this side. At full HP, damage taken is halved. Survives a killing blow from full HP and is immune to OHKO moves. Takes no damage from anything that is not a move. Its stats cannot be lowered, and no status move used by another Pokemon affects it. It cannot be trapped, cannot be copied by Transform or Imposter, and Destiny Bond cannot take it down. Mold Breaker, Teravolt and Turboblaze cannot ignore any of it.",
 	},
 
 	queensmorph: {
@@ -327,7 +364,7 @@ exports.Abilities = {
 		rating: 5,
 		num: -2,
 		shortDesc: "Transforms into the foe on entry, then +6 Speed. Keeps Shadow Shield, Sturdy, Magic Guard, Clear Body and Good as Gold.",
-		desc: "On switch-in, this Pokemon Transforms into the opposing Pokemon and then raises its Speed by 6 stages. Afterwards it keeps taking half damage at full HP, surviving a killing blow from full HP, ignoring damage that is not from a move, refusing stat drops and status moves from anything other than itself, being untrappable, and being safe from Destiny Bond - all of which outlive the Transform replacing this Ability with the copied one.",
+		desc: "On switch-in, this Pokemon Transforms into the opposing Pokemon and then raises its Speed by 6 stages. Afterwards it keeps taking half damage at full HP, surviving a killing blow from full HP, ignoring damage that is not from a move, refusing stat drops and status moves from anything other than itself, being untrappable, being safe from Destiny Bond, and being impossible to copy with Transform or Imposter - all of which outlive the Transform replacing this Ability with the copied one.",
 	},
 	/**
 	 * Verdant Surge - Grassy Surge, and then some.
@@ -409,3 +446,54 @@ exports.Abilities = {
 		// wearing it here made this illegal in RP OU alongside her.
 	},
 };
+
+/**
+ * Ditto cannot become a queen.
+ *
+ * Transform the move is a status move, so Good as Gold already turns it away at
+ * the door. Imposter is not a move: it fires on switch-in and calls
+ * transformInto() on whoever is standing opposite, and there is no event on the
+ * target's side to answer it with.
+ *
+ * transformInto() does refuse some Pokemon - Eternatus-Eternamax, a
+ * Terastallized Ogerpon - but it refuses them by name, in the simulator's own
+ * code, which our data hooks cannot reach. So this takes the same route used
+ * for Destiny Bond: patch the thing doing the copying, rather than invent a
+ * mechanism on the side being copied.
+ *
+ * Patched rather than replaced: Imposter carries a switch-in flag and an
+ * onStart that has to run in a particular order, and copying that across to
+ * change one condition would mean keeping the copy in step forever.
+ */
+function patchAbilities(Abilities) {
+	const imposter = Abilities && Abilities.imposter;
+	if (!imposter || imposter.velvetQueenSafe) return Abilities;
+
+	// It is onSwitchIn, not onStart - Imposter copies the moment it arrives.
+	const original = imposter.onSwitchIn;
+	if (typeof original !== 'function') return Abilities;
+	imposter.velvetQueenSafe = true;
+
+	imposter.onSwitchIn = function (pokemon) {
+		const foes = pokemon.side.foe.active;
+		const target = foes[foes.length - 1 - pokemon.position];
+		if (target && queenProtected(target)) {
+			this.add('-fail', pokemon, 'ability: Imposter');
+			this.add('-hint', "There is only one of her.");
+			return;
+		}
+		return original.call(this, pokemon);
+	};
+	return Abilities;
+}
+
+/** Shared with data/velvet/moves.js, which patches Destiny Bond the same way. */
+const QUEEN_ABILITIES = ['queenwrath', 'queensmorph'];
+
+function queenProtected(pokemon) {
+	if (!pokemon) return false;
+	if (QUEEN_ABILITIES.includes(pokemon.ability)) return true;
+	return !!(pokemon.volatiles && pokemon.volatiles['queensmorph']);
+}
+
+exports.patchAbilities = patchAbilities;
