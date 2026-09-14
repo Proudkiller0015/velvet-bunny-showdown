@@ -1,0 +1,59 @@
+# Keep the server awake, and keep a record of how it is doing.
+#
+# Render's free tier stops a web service after fifteen minutes with no inbound
+# request, and the next visitor pays for that with about a minute of waiting
+# while it boots - which, from the outside, is indistinguishable from the server
+# being down. That is what "it died" has meant every time so far.
+#
+# The bots cannot prevent it: they connect to the server over localhost, and
+# Render counts inbound requests from the outside world. So the ping has to come
+# from somewhere else, and a scheduled workflow is somewhere else that is free
+# for a public repository.
+#
+# Ten minutes, because the window is fifteen and GitHub runs scheduled jobs late
+# when it is busy - a five minute margin is the difference between this working
+# and this being a cron job that tidily documents the server going to sleep.
+#
+# It pings the health endpoint rather than the front page, so the log of this
+# workflow doubles as a memory history: every run leaves a line saying what the
+# container was holding at that moment, which is the only long-term record of
+# that we have.
+name: Keep awake
+
+on:
+  schedule:
+    - cron: '*/10 * * * *'
+  workflow_dispatch:
+
+# One at a time. A late run and an on-time run arriving together would achieve
+# nothing except two requests.
+concurrency:
+  group: keep-awake
+  cancel-in-progress: false
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Wake it and read the health endpoint
+        run: |
+          URL="https://velvet-bunny-showdown.onrender.com/velvet/health.json"
+          # A sleeping service takes about a minute to answer the first request,
+          # so the timeout has to be longer than that or this reports a failure
+          # every single time it actually does its job.
+          body=$(curl --silent --show-error --max-time 180 --retry 2 --retry-delay 15 "$URL") || {
+            echo "no answer from the server"
+            exit 1
+          }
+          echo "$body"
+          # Keep the interesting numbers on one greppable line.
+          echo "$body" | python3 -c '
+          import json, sys
+          d = json.load(sys.stdin)
+          c = d.get("container") or {}
+          print("SUMMARY uptime=%ss anon=%sMB (%s%%) cache=%sMB rss=%sMB heap=%sMB" % (
+              d.get("uptimeSeconds"), c.get("anonMB"), c.get("anonPercent"),
+              c.get("cacheMB"), d.get("process", {}).get("rssMB"),
+              d.get("process", {}).get("heapUsedMB")))
+          '
