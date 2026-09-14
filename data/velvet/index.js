@@ -27,6 +27,7 @@ const { FormatsData } = require('./formats-data.js');
 const { Learnsets } = require('./learnsets.js');
 const { patchItems } = require('./items.js');
 const { applyBuffs } = require('./buffs.js');
+const { applyZaMegas, applyZaStones } = require('./za-megas.js');
 const { unnerfMoves, unnerfAbilities } = require('./unnerfs.js');
 
 // The buffed Pokemon are Showdown's own, so they are changed in place rather
@@ -35,8 +36,12 @@ const { unnerfMoves, unnerfAbilities } = require('./unnerfs.js');
 // second finds the other's work already done.
 let buffedPokedex = null;
 let buffedLearnsets = null;
+let tierTable = null;
 function buffWhatWeHave() {
 	if (buffedPokedex && buffedLearnsets) applyBuffs(buffedPokedex, buffedLearnsets);
+	// The Z-A Megas need the stats from one file and the tiers from another, so
+	// like the buffs they wait until both have been through here.
+	if (buffedPokedex && tierTable) applyZaMegas(buffedPokedex, tierTable);
 }
 
 exports.pokedex = data => {
@@ -46,7 +51,11 @@ exports.pokedex = data => {
 };
 exports.abilities = data => unnerfAbilities(Object.assign(data, Abilities));
 exports.moves = data => unnerfMoves(Object.assign(data, Moves));
-exports.formatsData = data => Object.assign(data, FormatsData);
+exports.formatsData = data => {
+	Object.assign(data, FormatsData);
+	tierTable = data;
+	buffWhatWeHave();
+};
 exports.learnsets = data => {
 	Object.assign(data, Learnsets);
 	buffedLearnsets = data;
@@ -56,4 +65,11 @@ exports.learnsets = data => {
 // Items is the odd one out: Light Ball already exists and only two of its
 // handlers change, so replacing the whole entry would mean copying its number,
 // its Fling and its sprite across and keeping them in step forever.
-exports.items = data => patchItems(data);
+exports.items = data => {
+	patchItems(data);
+	// The Z-A Mega stones, which are their own data file and their own refusal:
+	// National Dex reads an item's nonstandard flag directly, so a stone left
+	// marked 'Future' is refused however legal the Mega holding it is.
+	applyZaStones(data, msg => console.log('[velvet] ' + msg));
+	return data;
+};

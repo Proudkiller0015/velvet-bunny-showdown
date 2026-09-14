@@ -130,8 +130,9 @@
 		var itemIn = installItemIcon();
 		var sigItemIn = installSignatureItem();
 		var powerIn = installBuffedBasePower();
+		var dmaxIn = installDynamaxBuilder();
 		return tableIn && orderIn && spritesIn && iconIn && builderIn && tipsIn && rpIn &&
-			listIn && buffsIn && abilitiesIn && itemIn && sigItemIn && powerIn;
+			listIn && buffsIn && abilitiesIn && itemIn && sigItemIn && powerIn && dmaxIn;
 	}
 
 	/**
@@ -765,6 +766,84 @@
 			return header.concat(rows, rest);
 		};
 		return true;
+	}
+
+	/**
+	 * Dynamax Level and Gigantamax, in the builder, for the RP tiers.
+	 *
+	 * The RP tiers offer all three gimmicks, so a Charizard here really can
+	 * Gigantamax - the server accepts the set, the battle fires G-Max Wildfire,
+	 * and the only thing missing was any way to ask for it. The builder draws
+	 * both controls inside a `gen === 8` branch, because on Showdown those are
+	 * the only formats where Dynamax exists.
+	 *
+	 * Only the drawing is gated, though. What reads the form back is not: it
+	 * looks for `input[name=gigantamax]` and `input[name=dynamaxlevel]` wherever
+	 * they happen to be and saves what it finds. So the fix is to put the two
+	 * rows on the page and let the existing code do the rest - no save path of
+	 * ours, and nothing to keep in step if they change how a set is stored.
+	 */
+	function installDynamaxBuilder() {
+		var room = window.TeambuilderRoom;
+		if (!room || !room.prototype || !room.prototype.updateDetailsForm) return false;
+		if (room.__velvetDynamax) return true;
+		room.__velvetDynamax = true;
+
+		var original = room.prototype.updateDetailsForm;
+		room.prototype.updateDetailsForm = function () {
+			var out = original.apply(this, arguments);
+			try {
+				addDynamaxRows(this);
+			} catch (e) {
+				// A missing row is better than a builder that will not draw.
+			}
+			return out;
+		};
+		return true;
+	}
+
+	function addDynamaxRows(room) {
+		var set = room.curSet;
+		var team = room.curTeam;
+		if (!set || !team || !room.$chart) return;
+		// Generation 8 already has both, drawn by the client itself.
+		if (team.gen === 8) return;
+		if (String(team.format || '').indexOf('gen9rp') !== 0) return;
+
+		var dex = team.dex || window.Dex;
+		var species = dex && dex.species ? dex.species.get(set.species) : null;
+		if (!species || !species.exists) return;
+
+		// A generation-9 dex may drop the Gigantamax flag on its way through, so
+		// the raw table is the fallback: the flag is a fact about the Pokemon
+		// rather than about the format being built for.
+		var raw = window.BattlePokedex && window.BattlePokedex[window.toID(set.species)];
+		var canGmax = species.canGigantamax || species.forme === 'Gmax' ||
+			(raw && (raw.canGigantamax || raw.forme === 'Gmax'));
+
+		var $form = room.$chart.find('form.detailsform');
+		if (!$form.length) return;
+		if ($form.find('input[name=gigantamax], input[name=dynamaxlevel]').length) return;
+
+		var buf = '';
+		if (!species.cannotDynamax) {
+			buf += '<div class="formrow"><label class="formlabel">Dmax Level:</label><div>' +
+				'<input type="number" min="0" max="10" step="1" name="dynamaxlevel" value="' +
+				(typeof set.dynamaxLevel === 'number' ? set.dynamaxLevel : 10) + '" /></div></div>';
+		}
+		if (canGmax) {
+			buf += '<div class="formrow"><label class="formlabel">Gigantamax:</label><div>';
+			if (species.forme === 'Gmax') {
+				buf += 'Yes';
+			} else {
+				buf += '<label class="checkbox inline"><input type="radio" name="gigantamax" value="yes"' +
+					(set.gigantamax ? ' checked' : '') + ' /> Yes</label> ';
+				buf += '<label class="checkbox inline"><input type="radio" name="gigantamax" value="no"' +
+					(!set.gigantamax ? ' checked' : '') + ' /> No</label>';
+			}
+			buf += '</div></div>';
+		}
+		if (buf) $form.append(buf);
 	}
 
 	/**
