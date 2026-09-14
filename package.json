@@ -23,6 +23,8 @@
     "test:elo": "node test/elo.test.js",
     "marathon": "node test/marathon.js",
     "marathon:stop": "node test/marathon.js --stop",
+    "build:calc": "node scripts/build-calc-data.js && node scripts/build-calc-page.js",
+    "test:calc": "node scripts/check-calc.js",
     "deploy": "node scripts/deploy.js"
   },
   "keywords": [

@@ -129,6 +129,19 @@ function playRedirect(url) {
 }
 
 /**
+ * The damage calculator, at a name worth typing.
+ *
+ * It is a static page like the client (`client/calc.html`, built by
+ * scripts/build-calc-page.js), so it is already served at /calc.html by
+ * whatever serves the rest of the folder. `/calc` is what anybody would type,
+ * and what fits in a sentence in the lobby.
+ */
+function calcRedirect(url) {
+	if (url !== '/calc' && url !== '/calc/') return null;
+	return '/calc.html';
+}
+
+/**
  * Dex data the client asks us for, which was never ours to serve.
  *
  * The client is configured to skip Showdown's cross-domain handshake - it
@@ -341,7 +354,7 @@ function hookServer(server, log) {
 				relay(req, res, log);
 				return true;
 			}
-			const moved = playRedirect(req.url) || dataRedirect(req.url);
+			const moved = playRedirect(req.url) || calcRedirect(req.url) || dataRedirect(req.url);
 			if (moved) {
 				res.writeHead(302, { Location: moved, 'Cache-Control': 'no-store' });
 				res.end();

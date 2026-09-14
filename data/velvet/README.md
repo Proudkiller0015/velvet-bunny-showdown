@@ -177,6 +177,60 @@ faint. Roar drags an ordinary Nuzleaf out and is refused by No Refunds;
 Intimidate lands for −2 on the control and is refused here. The second knockout
 is real, and it reverts to Nuzleaf.
 
+## The damage calculator
+
+`/calc` is Showdown's own calculator with this server's data and effects in it,
+built by `scripts/build-calc-page.js` the same way the client is built by
+`build-client-page.js`: their page, fetched at build time, with every relative
+URL pointed back at their host and two scripts of ours added at the end. Their
+mechanics stay theirs and stay current; none of it is reimplemented.
+
+Two things go in. **The data** — `client/js/velvet-calc-data.js`, generated —
+goes into `calc.SPECIES[9]` and friends, which is what the dropdowns are built
+from. That is only half: every data file walks its table into a *private by-id
+map* at load, and a calculation reads the map, not the table. Adding to the
+table alone made Samantha selectable and then "cannot read properties of
+undefined". The maps are private but the classes that read them are exported, so
+`Species.prototype.get` and its three siblings answer for ours and defer for
+everything else.
+
+**The effects** are applied by wrapping `calc.calculate`. An ability is only a
+name to the calculator — what it does lives in a formula keyed by the names it
+already knows, so Queen Wrath doubling both attacking stats means nothing to it.
+The obvious approach, multiplying the answer afterwards, is wrong by a point or
+two because the simulator truncates at *every* modifier rather than at the end.
+So the stats are computed here exactly as the server computes them — boosts,
+then ability, then item, each through the same 4096ths — and handed over as flat
+stats with the boost already spent. The arithmetic is the server's, so the
+numbers are the server's.
+
+Three things about that wrapper were each wrong once, and each produced a
+perfectly reasonable wrong number rather than an error:
+
+- **`calculate` clones its arguments** before doing anything, and a Pokémon's
+  clone rebuilds every stat from the species. Mutated stats have to be recorded
+  and put back by a patched `clone`.
+- **The patch must go on the prototype of the object in hand**, not on
+  `calc.Pokemon.prototype`. Their page loads `calc/index.js` and
+  `calc/adaptable.js`, which re-export everything onto one shared object, so
+  `calc.Pokemon` there is not the class the instances belong to. On a bare
+  harness the two are the same object and everything passes.
+- **The wrapper has to be `defineProperty`'d, not assigned.** Those same
+  re-exports make `calc.calculate` a get-only accessor: assigning to it does
+  nothing in loose mode and throws in strict mode.
+
+### Checking it
+
+    npm run test:calc
+
+`scripts/check-calc.js` asks the same twelve questions of both sides — the real
+simulator, and the real calculator files in a real browser — and compares all
+sixteen damage rolls of each. Twelve of twelve agree, roll for roll: Queen Wrath
+on both attacking stats, the Elemental Banana, Queen's Blitz against a type that
+resists it and a type that does not, both surges and the field they set,
+Merchant's Call, Nuzleaf-SOLD, a boosted attacker, and one control with nothing
+of ours in it at all.
+
 ## How it is installed
 
 Showdown compiles its dex into its own package and offers no hook for adding a

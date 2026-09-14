@@ -127,7 +127,9 @@ function build(upstream) {
 						of its own, a damage calculator built in, and one Pok&eacute;mon that
 						does not exist anywhere else.</p>
 						<p>Accounts are real Pok&eacute;mon Showdown accounts, and you can play
-						without one.</p></div>
+						without one.</p>
+						<p>The damage calculator is at <a href="/calc">/calc</a> - Showdown's own,
+						with this server's Pok&eacute;mon, moves, abilities and items in it.</p></div>
 					</div>
 				</div>`
 	);
