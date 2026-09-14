@@ -8,6 +8,8 @@
  */
 
 const path = require('path');
+const fs = require('fs');
+const os = require('os');
 const { spawn } = require('child_process');
 const net = require('net');
 
@@ -40,7 +42,28 @@ function startServer() {
 		// Forked battle workers happened to resolve them anyway, so getting this
 		// wrong only showed up once battles moved in-process.
 		cwd: path.dirname(require.resolve('pokemon-showdown/package.json')),
-		env: { ...process.env, PORT: String(PORT) },
+		/*
+		 * Its own heap cap, rather than this process's.
+		 *
+		 * `NODE_OPTIONS` is inherited, so one `--max-old-space-size` in the host
+		 * configuration was being applied to both processes in this container -
+		 * a 400MB ceiling each, in a box that is killed at 512MB total. Neither
+		 * had any reason to collect hard until it was alone past what the two of
+		 * them could afford together.
+		 *
+		 * So the server is given its own, and PS_SERVER_HEAP_MB is the knob. It
+		 * defaults to the same 400 the two of them shared, because the number
+		 * that should replace it depends on what the *other* process actually
+		 * holds - and nothing could see that until the memory note a few lines
+		 * below this one. Measure for a day, then set it here; a knob shipped
+		 * before the measurement would just be a guess with an env var on it.
+		 */
+		env: {
+			...process.env,
+			PORT: String(PORT),
+			NODE_OPTIONS: process.env.PS_SERVER_NODE_OPTIONS ||
+				`--max-old-space-size=${Number(process.env.PS_SERVER_HEAP_MB || 400)}`,
+		},
 		stdio: ['ignore', 'inherit', 'inherit'],
 	});
 	child.on('exit', code => {
@@ -100,6 +123,42 @@ function startServer() {
 	// processes away - so it looks now and then. See src/friends-store.js.
 	friends.start();
 	roster.start();
+
+	/*
+	 * Say how much memory this process is using, where something can read it.
+	 *
+	 * There are two node processes in this container and the health endpoint
+	 * could only see one of them - itself, the server. This one holds the bot,
+	 * the team builder and its own copy of the dex, and it was simply unmeasured:
+	 * the container total said 400MB and the server accounted for 300 of it, so
+	 * a hundred megabytes were being attributed to "the rest" with no way to
+	 * check. That matters now, because the two share a 512MB limit and inherit
+	 * one `--max-old-space-size` between them - if both ever grew into that cap
+	 * the sum would be well past what this box has.
+	 *
+	 * A file, because the two processes share a disk and nothing else.
+	 */
+	const wrapperStatus = path.join(process.env.PS_CACHE_DIR || os.tmpdir(), 'velvet-wrapper.json');
+	const noteMemory = () => {
+		try {
+			const memory = process.memoryUsage();
+			fs.mkdirSync(path.dirname(wrapperStatus), { recursive: true });
+			fs.writeFileSync(wrapperStatus, JSON.stringify({
+				pid: process.pid,
+				uptimeSeconds: Math.round(process.uptime()),
+				rss: memory.rss,
+				heapUsed: memory.heapUsed,
+				heapTotal: memory.heapTotal,
+				external: memory.external,
+				at: new Date().toISOString(),
+			}));
+		} catch (e) {
+			// Diagnostics must never be the thing that breaks the server.
+		}
+	};
+	noteMemory();
+	const memoryTimer = setInterval(noteMemory, Number(process.env.PS_MEMORY_NOTE_MS || 30000));
+	if (memoryTimer.unref) memoryTimer.unref();
 
 	/**
 	 * Leave slowly enough for the server to say goodbye.

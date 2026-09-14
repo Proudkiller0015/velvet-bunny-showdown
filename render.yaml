@@ -13,8 +13,16 @@ services:
     envVars:
       - key: NODE_VERSION
         value: "20"
-      # Live heap measures ~234MB across every format; the cap keeps V8 from
-      # letting RSS drift up toward the container limit and being OOM-killed.
+      # This now applies to the wrapper only - the process this line starts.
+      # The Showdown server gets its own from src/index.js, which defaults to
+      # the same number, so nothing has changed yet.
+      #
+      # It should change. A shared 400MB ceiling means 400 *each* in a box that
+      # is killed at 512MB for both together, so whichever grows first has no
+      # reason to collect until the container is already past saving. The right
+      # pair of numbers needs the live figure for this process, which nothing
+      # could see until now - /velvet/health.json reports both from this deploy
+      # on. Set PS_SERVER_HEAP_MB here once that has been read for a day.
       - key: NODE_OPTIONS
         value: --max-old-space-size=400
       - key: PS_BOT_NAME

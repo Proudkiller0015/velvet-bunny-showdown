@@ -395,8 +395,34 @@ function serveHealth(url, res) {
 	} catch (e) {
 		// Not a Linux control group, so there is no container number to give.
 	}
+	/*
+	 * The other process in here.
+	 *
+	 * This endpoint is served by the Showdown server, and the thing that started
+	 * it - which carries the bot, the ladder queues and a second copy of the dex
+	 * - is a different process with its own memory that nothing here can read.
+	 * It writes a line about itself to the disk both of them share; this picks it
+	 * up, with its age, because a stale number is worse than none.
+	 */
+	let wrapper = null;
+	try {
+		const raw = JSON.parse(fs.readFileSync(
+			path.join(process.env.PS_CACHE_DIR || os.tmpdir(), 'velvet-wrapper.json'), 'utf8'));
+		wrapper = {
+			pid: raw.pid,
+			rssMB: mb(raw.rss),
+			heapUsedMB: mb(raw.heapUsed),
+			heapTotalMB: mb(raw.heapTotal),
+			uptimeSeconds: raw.uptimeSeconds,
+			secondsOld: Math.round((Date.now() - new Date(raw.at).getTime()) / 1000),
+		};
+	} catch (e) {
+		// It has not written one yet, or this is not that kind of deployment.
+	}
+
 	const body = {
 		container,
+		wrapper,
 		uptimeSeconds: Math.round(process.uptime()),
 		process: {
 			rssMB: mb(memory.rss),
