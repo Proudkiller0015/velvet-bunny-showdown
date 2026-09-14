@@ -21,6 +21,11 @@
 	// replay while being perfectly fine in the client.
 	var SPRITES = '/sprites/';
 
+	// Who the Elemental Banana works for - the same six the item itself checks.
+	var BANANA_FAMILY = {
+		pansage: 1, simisage: 1, pansear: 1, simisear: 1, panpour: 1, simipour: 1,
+	};
+
 	var SPECIES = {
 		samantha: {
 			num: -1,
@@ -522,12 +527,40 @@
 			if (!stats || !mon) return stats;
 
 			var species = mon.speciesForme || mon.species || (mon.getSpeciesForme && mon.getSpeciesForme()) || '';
-			if (window.toID(species) !== 'samantha') return stats;
+			var speciesid = window.toID(species);
 
 			var ability = window.toID(
 				(clientPokemon && clientPokemon.ability) || (serverPokemon && serverPokemon.ability) || ''
 			);
 			var item = window.toID(mon.item || '');
+
+			/**
+			 * The Elemental Banana, in the numbers the tooltip shows.
+			 *
+			 * This panel does not ask the server what a stat is - it recalculates
+			 * it here, applying each item by name from a list that necessarily
+			 * knows nothing about ours. So the banana was doing its 1.3x in the
+			 * battle and showing none of it in the tooltip, which is worse than
+			 * showing nothing: the number was confidently wrong.
+			 *
+			 * The family check matches the item's own, and the ripened multiplier
+			 * matches too - 1.5x once this Pokemon has Terastallized or Dynamaxed.
+			 */
+			if (item === 'elementalbanana' && BANANA_FAMILY[speciesid]) {
+				var tera = !!(clientPokemon && (clientPokemon.terastallized || clientPokemon.teraType && clientPokemon.terastallized));
+				var maxed = !!(clientPokemon && clientPokemon.volatiles && clientPokemon.volatiles.dynamax);
+				var ripe = tera || maxed ? 1.5 : 1.3;
+				stats.atk = Math.floor(stats.atk * ripe);
+				stats.spa = Math.floor(stats.spa * ripe);
+				stats.spe = Math.floor(stats.spe * ripe);
+			}
+
+			if (speciesid !== 'samantha') {
+				for (var capped in stats) {
+					if (stats[capped] > 9999) stats[capped] = 9999;
+				}
+				return stats;
+			}
 
 			if (ability === 'queenwrath') {
 				stats.atk *= 2;

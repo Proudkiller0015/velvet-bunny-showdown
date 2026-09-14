@@ -34,6 +34,9 @@
  * client.
  */
 
+const fs = require('fs');
+const os = require('os');
+const path = require('path');
 const https = require('https');
 
 /** Built on first use: the web worker serves replays, it does not save them. */
@@ -284,6 +287,37 @@ function serveReplay(url, res, log) {
 }
 
 /**
+ * The ladder queues' own status.
+ *
+ * The bots live in the main process and the HTTP server lives in a socket
+ * worker, so this reads the small file src/ladder.js leaves on the disk they
+ * share rather than asking anything. It exists because this host offers no way
+ * to read the logs from outside, which left "the queues are not running" as a
+ * question with no answer that was not a guess.
+ *
+ * Nothing here is private: the queue names are the names people play against,
+ * and the rest is a format, a boolean and an error string.
+ */
+const LADDER_STATUS = path.join(process.env.PS_CACHE_DIR || os.tmpdir(), 'velvet-ladder-status.json');
+
+function serveLadderStatus(url, res) {
+	if (url.split('?')[0] !== '/velvet/ladder.json') return false;
+	let body;
+	try {
+		body = fs.readFileSync(LADDER_STATUS, 'utf8');
+	} catch (e) {
+		body = JSON.stringify({
+			reason: 'no status file: the ladder has not started in this deploy',
+			code: e.code,
+			lookedIn: LADDER_STATUS,
+		}, null, 1);
+	}
+	res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
+	res.end(body);
+	return true;
+}
+
+/**
  * Answer that one path before Showdown's own web server sees it.
  *
  * Showdown serves HTTP from a worker process, and its request handler is wired
@@ -313,6 +347,7 @@ function hookServer(server, log) {
 				res.end();
 				return true;
 			}
+			if (serveLadderStatus(req.url, res)) return true;
 			if (serveReplay(req.url, res, log)) return true;
 
 			if (isPage(req.url)) revalidate(res);
