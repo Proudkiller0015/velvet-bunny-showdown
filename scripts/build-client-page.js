@@ -115,7 +115,8 @@ function build(upstream) {
 	if (!teambuilderTables.test(html)) throw new Error('could not find the teambuilder tables to follow');
 	html = html.replace(teambuilderTables, match => `${match}\n<script src="js/velvet-signatures.js"></script>
 <script src="js/velvet-buffs.js"></script>
-<script src="js/velvet-data.js"></script>`);
+<script src="js/velvet-data.js"></script>
+<script src="js/velvet-matchmaking.js"></script>`);
 
 	// What this server is, in the panel their news would have been in.
 	html = html.replace(

@@ -66,3 +66,33 @@
 .ps-room:not(.tiny-layout) .mainmenuwrapper .mainmenu {
 	max-width: 324px;
 }
+
+/**
+ * The opponent row in the search form.
+ *
+ * The form's own rows are a label and one control; this one has three, so the
+ * pieces are spaced by hand rather than inheriting the label's fixed width and
+ * overlapping at the widths a phone has.
+ */
+.velvet-opponent .velvet-opponent-toggle {
+	display: inline-block;
+	margin-right: 6px;
+	vertical-align: middle;
+}
+.velvet-opponent select[name=velvetrung] {
+	vertical-align: middle;
+	max-width: 190px;
+}
+.velvet-opponent select[name=velvetrung][disabled] {
+	opacity: 0.5;
+}
+.velvet-opponent .velvet-opponent-note {
+	display: block;
+	margin: 2px 0 0 74px;
+	color: #888;
+}
+@media (max-width: 640px) {
+	.velvet-opponent .velvet-opponent-note {
+		margin-left: 0;
+	}
+}

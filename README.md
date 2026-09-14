@@ -16,6 +16,9 @@ Two ways to get a battle:
 
 - **Press Battle!** with a format chosen. The bot sits in the ladder queue, so
   it finds you, and the result is **rated** and counts on the server's ladder.
+  The **Opponent** row above the button decides who that is: leave *House bot*
+  ticked and pick a difficulty, or untick it for **players only** and wait for
+  a real one.
 - **Open the Lobby.** The panel at the top of the room lists every format as a
   button, with Easy / Normal / Hard / Champion alongside.
 
@@ -96,7 +99,8 @@ setup moves on a Choice item, no status under an Assault Vest.
 
 ## Difficulty
 
-PM the bot, or use the Lobby panel:
+The **Opponent** row on the search form, the Lobby panel, a PM to the bot, or
+`/bot <level>` in any chat - all four set the same thing:
 
 | level | plays like |
 | --- | --- |
