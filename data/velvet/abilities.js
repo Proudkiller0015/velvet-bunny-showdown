@@ -330,7 +330,7 @@ exports.Abilities = {
 		rating: 5,
 		num: -1,
 		shortDesc: "Doubles Atk and SpA, hits twice, contact moves ignore Protect. Shadow Shield, Sturdy, Magic Guard, Clear Body, Good as Gold. Untrappable, uncopyable.",
-		desc: "Attack and Special Attack are doubled, and its attacks hit twice, the second at a quarter power. Its moves ignore the target's Ability, and its contact moves ignore Protect and its relatives. Priority moves cannot touch this side, and it moves before anything else in its priority bracket, Trick Room included. At full HP, damage taken is halved. Survives a killing blow from full HP and is immune to OHKO moves. Takes no damage from anything that is not a move. Its stats cannot be lowered, and no status move used by another Pokemon affects it. It cannot be trapped, cannot be copied by Transform or Imposter, and Destiny Bond cannot take it down. Mold Breaker, Teravolt and Turboblaze cannot ignore any of it.",
+		desc: "Attack and Special Attack are doubled, and its attacks hit twice, the second at a quarter power. Its moves ignore the target's Ability, and its contact moves ignore Protect and its relatives. Priority moves cannot touch this side, and it moves before anything else in its priority bracket, Trick Room included. At full HP, damage taken is halved. Survives a killing blow from full HP and is immune to OHKO moves. Takes no damage from anything that is not a move. Its stats cannot be lowered, and no status move used by another Pokemon affects it. It cannot be trapped, cannot be copied or swapped away by anything - Transform, Imposter and Wandering Spirit included - and Destiny Bond cannot take it down. Mold Breaker, Teravolt and Turboblaze cannot ignore any of it.",
 	},
 
 	queensmorph: {
@@ -397,7 +397,7 @@ exports.Abilities = {
 		rating: 5,
 		num: -2,
 		shortDesc: "Transforms into the foe on entry, then +6 Speed. Keeps Shadow Shield, Sturdy, Magic Guard, Clear Body and Good as Gold.",
-		desc: "On switch-in, this Pokemon Transforms into the opposing Pokemon and then raises its Speed by 6 stages. Afterwards it keeps taking half damage at full HP, surviving a killing blow from full HP, ignoring damage that is not from a move, refusing stat drops and status moves from anything other than itself, moving first in its priority bracket even under Trick Room, being untrappable, being safe from Destiny Bond, and being impossible to copy with Transform or Imposter - all of which outlive the Transform replacing this Ability with the copied one.",
+		desc: "On switch-in, this Pokemon Transforms into the opposing Pokemon and then raises its Speed by 6 stages. Afterwards it keeps taking half damage at full HP, surviving a killing blow from full HP, ignoring damage that is not from a move, refusing stat drops and status moves from anything other than itself, moving first in its priority bracket even under Trick Room, being untrappable, being safe from Destiny Bond, and being impossible to copy or swap away with Transform, Imposter or Wandering Spirit - all of which outlive the Transform replacing this Ability with the copied one.",
 	},
 	/**
 	 * Verdant Surge - Grassy Surge, and then some.
@@ -506,6 +506,29 @@ function patchAbilities(Abilities) {
 	const original = imposter.onSwitchIn;
 	if (typeof original !== 'function') return Abilities;
 	imposter.velvetQueenSafe = true;
+
+	/*
+	 * Wandering Spirit swaps abilities with whoever touches it.
+	 *
+	 * Queen Wrath is already safe: the swap runs through the engine's skillSwap,
+	 * which refuses when either side's ability carries `failskillswap`, and hers
+	 * does. Queen's Morph is not, and for a subtle reason - by the time anything
+	 * touches her she is holding a copy of the foe's ability, and it is that copy
+	 * the swap inspects. Whatever she took from a Pidgey does not carry her flags.
+	 *
+	 * So the same treatment as Destiny Bond and Imposter: the thing doing the
+	 * taking is taught to look at who it is taking from.
+	 */
+	const wandering = Abilities.wanderingspirit;
+	if (wandering && !wandering.velvetQueenSafe && typeof wandering.onDamagingHit === 'function') {
+		const swap = wandering.onDamagingHit;
+		wandering.velvetQueenSafe = true;
+		wandering.onDamagingHit = function (damage, target, source, move) {
+			// `source` is whoever landed the hit; `target` holds Wandering Spirit.
+			if (queenProtected(source)) return;
+			return swap.call(this, damage, target, source, move);
+		};
+	}
 
 	imposter.onSwitchIn = function (pokemon) {
 		const foes = pokemon.side.foe.active;
