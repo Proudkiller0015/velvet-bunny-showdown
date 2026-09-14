@@ -309,8 +309,9 @@ function rpTier(name, base, { gen = 9, rules = [], ...extra } = {}) {
  * applied only to the three bases that actually carry it, which was measured
  * rather than assumed:
  *
- *   National Dex, National Dex UU, National Dex RU   carry it
- *   National Dex Ubers, National Dex AG, NU, PU, ZU  do not
+ *   National Dex, National Dex UU, National Dex RU       carry it
+ *   National Dex Ubers, National Dex AG, National Dex LC,
+ *   NU, PU, ZU                                           do not
  *
  * The check that every format builds its rule table runs before each deploy and
  * is what would catch this changing upstream.
@@ -454,6 +455,26 @@ exports.Formats = [
 	 * and a list that has to be maintained; until then, being narrower than
 	 * promised beats being wrong about who belongs.
 	 */
+	/*
+	 * Little Cup, which is where this server's own Pokemon are actually played.
+	 *
+	 * The monkeys were rebuilt here - a terrain setter, the priority move that
+	 * goes with it, thirty-odd moves each - and then their pre-evolutions were
+	 * given the same, on the principle that a buff belongs to a family. Pansage,
+	 * Pansear and Panpour are the stage that has a game to be in, at 316 base
+	 * stats, and this server had no format they could be brought to.
+	 *
+	 * National Dex LC rather than the ninth generation's own, for the same
+	 * reason every RP tier above it stands on National Dex: the Pokemon that
+	 * were cut are the whole point.
+	 *
+	 * No !Terastal Clause, and that is not an oversight. National Dex LC does
+	 * not carry the clause - measured, not assumed - and removing a rule a
+	 * format does not have is an error thrown while building the list every
+	 * connecting client asks for. One of those took the whole server down once.
+	 */
+	rpTier('LC', '[Gen 9] National Dex LC', UBERS_ONLY_ITEM),
+
 	rpTier('NU', '[Gen 9] NU', UBERS_ONLY_ITEM),
 	rpTier('PU', '[Gen 9] PU', UBERS_ONLY_ITEM),
 	rpTier('ZU', '[Gen 9] ZU', UBERS_ONLY_ITEM),

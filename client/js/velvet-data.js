@@ -471,6 +471,9 @@
 		gen9rpubers: 'gen9nationaldexubers',
 		gen9rpuu: 'gen9nationaldexuu',
 		gen9rpru: 'gen9nationaldexru',
+		// Little Cup has a National Dex list of its own, which is the one this
+		// server's buffed pre-evolutions belong in.
+		gen9rplc: 'gen9nationaldexlc',
 		// Below RU there is no National Dex list, so these stand on the ninth
 		// generation's own - which is also what the builder should show for them.
 		gen9rpnu: 'gen9nu',
