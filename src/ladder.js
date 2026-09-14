@@ -145,10 +145,26 @@ class LadderBot {
 				 */
 				noteQueue(this.name, { connected: false, named: parts[1], error: 'still a guest, retrying login' });
 				if (!this.guestRetry) {
+					/*
+					 * Wait longer, and not in step with everybody else.
+					 *
+					 * A refused name is not a broken socket. It means the login
+					 * server would not sign an assertion just then - and the reason
+					 * it would not is almost always that fifteen accounts from one
+					 * address asked it inside a minute. Retrying in two seconds
+					 * asks the same overloaded thing the same question sooner, and
+					 * every refused queue doing it on the same clock turns the
+					 * retry into a second burst exactly like the first.
+					 *
+					 * So: a floor of fifteen seconds, and a random half-minute on
+					 * top, which is what breaks the lockstep. Nine queues that all
+					 * failed together come back one at a time.
+					 */
+					const wait = Math.max(15000, this.reconnectDelay) + Math.floor(Math.random() * 30000);
 					this.guestRetry = setTimeout(() => {
 						this.guestRetry = null;
 						try { this.ws.close(); } catch (e) {}
-					}, this.reconnectDelay);
+					}, wait);
 				}
 			}
 			return;
@@ -305,7 +321,18 @@ function startLadderBots(options) {
 	 * were not, which is exactly the shape the ladder was in: Random Battle up,
 	 * RP Random Battle stuck as guests.
 	 */
-	const spacing = Number(process.env.PS_LADDER_LOGIN_SPACING_MS || 4000);
+	/*
+	 * Far enough apart that the login server will actually answer.
+	 *
+	 * Four seconds was set when there were ten queues and it was already the fix
+	 * for five of them failing. At fifteen it stopped being enough: nine came up
+	 * as guests, and a queue with no name is a queue nobody can be matched
+	 * against, so most of the ladder was quietly missing.
+	 *
+	 * Nine seconds means the last queue is up a little over two minutes after
+	 * boot, which nobody notices, against a ladder that works.
+	 */
+	const spacing = Number(process.env.PS_LADDER_LOGIN_SPACING_MS || 9000);
 	status.reason = `${bots.length} queue(s) starting, ${spacing}ms apart`;
 	bots.forEach((bot, i) => {
 		noteQueue(bot.name, { format: bot.format, difficulty: bot.difficulty, connected: false, error: null });
