@@ -1,0 +1,3362 @@
+{
+ "builtAt": "2026-09-14T13:25:10.518Z",
+ "source": "public replays from replay.pokemonshowdown.com, highest-rated first",
+ "pools": {
+  "gen3ou": {
+   "replays": 499,
+   "decisions": 41434,
+   "averageTurns": 45.2,
+   "rating": {
+    "median": 1714,
+    "low": 1637,
+    "high": 1910
+   },
+   "share": {
+    "pivot": 1.3,
+    "move": 66,
+    "switch": 32.5,
+    "dragged": 0.2
+   },
+   "doubleSwitchesPerGame": 4.99,
+   "whenFoeJustCameIn": {
+    "foe stayed in": {
+     "n": 24464,
+     "pivot": 1.4,
+     "move": 70.1,
+     "switch": 28.3,
+     "dragged": 0.2
+    },
+    "foe just came in": {
+     "n": 16970,
+     "move": 60,
+     "pivot": 1.2,
+     "switch": 38.6,
+     "dragged": 0.1
+    }
+   },
+   "whenJustCameIn": {
+    "we just came in": {
+     "n": 17029,
+     "move": 53.3,
+     "pivot": 1.4,
+     "switch": 45.2,
+     "dragged": 0.1
+    }
+   },
+   "byOwnHp": {
+    "full": {
+     "n": 15783,
+     "pivot": 1,
+     "move": 57.3,
+     "switch": 41.4,
+     "dragged": 0.3
+    },
+    "high": {
+     "n": 15339,
+     "pivot": 1.7,
+     "move": 69.9,
+     "switch": 28.3,
+     "dragged": 0.1
+    },
+    "low": {
+     "n": 2422,
+     "move": 75.3,
+     "switch": 23.4,
+     "pivot": 1.2,
+     "dragged": 0
+    },
+    "half": {
+     "n": 7890,
+     "move": 72.9,
+     "pivot": 1.5,
+     "switch": 25.6,
+     "dragged": 0.1
+    }
+   },
+   "byFoeHp": {
+    "full": {
+     "n": 15506,
+     "pivot": 1.8,
+     "move": 56.2,
+     "switch": 41.9,
+     "dragged": 0.1
+    },
+    "high": {
+     "n": 15241,
+     "move": 68,
+     "switch": 30.6,
+     "pivot": 1.3,
+     "dragged": 0.1
+    },
+    "half": {
+     "n": 8068,
+     "move": 76.1,
+     "pivot": 0.8,
+     "switch": 22.9,
+     "dragged": 0.2
+    },
+    "low": {
+     "n": 2619,
+     "move": 81.3,
+     "switch": 18,
+     "pivot": 0.5,
+     "dragged": 0.2
+    }
+   },
+   "firstTurn": {
+    "turn 1": {
+     "n": 963,
+     "pivot": 3.6,
+     "move": 62.6,
+     "switch": 33.7
+    }
+   }
+  },
+  "gen4ou": {
+   "replays": 499,
+   "decisions": 27428,
+   "averageTurns": 30.8,
+   "rating": {
+    "median": 1564,
+    "low": 1474,
+    "high": 1776
+   },
+   "share": {
+    "move": 73.2,
+    "switch": 24.2,
+    "pivot": 2.5,
+    "dragged": 0.1
+   },
+   "doubleSwitchesPerGame": 0.95,
+   "whenFoeJustCameIn": {
+    "foe stayed in": {
+     "n": 17282,
+     "move": 73,
+     "switch": 24.6,
+     "pivot": 2.2,
+     "dragged": 0.1
+    },
+    "foe just came in": {
+     "n": 10146,
+     "switch": 23.4,
+     "move": 73.5,
+     "pivot": 3,
+     "dragged": 0.1
+    }
+   },
+   "whenJustCameIn": {
+    "we just came in": {
+     "n": 10226,
+     "switch": 32.4,
+     "move": 65.1,
+     "pivot": 2.3,
+     "dragged": 0.1
+    }
+   },
+   "byOwnHp": {
+    "full": {
+     "n": 6743,
+     "move": 69.8,
+     "switch": 26.5,
+     "pivot": 3.6,
+     "dragged": 0.1
+    },
+    "half": {
+     "n": 5976,
+     "move": 75.5,
+     "switch": 22.6,
+     "pivot": 1.8,
+     "dragged": 0.1
+    },
+    "high": {
+     "n": 12665,
+     "switch": 24.2,
+     "move": 73.2,
+     "pivot": 2.5,
+     "dragged": 0.1
+    },
+    "low": {
+     "n": 2044,
+     "move": 77.7,
+     "switch": 21.1,
+     "pivot": 1.1,
+     "dragged": 0.1
+    }
+   },
+   "byFoeHp": {
+    "full": {
+     "n": 6520,
+     "move": 70,
+     "switch": 26.4,
+     "pivot": 3.5,
+     "dragged": 0.1
+    },
+    "high": {
+     "n": 12328,
+     "move": 71.2,
+     "switch": 26.3,
+     "pivot": 2.4,
+     "dragged": 0.1
+    },
+    "half": {
+     "n": 6195,
+     "switch": 20.6,
+     "move": 77.5,
+     "pivot": 1.8,
+     "dragged": 0.1
+    },
+    "low": {
+     "n": 2385,
+     "move": 81.4,
+     "switch": 16.4,
+     "pivot": 2.3
+    }
+   },
+   "firstTurn": {
+    "turn 1": {
+     "n": 942,
+     "move": 75.6,
+     "switch": 17.4,
+     "pivot": 7
+    }
+   }
+  },
+  "gen5ou": {
+   "replays": 500,
+   "decisions": 28037,
+   "averageTurns": 30.6,
+   "rating": {
+    "median": 1555,
+    "low": 1440,
+    "high": 1782
+   },
+   "share": {
+    "move": 69.7,
+    "switch": 26.2,
+    "pivot": 4.1,
+    "dragged": 0
+   },
+   "doubleSwitchesPerGame": 1.43,
+   "whenFoeJustCameIn": {
+    "foe stayed in": {
+     "n": 17058,
+     "move": 70.2,
+     "switch": 26.1,
+     "pivot": 3.6,
+     "dragged": 0
+    },
+    "foe just came in": {
+     "n": 10979,
+     "switch": 26.3,
+     "move": 68.8,
+     "pivot": 4.9,
+     "dragged": 0
+    }
+   },
+   "whenJustCameIn": {
+    "we just came in": {
+     "n": 11024,
+     "switch": 32.4,
+     "move": 63.6,
+     "pivot": 4,
+     "dragged": 0
+    }
+   },
+   "byOwnHp": {
+    "full": {
+     "n": 7548,
+     "move": 68.7,
+     "switch": 26.6,
+     "pivot": 4.7
+    },
+    "high": {
+     "n": 12199,
+     "move": 68.6,
+     "switch": 27,
+     "pivot": 4.4,
+     "dragged": 0
+    },
+    "half": {
+     "n": 6105,
+     "move": 71,
+     "switch": 25.3,
+     "pivot": 3.7,
+     "dragged": 0
+    },
+    "low": {
+     "n": 2185,
+     "switch": 22.9,
+     "move": 75.2,
+     "pivot": 1.9
+    }
+   },
+   "byFoeHp": {
+    "full": {
+     "n": 7338,
+     "move": 67.5,
+     "switch": 27.3,
+     "pivot": 5.2,
+     "dragged": 0
+    },
+    "high": {
+     "n": 11874,
+     "move": 67.8,
+     "switch": 28,
+     "pivot": 4.2,
+     "dragged": 0
+    },
+    "half": {
+     "n": 6276,
+     "move": 71.9,
+     "switch": 25,
+     "pivot": 3.1
+    },
+    "low": {
+     "n": 2549,
+     "move": 79.2,
+     "switch": 17.5,
+     "pivot": 3.3
+    }
+   },
+   "firstTurn": {
+    "turn 1": {
+     "n": 965,
+     "move": 69.5,
+     "switch": 23.3,
+     "pivot": 7.2
+    }
+   }
+  },
+  "gen6ou": {
+   "replays": 500,
+   "decisions": 36015,
+   "averageTurns": 38.9,
+   "rating": null,
+   "share": {
+    "pivot": 3.2,
+    "move": 69.9,
+    "switch": 26.8,
+    "dragged": 0
+   },
+   "doubleSwitchesPerGame": 2.03,
+   "whenFoeJustCameIn": {
+    "foe stayed in": {
+     "n": 22913,
+     "pivot": 3,
+     "move": 70.5,
+     "switch": 26.4,
+     "dragged": 0
+    },
+    "foe just came in": {
+     "n": 13102,
+     "pivot": 3.7,
+     "switch": 27.5,
+     "move": 68.8,
+     "dragged": 0
+    }
+   },
+   "whenJustCameIn": {
+    "we just came in": {
+     "n": 13151,
+     "pivot": 3.7,
+     "switch": 34.3,
+     "move": 62,
+     "dragged": 0
+    }
+   },
+   "byOwnHp": {
+    "full": {
+     "n": 9839,
+     "pivot": 3.1,
+     "move": 69.2,
+     "switch": 27.7,
+     "dragged": 0
+    },
+    "high": {
+     "n": 15946,
+     "pivot": 3.2,
+     "switch": 27.5,
+     "move": 69.3,
+     "dragged": 0
+    },
+    "half": {
+     "n": 7655,
+     "move": 71.7,
+     "pivot": 3.1,
+     "switch": 25.1,
+     "dragged": 0
+    },
+    "low": {
+     "n": 2575,
+     "switch": 24.7,
+     "move": 71,
+     "pivot": 4.3
+    }
+   },
+   "byFoeHp": {
+    "full": {
+     "n": 9653,
+     "pivot": 5,
+     "move": 68.1,
+     "switch": 26.9,
+     "dragged": 0
+    },
+    "high": {
+     "n": 15678,
+     "switch": 29.6,
+     "move": 67.4,
+     "pivot": 3,
+     "dragged": 0
+    },
+    "half": {
+     "n": 7881,
+     "move": 73.6,
+     "switch": 24.4,
+     "pivot": 2,
+     "dragged": 0
+    },
+    "low": {
+     "n": 2803,
+     "move": 79.5,
+     "switch": 18.1,
+     "pivot": 2.5
+    }
+   },
+   "firstTurn": {
+    "turn 1": {
+     "n": 930,
+     "pivot": 4.6,
+     "move": 75.3,
+     "switch": 20.1
+    }
+   }
+  },
+  "gen7ou": {
+   "replays": 500,
+   "decisions": 37019,
+   "averageTurns": 39.6,
+   "rating": {
+    "median": 2049,
+    "low": 1971,
+    "high": 2195
+   },
+   "share": {
+    "move": 66.6,
+    "switch": 29.4,
+    "pivot": 4,
+    "dragged": 0
+   },
+   "doubleSwitchesPerGame": 2.43,
+   "whenFoeJustCameIn": {
+    "foe stayed in": {
+     "n": 22330,
+     "move": 67.7,
+     "switch": 28.8,
+     "pivot": 3.5,
+     "dragged": 0
+    },
+    "foe just came in": {
+     "n": 14689,
+     "move": 64.9,
+     "pivot": 4.9,
+     "switch": 30.2,
+     "dragged": 0
+    }
+   },
+   "whenJustCameIn": {
+    "we just came in": {
+     "n": 14683,
+     "move": 59.2,
+     "switch": 36.4,
+     "pivot": 4.4,
+     "dragged": 0
+    }
+   },
+   "byOwnHp": {
+    "full": {
+     "n": 10130,
+     "move": 64.5,
+     "switch": 31,
+     "pivot": 4.6,
+     "dragged": 0
+    },
+    "high": {
+     "n": 16265,
+     "switch": 29.4,
+     "move": 66.6,
+     "pivot": 4,
+     "dragged": 0
+    },
+    "half": {
+     "n": 8060,
+     "move": 68.9,
+     "switch": 27.1,
+     "pivot": 3.9,
+     "dragged": 0
+    },
+    "low": {
+     "n": 2564,
+     "move": 67.5,
+     "switch": 29.8,
+     "pivot": 2.7,
+     "dragged": 0
+    }
+   },
+   "byFoeHp": {
+    "full": {
+     "n": 9938,
+     "move": 63.6,
+     "switch": 31.4,
+     "pivot": 4.9,
+     "dragged": 0.1
+    },
+    "high": {
+     "n": 15986,
+     "move": 65,
+     "switch": 31,
+     "pivot": 4,
+     "dragged": 0
+    },
+    "half": {
+     "n": 8253,
+     "switch": 27,
+     "move": 69.7,
+     "pivot": 3.3,
+     "dragged": 0
+    },
+    "low": {
+     "n": 2842,
+     "pivot": 3.4,
+     "move": 76.6,
+     "switch": 19.9,
+     "dragged": 0
+    }
+   },
+   "firstTurn": {
+    "turn 1": {
+     "n": 970,
+     "move": 67.4,
+     "switch": 23.2,
+     "pivot": 9.4
+    }
+   }
+  },
+  "gen8nationaldex": {
+   "replays": 500,
+   "decisions": 32048,
+   "averageTurns": 34.5,
+   "rating": {
+    "median": 1694,
+    "low": 1600,
+    "high": 1912
+   },
+   "share": {
+    "move": 68.3,
+    "switch": 27.3,
+    "pivot": 4.4,
+    "dragged": 0
+   },
+   "doubleSwitchesPerGame": 1.79,
+   "whenFoeJustCameIn": {
+    "foe stayed in": {
+     "n": 19669,
+     "move": 68.9,
+     "switch": 27.2,
+     "pivot": 3.8,
+     "dragged": 0
+    },
+    "foe just came in": {
+     "n": 12379,
+     "move": 67.3,
+     "switch": 27.5,
+     "pivot": 5.2,
+     "dragged": 0
+    }
+   },
+   "whenJustCameIn": {
+    "we just came in": {
+     "n": 12422,
+     "move": 60.2,
+     "switch": 34.7,
+     "pivot": 5,
+     "dragged": 0
+    }
+   },
+   "byOwnHp": {
+    "full": {
+     "n": 9740,
+     "move": 67.9,
+     "switch": 27.4,
+     "pivot": 4.8
+    },
+    "low": {
+     "n": 2067,
+     "move": 72.3,
+     "switch": 25.4,
+     "pivot": 2.3
+    },
+    "high": {
+     "n": 13775,
+     "move": 66.7,
+     "switch": 28.6,
+     "pivot": 4.6,
+     "dragged": 0
+    },
+    "half": {
+     "n": 6466,
+     "move": 71,
+     "switch": 25.1,
+     "pivot": 3.9,
+     "dragged": 0
+    }
+   },
+   "byFoeHp": {
+    "full": {
+     "n": 9567,
+     "move": 65.8,
+     "switch": 28.9,
+     "pivot": 5.3
+    },
+    "high": {
+     "n": 13641,
+     "move": 66.2,
+     "switch": 29.5,
+     "pivot": 4.3,
+     "dragged": 0
+    },
+    "low": {
+     "n": 2340,
+     "move": 79.2,
+     "switch": 16.5,
+     "pivot": 4.3
+    },
+    "half": {
+     "n": 6500,
+     "switch": 24.3,
+     "move": 72.4,
+     "pivot": 3.3,
+     "dragged": 0
+    }
+   },
+   "firstTurn": {
+    "turn 1": {
+     "n": 956,
+     "move": 72.1,
+     "pivot": 8.5,
+     "switch": 19.5
+    }
+   }
+  },
+  "gen8ou": {
+   "replays": 500,
+   "decisions": 46617,
+   "averageTurns": 49.3,
+   "rating": {
+    "median": 2016,
+    "low": 1911,
+    "high": 2185
+   },
+   "share": {
+    "move": 65.2,
+    "switch": 29.9,
+    "pivot": 4.9,
+    "dragged": 0
+   },
+   "doubleSwitchesPerGame": 3.44,
+   "whenFoeJustCameIn": {
+    "foe stayed in": {
+     "n": 28509,
+     "move": 66.8,
+     "switch": 28.6,
+     "pivot": 4.6,
+     "dragged": 0
+    },
+    "foe just came in": {
+     "n": 18108,
+     "switch": 31.9,
+     "move": 62.8,
+     "pivot": 5.4,
+     "dragged": 0
+    }
+   },
+   "whenJustCameIn": {
+    "we just came in": {
+     "n": 18133,
+     "switch": 38.7,
+     "move": 55.5,
+     "pivot": 5.8
+    }
+   },
+   "byOwnHp": {
+    "full": {
+     "n": 12299,
+     "move": 64.3,
+     "switch": 29.6,
+     "pivot": 6.1,
+     "dragged": 0
+    },
+    "half": {
+     "n": 8863,
+     "move": 69.4,
+     "switch": 27.3,
+     "pivot": 3.3
+    },
+    "high": {
+     "n": 23008,
+     "move": 64,
+     "switch": 30.9,
+     "pivot": 5.1,
+     "dragged": 0
+    },
+    "low": {
+     "n": 2447,
+     "move": 65.9,
+     "switch": 30.8,
+     "pivot": 3.3
+    }
+   },
+   "byFoeHp": {
+    "full": {
+     "n": 12149,
+     "move": 63.1,
+     "switch": 31.5,
+     "pivot": 5.4,
+     "dragged": 0
+    },
+    "half": {
+     "n": 9001,
+     "switch": 25.9,
+     "move": 70,
+     "pivot": 4
+    },
+    "high": {
+     "n": 22797,
+     "move": 63.4,
+     "switch": 31.4,
+     "pivot": 5.2
+    },
+    "low": {
+     "n": 2670,
+     "move": 73.7,
+     "switch": 22.8,
+     "pivot": 3.4
+    }
+   },
+   "firstTurn": {
+    "turn 1": {
+     "n": 968,
+     "move": 68.7,
+     "pivot": 7.2,
+     "switch": 24.1
+    }
+   }
+  },
+  "gen9doublesou": {
+   "replays": 500,
+   "decisions": 11461,
+   "averageTurns": 12.1,
+   "rating": {
+    "median": 1853,
+    "low": 1762,
+    "high": 1990
+   },
+   "share": {
+    "move": 73.9,
+    "switch": 22.3,
+    "pivot": 3.9,
+    "dragged": 0
+   },
+   "doubleSwitchesPerGame": 0.56,
+   "whenFoeJustCameIn": {
+    "foe stayed in": {
+     "n": 5858,
+     "move": 75.4,
+     "pivot": 3.6,
+     "switch": 21,
+     "dragged": 0
+    },
+    "foe just came in": {
+     "n": 5603,
+     "switch": 23.7,
+     "move": 72.2,
+     "pivot": 4.1
+    }
+   },
+   "whenJustCameIn": {
+    "we just came in": {
+     "n": 5608,
+     "switch": 24.4,
+     "move": 70.8,
+     "pivot": 4.8
+    }
+   },
+   "byOwnHp": {
+    "full": {
+     "n": 4316,
+     "move": 76.4,
+     "switch": 19.7,
+     "pivot": 3.9
+    },
+    "half": {
+     "n": 2326,
+     "switch": 24.9,
+     "move": 72,
+     "pivot": 3.1,
+     "dragged": 0
+    },
+    "low": {
+     "n": 1489,
+     "move": 75.9,
+     "switch": 22.8,
+     "pivot": 1.3
+    },
+    "high": {
+     "n": 3330,
+     "move": 71,
+     "switch": 23.6,
+     "pivot": 5.4
+    }
+   },
+   "byFoeHp": {
+    "full": {
+     "n": 4290,
+     "move": 71.7,
+     "switch": 24.4,
+     "pivot": 4
+    },
+    "low": {
+     "n": 1526,
+     "switch": 18.5,
+     "move": 79.1,
+     "pivot": 2.3,
+     "dragged": 0.1
+    },
+    "half": {
+     "n": 2336,
+     "move": 76.7,
+     "switch": 19.7,
+     "pivot": 3.6
+    },
+    "high": {
+     "n": 3309,
+     "move": 72.2,
+     "switch": 23.1,
+     "pivot": 4.6
+    }
+   },
+   "firstTurn": {
+    "turn 1": {
+     "n": 993,
+     "move": 74.6,
+     "pivot": 5.9,
+     "switch": 19.4
+    }
+   }
+  },
+  "gen9lc": {
+   "replays": 500,
+   "decisions": 24571,
+   "averageTurns": 27.8,
+   "rating": {
+    "median": 1490,
+    "low": 1400,
+    "high": 1671
+   },
+   "share": {
+    "move": 72.6,
+    "pivot": 6.1,
+    "switch": 21.3,
+    "dragged": 0
+   },
+   "doubleSwitchesPerGame": 0.57,
+   "whenFoeJustCameIn": {
+    "foe stayed in": {
+     "n": 14979,
+     "move": 71.9,
+     "pivot": 5.8,
+     "switch": 22.2,
+     "dragged": 0
+    },
+    "foe just came in": {
+     "n": 9592,
+     "move": 73.6,
+     "pivot": 6.6,
+     "switch": 19.8
+    }
+   },
+   "whenJustCameIn": {
+    "we just came in": {
+     "n": 9582,
+     "move": 66.1,
+     "pivot": 7.2,
+     "switch": 26.7
+    }
+   },
+   "byOwnHp": {
+    "full": {
+     "n": 6625,
+     "move": 73.2,
+     "pivot": 7,
+     "switch": 19.7,
+     "dragged": 0
+    },
+    "half": {
+     "n": 5575,
+     "pivot": 5.6,
+     "move": 71,
+     "switch": 23.4
+    },
+    "high": {
+     "n": 10293,
+     "move": 73.4,
+     "switch": 20.3,
+     "pivot": 6.3
+    },
+    "low": {
+     "n": 2078,
+     "move": 71,
+     "pivot": 3.7,
+     "switch": 25.4
+    }
+   },
+   "byFoeHp": {
+    "full": {
+     "n": 6312,
+     "move": 70.2,
+     "pivot": 5.3,
+     "switch": 24.4
+    },
+    "high": {
+     "n": 9978,
+     "pivot": 6.9,
+     "move": 70.9,
+     "switch": 22.2,
+     "dragged": 0
+    },
+    "half": {
+     "n": 5863,
+     "move": 75.7,
+     "switch": 18.8,
+     "pivot": 5.5
+    },
+    "low": {
+     "n": 2418,
+     "move": 78.4,
+     "switch": 15.3,
+     "pivot": 6.3
+    }
+   },
+   "firstTurn": {
+    "turn 1": {
+     "n": 913,
+     "move": 77.3,
+     "switch": 16,
+     "pivot": 6.7
+    }
+   }
+  },
+  "gen9monotype": {
+   "replays": 500,
+   "decisions": 27924,
+   "averageTurns": 30.4,
+   "rating": {
+    "median": 1678,
+    "low": 1594,
+    "high": 2036
+   },
+   "share": {
+    "move": 69.5,
+    "pivot": 3.8,
+    "switch": 26.6,
+    "dragged": 0.1
+   },
+   "doubleSwitchesPerGame": 1.25,
+   "whenFoeJustCameIn": {
+    "foe stayed in": {
+     "n": 16878,
+     "move": 69,
+     "pivot": 3.8,
+     "switch": 27.2,
+     "dragged": 0.1
+    },
+    "foe just came in": {
+     "n": 11046,
+     "switch": 25.8,
+     "move": 70.2,
+     "pivot": 4,
+     "dragged": 0
+    }
+   },
+   "whenJustCameIn": {
+    "we just came in": {
+     "n": 11068,
+     "switch": 33.7,
+     "move": 62.3,
+     "pivot": 4,
+     "dragged": 0
+    }
+   },
+   "byOwnHp": {
+    "full": {
+     "n": 8680,
+     "move": 68.9,
+     "pivot": 4.2,
+     "switch": 26.8,
+     "dragged": 0
+    },
+    "high": {
+     "n": 11292,
+     "switch": 26.4,
+     "move": 69.1,
+     "pivot": 4.4,
+     "dragged": 0.1
+    },
+    "half": {
+     "n": 5917,
+     "switch": 26.3,
+     "move": 70.6,
+     "pivot": 3,
+     "dragged": 0
+    },
+    "low": {
+     "n": 2035,
+     "move": 70.7,
+     "switch": 27.9,
+     "pivot": 1.3,
+     "dragged": 0.1
+    }
+   },
+   "byFoeHp": {
+    "full": {
+     "n": 8396,
+     "move": 66.7,
+     "pivot": 4.3,
+     "switch": 28.9,
+     "dragged": 0.1
+    },
+    "high": {
+     "n": 10967,
+     "move": 67.6,
+     "switch": 28,
+     "pivot": 4.3,
+     "dragged": 0
+    },
+    "half": {
+     "n": 6142,
+     "move": 72.8,
+     "switch": 24.5,
+     "pivot": 2.7,
+     "dragged": 0
+    },
+    "low": {
+     "n": 2419,
+     "move": 78.8,
+     "switch": 18.2,
+     "pivot": 2.9,
+     "dragged": 0.1
+    }
+   },
+   "firstTurn": {
+    "turn 1": {
+     "n": 980,
+     "move": 69.3,
+     "pivot": 8.4,
+     "switch": 22.3
+    }
+   }
+  },
+  "gen9nationaldex": {
+   "replays": 500,
+   "decisions": 33094,
+   "averageTurns": 35.4,
+   "rating": {
+    "median": 1892,
+    "low": 1823,
+    "high": 2107
+   },
+   "share": {
+    "move": 64.7,
+    "switch": 28.8,
+    "pivot": 6.6,
+    "dragged": 0
+   },
+   "doubleSwitchesPerGame": 2.27,
+   "whenFoeJustCameIn": {
+    "foe stayed in": {
+     "n": 19037,
+     "move": 65.8,
+     "switch": 28.3,
+     "pivot": 6,
+     "dragged": 0
+    },
+    "foe just came in": {
+     "n": 14057,
+     "move": 63.2,
+     "pivot": 7.3,
+     "switch": 29.4,
+     "dragged": 0
+    }
+   },
+   "whenJustCameIn": {
+    "we just came in": {
+     "n": 14021,
+     "move": 57.8,
+     "switch": 34.8,
+     "pivot": 7.4,
+     "dragged": 0
+    }
+   },
+   "byOwnHp": {
+    "full": {
+     "n": 10377,
+     "move": 64.4,
+     "switch": 28.8,
+     "pivot": 6.8
+    },
+    "low": {
+     "n": 2341,
+     "move": 67.5,
+     "switch": 29,
+     "pivot": 3.5
+    },
+    "high": {
+     "n": 13960,
+     "move": 64,
+     "switch": 28.7,
+     "pivot": 7.2,
+     "dragged": 0
+    },
+    "half": {
+     "n": 6416,
+     "move": 65.5,
+     "switch": 28.7,
+     "pivot": 5.8,
+     "dragged": 0
+    }
+   },
+   "byFoeHp": {
+    "full": {
+     "n": 10178,
+     "move": 59.9,
+     "switch": 32.5,
+     "pivot": 7.7
+    },
+    "high": {
+     "n": 13753,
+     "move": 63.2,
+     "switch": 29.9,
+     "pivot": 6.8,
+     "dragged": 0
+    },
+    "low": {
+     "n": 2600,
+     "move": 77.3,
+     "pivot": 4.5,
+     "switch": 18.2
+    },
+    "half": {
+     "n": 6563,
+     "move": 70.2,
+     "switch": 24.7,
+     "pivot": 5.1,
+     "dragged": 0
+    }
+   },
+   "firstTurn": {
+    "turn 1": {
+     "n": 975,
+     "move": 70.9,
+     "switch": 20.2,
+     "pivot": 8.9
+    }
+   }
+  },
+  "gen9nationaldexubers": {
+   "replays": 500,
+   "decisions": 23180,
+   "averageTurns": 26.3,
+   "rating": {
+    "median": 1723,
+    "low": 1626,
+    "high": 1977
+   },
+   "share": {
+    "move": 75.8,
+    "switch": 22.9,
+    "dragged": 0.1,
+    "pivot": 1.3
+   },
+   "doubleSwitchesPerGame": 0.84,
+   "whenFoeJustCameIn": {
+    "foe stayed in": {
+     "n": 14706,
+     "move": 75.4,
+     "switch": 23.3,
+     "dragged": 0.1,
+     "pivot": 1.3
+    },
+    "foe just came in": {
+     "n": 8474,
+     "move": 76.5,
+     "switch": 22.3,
+     "pivot": 1.2,
+     "dragged": 0
+    }
+   },
+   "whenJustCameIn": {
+    "we just came in": {
+     "n": 8542,
+     "move": 68.9,
+     "switch": 29.7,
+     "pivot": 1.4,
+     "dragged": 0
+    }
+   },
+   "byOwnHp": {
+    "full": {
+     "n": 7745,
+     "move": 77,
+     "switch": 21.5,
+     "dragged": 0.1,
+     "pivot": 1.4
+    },
+    "high": {
+     "n": 8675,
+     "switch": 24.6,
+     "move": 73.8,
+     "dragged": 0.1,
+     "pivot": 1.6
+    },
+    "half": {
+     "n": 4683,
+     "switch": 22.5,
+     "move": 76.7,
+     "pivot": 0.7
+    },
+    "low": {
+     "n": 2077,
+     "switch": 22.1,
+     "move": 77.4,
+     "pivot": 0.4
+    }
+   },
+   "byFoeHp": {
+    "full": {
+     "n": 7526,
+     "move": 74.6,
+     "switch": 24.1,
+     "pivot": 1.2,
+     "dragged": 0.1
+    },
+    "high": {
+     "n": 8521,
+     "move": 72.8,
+     "switch": 25.6,
+     "pivot": 1.5,
+     "dragged": 0
+    },
+    "half": {
+     "n": 4769,
+     "switch": 20.3,
+     "move": 78.6,
+     "dragged": 0.1,
+     "pivot": 1
+    },
+    "low": {
+     "n": 2364,
+     "switch": 14.4,
+     "move": 84.5,
+     "pivot": 1.1
+    }
+   },
+   "firstTurn": {
+    "turn 1": {
+     "n": 955,
+     "move": 82,
+     "switch": 15.4,
+     "pivot": 2.6
+    }
+   }
+  },
+  "gen9nu": {
+   "replays": 500,
+   "decisions": 26096,
+   "averageTurns": 28.6,
+   "rating": {
+    "median": 1506,
+    "low": 1437,
+    "high": 1662
+   },
+   "share": {
+    "move": 71.4,
+    "switch": 22.5,
+    "pivot": 6.1,
+    "dragged": 0
+   },
+   "doubleSwitchesPerGame": 0.74,
+   "whenFoeJustCameIn": {
+    "foe stayed in": {
+     "n": 15894,
+     "move": 71.4,
+     "switch": 22.8,
+     "pivot": 5.8,
+     "dragged": 0
+    },
+    "foe just came in": {
+     "n": 10202,
+     "move": 71.5,
+     "switch": 22,
+     "pivot": 6.4,
+     "dragged": 0
+    }
+   },
+   "whenJustCameIn": {
+    "we just came in": {
+     "n": 10240,
+     "move": 64.5,
+     "switch": 28.7,
+     "pivot": 6.8,
+     "dragged": 0
+    }
+   },
+   "byOwnHp": {
+    "full": {
+     "n": 8043,
+     "move": 71.3,
+     "switch": 20.4,
+     "pivot": 8.3
+    },
+    "half": {
+     "n": 5822,
+     "move": 73.6,
+     "switch": 21.6,
+     "pivot": 4.7,
+     "dragged": 0.1
+    },
+    "high": {
+     "n": 10134,
+     "move": 69.5,
+     "switch": 24.8,
+     "pivot": 5.7,
+     "dragged": 0
+    },
+    "low": {
+     "n": 2097,
+     "move": 75,
+     "switch": 21.7,
+     "pivot": 3.2,
+     "dragged": 0
+    }
+   },
+   "byFoeHp": {
+    "full": {
+     "n": 7736,
+     "move": 68.3,
+     "switch": 25.2,
+     "pivot": 6.5
+    },
+    "high": {
+     "n": 9896,
+     "move": 69.9,
+     "switch": 24.2,
+     "pivot": 5.9,
+     "dragged": 0
+    },
+    "half": {
+     "n": 5950,
+     "move": 74.2,
+     "switch": 20.1,
+     "pivot": 5.6,
+     "dragged": 0.1
+    },
+    "low": {
+     "n": 2514,
+     "move": 80.5,
+     "switch": 13,
+     "pivot": 6.4
+    }
+   },
+   "firstTurn": {
+    "turn 1": {
+     "n": 965,
+     "move": 67.9,
+     "switch": 16,
+     "pivot": 16.2
+    }
+   }
+  },
+  "gen9ou": {
+   "replays": 500,
+   "decisions": 37019,
+   "averageTurns": 39.3,
+   "rating": {
+    "median": 2021,
+    "low": 1932,
+    "high": 2183
+   },
+   "share": {
+    "move": 66.1,
+    "switch": 28.1,
+    "pivot": 5.8,
+    "dragged": 0
+   },
+   "doubleSwitchesPerGame": 2.28,
+   "whenFoeJustCameIn": {
+    "foe stayed in": {
+     "n": 22047,
+     "move": 67.4,
+     "switch": 27.2,
+     "pivot": 5.4,
+     "dragged": 0
+    },
+    "foe just came in": {
+     "n": 14972,
+     "move": 64.1,
+     "switch": 29.4,
+     "pivot": 6.4
+    }
+   },
+   "whenJustCameIn": {
+    "we just came in": {
+     "n": 15016,
+     "move": 59,
+     "switch": 34.7,
+     "pivot": 6.3,
+     "dragged": 0
+    }
+   },
+   "byOwnHp": {
+    "full": {
+     "n": 11446,
+     "move": 65.1,
+     "switch": 28.5,
+     "pivot": 6.4,
+     "dragged": 0
+    },
+    "half": {
+     "n": 8019,
+     "move": 67,
+     "switch": 27.4,
+     "pivot": 5.5
+    },
+    "high": {
+     "n": 14824,
+     "move": 66.6,
+     "switch": 27.6,
+     "pivot": 5.8,
+     "dragged": 0
+    },
+    "low": {
+     "n": 2730,
+     "move": 65.1,
+     "switch": 30.9,
+     "pivot": 4
+    }
+   },
+   "byFoeHp": {
+    "full": {
+     "n": 11226,
+     "move": 62.2,
+     "switch": 31.6,
+     "pivot": 6.2
+    },
+    "half": {
+     "n": 8188,
+     "move": 70.2,
+     "switch": 25.2,
+     "pivot": 4.6
+    },
+    "high": {
+     "n": 14572,
+     "move": 65.1,
+     "pivot": 6.5,
+     "switch": 28.4,
+     "dragged": 0
+    },
+    "low": {
+     "n": 3033,
+     "move": 74.4,
+     "switch": 21.1,
+     "pivot": 4.5
+    }
+   },
+   "firstTurn": {
+    "turn 1": {
+     "n": 987,
+     "move": 68.9,
+     "switch": 19.4,
+     "pivot": 11.8
+    }
+   }
+  },
+  "gen9pu": {
+   "replays": 500,
+   "decisions": 27331,
+   "averageTurns": 30.1,
+   "rating": {
+    "median": 1513,
+    "low": 1432,
+    "high": 1714
+   },
+   "share": {
+    "move": 72.1,
+    "switch": 22.9,
+    "pivot": 5,
+    "dragged": 0.1
+   },
+   "doubleSwitchesPerGame": 0.73,
+   "whenFoeJustCameIn": {
+    "foe stayed in": {
+     "n": 16676,
+     "move": 71,
+     "switch": 24.1,
+     "pivot": 4.8,
+     "dragged": 0.1
+    },
+    "foe just came in": {
+     "n": 10655,
+     "move": 73.7,
+     "switch": 21.1,
+     "pivot": 5.2,
+     "dragged": 0
+    }
+   },
+   "whenJustCameIn": {
+    "we just came in": {
+     "n": 10711,
+     "move": 64.2,
+     "switch": 30.1,
+     "pivot": 5.6,
+     "dragged": 0
+    }
+   },
+   "byOwnHp": {
+    "full": {
+     "n": 7864,
+     "move": 71,
+     "switch": 21.7,
+     "pivot": 7.2,
+     "dragged": 0
+    },
+    "high": {
+     "n": 10634,
+     "move": 71.2,
+     "switch": 24.3,
+     "pivot": 4.4,
+     "dragged": 0.1
+    },
+    "half": {
+     "n": 6531,
+     "move": 73.3,
+     "switch": 23.1,
+     "pivot": 3.6,
+     "dragged": 0
+    },
+    "low": {
+     "n": 2302,
+     "move": 75.9,
+     "switch": 20.3,
+     "pivot": 3.7
+    }
+   },
+   "byFoeHp": {
+    "full": {
+     "n": 7542,
+     "move": 69,
+     "switch": 24.8,
+     "pivot": 6.1,
+     "dragged": 0.1
+    },
+    "high": {
+     "n": 10312,
+     "switch": 25.1,
+     "move": 70,
+     "pivot": 4.9,
+     "dragged": 0.1
+    },
+    "half": {
+     "n": 6722,
+     "move": 74.6,
+     "pivot": 4.3,
+     "switch": 21.1,
+     "dragged": 0
+    },
+    "low": {
+     "n": 2755,
+     "move": 82,
+     "switch": 14.2,
+     "pivot": 3.7
+    }
+   },
+   "firstTurn": {
+    "turn 1": {
+     "n": 956,
+     "move": 70.2,
+     "switch": 16.3,
+     "pivot": 13.5
+    }
+   }
+  },
+  "gen9randombattle": {
+   "replays": 500,
+   "decisions": 29622,
+   "averageTurns": 32.5,
+   "rating": {
+    "median": 2465,
+    "low": 2392,
+    "high": 2614
+   },
+   "share": {
+    "move": 73.6,
+    "switch": 23.3,
+    "pivot": 3.1,
+    "dragged": 0
+   },
+   "doubleSwitchesPerGame": 0.77,
+   "whenFoeJustCameIn": {
+    "foe stayed in": {
+     "n": 18897,
+     "move": 73.1,
+     "switch": 24,
+     "pivot": 2.9,
+     "dragged": 0
+    },
+    "foe just came in": {
+     "n": 10725,
+     "switch": 22.1,
+     "move": 74.6,
+     "pivot": 3.3,
+     "dragged": 0
+    }
+   },
+   "whenJustCameIn": {
+    "we just came in": {
+     "n": 10699,
+     "switch": 32.2,
+     "move": 64.4,
+     "pivot": 3.5,
+     "dragged": 0
+    }
+   },
+   "byOwnHp": {
+    "full": {
+     "n": 9259,
+     "move": 73.5,
+     "switch": 22.6,
+     "pivot": 3.9,
+     "dragged": 0
+    },
+    "high": {
+     "n": 10992,
+     "switch": 23.9,
+     "move": 73.5,
+     "pivot": 2.6,
+     "dragged": 0
+    },
+    "half": {
+     "n": 6898,
+     "move": 74.4,
+     "switch": 22.9,
+     "pivot": 2.7,
+     "dragged": 0
+    },
+    "low": {
+     "n": 2473,
+     "switch": 24.5,
+     "move": 72.6,
+     "pivot": 3
+    }
+   },
+   "byFoeHp": {
+    "full": {
+     "n": 8956,
+     "move": 69.9,
+     "switch": 26.6,
+     "pivot": 3.5,
+     "dragged": 0
+    },
+    "high": {
+     "n": 10736,
+     "switch": 24.4,
+     "move": 72.4,
+     "pivot": 3.2,
+     "dragged": 0
+    },
+    "half": {
+     "n": 7109,
+     "move": 77.6,
+     "switch": 19.9,
+     "pivot": 2.5,
+     "dragged": 0
+    },
+    "low": {
+     "n": 2821,
+     "move": 80.2,
+     "switch": 17.1,
+     "pivot": 2.6,
+     "dragged": 0.1
+    }
+   },
+   "firstTurn": {
+    "turn 1": {
+     "n": 980,
+     "move": 59.5,
+     "switch": 32.9,
+     "pivot": 7.7
+    }
+   }
+  },
+  "gen9ru": {
+   "replays": 500,
+   "decisions": 30625,
+   "averageTurns": 33,
+   "rating": {
+    "median": 1583,
+    "low": 1474,
+    "high": 1755
+   },
+   "share": {
+    "move": 70.9,
+    "switch": 22.7,
+    "pivot": 6.4,
+    "dragged": 0
+   },
+   "doubleSwitchesPerGame": 0.96,
+   "whenFoeJustCameIn": {
+    "foe stayed in": {
+     "n": 18682,
+     "move": 70.2,
+     "switch": 23.6,
+     "pivot": 6.2,
+     "dragged": 0
+    },
+    "foe just came in": {
+     "n": 11943,
+     "move": 71.9,
+     "pivot": 6.8,
+     "switch": 21.3,
+     "dragged": 0
+    }
+   },
+   "whenJustCameIn": {
+    "we just came in": {
+     "n": 11928,
+     "move": 63.6,
+     "switch": 28.4,
+     "pivot": 7.9,
+     "dragged": 0
+    }
+   },
+   "byOwnHp": {
+    "full": {
+     "n": 7409,
+     "move": 71.9,
+     "switch": 22.1,
+     "pivot": 6,
+     "dragged": 0
+    },
+    "high": {
+     "n": 13445,
+     "move": 70,
+     "switch": 23.3,
+     "pivot": 6.7,
+     "dragged": 0
+    },
+    "half": {
+     "n": 7393,
+     "switch": 22.3,
+     "pivot": 6.6,
+     "move": 71.1
+    },
+    "low": {
+     "n": 2378,
+     "switch": 22.5,
+     "move": 71.8,
+     "pivot": 5.7
+    }
+   },
+   "byFoeHp": {
+    "full": {
+     "n": 7210,
+     "move": 69.6,
+     "switch": 23.9,
+     "pivot": 6.4,
+     "dragged": 0
+    },
+    "half": {
+     "n": 7537,
+     "move": 73.3,
+     "switch": 20.9,
+     "pivot": 5.7
+    },
+    "high": {
+     "n": 13149,
+     "switch": 24.2,
+     "move": 68.6,
+     "pivot": 7.2,
+     "dragged": 0
+    },
+    "low": {
+     "n": 2729,
+     "move": 78.4,
+     "switch": 16.9,
+     "pivot": 4.7
+    }
+   },
+   "firstTurn": {
+    "turn 1": {
+     "n": 967,
+     "move": 75.9,
+     "switch": 16.6,
+     "pivot": 7.4
+    }
+   }
+  },
+  "gen9ubers": {
+   "replays": 500,
+   "decisions": 35167,
+   "averageTurns": 37.8,
+   "rating": {
+    "median": 1721,
+    "low": 1624,
+    "high": 1987
+   },
+   "share": {
+    "pivot": 1.7,
+    "move": 71.4,
+    "switch": 26.8,
+    "dragged": 0.1
+   },
+   "doubleSwitchesPerGame": 2.17,
+   "whenFoeJustCameIn": {
+    "foe stayed in": {
+     "n": 22096,
+     "pivot": 1.5,
+     "move": 72.3,
+     "switch": 26.1,
+     "dragged": 0.1
+    },
+    "foe just came in": {
+     "n": 13071,
+     "move": 70,
+     "pivot": 2.1,
+     "switch": 27.9,
+     "dragged": 0.1
+    }
+   },
+   "whenJustCameIn": {
+    "we just came in": {
+     "n": 12997,
+     "move": 62.9,
+     "switch": 35.2,
+     "pivot": 1.8,
+     "dragged": 0.1
+    }
+   },
+   "byOwnHp": {
+    "full": {
+     "n": 11045,
+     "pivot": 2.2,
+     "move": 69.8,
+     "switch": 28,
+     "dragged": 0.1
+    },
+    "half": {
+     "n": 7648,
+     "move": 72.9,
+     "switch": 25.5,
+     "pivot": 1.5,
+     "dragged": 0.1
+    },
+    "high": {
+     "n": 13668,
+     "move": 71.6,
+     "switch": 26.8,
+     "pivot": 1.5,
+     "dragged": 0.1
+    },
+    "low": {
+     "n": 2806,
+     "switch": 24.9,
+     "move": 73.5,
+     "pivot": 1.4,
+     "dragged": 0.1
+    }
+   },
+   "byFoeHp": {
+    "full": {
+     "n": 10860,
+     "pivot": 2.3,
+     "move": 68.5,
+     "switch": 29.2,
+     "dragged": 0
+    },
+    "high": {
+     "n": 13429,
+     "move": 70.4,
+     "switch": 27.9,
+     "pivot": 1.6,
+     "dragged": 0.1
+    },
+    "half": {
+     "n": 7764,
+     "move": 74.3,
+     "switch": 24.6,
+     "pivot": 1.1,
+     "dragged": 0
+    },
+    "low": {
+     "n": 3114,
+     "move": 79.4,
+     "switch": 18.9,
+     "pivot": 1.6,
+     "dragged": 0.1
+    }
+   },
+   "firstTurn": {
+    "turn 1": {
+     "n": 977,
+     "pivot": 5.5,
+     "move": 77.9,
+     "switch": 16.6
+    }
+   }
+  },
+  "gen9uu": {
+   "replays": 500,
+   "decisions": 26402,
+   "averageTurns": 28.9,
+   "rating": {
+    "median": 1643,
+    "low": 1568,
+    "high": 1812
+   },
+   "share": {
+    "move": 66.5,
+    "switch": 24.9,
+    "pivot": 8.5
+   },
+   "doubleSwitchesPerGame": 0.9,
+   "whenFoeJustCameIn": {
+    "foe stayed in": {
+     "n": 15119,
+     "move": 65.8,
+     "switch": 26.1,
+     "pivot": 8.1
+    },
+    "foe just came in": {
+     "n": 11283,
+     "move": 67.5,
+     "switch": 23.4,
+     "pivot": 9
+    }
+   },
+   "whenJustCameIn": {
+    "we just came in": {
+     "n": 11285,
+     "move": 59.7,
+     "switch": 30.8,
+     "pivot": 9.5
+    }
+   },
+   "byOwnHp": {
+    "full": {
+     "n": 7703,
+     "move": 67.9,
+     "switch": 22.8,
+     "pivot": 9.3
+    },
+    "half": {
+     "n": 5692,
+     "move": 65.6,
+     "switch": 26.6,
+     "pivot": 7.8
+    },
+    "high": {
+     "n": 10767,
+     "move": 66.1,
+     "switch": 25.1,
+     "pivot": 8.8
+    },
+    "low": {
+     "n": 2240,
+     "move": 66.3,
+     "switch": 27.1,
+     "pivot": 6.6
+    }
+   },
+   "byFoeHp": {
+    "full": {
+     "n": 7410,
+     "move": 63.3,
+     "switch": 27.6,
+     "pivot": 9.1
+    },
+    "half": {
+     "n": 5899,
+     "move": 69.6,
+     "switch": 22.9,
+     "pivot": 7.5
+    },
+    "high": {
+     "n": 10478,
+     "move": 64.9,
+     "switch": 25.9,
+     "pivot": 9.1
+    },
+    "low": {
+     "n": 2615,
+     "move": 75.1,
+     "switch": 18.1,
+     "pivot": 6.7
+    }
+   },
+   "firstTurn": {
+    "turn 1": {
+     "n": 976,
+     "move": 66,
+     "pivot": 12.8,
+     "switch": 21.2
+    }
+   }
+  },
+  "gen9vgc2024regg": {
+   "replays": 500,
+   "decisions": 5977,
+   "averageTurns": 6.6,
+   "rating": {
+    "median": 1754,
+    "low": 1682,
+    "high": 1931
+   },
+   "share": {
+    "pivot": 2.1,
+    "move": 84.3,
+    "switch": 13.6
+   },
+   "doubleSwitchesPerGame": 0.12,
+   "whenFoeJustCameIn": {
+    "foe stayed in": {
+     "n": 3423,
+     "pivot": 2.3,
+     "move": 85.8,
+     "switch": 11.9
+    },
+    "foe just came in": {
+     "n": 2554,
+     "move": 82.3,
+     "switch": 15.8,
+     "pivot": 1.9
+    }
+   },
+   "whenJustCameIn": {
+    "we just came in": {
+     "n": 2589,
+     "move": 82,
+     "switch": 15.7,
+     "pivot": 2.2
+    }
+   },
+   "byOwnHp": {
+    "full": {
+     "n": 2881,
+     "pivot": 2.6,
+     "move": 85.7,
+     "switch": 11.6
+    },
+    "half": {
+     "n": 1029,
+     "move": 82.6,
+     "pivot": 1.2,
+     "switch": 16.2
+    },
+    "high": {
+     "n": 1229,
+     "move": 81.4,
+     "switch": 15.8,
+     "pivot": 2.8
+    },
+    "low": {
+     "n": 838,
+     "switch": 13.8,
+     "move": 85.4,
+     "pivot": 0.7
+    }
+   },
+   "byFoeHp": {
+    "full": {
+     "n": 2831,
+     "pivot": 2.4,
+     "move": 83.4,
+     "switch": 14.2
+    },
+    "half": {
+     "n": 1048,
+     "move": 85.4,
+     "switch": 13,
+     "pivot": 1.6
+    },
+    "high": {
+     "n": 1224,
+     "move": 82,
+     "switch": 15.4,
+     "pivot": 2.5
+    },
+    "low": {
+     "n": 874,
+     "move": 89,
+     "pivot": 1.3,
+     "switch": 9.7
+    }
+   },
+   "firstTurn": {
+    "turn 1": {
+     "n": 996,
+     "pivot": 4.3,
+     "move": 85,
+     "switch": 10.6
+    }
+   }
+  },
+  "gen9zu": {
+   "replays": 500,
+   "decisions": 24394,
+   "averageTurns": 27.3,
+   "rating": {
+    "median": 1398,
+    "low": 1299,
+    "high": 1581
+   },
+   "share": {
+    "pivot": 5.6,
+    "switch": 20.8,
+    "move": 73.6,
+    "dragged": 0
+   },
+   "doubleSwitchesPerGame": 0.57,
+   "whenFoeJustCameIn": {
+    "foe stayed in": {
+     "n": 15006,
+     "pivot": 5.2,
+     "switch": 21.4,
+     "move": 73.4,
+     "dragged": 0
+    },
+    "foe just came in": {
+     "n": 9388,
+     "switch": 19.9,
+     "move": 73.8,
+     "pivot": 6.3,
+     "dragged": 0
+    }
+   },
+   "whenJustCameIn": {
+    "we just came in": {
+     "n": 9351,
+     "switch": 27.4,
+     "move": 66.5,
+     "pivot": 6.1,
+     "dragged": 0
+    }
+   },
+   "byOwnHp": {
+    "full": {
+     "n": 7579,
+     "pivot": 7,
+     "move": 74,
+     "switch": 19,
+     "dragged": 0
+    },
+    "high": {
+     "n": 9282,
+     "switch": 21.8,
+     "move": 72.6,
+     "pivot": 5.6,
+     "dragged": 0
+    },
+    "half": {
+     "n": 5530,
+     "switch": 21.5,
+     "move": 73.7,
+     "pivot": 4.8
+    },
+    "low": {
+     "n": 2003,
+     "move": 76.2,
+     "switch": 21.1,
+     "pivot": 2.6
+    }
+   },
+   "byFoeHp": {
+    "full": {
+     "n": 7283,
+     "pivot": 6.6,
+     "switch": 22.6,
+     "move": 70.8,
+     "dragged": 0
+    },
+    "high": {
+     "n": 8898,
+     "move": 71.4,
+     "pivot": 5.7,
+     "switch": 22.9,
+     "dragged": 0
+    },
+    "half": {
+     "n": 5721,
+     "move": 77.2,
+     "switch": 18.4,
+     "pivot": 4.4
+    },
+    "low": {
+     "n": 2492,
+     "pivot": 5.1,
+     "move": 81.3,
+     "switch": 13.5,
+     "dragged": 0
+    }
+   },
+   "firstTurn": {
+    "turn 1": {
+     "n": 955,
+     "pivot": 16.4,
+     "move": 68.2,
+     "switch": 15.4
+    }
+   }
+  },
+  "playersgen5ou": {
+   "replays": 2,
+   "decisions": 96,
+   "averageTurns": 27,
+   "rating": null,
+   "share": {
+    "pivot": 7.3,
+    "move": 67.7,
+    "switch": 25
+   },
+   "doubleSwitchesPerGame": 0.5,
+   "whenFoeJustCameIn": {
+    "foe stayed in": {
+     "n": 52,
+     "pivot": 3.8,
+     "move": 67.3,
+     "switch": 28.8
+    },
+    "foe just came in": {
+     "n": 44,
+     "move": 68.2,
+     "pivot": 11.4,
+     "switch": 20.5
+    }
+   },
+   "whenJustCameIn": {
+    "we just came in": {
+     "n": 41,
+     "move": 73.2,
+     "switch": 26.8
+    }
+   },
+   "byOwnHp": {
+    "full": {
+     "n": 23,
+     "pivot": 8.7,
+     "move": 60.9,
+     "switch": 30.4
+    },
+    "high": {
+     "n": 40,
+     "move": 67.5,
+     "switch": 22.5,
+     "pivot": 10
+    },
+    "half": {
+     "n": 24,
+     "move": 75,
+     "switch": 20.8,
+     "pivot": 4.2
+    },
+    "low": {
+     "n": 9,
+     "move": 66.7,
+     "switch": 33.3
+    }
+   },
+   "byFoeHp": {
+    "full": {
+     "n": 22,
+     "pivot": 4.5,
+     "move": 54.5,
+     "switch": 40.9
+    },
+    "half": {
+     "n": 26,
+     "move": 73.1,
+     "switch": 26.9
+    },
+    "high": {
+     "n": 39,
+     "move": 64.1,
+     "switch": 20.5,
+     "pivot": 15.4
+    },
+    "low": {
+     "n": 9,
+     "move": 100
+    }
+   },
+   "firstTurn": {
+    "turn 1": {
+     "n": 4,
+     "pivot": 25,
+     "move": 50,
+     "switch": 25
+    }
+   }
+  },
+  "playersgen6ou": {
+   "replays": 51,
+   "decisions": 2782,
+   "averageTurns": 30.2,
+   "rating": null,
+   "share": {
+    "move": 73,
+    "switch": 24,
+    "pivot": 3
+   },
+   "doubleSwitchesPerGame": 1.06,
+   "whenFoeJustCameIn": {
+    "foe stayed in": {
+     "n": 1746,
+     "move": 72.4,
+     "switch": 24.5,
+     "pivot": 3.1
+    },
+    "foe just came in": {
+     "n": 1036,
+     "switch": 23.2,
+     "move": 74,
+     "pivot": 2.8
+    }
+   },
+   "whenJustCameIn": {
+    "we just came in": {
+     "n": 1029,
+     "switch": 32,
+     "move": 64.7,
+     "pivot": 3.3
+    }
+   },
+   "byOwnHp": {
+    "full": {
+     "n": 745,
+     "move": 71.3,
+     "switch": 25.8,
+     "pivot": 3
+    },
+    "half": {
+     "n": 642,
+     "move": 76.3,
+     "switch": 19.9,
+     "pivot": 3.7
+    },
+    "high": {
+     "n": 1159,
+     "move": 72.6,
+     "switch": 25.2,
+     "pivot": 2.2
+    },
+    "low": {
+     "n": 236,
+     "move": 71.2,
+     "switch": 23.7,
+     "pivot": 5.1
+    }
+   },
+   "byFoeHp": {
+    "full": {
+     "n": 728,
+     "move": 71.3,
+     "switch": 23.4,
+     "pivot": 5.4
+    },
+    "half": {
+     "n": 648,
+     "switch": 24.5,
+     "move": 73.8,
+     "pivot": 1.7
+    },
+    "high": {
+     "n": 1137,
+     "move": 71.8,
+     "switch": 25.9,
+     "pivot": 2.4
+    },
+    "low": {
+     "n": 269,
+     "move": 81,
+     "switch": 16.7,
+     "pivot": 2.2
+    }
+   },
+   "firstTurn": {
+    "turn 1": {
+     "n": 96,
+     "move": 76,
+     "switch": 18.8,
+     "pivot": 5.2
+    }
+   }
+  },
+  "playersgen6oususpecttest": {
+   "replays": 3,
+   "decisions": 105,
+   "averageTurns": 19.7,
+   "rating": null,
+   "share": {
+    "switch": 24.8,
+    "move": 75.2
+   },
+   "doubleSwitchesPerGame": 1,
+   "whenFoeJustCameIn": {
+    "foe stayed in": {
+     "n": 76,
+     "switch": 26.3,
+     "move": 73.7
+    },
+    "foe just came in": {
+     "n": 29,
+     "move": 79.3,
+     "switch": 20.7
+    }
+   },
+   "whenJustCameIn": {
+    "we just came in": {
+     "n": 31,
+     "move": 71,
+     "switch": 29
+    }
+   },
+   "byOwnHp": {
+    "full": {
+     "n": 47,
+     "switch": 23.4,
+     "move": 76.6
+    },
+    "high": {
+     "n": 36,
+     "move": 72.2,
+     "switch": 27.8
+    },
+    "half": {
+     "n": 18,
+     "move": 72.2,
+     "switch": 27.8
+    },
+    "low": {
+     "n": 4,
+     "move": 100
+    }
+   },
+   "byFoeHp": {
+    "full": {
+     "n": 48,
+     "switch": 16.7,
+     "move": 83.3
+    },
+    "high": {
+     "n": 33,
+     "move": 60.6,
+     "switch": 39.4
+    },
+    "half": {
+     "n": 20,
+     "move": 80,
+     "switch": 20
+    },
+    "low": {
+     "n": 4,
+     "move": 75,
+     "switch": 25
+    }
+   },
+   "firstTurn": {
+    "turn 1": {
+     "n": 5,
+     "switch": 20,
+     "move": 80
+    }
+   }
+  },
+  "playersgen7ou": {
+   "replays": 38,
+   "decisions": 2041,
+   "averageTurns": 29.9,
+   "rating": null,
+   "share": {
+    "switch": 28.6,
+    "move": 64.5,
+    "pivot": 6.9
+   },
+   "doubleSwitchesPerGame": 1.24,
+   "whenFoeJustCameIn": {
+    "foe stayed in": {
+     "n": 1121,
+     "switch": 30.5,
+     "move": 63.5,
+     "pivot": 6
+    },
+    "foe just came in": {
+     "n": 920,
+     "switch": 26.2,
+     "move": 65.8,
+     "pivot": 8
+    }
+   },
+   "whenJustCameIn": {
+    "we just came in": {
+     "n": 916,
+     "switch": 34.3,
+     "move": 57.4,
+     "pivot": 8.3
+    }
+   },
+   "byOwnHp": {
+    "full": {
+     "n": 550,
+     "switch": 24.9,
+     "move": 65.5,
+     "pivot": 9.6
+    },
+    "half": {
+     "n": 487,
+     "move": 62,
+     "switch": 31,
+     "pivot": 7
+    },
+    "low": {
+     "n": 178,
+     "move": 66.9,
+     "switch": 30.3,
+     "pivot": 2.8
+    },
+    "high": {
+     "n": 826,
+     "move": 64.9,
+     "switch": 29.2,
+     "pivot": 5.9
+    }
+   },
+   "byFoeHp": {
+    "full": {
+     "n": 539,
+     "switch": 28.4,
+     "move": 64.2,
+     "pivot": 7.4
+    },
+    "half": {
+     "n": 490,
+     "move": 67.8,
+     "switch": 27.3,
+     "pivot": 4.9
+    },
+    "low": {
+     "n": 221,
+     "switch": 20.8,
+     "move": 75.6,
+     "pivot": 3.6
+    },
+    "high": {
+     "n": 791,
+     "move": 59.7,
+     "switch": 31.6,
+     "pivot": 8.7
+    }
+   },
+   "firstTurn": {
+    "turn 1": {
+     "n": 71,
+     "switch": 26.8,
+     "pivot": 11.3,
+     "move": 62
+    }
+   }
+  },
+  "playersgen8ou": {
+   "replays": 951,
+   "decisions": 46761,
+   "averageTurns": 27.1,
+   "rating": {
+    "median": 1808,
+    "low": 1189,
+    "high": 2161
+   },
+   "share": {
+    "move": 71.2,
+    "switch": 24.5,
+    "pivot": 4.2,
+    "dragged": 0
+   },
+   "doubleSwitchesPerGame": 0.87,
+   "whenFoeJustCameIn": {
+    "foe stayed in": {
+     "n": 28627,
+     "move": 71.2,
+     "switch": 24.9,
+     "pivot": 3.9,
+     "dragged": 0
+    },
+    "foe just came in": {
+     "n": 18134,
+     "switch": 24,
+     "move": 71.4,
+     "pivot": 4.7
+    }
+   },
+   "whenJustCameIn": {
+    "we just came in": {
+     "n": 18163,
+     "switch": 31.2,
+     "move": 64.3,
+     "pivot": 4.4,
+     "dragged": 0
+    }
+   },
+   "byOwnHp": {
+    "full": {
+     "n": 13788,
+     "move": 71.3,
+     "switch": 23.6,
+     "pivot": 5.1,
+     "dragged": 0
+    },
+    "high": {
+     "n": 19674,
+     "move": 70.9,
+     "switch": 24.6,
+     "pivot": 4.4
+    },
+    "low": {
+     "n": 3756,
+     "switch": 26.9,
+     "move": 70.8,
+     "pivot": 2.3
+    },
+    "half": {
+     "n": 9543,
+     "switch": 24.8,
+     "move": 71.9,
+     "pivot": 3.3
+    }
+   },
+   "byFoeHp": {
+    "full": {
+     "n": 13363,
+     "move": 68,
+     "switch": 26.7,
+     "pivot": 5.3,
+     "dragged": 0
+    },
+    "high": {
+     "n": 19131,
+     "switch": 26,
+     "move": 69.9,
+     "pivot": 4,
+     "dragged": 0
+    },
+    "low": {
+     "n": 4370,
+     "move": 78.3,
+     "switch": 18.1,
+     "pivot": 3.7
+    },
+    "half": {
+     "n": 9897,
+     "switch": 21.6,
+     "move": 75,
+     "pivot": 3.4
+    }
+   },
+   "firstTurn": {
+    "turn 1": {
+     "n": 1806,
+     "move": 69.5,
+     "switch": 20.5,
+     "pivot": 10
+    }
+   }
+  },
+  "playersgen8randombattle": {
+   "replays": 2,
+   "decisions": 106,
+   "averageTurns": 29.5,
+   "rating": null,
+   "share": {
+    "move": 67,
+    "switch": 25.5,
+    "pivot": 7.5
+   },
+   "doubleSwitchesPerGame": 0,
+   "whenFoeJustCameIn": {
+    "foe stayed in": {
+     "n": 65,
+     "move": 72.3,
+     "switch": 24.6,
+     "pivot": 3.1
+    },
+    "foe just came in": {
+     "n": 41,
+     "switch": 26.8,
+     "move": 58.5,
+     "pivot": 14.6
+    }
+   },
+   "whenJustCameIn": {
+    "we just came in": {
+     "n": 46,
+     "switch": 30.4,
+     "move": 65.2,
+     "pivot": 4.3
+    }
+   },
+   "byOwnHp": {
+    "full": {
+     "n": 23,
+     "move": 78.3,
+     "switch": 21.7
+    },
+    "high": {
+     "n": 37,
+     "move": 70.3,
+     "switch": 21.6,
+     "pivot": 8.1
+    },
+    "half": {
+     "n": 36,
+     "move": 58.3,
+     "pivot": 11.1,
+     "switch": 30.6
+    },
+    "low": {
+     "n": 10,
+     "pivot": 10,
+     "switch": 30,
+     "move": 60
+    }
+   },
+   "byFoeHp": {
+    "full": {
+     "n": 22,
+     "move": 72.7,
+     "switch": 22.7,
+     "pivot": 4.5
+    },
+    "high": {
+     "n": 38,
+     "switch": 28.9,
+     "move": 71.1
+    },
+    "half": {
+     "n": 34,
+     "move": 61.8,
+     "pivot": 14.7,
+     "switch": 23.5
+    },
+    "low": {
+     "n": 12,
+     "pivot": 16.7,
+     "move": 58.3,
+     "switch": 25
+    }
+   },
+   "firstTurn": {
+    "turn 1": {
+     "n": 4,
+     "move": 50,
+     "switch": 50
+    }
+   }
+  },
+  "playersgen9draft": {
+   "replays": 1,
+   "decisions": 44,
+   "averageTurns": 25,
+   "rating": null,
+   "share": {
+    "move": 72.7,
+    "switch": 25,
+    "pivot": 2.3
+   },
+   "doubleSwitchesPerGame": 0,
+   "whenFoeJustCameIn": {
+    "foe stayed in": {
+     "n": 27,
+     "move": 66.7,
+     "switch": 29.6,
+     "pivot": 3.7
+    },
+    "foe just came in": {
+     "n": 17,
+     "switch": 17.6,
+     "move": 82.4
+    }
+   },
+   "whenJustCameIn": {
+    "we just came in": {
+     "n": 18,
+     "switch": 33.3,
+     "move": 61.1,
+     "pivot": 5.6
+    }
+   },
+   "byOwnHp": {
+    "full": {
+     "n": 11,
+     "move": 72.7,
+     "switch": 18.2,
+     "pivot": 9.1
+    },
+    "low": {
+     "n": 6,
+     "switch": 33.3,
+     "move": 66.7
+    },
+    "half": {
+     "n": 8,
+     "move": 62.5,
+     "switch": 37.5
+    },
+    "high": {
+     "n": 19,
+     "move": 78.9,
+     "switch": 21.1
+    }
+   },
+   "byFoeHp": {
+    "full": {
+     "n": 10,
+     "move": 80,
+     "switch": 20
+    },
+    "low": {
+     "n": 8,
+     "move": 87.5,
+     "switch": 12.5
+    },
+    "half": {
+     "n": 9,
+     "move": 66.7,
+     "switch": 33.3
+    },
+    "high": {
+     "n": 17,
+     "switch": 29.4,
+     "move": 64.7,
+     "pivot": 5.9
+    }
+   },
+   "firstTurn": {
+    "turn 1": {
+     "n": 2,
+     "move": 100
+    }
+   }
+  },
+  "playersgen9ou": {
+   "replays": 289,
+   "decisions": 16532,
+   "averageTurns": 30.9,
+   "rating": {
+    "median": 1851,
+    "low": 1611,
+    "high": 2045
+   },
+   "share": {
+    "pivot": 5.3,
+    "move": 70,
+    "switch": 24.7,
+    "dragged": 0
+   },
+   "doubleSwitchesPerGame": 1.01,
+   "whenFoeJustCameIn": {
+    "foe stayed in": {
+     "n": 9860,
+     "pivot": 4.7,
+     "move": 70,
+     "switch": 25.3,
+     "dragged": 0
+    },
+    "foe just came in": {
+     "n": 6672,
+     "move": 69.9,
+     "switch": 24,
+     "pivot": 6.1,
+     "dragged": 0
+    }
+   },
+   "whenJustCameIn": {
+    "we just came in": {
+     "n": 6703,
+     "move": 62.8,
+     "switch": 31.4,
+     "pivot": 5.8,
+     "dragged": 0
+    }
+   },
+   "byOwnHp": {
+    "full": {
+     "n": 4819,
+     "pivot": 5.9,
+     "move": 70.1,
+     "switch": 24
+    },
+    "high": {
+     "n": 6467,
+     "move": 70.1,
+     "switch": 24.2,
+     "pivot": 5.7,
+     "dragged": 0
+    },
+    "half": {
+     "n": 3739,
+     "move": 70.1,
+     "switch": 24.9,
+     "pivot": 4.9,
+     "dragged": 0
+    },
+    "low": {
+     "n": 1507,
+     "move": 68.4,
+     "switch": 29.2,
+     "pivot": 2.4
+    }
+   },
+   "byFoeHp": {
+    "full": {
+     "n": 4639,
+     "pivot": 6.3,
+     "move": 66.9,
+     "switch": 26.8,
+     "dragged": 0
+    },
+    "half": {
+     "n": 3872,
+     "move": 73.2,
+     "pivot": 3.7,
+     "switch": 23.1
+    },
+    "high": {
+     "n": 6299,
+     "move": 68.6,
+     "switch": 25.8,
+     "pivot": 5.7,
+     "dragged": 0
+    },
+    "low": {
+     "n": 1722,
+     "move": 76,
+     "switch": 19.3,
+     "pivot": 4.8
+    }
+   },
+   "firstTurn": {
+    "turn 1": {
+     "n": 563,
+     "pivot": 10.3,
+     "move": 70.2,
+     "switch": 19.5
+    }
+   }
+  },
+  "playersgen9randombattle": {
+   "replays": 2,
+   "decisions": 76,
+   "averageTurns": 22,
+   "rating": null,
+   "share": {
+    "move": 81.6,
+    "switch": 15.8,
+    "pivot": 2.6
+   },
+   "doubleSwitchesPerGame": 1.5,
+   "whenFoeJustCameIn": {
+    "foe stayed in": {
+     "n": 47,
+     "move": 80.9,
+     "switch": 14.9,
+     "pivot": 4.3
+    },
+    "foe just came in": {
+     "n": 29,
+     "switch": 17.2,
+     "move": 82.8
+    }
+   },
+   "whenJustCameIn": {
+    "we just came in": {
+     "n": 29,
+     "switch": 24.1,
+     "move": 72.4,
+     "pivot": 3.4
+    }
+   },
+   "byOwnHp": {
+    "full": {
+     "n": 42,
+     "move": 78.6,
+     "switch": 19,
+     "pivot": 2.4
+    },
+    "high": {
+     "n": 18,
+     "move": 88.9,
+     "switch": 11.1
+    },
+    "half": {
+     "n": 11,
+     "move": 72.7,
+     "switch": 18.2,
+     "pivot": 9.1
+    },
+    "low": {
+     "n": 5,
+     "move": 100
+    }
+   },
+   "byFoeHp": {
+    "full": {
+     "n": 36,
+     "move": 75,
+     "switch": 22.2,
+     "pivot": 2.8
+    },
+    "high": {
+     "n": 19,
+     "switch": 15.8,
+     "move": 78.9,
+     "pivot": 5.3
+    },
+    "half": {
+     "n": 12,
+     "move": 91.7,
+     "switch": 8.3
+    },
+    "low": {
+     "n": 9,
+     "move": 100
+    }
+   },
+   "firstTurn": {
+    "turn 1": {
+     "n": 4,
+     "move": 50,
+     "switch": 50
+    }
+   }
+  },
+  "player:stormzone": {
+   "replays": 1041,
+   "decisions": 27594,
+   "averageTurns": 28.7,
+   "rating": {
+    "median": 1809,
+    "low": 1481,
+    "high": 2161
+   },
+   "share": {
+    "switch": 23.8,
+    "move": 72.6,
+    "pivot": 3.7,
+    "dragged": 0
+   },
+   "doubleSwitchesPerGame": 0.52,
+   "whenFoeJustCameIn": {
+    "foe stayed in": {
+     "n": 16171,
+     "switch": 24.2,
+     "move": 72.5,
+     "pivot": 3.3
+    },
+    "foe just came in": {
+     "n": 11423,
+     "move": 72.6,
+     "pivot": 4.2,
+     "switch": 23.2,
+     "dragged": 0
+    }
+   },
+   "whenJustCameIn": {
+    "we just came in": {
+     "n": 10282,
+     "move": 65.9,
+     "switch": 30.2,
+     "pivot": 3.9
+    }
+   },
+   "byOwnHp": {
+    "full": {
+     "n": 8387,
+     "switch": 23.4,
+     "move": 72.1,
+     "pivot": 4.5
+    },
+    "high": {
+     "n": 11448,
+     "move": 72.8,
+     "switch": 23.7,
+     "pivot": 3.5
+    },
+    "half": {
+     "n": 5701,
+     "move": 73.5,
+     "switch": 23.3,
+     "pivot": 3.2,
+     "dragged": 0
+    },
+    "low": {
+     "n": 2058,
+     "move": 70.4,
+     "pivot": 2.3,
+     "switch": 27.3
+    }
+   },
+   "byFoeHp": {
+    "full": {
+     "n": 7246,
+     "switch": 25.5,
+     "move": 69.5,
+     "pivot": 4.9
+    },
+    "half": {
+     "n": 6362,
+     "move": 75.4,
+     "switch": 21.9,
+     "pivot": 2.7
+    },
+    "high": {
+     "n": 11247,
+     "switch": 25.1,
+     "move": 71.5,
+     "pivot": 3.4,
+     "dragged": 0
+    },
+    "low": {
+     "n": 2739,
+     "move": 78.3,
+     "switch": 18.3,
+     "pivot": 3.4
+    }
+   },
+   "firstTurn": {
+    "turn 1": {
+     "n": 1007,
+     "switch": 18.8,
+     "move": 69.8,
+     "pivot": 11.4
+    }
+   }
+  },
+  "player:relicstone": {
+   "replays": 265,
+   "decisions": 6491,
+   "averageTurns": 26.6,
+   "rating": {
+    "median": 1820,
+    "low": 1189,
+    "high": 2034
+   },
+   "share": {
+    "switch": 21.7,
+    "move": 75,
+    "pivot": 3.3
+   },
+   "doubleSwitchesPerGame": 0.39,
+   "whenFoeJustCameIn": {
+    "foe stayed in": {
+     "n": 3913,
+     "switch": 21.5,
+     "move": 75.4,
+     "pivot": 3.1
+    },
+    "foe just came in": {
+     "n": 2578,
+     "move": 74.4,
+     "switch": 22,
+     "pivot": 3.6
+    }
+   },
+   "whenJustCameIn": {
+    "we just came in": {
+     "n": 2334,
+     "move": 68.5,
+     "switch": 28.1,
+     "pivot": 3.5
+    }
+   },
+   "byOwnHp": {
+    "full": {
+     "n": 2074,
+     "switch": 20.5,
+     "move": 74.9,
+     "pivot": 4.6
+    },
+    "high": {
+     "n": 2527,
+     "move": 74.6,
+     "switch": 22.8,
+     "pivot": 2.6
+    },
+    "low": {
+     "n": 598,
+     "move": 72.2,
+     "switch": 25.9,
+     "pivot": 1.8
+    },
+    "half": {
+     "n": 1292,
+     "switch": 19.5,
+     "move": 77.2,
+     "pivot": 3.3
+    }
+   },
+   "byFoeHp": {
+    "full": {
+     "n": 1778,
+     "switch": 22.7,
+     "move": 72.7,
+     "pivot": 4.7
+    },
+    "high": {
+     "n": 2536,
+     "move": 74,
+     "switch": 23.1,
+     "pivot": 2.9
+    },
+    "half": {
+     "n": 1504,
+     "move": 78.2,
+     "switch": 19.5,
+     "pivot": 2.3
+    },
+    "low": {
+     "n": 673,
+     "move": 77.9,
+     "switch": 18.4,
+     "pivot": 3.7
+    }
+   },
+   "firstTurn": {
+    "turn 1": {
+     "n": 255,
+     "switch": 14.9,
+     "move": 74.1,
+     "pivot": 11
+    }
+   }
+  },
+  "player:shikuleo": {
+   "replays": 76,
+   "decisions": 1894,
+   "averageTurns": 26.8,
+   "rating": {
+    "median": 1869,
+    "low": 1627,
+    "high": 2045
+   },
+   "share": {
+    "switch": 23.6,
+    "move": 70.7,
+    "pivot": 5.5,
+    "dragged": 0.1
+   },
+   "doubleSwitchesPerGame": 0.29,
+   "whenFoeJustCameIn": {
+    "foe stayed in": {
+     "n": 1107,
+     "switch": 24.2,
+     "move": 70.5,
+     "pivot": 5.2,
+     "dragged": 0.1
+    },
+    "foe just came in": {
+     "n": 787,
+     "move": 71.2,
+     "pivot": 6,
+     "switch": 22.7,
+     "dragged": 0.1
+    }
+   },
+   "whenJustCameIn": {
+    "we just came in": {
+     "n": 760,
+     "move": 63.6,
+     "pivot": 5.5,
+     "switch": 30.8,
+     "dragged": 0.1
+    }
+   },
+   "byOwnHp": {
+    "full": {
+     "n": 564,
+     "switch": 20.7,
+     "pivot": 5.7,
+     "move": 73.6
+    },
+    "high": {
+     "n": 749,
+     "move": 69.7,
+     "pivot": 5.3,
+     "switch": 24.7,
+     "dragged": 0.3
+    },
+    "half": {
+     "n": 383,
+     "pivot": 6.5,
+     "switch": 24.3,
+     "move": 69.2
+    },
+    "low": {
+     "n": 198,
+     "move": 69.7,
+     "switch": 26.3,
+     "pivot": 4
+    }
+   },
+   "byFoeHp": {
+    "full": {
+     "n": 555,
+     "switch": 24.7,
+     "move": 68.8,
+     "pivot": 6.1,
+     "dragged": 0.4
+    },
+    "high": {
+     "n": 720,
+     "move": 66.3,
+     "pivot": 6,
+     "switch": 27.8
+    },
+    "half": {
+     "n": 414,
+     "pivot": 4.3,
+     "move": 76.1,
+     "switch": 19.6
+    },
+    "low": {
+     "n": 205,
+     "move": 81,
+     "switch": 14.1,
+     "pivot": 4.9
+    }
+   },
+   "firstTurn": {
+    "turn 1": {
+     "n": 74,
+     "switch": 23,
+     "move": 68.9,
+     "pivot": 8.1
+    }
+   }
+  }
+ }
+}

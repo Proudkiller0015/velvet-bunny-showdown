@@ -389,6 +389,225 @@ class TeamBuilder {
 		return out.slice(0, 4);
 	}
 
+	/**
+	 * Which Pokemon this server changed, and what each of them gained.
+	 *
+	 * Read from the buff module itself rather than listed here, and read from the
+	 * *installed* copy - the one inside the package, which is the copy that has
+	 * actually run and therefore the only one whose record of what it did is
+	 * filled in. Ours is the same file with an empty table.
+	 *
+	 * Missing is not an error: on a plain checkout with no buffs installed this
+	 * is an empty object and everything below it quietly does nothing.
+	 */
+	buffed() {
+		if (this._buffed) return this._buffed;
+		try {
+			const buffs = require('pokemon-showdown/dist/data/velvet/buffs.js');
+			this._buffed = buffs.applied || {};
+		} catch (e) {
+			this._buffed = {};
+		}
+		return this._buffed;
+	}
+
+	/**
+	 * Abilities this Pokemon has because we gave them to it.
+	 *
+	 * Two markers, because there are two kinds. One is an ability we wrote, which
+	 * carries a negative number like everything else of ours. The other is a real
+	 * ability handed to something that never had it - Shadow Tag on a Chandelure -
+	 * and those sit in slots named `V0`, `V1` and so on, because a species has
+	 * only four real slots (0, 1, H, S) and a buff can hand out more than fit.
+	 */
+	ourAbilities(ctx, species) {
+		const out = [];
+		for (const [slot, name] of Object.entries(species.abilities || {})) {
+			const ability = ctx.dex.abilities.get(name);
+			if (!ability.exists) continue;
+			if (slot.startsWith('V') || ability.num < 0) out.push(ability.name);
+		}
+		return out;
+	}
+
+	/**
+	 * Use one, sometimes.
+	 *
+	 * An ability we added to a Pokemon was added because it suits it - Verdant
+	 * Surge is the reason to bring a Simisage at all - so this does not try to
+	 * judge it against the curated one on the numbers, the way the move rule
+	 * does. It just takes it half the time. Half, rather than always, for the
+	 * same reason as the moves: a server where every Simisage is identical is
+	 * duller than one where it is a coin flip, and the curated ability is a
+	 * perfectly good Pokemon too.
+	 */
+	considerOurAbilities(ctx, species, set, rng) {
+		if (!set.ability) return;
+		const ours = this.ourAbilities(ctx, species);
+		if (!ours.length || ours.includes(set.ability)) return;
+		if (rng() > 0.5) return;
+		set.ability = pick(rng, ours);
+	}
+
+	/**
+	 * Items this server invented that name this Pokemon as their user.
+	 *
+	 * `itemUser` is the dex's own field for "this item is for these species" -
+	 * it is what a Thick Club or a Light Ball carries - so the Elemental Banana
+	 * naming the six monkeys and the Broken Pact naming Nuzleaf is the item
+	 * itself saying who it is for. Nothing has to be listed here, which is the
+	 * point: the next one is understood the day it is written.
+	 */
+	ourItems(ctx, species) {
+		const out = [];
+		for (const item of ctx.dex.items.all()) {
+			if (!item.exists || item.num >= 0) continue;
+			const users = item.itemUser || [];
+			if (users.some(name => ctx.dex.species.get(name).id === species.id ||
+				ctx.dex.species.get(name).id === species.baseSpecies.toLowerCase().replace(/[^a-z0-9]/g, ''))) {
+				out.push(item.name);
+			}
+		}
+		return out;
+	}
+
+	/**
+	 * Hand one over, when it is both theirs and allowed.
+	 *
+	 * A signature item is a stronger claim than a signature move - the Elemental
+	 * Banana does nothing at all for anybody else, so a Simisage holding one is
+	 * simply a better Simisage - so this takes it more often than the move rule
+	 * takes a move. Not always, because a monkey holding Leftovers is still a
+	 * perfectly ordinary Pokemon and a server where the same six sets appear
+	 * every game is duller.
+	 *
+	 * The ban check matters: the Broken Pact is Ubers-only, and a team built
+	 * with one in RP OU is a team the validator throws back. It would be
+	 * repaired rather than lost, but a rebuild is wasted work and the reason is
+	 * knowable here.
+	 */
+	considerOurItems(ctx, species, set, rng) {
+		const ours = this.ourItems(ctx, species);
+		if (!ours.length || ours.includes(set.item)) return;
+		if (rng() > 0.7) return;
+		const allowed = ours.filter(name => {
+			try {
+				return !ctx.format || !ctx.format.ruleTable || !ctx.format.ruleTable.isBannedSpecies &&
+					!ctx.format.ruleTable.has(`-item:${ctx.dex.items.get(name).id}`);
+			} catch (e) {
+				return true;
+			}
+		});
+		if (!allowed.length) return;
+		set.item = pick(rng, allowed);
+	}
+
+	/**
+	 * The moves this server invented, that this Pokemon can actually learn.
+	 *
+	 * Worked out from the dex rather than listed, by the same convention the rest
+	 * of the project uses: anything we wrote has a negative number, because a
+	 * real move's number is its place in the National Dex of moves and ours have
+	 * no place in it. Add a move tomorrow and this finds it.
+	 */
+	ourMoves(ctx, species) {
+		let pool;
+		try {
+			pool = ctx.dex.species.getMovePool(species.id);
+		} catch (e) {
+			return [];
+		}
+		const out = [];
+		for (const id of pool) {
+			const move = ctx.dex.moves.get(id);
+			if (move.exists && move.num < 0) out.push(move);
+		}
+		return out;
+	}
+
+	/**
+	 * Roughly what a move is worth to this Pokemon, in its own terms.
+	 *
+	 * Deliberately crude, and deliberately not a lookup table: it reads base
+	 * power, type, category and priority off the move itself, so a move added
+	 * next week is understood the same way. Enough to tell that Jungle Rush is a
+	 * better Grass move on a Grass-type than a 60 base power one, and not enough
+	 * to pretend it knows more than that.
+	 */
+	moveWorth(ctx, species, move, set) {
+		if (move.category === 'Status') {
+			// A setup move is worth having; a second one usually is not - and the
+			// move being scored is not its own second one. Comparing against the
+			// whole set meant Shell Smash scored as a redundant setup move because
+			// Shell Smash was in the set, and Blastoise cheerfully swapped it out.
+			const boosts = move.boosts ? Object.values(move.boosts).reduce((n, v) => n + Math.max(0, v), 0) : 0;
+			const alreadySetup = (set.moves || []).some(name => {
+				if (name === move.name) return false;
+				const other = ctx.dex.moves.get(name);
+				return other.category === 'Status' && other.boosts;
+			});
+			return boosts && !alreadySetup ? 40 + boosts * 15 : 15;
+		}
+		const stab = species.types.includes(move.type) ? 1.5 : 1;
+		/*
+		 * A move that works out its own damage has no base power to read.
+		 *
+		 * Merchant's Call, Final Gambit, Seismic Toss, Night Shade: zero in the
+		 * table and not zero in a battle. Scored on base power alone they are
+		 * worthless and get dropped; scored generously they replace real moves.
+		 * The middle is about right, and about as much as this is meant to know.
+		 */
+		const fixed = !move.basePower && (move.damage || move.damageCallback || /counter|toss|shade|gambit|call/i.test(move.name));
+		const power = fixed ? 60 : (move.basePower || 0) * stab;
+		// Priority is worth a lot on something that is not fast, and little on
+		// something that outruns the room anyway.
+		const speed = species.baseStats ? species.baseStats.spe : 80;
+		const priority = (move.priority || 0) > 0 ? (speed < 90 ? 35 : 15) : 0;
+		// An attacking stat it cannot use is worth nothing at all.
+		const attack = move.category === 'Physical' ? species.baseStats.atk : species.baseStats.spa;
+		const other = move.category === 'Physical' ? species.baseStats.spa : species.baseStats.atk;
+		const wrongSide = attack < other - 20 ? 0.6 : 1;
+		return (power + priority) * wrongSide;
+	}
+
+	/**
+	 * Give one of ours a slot, when it earns one.
+	 *
+	 * The rule asked for is "when relevant, without making it a priority", and
+	 * both halves matter. Relevant: it only ever replaces a *weaker* move of the
+	 * same kind, judged by the numbers above, so a Simisage that has been handed
+	 * Jungle Rush is holding something better than what it dropped. Not a
+	 * priority: at most one per Pokemon, only sometimes, and never at the cost of
+	 * the set's best move - a team where every Pokemon is showing off the new
+	 * toys is a worse team and an obviously artificial one.
+	 *
+	 * A free slot is different. If the curated set came back with three moves
+	 * there is nothing to weigh, and ours goes in.
+	 */
+	considerOurMoves(ctx, species, set, rng) {
+		const ours = this.ourMoves(ctx, species).filter(move => !set.moves.includes(move.name));
+		if (!ours.length) return;
+
+		const best = ours
+			.map(move => ({ move, worth: this.moveWorth(ctx, species, move, set) }))
+			.sort((a, b) => b.worth - a.worth)[0];
+		if (!best) return;
+
+		if (set.moves.length < 4) { set.moves.push(best.move.name); return; }
+
+		// Two in three, so the same Pokemon is not always carrying it.
+		if (rng() > 0.66) return;
+
+		const ranked = set.moves
+			.map(name => ({ name, worth: this.moveWorth(ctx, species, ctx.dex.moves.get(name), set) }))
+			.sort((a, b) => a.worth - b.worth);
+		const weakest = ranked[0];
+		// Only if ours is properly better, not merely different: a coin-flip swap
+		// is how a curated set quietly becomes a worse one.
+		if (!weakest || best.worth <= weakest.worth * 1.15) return;
+		set.moves = set.moves.map(name => name === weakest.name ? best.move.name : name);
+	}
+
 	synthesizeSet(ctx, species, rng) {
 		const pool = [...ctx.dex.species.getMovePool(species.id)]
 			.map(id => ctx.dex.moves.get(id)).filter(m => m.exists && !['Struggle', 'Sketch'].includes(m.name));
@@ -422,6 +641,11 @@ class TeamBuilder {
 			if (raw.ivs) set.ivs = raw.ivs;
 		}
 		if (gen >= 9 && raw.teraType && !constraints.noTera) set.teraType = raw.teraType;
+		// After the set is otherwise decided, and before it is checked: anything
+		// of ours it gets has to survive the same validation as the rest.
+		if (!constraints.onlyMove) this.considerOurMoves(ctx, species, set, rng);
+		if (set.ability) this.considerOurAbilities(ctx, species, set, rng);
+		if (set.item !== undefined && !constraints.noItems) this.considerOurItems(ctx, species, set, rng);
 		this.sanitize(ctx, species, set, rng);
 		// Cross Evolution: the set is validated as the target species, so the
 		// ability has to be one the target can legally have.
@@ -653,10 +877,26 @@ class TeamBuilder {
 			return e && e.usage ? (e.usage.weighted || e.usage.raw || 0) : 0;
 		};
 
+		/*
+		 * A buffed Pokemon is worth more than its usage says, because its usage
+		 * was measured on a different Pokemon.
+		 *
+		 * Chandelure's numbers are the numbers of a Chandelure without Shadow Tag,
+		 * and a Simisage's are from a world where it had no Verdant Surge and no
+		 * Jungle Rush. Left alone the draw goes on treating them as the
+		 * also-rans they used to be, and the one thing this server changed never
+		 * turns up in a game.
+		 *
+		 * A promotion, not a guarantee: they join the band of Pokemon the format
+		 * actually uses, and are drawn from it by the same weighted draw as
+		 * everything else. It is the difference between being in the conversation
+		 * and being ignored.
+		 */
+		const buffed = this.buffed();
 		const analysed = [], used = [], rest = [];
 		for (const s of pool) {
 			if (has(sets, s)) analysed.push(s);
-			else if (usageOf(s) > 0) used.push(s);
+			else if (usageOf(s) > 0 || buffed[s.id]) used.push(s);
 			else rest.push(s);
 		}
 		// Within each band, draw without replacement proportional to usage so the
