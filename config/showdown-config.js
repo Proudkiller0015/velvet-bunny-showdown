@@ -327,6 +327,32 @@ const BOT_IDS = botAccountIds(BOT_BASE, BOT_QUEUES);
 const BOT_RUNG = botDifficulties(BOT_BASE, BOT_QUEUES);
 /** userid -> the rung they want to be matched against, or PVP for no bots. */
 const wantedRung = new Map();
+
+/*
+ * The guest book, made once and written out on a timer.
+ *
+ * Lazily, because this file is loaded by more than one process - the config is
+ * read wherever Showdown needs it - and only the one that actually sees people
+ * arrive has any reason to open it.
+ *
+ * Written on a timer rather than on every arrival: a login is a bad moment to
+ * be doing file writes, and the wrapper process that commits this to the
+ * repository is on a clock of its own anyway. On the way out it is flushed once
+ * more, so the last arrival before a restart is not the one that gets lost.
+ */
+let roster = null;
+function velvetRoster() {
+	if (roster) return roster;
+	const { Roster } = require('../../../src/roster');
+	roster = new Roster();
+	roster.load();
+	const timer = setInterval(() => roster.flush(), Number(process.env.PS_ROSTER_FLUSH_MS || 60000));
+	if (timer.unref) timer.unref();
+	for (const signal of ['SIGTERM', 'SIGINT']) {
+		process.once(signal, () => { try { roster.flush(); } catch (e) {} });
+	}
+	return roster;
+}
 // Not a difficulty, so it can never match one: it is the absence of them.
 const PVP = 'pvp';
 
@@ -508,6 +534,92 @@ exports.commands = {
 		`/bot [difficulty] - always face that rung. /bot pvp - players only, no bots.`,
 		`/bot anyone - go back to matching on rating.`,
 	],
+
+	players: 'visitors',
+	guestbook: 'visitors',
+	/**
+	 * Everybody who has been here, not just who is here now.
+	 *
+	 * The count beside the client's user button is who is online this minute,
+	 * which is the only answer this server could give to "who plays here" - and
+	 * it is the wrong one for the person running it. Four people at midnight
+	 * says nothing about the forty who came through during the day.
+	 *
+	 * Owner and administrators only, on the same check the rank command uses.
+	 * It is a small private server and the list of who visits is theirs.
+	 */
+	visitors(target, room, user) {
+		this.checkCan('bypassall');   // owner and administrator only
+		const roster = velvetRoster();
+		const rows = roster.all();
+		if (!rows.length) {
+			return this.sendReplyBox(`Nobody has been written down yet.`);
+		}
+
+		const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+		const wanted = toID(target);
+		const shown = wanted ? rows.filter(row => row.id.includes(wanted)) : rows;
+		if (!shown.length) throw new Chat.ErrorMessage(`Nobody here matches "${target}".`);
+
+		// A day is the useful unit: "who came by this week" rather than a
+		// timestamp nobody reads.
+		const when = stamp => {
+			const then = new Date(stamp);
+			if (isNaN(then)) return '?';
+			const days = Math.floor((Date.now() - then.getTime()) / 86400000);
+			if (days <= 0) return 'today';
+			if (days === 1) return 'yesterday';
+			if (days < 30) return `${days} days ago`;
+			return then.toISOString().slice(0, 10);
+		};
+
+		const LIMIT = 100;
+		const table = shown.slice(0, LIMIT).map(row => {
+			const here = Users.get(row.id);
+			const online = here && here.connected ? ' <small style="color:#3a3">online</small>' : '';
+			return `<tr><td style="padding:2px 8px">${esc(row.name)}${online}</td>` +
+				`<td style="padding:2px 8px">${when(row.last)}</td>` +
+				`<td style="padding:2px 8px">${when(row.first)}</td>` +
+				`<td style="padding:2px 8px;text-align:right">${row.visits}</td></tr>`;
+		}).join('');
+
+		this.sendReplyBox(
+			`<b>Everyone who has been here</b> &mdash; ${shown.length}` +
+			(wanted ? ` matching <code>${esc(target)}</code>` : ` account(s)`) + `<br/>` +
+			`<table style="border-collapse:collapse">` +
+			`<tr><th style="padding:2px 8px;text-align:left">Name</th>` +
+			`<th style="padding:2px 8px;text-align:left">Last seen</th>` +
+			`<th style="padding:2px 8px;text-align:left">First seen</th>` +
+			`<th style="padding:2px 8px;text-align:right">Visits</th></tr>${table}</table>` +
+			(shown.length > LIMIT ? `<small>Showing the ${LIMIT} most recent. Add a name to narrow it.</small>` : '')
+		);
+	},
+	visitorshelp: [
+		`/players - everyone who has ever been on this server, newest first. Owner and admin only.`,
+		`/players [name] - only the accounts whose id contains that.`,
+	],
+};
+
+/**
+ * Write down who turns up.
+ *
+ * `loginfilter` rather than the rename handler, and the difference is the whole
+ * bug: `onRename` runs *during* a rename, before the new name has settled, so a
+ * handler there is handed a user who is still the guest they were a moment ago.
+ * Everyone who logged in was written down as nobody. This one is called once
+ * the rename has succeeded, which is the first moment the account exists, and
+ * again on every reconnect - exactly what "last seen" wants.
+ *
+ * The bots are skipped. They are furniture - fifteen of them log in on every
+ * boot - and a guest book of our own accounts is a guest book of nobody.
+ */
+exports.loginfilter = function (user, oldUser, usertype) {
+	try {
+		if (!user || !user.named) return;
+		velvetRoster().see(user.id, user.name, { skip: id => BOT_IDS.has(id) });
+	} catch (e) {
+		// Never let the guest book break a login.
+	}
 };
 
 /**

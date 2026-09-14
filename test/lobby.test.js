@@ -13,6 +13,7 @@ const { spawn } = require('child_process');
 const net = require('net');
 const WebSocket = require('ws');
 const { Dex } = require('pokemon-showdown');
+const { BattleAI } = require('../src/ai');
 
 const PORT = Number(process.env.TEST_PORT) || 8791;
 const REMOTE = process.argv[2] || '';   // when given, test a deployed server instead
@@ -40,8 +41,21 @@ function waitForPort(port, timeoutMs = 90000) {
 
 	if (!REMOTE) {
 		const root = path.join(__dirname, '..');
+		/*
+		 * A local server that will let this test have a name.
+		 *
+		 * The real server checks names against Showdown's login server, and a
+		 * `/trn` with no assertion is refused - so this watcher stayed a guest,
+		 * never joined the lobby, and reported that the panel had not been sent.
+		 * The panel was fine; the test could not get in the door. It went that way
+		 * the day real accounts became the default and stayed that way, which is
+		 * the argument for the test saying which server it wants rather than
+		 * inheriting whatever the environment happens to hold.
+		 */
 		const server = spawn(process.execPath, [path.join(root, 'src', 'index.js')], {
-			cwd: root, env: { ...process.env, PORT: String(PORT) }, stdio: ['ignore', 'pipe', 'pipe'],
+			cwd: root,
+			env: { ...process.env, PORT: String(PORT), PS_REAL_ACCOUNTS: '0' },
+			stdio: ['ignore', 'pipe', 'pipe'],
 		});
 		server.stdout.on('data', d => { log += d; });
 		server.stderr.on('data', d => { log += d; });
@@ -104,7 +118,14 @@ function waitForPort(port, timeoutMs = 90000) {
 	};
 
 	console.log(`\nlobby panel received (${intro.length} bytes)`);
-	check('offers a difficulty control', /difficulty (easy|normal|hard|champion)/.test(intro));
+	// `/bot <difficulty>`, not `/difficulty` - the buttons were moved onto a
+	// command the server also hears, because the ladder is matched server-side
+	// and a difficulty only this process knew about was ignored there. The check
+	// asks for whatever difficulties the bot actually offers rather than a list
+	// written out here, so adding a rung does not quietly fail this.
+	const rungs = BattleAI.difficulties();
+	check('offers a difficulty control',
+		rungs.length > 1 && rungs.every(d => intro.includes(`/bot ${d}`)));
 	check('has challenge buttons', new RegExp(`/challenge ${BOT}, `).test(intro));
 
 	// Every format id the panel offers must be one the server really has.

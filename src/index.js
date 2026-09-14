@@ -62,6 +62,7 @@ function startServer() {
 	const ladderDir = path.join(pkgRoot, 'config', 'ladders');
 	const { LadderStore } = require('./ladder-store');
 	const { FriendsStore } = require('./friends-store');
+	const { RosterStore } = require('./roster-store');
 	const store = new LadderStore(ladderDir, (...a) => console.log('[ladder-store]', ...a));
 	await store.connect();
 	await store.restore();
@@ -79,6 +80,10 @@ function startServer() {
 		(...a) => console.log('[friends-store]', ...a));
 	await friends.restore();
 
+	// And the guest book, which the server appends to as people arrive.
+	const roster = new RosterStore(undefined, (...a) => console.log('[roster]', ...a));
+	await roster.restore();
+
 	const { seedLadder } = require('./ladder-seed');
 	const { ladderQueues } = require('./ladder');
 	// The same list the queues themselves are built from, so a seeded row can
@@ -94,6 +99,7 @@ function startServer() {
 	// Nothing tells this process that somebody made a friend - it happens two
 	// processes away - so it looks now and then. See src/friends-store.js.
 	friends.start();
+	roster.start();
 
 	/**
 	 * Leave slowly enough for the server to say goodbye.
@@ -123,7 +129,7 @@ function startServer() {
 		const done = () => {
 			// Ratings and friendships last, so anything the wind-down changed is
 			// included. Neither is allowed to hold the exit up on its own.
-			Promise.allSettled([store.stop(), friends.stop()])
+			Promise.allSettled([store.stop(), friends.stop(), roster.stop()])
 				.finally(() => process.exit(0));
 		};
 
