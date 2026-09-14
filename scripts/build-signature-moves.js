@@ -116,16 +116,35 @@ function build() {
 	 * and Marowak loses a move that has never belonged to anyone else.
 	 *
 	 * So: find the newest generation in which anybody properly learns the move,
-	 * and ask who learns it there. Pay Day resolves in Generation 9 to Meowth,
-	 * Bonemerang in Generation 8 to Cubone, and Sacred Fire in Generation 9 to
-	 * nobody - because Entei was given it alongside Ho-Oh, which is exactly what
-	 * it means for a move to stop being a signature.
+	 * and ask who learns it there. Pay Day resolves in Generation 9 to Meowth
+	 * and Bonemerang in Generation 8 to Cubone.
+	 *
+	 * And when that is still more than one family, whoever had it first keeps
+	 * it - as long as it did not spread far. Sacred Fire is Ho-Oh's move: it was
+	 * his alone from Generation 3, and Entei being handed it in Generation 6
+	 * makes it neither Entei's nor nobody's.
+	 *
+	 * The limit is what stops that swallowing the whole dex. Without it the same
+	 * argument hands Charmander Blast Burn - true, it was his in Generation 3 -
+	 * along with Super Fang, Weather Ball and every other move introduced for one
+	 * Pokemon and later given to forty. A move one other family was let in on is
+	 * still that Pokemon's; a move nine families know is a move, and the line
+	 * between those two is the only judgement call in this file.
 	 */
+	const SHARED_LIMIT = 2;
+
 	function ownersOf(moveid) {
 		const byGen = genOwners.get(moveid);
 		// Only ever handed out at an event: still that Pokemon's move.
 		if (!byGen || !byGen.size) return everyOwner.get(moveid) || new Set();
-		return byGen.get(Math.max(...byGen.keys()));
+
+		const newest = byGen.get(Math.max(...byGen.keys()));
+		if (newest.size === 1) return newest;
+		if (newest.size > SHARED_LIMIT) return newest;
+
+		// Shared with one other. The family it started with keeps it.
+		const first = byGen.get(Math.min(...byGen.keys()));
+		return first.size === 1 ? first : newest;
 	}
 
 	const signatures = {};
