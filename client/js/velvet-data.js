@@ -524,6 +524,111 @@
 	}
 
 	/**
+	 * Where a Pokemon sits when Smogon last said anything about it.
+	 *
+	 * One lookup from species id to the tier heading it is listed under, built
+	 * from the current generation first and older ones only where the current
+	 * one has nothing - a Pokemon that is not in Scarlet and Violet at all is
+	 * still tiered in Sword and Shield, and one that is in neither is tiered in
+	 * Sun and Moon. Every Pokemon in National Dex is in one of the three.
+	 *
+	 * Built newest-last so the newer table overwrites the older, which is the
+	 * order that makes the freshest ranking win.
+	 */
+	function smogonSections(root, prefer) {
+		var map = {};
+		for (var i = prefer.length - 1; i >= 0; i--) {
+			var rows = prefer[i] && prefer[i].tiers;
+			if (!rows) continue;
+			var section = null;
+			for (var j = 0; j < rows.length; j++) {
+				var row = rows[j];
+				if (typeof row === 'string') { if (section) map[row] = section; continue; }
+				if (row && row[0] === 'header') section = row[1];
+			}
+		}
+		return map;
+	}
+
+	var LOWER = { NU: 'NU', NUBL: 'NU', PU: 'PU', PUBL: 'PU', ZU: 'ZU', ZUBL: 'ZU' };
+
+	/**
+	 * Give the National Dex list the tiers below RU that it does not have.
+	 *
+	 * Smogon ranks National Dex down to RU and stops, so its table has one RU
+	 * heading with five hundred and thirty-nine Pokemon under it - RU, and
+	 * everything Smogon never got round to ranking, in one alphabetical run.
+	 * Every RP tier from RU upwards searches that table, so scrolling RP OU went
+	 * OU, UUBL, UU, RUBL, RU, and then simply ended, with Luvdisc sitting in RU
+	 * next to Gengar. The tiers below it were not missing Pokemon - they were
+	 * missing headings, and a heading is how anybody finds anything by scrolling.
+	 *
+	 * Meanwhile RP NU, PU and ZU stand on the ordinary ninth-generation tiers,
+	 * which do have those headings. So the same server had two shapes of list
+	 * depending on which of its own tiers you were building for, which is the
+	 * inconsistency being reported.
+	 *
+	 * So the block is split, and split on Smogon's own ranking rather than an
+	 * invented one: the tier the Pokemon holds in Scarlet and Violet, or in the
+	 * newest generation that has it. Anything RU or higher there stays under RU,
+	 * because National Dex placing it this low is National Dex's own judgement
+	 * and it is the authority for the tiers it does rank. The rest get the
+	 * heading they hold everywhere else.
+	 *
+	 * The labels move with them - a Pokemon under a ZU heading that the builder
+	 * calls RU is the same confusion in a smaller place - and so do the slice
+	 * indexes, since every heading inserted pushes everything after it down.
+	 */
+	function sectionLowerTiers(table, sections) {
+		if (!table || !table.tiers || !table.formatSlices) return;
+		if (table.tiers.__velvetTiers) return;
+
+		var headers = {};
+		for (var i = 0; i < table.tiers.length; i++) {
+			var row = table.tiers[i];
+			if (typeof row === 'string') continue;
+			if (row && row[0] === 'header') headers[row[1]] = i;
+		}
+		// Nothing to do for a table that already has the headings, and nothing
+		// sensible to do for one with no RU at all.
+		if (headers.RU === undefined || headers.NU !== undefined) return;
+		table.tiers.__velvetTiers = true;
+
+		var from = headers.RU + 1;
+		var end = table.tiers.length;
+		for (var i = from; i < table.tiers.length; i++) {
+			if (typeof table.tiers[i] !== 'string') { end = i; break; }
+		}
+
+		var groups = { RU: [], NU: [], PU: [], ZU: [] };
+		for (var i = from; i < end; i++) {
+			var id = table.tiers[i];
+			var into = LOWER[sections[id]] || 'RU';
+			groups[into].push(id);
+			if (into !== 'RU' && table.overrideTier) table.overrideTier[id] = into;
+		}
+
+		var rebuilt = groups.RU.slice();
+		var order = ['NU', 'PU', 'ZU'];
+		var placed = {};
+		for (var k = 0; k < order.length; k++) {
+			if (!groups[order[k]].length) continue;
+			placed[order[k]] = from + rebuilt.length;
+			rebuilt.push(['header', order[k]]);
+			rebuilt = rebuilt.concat(groups[order[k]]);
+		}
+
+		var added = rebuilt.length - (end - from);
+		table.tiers.splice.apply(table.tiers, [from, end - from].concat(rebuilt));
+		for (var key in table.formatSlices) {
+			if (table.formatSlices[key] >= end) table.formatSlices[key] += added;
+		}
+		// These pointed at the end of the RU block, which was the honest answer
+		// when there was no such section. Now there is one.
+		for (var tier in placed) table.formatSlices[tier] = placed[tier];
+	}
+
+	/**
 	 * Put the Z-A Megas in the list you scroll through.
 	 *
 	 * Giving them a tier was only half of it, and the half that shows when you
@@ -560,14 +665,37 @@
 			return -1;
 		};
 
+		/*
+		 * In its alphabetical place, not at the top of the section.
+		 *
+		 * Each tier's block is sorted by id - alakazammega, annihilape, arceus -
+		 * and dropping ours in directly after the header put every one of them
+		 * above the As. The list is scrolled by people looking for a name, so a
+		 * handful of Megas jumbled at the top of each tier is worse than not
+		 * listing them: it reads as the order being broken, because it is.
+		 *
+		 * So the block is walked to the first entry that sorts after ours, and it
+		 * goes there. A header ends the block.
+		 */
+		var placeFor = function (id, tier) {
+			var start = headerIndex(tier);
+			if (start < 0) return -1;
+			for (var i = start + 1; i < table.tiers.length; i++) {
+				var row = table.tiers[i];
+				// A nested header ends this block: OU has "OU by technicality".
+				if (row && row.length === 2 && row[0] === 'header') return i;
+				if (typeof row === 'string' && row > id) return i;
+			}
+			return table.tiers.length;
+		};
+
 		for (var id in megaTiers) {
 			if (table.tiers.indexOf(id) >= 0) continue;      // already listed
-			var at = headerIndex(megaTiers[id]);
+			var at = placeFor(id, megaTiers[id]);
 			if (at < 0) continue;                             // no such section here
-			at = at + 1;
 			table.tiers.splice(at, 0, id);
 			for (var key in table.formatSlices) {
-				if (table.formatSlices[key] > at) table.formatSlices[key]++;
+				if (table.formatSlices[key] >= at) table.formatSlices[key]++;
 			}
 		}
 	}
@@ -594,12 +722,25 @@
 		// nested under their own key. Both shapes get her.
 		var targets = [table];
 		var natdexTargets = [];
+		var megaTargets = [];
 		for (var key in table) {
 			if (!table[key] || typeof table[key] !== 'object') continue;
 			if (key.indexOf('gen9') === 0) targets.push(table[key]);
 			// The National Dex tables are where a Mega is a legal Pokemon at all,
 			// and they are what the RP tiers search against - see installRpTiers.
 			if (key.indexOf('natdex') >= 0) natdexTargets.push(table[key]);
+			/*
+			 * The Z-A Megas are ninth-generation data and only that.
+			 *
+			 * Gen 8 RP stands on Gen 8 National Dex, and the validator refuses an
+			 * item from a later generation on its own: a Raichunite X in a Gen 8
+			 * team comes back "does not exist in Gen 8", twice, along with the
+			 * Pokemon it makes. Listing them in that table would offer a Mega the
+			 * server will not accept - the same complaint as before, one
+			 * generation down, and found by validating a set rather than by
+			 * anyone hitting it.
+			 */
+			if (key.indexOf('gen9') === 0 && key.indexOf('natdex') >= 0) megaTargets.push(table[key]);
 		}
 
 		// Her place in the list is not decided here, and cannot be: every tier's
@@ -646,13 +787,25 @@
 		 * In National Dex they are legal, tiered, and ours had no tier at all -
 		 * so the builder offered the stone and called the Pokemon it makes
 		 * illegal. That is the complaint, and this is the half that was missing.
+		 *
+		 * The same pass gives those tables their tiers below RU, which has to
+		 * happen first: a Mega is slotted into the section its tier names, so the
+		 * sections have to be there before it goes looking for one.
 		 */
+		var ninth = smogonSections(table, [table.gen7, table.gen8, table]);
+		var eighth = smogonSections(table, [table.gen7, table.gen8]);
+		// Every National Dex table gets its lower tiers, whichever generation it
+		// is: the missing headings are the same missing headings there.
+		for (var n = 0; n < natdexTargets.length; n++) {
+			var natdex = natdexTargets[n];
+			sectionLowerTiers(natdex, natdex === table.gen8natdex ? eighth : ninth);
+		}
 		if (buffs && buffs.megaTiers) {
-			for (var n = 0; n < natdexTargets.length; n++) {
-				var natdex = natdexTargets[n];
-				if (!natdex.overrideTier) natdex.overrideTier = {};
-				for (var megaId in buffs.megaTiers) natdex.overrideTier[megaId] = buffs.megaTiers[megaId];
-				listMegas(natdex, buffs.megaTiers);
+			for (var g = 0; g < megaTargets.length; g++) {
+				var withMegas = megaTargets[g];
+				if (!withMegas.overrideTier) withMegas.overrideTier = {};
+				for (var megaId in buffs.megaTiers) withMegas.overrideTier[megaId] = buffs.megaTiers[megaId];
+				listMegas(withMegas, buffs.megaTiers);
 			}
 		}
 
