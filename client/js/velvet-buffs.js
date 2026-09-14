@@ -129,6 +129,51 @@ window.VelvetBuffs = {
 				"1": "Tidal Surge",
 				"H": "Torrent"
 			}
+		},
+		"litwick": {
+			"moves": [],
+			"abilities": [
+				"Shadow Tag"
+			],
+			"slots": {
+				"0": "Flash Fire",
+				"1": "Flame Body",
+				"H": "Infiltrator",
+				"V0": "Shadow Tag"
+			}
+		},
+		"lampent": {
+			"moves": [],
+			"abilities": [
+				"Shadow Tag"
+			],
+			"slots": {
+				"0": "Flash Fire",
+				"1": "Flame Body",
+				"H": "Infiltrator",
+				"V0": "Shadow Tag"
+			}
+		},
+		"chandelure": {
+			"moves": [],
+			"abilities": [
+				"Shadow Tag"
+			],
+			"slots": {
+				"0": "Flash Fire",
+				"1": "Flame Body",
+				"H": "Infiltrator",
+				"V0": "Shadow Tag"
+			}
+		},
+		"chandeluremega": {
+			"moves": [],
+			"abilities": [
+				"Shadow Tag"
+			],
+			"slots": {
+				"0": "Shadow Tag"
+			}
 		}
 	},
 	moves: {"junglerush":{"num":-4,"name":"Jungle Rush","type":"Grass","category":"Physical","basePower":80,"accuracy":100,"pp":15,"priority":0,"target":"normal","flags":{"contact":1,"protect":1,"mirror":1,"metronome":1},"secondary":null,"shortDesc":"Uses the user's better attacking stat. +1 priority on Grassy Terrain.","desc":"This move uses whichever of the user's Attack or Special Attack is higher, before any boosts. It gains +1 priority while Grassy Terrain is active and the user is grounded."},"cinderrush":{"num":-6,"name":"Cinder Rush","type":"Fire","category":"Physical","basePower":80,"accuracy":100,"pp":15,"priority":0,"target":"normal","flags":{"contact":1,"protect":1,"mirror":1,"metronome":1},"secondary":null,"shortDesc":"Uses the user's better attacking stat. +1 priority in harsh sunlight.","desc":"This move uses whichever of the user's Attack or Special Attack is higher, before any boosts. It gains +1 priority in harsh sunlight."},"wavecharge":{"num":-5,"name":"Wave Charge","type":"Water","category":"Physical","basePower":50,"accuracy":100,"pp":20,"priority":0,"target":"normal","flags":{"contact":1,"protect":1,"mirror":1,"metronome":1},"secondary":{"chance":100,"self":{"boosts":{"spe":1}}},"shortDesc":"100% chance to raise the user's Speed by 1.","desc":"Has a 100% chance to raise the user's Speed by 1 stage."},"torrentrush":{"num":-7,"name":"Torrent Rush","type":"Water","category":"Physical","basePower":80,"accuracy":100,"pp":15,"priority":0,"target":"normal","flags":{"contact":1,"protect":1,"mirror":1,"metronome":1},"secondary":null,"shortDesc":"Uses the user's better attacking stat. +1 priority in rain.","desc":"This move uses whichever of the user's Attack or Special Attack is higher, before any boosts. It gains +1 priority in rain."}},

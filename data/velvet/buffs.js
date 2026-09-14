@@ -134,8 +134,37 @@ const MONKEYS = {
 	},
 };
 
+/**
+ * The Chandelure family.
+ *
+ * A Ghost-type lamp whose Pokedex entries are about drawing spirits in and not
+ * letting them leave, carrying Flash Fire, Flame Body and Infiltrator - three
+ * abilities about being on fire, one of them about walking through walls, and
+ * none about the thing the Pokemon actually is. Shadow Tag is the ability that
+ * describes it.
+ *
+ * All three stages, because a buff belongs to the family and not to the last
+ * form, and the Mega with them.
+ *
+ * Worth knowing what this costs in tiers: Shadow Tag is banned by name in
+ * National Dex, so a Chandelure holding it is legal in RP Ubers, RP Battle and
+ * RP Random Battle, and refused by RP OU, UU and RU. That is not a mistake to
+ * route around - trapping is why those tiers ban it, and a Chandelure that
+ * traps is an Ubers Pokemon. If it should be playable further down, the answer
+ * is the monkeys' answer: our own name for it, which no tier has banned.
+ */
+const CHANDELURE = {
+	litwick: { abilities: ['Shadow Tag'] },
+	lampent: { abilities: ['Shadow Tag'] },
+	chandelure: { abilities: ['Shadow Tag'] },
+	// `sole`: a Mega has one ability slot, and this is what goes in it, in place
+	// of the Infiltrator it was given. Nothing else on a Mega is ever read.
+	chandeluremega: { abilities: ['Shadow Tag'], sole: true },
+};
+
 exports.Buffs = {
 	...MONKEYS,
+	...CHANDELURE,
 };
 
 /**
@@ -148,15 +177,40 @@ exports.Buffs = {
  * client reads the four it knows), so an extra key is invisible to everything
  * that should not see it and available to everything that should.
  */
-function addAbilities(species, abilities) {
+function addAbilities(species, abilities, sole) {
+	if (!abilities.length) return;
+
+	/*
+	 * A Mega Evolution has exactly one ability, and the engine reads it from
+	 * slot 0 - forme-changing into the Mega sets that slot's ability and nothing
+	 * else - so for a Mega this replaces rather than adds. There is no additive
+	 * option: an ability in any other slot on a Mega is never reached.
+	 */
+	if (sole) {
+		species.abilities = { 0: abilities[0] };
+		return;
+	}
+
 	const existing = new Set(Object.values(species.abilities || {}));
 	let extra = 0;
 	for (const ability of abilities) {
 		if (existing.has(ability)) continue;
-		if (!species.abilities['1']) species.abilities['1'] = ability;
-		else if (!species.abilities['H']) species.abilities['H'] = ability;
-		else if (!species.abilities['S']) species.abilities['S'] = ability;
-		else species.abilities[`V${extra++}`] = ability;
+		if (!species.abilities['1']) {
+			species.abilities['1'] = ability;
+		} else {
+			/*
+			 * Slots of our own, and deliberately not 'H' or 'S'.
+			 *
+			 * Both of those mean something. 'H' is the Hidden Ability, which drags
+			 * in rules of its own - gender locks, unreleased checks, a different
+			 * legality path - and 'S' is the event-only slot, the wrong home for
+			 * something we want people to pick freely. The validator only ever asks
+			 * whether the ability is one of the species' values, so a key it has
+			 * never seen works perfectly and carries none of that baggage.
+			 */
+			while (species.abilities[`V${extra}`]) extra++;
+			species.abilities[`V${extra++}`] = ability;
+		}
 		existing.add(ability);
 	}
 }
@@ -209,7 +263,7 @@ exports.applyBuffs = (Pokedex, Learnsets) => {
 		const record = exports.applied[id] || (exports.applied[id] = { moves: [], abilities: [] });
 		const hadAbilities = new Set(Object.values(species.abilities || {}));
 
-		if (buff.abilities?.length) addAbilities(species, buff.abilities);
+		if (buff.abilities?.length) addAbilities(species, buff.abilities, buff.sole);
 		for (const ability of Object.values(species.abilities || {})) {
 			if (!hadAbilities.has(ability) && !record.abilities.includes(ability)) {
 				record.abilities.push(ability);
