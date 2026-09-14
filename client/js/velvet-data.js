@@ -129,8 +129,9 @@
 		var abilitiesIn = installBuffedAbilities();
 		var itemIn = installItemIcon();
 		var sigItemIn = installSignatureItem();
+		var powerIn = installBuffedBasePower();
 		return tableIn && orderIn && spritesIn && iconIn && builderIn && tipsIn && rpIn &&
-			listIn && buffsIn && abilitiesIn && itemIn && sigItemIn;
+			listIn && buffsIn && abilitiesIn && itemIn && sigItemIn && powerIn;
 	}
 
 	/**
@@ -762,6 +763,48 @@
 			var rows = [];
 			for (var n = 0; n < hoist.length; n++) rows.push(['ability', hoist[n]]);
 			return header.concat(rows, rest);
+		};
+		return true;
+	}
+
+	/**
+	 * Verdant Surge's extra boost, in the move tooltip.
+	 *
+	 * The tooltip recomputes base power from its own list of modifiers, the same
+	 * way the stat panel recomputes stats, so an ability it has never heard of
+	 * simply does not exist to it: Simisage's Grass moves showed the ordinary
+	 * 1.3x from Grassy Terrain while the battle was applying 1.5x. The damage was
+	 * right and the number above it was wrong, which is the worst of both.
+	 *
+	 * Applied as a second factor on top of the terrain's, rather than as a
+	 * replacement, because that is exactly what the server does: 4726/4096 after
+	 * a 1.3x is 1.5x, chained in the same order with the same rounding.
+	 */
+	function installBuffedBasePower() {
+		var tips = window.BattleTooltips;
+		if (!tips || !tips.prototype || !tips.prototype.getMoveBasePower) return false;
+		if (tips.__velvetBasePower) return true;
+		tips.__velvetBasePower = true;
+
+		var original = tips.prototype.getMoveBasePower;
+		tips.prototype.getMoveBasePower = function (move, moveType, value, target) {
+			var out = original.apply(this, arguments);
+			try {
+				var pokemon = value && value.pokemon;
+				var serverPokemon = value && value.serverPokemon;
+				var ability = window.toID(
+					(pokemon && pokemon.ability) || (serverPokemon && serverPokemon.ability) || ''
+				);
+				var grassy = this.battle && this.battle.hasPseudoWeather &&
+					this.battle.hasPseudoWeather('Grassy Terrain');
+				var grounded = !pokemon || !pokemon.isGrounded || pokemon.isGrounded(serverPokemon);
+				if (ability === 'verdantsurge' && moveType === 'Grass' && grassy && grounded && out && out.modify) {
+					out.modify(4726 / 4096, 'Verdant Surge');
+				}
+			} catch (e) {
+				// A tooltip is never worth throwing over.
+			}
+			return out;
 		};
 		return true;
 	}
