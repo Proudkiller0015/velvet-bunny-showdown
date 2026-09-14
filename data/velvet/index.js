@@ -22,7 +22,7 @@
 
 const { Pokedex } = require('./pokedex.js');
 const { Abilities } = require('./abilities.js');
-const { Moves } = require('./moves.js');
+const { Moves, patchMoves } = require('./moves.js');
 const { FormatsData } = require('./formats-data.js');
 const { Learnsets } = require('./learnsets.js');
 const { patchItems } = require('./items.js');
@@ -55,7 +55,7 @@ exports.pokedex = data => {
 	buffWhatWeHave();
 };
 exports.abilities = data => unnerfAbilities(Object.assign(data, Abilities));
-exports.moves = data => unnerfMoves(Object.assign(data, Moves));
+exports.moves = data => patchMoves(unnerfMoves(Object.assign(data, Moves)));
 exports.formatsData = data => {
 	Object.assign(data, FormatsData);
 	tierTable = data;

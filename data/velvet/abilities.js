@@ -80,6 +80,44 @@ function shadowShield(label) {
 }
 
 /**
+ * Run two onTryHit handlers as one.
+ *
+ * An effect gets a single onTryHit, and both of these need it: one refuses
+ * status moves, the other refuses OHKO moves. Whichever answers first wins, and
+ * an answer of `undefined` means "no opinion, carry on".
+ */
+function chainTryHit(...handlers) {
+	return function (target, source, move) {
+		for (const handler of handlers) {
+			const result = handler.call(this, target, source, move);
+			if (result !== undefined) return result;
+		}
+	};
+}
+
+/**
+ * Good as Gold: no status move from anybody else touches her.
+ *
+ * Gholdengo's ability, and it does more work here than it looks. Perish Song,
+ * Leech Seed, Toxic, Will-O-Wisp, Thunder Wave, Encore, Taunt, Roar, Spore -
+ * all of them are status moves, and all of them stop at the door. Perish Song
+ * in particular is the reason it is here: it is the other move that kills
+ * without dealing damage, and it is a status move, so this is the whole answer
+ * to it.
+ *
+ * Her own status moves still work on herself, which is what `target !== source`
+ * is for - Queen's Dance and Queen's Heal are status moves too.
+ */
+function goodAsGold(name) {
+	return function (target, source, move) {
+		if (move.category === 'Status' && target !== source) {
+			this.add('-immune', target, `[from] ability: ${name}`);
+			return null;
+		}
+	};
+}
+
+/**
  * Never trapped, the way a Shed Shell is never trapped.
  *
  * Shadow Tag, Arena Trap, Magnet Pull, Mean Look, Block, Spider Web, Fairy
@@ -181,6 +219,8 @@ exports.Abilities = {
 
 		// Nothing the other side does lowers her stats.
 		onTryBoost: clearBody('Queen Wrath'),
+		// And no status move from anybody else lands at all.
+		onTryHit: chainTryHit(goodAsGold('Queen Wrath'), ignoreOhko('Queen Wrath')),
 		// And nothing holds her in place.
 		...untrappable,
 
@@ -221,8 +261,8 @@ exports.Abilities = {
 		},
 		rating: 5,
 		num: -1,
-		shortDesc: "Doubles Atk and SpA, ignores abilities, blocks priority, Shadow Shield, Sturdy, Magic Guard, Clear Body. Mold Breaker cannot touch it.",
-		desc: "Attack and Special Attack are doubled. This Pokemon's moves ignore the target's Ability. Priority moves cannot touch this side. At full HP, damage taken is halved. Survives a killing blow from full HP and is immune to OHKO moves. Takes no damage from anything that is not a move. Its stats cannot be lowered by anything other than itself. Mold Breaker, Teravolt and Turboblaze cannot ignore any of it.",
+		shortDesc: "Doubles Atk and SpA, ignores abilities, blocks priority, Shadow Shield, Sturdy, Magic Guard, Clear Body, Good as Gold. Untrappable.",
+		desc: "Attack and Special Attack are doubled. This Pokemon's moves ignore the target's Ability. Priority moves cannot touch this side. At full HP, damage taken is halved. Survives a killing blow from full HP and is immune to OHKO moves. Takes no damage from anything that is not a move. Its stats cannot be lowered by anything other than itself. No status move used by another Pokemon affects it. It cannot be trapped, and Destiny Bond cannot take it down. Mold Breaker, Teravolt and Turboblaze cannot ignore any of it.",
 	},
 
 	queensmorph: {
@@ -261,7 +301,7 @@ exports.Abilities = {
 		// Held before she transforms, and by the volatile afterwards.
 		onSourceModifyDamage: shadowShield("Queen's Morph"),
 		onDamage: guardAndEndure("Queen's Morph"),
-		onTryHit: ignoreOhko("Queen's Morph"),
+		onTryHit: chainTryHit(goodAsGold("Queen's Morph"), ignoreOhko("Queen's Morph")),
 		onTryBoost: clearBody("Queen's Morph"),
 		...untrappable,
 
@@ -272,7 +312,7 @@ exports.Abilities = {
 			},
 			onSourceModifyDamage: shadowShield("Queen's Morph"),
 			onDamage: guardAndEndure("Queen's Morph"),
-			onTryHit: ignoreOhko("Queen's Morph"),
+			onTryHit: chainTryHit(goodAsGold("Queen's Morph"), ignoreOhko("Queen's Morph")),
 			onTryBoost: clearBody("Queen's Morph"),
 			...untrappable,
 		},
@@ -286,8 +326,8 @@ exports.Abilities = {
 		},
 		rating: 5,
 		num: -2,
-		shortDesc: "Transforms into the foe on entry, then +6 Speed. Keeps Shadow Shield, Sturdy, Magic Guard and Clear Body.",
-		desc: "On switch-in, this Pokemon Transforms into the opposing Pokemon and then raises its Speed by 6 stages. Afterwards it keeps taking half damage at full HP, surviving a killing blow from full HP, ignoring damage that is not from a move, and refusing stat drops from anything other than itself - all of which outlive the Transform replacing this Ability with the copied one.",
+		shortDesc: "Transforms into the foe on entry, then +6 Speed. Keeps Shadow Shield, Sturdy, Magic Guard, Clear Body and Good as Gold.",
+		desc: "On switch-in, this Pokemon Transforms into the opposing Pokemon and then raises its Speed by 6 stages. Afterwards it keeps taking half damage at full HP, surviving a killing blow from full HP, ignoring damage that is not from a move, refusing stat drops and status moves from anything other than itself, being untrappable, and being safe from Destiny Bond - all of which outlive the Transform replacing this Ability with the copied one.",
 	},
 	/**
 	 * Verdant Surge - Grassy Surge, and then some.

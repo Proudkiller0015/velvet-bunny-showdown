@@ -282,3 +282,50 @@ exports.Moves = {
 		desc: "This move uses whichever of the user's Attack or Special Attack is higher, before any boosts. It gains +1 priority in rain.",
 	},
 };
+
+/**
+ * Destiny Bond cannot take a queen with it.
+ *
+ * Perish Song is a status move, so Good as Gold already refuses it at the door.
+ * Destiny Bond is not aimed at her at all - it is used by the other Pokemon on
+ * itself, and when it faints it reaches across and calls `faint()` on whoever
+ * killed it. There is nothing for an ability on her side to intercept.
+ *
+ * Showdown has exactly this problem with Dynamax and solves it inside Destiny
+ * Bond, which checks the attacker for the dynamax volatile before taking them
+ * down. So this does the same thing for the same reason rather than inventing a
+ * second mechanism: the move itself is taught to look, and to let her go.
+ *
+ * Patched rather than replaced - Destiny Bond carries a priority, a condition
+ * with four other handlers, and a Z-move effect, and copying all of that across
+ * to change one line would mean keeping the copy in step forever.
+ */
+const QUEEN_ABILITIES = ['queenwrath', 'queensmorph'];
+
+function queenProtected(pokemon) {
+	if (!pokemon) return false;
+	if (QUEEN_ABILITIES.includes(pokemon.ability)) return true;
+	// Queen's Morph replaces its own ability when it Transforms; the volatile is
+	// what carries her protections afterwards.
+	return !!(pokemon.volatiles && pokemon.volatiles['queensmorph']);
+}
+
+function patchMoves(Moves) {
+	const destinyBond = Moves && Moves.destinybond;
+	if (!destinyBond || !destinyBond.condition) return Moves;
+
+	const original = destinyBond.condition.onFaint;
+	if (!original || destinyBond.condition.velvetQueenSafe) return Moves;
+	destinyBond.condition.velvetQueenSafe = true;
+
+	destinyBond.condition.onFaint = function (target, source, effect) {
+		if (queenProtected(source)) {
+			this.add('-hint', "Destiny Bond cannot take a queen with it.");
+			return;
+		}
+		return original.call(this, target, source, effect);
+	};
+	return Moves;
+}
+
+exports.patchMoves = patchMoves;
