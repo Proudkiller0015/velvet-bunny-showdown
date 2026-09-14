@@ -238,10 +238,24 @@ exports.noipchecks = true;
  */
 const { botAccountIds, botDifficulties, toId: queueId } = require('../../../src/queue-names');
 
+/*
+ * The defaults come from src/ladder-defaults.js, not from a copy written out
+ * here, and that is the whole point of that file existing.
+ *
+ * This list decides which accounts may claim their name without one - see
+ * exemptBots() below - so a queue missing from it cannot log in at all. When
+ * RP Random Battle was added to the ladder, this copy still said
+ * 'gen9randombattle' and nothing else, so the server had never heard of the
+ * five RP queues: they connected, asked for their names, were refused, and
+ * spent their lives as Guest 7 while the five Random Battle rungs beside them
+ * worked perfectly. Two lists of the same thing, one of them stale.
+ */
+const { DEFAULT_FORMATS, DEFAULT_DIFFICULTIES } = require('../../../src/ladder-defaults');
+
 const BOT_BASE = process.env.PS_BOT_NAME || 'Velvet Bunny';
-const BOT_DIFFICULTIES = (process.env.PS_LADDER_DIFFICULTIES || 'easy,normal,hard,champion,stockfish')
+const BOT_DIFFICULTIES = (process.env.PS_LADDER_DIFFICULTIES || DEFAULT_DIFFICULTIES.join(','))
 	.split(',').map(d => d.trim()).filter(d => d);
-const BOT_FORMATS = (process.env.PS_LADDER_FORMATS || 'gen9randombattle')
+const BOT_FORMATS = (process.env.PS_LADDER_FORMATS || DEFAULT_FORMATS.join(','))
 	.split(',').map(f => f.trim()).filter(f => f);
 
 const BOT_IDS = botAccountIds(BOT_BASE, BOT_DIFFICULTIES, BOT_FORMATS);
