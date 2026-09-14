@@ -20,6 +20,7 @@
 
 const { Generations } = require('@pkmn/data');
 const { Dex: PkmnDex } = require('@pkmn/dex');
+const playbook = require('./playbook');
 const calc = require('@smogon/calc');
 const { TurnSearch, DEFAULT_WEIGHTS } = require('./search');
 const { loadBrain } = require('./brain');
@@ -119,11 +120,11 @@ const DIFFICULTIES = {
 	// Everything Hard does and no lapses at all: it counts the speed tiers before
 	// committing, and in Random Battle it knows the whole set - moves and Tera
 	// types included - before any of it is used.
-	champion: { blunder: 0,    greedy: false, noise: 0,  switching: true,  tempo: true,  predict: true,  tera: true, switchMargin: 25, knowsSets: true, readsSets: true },
+	champion: { blunder: 0,    greedy: false, noise: 0,  switching: true,  tempo: true,  predict: true,  tera: true, switchMargin: 25, knowsSets: true, readsSets: true, playbook: true },
 	// Experimental. Everything Champion does, plus a one-turn search over our
 	// options against their likely replies, weighted by numbers the trainer tuned
 	// from self-play rather than by hand.
-	stockfish: { blunder: 0,   greedy: false, noise: 0,  switching: true,  tempo: true,  predict: true,  tera: true, switchMargin: 25, knowsSets: true, readsSets: true, search: true },
+	stockfish: { blunder: 0,   greedy: false, noise: 0,  switching: true,  tempo: true,  predict: true,  tera: true, switchMargin: 25, knowsSets: true, readsSets: true, search: true, playbook: true },
 };
 const DEFAULT_DIFFICULTY = 'hard';
 
@@ -227,6 +228,7 @@ class BattleAI {
 			opts.overrides = { baseStats: undefined };
 			opts.rawStats = entry.stats;
 		}
+		opts.overrides = this.speciesOverrides(gen, species, opts.overrides);
 		try {
 			const mon = new calc.Pokemon(gen, species, opts);
 			if (entry.stats && !transformed) {
@@ -247,8 +249,69 @@ class BattleAI {
 			}
 			return mon;
 		} catch (e) {
-			return new calc.Pokemon(gen, species, { level: opts.level });
+			// The last resort, with whatever sheet could be found - repeating the
+			// call unchanged is what used to make this catch useless.
+			return new calc.Pokemon(gen, species, {
+				level: opts.level,
+				overrides: this.speciesOverrides(gen, species, undefined),
+			});
 		}
+	}
+
+	/**
+	 * Species data for a Pokemon this generation has never heard of.
+	 *
+	 * The damage calculator's ninth generation is Scarlet and Violet, and half
+	 * the Pokemon in National Dex are not in it - Ferrothorn is not, and neither
+	 * is Lopunny. Asked for one, `gen.species.get` returns nothing and the
+	 * calculator's constructor reads `baseStats.hp` off it, which throws. The
+	 * fallback beside it repeated the same call and threw the same way, so the
+	 * error left the AI entirely: in a National Dex battle - which is what the RP
+	 * tiers are - the bot crashed on the turn a Ferrothorn appeared.
+	 *
+	 * The fix is to hand the constructor the sheet from the newest generation
+	 * that does have it. The mechanics stay this generation's, which is correct;
+	 * only the stats, types and weight come from where they exist.
+	 */
+	pastSpecies(name) {
+		if (!this._pastSpecies) this._pastSpecies = new Map();
+		const key = String(name);
+		if (this._pastSpecies.has(key)) return this._pastSpecies.get(key);
+
+		let found = null;
+		for (const num of [8, 7, 6, 5, 4, 3, 2, 1]) {
+			let older;
+			try {
+				older = GENS.get(num).species.get(key);
+			} catch (e) {
+				older = null;
+			}
+			if (older && older.baseStats) {
+				found = {
+					baseStats: older.baseStats,
+					types: older.types,
+					weightkg: older.weightkg,
+					abilities: older.abilities,
+				};
+				break;
+			}
+		}
+		this._pastSpecies.set(key, found);
+		return found;
+	}
+
+	/** Whatever this generation knows, or the last one that knew anything. */
+	speciesOverrides(gen, name, overrides) {
+		let known = null;
+		try {
+			known = gen.species.get(name);
+		} catch (e) {
+			known = null;
+		}
+		if (known) return overrides;
+		const past = this.pastSpecies(name);
+		if (!past) return overrides;
+		return { ...(overrides || {}), ...past };
 	}
 
 	/** Build a calc Pokemon for an opponent we can only partially see. */
@@ -265,11 +328,23 @@ class BattleAI {
 			evs: { hp: 85, atk: 85, def: 85, spa: 85, spd: 85, spe: 85 },
 		};
 		try {
+			opts.overrides = this.speciesOverrides(gen, species, opts.overrides);
 			const mon = new calc.Pokemon(gen, species, opts);
 			if (foe.maxhp === 100 && foe.hp < 100) mon.originalCurHP = Math.max(1, Math.round(mon.maxHP() * foe.hp / 100));
 			return mon;
 		} catch (e) {
-			return new calc.Pokemon(gen, 'Pikachu', { level: opts.level });
+			// Something rather than nothing: a Pikachu-shaped guess is a bad
+			// estimate and a crash is no estimate at all. Tried with the real
+			// sheet first, in case the species is simply older than this
+			// generation - Ferrothorn in National Dex is exactly that.
+			try {
+				return new calc.Pokemon(gen, species, {
+					level: opts.level,
+					overrides: this.speciesOverrides(gen, species, undefined),
+				});
+			} catch (e2) {
+				return new calc.Pokemon(gen, 'Pikachu', { level: opts.level });
+			}
 		}
 	}
 
@@ -552,6 +627,34 @@ class BattleAI {
 		return best / 200;
 	}
 
+	/**
+	 * Is setting up against this opponent simply a wasted turn?
+	 *
+	 * Answered from what the battle has shown rather than from what the Pokemon
+	 * could have: an ability we have seen, or a move they have used. Guessing
+	 * that a Clefable is Unaware before it proves it would be right most of the
+	 * time and wrong in the way that loses games.
+	 */
+	setupIsWasted(gen, foe, boostsUp, ctx) {
+		const foes = (ctx && ctx.foes) || [];
+		const offensive = ['atk', 'spa', 'spe'].some(stat => (boostsUp[stat] || 0) > 0);
+		const defensive = ['def', 'spd'].some(stat => (boostsUp[stat] || 0) > 0);
+
+		for (const other of foes) {
+			const ability = String(other.ability || '').toLowerCase().replace(/[^a-z]/g, '');
+			// Unaware kills the offensive half and leaves the defensive half alone.
+			if (ability === 'unaware' && offensive && !defensive) return true;
+
+			const seen = other.moves ? [...other.moves] : [];
+			for (const move of seen) {
+				const id = String(move).toLowerCase().replace(/[^a-z0-9]/g, '');
+				if (id === 'haze' || id === 'clearsmog') return true;
+			}
+		}
+		void foe;
+		return false;
+	}
+
 	/** Score a status move by what it is actually worth this turn. */
 	statusScore(gen, moveName, me, foe, state, incoming, ctx = {}) {
 		const move = PkmnDex.forGen(gen.num).moves.get(moveName);
@@ -574,9 +677,26 @@ class BattleAI {
 		if (PIVOT.includes(move.name)) return 20;
 
 		if (isSetup) {
-			// Setup is a win condition, not a tic. It is worth a turn when the
-			// opponent is likely to be leaving, and it is a throw when they are
-			// about to knock us out and have no reason to go anywhere.
+			/*
+			 * Two Pokemon make setting up pointless, and the bot used to do it
+			 * anyway - happily clicking Swords Dance at a Clefable, six times.
+			 *
+			 * **Unaware** does not see the boosts. Every point of Attack bought
+			 * with a turn is a point it calculates as though it were never there,
+			 * so against one of these a setup move is strictly worse than any
+			 * attack: same damage, one fewer turn. Only the offensive half is
+			 * dead - Bulk Up against an Unaware *attacker* still makes us tougher
+			 * - so the boosts are checked rather than the move.
+			 *
+			 * **Haze**, and Clear Smog, delete the boosts outright. The turn spent
+			 * setting up and the turn spent hazing cancel, and we are down a turn
+			 * and they are not. This one is only counted when they have actually
+			 * shown the move: assuming every Pokemon might have Haze would stop
+			 * the bot setting up at all.
+			 */
+			const deadSetup = this.setupIsWasted(gen, foe, boostsUp, ctx);
+			if (deadSetup) return -35;
+
 			const sweep = ctx.foes ? this.sweepPotential(gen, ctx.entry, state, ctx.foes, ctx.field, boostsUp) : 0;
 			const danger = incoming / Math.max(1, myHpPct);      // 1 = exactly lethal
 			// A free turn bought by threatening them is the whole point.
@@ -591,7 +711,22 @@ class BattleAI {
 			if (move.status === 'slp') return 45;
 			if (move.status === 'par' || move.status === 'brn' || move.status === 'tox') return 32;
 		}
-		if (/taunt|encore|disable|haze|defog|rapidspin|trick|knockoff/i.test(move.id)) return 22;
+		/*
+		 * Haze against a Pokemon that has spent turns setting up is one of the
+		 * best moves in the game, and against one that has not it is a wasted
+		 * turn. The bot scored it the same either way - a flat 22 with Taunt and
+		 * Defog - so it hazed at full-health attackers and declined to haze the
+		 * Dragon Dance sweeper that was about to end the game.
+		 */
+		if (/^(haze|clearsmog)$/.test(move.id)) {
+			let theirBoosts = 0;
+			for (const other of (ctx.foes || [])) {
+				const boosts = other.boosts || {};
+				theirBoosts = Math.max(theirBoosts, Object.values(boosts).reduce((n, v) => n + Math.max(0, v), 0));
+			}
+			return theirBoosts >= 2 ? 55 + theirBoosts * 8 : theirBoosts ? 24 : -8;
+		}
+		if (/taunt|encore|disable|defog|rapidspin|trick|knockoff/i.test(move.id)) return 22;
 		if (move.id === 'protect' || move.id === 'detect') return 8;
 		return 6;
 	}
@@ -765,6 +900,67 @@ class BattleAI {
 			choices.push(this.chooseForSlot(gen, active, entry, index, request, state, field));
 		});
 		return choices.join(', ');
+	}
+
+	/**
+	 * The worst this bench Pokemon would take, coming in right now.
+	 *
+	 * Per cent of its own maximum, against whatever the opponent has shown - and
+	 * against a rough guess at their best when they have shown nothing, which is
+	 * the same estimate the switching code already trusts elsewhere.
+	 */
+	worstIncoming(gen, entry, state, field) {
+		const foes = state.foes();
+		if (!foes.length) return 100;
+		const me = this.switchInAs(gen, entry, state, foes);
+		let worst = 0;
+		for (const foe of foes) {
+			const them = this.foePokemon(gen, foe);
+			const seen = [...foe.moves];
+			const back = seen.length ?
+				seen.map(m => this.damagePct(gen, them, me, m, field)) :
+				[this.roughIncoming(gen, them, me, field)];
+			worst = Math.max(worst, ...back);
+		}
+		return worst;
+	}
+
+	/**
+	 * The position, in the terms the playbook counts in.
+	 *
+	 * Deliberately coarse, and deliberately the same buckets
+	 * scripts/learn-playbook.js used when it read the replays - "low" has to mean
+	 * the same thing on both sides of the comparison or the numbers are about
+	 * nothing.
+	 */
+	situation(state, entry, foes) {
+		const bucket = fraction =>
+			fraction === null || fraction === undefined ? 'unknown' :
+			fraction <= 0.25 ? 'low' :
+			fraction <= 0.6 ? 'half' :
+			fraction < 1 ? 'high' : 'full';
+
+		const mine = entry && entry.condition ? entry.condition : '';
+		const hp = (() => {
+			const match = /^(\d+)\/(\d+)/.exec(String(mine));
+			if (!match) return null;
+			return Number(match[2]) ? Number(match[1]) / Number(match[2]) : null;
+		})();
+		const foe = foes && foes[0];
+		const foeHp = foe && typeof foe.hp === 'number' ?
+			(foe.maxhp ? foe.hp / foe.maxhp : foe.hp / 100) : null;
+
+		const turn = state && state.turn ? state.turn : 0;
+		return {
+			turn,
+			hp: bucket(hp),
+			foeHp: bucket(foeHp),
+			// "Just came in" means the turn before this one, which is what the
+			// replays counted: a chooser knows who arrived last turn, not who is
+			// arriving this one.
+			justCameIn: !!(state && state.mineCameIn && state.mineCameIn === turn - 1),
+			foeJustCameIn: !!(state && state.foeCameIn && state.foeCameIn === turn - 1),
+		};
 	}
 
 	/**
@@ -995,19 +1191,67 @@ class BattleAI {
 					.map((p, i) => ({ p, i: i + 1 }))
 					.filter(({ p }) => !p.active && !/fnt/.test(p.condition));
 				let alt = null;
+				let safest = null;
 				for (const opt of bench) {
 					const score = this.benchScore(gen, opt.p, state, field, request, true) + this.jitter();
 					if (!alt || score > alt.score) alt = { score, i: opt.i };
+					// And separately: what would this one actually take coming in?
+					const takes = this.worstIncoming(gen, opt.p, state, field);
+					if (safest === null || takes < safest.takes) safest = { takes, i: opt.i, score };
 				}
 				// Tempo: when this one is dying anyway, letting it fall is often
 				// better than spending a switch-in to save it - but only if it is
 				// the cheap end of the team. The mon that still wins the game is
 				// worth a turn.
+				/*
+				 * Never sacrifice something when a switch-in walls the hit.
+				 *
+				 * This is the single most irritating thing a bot does, and it was
+				 * a rule rather than an oversight: when the active was dying and
+				 * happened to be the cheap end of the team, the margin was set to
+				 * 70 - "let the spare one go" - and a Pokemon that resists the
+				 * incoming attack sat on the bench watching.
+				 *
+				 * Sacrificing is a real play and the reasoning was not silly: a
+				 * switch costs a turn, and spending one to save a Pokemon you were
+				 * going to lose anyway is often worse than taking the free switch
+				 * afterwards. But it is only right when coming in *costs*
+				 * something. When the bench has something that takes a quarter of
+				 * its health from the thing that is about to kill you, the switch
+				 * is free, and there is no argument for the sacrifice at all.
+				 *
+				 * So it is checked before the value ranking gets a say: if the
+				 * best available switch-in takes little enough to come in
+				 * comfortably, and the active really is dying, go.
+				 */
+				const WALLS_IT = 35;      // per cent of its own health, coming in
+				if (doomed && safest && safest.takes <= WALLS_IT && best.score < 100) {
+					return `switch ${safest.i}`;
+				}
+
 				let margin = this.cfg.switchMargin !== undefined ? this.cfg.switchMargin : 25;
 				if (this.cfg.tempo) {
 					const rank = this.valueRank(gen, entry, state, request);
 					if (doomed && rank < 0.5) margin = 70;   // let the spare one go
 					else if (doomed && rank >= 0.75) margin = 8;  // save the win condition
+				}
+				/*
+				 * And what people actually do in a position like this one.
+				 *
+				 * The margin above is the bot's own idea of how much better the
+				 * bench has to look; the playbook says how often good players
+				 * leave in this *kind* of position, measured over eleven thousand
+				 * real games, and moves the bar towards that. It changes the
+				 * threshold and nothing else - which switch to make is still
+				 * decided by the evaluation.
+				 *
+				 * Only for the rungs that are meant to be good. Easy does not
+				 * switch at all and Normal is deliberately clumsy; teaching them
+				 * to leave like a 2000-rated player would flatten the ladder,
+				 * which is the opposite of the point.
+				 */
+				if (this.cfg.playbook) {
+					margin = playbook.adjustSwitchMargin(this.formatId, this.situation(state, entry, foes), margin);
 				}
 				if (alt && alt.score > best.score + margin) return `switch ${alt.i}`;
 			}

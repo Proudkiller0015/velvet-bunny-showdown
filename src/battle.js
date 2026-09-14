@@ -32,6 +32,9 @@ class BattleState {
 		this.gen = 9;
 		this.gameType = 'singles';
 		this.turn = 0;
+		// The turn each side last sent something out; see the switch handler.
+		this.mineCameIn = 0;
+		this.foeCameIn = 0;
 		this.weather = '';
 		this.terrain = '';
 		this.pseudo = {};          // Trick Room / Gravity / Magic Room / Wonder Room
@@ -80,6 +83,18 @@ class BattleState {
 		case 'switch': case 'drag': case 'replace': {
 			const id = this.slotOf(args[0]);
 			if (!id) break;
+			/*
+			 * Which turn each side last brought something in.
+			 *
+			 * Two of the playbook's strongest signals are about exactly this -
+			 * people leave far more often on the turn after the opponent brought
+			 * something in, and more often again on the turn after they brought
+			 * something in themselves, which is the shape of a double switch. The
+			 * turn number is all that needs storing; "just came in" is then a
+			 * comparison rather than a flag that has to be cleared.
+			 */
+			if (id.side === this.myPlayer) this.mineCameIn = this.turn;
+			else this.foeCameIn = this.turn;
 			const store = id.side === this.myPlayer ? this.mine : this.opponent;
 			const mon = this.blank(id.name, args[1]);
 			const cond = parseCondition(args[2]);

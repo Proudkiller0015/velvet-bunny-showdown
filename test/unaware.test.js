@@ -1,0 +1,134 @@
+'use strict';
+/**
+ * Does the bot still set up into the two Pokemon that make setting up useless?
+ *
+ *   node test/unaware.test.js
+ *
+ * "bot is also a lil dumb around unaware and haze... all of em".
+ *
+ * Two different kinds of pointless, and the bot treated both as ordinary:
+ *
+ * **Unaware** does not see the boosts. Every point of Attack bought with a turn
+ * is calculated as though it were never bought, so a setup move against one is
+ * strictly worse than any attack - the same damage, one turn later. Only the
+ * offensive half is dead: Bulk Up against an Unaware *attacker* still makes us
+ * harder to kill, and the test below checks that case still works.
+ *
+ * **Haze** deletes them. The turn spent setting up and the turn spent hazing
+ * cancel out, except we also spent a turn. And in the other direction the bot
+ * scored its own Haze the same whether the opponent had six boosts or none,
+ * which is how it hazes a healthy attacker and declines to haze a sweeper.
+ *
+ * Only what the battle has shown counts. Assuming a Clefable is Unaware before
+ * it proves it is right most of the time and wrong in the way that loses games.
+ */
+
+const { BattleAI } = require('../src/ai');
+const { BattleState } = require('../src/battle');
+
+const STATS = { atk: 220, def: 160, spa: 120, spd: 160, spe: 180 };
+
+function position({ myMoves, foeSpecies, foeAbility, foeMoves = [], foeBoosts = null, mySpecies = 'Garchomp' }) {
+	const state = new BattleState('test');
+	state.myPlayer = 'p1';
+	state.gen = 9;
+	state.turn = 5;
+	const feed = line => state.line(line.slice(1).split('|'));
+	feed(`|player|p1|Bot|1|`);
+	feed(`|player|p2|Them|1|`);
+	feed(`|switch|p1a: Mine|${mySpecies}, L100|300/300`);
+	feed(`|switch|p2a: Theirs|${foeSpecies}, L100|100/100`);
+	if (foeAbility) feed(`|-ability|p2a: Theirs|${foeAbility}`);
+	for (const move of foeMoves) feed(`|move|p2a: Theirs|${move}|p1a: Mine`);
+	if (foeBoosts) for (const [stat, n] of Object.entries(foeBoosts)) feed(`|-boost|p2a: Theirs|${stat}|${n}`);
+
+	return {
+		state,
+		request: {
+			active: [{ moves: myMoves.map(name => ({ move: name, id: name.toLowerCase().replace(/\W/g, ''), pp: 8, maxpp: 8 })) }],
+			side: {
+				pokemon: [{
+					active: true, details: `${mySpecies}, L100`, condition: '300/300',
+					moves: myMoves.map(m => m.toLowerCase().replace(/\W/g, '')),
+					ability: '', baseAbility: '', item: '', stats: STATS,
+				}, {
+					active: false, details: 'Blissey, L100', condition: '400/400',
+					moves: ['softboiled'], ability: '', baseAbility: '', item: '', stats: STATS,
+				}],
+			},
+		},
+	};
+}
+
+const cases = [
+	{
+		name: 'Swords Dance into a known Unaware wall',
+		setup: { myMoves: ['Swords Dance', 'Earthquake'], foeSpecies: 'Clefable', foeAbility: 'Unaware' },
+		expect: move => move !== 'Swords Dance',
+		wanted: 'anything but Swords Dance',
+	},
+	{
+		name: 'Swords Dance into the same wall before it shows Unaware',
+		setup: { myMoves: ['Swords Dance', 'Earthquake'], foeSpecies: 'Clefable' },
+		expect: () => true,
+		wanted: 'either is defensible - it has not shown the ability',
+	},
+	{
+		name: 'Swords Dance into something that has used Haze',
+		setup: { myMoves: ['Swords Dance', 'Earthquake'], foeSpecies: 'Toxapex', foeMoves: ['Haze'] },
+		expect: move => move !== 'Swords Dance',
+		wanted: 'anything but Swords Dance',
+	},
+	{
+		name: 'our own Haze, against a sweeper at +2',
+		setup: {
+			myMoves: ['Haze', 'Tackle'], mySpecies: 'Toxapex',
+			foeSpecies: 'Dragonite', foeBoosts: { atk: 2, spe: 2 },
+		},
+		expect: move => move === 'Haze',
+		wanted: 'Haze',
+		// Not asked of Normal, which is `greedy` by design: it clicks the biggest
+		// damage and does not weigh status moves at all. That is the difficulty,
+		// not a bug in it.
+		thinking: true,
+	},
+	{
+		name: 'our own Haze, against something that has not set up',
+		setup: { myMoves: ['Haze', 'Tackle'], mySpecies: 'Toxapex', foeSpecies: 'Dragonite' },
+		expect: move => move !== 'Haze',
+		wanted: 'not Haze',
+		// Only asked of the rungs that are supposed to be precise. Normal and
+		// Hard add deliberate noise - 20 and 12 points - and this is a close call
+		// between a pointless Haze and a Tackle that does almost nothing, so it
+		// flips on the jitter. Demanding it of them would be demanding they stop
+		// being the difficulty they are.
+		quiet: true,
+	},
+];
+
+let bad = 0;
+for (const rung of ['normal', 'hard', 'champion', 'stockfish']) {
+	console.log(`\n${rung}:`);
+	for (const one of cases) {
+		if (one.quiet && rung !== 'champion' && rung !== 'stockfish') continue;
+		if (one.thinking && rung === 'normal') continue;
+		const ai = new BattleAI({ difficulty: rung });
+		ai.setFormat('gen9ou');
+		const { state, request } = position(one.setup);
+		let choice = '';
+		try {
+			choice = String(ai.decide(request, state) || '');
+		} catch (e) {
+			choice = 'threw: ' + e.message;
+		}
+		const number = /^move (\d)/.exec(choice);
+		const picked = number ? one.setup.myMoves[Number(number[1]) - 1] : choice;
+		const ok = one.expect(picked);
+		if (!ok) bad++;
+		console.log(`  ${ok ? 'ok  ' : 'FAIL'} ${one.name}`);
+		console.log(`       wanted ${one.wanted}, got ${picked}`);
+	}
+}
+
+console.log(bad ? `\n${bad} wrong` : '\nit understands what boosts are worth');
+process.exit(bad ? 1 : 0);
