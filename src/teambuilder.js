@@ -30,6 +30,23 @@
 const PS = require('pokemon-showdown');
 const { Dex, TeamValidator, Teams } = PS;
 
+/**
+ * The cut-Pokemon machine moves, read once from the installed copy.
+ *
+ * Missing is not an error: without it the bot builds exactly as it did before,
+ * which is also what happens for every format that does not lend them.
+ */
+let CUT_MOVES = null;
+function cutMoveTable() {
+	if (CUT_MOVES) return CUT_MOVES;
+	try {
+		CUT_MOVES = require('pokemon-showdown/dist/data/velvet/cut-moves.json');
+	} catch (e) {
+		CUT_MOVES = {};
+	}
+	return CUT_MOVES;
+}
+
 // Some format handlers in the published pokemon-showdown build reference `Dex`,
 // `toID` and `Teams` as globals, which only exist when the full server boots
 // (Inheritance throws "Dex is not defined" otherwise). Provide them.
@@ -660,6 +677,37 @@ class TeamBuilder {
 	}
 
 	/**
+	 * The TMs this format lends a Pokemon that was cut from the game.
+	 *
+	 * Measured by scripts/build-cut-moves.js and forgiven by the RP learn check -
+	 * a Pokemon that was not in Sword and Shield or Scarlet and Violet was never
+	 * offered the machines those games introduced, and RP hands them over. The
+	 * bot has to be told, because everything it builds from - Smogon analyses,
+	 * usage statistics, mined replays - was written about a game where Pidgeot
+	 * does not learn Tera Blast.
+	 *
+	 * Only where the format actually forgives them, and the test for that is the
+	 * same one the server makes: an RP tier is a format with a learn check of
+	 * its own, and nothing else has one.
+	 */
+	cutMoves(ctx, species) {
+		if (!ctx.format || typeof ctx.format.checkCanLearn !== 'function') return [];
+		const table = cutMoveTable();
+		const base = species.baseSpecies && species.baseSpecies !== species.name ?
+			ctx.dex.species.get(species.baseSpecies) : species;
+		const list = table[base.id] || table[species.id];
+		if (!list) return [];
+		const out = [];
+		for (const id of list) {
+			const move = ctx.dex.moves.get(id);
+			// A ninth-generation machine is no use in a Gen 8 RP tier, and the
+			// validator would say so.
+			if (move.exists && move.gen <= ctx.gen) out.push(move);
+		}
+		return out;
+	}
+
+	/**
 	 * Give one of ours a slot, when it earns one.
 	 *
 	 * The rule asked for is "when relevant, without making it a priority", and
@@ -674,7 +722,8 @@ class TeamBuilder {
 	 * there is nothing to weigh, and ours goes in.
 	 */
 	considerOurMoves(ctx, species, set, rng) {
-		const ours = this.ourMoves(ctx, species).filter(move => !set.moves.includes(move.name));
+		const ours = this.ourMoves(ctx, species).concat(this.cutMoves(ctx, species))
+			.filter(move => !set.moves.includes(move.name));
 		if (!ours.length) return;
 
 		const best = ours

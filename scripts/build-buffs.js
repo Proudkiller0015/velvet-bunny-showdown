@@ -179,6 +179,50 @@ const za = require(path.join(PACKAGE, 'dist', 'data', 'velvet', 'za-megas.js'));
  * would label it Uber in a format it cannot be picked in, which is the same
  * mislabelling the two tables above exist to avoid.
  */
+/*
+ * And the TMs the cut Pokemon never got offered.
+ *
+ * Measured by scripts/build-cut-moves.js against what the Pokemon that were in
+ * Sword and Shield and Scarlet and Violet actually received, and read on the
+ * server by the RP learn check. The builder needs its own copy for the same
+ * reason it needs all of this: it builds its dex from Showdown's CDN, where
+ * Pidgeot does not learn Tera Blast, so without this the move is legal in RP
+ * and cannot be picked - the offer-and-refuse bug with the halves swapped.
+ */
+let cutMoves = {};
+try {
+	cutMoves = require(path.join(__dirname, '..', 'data', 'velvet', 'cut-moves.json'));
+} catch (e) {
+	console.log('no cut-moves.json - run scripts/build-cut-moves.js first');
+}
+
+/*
+ * And what each of them should say in a learnset, worked out here.
+ *
+ * The client cannot be asked. Its own move data puts Tera Blast in generation
+ * 8 - it derives the generation from the move number and its table stops before
+ * the ninth - so a learnset entry built from `Dex.moves.get(id).gen` in the
+ * browser comes out '8M', which hides the move in every ninth-generation format
+ * and offers it in the eighth, where the validator refuses it. Exactly
+ * backwards, and silently.
+ *
+ * The server's dex is right about this, and this script runs on the server.
+ */
+const cutMoveSources = {};
+for (const list of Object.values(cutMoves)) {
+	for (const id of list) {
+		/*
+		 * Every generation the move has existed for, not just the one it arrived
+		 * in. The builder lists a move when the entry mentions the generation
+		 * being built for, so a lone '8M' on Dual Wingbeat hides it in the ninth
+		 * - where it is a TM, and where the server accepts it. A real entry
+		 * carries every source it has, and so does this one.
+		 */
+		const from = Dex.moves.get(id).gen;
+		cutMoveSources[id] = [9, 8].filter(gen => gen >= from).map(gen => `${gen}M`).join('');
+	}
+}
+
 const isMegaForme = id => Dex.species.get(id).name.includes('-Mega');
 const inThisGen = id => Dex.species.get(id).tier !== 'Illegal';
 const tiers = {};
@@ -247,6 +291,8 @@ window.VelvetBuffs = {
 \ttiers: ${JSON.stringify(tiers)},
 \tmegaTiers: ${JSON.stringify(megaTiers)},
 \tnatdexTiers: ${JSON.stringify(natdexTiers)},
+\tcutMoves: ${JSON.stringify(cutMoves)},
+\tcutMoveSources: ${JSON.stringify(cutMoveSources)},
 \tunlocked: ${JSON.stringify(unlocked)},
 
 \t/** What this Pokemon gained, or an empty record. */
@@ -263,6 +309,7 @@ console.log(`${Object.keys(bySpecies).length} buffed Pokemon, ${Object.keys(move
 	`${Object.keys(overrides.moves).length + Object.keys(overrides.abilities).length} corrected rows, ` +
 	`${Object.keys(tiers).length} re-tiered, ${Object.keys(megaTiers).length} Mega tiers, ` +
 	`${Object.keys(natdexTiers).length} National Dex only, ` +
+	`${Object.values(cutMoves).reduce((n, list) => n + list.length, 0)} cut-Pokemon TMs, ` +
 	`${unlocked.species.length + unlocked.items.length} unlocked`);
 console.log(`${Math.round(file.length / 1024)}KB -> ${OUT}`);
 for (const [id, record] of Object.entries(bySpecies)) {

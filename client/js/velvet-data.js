@@ -222,6 +222,7 @@
 		var builderIn = installTeambuilderSprite();
 		var tipsIn = installTooltipStats();
 		var rpIn = installRpTiers();
+		var cutIn = installCutMoves();
 		var listIn = installPokemonOrder();
 		var buffsIn = installBuffs();
 		var abilitiesIn = installBuffedAbilities();
@@ -230,7 +231,7 @@
 		var powerIn = installBuffedBasePower();
 		var dmaxIn = installDynamaxBuilder();
 		return tableIn && orderIn && spritesIn && iconIn && builderIn && tipsIn && rpIn &&
-			listIn && buffsIn && abilitiesIn && itemIn && sigItemIn && powerIn && dmaxIn;
+			cutIn && listIn && buffsIn && abilitiesIn && itemIn && sigItemIn && powerIn && dmaxIn;
 	}
 
 	/**
@@ -352,6 +353,91 @@
 		return true;
 	}
 	/**
+	 * Lend a cut Pokemon the TMs it never got offered - in RP, and nowhere else.
+	 *
+	 * The server already allows these: levelFreeMoves in config/custom-formats.js
+	 * forgives exactly the moves scripts/build-cut-moves.js measured, which are
+	 * the generation 8 and 9 machine moves a Pokemon would have been handed had
+	 * it not been cut from those games. The builder has no idea, because it
+	 * builds its dex from Showdown's CDN where Pidgeot does not learn Tera Blast
+	 * - so the move was legal in RP and could not be picked, which is the
+	 * offer-and-refuse bug with its halves swapped.
+	 *
+	 * Lent rather than given. There is one learnset table and every format reads
+	 * it, so writing these in permanently would offer them in Smogon's National
+	 * Dex too, where the server refuses them - and "only for RP" is the whole
+	 * point. So the entries go in for the length of one search and come straight
+	 * back out, which is precise and costs a few object writes on a keystroke.
+	 *
+	 * The generation is written into the entry rather than assumed: a move gets
+	 * `8M` or `9M` for the generation that introduced it, so an RP Gen 8 format
+	 * is shown Body Press and not Tera Blast, which is exactly what its
+	 * validator will accept.
+	 */
+	function installCutMoves() {
+		var search = window.BattleMoveSearch;
+		if (!search || !search.prototype || !search.prototype.getBaseResults) return false;
+		if (search.__velvetCutMoves) return true;
+		search.__velvetCutMoves = true;
+
+		var original = search.prototype.getBaseResults;
+		search.prototype.getBaseResults = function () {
+			var give_back = lendCutMoves(this);
+			try {
+				return original.apply(this, arguments);
+			} finally {
+				give_back();
+			}
+		};
+		return true;
+	}
+
+	function lendCutMoves(search) {
+		var nothing = function () {};
+		var buffs = window.VelvetBuffs;
+		var cuts = buffs && buffs.cutMoves;
+		var table = window.BattleTeambuilderTable;
+		if (!cuts || !table || !table.learnsets || !search.species) return nothing;
+		// RP only, and the format has been rewritten by now - see installRpTiers.
+		if (!RP_TIERS[String(search.velvetFormat || '')]) return nothing;
+		if (!window.Dex || !window.Dex.species) return nothing;
+
+		var species = window.Dex.species.get(search.species);
+		if (!species || !species.exists) return nothing;
+		// Keyed by base form, because that is where the measurement was made and
+		// because a forme has no movepool of its own.
+		var list = cuts[window.toID(species.baseSpecies || species.name)] || cuts[species.id];
+		if (!list || !list.length) return nothing;
+
+		var key = typeof search.firstLearnsetid === 'function' ?
+			search.firstLearnsetid(species.id) : species.id;
+		if (!key) return nothing;
+
+		var learnset = table.learnsets[key] || (table.learnsets[key] = {});
+		var sources = buffs.cutMoveSources || {};
+		var lent = [];
+		for (var i = 0; i < list.length; i++) {
+			if (learnset[list[i]]) continue;
+			/*
+			 * The generation comes from the server, not from here.
+			 *
+			 * The client works a move's generation out from its number against a
+			 * table that stops at the eighth, so it answers 8 for Tera Blast and
+			 * an entry built on that reads '8M' - hidden in every ninth-generation
+			 * format and offered in the eighth, where it does not exist. Exactly
+			 * the wrong way round, and silent. scripts/build-buffs.js writes these
+			 * out against the real dex.
+			 */
+			learnset[list[i]] = sources[list[i]] || '9M';
+			lent.push(list[i]);
+		}
+		if (!lent.length) return nothing;
+		return function () {
+			for (var j = 0; j < lent.length; j++) delete learnset[lent[j]];
+		};
+	}
+
+	/**
 	 * Show National Dex tiers when building for an RP tier.
 	 *
 	 * RP is this server's own National Dex, and the tiers stand on Smogon's ND
@@ -420,8 +506,20 @@
 
 		var original = search.prototype.getTypedSearch;
 		search.prototype.getTypedSearch = function (searchType, format, speciesOrSet) {
-			var mapped = RP_TIERS[window.toID(format || '')];
-			return original.call(this, searchType, mapped || format, speciesOrSet);
+			var asked = window.toID(format || '');
+			var mapped = RP_TIERS[asked];
+			var typed = original.call(this, searchType, mapped || format, speciesOrSet);
+			/*
+			 * And keep the name it was asked by.
+			 *
+			 * Swapping the format is the point of this hook, and the cost of it is
+			 * that from here on nothing downstream can tell an RP tier from the
+			 * Smogon one it stands on - `gen9rpou` arrives at the move search as
+			 * plain `ou` with a National Dex flag, exactly like `gen9nationaldex`.
+			 * Anything that is true of RP and not of National Dex needs this.
+			 */
+			if (typed) typed.velvetFormat = asked;
+			return typed;
 		};
 		return true;
 	}

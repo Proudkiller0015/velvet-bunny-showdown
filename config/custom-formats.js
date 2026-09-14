@@ -184,11 +184,66 @@ function allGimmicks() {
  * `this` is the validator, so calling its own checkCanLearn runs the real
  * check, with the level briefly set to the highest anything is learned at.
  */
+/**
+ * The TMs a cut Pokemon never got offered, because it was not there.
+ *
+ * Built by scripts/build-cut-moves.js and explained there. Short version: every
+ * machine move generations 8 and 9 introduced was handed to the Pokemon
+ * standing in those games, and the four hundred and fifty-four that had been
+ * cut got none of them - Tera Blast included, which seven hundred and
+ * twenty-seven of the seven hundred and thirty-three present Pokemon learn. RP
+ * hands Terastallization back to every tier, so here that is a Pokemon that can
+ * Terastallize and has nothing to do with it.
+ *
+ * Missing is fine and is the case on a fresh checkout: nothing is granted and
+ * the check below behaves exactly as it did before the table existed.
+ */
+let CUT_MOVES = {};
+try {
+	CUT_MOVES = require('../data/velvet/cut-moves.json');
+} catch (e) {
+	console.log('[velvet] no cut-moves.json; run scripts/build-cut-moves.js - ' + e.message);
+}
+
+/**
+ * Is this one of them, for this Pokemon?
+ *
+ * The table is keyed by base species, because that is the level the measurement
+ * was made at and because a forme's movepool is its base form's - Rotom-Heat
+ * has no learnset of its own, and neither does a Mega. So the base form is
+ * asked first and the forme only if it somehow has its own row.
+ */
+function grantedToCut(dex, species, move) {
+	const base = species.baseSpecies && species.baseSpecies !== species.name ?
+		dex.species.get(species.baseSpecies) : species;
+	const list = CUT_MOVES[base.id] || CUT_MOVES[species.id];
+	return !!list && list.includes(move.id);
+}
+
+/**
+ * The learn check every RP tier uses, and the two things it forgives.
+ *
+ * The level is the first: RP does not care that Charizard learns Flamethrower
+ * at 41 when the set is level 50, so the check is asked at 100 and the real
+ * level put back.
+ *
+ * The TM a cut Pokemon never had the chance to be taught is the second, and it
+ * is only forgiven after the ordinary check has already said no - so nothing
+ * here can make an illegal set legal for any other reason. A move it could not
+ * learn for a different reason is refused with that reason, unchanged.
+ *
+ * Both are RP's own. This function is the whole of the difference, which is why
+ * it is the only place the table is read: National Dex on this server is
+ * Smogon's National Dex.
+ */
 function levelFreeMoves(move, species, setSources, set) {
 	const level = set.level;
 	set.level = 100;
 	try {
-		return this.checkCanLearn(move, species, setSources, set);
+		const problem = this.checkCanLearn(move, species, setSources, set);
+		if (!problem) return null;
+		if (grantedToCut(this.dex, species, move)) return null;
+		return problem;
 	} finally {
 		set.level = level;
 	}
