@@ -270,10 +270,31 @@ const DISTRIBUTED = {
 			'dhelmise',                            // anchor and seaweed
 			'cetoddle', 'cetitan',                 // whales
 			'eiscue',                              // penguin
+
+			/*
+			 * And the two that learn things for reasons of their own.
+			 *
+			 * Both are Normal-typed, so the sweep above never reaches them, and
+			 * both have a claim that has nothing to do with being Water. Arceus
+			 * made the place; Mew learns every machine move there is - it already
+			 * has 234 of the 242 in the data, and this is one it did not have.
+			 *
+			 * They get this one and not the three Rush moves, and that is not an
+			 * oversight. Wave Charge was written to be handed out and is marked
+			 * `velvetShared` so the signature table skips it. The Rush moves are
+			 * the opposite: one per monkey, each the only thing that family has.
+			 * Handing one to Arceus makes it a move two families know, which is
+			 * precisely what stops a move being a signature - Simisage would lose
+			 * the only signature move it has ever had so that a god could have a
+			 * fourth way to go first.
+			 */
+			'arceus',
+			'mew',
 		],
 		// Formes of a Pokemon that is not really of this type - the same ones
-		// Flame Charge skips on the Fire side.
-		except: ['rotomwash', 'arceuswater', 'ogerponwellspring', 'ogerponwellspringtera'],
+		// Flame Charge skips on the Fire side. Arceus-Water is not here: its base
+		// forme is on the list above, and every plate inherits from it.
+		except: ['rotomwash', 'ogerponwellspring', 'ogerponwellspringtera'],
 	},
 };
 

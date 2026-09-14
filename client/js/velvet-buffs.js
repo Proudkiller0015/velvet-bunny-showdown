@@ -588,6 +588,12 @@ window.VelvetBuffs = {
 			],
 			"abilities": []
 		},
+		"arceuswater": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
 		"oshawott": {
 			"moves": [
 				"wavecharge"
@@ -1139,6 +1145,18 @@ window.VelvetBuffs = {
 			"abilities": []
 		},
 		"eiscue": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"arceus": {
+			"moves": [
+				"wavecharge"
+			],
+			"abilities": []
+		},
+		"mew": {
 			"moves": [
 				"wavecharge"
 			],
