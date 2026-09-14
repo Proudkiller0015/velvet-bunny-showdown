@@ -998,10 +998,13 @@
 			var buffs = window.VelvetBuffs;
 			if (!results || !buffs || !buffs.items) return results;
 
-			var species = this.species;
-			if (species && typeof species !== 'string') species = species.species || species.name || '';
-			var speciesid = window.toID(species || '');
+			var speciesName = this.species;
+			if (speciesName && typeof speciesName !== 'string') {
+				speciesName = speciesName.species || speciesName.name || '';
+			}
+			var speciesid = window.toID(speciesName || '');
 			if (!speciesid) return results;
+			var species = window.Dex && window.Dex.species ? window.Dex.species.get(speciesid) : null;
 
 			var mine = [];
 			for (var id in buffs.items) {
@@ -1010,20 +1013,63 @@
 					if (window.toID(users[u]) === speciesid) { mine.push(id); break; }
 				}
 			}
-			if (!mine.length) return results;
 
+			var stones = megaStonesFor(this, species);
+			if (!mine.length && !stones.length) return results;
+
+			var taken = mine.concat(stones);
 			var rest = [];
 			for (var i = 0; i < results.length; i++) {
 				var row = results[i];
-				if (row[0] === 'item' && mine.indexOf(row[1]) >= 0) continue;
+				if (row[0] === 'item' && taken.indexOf(row[1]) >= 0) continue;
 				rest.push(row);
 			}
 
-			var hoisted = [['header', mine.length === 1 ? 'Signature item' : 'Signature items']];
-			for (var k = 0; k < mine.length; k++) hoisted.push(['item', mine[k]]);
+			var hoisted = [];
+			if (mine.length) {
+				hoisted.push(['header', mine.length === 1 ? 'Signature item' : 'Signature items']);
+				for (var k = 0; k < mine.length; k++) hoisted.push(['item', mine[k]]);
+			}
+			if (stones.length) {
+				hoisted.push(['header', stones.length === 1 ? 'Mega Stone' : 'Mega Stones']);
+				for (var s = 0; s < stones.length; s++) hoisted.push(['item', stones[s]]);
+			}
 			return hoisted.concat(rest);
 		};
 		return true;
+	}
+
+	/**
+	 * The Mega Stone that belongs to the Pokemon being built.
+	 *
+	 * Showdown's builder does know how to turn a stone into a Mega - it reads
+	 * `item.megaStone[baseSpecies]` and changes the set's forme - but it never
+	 * offers the stone. Every Mega Stone comes back in the "Illegal results"
+	 * pile, Charizardite X for Charizard in National Dex exactly like
+	 * Chandelurite for Chandelure here, so the only way to reach a Mega is to
+	 * know the stone's name and type it.
+	 *
+	 * Hoisting the stone into the ordinary results is what makes it offered, and
+	 * makes the forme change follow for free, because the code that does that is
+	 * already there and was only ever waiting for someone to pick the item.
+	 *
+	 * Only where a Mega can actually happen. In a plain ninth-generation format
+	 * there is no Mega Evolution, and a stone offered there would be an item
+	 * that does nothing.
+	 */
+	function megaStonesFor(search, species) {
+		var format = String(search.format || '');
+		var megasWork = format.indexOf('rp') >= 0 || format.indexOf('natdex') >= 0 ||
+			format.indexOf('nationaldex') >= 0 || /^gen[1-7]/.test(format);
+		if (!megasWork || !window.BattleItems || !species) return [];
+
+		var base = species.baseSpecies || species.name;
+		var out = [];
+		for (var id in window.BattleItems) {
+			var stone = window.BattleItems[id].megaStone;
+			if (stone && stone[base]) out.push(id);
+		}
+		return out;
 	}
 
 	/**

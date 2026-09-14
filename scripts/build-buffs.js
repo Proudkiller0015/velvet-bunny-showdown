@@ -141,7 +141,24 @@ const za = require(path.join(PACKAGE, 'dist', 'data', 'velvet', 'za-megas.js'));
  *
  * A deliberate decision in tiering.js wins over a derived one, so it goes last.
  */
-const tiers = Object.assign({}, za.assigned, TIERS);
+/*
+ * Tiers, minus the Mega formes.
+ *
+ * A Mega is never picked directly in the builder - you pick the base form and
+ * give it the stone - and Showdown labels every Mega forme 'Illegal' in the
+ * client so that it stays out of the pickable list. Shipping a real tier for
+ * ours put them in it, which is exactly the "these behave differently from
+ * other Megas" complaint: Chandelure-Mega read Uber where Charizard-Mega-X
+ * read Illegal.
+ *
+ * The real tier still matters, and still applies - on the server, where the
+ * team is validated. The client only needs to know the base form's.
+ */
+const isMegaForme = id => Dex.species.get(id).name.includes('-Mega');
+const tiers = {};
+for (const [id, tier] of Object.entries(Object.assign({}, za.assigned, TIERS))) {
+	if (!isMegaForme(id)) tiers[id] = tier;
+}
 const unlocked = {
 	species: Object.keys(za.assigned),
 	items: za.ZA_STONES.slice(),
