@@ -524,6 +524,55 @@
 	}
 
 	/**
+	 * Put the Z-A Megas in the list you scroll through.
+	 *
+	 * Giving them a tier was only half of it, and the half that shows when you
+	 * type a name. The builder's list is a different thing entirely: one long
+	 * array per generation - `tiers` - of section headers and species ids, which
+	 * each format shows a *suffix* of, starting at the index `formatSlices` gives
+	 * for its tier. Ours were in the dex, in the search index, and correctly
+	 * tiered, and simply were not in that array. So they were findable by typing
+	 * and invisible to anybody scrolling, which is how most people look.
+	 *
+	 * Inserting into it means moving every index after the insertion, which is
+	 * why nothing else in this file does: Samantha is appended at the very end
+	 * and hoisted into the results instead, precisely to avoid this. A Mega
+	 * cannot be handled that way, because it has to appear under its own tier
+	 * heading next to the other Megas.
+	 *
+	 * So the slices are moved with it. Each Mega goes in immediately after its
+	 * tier's header - the header index is the slice value, so inserting *after*
+	 * it leaves that slice alone and pushes only the ones below - and every slice
+	 * index past the insertion point goes up by one.
+	 */
+	function listMegas(table, megaTiers) {
+		if (!table || !table.tiers || !table.formatSlices) return;
+		// The same array is shared between generations of the table, so doing this
+		// twice would list every Mega twice.
+		if (table.tiers.__velvetMegas) return;
+		table.tiers.__velvetMegas = true;
+
+		var headerIndex = function (tier) {
+			for (var i = 0; i < table.tiers.length; i++) {
+				var row = table.tiers[i];
+				if (row && row.length === 2 && row[0] === 'header' && row[1] === tier) return i;
+			}
+			return -1;
+		};
+
+		for (var id in megaTiers) {
+			if (table.tiers.indexOf(id) >= 0) continue;      // already listed
+			var at = headerIndex(megaTiers[id]);
+			if (at < 0) continue;                             // no such section here
+			at = at + 1;
+			table.tiers.splice(at, 0, id);
+			for (var key in table.formatSlices) {
+				if (table.formatSlices[key] > at) table.formatSlices[key]++;
+			}
+		}
+	}
+
+	/**
 	 * Put her in the builder's list.
 	 *
 	 * The species list is not the dex - it comes from BattleTeambuilderTable,
@@ -603,6 +652,7 @@
 				var natdex = natdexTargets[n];
 				if (!natdex.overrideTier) natdex.overrideTier = {};
 				for (var megaId in buffs.megaTiers) natdex.overrideTier[megaId] = buffs.megaTiers[megaId];
+				listMegas(natdex, buffs.megaTiers);
 			}
 		}
 
