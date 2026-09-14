@@ -391,11 +391,24 @@
 		// inside every tier.
 
 		var landed = false;
+		var buffs = window.VelvetBuffs;
 		for (var i = 0; i < targets.length; i++) {
 			var t = targets[i];
 			// What the builder calls her tier when it labels her.
 			if (t.overrideTier) {
 				t.overrideTier.samantha = 'Dev';
+
+				/*
+				 * And anywhere this server disagrees with Smogon about a tier.
+				 *
+				 * The builder reads its tiers from the CDN, so a Pokemon this
+				 * server moved to Ubers goes on being offered in OU and marked
+				 * legal there, right up until the server refuses the team. The
+				 * label and the rule have to be the same thing.
+				 */
+				if (buffs && buffs.tiers) {
+					for (var id in buffs.tiers) t.overrideTier[id] = buffs.tiers[id];
+				}
 				landed = true;
 			}
 		}

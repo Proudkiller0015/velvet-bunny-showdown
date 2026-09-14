@@ -127,6 +127,7 @@ for (const id of OUR_ABILITIES) abilities[id] = abilityRow(Dex.abilities.get(id)
  * the server actually does.
  */
 const { CHANGED } = require(path.join(PACKAGE, 'dist', 'data', 'velvet', 'unnerfs.js'));
+const { TIERS } = require(path.join(PACKAGE, 'dist', 'data', 'velvet', 'tiering.js'));
 const overrides = { moves: {}, abilities: {} };
 for (const id of CHANGED.moves) overrides.moves[id] = moveRow(Dex.moves.get(id));
 for (const id of CHANGED.abilities) overrides.abilities[id] = abilityRow(Dex.abilities.get(id));
@@ -178,6 +179,7 @@ window.VelvetBuffs = {
 \titems: ${JSON.stringify(items)},
 \tsearch: ${JSON.stringify(search)},
 \toverrides: ${JSON.stringify(overrides)},
+\ttiers: ${JSON.stringify(TIERS)},
 
 \t/** What this Pokemon gained, or an empty record. */
 \tget: function (speciesid) {
@@ -190,7 +192,8 @@ fs.writeFileSync(OUT, file);
 
 console.log(`${Object.keys(bySpecies).length} buffed Pokemon, ${Object.keys(moves).length} moves, ` +
 	`${Object.keys(abilities).length} abilities, ${Object.keys(items).length} items, ` +
-	`${Object.keys(overrides.moves).length + Object.keys(overrides.abilities).length} corrected rows`);
+	`${Object.keys(overrides.moves).length + Object.keys(overrides.abilities).length} corrected rows, ` +
+	`${Object.keys(TIERS).length} re-tiered`);
 console.log(`${Math.round(file.length / 1024)}KB -> ${OUT}`);
 for (const [id, record] of Object.entries(bySpecies)) {
 	console.log(`  ${Dex.species.get(id).name}: +${record.moves.length} move(s)` +

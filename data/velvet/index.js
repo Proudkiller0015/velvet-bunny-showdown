@@ -28,6 +28,7 @@ const { Learnsets } = require('./learnsets.js');
 const { patchItems } = require('./items.js');
 const { applyBuffs } = require('./buffs.js');
 const { applyZaMegas, applyZaStones } = require('./za-megas.js');
+const { applyTiers } = require('./tiering.js');
 const { unnerfMoves, unnerfAbilities } = require('./unnerfs.js');
 
 // The buffed Pokemon are Showdown's own, so they are changed in place rather
@@ -41,7 +42,11 @@ function buffWhatWeHave() {
 	if (buffedPokedex && buffedLearnsets) applyBuffs(buffedPokedex, buffedLearnsets);
 	// The Z-A Megas need the stats from one file and the tiers from another, so
 	// like the buffs they wait until both have been through here.
-	if (buffedPokedex && tierTable) applyZaMegas(buffedPokedex, tierTable);
+	if (buffedPokedex && tierTable) {
+		applyZaMegas(buffedPokedex, tierTable);
+		// Last, so a deliberate decision beats a derived one.
+		applyTiers(tierTable, msg => console.log('[velvet] ' + msg));
+	}
 }
 
 exports.pokedex = data => {
