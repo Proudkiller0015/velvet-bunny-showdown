@@ -146,6 +146,45 @@ Be suspicious of a single good sample: a run that accepted a change at 73%
 re-measured at 60% over fresh games, which is why the acceptance test is
 deliberately conservative.
 
+### Learning from real games
+
+Self-play only ever teaches the bot about itself. These three read games played
+by people who are actually good, from the public replay site:
+
+```bash
+node scripts/mine-replays.js        # 500 per format, plus named players
+node scripts/learn-playbook.js      # what they do, and when
+node scripts/learn-teams.js         # what they bring, and with what
+```
+
+`sort=rating` is what makes it worth doing — ten pages of Gen 9 OU is still
+1980+, and Random Battle is 2400+ the whole way down. Random Battle is mined
+separately on purpose: with no team preview it is a different game, and a policy
+fitted to OU would be wrong there in a way that averages out to looking fine.
+
+The logs are kept **outside** the repository (`../reference/replays`, gzipped,
+~50MB for 11,839 games); only `data/playbook.json` and `data/mined-teams.json`
+are committed. A log records what happened, not what was chosen, so the
+reconstruction is the delicate part — a switch after a faint is a replacement,
+a switch from Roar is nobody's choice, and U-turn is one decision that looks
+like two.
+
+### Scoring what nobody has played
+
+The Z-A Megas have no usage statistics and no tier, because no ladder has ever
+run them. `src/paper-strength.js` reads the sheet instead — the better attacking
+stat rather than a base stat total, speed against the tiers people build around,
+bulk as HP × defence, typing both ways, a short ability list.
+
+```bash
+node scripts/check-strength.js      # against tiers we already know
+node scripts/build-za-tiers.js      # -> data/velvet/za-tiers.json
+```
+
+It is checked the only way it can be: every *known* tier's median should land in
+its own band. It promotes rather than re-tiers — used as a maximum it put 42 of
+98 Megas in Ubers, which is not a tiering decision.
+
 ## Running it
 
 ```bash
