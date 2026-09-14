@@ -119,6 +119,16 @@ exports.Moves = {
 		accuracy: true,
 		pp: 30,
 		priority: 0,
+
+		/*
+		 * Usable while asleep, the way Snore and Sleep Talk are.
+		 *
+		 * The move cures sleep, which made it the one status it could not answer:
+		 * being asleep is what stops you moving, so the cure could never be
+		 * reached from the position that needed it. Sleeping through the only
+		 * thing that wakes you is a joke at her expense rather than a cost.
+		 */
+		sleepUsable: true,
 		onHit(target) {
 			// heal() reports the amount; cureStatus clears burn, poison, paralysis,
 			// sleep and freeze alike.

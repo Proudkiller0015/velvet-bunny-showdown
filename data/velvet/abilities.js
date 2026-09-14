@@ -195,6 +195,8 @@ exports.Abilities = {
 		},
 		rating: 5,
 		num: -1,
+		shortDesc: "Doubles Atk and SpA, ignores abilities, blocks priority, Shadow Shield, Sturdy, Magic Guard, Clear Body. Mold Breaker cannot touch it.",
+		desc: "Attack and Special Attack are doubled. This Pokemon's moves ignore the target's Ability. Priority moves cannot touch this side. At full HP, damage taken is halved. Survives a killing blow from full HP and is immune to OHKO moves. Takes no damage from anything that is not a move. Its stats cannot be lowered by anything other than itself. Mold Breaker, Teravolt and Turboblaze cannot ignore any of it.",
 	},
 
 	queensmorph: {
@@ -256,6 +258,8 @@ exports.Abilities = {
 		},
 		rating: 5,
 		num: -2,
+		shortDesc: "Transforms into the foe on entry, then +6 Speed. Keeps Shadow Shield, Sturdy, Magic Guard and Clear Body.",
+		desc: "On switch-in, this Pokemon Transforms into the opposing Pokemon and then raises its Speed by 6 stages. Afterwards it keeps taking half damage at full HP, surviving a killing blow from full HP, ignoring damage that is not from a move, and refusing stat drops from anything other than itself - all of which outlive the Transform replacing this Ability with the copied one.",
 	},
 	/**
 	 * Verdant Surge - Grassy Surge, and then some.
