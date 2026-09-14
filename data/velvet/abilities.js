@@ -140,8 +140,26 @@ exports.Abilities = {
 			 * worse than either answer. So the flag comes off and Mold Breaker goes
 			 * through the priority block no more than it goes through the rest.
 			 */
-			// Neutralizing Gas cannot switch any of it off either.
+			/*
+			 * And it cannot be switched off, taken, copied or handed away.
+			 *
+			 * `cantsuppress` alone already turned away most of it - Gastro Acid,
+			 * Core Enforcer, Neutralizing Gas, Worry Seed, Entrainment, Simple
+			 * Beam and Role Play all check that flag before they do anything. Skill
+			 * Swap does not: it checks `failskillswap`, which was missing, so the
+			 * one move that trades abilities rather than removing them walked off
+			 * with hers.
+			 *
+			 * The rest are here so the list is complete rather than nearly
+			 * complete: Trace cannot copy it, Receiver and Power of Alchemy cannot
+			 * inherit it, Entrainment cannot give it to anybody else.
+			 */
 			cantsuppress: 1,
+			failskillswap: 1,
+			failroleplay: 1,
+			noentrain: 1,
+			noreceiver: 1,
+			notrace: 1,
 		},
 		rating: 5,
 		num: -1,
