@@ -133,27 +133,57 @@ function build() {
 	 */
 	const SHARED_LIMIT = 2;
 
-	function ownersOf(moveid) {
+	/**
+	 * And some moves belong to a group rather than to one Pokemon.
+	 *
+	 * Nature's Madness is the four Tapus', Sacred Sword was the four Swords of
+	 * Justice'. Nobody describes either as "not a signature move" because there
+	 * are four of them - they were built for that set and handed out together.
+	 *
+	 * What separates those from a move that merely ended up shared is whether
+	 * anybody was added afterwards. Nature's Madness arrived in Generation 7
+	 * with exactly four owners and still has exactly those four. Sacred Sword
+	 * also started with four - and is on eleven families now, which is how a
+	 * group move becomes an ordinary one. Meteor Mash went from two to four,
+	 * Blast Burn from one to ten, Aura Sphere from seven to thirty-four.
+	 *
+	 * So: a move whose owners have not changed since the generation it was
+	 * introduced, and who are few, belongs to all of them.
+	 */
+	const GROUP_LIMIT = 4;
+
+	const sameSet = (a, b) => a.size === b.size && [...a].every(item => b.has(item));
+
+	/**
+	 * The families a move is a signature move *of* - empty when it is nobody's.
+	 */
+	function signatureOwners(moveid) {
 		const byGen = genOwners.get(moveid);
-		// Only ever handed out at an event: still that Pokemon's move.
-		if (!byGen || !byGen.size) return everyOwner.get(moveid) || new Set();
+		if (!byGen || !byGen.size) {
+			// Only ever handed out at an event: still that Pokemon's move.
+			const all = everyOwner.get(moveid) || new Set();
+			return all.size === 1 ? all : new Set();
+		}
 
 		const newest = byGen.get(Math.max(...byGen.keys()));
 		if (newest.size === 1) return newest;
-		if (newest.size > SHARED_LIMIT) return newest;
+
+		const first = byGen.get(Math.min(...byGen.keys()));
+
+		// Arrived shared, and stayed exactly as shared: it is the group's.
+		if (newest.size <= GROUP_LIMIT && sameSet(first, newest)) return newest;
 
 		// Shared with one other. The family it started with keeps it.
-		const first = byGen.get(Math.min(...byGen.keys()));
-		return first.size === 1 ? first : newest;
+		if (newest.size <= SHARED_LIMIT && first.size === 1) return first;
+
+		// Spread too far to be anybody's.
+		return new Set();
 	}
 
 	const signatures = {};
 	for (const [family, moves] of familyMoves) {
 		const own = [...moves]
-			.filter(moveid => {
-				const owners = ownersOf(moveid);
-				return owners.size === 1 && owners.has(family);
-			})
+			.filter(moveid => signatureOwners(moveid).has(family))
 			// Z-moves and Max moves are not moves anyone chooses in the builder,
 			// and a move marked `velvetShared` is one of ours meant to be handed
 			// out later - being new is not the same as being somebody's.
