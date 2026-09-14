@@ -1058,9 +1058,25 @@
 	 * that does nothing.
 	 */
 	function megaStonesFor(search, species) {
+		/*
+		 * Where a Mega can actually happen.
+		 *
+		 * The search strips the generation off the format before storing it, and
+		 * puts the interesting half somewhere else: `gen9nationaldex` arrives as
+		 * format 'ou' with formatType 'natdex', and `gen9rpou` as format 'rpou'
+		 * with no formatType at all. Checking the format string for 'nationaldex'
+		 * therefore never matched - and since the RP tiers are pointed at
+		 * National Dex for searching (see installRpTiers), that was the path the
+		 * builder actually takes.
+		 *
+		 * The generation covers the rest: Mega Evolution is native to the sixth
+		 * and seventh, so a past-generation RP tier there needs no help.
+		 */
 		var format = String(search.format || '');
-		var megasWork = format.indexOf('rp') >= 0 || format.indexOf('natdex') >= 0 ||
-			format.indexOf('nationaldex') >= 0 || /^gen[1-7]/.test(format);
+		var formatType = String(search.formatType || '');
+		var gen = search.dex && search.dex.gen;
+		var megasWork = format.indexOf('rp') === 0 || formatType.indexOf('natdex') >= 0 ||
+			gen === 6 || gen === 7;
 		if (!megasWork || !window.BattleItems || !species) return [];
 
 		var base = species.baseSpecies || species.name;
