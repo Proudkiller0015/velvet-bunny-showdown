@@ -42,6 +42,55 @@ const TIERS = {
 	// tier to be played in.
 	gliscor: 'Uber',
 
+	/*
+	 * The two that National Dex tiered under a Terastal ban this server does
+	 * not have.
+	 *
+	 * RP stands on National Dex's lists and then hands Terastallization back,
+	 * which is the tier's defining decision - see UNBAN_TERA in the format
+	 * file. For almost everything that is a small change. For these two it is
+	 * the change their whole tier placement was resting on, so the number
+	 * National Dex arrived at is answering a different question than the one
+	 * this server asks.
+	 */
+
+	// National Dex calls it OU because under a Terastal ban it never becomes
+	// Terapagos-Stellar: 160 / 105 / 110 / 130 / 110 / 85, seven hundred base
+	// stats, behind Tera Shell halving everything on a full HP bar. With Tera
+	// handed back that forme is one turn away, and it is Uber in every format
+	// that can actually reach it - including Smogon's own ninth-generation OU,
+	// which bans the base Pokemon outright.
+	terapagos: 'Uber',
+
+	// Wonder Guard says only super-effective moves land, and National Dex tiered
+	// that at RU on the assumption that the typing deciding "super-effective" is
+	// fixed at team preview. Terastallization is what breaks the assumption: the
+	// defending type is chosen after the other player has committed to their
+	// coverage, so the four moves they brought to answer a Bug/Ghost are
+	// answering something else by the time they are used.
+	shedinja: 'Uber',
+
+	/*
+	 * The three monkeys, which this server rebuilt.
+	 *
+	 * National Dex has them at RU, and that tier describes the Pokemon Game
+	 * Freak shipped: 498 base stats, a bad movepool and an ability nobody wants.
+	 * Ours have a terrain setter in the second slot, the priority move that goes
+	 * with it, and thirty-odd moves each that they did not have - Simisage alone
+	 * gained Grassy Glide, Jungle Rush, Swords Dance, Close Combat and U-turn.
+	 *
+	 * A tier set against the old sheet is not a judgement about these any more,
+	 * so they move up two to UU. Two rather than one because the change is a
+	 * whole set rather than a single addition, and not further than UU because
+	 * 101 Speed and 63 / 63 defences is still what they have to work with.
+	 *
+	 * This is the case the file was written for: a tier we invalidated
+	 * ourselves, moved by us rather than left to drift.
+	 */
+	simisage: 'UU',
+	simisear: 'UU',
+	simipour: 'UU',
+
 	// Its only ability is Shadow Tag. Base Chandelure can pick Flash Fire and go
 	// on being an RU Pokemon, and the ability ban in the tiers below Ubers
 	// already stops the trapping set there - but a Mega has one ability slot and
@@ -97,12 +146,13 @@ const TIERS = {
 /**
  * Put the decisions into the tier tables.
  *
- * Both `tier` and `natDexTier` are set. The first is what a plain
- * ninth-generation format reads and the second is what National Dex reads, and
- * the RP tiers are built on National Dex - so the one that matters here is the
- * second. They are kept in step rather than allowed to drift, because two
- * numbers describing one Pokemon is how it ends up legal in one place and not
- * its mirror.
+ * `natDexTier` always, and `tier` as well wherever the Pokemon exists. The
+ * first is what a plain ninth-generation format reads and the second is what
+ * National Dex reads, and the RP tiers are built on National Dex - so the one
+ * that matters here is the second. They are kept in step rather than allowed to
+ * drift, because two numbers describing one Pokemon is how it ends up legal in
+ * one place and not its mirror; the one exception is a Pokemon that is not in
+ * this generation at all, and the note below says why.
  */
 exports.applyTiers = (FormatsData, Pokedex, log = () => {}) => {
 	const applied = {};
@@ -133,7 +183,22 @@ exports.applyTiers = (FormatsData, Pokedex, log = () => {}) => {
 			data = FormatsData[id] = {};
 		}
 
-		data.tier = tier;
+		/*
+		 * A Pokemon that is not in this generation keeps its Illegal.
+		 *
+		 * `tier` is what a plain ninth-generation format reads and `natDexTier`
+		 * is what National Dex reads, and Shedinja is the case that separates
+		 * them: it is not in Scarlet and Violet at all, so its ninth-generation
+		 * tier is Illegal and that is the true answer there. Writing Uber over
+		 * it would say this server had added a Pokemon to SV that it has not -
+		 * harmless to the validator, which refuses it on `isNonstandard: 'Past'`
+		 * anyway, and not harmless in the builder, which labels from the tier
+		 * and would call it Uber in a format it cannot be picked in.
+		 *
+		 * So the decision lands where the decision applies. RP reads the second
+		 * one.
+		 */
+		if (data.tier !== 'Illegal') data.tier = tier;
 		data.natDexTier = tier;
 		applied[id] = tier;
 	}

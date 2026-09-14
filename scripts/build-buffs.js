@@ -169,11 +169,24 @@ const za = require(path.join(PACKAGE, 'dist', 'data', 'velvet', 'za-megas.js'));
  * what it is. That is where the Z-A Megas were - a stone the builder offered,
  * attached to a Pokemon the builder called illegal.
  */
+/*
+ * And a third table, for the same reason one step further out.
+ *
+ * Shedinja is not in Scarlet and Violet. Its ninth-generation tier is Illegal
+ * and that is the true answer there, so this server moving it to Ubers is a
+ * decision about National Dex and nothing else - tiering.js leaves the SV tier
+ * alone for exactly that reason. Shipping the Uber into the plain SV table
+ * would label it Uber in a format it cannot be picked in, which is the same
+ * mislabelling the two tables above exist to avoid.
+ */
 const isMegaForme = id => Dex.species.get(id).name.includes('-Mega');
+const inThisGen = id => Dex.species.get(id).tier !== 'Illegal';
 const tiers = {};
 const megaTiers = {};
+const natdexTiers = {};
 for (const [id, tier] of Object.entries(Object.assign({}, za.assigned, TIERS))) {
 	if (isMegaForme(id)) megaTiers[id] = tier;
+	else if (!inThisGen(id)) natdexTiers[id] = tier;
 	else tiers[id] = tier;
 }
 const unlocked = {
@@ -233,6 +246,7 @@ window.VelvetBuffs = {
 \toverrides: ${JSON.stringify(overrides)},
 \ttiers: ${JSON.stringify(tiers)},
 \tmegaTiers: ${JSON.stringify(megaTiers)},
+\tnatdexTiers: ${JSON.stringify(natdexTiers)},
 \tunlocked: ${JSON.stringify(unlocked)},
 
 \t/** What this Pokemon gained, or an empty record. */
@@ -248,6 +262,7 @@ console.log(`${Object.keys(bySpecies).length} buffed Pokemon, ${Object.keys(move
 	`${Object.keys(abilities).length} abilities, ${Object.keys(items).length} items, ` +
 	`${Object.keys(overrides.moves).length + Object.keys(overrides.abilities).length} corrected rows, ` +
 	`${Object.keys(tiers).length} re-tiered, ${Object.keys(megaTiers).length} Mega tiers, ` +
+	`${Object.keys(natdexTiers).length} National Dex only, ` +
 	`${unlocked.species.length + unlocked.items.length} unlocked`);
 console.log(`${Math.round(file.length / 1024)}KB -> ${OUT}`);
 for (const [id, record] of Object.entries(bySpecies)) {

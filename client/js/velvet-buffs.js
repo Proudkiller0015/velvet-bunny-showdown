@@ -620,9 +620,45 @@ window.VelvetBuffs = {
 		},
 		"panpour": {
 			"moves": [
-				"wavecharge"
+				"wavecharge",
+				"liquidation",
+				"chillingwater",
+				"muddywater",
+				"whirlpool",
+				"endure",
+				"terablast",
+				"torrentrush",
+				"swordsdance",
+				"bulkup",
+				"focusenergy",
+				"screech",
+				"scaryface",
+				"encore",
+				"psychup",
+				"spite",
+				"curse",
+				"quickguard",
+				"metronome",
+				"sunnyday",
+				"closecombat",
+				"focusblast",
+				"drainpunch",
+				"machpunch",
+				"firepunch",
+				"thunderpunch",
+				"rockslide",
+				"stoneedge",
+				"uturn",
+				"fakeout"
 			],
-			"abilities": []
+			"abilities": [
+				"Tidal Surge"
+			],
+			"slots": {
+				"0": "Gluttony",
+				"1": "Tidal Surge",
+				"H": "Torrent"
+			}
 		},
 		"simipour": {
 			"moves": [
@@ -1240,6 +1276,88 @@ window.VelvetBuffs = {
 				"H": "Blaze"
 			}
 		},
+		"pansage": {
+			"moves": [
+				"grassyglide",
+				"grassyterrain",
+				"trailblaze",
+				"growth",
+				"endure",
+				"terablast",
+				"junglerush",
+				"swordsdance",
+				"bulkup",
+				"focusenergy",
+				"screech",
+				"scaryface",
+				"encore",
+				"psychup",
+				"spite",
+				"curse",
+				"quickguard",
+				"metronome",
+				"raindance",
+				"closecombat",
+				"focusblast",
+				"drainpunch",
+				"machpunch",
+				"icepunch",
+				"firepunch",
+				"thunderpunch",
+				"rockslide",
+				"stoneedge",
+				"uturn",
+				"fakeout"
+			],
+			"abilities": [
+				"Verdant Surge"
+			],
+			"slots": {
+				"0": "Gluttony",
+				"1": "Verdant Surge",
+				"H": "Overgrow"
+			}
+		},
+		"pansear": {
+			"moves": [
+				"temperflare",
+				"burningjealousy",
+				"ember",
+				"endure",
+				"terablast",
+				"cinderrush",
+				"swordsdance",
+				"bulkup",
+				"focusenergy",
+				"screech",
+				"scaryface",
+				"encore",
+				"psychup",
+				"spite",
+				"curse",
+				"quickguard",
+				"metronome",
+				"raindance",
+				"closecombat",
+				"focusblast",
+				"drainpunch",
+				"machpunch",
+				"icepunch",
+				"thunderpunch",
+				"rockslide",
+				"stoneedge",
+				"uturn",
+				"fakeout"
+			],
+			"abilities": [
+				"Solar Surge"
+			],
+			"slots": {
+				"0": "Gluttony",
+				"1": "Solar Surge",
+				"H": "Blaze"
+			}
+		},
 		"litwick": {
 			"moves": [],
 			"abilities": [
@@ -1297,8 +1415,9 @@ window.VelvetBuffs = {
 	items: {"elementalbanana":{"num":-1,"name":"Elemental Banana","spritenum":0,"itemUser":["Pansage","Simisage","Pansear","Simisear","Panpour","Simipour"],"fling":{"basePower":30},"gen":9,"shortDesc":"Simi family: 1.3x Atk, SpA and Speed, and cannot be removed. 1.5x after Tera/Dynamax, which also re-sets their weather.","desc":"If held by a Pansage, Pansear, Panpour, Simisage, Simisear or Simipour, that Pokemon's Attack, Special Attack and Speed are multiplied by 1.3, and the item cannot be removed by Knock Off, Trick, Thief or anything else. Once that Pokemon Terastallizes or Dynamaxes the multiplier becomes 1.5, and its weather- or terrain-setting Ability activates again."},"brokenpact":{"num":-2,"name":"Broken Pact","spritenum":0,"itemUser":["Nuzleaf"],"fling":{"basePower":10},"gen":9,"shortDesc":"If Nuzleaf would faint while holding this, it returns at full HP as Nuzleaf-SOLD.","desc":"A reminder of a Trainer who abandoned their partner when it mattered most. If Nuzleaf is knocked out while holding this item - by an attack, by an ally, or by its own Merchant's Call - it does not faint. It returns at once as Nuzleaf-SOLD, restored to full HP and cured of status, and this item is used up."}},
 	search: [["junglerush","move","0000001111"],["cinderrush","move","0000001111"],["wavecharge","move","0000111111"],["torrentrush","move","00000001111"],["merchantscall","move","0000000012222"],["verdantsurge","ability","000000011111"],["solarsurge","ability","0000011111"],["tidalsurge","ability","0000011111"],["elementalbanana","item","000000000111111"],["brokenpact","item","0000001111"]],
 	overrides: {"moves":{"darkvoid":{"num":464,"name":"Dark Void","type":"Dark","category":"Status","basePower":0,"accuracy":80,"pp":10,"priority":0,"target":"allAdjacentFoes","flags":{"protect":1,"reflectable":1,"mirror":1,"metronome":1,"nosketch":1},"secondary":null,"shortDesc":"Darkrai: Causes the foe(s) to fall asleep.","desc":"Causes the target to fall asleep. This move cannot be used successfully unless the user's current form, while considering Transform, is Darkrai."},"recover":{"num":105,"name":"Recover","type":"Normal","category":"Status","basePower":0,"accuracy":true,"pp":10,"priority":0,"target":"self","flags":{"snatch":1,"heal":1,"metronome":1},"secondary":null,"shortDesc":"Heals the user by 50% of its max HP.","desc":"The user restores 1/2 of its maximum HP, rounded half up."},"roost":{"num":355,"name":"Roost","type":"Flying","category":"Status","basePower":0,"accuracy":true,"pp":10,"priority":0,"target":"self","flags":{"snatch":1,"heal":1,"metronome":1},"secondary":null,"shortDesc":"Heals 50% HP. Flying-type removed 'til turn ends.","desc":"The user restores 1/2 of its maximum HP, rounded half up. If the user is not Terastallized, until the end of the turn Flying-type users lose their Flying type and pure Flying-type users become Normal type. Does nothing if the user's HP is full."},"softboiled":{"num":135,"name":"Soft-Boiled","type":"Normal","category":"Status","basePower":0,"accuracy":true,"pp":10,"priority":0,"target":"self","flags":{"snatch":1,"heal":1,"metronome":1},"secondary":null,"shortDesc":"Heals the user by 50% of its max HP.","desc":"The user restores 1/2 of its maximum HP, rounded half up."},"slackoff":{"num":303,"name":"Slack Off","type":"Normal","category":"Status","basePower":0,"accuracy":true,"pp":10,"priority":0,"target":"self","flags":{"snatch":1,"heal":1,"metronome":1},"secondary":null,"shortDesc":"Heals the user by 50% of its max HP.","desc":"The user restores 1/2 of its maximum HP, rounded half up."},"milkdrink":{"num":208,"name":"Milk Drink","type":"Normal","category":"Status","basePower":0,"accuracy":true,"pp":10,"priority":0,"target":"self","flags":{"snatch":1,"heal":1,"metronome":1},"secondary":null,"shortDesc":"Heals the user by 50% of its max HP.","desc":"The user restores 1/2 of its maximum HP, rounded half up."},"shoreup":{"num":659,"name":"Shore Up","type":"Ground","category":"Status","basePower":0,"accuracy":true,"pp":10,"priority":0,"target":"self","flags":{"snatch":1,"heal":1,"metronome":1},"secondary":null,"shortDesc":"User restores 1/2 its max HP; 2/3 in Sandstorm.","desc":"The user restores 1/2 of its maximum HP, rounded half down. If the weather is Sandstorm, the user instead restores 2/3 of its maximum HP, rounded half down."},"rest":{"num":156,"name":"Rest","type":"Psychic","category":"Status","basePower":0,"accuracy":true,"pp":10,"priority":0,"target":"self","flags":{"snatch":1,"heal":1,"metronome":1},"secondary":null,"shortDesc":"User sleeps 2 turns and restores HP and status.","desc":"The user falls asleep for the next two turns and restores all of its HP, curing itself of any non-volatile status condition in the process. Fails if the user has full HP, is already asleep, or if another effect is preventing sleep."}},"abilities":{"protean":{"num":168,"name":"Protean","rating":4.5,"shortDesc":"This Pokemon's type changes to the type of the move it is using.","desc":"This Pokemon's type changes to match the type of the move it is about to use. This effect comes after all effects that change a move's type."},"libero":{"num":236,"name":"Libero","rating":4.5,"shortDesc":"This Pokemon's type changes to the type of the move it is using.","desc":"This Pokemon's type changes to match the type of the move it is about to use. This effect comes after all effects that change a move's type."},"battlebond":{"num":210,"name":"Battle Bond","rating":4,"shortDesc":"After KOing a Pokemon: becomes Ash-Greninja, Water Shuriken hits 3 times.","desc":"If this Pokemon is a Greninja with this Ability, it transforms into Ash-Greninja after knocking out a Pokemon. As Ash-Greninja, its Water Shuriken has 20 base power and always hits 3 times."}}},
-	tiers: {"gliscor":"Uber","greninjabond":"Uber"},
+	tiers: {"gliscor":"Uber","terapagos":"Uber","greninjabond":"Uber"},
 	megaTiers: {"raichumegax":"RU","raichumegay":"RU","clefablemega":"UU","victreebelmega":"RU","starmiemega":"Uber","dragonitemega":"Uber","meganiummega":"RU","feraligatrmega":"RU","skarmorymega":"UU","chimechomega":"RU","absolmegaz":"Uber","staraptormega":"RU","garchompmegaz":"Uber","lucariomegaz":"Uber","froslassmega":"RU","heatranmega":"Uber","darkraimega":"Uber","emboarmega":"RU","excadrillmega":"UU","scolipedemega":"UU","scraftymega":"RU","eelektrossmega":"RU","chandeluremega":"Uber","golurkmega":"RU","chesnaughtmega":"RU","delphoxmega":"RU","greninjamega":"Uber","pyroarmega":"RU","floettemega":"Uber","meowsticmmega":"RU","meowsticfmega":"RU","malamarmega":"RU","barbaraclemega":"RU","dragalgemega":"RU","hawluchamega":"OU","zygardemega":"Uber","crabominablemega":"RU","golisopodmega":"RU","drampamega":"RU","magearnamega":"Uber","magearnaoriginalmega":"Uber","zeraoramega":"Uber","falinksmega":"RU","scovillainmega":"RU","glimmoramega":"UU","tatsugiricurlymega":"RU","tatsugiridroopymega":"RU","tatsugiristretchymega":"RU","baxcaliburmega":"Uber"},
+	natdexTiers: {"shedinja":"Uber","simisage":"UU","simisear":"UU","simipour":"UU"},
 	unlocked: {"species":["raichumegax","raichumegay","clefablemega","victreebelmega","starmiemega","dragonitemega","meganiummega","feraligatrmega","skarmorymega","chimechomega","absolmegaz","staraptormega","garchompmegaz","lucariomegaz","froslassmega","heatranmega","darkraimega","emboarmega","excadrillmega","scolipedemega","scraftymega","eelektrossmega","chandeluremega","golurkmega","chesnaughtmega","delphoxmega","greninjamega","pyroarmega","floettemega","meowsticmmega","meowsticfmega","malamarmega","barbaraclemega","dragalgemega","hawluchamega","zygardemega","crabominablemega","golisopodmega","drampamega","magearnamega","magearnaoriginalmega","zeraoramega","falinksmega","scovillainmega","glimmoramega","tatsugiricurlymega","tatsugiridroopymega","tatsugiristretchymega","baxcaliburmega"],"items":["absolitez","barbaracite","baxcalibrite","chandelurite","chesnaughtite","chimechite","clefablite","crabominite","darkranite","delphoxite","dragalgite","dragoninite","drampanite","eelektrossite","emboarite","excadrite","falinksite","feraligite","floettite","froslassite","garchompitez","glimmoranite","golisopite","golurkite","greninjite","hawluchanite","heatranite","lucarionitez","magearnite","malamarite","meganiumite","meowsticite","pyroarite","raichunitex","raichunitey","scolipite","scovillainite","scraftinite","skarmorite","staraptite","starminite","tatsugirinite","victreebelite","zeraorite","zygardite"]},
 
 	/** What this Pokemon gained, or an empty record. */

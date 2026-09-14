@@ -650,6 +650,73 @@
 	 * it leaves that slice alone and pushes only the ones below - and every slice
 	 * index past the insertion point goes up by one.
 	 */
+	function headerIndex(table, tier) {
+		for (var i = 0; i < table.tiers.length; i++) {
+			var row = table.tiers[i];
+			if (typeof row !== 'string' && row && row[0] === 'header' && row[1] === tier) return i;
+		}
+		return -1;
+	}
+
+	/*
+	 * In its alphabetical place, not at the top of the section.
+	 *
+	 * Each tier's block is sorted by id - alakazammega, annihilape, arceus - and
+	 * dropping ours in directly after the header put every one of them above the
+	 * As. The list is scrolled by people looking for a name, so a handful jumbled
+	 * at the top of each tier is worse than not listing them at all: it reads as
+	 * the order being broken, because it is.
+	 *
+	 * So the block is walked to the first entry that sorts after ours, and it
+	 * goes there. A header ends the block.
+	 */
+	function placeFor(table, id, tier) {
+		var start = headerIndex(table, tier);
+		if (start < 0) return -1;
+		for (var i = start + 1; i < table.tiers.length; i++) {
+			var row = table.tiers[i];
+			// A nested header ends this block: OU has "OU by technicality".
+			if (typeof row !== 'string') return i;
+			if (row > id) return i;
+		}
+		return table.tiers.length;
+	}
+
+	/**
+	 * Put one Pokemon under the heading its tier names, wherever it is now.
+	 *
+	 * Both halves matter and only one of them was here before. Listing something
+	 * that is missing is the Z-A Mega case. Moving something that is listed in
+	 * the wrong place is the case this server creates every time it disagrees
+	 * with Smogon about a tier: Gliscor is Uber here and OU in National Dex, so
+	 * it sat in the OU block, was offered to anyone scrolling RP OU, and came
+	 * back "Gliscor is tagged ND Uber, which is banned" when the team was sent.
+	 * The label already said Uber - the label is read from a different table
+	 * than the position - which is the builder disagreeing with itself on one
+	 * screen.
+	 *
+	 * Every index after a move shifts, so the slices shift with it: taking the
+	 * row out pulls down everything below it, putting it back pushes everything
+	 * from the insertion point down again.
+	 */
+	function placeSpecies(table, id, tier) {
+		if (headerIndex(table, tier) < 0) return false;   // no such section here
+		var from = table.tiers.indexOf(id);
+		if (from >= 0) {
+			table.tiers.splice(from, 1);
+			for (var key in table.formatSlices) {
+				if (table.formatSlices[key] > from) table.formatSlices[key]--;
+			}
+		}
+		var at = placeFor(table, id, tier);
+		if (at < 0) return false;
+		table.tiers.splice(at, 0, id);
+		for (var slice in table.formatSlices) {
+			if (table.formatSlices[slice] >= at) table.formatSlices[slice]++;
+		}
+		return true;
+	}
+
 	function listMegas(table, megaTiers) {
 		if (!table || !table.tiers || !table.formatSlices) return;
 		// The same array is shared between generations of the table, so doing this
@@ -657,46 +724,32 @@
 		if (table.tiers.__velvetMegas) return;
 		table.tiers.__velvetMegas = true;
 
-		var headerIndex = function (tier) {
-			for (var i = 0; i < table.tiers.length; i++) {
-				var row = table.tiers[i];
-				if (row && row.length === 2 && row[0] === 'header' && row[1] === tier) return i;
-			}
-			return -1;
-		};
-
-		/*
-		 * In its alphabetical place, not at the top of the section.
-		 *
-		 * Each tier's block is sorted by id - alakazammega, annihilape, arceus -
-		 * and dropping ours in directly after the header put every one of them
-		 * above the As. The list is scrolled by people looking for a name, so a
-		 * handful of Megas jumbled at the top of each tier is worse than not
-		 * listing them: it reads as the order being broken, because it is.
-		 *
-		 * So the block is walked to the first entry that sorts after ours, and it
-		 * goes there. A header ends the block.
-		 */
-		var placeFor = function (id, tier) {
-			var start = headerIndex(tier);
-			if (start < 0) return -1;
-			for (var i = start + 1; i < table.tiers.length; i++) {
-				var row = table.tiers[i];
-				// A nested header ends this block: OU has "OU by technicality".
-				if (row && row.length === 2 && row[0] === 'header') return i;
-				if (typeof row === 'string' && row > id) return i;
-			}
-			return table.tiers.length;
-		};
-
 		for (var id in megaTiers) {
 			if (table.tiers.indexOf(id) >= 0) continue;      // already listed
-			var at = placeFor(id, megaTiers[id]);
-			if (at < 0) continue;                             // no such section here
-			table.tiers.splice(at, 0, id);
-			for (var key in table.formatSlices) {
-				if (table.formatSlices[key] >= at) table.formatSlices[key]++;
-			}
+			placeSpecies(table, id, megaTiers[id]);
+		}
+	}
+
+	/**
+	 * And move the ones that are listed under a heading this server disagrees
+	 * with.
+	 *
+	 * Only what is already in the list: something missing from it is either not
+	 * in this generation or is a Mega, and listMegas is the one that adds.
+	 */
+	function retierListed(table, tierMap) {
+		if (!table || !table.tiers || !table.formatSlices) return;
+		/*
+		 * Unguarded, unlike listMegas, and it has to be: two tier tables reach
+		 * the same National Dex array - the ninth-generation one and the
+		 * National-Dex-only one - and a flag on the array would let the first
+		 * through and silently drop the second. Moving something already under
+		 * the right heading takes it out and puts it back in the same place, so
+		 * running twice costs a splice and changes nothing.
+		 */
+		for (var id in tierMap) {
+			if (table.tiers.indexOf(id) < 0) continue;
+			placeSpecies(table, id, tierMap[id]);
 		}
 	}
 
@@ -772,6 +825,10 @@
 				 */
 				if (buffs && buffs.tiers) {
 					for (var id in buffs.tiers) t.overrideTier[id] = buffs.tiers[id];
+					// And under the right heading, not just with the right label -
+					// see placeSpecies. A Gliscor marked Uber in the middle of the
+					// OU block is still offered to everyone scrolling OU.
+					retierListed(t, buffs.tiers);
 				}
 				landed = true;
 			}
@@ -799,6 +856,29 @@
 		for (var n = 0; n < natdexTargets.length; n++) {
 			var natdex = natdexTargets[n];
 			sectionLowerTiers(natdex, natdex === table.gen8natdex ? eighth : ninth);
+		}
+		/*
+		 * And the tiers that are a National Dex decision and only that.
+		 *
+		 * Shedinja is not in Scarlet and Violet, so its ninth-generation tier is
+		 * Illegal and stays Illegal - this server moving it to Ubers is a thing
+		 * it did to National Dex. Putting that Uber in the plain table would
+		 * label it Uber in a format it cannot be picked in, which is the
+		 * complaint the Mega split above already exists to answer.
+		 */
+		if (buffs && buffs.natdexTiers) {
+			for (var d = 0; d < natdexTargets.length; d++) {
+				var nd = natdexTargets[d];
+				if (!nd.overrideTier) nd.overrideTier = {};
+				for (var ndId in buffs.natdexTiers) nd.overrideTier[ndId] = buffs.natdexTiers[ndId];
+			}
+		}
+		// And under the right heading in these tables too - including the ones
+		// that are not ninth-generation keys, which the loop above never saw.
+		for (var r = 0; r < natdexTargets.length; r++) {
+			var moved = natdexTargets[r];
+			if (buffs && buffs.tiers) retierListed(moved, buffs.tiers);
+			if (buffs && buffs.natdexTiers) retierListed(moved, buffs.natdexTiers);
 		}
 		if (buffs && buffs.megaTiers) {
 			for (var g = 0; g < megaTargets.length; g++) {

@@ -135,6 +135,29 @@ const MONKEYS = {
 };
 
 /**
+ * And the same three, one stage down.
+ *
+ * The Chandelure line got all three stages on the stated principle that a buff
+ * belongs to the family and not to the last form. The monkeys got the last form
+ * only, which was an oversight rather than a decision: Pansage, Pansear and
+ * Panpour are the same Pokemon with the same problem - the most on-the-nose
+ * weather trio in the game, and not a weather ability between them - and they
+ * are the stage that is actually played, because Little Cup is where a 316 base
+ * stat Pokemon has a game to be in.
+ *
+ * Identical lists rather than a reduced set. A pre-evolution's moves are
+ * inherited by what it becomes, so anything held back here would have to be
+ * given back a line later, and the three evolved forms already have every one
+ * of these - which is what makes this cost nothing above Little Cup and be the
+ * whole point below it.
+ */
+const PAN = {
+	pansage: MONKEYS.simisage,
+	pansear: MONKEYS.simisear,
+	panpour: MONKEYS.simipour,
+};
+
+/**
  * The Chandelure family.
  *
  * A Ghost-type lamp whose Pokedex entries are about drawing spirits in and not
@@ -178,6 +201,7 @@ const NUZLEAF = {
 
 exports.Buffs = {
 	...MONKEYS,
+	...PAN,
 	...CHANDELURE,
 	...NUZLEAF,
 };
