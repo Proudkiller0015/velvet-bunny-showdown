@@ -160,6 +160,17 @@ Three things in that handler are load-bearing, each of which was wrong once:
 - **A null source, not the item.** `formeChange`'s permanent branch treats any
   Item source as a Mega Stone and sends the client a `-mega` line.
 
+And a fourth, which is not in the simulator at all: **the heal has to claim
+Revival Blessing.** The client latches fainting — `parseHealth` sets
+`fainted = true` the moment it reads an HP string ending in `fnt`, and nothing
+in the whole protocol sets it back except one branch of `-heal`, the one whose
+`[from]` is Revival Blessing. Without that tag the server healed to full and the
+client drew an empty bar on a Pokémon it still believed was gone. Replayed
+through Showdown's own `battle.js` in a headless browser, the same log gives
+`fainted: true, hpWidth: 0` untagged and `fainted: false, hpWidth: 100` tagged.
+The tag names the wrong cause but the right event, and the text it prints —
+"was revived and is ready to fight again" — names no move at all.
+
 Measured, each against a control: knocked out by an attack and by its own move,
 it comes back at 224 HP with 526 / 374 / 416 offences; without the item, both
 faint. Roar drags an ordinary Nuzleaf out and is refused by No Refunds;

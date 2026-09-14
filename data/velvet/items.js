@@ -139,9 +139,27 @@ function brokenPactReturn(battle, pokemon) {
 	 */
 	pokemon.clearVolatile(false);
 	pokemon.hp = pokemon.maxhp;
+	pokemon.subFainted = false;
 	pokemon.cureStatus(true);
 	pokemon.formeChange('Nuzleaf-SOLD', null, true);
-	battle.add('-heal', pokemon, pokemon.getHealth);
+
+	/*
+	 * And the heal has to say Revival Blessing, which is not a lie about what
+	 * happened - only about what caused it.
+	 *
+	 * The client latches fainting. `parseHealth` sets `fainted = true` the
+	 * moment it reads an HP string ending in `fnt`, and nothing in the entire
+	 * protocol ever sets it back to false - except one branch: a `-heal` whose
+	 * `[from]` is Revival Blessing, which is the game's only way of saying "this
+	 * Pokemon is not dead after all". The server was healing it to full and the
+	 * client was drawing an empty bar on a Pokemon it still believed was gone.
+	 *
+	 * That branch clears `fainted`, clears the status, and redraws the team
+	 * sidebar - the same three things the engine does for the move itself. The
+	 * text it prints is "was revived and is ready to fight again", with no move
+	 * named in it, which is exactly right.
+	 */
+	battle.add('-heal', pokemon, pokemon.getHealth, '[from] move: Revival Blessing');
 
 	battle.add('-message', `${pokemon.name} was sold. It came back anyway.`);
 	battle.add('-hint', "Broken Pact: a Nuzleaf that would faint while holding it returns at once as Nuzleaf-SOLD, at full HP, with the item used up. It never faints, so nothing that keys off a knockout - Moxie, Destiny Bond, Grim Neigh - triggers.");
