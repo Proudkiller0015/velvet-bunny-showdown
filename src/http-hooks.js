@@ -331,6 +331,67 @@ function serveLadderStatus(url, res) {
 }
 
 /**
+ * How much room is left.
+ *
+ * This host gives the whole service 512MB and kills it without ceremony when it
+ * goes over, which is why battles run in this process rather than their own and
+ * why every subsystem that wants a child of its own has to argue for it. There
+ * was no way to ask how close it was running except by waiting for it to die,
+ * so decisions about what to switch on were being made on local numbers from a
+ * different operating system.
+ *
+ * Nothing private: totals for this process, the ones the host would use to
+ * decide whether to kill it, and how long it has been up.
+ */
+function serveHealth(url, res) {
+	if (url.split('?')[0] !== '/velvet/health.json') return false;
+	const mb = bytes => Math.round(bytes / 1024 / 1024 * 10) / 10;
+	const memory = process.memoryUsage();
+	/*
+	 * What the host is actually counting.
+	 *
+	 * `process.memoryUsage()` describes this process, and this process is not
+	 * what gets killed - the container is, and it holds the wrapper, the server
+	 * and any child a subsystem was given. Linux keeps that total in the control
+	 * group, which is the same number the 512MB limit is compared against, so
+	 * where it exists it is the honest answer and everything above it is detail.
+	 * It does not exist on a developer's Windows machine, hence the try.
+	 */
+	let container = null;
+	try {
+		const used = Number(fs.readFileSync('/sys/fs/cgroup/memory.current', 'utf8').trim());
+		const limit = fs.readFileSync('/sys/fs/cgroup/memory.max', 'utf8').trim();
+		container = {
+			usedMB: mb(used),
+			limitMB: limit === 'max' ? null : mb(Number(limit)),
+		};
+		if (container.limitMB) container.usedPercent = Math.round(container.usedMB / container.limitMB * 100);
+	} catch (e) {
+		// Not a Linux control group, so there is no container number to give.
+	}
+	const body = {
+		container,
+		uptimeSeconds: Math.round(process.uptime()),
+		process: {
+			rssMB: mb(memory.rss),
+			heapUsedMB: mb(memory.heapUsed),
+			heapTotalMB: mb(memory.heapTotal),
+			externalMB: mb(memory.external),
+		},
+		host: {
+			totalMB: mb(os.totalmem()),
+			freeMB: mb(os.freemem()),
+			cpus: os.cpus().length,
+		},
+		node: process.version,
+		pid: process.pid,
+	};
+	res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
+	res.end(JSON.stringify(body, null, 1));
+	return true;
+}
+
+/**
  * Answer that one path before Showdown's own web server sees it.
  *
  * Showdown serves HTTP from a worker process, and its request handler is wired
@@ -361,6 +422,7 @@ function hookServer(server, log) {
 				return true;
 			}
 			if (serveLadderStatus(req.url, res)) return true;
+			if (serveHealth(req.url, res)) return true;
 			if (serveReplay(req.url, res, log)) return true;
 
 			if (isPage(req.url)) revalidate(res);

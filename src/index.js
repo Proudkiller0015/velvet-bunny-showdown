@@ -61,9 +61,23 @@ function startServer() {
 	const pkgRoot = path.dirname(require.resolve('pokemon-showdown/package.json'));
 	const ladderDir = path.join(pkgRoot, 'config', 'ladders');
 	const { LadderStore } = require('./ladder-store');
+	const { FriendsStore } = require('./friends-store');
 	const store = new LadderStore(ladderDir, (...a) => console.log('[ladder-store]', ...a));
 	await store.connect();
 	await store.restore();
+
+	/*
+	 * And the friends list, for the same reason and in the same window.
+	 *
+	 * Showdown opens the database as it starts, so the saved copy has to be back
+	 * on disk before the server is spawned a few lines below. It is put back only
+	 * when there is no database here already, because a file on this disk is
+	 * newer than the commit by definition.
+	 */
+	const friends = new FriendsStore(
+		path.join(pkgRoot, 'databases', 'friends.db'),
+		(...a) => console.log('[friends-store]', ...a));
+	await friends.restore();
 
 	const { seedLadder } = require('./ladder-seed');
 	const { ladderQueues } = require('./ladder');
@@ -77,6 +91,9 @@ function startServer() {
 
 	console.log(`[boot] starting Pokemon Showdown on port ${PORT}`);
 	const server = startServer();
+	// Nothing tells this process that somebody made a friend - it happens two
+	// processes away - so it looks now and then. See src/friends-store.js.
+	friends.start();
 
 	/**
 	 * Leave slowly enough for the server to say goodbye.
@@ -104,8 +121,10 @@ function startServer() {
 		try { server.kill('SIGTERM'); } catch (e) { /* already gone */ }
 
 		const done = () => {
-			// Ratings last, so anything the wind-down changed is included.
-			store.stop().catch(() => {}).finally(() => process.exit(0));
+			// Ratings and friendships last, so anything the wind-down changed is
+			// included. Neither is allowed to hold the exit up on its own.
+			Promise.allSettled([store.stop(), friends.stop()])
+				.finally(() => process.exit(0));
 		};
 
 		const deadline = setTimeout(() => {

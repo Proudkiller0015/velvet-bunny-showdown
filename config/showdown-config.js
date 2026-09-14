@@ -142,7 +142,44 @@ exports.bindaddress = '0.0.0.0';
 // Battles run in the main process. Each battle subprocess costs ~80MB, which
 // on a 512MB free tier is the difference between booting and being OOM-killed.
 // A casual server with a handful of concurrent battles does not need them.
-exports.subprocesses = Number(process.env.PS_SUBPROCESSES || 0);
+/*
+ * Every kind of helper process, and how many of each.
+ *
+ * A plain `0` here is the shorthand for "none of anything", and it is spelled
+ * out instead because one of them has to be 1: the friends database is queried
+ * through a process manager, and a process manager with nothing to ask answers
+ * null - which reads as a friends system that takes a request, says all the
+ * right things to both players, and stores nothing. Found exactly that way,
+ * before it was ever deployed.
+ *
+ * The list is Showdown's own `processTypes`. It is written out rather than
+ * spread over a `0` because handing this setting an object means every key it
+ * does not mention falls back to that subsystem's own default, which is
+ * usually one process each - the opposite of what a 512MB tier wants.
+ */
+const NO_SUBPROCESSES = {
+	localartemis: 0, remoteartemis: 0, battlesearch: 0, datasearch: 0,
+	friends: 0, chatdb: 0, pm: 0, modlog: 0,
+	network: 0, simulator: 0, validator: 0, verifier: 0,
+};
+
+/**
+ * Friends: off unless asked for, because it is not free.
+ *
+ * The system itself is Showdown's and it works - see the note further down -
+ * but it wants a child process, and a child process measured at 51MB on a
+ * service with 512MB for everything. This server has already given up battle
+ * subprocesses for less.
+ *
+ * So it is opt-in rather than opt-out: deploying this changes nothing until
+ * PS_FRIENDS=1 is set on the host, which means the decision is made after
+ * looking at /velvet/health.json rather than by whoever deploys next. Turning
+ * it on and off again costs a restart and no code.
+ */
+const FRIENDS = process.env.PS_FRIENDS === '1';
+exports.subprocesses = Number(process.env.PS_SUBPROCESSES || 0) ?
+	Number(process.env.PS_SUBPROCESSES) :
+	{ ...NO_SUBPROCESSES, friends: FRIENDS ? 1 : 0 };
 
 /**
  * Accounts: real Pokemon Showdown ones.
@@ -186,6 +223,33 @@ if (realAccounts) {
 	exports.noguestsecurity = true;
 	exports.loginserver = '';
 }
+/**
+ * Friends, and what they cost.
+ *
+ * Showdown has a whole friends system - requests, a list, "so-and-so just came
+ * online", a page in the client - and it is switched off by default because it
+ * wants a database. Switching it on is these two lines plus better-sqlite3,
+ * which ships prebuilt and needs no compiler.
+ *
+ * The cost is a child process: the database is queried through a process
+ * manager, and with no child to query the whole system silently answers null.
+ * That is a real price on a 512MB tier - it is the same reason battles run in
+ * this process rather than their own, a few lines up - so it was measured
+ * rather than assumed, at 51MB, and left off until somebody says otherwise.
+ * PS_FRIENDS=1 on the host is the whole switch; see FRIENDS above.
+ *
+ * The rank is the floor for using it at all: a space means everybody. Being
+ * autoconfirmed is checked separately by Showdown itself and cannot be turned
+ * off from here, which on this server means registered and having won a rated
+ * game - the ladder queues are rated, so beating a bot is enough.
+ *
+ * The database lives on a disk this host wipes on every restart, so
+ * src/friends-store.js keeps it in the repository the same way the ladder and
+ * the replays are kept.
+ */
+exports.usesqlite = FRIENDS;
+exports.usesqlitefriends = ' ';
+
 exports.serverid = process.env.PS_SERVERID || 'velvetbunny';
 exports.servertoken = '';
 
