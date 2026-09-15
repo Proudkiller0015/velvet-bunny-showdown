@@ -223,7 +223,7 @@ const avatarRights = {
 	slimequeensamantha: ['queen.png'],
 	// Offered rather than applied, at her own request, so she picks it herself.
 	dana3166: [null, 'dana.png'],
-	keikosama: ['keiko-milim.png'],
+	keikosama: ['keiko-coral.png', 'keiko-silverwolf.png', 'keiko-silverwolf-2.png', 'keiko-coral-disguise.png', 'keiko-milim.png'],
 	ladymilim: ['milim.png'],
 	simiaignis: ['simia-ignis.png'],
 	lavit: ['lavit.png'],
@@ -238,6 +238,10 @@ for (const id of botIds) avatarRights[id] = ['bunny.png'];
 // that away - so anyone whose avatar is offered rather than applied had to pick
 // it again after every single restart.
 const avatarsPath = path.join(pkgRoot, 'config', 'avatars.json');
+// Applied once on the next boot even if the account already has a different avatar in the applied slot
+// (the merge below otherwise never changes what someone wears). Recorded as forcedApplied so a later
+// /avatar choice sticks.
+const FORCE_APPLIED = { keikosama: 'keiko-coral.png' };
 // What actually exists to be worn. An avatar that has been renamed or removed
 // lingers in everyone's list otherwise, and a stale name in the applied slot
 // means logging in asks the server for a file that is not there.
@@ -271,6 +275,12 @@ for (const [userid, allowed] of Object.entries(avatarRights)) {
 		return true;
 	});
 	existing.allowed = kept.length ? kept : [allowed[0] || null];
+	// A new applied avatar the owner asked for: replaces whatever is in the applied slot once.
+	if (FORCE_APPLIED[userid] && onDisk.has(FORCE_APPLIED[userid]) && existing.forcedApplied !== FORCE_APPLIED[userid]) {
+		existing.allowed = [FORCE_APPLIED[userid], ...existing.allowed.filter(f => f && f !== FORCE_APPLIED[userid])];
+		existing.default = FORCE_APPLIED[userid];
+		existing.forcedApplied = FORCE_APPLIED[userid];
+	}
 	// A default pointing at a file that no longer ships would apply nothing.
 	if (existing.default && !onDisk.has(existing.default)) delete existing.default;
 }
