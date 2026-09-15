@@ -230,8 +230,9 @@
 		var sigItemIn = installSignatureItem();
 		var powerIn = installBuffedBasePower();
 		var dmaxIn = installDynamaxBuilder();
+		var awakenedIn = installAwakenedSearch();
 		return tableIn && orderIn && spritesIn && iconIn && builderIn && tipsIn && rpIn &&
-			cutIn && listIn && buffsIn && abilitiesIn && itemIn && sigItemIn && powerIn && dmaxIn;
+			cutIn && listIn && buffsIn && abilitiesIn && itemIn && sigItemIn && powerIn && dmaxIn && awakenedIn;
 	}
 
 	/**
@@ -1534,6 +1535,65 @@
 	 * replacement, because that is exactly what the server does: 4726/4096 after
 	 * a 1.3x is 1.5x, chained in the same order with the same rounding.
 	 */
+	/**
+	 * "awakened" and "signature" in the Pokemon search.
+	 *
+	 * "awakened" lists every Pokemon Balance Patch 1 and the earlier buffs gave a
+	 * signature ability or signature move of ours. "signature" lists every
+	 * Pokemon with a signature move, official or ours (the velvet-signatures.js
+	 * table, which already counts ours). It is filed as an egg-group row - the
+	 * builder's only filter that is a set of Pokemon - and answered here, from the lists scripts/build-buffs.js works out.
+	 */
+	function installAwakenedSearch() {
+		var buffs = window.VelvetBuffs;
+		var search = window.BattlePokemonSearch;
+		if (!buffs || !buffs.awakened || !search || !search.prototype || !search.prototype.filter) return false;
+		// The row renderer loads in a later script than the search itself.
+		if (!window.BattleSearch && !window.PSSearchResults) return false;
+		if (search.__velvetAwakened) return true;
+		search.__velvetAwakened = true;
+
+		var NAMES = { awakened: 'Awakened', signature: 'Signature' };
+		var sets = { awakened: {}, signature: {} };
+		var table = window.VelvetSignatureMoves;
+		if (table && table.bySpecies) for (var sp in table.bySpecies) if (table.get(sp).length) sets.signature[sp] = true;
+		for (var m = 0; m < (buffs.awakened.move || []).length; m++) sets.signature[buffs.awakened.move[m]] = true;
+		var ids = (buffs.awakened.ability || []).concat(buffs.awakened.move || []);
+		for (var n = 0; n < ids.length; n++) sets.awakened[ids[n]] = true;
+
+		var filter = search.prototype.filter;
+		search.prototype.filter = function (row, filters) {
+			if (!filters || !row || row[0] !== 'pokemon') return filter.apply(this, arguments);
+			var rest = [];
+			for (var i = 0; i < filters.length; i++) {
+				var set = filters[i][0] === 'egggroup' && sets[window.toID(filters[i][1])];
+				if (!set) { rest.push(filters[i]); continue; }
+				if (!set[row[1]]) return false;
+			}
+			return filter.call(this, row, rest.length ? rest : null);
+		};
+
+		// The row: labelled as a search term, not an egg group.
+		var Old = window.BattleSearch;
+		if (Old && Old.prototype && Old.prototype.renderEggGroupRow) {
+			var row = Old.prototype.renderEggGroupRow;
+			Old.prototype.renderEggGroupRow = function (egggroup, matchStart, matchLength, errorMessage) {
+				var name = NAMES[window.toID(egggroup && egggroup.name)];
+				if (!name) return row.apply(this, arguments);
+				return row.call(this, { name: name }, matchStart, matchLength, errorMessage).replace('(egg group)', name === 'Signature' ? '(has a signature move)' : '(Awakened Pokémon)');
+			};
+		}
+		var Results = window.PSSearchResults;
+		if (Results && Results.prototype && Results.prototype.renderEggGroupRowHTML) {
+			var rowHTML = Results.prototype.renderEggGroupRowHTML;
+			Results.prototype.renderEggGroupRowHTML = function (index, id) {
+				var html = rowHTML.apply(this, arguments);
+				return NAMES[id] ? html.replace('(egg group)', id === 'signature' ? '(has a signature move)' : '(Awakened Pokémon)') : html;
+			};
+		}
+		return true;
+	}
+
 	function installBuffedBasePower() {
 		var tips = window.BattleTooltips;
 		if (!tips || !tips.prototype || !tips.prototype.getMoveBasePower) return false;

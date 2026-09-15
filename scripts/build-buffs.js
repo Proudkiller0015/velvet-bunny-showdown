@@ -258,8 +258,28 @@ for (const id of CHANGED.abilities) overrides.abilities[id] = abilityRow(Dex.abi
 const items = {};
 for (const id of OUR_ITEMS) items[id] = itemRow(Dex.items.get(id));
 
+/*
+ * The "awakened" search term: every Pokemon with one of our signature
+ * abilities or that learns one of our signature moves (a negative number
+ * without `velvetShared`). "signature" also uses the move half, beside the
+ * official signature moves in velvet-signatures.js. Worked out from the dex so a new
+ * signature shows up by itself. Samantha and Nuzleaf-SOLD are left out.
+ */
+const ours = x => x.exists && x.num < 0 && x.isNonstandard !== 'CAP';
+const signatureMoves = Dex.moves.all().filter(m => ours(m) && !m.velvetShared).map(m => m.id);
+const awakened = { ability: [], move: [] };
+for (const s of Dex.species.all()) {
+	if (!s.exists || s.isNonstandard === 'Custom' || s.num <= 0) continue;
+	if (Object.values(s.abilities || {}).some(a => ours(Dex.abilities.get(a)))) awakened.ability.push(s.id);
+	const learnset = Dex.species.getLearnsetData(s.id).learnset || {};
+	if (signatureMoves.some(m => learnset[m])) awakened.move.push(s.id);
+}
+
 // One row per thing that has to be findable by typing.
 const search = [];
+// Filed as egg groups: the only filter kind the builder offers that names a set
+// of Pokemon rather than a property of one. velvet-data.js answers them.
+for (const name of ['Awakened', 'Signature']) search.push([name.toLowerCase(), 'egggroup', offsetsFor(name)]);
 for (const [id, row] of Object.entries(moves)) search.push([id, 'move', offsetsFor(row.name)]);
 for (const [id, row] of Object.entries(abilities)) search.push([id, 'ability', offsetsFor(row.name)]);
 for (const [id, row] of Object.entries(items)) search.push([id, 'item', offsetsFor(row.name)]);
@@ -311,6 +331,7 @@ window.VelvetBuffs = {
 \tunlocked: ${JSON.stringify(unlocked)},
 \tevoLevels: ${JSON.stringify(evoLevels)},
 \tevoAlso: ${JSON.stringify(evoAlso)},
+\tawakened: ${JSON.stringify(awakened)},
 
 \t/** What this Pokemon gained, or an empty record. */
 \tget: function (speciesid) {
