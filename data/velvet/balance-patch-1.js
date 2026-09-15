@@ -36,15 +36,15 @@ exports.EVOLUTIONS = {
 	mandibuzz: { from: 54, to: 40, why: "Braviary's counterpart, same wait for no reason" },
 	bisharp: { from: 52, to: 40, why: '490 BST middle stage (cap 40); Kingambit still needs the Crest' },
 	mienshao: { from: 50, to: 40, why: '510 BST fighter stuck behind a pseudo level' },
-	klang: { from: 38, to: 32, why: 'A 440 BST middle stage at 38' },
+	klang: { from: 38, to: 30, why: 'A 440 BST middle stage at 38; ten levels as Klang before Klinklang at 40' },
 	klinklang: { from: 49, to: 40, why: '520 BST, and no stronger for the wait' },
 	dragalge: { from: 48, to: 38, why: '494 BST: a pseudo level for a RU Pokemon' },
 	noivern: { from: 48, to: 38, why: '535 BST speedster, evolving late made it unusable in-story' },
 	vanillish: { from: 35, to: 30, why: 'Brings the line forward' },
 	vanilluxe: { from: 47, to: 40, why: 'An ice cream cone should not take longer than Garchomp' },
-	vibrava: { from: 35, to: 30, why: 'Brings the line forward' },
+	vibrava: { from: 35, to: 28, why: 'Brings the line forward: ten levels as Vibrava before Flygon at 38' },
 	flygon: { from: 45, to: 38, why: '520 BST, not a pseudo-legendary despite the wait' },
-	sealeo: { from: 32, to: 30, why: 'Brings the line forward' },
+	sealeo: { from: 32, to: 28, why: 'Brings the line forward: ten levels as Sealeo before Walrein at 38' },
 	walrein: { from: 44, to: 38, why: '530 BST with a slow, bulky role that needs levels early' },
 	golurk: { from: 43, to: 35, why: '483 BST' },
 	glalie: { from: 42, to: 35, why: '480 BST, weaker than Froslass, which evolves by stone' },
@@ -70,6 +70,35 @@ exports.EVOLUTIONS = {
 	seaking: { from: 33, to: 28, why: '450 BST' },
 	cacturne: { from: 32, to: 28, why: '475 BST' },
 	lumineon: { from: 31, to: 26, why: '460 BST' },
+
+	/*
+	 * Two-stage lines that evolved late. One evolution, so the whole wait was
+	 * spent as the unevolved form: brought to 32-36 by how strong the final is.
+	 * Palafin (Zero to Hero) keeps its 38. Regional forms move with their line.
+	 */
+	rapidash: { from: 40, to: 34, why: '500 BST two-stage line' },
+	rapidashgalar: { from: 40, to: 34, why: 'Same line as Rapidash' },
+	muk: { from: 38, to: 34, why: '500 BST two-stage line' },
+	mukalola: { from: 38, to: 34, why: 'Same line as Muk' },
+	omastar: { from: 40, to: 34, why: '495 BST fossil' },
+	kabutops: { from: 40, to: 34, why: '495 BST fossil' },
+	cradily: { from: 40, to: 34, why: '495 BST fossil' },
+	armaldo: { from: 40, to: 34, why: '495 BST fossil' },
+	carracosta: { from: 37, to: 33, why: '495 BST fossil' },
+	archeops: { from: 37, to: 36, why: '567 BST: the strongest here keeps a late level' },
+	tyrantrum: { from: 39, to: 36, why: '521 BST fossil' },
+	aurorus: { from: 39, to: 36, why: '521 BST fossil' },
+	cursola: { from: 38, to: 34, why: '510 BST, but frail' },
+	claydol: { from: 36, to: 32, why: '500 BST two-stage line' },
+	toxicroak: { from: 37, to: 32, why: '490 BST two-stage line' },
+	abomasnow: { from: 40, to: 34, why: '494 BST two-stage line' },
+	amoonguss: { from: 39, to: 34, why: 'Strong in battle through its utility, not its 464 BST' },
+	galvantula: { from: 36, to: 32, why: '472 BST two-stage line' },
+	ferrothorn: { from: 40, to: 36, why: 'A defensive staple: the later end of the range' },
+	beartic: { from: 37, to: 32, why: '505 BST two-stage line' },
+	clawitzer: { from: 37, to: 32, why: '500 BST two-stage line' },
+	toxapex: { from: 38, to: 36, why: 'A defensive staple: the later end of the range' },
+	sandaconda: { from: 36, to: 32, why: '510 BST two-stage line' },
 
 	/*
 	 * The caps. No evolution into a final stage after level 50 - pseudo-
@@ -367,6 +396,30 @@ exports.MOVES = {
 		shortDesc: "Super effective on Steel. 10% chance to confuse. Never poisons.",
 		desc: "A corrosive mist. This move's type effectiveness against Steel is changed to be super effective no matter what this move's type is, and Steel-types are not immune to it. Has a 10% chance to confuse the target. It cannot poison.",
 	},
+	/*
+	 * Gleamstalk - Luxray's. It locks eyes with its prey through any wall, and
+	 * the prey freezes: the target is paralyzed (through a Substitute), Luxray's
+	 * Speed rises by 2 whether or not the paralysis takes, and its next Electric
+	 * move is charged to double power, as Charge does. It never misses. Dark-type,
+	 * so it paralyzes Ground types and, with Prankster, fails on Dark ones - but it
+	 * is still lightning: Volt Absorb, Lightning Rod, Motor Drive and the like take
+	 * it as they would an Electric move, and then Luxray gets nothing.
+	 */
+	gleamstalk: {
+		num: -28, gen: 9, name: "Gleamstalk", type: "Dark", category: "Status",
+		basePower: 0, accuracy: true, pp: 10, priority: 0,
+		flags: { protect: 1, reflectable: 1, mirror: 1, bypasssub: 1, metronome: 1, nosketch: 1 },
+		onHit(target, source, move) {
+			target.trySetStatus('par', source, move);
+			this.boost({ spe: 2 }, source, source, move);
+			source.addVolatile('charge');
+		},
+		secondary: null,
+		target: "normal", contestType: "Cool",
+		flavor: "Luxray's eyes find its prey through the wall, and the prey forgets how to run.",
+		shortDesc: "Paralyzes the target. User: +2 Speed, next Electric move 2x power.",
+		desc: "Never misses and hits through Substitute. Paralyzes the target, Ground types included; abilities that absorb Electric moves (Volt Absorb, Lightning Rod, Motor Drive and the like) absorb it instead, and then the user gains nothing. Whether or not the paralysis takes, the user's Speed rises by 2 stages and its next Electric-type attack has doubled power, as with Charge.",
+	},
 	continentalheave: {
 		num: -20, gen: 9, name: "Continental Heave", type: "Normal", category: "Physical",
 		basePower: 110, accuracy: 95, pp: 5, priority: 0,
@@ -566,6 +619,237 @@ exports.ABILITIES = {
 		shortDesc: "Not-very-effective hits deal double. Psychic moves hit Dark types.",
 		desc: "This Pokemon's attacks that are not very effective on a target deal double damage, and its Psychic-type moves can hit Dark-type Pokemon.",
 	},
+	/*
+	 * The eeveelutions' signatures. Glaceon and Leafeon bring their own weather
+	 * and double their Speed in it, a five-turn sweep that needs no teammate;
+	 * Flareon sets itself alight and runs on the burn.
+	 */
+	diamonddust: {
+		name: "Diamond Dust",
+		onStart(source) {
+			this.field.setWeather('snowscape');
+		},
+		onModifySpe(spe, pokemon) {
+			if (this.field.isWeather(['hail', 'snowscape'])) return this.chainModify(2);
+		},
+		flags: {},
+		rating: 4,
+		num: -14,
+		gen: 9,
+		flavor: "The air around Glaceon freezes into glittering motes, and it moves through them like light.",
+		shortDesc: "Sets snow on entry. Doubles Speed in snow.",
+		desc: "On switch-in, this Pokemon summons snow. Its Speed is doubled while it is snowing.",
+	},
+	solstice: {
+		name: "Solstice",
+		onStart(source) {
+			this.field.setWeather('sunnyday');
+		},
+		onModifySpe(spe, pokemon) {
+			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather())) return this.chainModify(2);
+		},
+		flags: {},
+		rating: 4,
+		num: -15,
+		gen: 9,
+		flavor: "Leafeon unfurls, and it is midsummer wherever it stands.",
+		shortDesc: "Sets harsh sunlight on entry. Doubles Speed in sun.",
+		desc: "On switch-in, this Pokemon summons harsh sunlight. Its Speed is doubled while the sunlight is harsh, unless it holds a Utility Umbrella.",
+	},
+	kindledfury: {
+		name: "Kindled Fury",
+		onStart(pokemon) {
+			// Fire types cannot be burned; this one does it to itself anyway.
+			if (!pokemon.status) pokemon.setStatus('brn', pokemon, this.effect, true);
+		},
+		onResidualOrder: 28,
+		onResidualSubOrder: 2,
+		onResidual(pokemon) {
+			if (pokemon.activeTurns) this.boost({ spe: 1 });
+		},
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, pokemon) {
+			if (pokemon.status) return this.chainModify(1.5);
+		},
+		// Guts: the burn does not halve its physical damage. The engine only skips
+		// the halving for Guts by name, so it is undone here (Facade is never halved).
+		onModifyDamage(damage, source, target, move) {
+			if (source.status === 'brn' && move.category === 'Physical' && move.id !== 'facade') return this.chainModify(2);
+		},
+		flags: {},
+		rating: 4.5,
+		num: -16,
+		gen: 9,
+		flavor: "Flareon sets its own mane alight, and the longer it burns the faster it runs.",
+		shortDesc: "Burns itself on entry. Speed Boost + Guts; its burn does not halve its Attack.",
+		desc: "On switch-in, this Pokemon burns itself if it has no status, even though it is a Fire type. Its Speed rises by 1 stage at the end of each full turn on the field, its Attack is multiplied by 1.5 while it has a status condition, and a burn does not halve its physical damage.",
+	},
+	/*
+	 * Moonlit Venom - Umbreon's. Its sweat turns poisonous under the moon: no
+	 * status condition takes hold (Purifying Salt's immunity, so Rest fails too),
+	 * and its poison reaches Steel and Poison types (Corrosion).
+	 */
+	moonlitvenom: {
+		name: "Moonlit Venom",
+		onSetStatus(status, target, source, effect) {
+			if (effect && effect.status) this.add('-immune', target, '[from] ability: Moonlit Venom');
+			return false;
+		},
+		onTryAddVolatile(status, target) {
+			if (status.id === 'yawn') {
+				this.add('-immune', target, '[from] ability: Moonlit Venom');
+				return null;
+			}
+		},
+		// Corrosion is checked by name inside the engine, so the poison is applied
+		// here instead, past the type immunity and through every other check.
+		onModifyMove(move) {
+			const corrode = effect => {
+				if (!effect || (effect.status !== 'psn' && effect.status !== 'tox')) return;
+				const status = effect.status;
+				delete effect.status;
+				effect.onHit = function (target, source, active) {
+					return target.setStatus(target.status || status, source, active, true);
+				};
+			};
+			corrode(move);
+			for (const secondary of move.secondaries || []) corrode(secondary);
+		},
+		flags: { breakable: 1 },
+		rating: 4,
+		num: -17,
+		gen: 9,
+		flavor: "Under the moon, Umbreon's sweat turns to venom that nothing can wash away, and nothing can touch.",
+		shortDesc: "Immune to status conditions. Can poison Steel and Poison types.",
+		desc: "This Pokemon cannot be poisoned, burned, paralyzed, put to sleep or frozen, and cannot become drowsy; Rest fails. Its moves can poison Steel-type and Poison-type Pokemon.",
+	},
+	/*
+	 * Prescience - Espeon's. It sees the harm coming: only attacks damage it
+	 * (Magic Guard), and status moves and hazards aimed at it bounce back
+	 * (Magic Bounce).
+	 */
+	prescience: {
+		name: "Prescience",
+		onDamage(damage, target, source, effect) {
+			if (effect.effectType !== 'Move') {
+				if (effect.effectType === 'Ability') this.add('-activate', source, 'ability: ' + effect.name);
+				return false;
+			}
+		},
+		onTryHitPriority: 1,
+		onTryHit(target, source, move) {
+			if (target === source || move.hasBounced || !move.flags['reflectable'] || target.isSemiInvulnerable()) return;
+			const newMove = this.dex.getActiveMove(move.id);
+			newMove.hasBounced = true;
+			newMove.pranksterBoosted = false;
+			this.actions.useMove(newMove, target, { target: source });
+			return null;
+		},
+		onAllyTryHitSide(target, source, move) {
+			if (target.isAlly(source) || move.hasBounced || !move.flags['reflectable'] || target.isSemiInvulnerable()) return;
+			const newMove = this.dex.getActiveMove(move.id);
+			newMove.hasBounced = true;
+			newMove.pranksterBoosted = false;
+			this.actions.useMove(newMove, this.effectState.target, { target: source });
+			move.hasBounced = true;
+			return null;
+		},
+		flags: { breakable: 1 },
+		rating: 5,
+		num: -18,
+		gen: 9,
+		flavor: "The jewel on Espeon's brow glows before any harm arrives, and the harm turns around.",
+		shortDesc: "Magic Guard + Magic Bounce.",
+		desc: "This Pokemon can only be damaged by direct attacks, and it reflects back status moves and hazards aimed at it or its side, as Magic Bounce does.",
+	},
+	/*
+	 * Liquid Body - Vaporeon's. It melts into water: Water moves heal it instead
+	 * (Water Absorb), and it recovers a third of its HP on switching out
+	 * (Regenerator).
+	 */
+	liquidbody: {
+		name: "Liquid Body",
+		onTryHit(target, source, move) {
+			if (target !== source && move.type === 'Water') {
+				if (!this.heal(target.baseMaxhp / 4)) this.add('-immune', target, '[from] ability: Liquid Body');
+				return null;
+			}
+		},
+		onSwitchOut(pokemon) {
+			pokemon.heal(pokemon.baseMaxhp / 3);
+		},
+		flags: { breakable: 1 },
+		rating: 4.5,
+		num: -19,
+		gen: 9,
+		flavor: "Vaporeon dissolves into the water around it and comes back whole.",
+		shortDesc: "Water Absorb + Regenerator.",
+		desc: "This Pokemon is immune to Water-type moves and heals 1/4 of its maximum HP when hit by one. It restores 1/3 of its maximum HP when it switches out.",
+	},
+	/*
+	 * Static Needles - Jolteon's. Its fur bristles into charged needles:
+	 * Electric moves heal it and raise its Speed (Volt Absorb and Motor Drive),
+	 * and touching it can paralyze (Static).
+	 */
+	staticneedles: {
+		name: "Static Needles",
+		onTryHit(target, source, move) {
+			if (target !== source && move.type === 'Electric') {
+				const healed = this.heal(target.baseMaxhp / 4);
+				const boosted = this.boost({ spe: 1 });
+				if (!healed && !boosted) this.add('-immune', target, '[from] ability: Static Needles');
+				return null;
+			}
+		},
+		onDamagingHit(damage, target, source, move) {
+			if (this.checkMoveMakesContact(move, source, target) && this.randomChance(3, 10)) {
+				source.trySetStatus('par', target);
+			}
+		},
+		flags: { breakable: 1 },
+		rating: 3.5,
+		num: -20,
+		gen: 9,
+		flavor: "Every hair on Jolteon stands up as a needle full of lightning.",
+		shortDesc: "Electric immunity: heals 1/4 and +1 Speed. 30% to paralyze on contact.",
+		desc: "This Pokemon is immune to Electric-type moves; when hit by one it heals 1/4 of its maximum HP and its Speed rises by 1 stage. Pokemon making contact with it have a 30% chance to be paralyzed.",
+	},
+	/*
+	 * Ribbon Hymn - Sylveon's. Its Normal moves become Fairy with a 1.2x boost
+	 * (Pixilate), and its ribbons hush sound moves aimed at it (Soundproof).
+	 */
+	ribbonhymn: {
+		name: "Ribbon Hymn",
+		onModifyTypePriority: -1,
+		onModifyType(move, pokemon) {
+			const noModifyType = ['judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'terrainpulse', 'weatherball'];
+			if (move.type === 'Normal' && (!noModifyType.includes(move.id) || (this.activeMove && this.activeMove.isMax)) &&
+				!(move.isZ && move.category !== 'Status') && !(move.name === 'Tera Blast' && pokemon.terastallized)) {
+				move.type = 'Fairy';
+				move.typeChangerBoosted = this.effect;
+			}
+		},
+		onBasePowerPriority: 23,
+		onBasePower(basePower, pokemon, target, move) {
+			if (move.typeChangerBoosted === this.effect) return this.chainModify([4915, 4096]);
+		},
+		onTryHit(target, source, move) {
+			if (target !== source && move.flags['sound']) {
+				this.add('-immune', target, '[from] ability: Ribbon Hymn');
+				return null;
+			}
+		},
+		onAllyTryHitSide(target, source, move) {
+			if (move.flags['sound']) this.add('-immune', this.effectState.target, '[from] ability: Ribbon Hymn');
+		},
+		flags: { breakable: 1 },
+		rating: 4,
+		num: -21,
+		gen: 9,
+		flavor: "Sylveon's ribbons sing a quiet hymn that turns every sound it makes to a Fairy's, and hushes any aimed at it.",
+		shortDesc: "Pixilate + Soundproof.",
+		desc: "This Pokemon's Normal-type moves become Fairy type and have 1.2x power. It is immune to sound-based moves.",
+	},
 	colossusunbound: {
 		name: "Colossus Unbound",
 		onStart(pokemon) {
@@ -699,6 +983,36 @@ const ABILITY_GRANTS = {
 	banette: 'Prankster',
 	seviper: 'Intimidate',
 	stonjourner: 'Sturdy',
+};
+
+/*
+ * Three eeveelutions with a stat worth building around and no way to use it:
+ * each gets a signature ability and a little coverage. Eevee is left alone -
+ * it is every eeveelution's pre-evolution, so whatever it gets, all eight get.
+ */
+/*
+ * Luxray: Knock Off and Sucker Punch for the Dark STAB it now has (Crunch and
+ * Throat Chop it already knew), and for Prankster the moves of a hunter that
+ * pins its prey - Taunt, Parting Shot, Encore, Yawn, Swagger, Swords Dance. Volt Switch,
+ * Thunder Wave, Snarl, Fake Tears, Protect and Substitute it already had.
+ */
+const LUXRAY = { ability: 'Prankster', moves: ['gleamstalk', 'knockoff', 'suckerpunch', 'taunt', 'partingshot', 'encore', 'yawn', 'swagger', 'swordsdance'] };
+
+const EEVEELUTIONS = {
+	// Solar Blade (native) fires in one turn in its own sun. Rock for the Fire,
+	// Flying and Bug types that wall Grass; Ground for Steel and Poison.
+	leafeon: { ability: 'Solstice', moves: ['stoneedge', 'earthquake'] },
+	// Facade (native) is the burn's other half. Ground for the Fire and Rock
+	// types, Fighting and Dark for the rest.
+	flareon: { ability: 'Kindled Fury', moves: ['highhorsepower', 'closecombat', 'knockoff'] },
+	// Ground for the Steel and Fire types that wall Ice; Psyshock for Fighting.
+	glaceon: { ability: 'Diamond Dust', moves: ['earthpower', 'psyshock'] },
+	// The other five: a signature each, two existing abilities fused on theme.
+	umbreon: { ability: 'Moonlit Venom', moves: [] },
+	espeon: { ability: 'Prescience', moves: [] },
+	vaporeon: { ability: 'Liquid Body', moves: [] },
+	jolteon: { ability: 'Static Needles', moves: [] },
+	sylveon: { ability: 'Ribbon Hymn', moves: [] },
 };
 
 /*
@@ -1170,7 +1484,7 @@ exports.buildBuffs = (Pokedex) => {
 	}
 
 	// Pre-evolutions: the new move (not the coverage) and the ability.
-	const SIGNATURES = ['continentalheave', 'aurorasquall', 'memorywipe', 'soulresonance', 'resolutestrike'];
+	const SIGNATURES = ['continentalheave', 'aurorasquall', 'memorywipe', 'soulresonance', 'resolutestrike', 'gleamstalk'];
 	const newMove = m => exports.MOVES[m] && !SIGNATURES.includes(m);
 	for (const id of Object.keys(out)) {
 		let species = Pokedex[id];
@@ -1183,6 +1497,13 @@ exports.buildBuffs = (Pokedex) => {
 			species = Pokedex[pre];
 		}
 	}
+
+	// Luxray, now Electric/Dark (see unnerfs.js): Dark attacks for the new STAB and
+	// Prankster with the stalker's support moves. Luxray only, not Shinx or Luxio.
+	if (Pokedex.luxray) add('luxray', LUXRAY.moves, [LUXRAY.ability]);
+
+	// The eeveelutions, after the pre-evolution pass so Eevee does not inherit them.
+	for (const [id, e] of Object.entries(EEVEELUTIONS)) if (Pokedex[id]) add(id, e.moves, [e.ability]);
 
 	// Mew learns every machine move there is, and these are handed out like machines.
 	add('mew', Object.keys(exports.MOVES).filter(newMove), []);
@@ -1205,3 +1526,24 @@ exports.NEWER_MOVES = NEWER_MOVES;
 exports.GRASS_COVERAGE = GRASS_COVERAGE;
 exports.SMALL = SMALL;
 exports.ABILITY_GRANTS = ABILITY_GRANTS;
+exports.EEVEELUTIONS = EEVEELUTIONS;
+
+/**
+ * Gleamstalk is Dark-type lightning: every ability that absorbs Electric moves
+ * absorbs it too. Found by what the ability checks rather than by a list, so
+ * Mudflat Ambush, Static Needles and anything added later come along; each is
+ * shown the move as Electric and does exactly what it does to one.
+ */
+exports.patchAbsorbers = Abilities => {
+	for (const ability of Object.values(Abilities)) {
+		const original = ability && ability.onTryHit;
+		if (typeof original !== 'function' || original.velvetGleamstalk || !/Electric/.test(String(original))) continue;
+		ability.onTryHit = function (target, source, move) {
+			if (move && move.id === 'gleamstalk') move = Object.create(move, { type: { value: 'Electric' } });
+			return original.call(this, target, source, move);
+		};
+		ability.onTryHit.velvetGleamstalk = true;
+	}
+	return Abilities;
+};
+exports.LUXRAY = LUXRAY;

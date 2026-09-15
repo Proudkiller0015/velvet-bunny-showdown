@@ -990,6 +990,29 @@
 			}
 		}
 
+		/*
+		 * Partner Pikachu and Eevee, listed under their tier: the SV tier in the
+		 * ninth-generation tables, RU in National Dex (which stops there). Neither
+		 * is in any list the CDN ships, so each goes in once and is left alone.
+		 */
+		if (buffs && buffs.partners) {
+			for (var pid in buffs.partners) {
+				var partner = buffs.partners[pid];
+				for (var pt = 0; pt < targets.length; pt++) {
+					var list = targets[pt];
+					if (natdexTargets.indexOf(list) >= 0) continue;
+					if (list.overrideTier) list.overrideTier[pid] = partner.tier;
+					if (list.tiers && list.formatSlices && list.tiers.indexOf(pid) < 0) placeSpecies(list, pid, partner.tier);
+				}
+				for (var pn = 0; pn < natdexTargets.length; pn++) {
+					var ndList = natdexTargets[pn];
+					if (!ndList.overrideTier) ndList.overrideTier = {};
+					ndList.overrideTier[pid] = partner.natDexTier;
+					if (ndList.tiers && ndList.formatSlices && ndList.tiers.indexOf(pid) < 0) placeSpecies(ndList, pid, partner.natDexTier);
+				}
+			}
+		}
+
 		installLearnset(table);
 		if (!landed) return false;
 		return true;
@@ -1154,6 +1177,16 @@
 			 * The tooltip recalculates stats from its own list of abilities by
 			 * name, so without this the number shown ignores the ability.
 			 */
+			/*
+			 * The eeveelutions' abilities. Kindled Fury is Guts (1.5x Attack while
+			 * statused); Diamond Dust and Solstice double Speed in their weather.
+			 */
+			var status = (clientPokemon && clientPokemon.status) || (serverPokemon && serverPokemon.status) || '';
+			if (ability === 'kindledfury' && status && status !== 'fnt') stats.atk = Math.floor(stats.atk * 1.5);
+			var weather = window.toID((this.battle && this.battle.weather) || '');
+			if (ability === 'diamonddust' && (weather === 'snowscape' || weather === 'hail')) stats.spe *= 2;
+			if (ability === 'solstice' && (weather === 'sunnyday' || weather === 'desolateland') && item !== 'utilityumbrella') stats.spe *= 2;
+
 			if (ability === 'colossusunbound') {
 				var hp = clientPokemon ? clientPokemon.hp : serverPokemon && serverPokemon.hp;
 				var maxhp = clientPokemon ? clientPokemon.maxhp : serverPokemon && serverPokemon.maxhp;
@@ -1306,6 +1339,17 @@
 				if (entry && slots) entry.abilities = slots;
 			}
 		} else ready = false;
+
+		// Partner Pikachu and Eevee: their learnset row is replaced, not merged -
+		// the one the CDN ships is the Let's Go movepool with the partner moves.
+		if (table && table.learnsets && buffs.partners) {
+			for (var partnerId in buffs.partners) {
+				var row2 = {};
+				var list2 = buffs.partners[partnerId].moves;
+				for (var pm = 0; pm < list2.length; pm++) row2[list2[pm]] = '9a';
+				table.learnsets[partnerId] = row2;
+			}
+		}
 
 		// The movepool. Merged into what is already there, never replacing it:
 		// this table is the only copy of the Pokemon's real learnset the builder
@@ -1530,6 +1574,21 @@
 		if (tips.__velvetBasePower) return true;
 		tips.__velvetBasePower = true;
 
+		// Ribbon Hymn turns Normal moves Fairy, the way the tooltip already shows Pixilate.
+		var originalType = tips.prototype.getMoveType;
+		if (originalType) {
+			tips.prototype.getMoveType = function (move, value) {
+				var out = originalType.apply(this, arguments);
+				try {
+					var mon = value && (value.pokemon || value.serverPokemon);
+					var ab = window.toID((value && value.pokemon && value.pokemon.ability) || (value && value.serverPokemon && value.serverPokemon.ability) || '');
+					var fixed = { judgment: 1, multiattack: 1, naturalgift: 1, revelationdance: 1, technoblast: 1, terrainpulse: 1, weatherball: 1 };
+					if (mon && ab === 'ribbonhymn' && out && out[0] === 'Normal' && move && move.type === 'Normal' && !fixed[move.id]) out[0] = 'Fairy';
+				} catch (e) {}
+				return out;
+			};
+		}
+
 		var original = tips.prototype.getMoveBasePower;
 		tips.prototype.getMoveBasePower = function (move, moveType, value, target) {
 			var out = original.apply(this, arguments);
@@ -1544,6 +1603,10 @@
 				var grounded = !pokemon || !pokemon.isGrounded || pokemon.isGrounded(serverPokemon);
 				if (ability === 'verdantsurge' && moveType === 'Grass' && grassy && grounded && out && out.modify) {
 					out.modify(4726 / 4096, 'Verdant Surge');
+				}
+				// Ribbon Hymn (Sylveon) is Pixilate: 1.2x on the Normal moves it turns Fairy.
+				if (ability === 'ribbonhymn' && move && move.type === 'Normal' && moveType === 'Fairy' && out && out.modify) {
+					out.modify(4915 / 4096, 'Ribbon Hymn');
 				}
 				// Solar Nectar: 135 power in harsh sunlight (Balance Patch 1).
 				var moveId = move && (move.id || window.toID(move.name || ''));
@@ -1759,6 +1822,15 @@
 				var base = anims[MOVE_ANIMS[id][i]];
 				if (base && base.anim) { anims[id] = { anim: base.anim, velvetFrom: MOVE_ANIMS[id][i] }; break; }
 			}
+		}
+		if (!anims.gleamstalk && anims.glare) {
+			anims.gleamstalk = {
+				velvetFrom: 'glare+charge',
+				anim: function (scene, sprites) {
+					anims.glare.anim(scene, sprites);
+					if (anims.charge && anims.charge.anim) anims.charge.anim(scene, sprites);
+				},
+			};
 		}
 		if (!anims.continentalheave && anims.gigaimpact) {
 			anims.continentalheave = {

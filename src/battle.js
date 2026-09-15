@@ -223,6 +223,15 @@ class BattleState {
 			if (mon && lm && lm.side === this.myPlayer && lm.name) mon.immuneTo.add(lm.name);
 			break;
 		}
+		case '-start': case '-end': {
+			// Charge (the move, or Luxray's Gleamstalk): the next Electric move is doubled.
+			if (!/charge/i.test(String(args[1] || ''))) break;
+			const id = this.slotOf(args[0]);
+			if (!id) break;
+			const store = id.side === this.myPlayer ? this.mine : this.opponent;
+			if (store[id.slot]) store[id.slot].charged = cmd === '-start';
+			break;
+		}
 		case '-weather': this.weather = args[0] === 'none' ? '' : args[0]; break;
 		case '-fieldstart': {
 			const name = (args[0] || '').replace('move: ', '');

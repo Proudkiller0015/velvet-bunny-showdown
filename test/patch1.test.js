@@ -344,5 +344,208 @@ check(!learns('mew', 'continentalheave') && learns('regigigas', 'continentalheav
 check(Dex.moves.get('continentalheave').flags.nosketch, 'and cannot be Sketched');
 check(!Dex.moves.get('undertow').flags.nosketch, 'the other ten can be Sketched');
 
+// The eeveelutions.
+{
+	// Kindled Fury: burns itself on entry despite being Fire, Guts, no halving, Speed Boost.
+	const b = battle(
+		[{ species: 'Flareon', ability: 'Kindled Fury', moves: ['flareblitz', 'facade', 'protect'] }],
+		[{ species: 'Blissey', ability: 'Natural Cure', moves: ['splash'] }],
+	);
+	const flareon = b.p1.active[0];
+	check(flareon.status === 'brn', 'Kindled Fury: Flareon burns itself on entry, Fire type or not');
+	const plain = battle(
+		[{ species: 'Flareon', ability: 'Flash Fire', moves: ['flareblitz'] }],
+		[{ species: 'Blissey', ability: 'Natural Cure', moves: ['splash'] }],
+	);
+	const atkWild = flareon.getStat('atk'), atkPlain = plain.p1.active[0].getStat('atk');
+	check(Math.abs(atkWild / atkPlain - 1.5) < 0.01, `and has 1.5x Attack while burned (${atkPlain} -> ${atkWild})`);
+	b.makeChoices('move 3', 'move 1');
+	check(flareon.boosts.spe === 1, 'and +1 Speed at the end of the turn');
+	check(flareon.hp < flareon.maxhp, 'and still takes burn damage');
+	// Damage: Kindled Fury's burned Flare Blitz is 1.5x an unburned Flash Fire one, not 0.75x.
+	const hit = (ability) => {
+		const x = battle(
+			[{ species: 'Flareon', ability, moves: ['bodyslam'] }],
+			[{ species: 'Blissey', ability: 'Natural Cure', moves: ['splash'], evs: {} }],
+			[5, 5, 5, 5],
+		);
+		const before = x.p2.active[0].hp;
+		x.makeChoices('move 1', 'move 1');
+		return before - x.p2.active[0].hp;
+	};
+	const wild = hit('Kindled Fury'), flash = hit('Flash Fire');
+	check(wild / flash > 1.35 && wild / flash < 1.65, `burn does not halve it: Body Slam ${flash} -> ${wild}`);
+}
+{
+	const b = battle(
+		[{ species: 'Glaceon', ability: 'Diamond Dust', moves: ['blizzard'] }],
+		[{ species: 'Blissey', ability: 'Natural Cure', moves: ['splash'] }],
+	);
+	check(b.field.isWeather('snowscape'), 'Diamond Dust sets snow');
+	const g = b.p1.active[0];
+	const fast = g.getActionSpeed();
+	b.field.clearWeather();
+	check(fast === g.getActionSpeed() * 2, `and doubles Glaceon's Speed in it (${g.getActionSpeed()} -> ${fast})`);
+}
+{
+	const b = battle(
+		[{ species: 'Leafeon', ability: 'Solstice', moves: ['solarblade'] }],
+		[{ species: 'Blissey', ability: 'Natural Cure', moves: ['splash'] }],
+	);
+	check(b.field.isWeather('sunnyday'), 'Solstice sets harsh sunlight');
+	const l = b.p1.active[0];
+	const fast = l.getActionSpeed();
+	const before = b.p2.active[0].hp;
+	b.makeChoices('move 1', 'move 1');
+	check(b.p2.active[0].hp < before, 'and Solar Blade fires the same turn');
+	b.field.clearWeather();
+	check(fast === l.getActionSpeed() * 2, `and doubles Leafeon's Speed in sun (${l.getActionSpeed()} -> ${fast})`);
+}
+check(learns('glaceon', 'earthpower') && learns('flareon', 'closecombat') && learns('leafeon', 'stoneedge') && learns('leafeon', 'solarblade') && learns('flareon', 'facade'), 'Eeveelution coverage: Glaceon Earth Power, Flareon Close Combat, Leafeon Stone Edge');
+check(!learns('eevee', 'closecombat') && !Object.values(Dex.species.get('eevee').abilities).includes('Kindled Fury'), 'Eevee is not given any of it');
+check(['Leafeon:Solstice', 'Flareon:Kindled Fury', 'Glaceon:Diamond Dust'].every(x => Object.values(Dex.species.get(x.split(':')[0]).abilities).includes(x.split(':')[1])), 'each keeps its old abilities and gains its signature');
+check(['leafeon', 'glaceon', 'flareon', 'espeon', 'umbreon', 'vaporeon'].every(id => Dex.species.get(id).natDexTier === 'UU') && Dex.species.get('luxray').natDexTier === 'OU' && Dex.species.get('urshifu').natDexTier === 'Uber' && Dex.species.get('urshifurapidstrike').natDexTier === 'Uber', 'Tier review: six eeveelutions UU, Luxray OU, both Urshifu Uber');
+
+// Umbreon: Moonlit Venom.
+{
+	const b = battle(
+		[{ species: 'Umbreon', ability: 'Moonlit Venom', moves: ['toxic', 'rest'] }],
+		[{ species: 'Skarmory', ability: 'Sturdy', moves: ['toxic', 'splash'] }],
+	);
+	b.makeChoices('move 1', 'move 1');
+	check(!b.p1.active[0].status, 'Moonlit Venom: Umbreon cannot be badly poisoned');
+	check(b.p2.active[0].status === 'tox', 'and its Toxic poisons a Steel type');
+	b.p1.active[0].hp = 50;
+	b.makeChoices('move 2', 'move 2');
+	check(b.p1.active[0].hp === 50 && !b.p1.active[0].status, 'and Rest fails, as with Purifying Salt');
+}
+// Espeon: Prescience.
+{
+	const b = battle(
+		[{ species: 'Espeon', ability: 'Prescience', item: 'Life Orb', moves: ['psychic'] }],
+		[{ species: 'Blissey', ability: 'Natural Cure', moves: ['stealthrock', 'toxic'] }],
+	);
+	b.makeChoices('move 1', 'move 1');
+	const espeon = b.p1.active[0];
+	check(espeon.hp === espeon.maxhp, 'Prescience: no Life Orb recoil');
+	check(!b.p1.sideConditions.stealthrock && !!b.p2.sideConditions.stealthrock, 'and Stealth Rock bounces back');
+	b.makeChoices('move 1', 'move 2');
+	check(!espeon.status && b.p2.active[0].status === 'tox', 'and so does Toxic');
+}
+// Vaporeon: Liquid Body.
+{
+	const b = battle(
+		[{ species: 'Vaporeon', ability: 'Liquid Body', moves: ['splash'] }, { species: 'Blissey', ability: 'Natural Cure', moves: ['splash'] }],
+		[{ species: 'Starmie', ability: 'Natural Cure', moves: ['surf', 'psychic'] }],
+	);
+	b.p1.active[0].hp = 100;
+	b.makeChoices('move 1', 'move 1');
+	check(b.p1.active[0].hp > 100, 'Liquid Body: Water moves heal Vaporeon');
+	b.makeChoices('switch 2', 'move 2');
+	const vap = b.p1.pokemon.find(m => m.species.name === 'Vaporeon');
+	check(vap.hp >= Math.min(vap.maxhp, 100 + Math.floor(vap.maxhp / 4) + Math.floor(vap.maxhp / 3) - 1), 'and it regenerates a third on switching out');
+}
+// Jolteon: Static Needles.
+{
+	const b = battle(
+		[{ species: 'Jolteon', ability: 'Static Needles', moves: ['splash'] }],
+		[{ species: 'Raichu', ability: 'Static', moves: ['thunderbolt'] }],
+	);
+	b.makeChoices('move 1', 'move 1');
+	check(b.p1.active[0].hp === b.p1.active[0].maxhp && b.p1.active[0].boosts.spe === 1, 'Static Needles: Electric moves do nothing but raise Speed');
+}
+// Sylveon: Ribbon Hymn.
+{
+	const b = battle(
+		[{ species: 'Sylveon', ability: 'Ribbon Hymn', moves: ['hypervoice'] }],
+		[{ species: 'Exploud', ability: 'Scrappy', moves: ['boomburst'] }],
+	);
+	b.makeChoices('move 1', 'move 1');
+	check(/\|-immune\|p1a: Sylveon\|\[from\] ability: Ribbon Hymn/.test(log(b)), 'Ribbon Hymn: sound moves do not touch Sylveon');
+	check(/\|move\|p1a: Sylveon\|Hyper Voice/.test(log(b)) && Dex.abilities.get('ribbonhymn').onModifyType, 'and its Hyper Voice is a Fairy move');
+}
+{
+	const move = Dex.getActiveMove('hypervoice');
+	const b = battle([{ species: 'Sylveon', ability: 'Ribbon Hymn', moves: ['hypervoice'] }], [{ species: 'Blissey', ability: 'Natural Cure', moves: ['splash'] }]);
+	b.singleEvent('ModifyType', Dex.abilities.get('ribbonhymn'), {}, b.p1.active[0], b.p2.active[0], move, move);
+	check(move.type === 'Fairy', 'Ribbon Hymn makes Normal moves Fairy');
+}
+
+// Luxray: Electric/Dark, Prankster, a hunter's movepool.
+check(Dex.species.get('luxray').types.join('/') === 'Electric/Dark' && Dex.species.get('luxio').types.join('/') === 'Electric', 'Luxray is Electric/Dark; Luxio stays Electric');
+check(Object.values(Dex.species.get('luxray').abilities).includes('Prankster') && Object.values(Dex.species.get('luxray').abilities).includes('Intimidate'), 'Luxray has Prankster beside Intimidate');
+check(['voltswitch', 'partingshot', 'encore', 'swagger', 'taunt', 'knockoff', 'suckerpunch', 'thunderwave'].every(m => learns('luxray', m)), 'Luxray learns Volt Switch, Parting Shot, Encore, Swagger, Taunt, Knock Off, Sucker Punch, Thunder Wave');
+{
+	const b = battle(
+		[{ species: 'Luxray', ability: 'Prankster', moves: ['thunderwave'] }],
+		[{ species: 'Alakazam', ability: 'Inner Focus', moves: ['psychic'] }],
+	);
+	b.makeChoices('move 1', 'move 1');
+	const order = log(b).split('\n').filter(l => /^\|move\|/.test(l));
+	check(/Luxray/.test(order[0]), 'Prankster Thunder Wave goes before a faster Alakazam');
+}
+{
+	const b = battle(
+		[{ species: 'Luxray', ability: 'Intimidate', moves: ['splash'] }],
+		[{ species: 'Alakazam', ability: 'Inner Focus', moves: ['psychic'] }],
+	);
+	b.makeChoices('move 1', 'move 1');
+	check(b.p1.active[0].hp === b.p1.active[0].maxhp && /\|-immune\|p1a: Luxray/.test(log(b)), 'and Psychic does nothing to Luxray');
+}
+
+// Partner Pikachu and Eevee.
+{
+	const pika = Dex.species.get('pikachustarter'), eevee = Dex.species.get('eeveestarter');
+	check(!pika.isNonstandard && !eevee.isNonstandard && pika.baseStats.spe === 120 && eevee.baseStats.spd === 85, 'Partner Pikachu and Eevee exist with their partner stats');
+	check(learns('pikachustarter', 'thunderbolt') && learns('pikachustarter', 'voltaiclance') && !learns('pikachustarter', 'zippyzap') && !learns('eeveestarter', 'veeveevolley'), 'with the base line\'s movepool, patch moves included, and no partner moves');
+	const { TeamValidator } = require('pokemon-showdown');
+	const set = { species: 'Pikachu-Starter', ability: 'Static', item: 'Light Ball', moves: ['thunderbolt', 'voltswitch'], level: 100, evs: { hp: 4 }, ivs: {}, nature: 'Hardy' };
+	check(!new TeamValidator('gen9rppu').validateTeam([set]), 'Partner Pikachu is legal in RP PU');
+	check(!!new TeamValidator('gen9ou').validateTeam([set]), 'and still refused in plain Gen 9 OU');
+}
+
+// Gleamstalk, Luxray's.
+{
+	const b = battle(
+		[{ species: 'Luxray', ability: 'Intimidate', moves: ['gleamstalk', 'thunderbolt', 'splash'] }],
+		[{ species: 'Blissey', ability: 'Natural Cure', moves: ['substitute', 'splash'] }],
+	);
+	b.makeChoices('move 3', 'move 1');
+	const foe = b.p2.active[0], lux = b.p1.active[0];
+	check(!!foe.volatiles.substitute, 'Gleamstalk setup: Blissey behind a Substitute');
+	b.makeChoices('move 1', 'move 2');
+	check(foe.status === 'par', 'Gleamstalk paralyzes through a Substitute');
+	check(lux.boosts.spe === 2 && !!lux.volatiles.charge, 'and Luxray gets +2 Speed and a Charge');
+	const move = Dex.getActiveMove('thunderbolt');
+	check(b.runEvent('BasePower', lux, foe, move, 90, true) === 180, 'so its next Electric move is doubled');
+	b.makeChoices('move 1', 'move 2');
+	check(lux.boosts.spe === 4, 'and its Speed still rises when the target is already paralyzed');
+}
+{
+	const b = battle(
+		[{ species: 'Luxray', ability: 'Intimidate', moves: ['gleamstalk'] }],
+		[{ species: 'Garchomp', ability: 'Rough Skin', moves: ['doubleteam'] }],
+	);
+	b.p2.active[0].boosts.evasion = 6;
+	b.makeChoices('move 1', 'move 1');
+	check(b.p2.active[0].status === 'par', 'Gleamstalk paralyzes a Ground type at +6 evasion');
+}
+for (const [species, ability, effect] of [
+	['Lanturn', 'Volt Absorb', m => m.hp > 100],
+	['Raichu', 'Lightning Rod', m => m.boosts.spa === 1],
+	['Electivire', 'Motor Drive', m => m.boosts.spe === 1],
+	['Stunfisk', 'Mudflat Ambush', m => m.hp > 100],
+]) {
+	const b = battle(
+		[{ species: 'Luxray', ability: 'Intimidate', moves: ['gleamstalk'] }],
+		[{ species, ability, moves: ['splash'] }],
+	);
+	b.p2.active[0].hp = 100;
+	b.makeChoices('move 1', 'move 1');
+	const foe = b.p2.active[0], lux = b.p1.active[0];
+	check(!foe.status && effect(foe) && !lux.boosts.spe && !lux.volatiles.charge, `${ability} absorbs Gleamstalk (and Luxray gains nothing)`);
+}
+check(learns('luxray', 'gleamstalk') && !learns('luxio', 'gleamstalk') && !learns('mew', 'gleamstalk') && Dex.moves.get('gleamstalk').flags.nosketch, "Gleamstalk is Luxray's alone");
+
 console.log(failed ? `\n${failed} failed` : '\nall passed');
 process.exit(failed ? 1 : 0);

@@ -86,6 +86,14 @@ for (const id of SPECIES) {
 	species[found.name] = speciesRow(found);
 }
 
+// Species this server changed (types, stats): written over the calculator's own rows.
+const { CHANGED } = require(path.join(PACKAGE, 'dist', 'data', 'velvet', 'unnerfs.js'));
+const changedSpecies = {};
+for (const id of CHANGED.species || []) {
+	const found = Dex.species.get(id);
+	if (found.exists) changedSpecies[found.name] = speciesRow(found);
+}
+
 const moves = {};
 for (const id of MOVES) {
 	const found = Dex.moves.get(id);
@@ -117,6 +125,7 @@ const file = `/**
  */
 window.__VELVET_CALC_DATA = {
 \tspecies: ${JSON.stringify(species)},
+\tchangedSpecies: ${JSON.stringify(changedSpecies)},
 \tmoves: ${JSON.stringify(moves)},
 \tabilities: ${JSON.stringify(abilities)},
 \titems: ${JSON.stringify(items)},

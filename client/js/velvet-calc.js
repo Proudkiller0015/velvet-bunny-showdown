@@ -67,6 +67,12 @@
 
 		var species = window.calc.SPECIES[GEN];
 		for (var name in DATA.species) if (!species[name]) species[name] = DATA.species[name];
+		// Real Pokemon whose sheet this server changed: Luxray's Dark type, Cresselia's defences.
+		for (var changed in (DATA.changedSpecies || {})) {
+			if (!species[changed]) continue;
+			species[changed].types = DATA.changedSpecies[changed].types;
+			species[changed].bs = DATA.changedSpecies[changed].bs;
+		}
 
 		var moves = window.calc.MOVES[GEN];
 		for (var move in DATA.moves) if (!moves[move]) moves[move] = DATA.moves[move];
@@ -443,6 +449,15 @@
 				them.types = rest.length ? rest : ['Normal'];
 			}
 			if (String(us.ability || '') === 'Unbending Will') us.ability = 'Tinted Lens';
+
+			// The eeveelutions' abilities, as the vanilla ones the calculator knows:
+			// Kindled Fury is Guts (its burn does not halve it), the weather ones double Speed.
+			var asVanilla = {
+				'Kindled Fury': 'Guts', 'Diamond Dust': 'Slush Rush', 'Solstice': 'Chlorophyll',
+				'Prescience': 'Magic Guard', 'Liquid Body': 'Water Absorb', 'Static Needles': 'Volt Absorb', 'Ribbon Hymn': 'Pixilate',
+			};
+			if (asVanilla[String(us.ability || '')]) us.ability = asVanilla[String(us.ability)];
+			if (asVanilla[String(them.ability || '')]) them.ability = asVanilla[String(them.ability)];
 
 			// Oxidize is super effective on Steel (Poison's Freeze-Dry). The chart says
 			// Steel is immune, so Steel is read as Grass - also 2x from Poison - for it.

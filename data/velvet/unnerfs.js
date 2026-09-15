@@ -159,8 +159,20 @@ const SPECIES_STATS = {
 	cresselia: { def: 120, spd: 130 },
 };
 
+/*
+ * Types this server changed. Luxray (Balance Patch 1): the Gleam Eyes Pokemon
+ * that hunts by seeing through walls becomes Electric/Dark. Shinx and Luxio stay
+ * pure Electric - the Dark comes with the full-grown hunter.
+ */
+const SPECIES_TYPES = {
+	luxray: ['Electric', 'Dark'],
+};
+
 function unnerfSpecies(Pokedex) {
 	if (!Pokedex) return Pokedex;
+	for (const [id, types] of Object.entries(SPECIES_TYPES)) {
+		if (Pokedex[id]) Pokedex[id].types = types.slice();
+	}
 	for (const [id, stats] of Object.entries(SPECIES_STATS)) {
 		if (Pokedex[id] && Pokedex[id].baseStats) Object.assign(Pokedex[id].baseStats, stats);
 	}
@@ -170,7 +182,7 @@ function unnerfSpecies(Pokedex) {
 exports.CHANGED = {
 	moves: ['darkvoid', ...Object.keys(RECOVERY_PP)],
 	abilities: ['protean', 'libero', 'battlebond'],
-	species: Object.keys(SPECIES_STATS),
+	species: [...new Set([...Object.keys(SPECIES_STATS), ...Object.keys(SPECIES_TYPES)])],
 };
 exports.unnerfSpecies = unnerfSpecies;
 

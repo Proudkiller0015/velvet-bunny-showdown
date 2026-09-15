@@ -149,6 +149,38 @@ function toName(id, kind) {
 
 /** Abilities of ours that let Psychic moves hit Dark types (the lake trio, Balance Patch 1). */
 const LAKE_ABILITIES = new Set(['Mind Keeper', 'Heartfelt Resolve', 'Unbending Will']);
+// Balance Patch 1's eeveelution abilities, as the vanilla ability the calculator
+// knows that does the same to damage.
+/** Species sheets this server changed, from the simulator's own dex. */
+let CHANGED_SPECIES = null;
+function changedSpecies() {
+	if (CHANGED_SPECIES) return CHANGED_SPECIES;
+	CHANGED_SPECIES = {};
+	try {
+		const path = require('path');
+		const { Dex } = require('pokemon-showdown');
+		const dir = path.join(path.dirname(require.resolve('pokemon-showdown')), '..', 'data', 'velvet', 'unnerfs.js');
+		for (const id of require(dir).CHANGED.species || []) {
+			const s = Dex.species.get(id);
+			if (s.exists) CHANGED_SPECIES[id] = { types: s.types.slice(), baseStats: { ...s.baseStats } };
+		}
+	} catch (e) { /* no simulator data: Smogon's sheets are all there is */ }
+	return CHANGED_SPECIES;
+}
+const CALC_ABILITY = {
+	'Kindled Fury': 'Guts', 'Diamond Dust': 'Slush Rush', 'Solstice': 'Chlorophyll',
+	'Prescience': 'Magic Guard', 'Liquid Body': 'Water Absorb', 'Static Needles': 'Volt Absorb', 'Ribbon Hymn': 'Pixilate',
+};
+// Abilities that bounce status moves and hazards, and ones no status takes on.
+const BOUNCES = new Set(['magicbounce', 'prescience']);
+const STATUS_PROOF = new Set(['moonlitvenom', 'purifyingsalt', 'comatose']);
+const CORRODES = new Set(['corrosion', 'moonlitvenom']);
+// Weather Speed doublers, ours and the originals: [ability id, weathers].
+const WEATHER_SPEED = {
+	diamonddust: ['snowscape', 'hail'], slushrush: ['snowscape', 'hail'],
+	solstice: ['sunnyday', 'desolateland'], chlorophyll: ['sunnyday', 'desolateland'],
+	swiftswim: ['raindance', 'primordialsea'], sandrush: ['sandstorm'],
+};
 
 class BattleAI {
 	constructor(options = {}) {
@@ -182,8 +214,10 @@ class BattleAI {
 	 * sweeper it believed it outran, and they died in the order they were listed
 	 * without ever getting a move off.
 	 */
-	speedOf(mon, boosts, status) {
+	speedOf(mon, boosts, status, weather) {
 		let spe = (mon && mon.stats && mon.stats.spe) || 0;
+		const doubler = WEATHER_SPEED[String((mon && mon.ability) || '').toLowerCase().replace(/\W/g, '')];
+		if (doubler && weather && doubler.includes(String(weather).toLowerCase().replace(/\W/g, ''))) spe *= 2;
 		const stage = Math.max(-6, Math.min(6, (boosts && boosts.spe) || 0));
 		spe = stage >= 0 ? spe * (2 + stage) / 2 : spe * 2 / (2 - stage);
 		if (status === 'par') spe *= 0.5;
@@ -192,8 +226,8 @@ class BattleAI {
 	}
 
 	/** The speed of an opponent as the battle has actually left it. */
-	foeSpeed(gen, foe) {
-		return this.speedOf(this.foePokemon(gen, foe), foe.boosts, foe.status);
+	foeSpeed(gen, foe, weather) {
+		return this.speedOf(this.foePokemon(gen, foe), foe.boosts, foe.status, weather);
 	}
 
 	gen(n) { return GENS.get(Math.max(1, Math.min(9, n || 9))); }
@@ -234,6 +268,7 @@ class BattleAI {
 		opts.overrides = this.speciesOverrides(gen, species, opts.overrides);
 		try {
 			const mon = new calc.Pokemon(gen, species, opts);
+			if (live && live.charged) mon.velvetCharged = true;
 			if (entry.stats && !transformed) {
 				for (const k of ['atk', 'def', 'spa', 'spd', 'spe']) if (entry.stats[k]) mon.stats[k] = entry.stats[k];
 			}
@@ -341,7 +376,10 @@ class BattleAI {
 		} catch (e) {
 			known = null;
 		}
-		if (known) return overrides;
+		if (known) {
+			const changed = changedSpecies()[String(name).toLowerCase().replace(/[^a-z0-9]/g, '')];
+			return changed ? { ...changed, ...(overrides || {}) } : overrides;
+		}
 		const past = this.pastSpecies(name);
 		if (!past) return overrides;
 		return { ...(overrides || {}), ...past };
@@ -513,6 +551,16 @@ class BattleAI {
 		try {
 			const move = new calc.Move(gen, moveName);
 			if (!move.bp) return 0;
+			// A Charge doubles the next Electric move; the calculator has no idea.
+			const charged = attacker.velvetCharged && move.type === 'Electric' ? 2 : 1;
+			if (CALC_ABILITY[String(attacker.ability || '')]) {
+				attacker = attacker.clone();
+				attacker.ability = CALC_ABILITY[String(attacker.ability)];
+			}
+			if (CALC_ABILITY[String(defender.ability || '')]) {
+				defender = defender.clone();
+				defender.ability = CALC_ABILITY[String(defender.ability)];
+			}
 			// The lake trio's signature abilities (Balance Patch 1) let Psychic moves hit Dark types;
 			// the calculator only knows the chart, so Dark comes off a copy of the defender for them.
 			if (LAKE_ABILITIES.has(String(attacker.ability || '')) && move.type === 'Psychic' &&
@@ -530,7 +578,7 @@ class BattleAI {
 			const dmg = result.damage;
 			const rolls = Array.isArray(dmg) ? dmg.flat().filter(n => typeof n === 'number') : [dmg];
 			if (!rolls.length) return 0;
-			const avg = rolls.reduce((a, b) => a + b, 0) / rolls.length;
+			const avg = charged * rolls.reduce((a, b) => a + b, 0) / rolls.length;
 			const hp = defender.originalCurHP || defender.maxHP();
 			return Math.max(0, (avg / hp) * 100);
 		} catch (e) {
@@ -572,8 +620,8 @@ class BattleAI {
 		const foes = state.foes();
 		let speedEdge = 0;
 		if (foes.length) {
-			const mySpe = this.speedOf(me, me.boosts, me.status);
-			const theirSpe = foes.map(f => this.foeSpeed(gen, f));
+			const mySpe = this.speedOf(me, me.boosts, me.status, state.weather);
+			const theirSpe = foes.map(f => this.foeSpeed(gen, f, state.weather));
 			const faster = theirSpe.filter(sp => mySpe > sp).length / theirSpe.length;
 			speedEdge = (faster - 0.5) * 2;              // -1 (outsped by all) .. +1 (outspeeds all)
 		}
@@ -716,6 +764,32 @@ class BattleAI {
 		if (dying && !(isSetup && pressure >= 0.7)) return move.priority > 0 ? 5 : -20;
 
 		if (RECOVERY.includes(move.name)) return myHpPct < 55 ? 60 - myHpPct : -10;
+
+		// Into a Magic Bounce (or Espeon's Prescience) a status move or hazard comes
+		// straight back. Espeon counts even unrevealed: two of its abilities bounce.
+		const foeAbility = String((foe && foe.ability) || '').toLowerCase().replace(/[^a-z]/g, '');
+		const foeSpecies = String((foe && foe.name) || '').toLowerCase().replace(/[^a-z]/g, '');
+		if (move.flags && move.flags.reflectable && (BOUNCES.has(foeAbility) || foeSpecies === 'espeon')) return -30;
+		// Gleamstalk (Luxray): paralysis, +2 Speed and a Charge. Best early; spent
+		// once Luxray is already fast and charged.
+		if (move.id === 'gleamstalk') {
+			const fast = ((me && me.boosts && me.boosts.spe) || 0) >= 2;
+			if (fast && me.velvetCharged) return -10;
+			const foeTypes = (foe && foe.types) || [];
+			const canPar = !foe.status && !foeTypes.includes('Electric') && !STATUS_PROOF.has(foeAbility);
+			if (foeTypes.includes('Dark') && String((me && me.ability) || '') === 'Prankster') return -20;
+			if (['voltabsorb', 'lightningrod', 'motordrive', 'mudflatambush', 'staticneedles'].includes(foeAbility)) return -20;
+			return (canPar ? 40 : 26) - (fast ? 14 : 0);
+		}
+		if (move.status && move.target !== 'self') {
+			if (STATUS_PROOF.has(foeAbility)) return -25;
+			const types = (foe && foe.types) || [];
+			const myAbility = String((me && me.ability) || '').toLowerCase().replace(/[^a-z]/g, '');
+			const poison = move.status === 'psn' || move.status === 'tox';
+			if (poison && !CORRODES.has(myAbility) && (types.includes('Steel') || types.includes('Poison'))) return -25;
+			if (move.status === 'brn' && types.includes('Fire')) return -25;
+			if (move.status === 'par' && types.includes('Electric')) return -25;
+		}
 		if (HAZARDS.includes(move.name)) {
 			const theirSide = state.hazards[state.theirPlayer] || {};
 			return theirSide[move.name] ? -30 : 38;
@@ -833,9 +907,9 @@ class BattleAI {
 		// they died one a turn without attacking. The one that kills first - by
 		// outrunning it, or with a priority move - ends the sweep instead.
 		if (best >= 100 && this.cfg.revenge !== false) {
-			const mySpe = this.speedOf(me, me.boosts, me.status);
+			const mySpe = this.speedOf(me, me.boosts, me.status, state.weather);
 			const outruns = foes.every(foe => {
-				const theirSpe = this.foeSpeed(gen, foe);
+				const theirSpe = this.foeSpeed(gen, foe, state.weather);
 				return state.trickRoom ? mySpe < theirSpe : mySpe > theirSpe;
 			});
 			let priorityKill = false;
@@ -1153,9 +1227,9 @@ class BattleAI {
 		// is worth anything, and otherwise the right answer is to leave.
 		let outsped = false;
 		if (this.cfg.predict && foes.length) {
-			const mySpe = this.speedOf(me, me.boosts, me.status);
+			const mySpe = this.speedOf(me, me.boosts, me.status, state.weather);
 			const order = foes.map(foe => {
-				const theirSpe = this.foeSpeed(gen, foe);
+				const theirSpe = this.foeSpeed(gen, foe, state.weather);
 				return state.trickRoom ? mySpe < theirSpe : mySpe > theirSpe;
 			});
 			movesFirst = order.every(Boolean);

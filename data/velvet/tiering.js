@@ -160,6 +160,48 @@ const TIERS = {
 	uxie: 'UU',
 	mesprit: 'UU',
 	azelf: 'UU',
+
+	/*
+	 * Balance Patch 1's tier review: the few that the patch lifted out of the tier
+	 * below RU they were in. These only move the ninth-generation tier (the NU,
+	 * PU and ZU lists); National Dex has nothing below RU, so they stay RU there.
+	 * Everything else the patch touched was reviewed and left where it was, to be
+	 * revisited once real usage comes in.
+	 */
+
+	/*
+	 * The eeveelutions' signatures, tested in UU. Each turns a stat they could
+	 * never use into a plan - Solstice and Diamond Dust bring their own weather
+	 * and double Speed in it, Kindled Fury is a turn-one Guts burn that Speed
+	 * Boosts, Prescience is Magic Guard and Magic Bounce, Liquid Body is Water
+	 * Absorb and Regenerator on 130 HP, Moonlit Venom shuts out status. Checked
+	 * with short sims: a Choice Band Kindled Fury Facade does about a third to a
+	 * physically defensive Corviknight, a Life Orb Solar Blade half to Garchomp;
+	 * strong, not unanswerable. Jolteon and Sylveon gained less and stay put.
+	 * To be revisited with real usage.
+	 */
+	leafeon: 'UU',
+	glaceon: 'UU',
+	flareon: 'UU',
+	espeon: 'UU',
+	umbreon: 'UU',
+	vaporeon: 'UU',
+
+	// Luxray, Electric/Dark with Prankster and Gleamstalk: a Prankster paralysis
+	// that also gives +2 Speed and a Charge. The charged Life Orb Supercell Slam
+	// after it removes a full-health physically defensive Toxapex. Tested in OU.
+	luxray: 'OU',
+
+	// Urshifu, both styles: banned to Ubers at the owner's call.
+	urshifu: 'Uber',
+	urshifurapidstrike: 'Uber',
+
+	// Reckless Brave Bird and Double-Edge on 110 Speed, and now Hustle Up and
+	// U-turn beside them.
+	dodrio: 'PU',
+	// Quiver Dance and Sleep Powder already made it ZU's best sweeper; Earth
+	// Power, Sludge Bomb and Solar Nectar remove what used to wall it.
+	lilligant: 'PU',
 };
 
 /**
@@ -218,7 +260,9 @@ exports.applyTiers = (FormatsData, Pokedex, log = () => {}) => {
 		 * one.
 		 */
 		if (data.tier !== 'Illegal') data.tier = tier;
-		data.natDexTier = tier;
+		// National Dex stops at RU, so a tier below it only moves the SV list.
+		const belowRU = LADDER.indexOf(tier) > LADDER.indexOf('RU');
+		data.natDexTier = belowRU ? (data.natDexTier || 'RU') : tier;
 		applied[id] = tier;
 	}
 	return applied;
