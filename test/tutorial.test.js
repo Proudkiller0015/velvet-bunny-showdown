@@ -6,6 +6,8 @@
  *
  *   PORT=8123 PS_REAL_ACCOUNTS=0 node src/index.js
  *   RP_TEST_URL=http://localhost:8123 node test/tutorial.test.js
+ *
+ * Against the live server, RP_GUEST=1 stays a guest (no name to log in with).
  */
 
 const WebSocket = require('ws');
@@ -26,7 +28,7 @@ const wait = ms => new Promise(r => setTimeout(r, ms));
 		let room = '';
 		if (lines[0].startsWith('>')) room = lines.shift().slice(1);
 		for (const line of lines) {
-			if (line.startsWith('|challstr|')) ws.send(`|/trn ${NAME},0,`);
+			if (line.startsWith('|challstr|') && !process.env.RP_GUEST) ws.send(`|/trn ${NAME},0,`);
 			if (line.startsWith('|pm|') && line.includes('|/challenge gen9rptutorial')) {
 				const from = line.split('|')[2].trim().replace(/^[^A-Za-z0-9]/, '');
 				seen.challenge = from;
@@ -48,7 +50,8 @@ const wait = ms => new Promise(r => setTimeout(r, ms));
 			const raw = line.slice(9);
 			if (!raw) continue;
 			const request = JSON.parse(raw);
-			if (request.wait) continue;
+			// An updated request (after a throw is queued) is not a new turn: answering it replaces the throw.
+			if (request.wait || request.update) continue;
 			if (request.forceSwitch || request.teamPreview) { ws.send(`${room}|/choose default`); continue; }
 			turn++;
 			const [hp, max] = String(request.side.pokemon[0].condition).split(' ')[0].split('/').map(Number);
