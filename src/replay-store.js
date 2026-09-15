@@ -119,7 +119,7 @@ class ReplayStore {
 
 		const url = `https://api.github.com/repos/${REPO}/contents/${DIR}/${replay.id}.json`;
 		const payload = {
-			message: `Replay: ${replay.id}`,
+			message: `Replay: ${replay.id} [skip render]`,   // data, not code: must not redeploy the server
 			content: Buffer.from(JSON.stringify(replay, null, '\t'), 'utf8').toString('base64'),
 			branch: BRANCH,
 		};

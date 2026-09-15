@@ -139,7 +139,7 @@ class RepoFile {
 
 		const url = `https://api.github.com/repos/${REPO}/contents/${this.repoPath}`;
 		const payload = {
-			message: `${path.basename(this.repoPath)}: ${reason}`,
+			message: `${path.basename(this.repoPath)}: ${reason} [skip render]`,   // data, not code: must not redeploy the server
 			content: Buffer.from(bytes).toString('base64'),
 			branch: BRANCH,
 		};

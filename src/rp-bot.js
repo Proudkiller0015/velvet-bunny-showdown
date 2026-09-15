@@ -53,6 +53,7 @@ class EncounterOpponent extends ShowdownBot {
 			log: (...a) => options.log(`[${spawn.name}]`, ...a),
 		});
 		this.spawn = spawn;
+		this.noGimmicks = true;   // no Mega, Tera, Dynamax or Z-moves for wild Pokémon and RP trainers
 		this.onDone = options.onDone;
 		this.renames = 0;
 		this.challenged = false;

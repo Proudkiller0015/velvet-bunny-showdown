@@ -82,7 +82,7 @@ class GithubBackend {
 	async write(name, body) {
 		const url = `https://api.github.com/repos/${this.repo}/contents/${this.dir}/${name}`;
 		const payload = {
-			message: `Ladder: ${name.replace(/\.tsv$/, '')}`,
+			message: `Ladder: ${name.replace(/\.tsv$/, '')} [skip render]`,   // data, not code: must not redeploy the server
 			content: Buffer.from(body, 'utf8').toString('base64'),
 			branch: this.branch,
 		};

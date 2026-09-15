@@ -126,7 +126,7 @@ class BattleLogStore {
 
 			const body = (existing || HEADER + '\n') + lines.join('\n') + '\n';
 			const payload = {
-				message: `Battle log: ${lines.length} battle${lines.length === 1 ? '' : 's'}`,
+				message: `Battle log: ${lines.length} battle${lines.length === 1 ? '' : 's'} [skip render]`,   // data, not code: must not redeploy the server
 				content: Buffer.from(body, 'utf8').toString('base64'),
 				branch: BRANCH,
 			};

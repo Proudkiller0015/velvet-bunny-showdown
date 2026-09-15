@@ -375,6 +375,13 @@ class ShowdownBot {
 			let request;
 			try { request = JSON.parse(rawJson); } catch (e) { return; }
 			battle.retries = 0;
+			// RP wild Pokémon and trainers don't Mega Evolve, Terastallize, Dynamax
+			// or use Z-moves: hide the options so the AI never reaches for them.
+			if (this.noGimmicks) {
+				for (const active of request.active || []) {
+					for (const k of ['canTerastallize', 'canMegaEvo', 'canMegaEvoX', 'canMegaEvoY', 'canUltraBurst', 'canDynamax', 'canZMove', 'maxMoves']) delete active[k];
+				}
+			}
 			const choice = ai.decide(request, state);
 			if (choice) this.room(roomid, `/choose ${choice}|${request.rqid || ''}`);
 			return;

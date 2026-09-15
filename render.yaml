@@ -10,6 +10,13 @@ services:
     buildCommand: npm install
     startCommand: npm start
     healthCheckPath: /
+    # The server saves replays, ladders, battle logs, friends and the roster to
+    # data/ in this repository as it runs. Each save is a commit, and without this
+    # every one of them redeployed - restarting the server at the end of every
+    # battle. The commits also say [skip render], in case this filter is lost.
+    buildFilter:
+      ignoredPaths:
+        - data/**
     envVars:
       # 22, not 20. better-sqlite3 (the friends database) needs Node 22 and on 20
       # it does not throw - it segfaults. The wrapper saves the friends list every

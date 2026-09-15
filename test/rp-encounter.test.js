@@ -112,6 +112,8 @@ const TEAM = Teams.pack([
 	check(!!result, `the result is reported: ${JSON.stringify(result)}`);
 	const log = seen.log.join('\n');
 	check(/threw a Poké Ball/.test(log), 'a ball was thrown');
+	// The test player only ever chooses "default", so any gimmick in the log is the wild Pokémon's.
+	check(!/^\|-(terastallize|mega|burst|zpower)\||^\|-start\|[^|]*\|Dynamax/m.test(log),'the wild Pokémon used no Mega, Tera, Dynamax or Z-move');
 	const thrown = (log.match(/threw a Poké Ball/g) || []).length;
 	check(thrown <= 2, `no more balls than the character had (${thrown} of 2)`);
 	check(seen.errors.some(e => /last Poké Ball|doesn't have/.test(e)) || thrown < 2 || (result && result.outcome === 'caught'),
