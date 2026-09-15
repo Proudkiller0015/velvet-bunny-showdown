@@ -191,14 +191,25 @@ the file that already owns that kind of change:
 
 | part | what | joins |
 | --- | --- | --- |
-| `EVOLUTIONS` | 39 lowered evolution levels (Braviary 54 → 40, Magcargo 38 → 30…) | `buffs.js` sets `evoLevel`; `scripts/build-buffs.js` ships them to the client; the Discord bot copies them with `rp-bot/tools/sync-evo-levels.js` |
-| `MOVES` | Hive Frenzy, Chrysalis Veil, Hustle Up, Carrion Feast, Spark Scamper, Undertow, Solar Nectar, Crag Hammer, Hypno Whirl, Shuffle Jab (nums −10…−19, `velvetShared`), and Regigigas's Continental Heave (−20, `nosketch`) | `moves.js` |
-| `ABILITIES` | Colossus Unbound (−7): Mold Breaker + Clear Body + 1.2x Attack above half HP | `abilities.js`; tooltip in `velvet-data.js`, calculator in `velvet-calc.js` |
-| `buildBuffs` | ten type groups, the joke Pokémon (`SMALL`), ability grants, pre-evolutions, Mew | `buffs.js`'s table, applied with everything else |
+| `EVOLUTIONS` | 82 entries: 75 lowered levels (caps of 50 for a final stage and 40 for a middle one, late two-stage lines at 32-36, middle stages ten levels before the final) and 7 stone evolutions that can also happen by level (a string `from`) | `buffs.js` sets `evoLevel` / `velvetLevelToo`; `scripts/build-buffs.js` ships them to the client; the Discord bot copies them with `rp-bot/tools/sync-evo-levels.js` |
+| `MOVES` | Shared (`velvetShared`, −10…−19, −25…−27): Hive Frenzy, Chrysalis Veil, Hustle Up, Carrion Feast, Spark Scamper, Undertow, Solar Nectar, Crag Hammer, Hypno Whirl, Shuffle Jab, Voltaic Lance, Rime Cleaver, Oxidize. Signatures (`nosketch`, in `SIGNATURES`): Continental Heave (Regigigas), Aurora Squall (Articuno), Memory Wipe / Soul Resonance / Resolute Strike (lake trio), Gleamstalk (Luxray, −28) | `moves.js` |
+| `ABILITIES` | Colossus Unbound (−7), Mudflat Ambush (−8), Polar Mantle (−9), Permafrost Core (−10), Mind Keeper / Heartfelt Resolve / Unbending Will (−11…−13), and the eeveelutions: Diamond Dust, Solstice, Kindled Fury, Moonlit Venom, Prescience, Liquid Body, Static Needles, Ribbon Hymn (−14…−21) | `abilities.js`; `patchAbsorbers` makes every Electric-absorbing ability take Gleamstalk |
+| `buildBuffs` | `GROUPS`, `SMALL`, `ABILITY_GRANTS`, `GRASS_COVERAGE`, `NEWER_MOVES`, `TM_DISTRIBUTION`, pre-evolutions, Mew, then the explicit legends, `LUXRAY` and `EEVEELUTIONS` (after the pre-evolution pass, so Eevee inherits nothing) | `buffs.js`'s table, applied with everything else |
 
-Regigigas is Uber in `tiering.js`. Custom move animations (all of ours, not
-only this patch's) are borrowed from real moves in `installMoveAnims()` in
-`client/js/velvet-data.js`. `test/patch1.test.js` checks every effect in battle.
+Elsewhere: `unnerfs.js` holds changed species sheets (Cresselia's defences,
+Pikachu's and Eevee's Let's Go partner stats, Luxray's Electric/Dark), which
+reach the client through `overrides.species`, the calculator through
+`changedSpecies` and the bot through `ai.js`'s `changedSpecies()`. The tier
+review is in `tiering.js` (Regigigas and both Urshifu Uber, Luxray OU, six
+eeveelutions and the lake trio UU, Articuno and Regice RU, Pikachu, Dodrio and
+Lilligant PU); a tier below RU moves only the SV list. The bot and calculator
+read our abilities as the vanilla one that does the same to damage
+(`CALC_ABILITY` / `asVanilla`), and the tooltip hooks in `velvet-data.js` show
+Kindled Fury's Attack, the weather Speed doublers and Ribbon Hymn's Fairy moves.
+Custom move animations are borrowed from real moves in `installMoveAnims()`.
+`test/patch1.test.js` checks every effect in battle.
+
+No Pokémon goes to Ubers without the owner's say-so.
 
 ## The damage calculator
 

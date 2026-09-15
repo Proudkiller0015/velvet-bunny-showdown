@@ -247,6 +247,9 @@ introduction is the whole beginner tutorial. The lobby is untouched.
   so one RP team works for everything. Catching is part of the wild formats:
   `/throwball` (the buttons in the battle chat) checks the character's bag, the
   throw happens inside the simulator, and replays show every wobble.
+  `[Gen 9] RP Custom Game` is the anything-goes one (hackmons, illegal
+  Pokémon): challenge only, never an encounter, and the Discord bot gives its
+  PvP replays no EXP.
 
 ---
 
