@@ -211,8 +211,54 @@ check(Dex.species.get('articuno').natDexTier === 'RU', 'Articuno is RU');
 	move.onModifyMove.call(b, m, b.p1.active[0]);
 	check(m.category === 'Physical', 'Resolute Strike goes physical for a physical Azelf');
 }
-check(['regice', 'uxie', 'mesprit'].every(id => Dex.species.get(id).natDexTier === 'RU') && Dex.species.get('azelf').natDexTier === 'UU', 'Regice, Uxie, Mesprit RU; Azelf UU');
+check(Dex.species.get('regice').natDexTier === 'RU' && ['uxie', 'mesprit', 'azelf'].every(id => Dex.species.get(id).natDexTier === 'UU'), 'Regice RU; the lake trio UU');
+check(['memorywipe', 'soulresonance', 'resolutestrike'].every(id => Dex.moves.get(id).basePower === 110 && !Dex.moves.get(id).secondary), 'lake trio signatures: 110 power, guaranteed effects only');
+check(Dex.moves.get('soulresonance').drain[0] === Dex.moves.get('soulresonance').drain[1] && Dex.moves.get('resolutestrike').ignoreDefensive, 'Soul Resonance heals 100%; Resolute Strike ignores defensive boosts');
+check(Object.values(Dex.species.get('uxie').abilities).includes('Mind Keeper') && Object.values(Dex.species.get('mesprit').abilities).includes('Heartfelt Resolve'), 'Uxie has Mind Keeper, Mesprit has Heartfelt Resolve');
 check(!['memorywipe', 'soulresonance', 'resolutestrike', 'aurorasquall'].some(mv => learns('mew', mv)), 'the legends\' moves stay theirs');
+{
+	// All three lake abilities: Psychic moves hit Dark types; without them, they don't.
+	for (const [species, ability] of [['Uxie', 'Mind Keeper'], ['Mesprit', 'Heartfelt Resolve'], ['Azelf', 'Unbending Will'], ['Azelf', 'Levitate']]) {
+		const b = battle([{ species, ability, moves: ['psychic'] }], [{ species: 'Umbreon', ability: 'Synchronize', moves: ['splash'] }]);
+		const hp = b.p2.active[0].hp;
+		b.makeChoices('move 1', 'move 1');
+		const hit = b.p2.active[0].hp < hp;
+		check(ability === 'Levitate' ? !hit : hit, `${ability}: Psychic ${hit ? 'hits' : 'does not hit'} Umbreon`);
+	}
+	// Unbending Will: resisted hits deal double.
+	const resisted = (ability) => {
+		const b = battle([{ species: 'Azelf', ability, moves: ['psychic'] }], [{ species: 'Bronzong', ability: 'Heatproof', moves: ['splash'] }]);
+		const hp = b.p2.active[0].hp;
+		b.makeChoices('move 1', 'move 1');
+		return hp - b.p2.active[0].hp;
+	};
+	const will = resisted('Unbending Will'), lev = resisted('Levitate');
+	check(will > lev * 1.8, `Unbending Will doubles resisted hits (${will} vs ${lev})`);
+}
+{
+	// Heartfelt Resolve: a super-effective hit raises Sp. Atk.
+	const b = battle(
+		[{ species: 'Mesprit', ability: 'Heartfelt Resolve', moves: ['splash'] }],
+		[{ species: 'Houndoom', ability: 'Flash Fire', moves: ['snarl', 'crunch'] }],
+	);
+	b.makeChoices('move 1', 'move 2');
+	check(b.p1.active[0].boosts.spa === 1, `Heartfelt Resolve: Crunch raises Mesprit's Sp. Atk (${b.p1.active[0].boosts.spa})`);
+}
+{
+	// Mind Keeper: ignores the attacker's Swords Dance.
+	const dmg = (ability) => {
+		const b = battle(
+			[{ species: 'Uxie', ability, moves: ['splash'] }],
+			[{ species: 'Scizor', ability: 'Light Metal', moves: ['swordsdance', 'bulletpunch'] }],
+		);
+		b.makeChoices('move 1', 'move 1');
+		const hp = b.p1.active[0].hp;
+		b.makeChoices('move 1', 'move 2');
+		return hp - b.p1.active[0].hp;
+	};
+	const keeper = dmg('Mind Keeper'), plain = dmg('Levitate');
+	check(keeper < plain * 0.7, `Mind Keeper ignores a +2 attacker (${keeper} vs ${plain})`);
+}
 {
 	const c = Dex.species.get('cresselia').baseStats;
 	check(c.def === 120 && c.spd === 130, `Cresselia's Generation 8 defences are back (${c.def}/${c.spd})`);

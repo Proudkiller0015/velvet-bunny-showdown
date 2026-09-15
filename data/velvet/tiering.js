@@ -155,10 +155,10 @@ const TIERS = {
 
 	// The rest of Balance Patch 1's "Legends Rise": each got a signature (Regice's
 	// Permafrost Core, the lake trio's Memory Wipe, Soul Resonance and Resolute
-	// Strike) aimed at RU. Azelf, the strongest of them with its offences, UU.
+	// Strike) aimed at RU; after the lake trio's rework (110 power, guaranteed effects, Mind Keeper and Heartfelt Resolve) all three are UU.
 	regice: 'RU',
-	uxie: 'RU',
-	mesprit: 'RU',
+	uxie: 'UU',
+	mesprit: 'UU',
 	azelf: 'UU',
 };
 

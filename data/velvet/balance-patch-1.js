@@ -268,47 +268,57 @@ exports.MOVES = {
 		desc: "Curtains of polar light come down as a freezing gale. Hits all adjacent foes, with a 30% chance to lower each target's Speed by 1 stage. This move does not check accuracy in snow.",
 	},
 	/*
-	 * The lake trio: knowledge, emotion and willpower, each with its own move.
+	 * The lake trio: knowledge, emotion and willpower. Each signature is a
+	 * 110 power Psychic attack with an effect that always happens, paid for with
+	 * 90-95% accuracy and 5-8 PP.
 	 */
-	// Uxie's: knowledge taken back. Removes the target's stat boosts, the way
-	// Clear Smog does, on a Psychic attack. A support move with teeth, not a nuke.
+	// Uxie's: knowledge taken back. Always resets the target's stat changes, and
+	// clears the user's own drops too.
 	memorywipe: {
 		num: -22, gen: 9, name: "Memory Wipe", type: "Psychic", category: "Special",
-		basePower: 70, accuracy: 100, pp: 15, priority: 0,
-		onHit(target) {
+		basePower: 110, accuracy: 95, pp: 8, priority: 0,
+		onHit(target, source) {
 			target.clearBoosts();
 			this.add('-clearboost', target);
+			let dropped = false;
+			for (const stat in source.boosts) {
+				if (source.boosts[stat] < 0) { source.boosts[stat] = 0; dropped = true; }
+			}
+			if (dropped) this.add('-clearnegativeboost', source, '[silent]');
 		},
 		flags: { protect: 1, mirror: 1, metronome: 1, nosketch: 1 },
 		secondary: null, target: "normal", contestType: "Clever",
 		flavor: "Uxie opens its eyes, and whatever the target had learned this battle is gone.",
-		shortDesc: "Resets the target's stat changes. Uxie's signature.",
-		desc: "Uxie opens its eyes and the target forgets. After dealing damage, all of the target's stat stages are reset to 0.",
+		shortDesc: "Always resets the target's stat changes and the user's stat drops. Uxie's signature.",
+		desc: "Uxie opens its eyes and the target forgets. After dealing damage, all of the target's stat stages are reset to 0, and any of the user's lowered stat stages are reset to 0.",
 	},
-	// Mesprit's: shared feeling. A Psychic attack that heals half of what it deals.
+	// Mesprit's: shared feeling. Heals the user for all of the damage it deals.
 	soulresonance: {
 		num: -23, gen: 9, name: "Soul Resonance", type: "Psychic", category: "Special",
-		basePower: 80, accuracy: 100, pp: 10, priority: 0,
-		drain: [1, 2],
+		basePower: 110, accuracy: 90, pp: 5, priority: 0,
+		drain: [1, 1],
 		flags: { protect: 1, mirror: 1, heal: 1, metronome: 1, nosketch: 1 },
 		secondary: null, target: "normal", contestType: "Beautiful",
-		flavor: "Mesprit feels the target's pain as its own, and takes some of the target's strength to bear it.",
-		shortDesc: "User recovers 50% of the damage dealt. Mesprit's signature.",
-		desc: "Mesprit feels the target's pain as its own. The user recovers 1/2 of the HP lost by the target, rounded half up.",
+		flavor: "Mesprit feels the target's pain as its own, and takes the target's strength to bear it.",
+		shortDesc: "User recovers 100% of the damage dealt. Mesprit's signature.",
+		desc: "Mesprit feels the target's pain as its own. The user recovers HP equal to all of the HP lost by the target.",
 	},
-	// Azelf's: willpower made into a blow. Physical or special, whichever is stronger.
+	// Azelf's: willpower made into a blow. Physical or special, whichever is
+	// stronger, and it always ignores the target's defensive boosts and evasion.
 	resolutestrike: {
 		num: -24, gen: 9, name: "Resolute Strike", type: "Psychic", category: "Special",
-		basePower: 85, accuracy: 100, pp: 10, priority: 0,
+		basePower: 110, accuracy: 95, pp: 8, priority: 0,
+		ignoreDefensive: true,
+		ignoreEvasion: true,
 		onModifyMove(move, pokemon) {
 			if (pokemon.getStat('atk', false, true) > pokemon.getStat('spa', false, true)) move.category = 'Physical';
 		},
 		flags: { protect: 1, mirror: 1, metronome: 1, nosketch: 1 },
-		secondary: { chance: 10, volatileStatus: 'flinch' },
+		secondary: null,
 		target: "normal", contestType: "Cool",
-		flavor: "Azelf's will alone is enough to hit, and it never hesitates.",
-		shortDesc: "Uses the higher attacking stat. 10% flinch. Azelf's signature.",
-		desc: "Azelf's willpower becomes a blow. Uses whichever of the user's Attack or Special Attack is higher, before boosts, and has a 10% chance to make the target flinch.",
+		flavor: "Azelf's will alone is enough to hit, and no wall it can see will stop it.",
+		shortDesc: "Uses the higher attacking stat. Always ignores the target's stat boosts. Azelf's signature.",
+		desc: "Azelf's willpower becomes a blow. Uses whichever of the user's Attack or Special Attack is higher, before boosts, and always ignores the target's Defense, Special Defense and evasion boosts.",
 	},
 	continentalheave: {
 		num: -20, gen: 9, name: "Continental Heave", type: "Normal", category: "Physical",
@@ -341,6 +351,13 @@ exports.MOVES = {
  *
  * Ubers, and moved there in tiering.js.
  */
+/** The lake trio's shared gift: their Psychic moves hit Dark types. */
+function psychicHitsDark(move) {
+	if (move.type !== 'Psychic' || move.ignoreImmunity === true) return;
+	if (!move.ignoreImmunity) move.ignoreImmunity = {};
+	move.ignoreImmunity['Psychic'] = true;
+}
+
 exports.ABILITIES = {
 	/*
 	 * Mudflat Ambush - Stunfisk's, both formes.
@@ -432,6 +449,75 @@ exports.ABILITIES = {
 		flavor: "Ice that has not melted in ten thousand years does not start now.",
 		shortDesc: "Takes half damage from Fire and Fighting moves. Can't be burned or frozen.",
 		desc: "This Pokemon takes half damage from Fire-type and Fighting-type moves, and cannot be burned or frozen.",
+	},
+	/*
+	 * Mind Keeper - Uxie's. Knowledge as armour: it ignores every foe's stat
+	 * changes (Unaware) and takes 3/4 damage from super-effective hits (Filter).
+	 */
+	mindkeeper: {
+		name: "Mind Keeper",
+		onModifyMovePriority: -5,
+		onModifyMove: psychicHitsDark,
+		onAnyModifyBoost(boosts, pokemon) {
+			const user = this.effectState.target;
+			if (user === pokemon) return;
+			if (user === this.activePokemon && pokemon === this.activeTarget) {
+				boosts['def'] = 0; boosts['spd'] = 0; boosts['evasion'] = 0;
+			}
+			if (pokemon === this.activePokemon && user === this.activeTarget) {
+				boosts['atk'] = 0; boosts['def'] = 0; boosts['spa'] = 0; boosts['accuracy'] = 0;
+			}
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (target.getMoveHitData(move).typeMod > 0) return this.chainModify(0.75);
+		},
+		flags: { breakable: 1 },
+		rating: 4,
+		num: -11,
+		gen: 9,
+		flavor: "It already knows every trick you were about to try.",
+		shortDesc: "Ignores foes' stat changes. 0.75x super-effective damage. Psychic moves hit Dark types.",
+		desc: "This Pokemon ignores other Pokemon's stat stages when taking or doing damage, receives 3/4 damage from supereffective attacks, and its Psychic-type moves can hit Dark-type Pokemon.",
+	},
+	/*
+	 * Heartfelt Resolve - Mesprit's. Every time a super-effective hit lands on
+	 * it, the hurt becomes power: +1 Special Attack. Repeatable, but only on the
+	 * hits that were meant to finish it.
+	 */
+	heartfeltresolve: {
+		name: "Heartfelt Resolve",
+		onModifyMovePriority: -5,
+		onModifyMove: psychicHitsDark,
+		onDamagingHit(damage, target, source, move) {
+			if (target.hp && target.getMoveHitData(move).typeMod > 0) this.boost({ spa: 1 }, target, target);
+		},
+		flags: {},
+		rating: 3.5,
+		num: -12,
+		gen: 9,
+		flavor: "Hurt it where it's weakest and it only feels more.",
+		shortDesc: "Super-effective hit taken: +1 Sp. Atk. Psychic moves hit Dark types.",
+		desc: "When this Pokemon is damaged by a super-effective attack and is not knocked out, its Special Attack is raised by 1 stage. Its Psychic-type moves can hit Dark-type Pokemon.",
+	},
+	/*
+	 * Unbending Will - Azelf's. Willpower that does not accept "not very
+	 * effective": resisted hits deal double (Tinted Lens), and its Psychic
+	 * moves hit Dark types.
+	 */
+	unbendingwill: {
+		name: "Unbending Will",
+		onModifyMovePriority: -5,
+		onModifyMove: psychicHitsDark,
+		onModifyDamage(damage, source, target, move) {
+			if (target.getMoveHitData(move).typeMod < 0) return this.chainModify(2);
+		},
+		flags: {},
+		rating: 4,
+		num: -13,
+		gen: 9,
+		flavor: "Azelf does not accept that anything is out of reach.",
+		shortDesc: "Not-very-effective hits deal double. Psychic moves hit Dark types.",
+		desc: "This Pokemon's attacks that are not very effective on a target deal double damage, and its Psychic-type moves can hit Dark-type Pokemon.",
 	},
 	colossusunbound: {
 		name: "Colossus Unbound",
@@ -640,12 +726,12 @@ exports.buildBuffs = (Pokedex) => {
 	out.regigigas = { moves: ['continentalheave'], abilities: ['Colossus Unbound'], sole: true };
 	// A Second Legend: Articuno keeps Pressure and Snow Cloak and gains its own.
 	out.articuno = { moves: ['aurorasquall', 'freezedry', 'hurricane', 'calmmind', 'roost', 'uturn'], abilities: ['Polar Mantle'] };
-	// The Legends Rise: each keeps what it had and gains its own. Existing abilities
-	// for the lake trio (Unaware, Opportunist, Tinted Lens) fit each one's idea.
+	// The Legends Rise: each keeps what it had and gains its own. Uxie and Mesprit get
+	// signature abilities, each letting Psychic moves hit Dark types.
 	out.regice = { moves: ['freezedry', 'recover', 'aurorabeam', 'chillingwater', 'auroraveil'], abilities: ['Permafrost Core'] };
-	out.uxie = { moves: ['memorywipe', 'slackoff', 'teleport', 'healbell'], abilities: ['Unaware'] };
-	out.mesprit = { moves: ['soulresonance', 'moonblast', 'calmmind', 'wish'], abilities: ['Opportunist'] };
-	out.azelf = { moves: ['resolutestrike', 'closecombat', 'swordsdance', 'knockoff'], abilities: ['Tinted Lens'] };
+	out.uxie = { moves: ['memorywipe', 'slackoff', 'teleport', 'healbell'], abilities: ['Mind Keeper'] };
+	out.mesprit = { moves: ['soulresonance', 'moonblast', 'calmmind', 'wish'], abilities: ['Heartfelt Resolve'] };
+	out.azelf = { moves: ['resolutestrike', 'closecombat', 'swordsdance', 'knockoff'], abilities: ['Unbending Will'] };
 	return out;
 };
 

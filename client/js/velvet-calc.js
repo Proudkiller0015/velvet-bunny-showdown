@@ -430,6 +430,20 @@
 
 			if (theMove.name === "Queen's Blitz") queensBlitz(us, them, theMove, genNum);
 
+			/*
+			 * The lake trio's abilities let Psychic moves hit Dark types. The
+			 * calculator knows the chart, not our abilities, so Dark is taken off
+			 * the (cloned) defender for a Psychic move - Dark only ever matters to
+			 * a Psychic move as the immunity. Unbending Will is Tinted Lens too,
+			 * which the calculator does know by name.
+			 */
+			var lake = { 'Mind Keeper': 1, 'Heartfelt Resolve': 1, 'Unbending Will': 1 };
+			if (lake[String(us.ability || '')] && theMove.type === 'Psychic' && them.types && them.types.indexOf('Dark') >= 0) {
+				var rest = them.types.filter(function (t) { return t !== 'Dark'; });
+				them.types = rest.length ? rest : ['Normal'];
+			}
+			if (String(us.ability || '') === 'Unbending Will') us.ability = 'Tinted Lens';
+
 			var result = original.call(this, gen, us, them, theMove, field);
 
 			// A move that deals a flat number ignores the formula entirely, so the

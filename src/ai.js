@@ -147,6 +147,9 @@ function toName(id, kind) {
 	return entry ? entry.name : id;
 }
 
+/** Abilities of ours that let Psychic moves hit Dark types (the lake trio, Balance Patch 1). */
+const LAKE_ABILITIES = new Set(['Mind Keeper', 'Heartfelt Resolve', 'Unbending Will']);
+
 class BattleAI {
 	constructor(options = {}) {
 		this.log = options.log || (() => {});
@@ -510,6 +513,14 @@ class BattleAI {
 		try {
 			const move = new calc.Move(gen, moveName);
 			if (!move.bp) return 0;
+			// The lake trio's signature abilities (Balance Patch 1) let Psychic moves hit Dark types;
+			// the calculator only knows the chart, so Dark comes off a copy of the defender for them.
+			if (LAKE_ABILITIES.has(String(attacker.ability || '')) && move.type === 'Psychic' &&
+				defender.types && defender.types.includes('Dark')) {
+				defender = defender.clone();
+				const rest = defender.types.filter(t => t !== 'Dark');
+				defender.types = rest.length ? rest : ['Normal'];
+			}
 			const result = calc.calculate(gen, attacker, defender, move, field);
 			const dmg = result.damage;
 			const rolls = Array.isArray(dmg) ? dmg.flat().filter(n => typeof n === 'number') : [dmg];
