@@ -1,0 +1,12 @@
+{
+	"id": "gen9rptutorial-2-tlek8x",
+	"format": "[Gen 9] RP Tutorial",
+	"players": [
+		"Wild Rattata",
+		"Guest 20"
+	],
+	"rating": null,
+	"log": "|j|☆Wild Rattata\n|t:|1789471549\n|gametype|singles\n|player|p1|Wild Rattata|unknown|\n|player|p2|Guest 20|101|\n|gen|9\n|tier|[Gen 9] RP Tutorial\n|-message|This is a practice battle. Normally a wild Pokémon or a trainer challenges you here when you type !encounter on Discord, in your character's channel, and you battle with your own RP team from your box.\n|-message|Step 1: pick Thunder Shock to attack.\n|-message|Hurt? Use your 1 Potion from the item panel in the chat (it uses your turn).\n|\n|t:|1789471549\n|teamsize|p1|1\n|teamsize|p2|1\n|start\n|switch|p1a: Rattata|Rattata, L5, M|18/18\n|switch|p2a: Pikachu|Pikachu, L5, M|21/21\n|turn|1\n|inactive|Battle timer is ON: inactive players will automatically lose when time's up. (requested by Wild Rattata)\n|c|☆Wild Rattata|Your bag: 1 Poké Ball\n|\n|t:|1789471549\n|-message|Guest 20 threw a Poké Ball!\n|-message|...wobble...\n|-message|...wobble...\n|-message|...wobble...\n|-message|Gotcha! Rattata was caught!\n|-message|In a real encounter, what you catch goes into your character's box (on the bot and in the doc), and the ball comes out of your bag. Here nothing is kept.\n|raw|<div class=\"broadcast-blue\"><b>Tutorial done! Ready for the real thing?</b><br/>1. <a href=\"https://discord.gg/pH86q7sdg7\">Join the Kagura RP on Discord</a> to play for real, and make a character: <code>!character add &lt;name&gt;</code><br/>2. Pick your starter: <code>!pick</code><br/>3. Link this Showdown account: <code>!showdown &lt;your name&gt;</code><br/>4. Build your RP team in the Teambuilder, then type <code>!encounter</code> in your character's channel.</div>\n|\n|win|Guest 20\n",
+	"inputlog": ">start {\"formatid\":\"gen9rptutorial\",\"seed\":\"sodium,a0843947320fc273d6e3000ce101b215\"}\n>player p1 {\"name\":\"Wild Rattata\",\"avatar\":\"unknown\",\"rating\":0,\"seed\":\"sodium,d580c0f303816d55f13c889aff47ec96\"}\n>player p2 {\"name\":\"Guest 20\",\"avatar\":\"101\",\"rating\":0,\"seed\":\"sodium,38d4eded2cd381265c44b76e83d9e037\"}\n>chat ☆Wild Rattata|Your bag: 1 Poké Ball\n>p1 move tackle\n>p2 move thundershock",
+	"uploadtime": 1789471549
+}
