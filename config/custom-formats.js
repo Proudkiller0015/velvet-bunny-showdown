@@ -709,9 +709,12 @@ exports.Formats = [
 			'Default Level = 100',
 		],
 		battle: { trunc: Math.trunc },
+		// Healing items too, unlimited: /useitem checks nothing in this format.
 		onBegin() {
 			allGimmicks.call(this);
+			installItems(this);
 		},
+		...RP_TURN_ACTIONS,
 
 		searchShow: false,
 		challengeShow: true,

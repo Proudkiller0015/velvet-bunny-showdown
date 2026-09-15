@@ -476,7 +476,19 @@ exports.commands = {
 		if (!item) throw new Chat.ErrorMessage(`There's no battle item called "${itemName}". Try Potion, Super Potion, Hyper Potion, Max Potion, Full Restore, Revive, Max Revive or Max Elixir.`);
 		if (!pokemon) throw new Chat.ErrorMessage('Which Pokémon? Type its name in the box.');
 		const enc = game.rpEncounter && rp.encounters.get(game.rpEncounter);
-		const allowed = rp.canUseItem(enc, item.id, rp.usedInLog(room.log.log, user.name, item.name));
+		const used = rp.usedInLog(room.log.log, user.name, item.name);
+		let allowed;
+		if (enc && enc.userid === user.id) {
+			allowed = rp.canUseItem(enc, item.id, used);
+		} else if (RP_PVP_FORMATS.has(game.format) && !game.rpEncounter) {
+			// A battle between players: the character's bag, or 5 of each for an NPC.
+			allowed = rp.canUsePvpItem(user.id, item.id, used);
+		} else if (game.format === 'gen9rpcustomgame') {
+			// Anything goes: every item, as many as you like, and no bag is touched.
+			allowed = { ok: true, left: 'unlimited' };
+		} else {
+			throw new Chat.ErrorMessage('Items can only be used in RP battles.');
+		}
 		if (!allowed.ok) throw new Chat.ErrorMessage(allowed.message);
 		game.rpItemFrom = user.id;
 		try {
@@ -489,7 +501,7 @@ exports.commands = {
 			this.sendReply(`|raw|<small>Using ${aOrAnName(item.name)} on ${Chat.escapeHTML(pokemon)} (${allowed.left} left after this). Don't pick a move now, or it replaces the item.</small>`);
 		}
 	},
-	useitemhelp: ['/useitem [item], [pokemon] - In an RP encounter, use a Potion, Revive or similar from your bag instead of attacking.'],
+	useitemhelp: ["/useitem [item], [pokemon] - In any RP battle, use a Potion, Revive or similar from your character's bag instead of attacking (NPCs have 5 of each; RP Custom Game is unlimited)."],
 
 	/**
 	 * Throw a ball in an RP wild encounter. Sent by the buttons the battle
@@ -1125,9 +1137,9 @@ function serverHelpBox(user) {
 			`${btn('roleplay', 'Roleplay room')} ${cmd('/roleplay')}: the full guide (team, encounters, catching).`,
 			`Use <b>[Gen 9] RP Battle</b> for your RP team, built from your box in the <a href="https://docs.google.com/spreadsheets/d/1-XoCX0qkrshpiVvY4Sw1sBNAfiEnJYX67ZXZUkDDGrs/edit">RP doc</a>: ` +
 			`any move it can learn whatever its level (TMs free), held items from your first gym badge. Wild Pok&eacute;mon and trainers come from ${cmd('!encounter')} on the Discord.`,
-			`In a wild battle, the <b>Throw</b> buttons or ${cmd('/throwball [ball]')} catch; ${cmd('/useitem [item], [pokemon]')} uses a Potion or Revive.`,
+			`In a wild battle, the <b>Throw</b> buttons or ${cmd('/throwball [ball]')} catch; ${cmd('/useitem [item], [pokemon]')} uses a Potion or Revive from your bag, in any RP battle (unlimited in RP Custom Game).`,
 			`Your team is checked against your character's box, and Mega / Z / Dynamax / Tera need the story item.`,
-			`<b>[Gen 9] RP Custom Game</b> is for hackmons, illegal and fun battles: anything goes, challenge only, and no EXP or RP progress.`,
+			`<b>[Gen 9] RP Custom Game</b> is for hackmons, illegal and fun battles: anything goes (items unlimited), challenge only, and no EXP or RP progress.`,
 		]) +
 
 		section('Replays and more', [
@@ -1345,6 +1357,8 @@ const RP_BOT = process.env.PS_RP_BOT_NAME || 'RP Guide';
  */
 let isRpBot = () => false;
 const RP_FORMATS = new Set(['gen9rpbattlewildencounter', 'gen9rpbattlewilddoubles']);
+// Battles between players where bag items work (not RP Custom Game).
+const RP_PVP_FORMATS = new Set(['gen9rpbattle', 'gen9rpbattledoubles']);
 
 function roleplayIntro() {
 	const discord = '<b>Discord</b>';
@@ -1395,6 +1409,7 @@ function roleplayIntro() {
 			`<li><b>Catching:</b> against a wild Pok&eacute;mon, <b>Throw</b> buttons appear in the battle chat. Throwing uses your whole turn.</li>` +
 			`<li>Lower its HP and give it a status (sleep is best) to make catching easier. Every miss makes the next ball likelier.</li>` +
 			`<li>Two wild Pok&eacute;mon? Knock one out first, then throw at the other.</li>` +
+			`<li><b>Healing items:</b> the item panel in the battle chat (or <code>/useitem [item], [pokemon]</code>) uses a Potion, Revive and so on. It works in every RP battle: encounters and battles with players or NPC trainers use your character's bag (taken off afterwards; NPCs have 5 of each), and RP Custom Game is unlimited.</li>` +
 			`<li>You can only throw balls your character has. Legendary and Mythical Pok&eacute;mon never appear here; those happen in the RP.</li>` +
 			`<li><b>Mega Evolution, Z-Moves, Dynamax and Terastallization</b> stay locked until the story gives your character the Key Stone, Z-Ring, Dynamax Band or Tera Orb.</li>` +
 			`</ul>`) +
@@ -1550,6 +1565,18 @@ function roleplay() {
 				const player = this.playerTable[enc.userid];
 				const bag = enc.items ? Object.entries(enc.items).filter(([, n]) => n > 0) : [];
 				if (player && bag.length) player.sendRoom(`|uhtml|rpitems|${itemPanel(bag)}`);
+			} else if (RP_PVP_FORMATS.has(this.format)) {
+				// Players battling each other: each sees a panel of their own character's items.
+				for (const player of this.players) {
+					const items = rp.pvpItemsFor(player.id);
+					const bag = items ? Object.entries(items).filter(([, n]) => n > 0) : [];
+					if (bag.length) player.sendRoom(`|uhtml|rpitems|${itemPanel(bag)}`);
+				}
+			} else if (this.format === 'gen9rpcustomgame') {
+				// RP Custom Game: every item, unlimited, for everyone.
+				const E = require('../../../src/encounters');
+				const every = E.BATTLE_ITEMS.map(item => [item.id, '∞']);
+				for (const player of this.players) player.sendRoom(`|uhtml|rpitems|${itemPanel(every)}`);
 			}
 		} catch (e) { console.log(`[roleplay] ${e.message}`); }
 		return out;

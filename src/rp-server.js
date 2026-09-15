@@ -270,6 +270,52 @@ function canUseItem(enc, itemId, usedSoFar) {
 	return { ok: false, message: have ? `That was your last ${item.name}.` : `${enc.character || 'Your character'} doesn't have a ${item.name}. Buy some with !buy on Discord.` };
 }
 
+/*
+ * Healing items in RP battles between players.
+ *
+ * Showdown cannot ask Discord what is in a bag, and a PvP challenge is not
+ * announced in advance, so the bot pushes the table: for each player with a
+ * Showdown name and a character selected, that character's battle items and
+ * whether it is an NPC. It replaces the whole table on every push (on start,
+ * when a bag changes, and every few minutes, which also refills it after this
+ * server restarts). An NPC has 5 of each and nothing is taken; a player's items
+ * come off the bag when the replay is settled on Discord.
+ */
+const NPC_ITEMS_EACH = 5;
+let bags = new Map();
+function setBags(payload) {
+	const next = new Map();
+	for (const p of Array.isArray(payload.players) ? payload.players.slice(0, 2000) : []) {
+		const id = toID(p.showdown);
+		if (!id) continue;
+		const items = {};
+		for (const [itemId, n] of Object.entries(p.items || {})) {
+			const item = E.findBattleItem(itemId);
+			if (item && Number(n) > 0) items[item.id] = Math.floor(Number(n));
+		}
+		next.set(id, { character: String(p.character || '').slice(0, 60), npc: !!p.npc, items });
+	}
+	bags = next;
+	return { ok: true, players: bags.size };
+}
+function bagFor(userid) {
+	return bags.get(toID(userid)) || null;
+}
+/** What a player in an RP PvP battle may use: their bag, or 5 of each for an NPC. */
+function pvpItemsFor(userid) {
+	const bag = bagFor(userid);
+	if (!bag) return null;
+	if (!bag.npc) return bag.items;
+	const out = {};
+	for (const item of E.BATTLE_ITEMS) out[item.id] = NPC_ITEMS_EACH;
+	return out;
+}
+function canUsePvpItem(userid, itemId, usedSoFar) {
+	const bag = bagFor(userid);
+	if (!bag) return { ok: false, message: 'Link a character first: set your Showdown name with !showdown on Discord and select a character, then items from its bag work in RP battles.' };
+	return canUseItem({ items: pvpItemsFor(userid), character: bag.character }, itemId, usedSoFar);
+}
+
 function normaliseBalls(balls) {
 	const out = {};
 	for (const [name, count] of Object.entries(balls)) {
@@ -451,6 +497,16 @@ function sidesInLog(lines) {
 		const m = /^\|player\|(p\d)\|([^|]+)/.exec(line);
 		if (m && !Object.values(out).some(s => s.slot === m[1])) out[toID(m[2])] = { slot: m[1], name: m[2], fainted: [], team: [] };
 	}
+	for (const side of Object.values(out)) {
+		// Items used, by the "<player> used a Potion on ..." line useItem writes.
+		side.itemsUsed = {};
+		for (const line of lines) {
+			const m = /^\|-message\|(.+) used an? (.+) on .+!$/.exec(line);
+			if (!m || toID(m[1]) !== toID(side.name)) continue;
+			const item = E.findBattleItem(m[2]);
+			if (item) side.itemsUsed[item.id] = (side.itemsUsed[item.id] || 0) + 1;
+		}
+	}
 	for (const [id, side] of Object.entries(out)) {
 		const { fainted, team } = sideInLog(lines, side.slot, id);
 		side.fainted = fainted;
@@ -551,6 +607,14 @@ function httpRoute(deps, log) {
 			}).catch(() => send(res, 400, { ok: false, code: 'bad', message: 'Bad request.' }));
 			return true;
 		}
+		if (url === '/rp/bags' && req.method === 'POST') {
+			readJson(req).then(body => {
+				const checked = verify(body);
+				if (checked.error) return send(res, 403, { ok: false, code: 'forbidden', message: checked.error });
+				send(res, 200, setBags(checked.payload));
+			}).catch(() => send(res, 400, { ok: false, code: 'bad', message: 'Bad request.' }));
+			return true;
+		}
 		const feed = /^\/rp\/finished(?:\?since=(\d+))?$/.exec(url);
 		if (feed && req.method === 'GET') {
 			// Server-restart aware: a `since` above anything this boot has seen
@@ -572,7 +636,7 @@ function httpRoute(deps, log) {
 }
 
 module.exports = {
-	verify, placeFor, requestEncounter, completeEncounter, canUseItem, usedInLog, publicView, canThrow, thrownInLog, resultFromLog, openFor,
+	verify, placeFor, requestEncounter, completeEncounter, canUseItem, usedInLog, setBags, bagFor, pvpItemsFor, canUsePvpItem, NPC_ITEMS_EACH, publicView, canThrow, thrownInLog, resultFromLog, openFor,
 	checkTeam, gimmickIn, GIMMICK_ITEM, GIMMICK_NAME, sidesInLog,
 	httpRoute, encounters, RP_ROOM, CHALLENGE_MS, recordFinished, finishedSince,
 };

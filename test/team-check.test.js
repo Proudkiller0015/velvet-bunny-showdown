@@ -42,6 +42,33 @@ check(!r.ok, 'Eevee-Starter does not count as a box Eevee');
 	check(!new TeamValidator('gen9rpbattle').validateTeam([{ species: 'Samantha', ability: 'Queen Wrath', item: '', moves: ['queenbeam'], level: 100, evs: {}, ivs: {}, nature: 'Hardy' }]), 'Samantha is still legal in RP Battle');
 }
 
+// Items in RP battles between players.
+{
+	rp.setBags({ players: [
+		{ showdown: 'Mira Player', character: 'Mira', items: { hyperpotion: 2 } },
+		{ showdown: 'AoiNPC', character: 'Aoi', npc: true, items: {} },
+	] });
+	check(rp.canUsePvpItem('miraplayer', 'hyperpotion', 1).ok && !rp.canUsePvpItem('miraplayer', 'hyperpotion', 2).ok, 'a player is limited to their bag');
+	check(!rp.canUsePvpItem('miraplayer', 'revive', 0).ok, 'and has nothing they did not bring');
+	check(rp.canUsePvpItem('aoinpc', 'fullrestore', 4).ok && !rp.canUsePvpItem('aoinpc', 'fullrestore', 5).ok, 'an NPC has 5 of each');
+	check(!rp.canUsePvpItem('stranger', 'potion', 0).ok, 'a player with no linked character has none');
+	const itemLog = ['|player|p1|Mira Player|1|', '|player|p2|AoiNPC|1|', '|-message|Mira Player used a Hyper Potion on Chompy!', '|-message|AoiNPC used a Full Restore on Onix!', '|-message|Mira Player used a Hyper Potion on Chompy!'];
+	const itemSides = rp.sidesInLog(itemLog);
+	check(itemSides.miraplayer.itemsUsed.hyperpotion === 2 && itemSides.aoinpc.itemsUsed.fullrestore === 1, 'the replay feed carries each side\'s items used');
+
+	// RP Custom Game: items work in the battle itself (unlimited; /useitem checks nothing there).
+	const { Battle } = require('pokemon-showdown');
+	const b = new Battle({ formatid: 'gen9rpcustomgame', seed: [1, 2, 3, 4] });
+	const set = s => [{ species: s, ability: 'Static', item: '', moves: ['splash'], level: 50, evs: {}, ivs: {}, nature: 'Hardy' }];
+	b.setPlayer('p1', { name: 'A', team: set('Pikachu') });
+	b.setPlayer('p2', { name: 'B', team: set('Eevee') });
+	if (b.requestState === 'teampreview') b.makeChoices('team 1', 'team 1');
+	const pika = b.p1.active[0];
+	pika.hp = 10;
+	b.makeChoices('item potion Pikachu', 'move 1');
+	check(pika.hp > 10, 'RP Custom Game battles accept a Potion');
+}
+
 // Who fainted, read off a battle log.
 const log = [
 	'|player|p1|RpTester|1|', '|player|p2|Wild Rattata|1|',
