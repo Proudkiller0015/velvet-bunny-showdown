@@ -126,10 +126,10 @@ check(Dex.species.get('regigigas').natDexTier === 'Uber', 'Regigigas is Uber');
 }
 
 // Secondary effects exist as written.
-check(Dex.moves.get('undertow').secondary.boosts.spe === -1, 'Undertow can lower Speed');
+check(Dex.moves.get('undertow').secondary.boosts.spe === -1 && Dex.moves.get('undertow').secondary.chance === 50 && Dex.moves.get('undertow').basePower === 85, 'Undertow is 85 power with a 50% chance to lower Speed');
 check(Dex.moves.get('craghammer').secondary.boosts.def === -1, 'Crag Hammer can lower Defense');
 check(Dex.moves.get('hypnowhirl').secondary.volatileStatus === 'confusion', 'Hypno Whirl can confuse');
-check(Dex.moves.get('hivefrenzy').secondary.self.boosts.atk === 1, 'Hive Frenzy can raise Attack');
+check(Dex.moves.get('hivefrenzy').secondary.self.boosts.atk === 1 && Dex.moves.get('hivefrenzy').secondary.chance === 50, 'Hive Frenzy has a 50% chance to raise Attack');
 
 // Evolution levels, and who learns what.
 check(Dex.species.get('braviary').evoLevel === 40 && Dex.species.get('magcargo').evoLevel === 30, 'evolution levels lowered');
