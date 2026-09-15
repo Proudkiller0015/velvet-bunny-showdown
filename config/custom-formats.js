@@ -446,11 +446,23 @@ function installItems(battle) {
 	}
 }
 
+/** The tutorial's closing box: what to do to play for real. */
+function tutorialNextSteps(battle) {
+	if (battle.rpTutorialDone) return;
+	battle.rpTutorialDone = true;
+	battle.add('raw', '<div class="broadcast-blue"><b>Tutorial done! Ready for the real thing?</b><br/>' +
+		'1. <a href="https://discord.gg/pH86q7sdg7">Join the Kagura RP on Discord</a> to play for real, and make a character: <code>!character add &lt;name&gt;</code><br/>' +
+		'2. Pick your starter: <code>!pick</code><br/>' +
+		'3. Link this Showdown account: <code>!showdown &lt;your name&gt;</code><br/>' +
+		'4. Build your RP team in the Teambuilder, then type <code>!encounter</code> in your character\'s channel.</div>');
+}
+
 function useItem(battle, side, itemId, target) {
 	const E = encounters();
 	const item = E.findBattleItem(itemId);
 	if (!item || !target) return;
 	battle.add('-message', `${side.name} used ${aOrAn(item.name)} on ${target.name}!`);
+	if ((battle.format.id || battle.format) === 'gen9rptutorial') battle.add('-message', 'Real items come from your character\'s bag (!bag on Discord, buy more with !buy).');
 	if (item.revive) {
 		if (!target.fainted) return battle.add('-message', `It had no effect.`);
 		target.fainted = false;
@@ -596,6 +608,13 @@ function throwBall(battle, pokemon, ballId) {
 
 	battle.add('-message', `${side.name} threw ${aOrAn(ball.name)}!`);
 	for (let i = 0; i < shakes; i++) battle.add('-message', '...wobble...');
+	if (caught && (battle.format.id || battle.format) === 'gen9rptutorial') {
+		battle.add('-message', `Gotcha! ${wild.name} was caught!`);
+		battle.add('-message', "In a real encounter, what you catch goes into your character's box (on the bot and in the doc), and the ball comes out of your bag. Here nothing is kept.");
+		tutorialNextSteps(battle);
+		battle.win(side);
+		return;
+	}
 	if (caught) {
 		battle.add('-message', `Gotcha! ${wild.name} was caught!`);
 		battle.add('raw', `<div class="broadcast-green"><b>Caught ${species.name}!</b> ` +
@@ -713,6 +732,54 @@ exports.Formats = [
 		onBegin() {
 			allGimmicks.call(this);
 			installItems(this);
+		},
+		...RP_TURN_ACTIONS,
+
+		searchShow: false,
+		challengeShow: true,
+		rated: false,
+	},
+	{
+		name: "[Gen 9] RP Tutorial",
+		desc: "A practice wild battle: a Lv. 5 Pikachu, 1 Potion and 1 Poké Ball against a Lv. 5 Rattata. Start it with /tutorial.",
+
+		/**
+		 * No team needed, and none used: `team` makes the server skip asking for
+		 * one, and the battle then puts the tutorial Pokemon on both sides before
+		 * anything is sent out. The Rattata is the side named "Wild ...".
+		 */
+		team: 'random',
+		ruleset: ['Cancel Mod'],
+		battle: { trunc: Math.trunc },
+		onBegin() {
+			const E = encounters();
+			for (const side of this.sides) {
+				const set = /^Wild /.test(side.name) ? E.TUTORIAL_RATTATA : E.TUTORIAL_PIKACHU;
+				side.team = [set];
+				side.pokemon = [];
+				side.pokemonLeft = 0;
+				side.addPokemon(set);
+			}
+			installCatching(this);
+			installItems(this);
+			this.add('-message', 'This is a practice battle. Normally a wild Pokémon or a trainer challenges you here when you type !encounter on Discord, in your character\'s channel, and you battle with your own RP team from your box.');
+			this.add('-message', 'Step 1: pick Thunder Shock to attack.');
+			this.add('-message', 'Hurt? Use your 1 Potion from the item panel in the chat (it uses your turn).');
+		},
+		onFaint(pokemon) {
+			if (pokemon.side.pokemonLeft > 1) return;
+			this.add('-message', "Normally you'd earn money, EXP and team EXP (!share) now, and a fainted Pokémon stays fainted until !heal at a Pokémon Centre.");
+			tutorialNextSteps(this);
+		},
+		onResidualOrder: 99,
+		onResidual() {
+			const wild = this.sides.find(s => /^Wild /.test(s.name));
+			const mon = wild && wild.active[0];
+			if (!mon || mon.fainted || this.rpTutorialHinted) return;
+			if (mon.hp <= mon.maxhp / 2) {
+				this.rpTutorialHinted = true;
+				this.add('-message', "Step 2: Rattata is weak! Press Throw in the chat to throw your Poké Ball and catch it (or finish it off).");
+			}
 		},
 		...RP_TURN_ACTIONS,
 

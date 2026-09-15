@@ -501,6 +501,20 @@ exports.commands = {
 			this.sendReply(`|raw|<small>Using ${aOrAnName(item.name)} on ${Chat.escapeHTML(pokemon)} (${allowed.left} left after this). Don't pick a move now, or it replaces the item.</small>`);
 		}
 	},
+	/**
+	 * The tutorial battle, for anyone, from here: a Lv. 5 Rattata challenges you
+	 * and your team is a Lv. 5 Pikachu with 1 Potion and 1 Poke Ball. No team or
+	 * Discord link needed, and nothing is recorded.
+	 */
+	tutorial(target, room, user) {
+		if (!tutorialDeps) throw new Chat.ErrorMessage('The tutorial is still starting up. Try again in a minute.');
+		const rp = require('../../../src/rp-server');
+		const answer = rp.requestTutorial({ showdown: user.name }, tutorialDeps);
+		if (!answer.ok) throw new Chat.ErrorMessage(String(answer.message || 'The tutorial could not start.').replace(/\*\*/g, ''));
+		this.sendReply('A wild Rattata is about to challenge you. Click Accept (no team needed): you battle with a Lv. 5 Pikachu, 1 Potion and 1 Poké Ball. Nothing counts, so try everything.');
+	},
+	tutorialhelp: ['/tutorial - A practice wild battle: a Lv. 5 Pikachu with 1 Potion and 1 Poké Ball against a Lv. 5 Rattata. Nothing is recorded.'],
+
 	useitemhelp: ["/useitem [item], [pokemon] - In any RP battle, use a Potion, Revive or similar from your character's bag instead of attacking (NPCs have 5 of each; RP Custom Game is unlimited)."],
 
 	/**
@@ -1134,9 +1148,10 @@ function serverHelpBox(user) {
 		]) +
 
 		section('Kagura RP battles', [
+			`<b>First time?</b> <button class="button" name="send" value="/tutorial"><b>Start the tutorial</b></button> ${cmd('/tutorial')}: a 2-minute practice battle (Lv. 5 Pikachu, 1 Potion, 1 Pok&eacute; Ball vs a wild Rattata). No team needed, nothing counts.`,
 			`${btn('roleplay', 'Roleplay room')} ${cmd('/roleplay')}: the full guide (team, encounters, catching).`,
 			`Use <b>[Gen 9] RP Battle</b> for your RP team, built from your box in the <a href="https://docs.google.com/spreadsheets/d/1-XoCX0qkrshpiVvY4Sw1sBNAfiEnJYX67ZXZUkDDGrs/edit">RP doc</a>: ` +
-			`any move it can learn whatever its level (TMs free), held items from your first gym badge. Wild Pok&eacute;mon and trainers come from ${cmd('!encounter')} on the Discord.`,
+			`any move it can learn whatever its level (TMs free), held items from your first gym badge. Wild Pok&eacute;mon and trainers come from ${cmd('!encounter')} on the <a href="https://discord.gg/pH86q7sdg7">Kagura Discord</a>.`,
 			`In a wild battle, the <b>Throw</b> buttons or ${cmd('/throwball [ball]')} catch; ${cmd('/useitem [item], [pokemon]')} uses a Potion or Revive from your bag, in any RP battle (unlimited in RP Custom Game).`,
 			`Your team is checked against your character's box, and Mega / Z / Dynamax / Tera need the story item.`,
 			`<b>[Gen 9] RP Custom Game</b> is for hackmons, illegal and fun battles: anything goes (items unlimited), challenge only, and no EXP or RP progress.`,
@@ -1356,7 +1371,9 @@ const RP_BOT = process.env.PS_RP_BOT_NAME || 'RP Guide';
  * other bot, but are never remembered - the next "Hiker Bob" could be a person.
  */
 let isRpBot = () => false;
-const RP_FORMATS = new Set(['gen9rpbattlewildencounter', 'gen9rpbattlewilddoubles']);
+const RP_FORMATS = new Set(['gen9rpbattlewildencounter', 'gen9rpbattlewilddoubles', 'gen9rptutorial']);
+// Set once the roleplay hooks are up: what /tutorial needs to start a battle.
+let tutorialDeps = null;
 // Battles between players where bag items work (not RP Custom Game).
 const RP_PVP_FORMATS = new Set(['gen9rpbattle', 'gen9rpbattledoubles']);
 
@@ -1366,8 +1383,10 @@ function roleplayIntro() {
 		`<details${open ? ' open' : ''} style="margin:4px 0"><summary><b>${title}</b></summary><div style="padding:4px 0 4px 12px">${body}</div></details>`;
 	return `<div style="padding:4px">` +
 		`<h2 style="margin:0 0 4px">Roleplay</h2>` +
+		`<p style="margin:0 0 8px"><b>First time? Start here:</b> <button class="button" name="send" value="/tutorial" style="font-size:12pt;padding:4px 12px"><b>Start the tutorial</b></button> ` +
+		`a 2-minute practice battle with a Lv. 5 Pikachu, 1 Potion and 1 Pok&eacute; Ball against a wild Rattata. No team or Discord needed, and nothing counts. (Or type <code>/tutorial</code>, or <code>!tutorial</code> on Discord.)</p>` +
 		`<p style="margin:0 0 6px">Battles for the Kagura RP. <b>You don't challenge anybody here</b>: ` +
-		`you ask for an encounter on ${discord}, and a wild Pok&eacute;mon or a trainer challenges you here.</p>` +
+		`you ask for an encounter on ${discord} (<a href="https://discord.gg/pH86q7sdg7">join the Kagura RP</a>), and a wild Pok&eacute;mon or a trainer challenges you here.</p>` +
 		`<p style="margin:0 0 6px"><b>The RP doc is your record</b>: your box (every Pok&eacute;mon, its level and ball), bag, money and badges. ` +
 		`Build your team from it: <a href="https://docs.google.com/spreadsheets/d/1-XoCX0qkrshpiVvY4Sw1sBNAfiEnJYX67ZXZUkDDGrs/edit">open the doc</a>. ` +
 		`<b>Moves:</b> any move it can learn, whatever its level, and TMs are free. <b>Held items:</b> from your first gym badge.</p>` +
@@ -1500,6 +1519,7 @@ function roleplay() {
 			return true;
 		},
 	};
+	tutorialDeps = deps;
 	deps.cancel = enc => {
 		const guide = Users.get(toID(RP_BOT));
 		if (guide && guide.connected) guide.send(`|pm|~|${guide.getIdentity()}|/rpcancel ${enc.id}`);
@@ -1604,7 +1624,7 @@ function roleplay() {
 		const out = end.call(this, winnerName, ...rest);
 		if (replay && !wasEnded) {
 			try {
-				rp.recordFinished({
+				if (!(enc && enc.tutorial)) rp.recordFinished({
 					kind: enc ? enc.kind : 'pvp',
 					format: this.format,
 					players: this.players.map(p => p.name),

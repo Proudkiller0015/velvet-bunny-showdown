@@ -69,6 +69,29 @@ check(!r.ok, 'Eevee-Starter does not count as a box Eevee');
 	check(pika.hp > 10, 'RP Custom Game battles accept a Potion');
 }
 
+// The tutorial: forced teams, 1 Potion and 1 Poke Ball, nothing needed.
+{
+	const { Battle } = require('pokemon-showdown');
+	const spawned = [];
+	const deps = { isOnline: () => true, spawn: enc => spawned.push(enc) };
+	const answer = rp.requestTutorial({ showdown: 'Newbie' }, deps);
+	check(answer.ok && spawned.length === 1 && spawned[0].format === 'gen9rptutorial' && spawned[0].name === 'Wild Rattata', 'the tutorial spawns a wild Rattata in RP Tutorial');
+	const tut = spawned[0];
+	check(rp.canUseItem(tut, 'potion', 0).ok && !rp.canUseItem(tut, 'potion', 1).ok && !rp.canUseItem(tut, 'superpotion', 0).ok, 'exactly 1 Potion');
+	check(rp.canThrow(tut, 'poke', 0).ok && !rp.canThrow(tut, 'poke', 1).ok && !rp.canThrow(tut, 'ultra', 0).ok, 'and exactly 1 Poke Ball');
+	check(rp.checkTeam(tut, [{ species: 'Mewtwo', level: 100 }]).ok, 'no box to check a team against');
+	const tb = new Battle({ formatid: 'gen9rptutorial', seed: [1, 2, 3, 4] });
+	tb.setPlayer('p1', { name: 'Wild Rattata' });
+	tb.setPlayer('p2', { name: 'Newbie' });
+	check(tb.p2.pokemon.length === 1 && tb.p2.pokemon[0].species.name === 'Pikachu' && tb.p2.pokemon[0].level === 5 && tb.p1.pokemon[0].species.name === 'Rattata', 'no team needed: Lv. 5 Pikachu against Lv. 5 Rattata');
+	tb.p1.active[0].hp = 1;
+	tb.makeChoices('move 1', 'ball poke');
+	const result = rp.resultFromLog(tut, tb.log, 'newbie');
+	check(tb.ended && result.outcome === 'caught', 'the Rattata can be caught (and the result says so)');
+	check(rp.publicView(tut).tutorial === true, 'Discord is told it was the tutorial');
+	check(rp.requestTutorial({ showdown: 'Newbie' }, deps).again, 'asking again brings the same tutorial back');
+}
+
 // Who fainted, read off a battle log.
 const log = [
 	'|player|p1|RpTester|1|', '|player|p2|Wild Rattata|1|',

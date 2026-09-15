@@ -89,7 +89,8 @@ class EncounterOpponent extends ShowdownBot {
 		// Guests are made autoconfirmed on a two-second sweep, and a challenge from
 		// somebody who isn't is refused - so wait out one sweep first.
 		this.later(() => {
-			this.send(`|/utm ${this.spawn.team}`);
+			// The tutorial format hands out the teams itself and refuses one sent in.
+			this.send(`|/utm ${this.spawn.format === 'gen9rptutorial' ? 'null' : this.spawn.team}`);
 			this.send(`|/challenge ${this.spawn.target}, ${this.spawn.format}`);
 			this.challenged = true;
 			this.log(`challenged ${this.spawn.target} in ${this.spawn.format}`);

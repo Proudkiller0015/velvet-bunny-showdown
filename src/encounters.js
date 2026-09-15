@@ -729,6 +729,25 @@ function findBattleItem(input) {
 }
 
 const WILD_FORMAT = 'gen9rpbattlewildencounter';
+
+/*
+ * The tutorial: a practice wild battle anyone can start, from Discord or with
+ * /tutorial on Showdown. The format hands out both teams, so nobody needs one:
+ * a Lv. 5 Pikachu against a Lv. 5 Rattata, with 1 Potion and 1 Poke Ball that
+ * come from nowhere. Nothing is recorded anywhere.
+ */
+const TUTORIAL_FORMAT = 'gen9rptutorial';
+const TUTORIAL_PIKACHU = {
+	name: 'Pikachu', species: 'Pikachu', level: 5, ability: 'Static', item: '', nature: 'Hardy', gender: 'M',
+	moves: ['thundershock', 'quickattack', 'growl', 'thunderwave'],
+	evs: { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 }, ivs: { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 },
+};
+const TUTORIAL_RATTATA = {
+	name: 'Rattata', species: 'Rattata', level: 5, ability: 'Run Away', item: '', nature: 'Hardy',
+	moves: ['tackle', 'tailwhip', 'quickattack'],
+	evs: { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 }, ivs: { hp: 15, atk: 15, def: 15, spa: 15, spd: 15, spe: 15 },
+};
+const TUTORIAL_BAG = { balls: { poke: 1 }, items: { potion: 1 } };
 const WILD_DOUBLE_FORMAT = 'gen9rpbattlewilddoubles';
 const TRAINER_FORMAT = 'gen9rpbattle';
 const TRAINER_DOUBLE_FORMAT = 'gen9rpbattledoubles';
@@ -749,5 +768,5 @@ module.exports = {
 	catchRate, BALLS, findBall, catchChance, shakesFor, CATCH_BOOST, PITY_PER_MISS,
 	TRAINER_CLASSES, findClass, trainerName, minLevel, rootOf, lineOf, lineWeight, rarityClass, BADGE_TIERS,
 	rollWild, rollTrainer, describe,
-	WILD_FORMAT, WILD_DOUBLE_FORMAT, TRAINER_FORMAT, TRAINER_DOUBLE_FORMAT,
+	WILD_FORMAT, WILD_DOUBLE_FORMAT, TUTORIAL_FORMAT, TUTORIAL_PIKACHU, TUTORIAL_RATTATA, TUTORIAL_BAG, TRAINER_FORMAT, TRAINER_DOUBLE_FORMAT,
 };

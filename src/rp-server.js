@@ -108,6 +108,7 @@ function openFor(userid) {
 function requestEncounter(payload, deps) {
 	const userid = toID(payload.showdown);
 	if (!userid) return { ok: false, code: 'noname', message: 'No Showdown name given.' };
+	if (payload.tutorial) return requestTutorial(payload, deps);
 
 	let found = placeFor(payload.region, payload.channel);
 	// Staff can summon something anywhere - an event channel isn't on the map.
@@ -191,6 +192,45 @@ function requestEncounter(payload, deps) {
 			? { mega: !!payload.gimmicks.mega, zmove: !!payload.gimmicks.zmove, dynamax: !!payload.gimmicks.dynamax, tera: !!payload.gimmicks.tera }
 			: null,
 		...rolled,
+		status: 'waiting',
+		result: null,
+	};
+	encounters.set(enc.id, enc);
+	deps.spawn(enc);
+	return { ok: true, encounter: publicView(enc) };
+}
+
+/**
+ * The tutorial battle: a Lv. 5 Rattata challenges the player, whose team the
+ * format replaces with a Lv. 5 Pikachu. 1 Potion and 1 Poke Ball, no box, no
+ * cooldown. Asked for from Discord (`!tutorial`) or on Showdown (`/tutorial`).
+ */
+function requestTutorial(payload, deps) {
+	const userid = toID(payload.showdown);
+	if (!deps.isOnline(userid)) {
+		return { ok: false, code: 'offline', message: `You're not on Showdown as **${payload.showdown}** right now. Open the Showdown site, log in with that name, then try again.` };
+	}
+	const existing = openFor(userid);
+	if (existing) {
+		if (existing.tutorial && existing.status === 'waiting') {
+			deps.spawn(existing);
+			return { ok: true, again: true, encounter: publicView(existing) };
+		}
+		return { ok: false, code: 'busy', message: `${payload.showdown} already has an encounter open (${E.describe(existing)}). Finish it first.` };
+	}
+	const enc = {
+		id: crypto.randomBytes(8).toString('hex'),
+		createdAt: Date.now(),
+		userid,
+		showdown: payload.showdown,
+		character: payload.character || '',
+		discord: payload.discord || '',
+		place: 'tutorial', placeName: 'the tutorial', channel: String(payload.channel || ''),
+		balls: { ...E.TUTORIAL_BAG.balls }, items: { ...E.TUTORIAL_BAG.items },
+		warning: '', box: null, gimmicks: null,
+		kind: 'wild', double: false, name: 'Wild Rattata', avatar: '', team: [E.TUTORIAL_RATTATA],
+		ai: 'easy', format: E.TUTORIAL_FORMAT, badges: 0,
+		tutorial: true,
 		status: 'waiting',
 		result: null,
 	};
@@ -342,6 +382,7 @@ function publicView(enc) {
 		status: enc.status,
 		result: enc.result,
 		invalid: enc.invalid || null,
+		tutorial: !!enc.tutorial,
 	};
 }
 
@@ -465,6 +506,10 @@ function resultFromLog(enc, lines, winnerid) {
 		if (!m || toID(m[1]) !== enc.userid) continue;
 		const item = E.findBattleItem(m[2]);
 		if (item) itemsUsed[item.id] = (itemsUsed[item.id] || 0) + 1;
+	}
+	// The tutorial's catch goes nowhere, so it has no line for the doc: the "Gotcha" says it.
+	if (!caught && enc.tutorial && lines.some(l => /^\|-message\|Gotcha! .+ was caught!$/.test(l))) {
+		caught = { species: enc.team[0].species, level: enc.team[0].level, ball: 'poke', shiny: false };
 	}
 	const won = winnerid === enc.userid;
 	return {
@@ -636,7 +681,7 @@ function httpRoute(deps, log) {
 }
 
 module.exports = {
-	verify, placeFor, requestEncounter, completeEncounter, canUseItem, usedInLog, setBags, bagFor, pvpItemsFor, canUsePvpItem, NPC_ITEMS_EACH, publicView, canThrow, thrownInLog, resultFromLog, openFor,
+	verify, placeFor, requestEncounter, requestTutorial, completeEncounter, canUseItem, usedInLog, setBags, bagFor, pvpItemsFor, canUsePvpItem, NPC_ITEMS_EACH, publicView, canThrow, thrownInLog, resultFromLog, openFor,
 	checkTeam, gimmickIn, GIMMICK_ITEM, GIMMICK_NAME, sidesInLog,
 	httpRoute, encounters, RP_ROOM, CHALLENGE_MS, recordFinished, finishedSince,
 };
