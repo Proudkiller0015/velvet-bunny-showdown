@@ -133,7 +133,21 @@ check(Dex.moves.get('hivefrenzy').secondary.self.boosts.atk === 1, 'Hive Frenzy 
 
 // Evolution levels, and who learns what.
 check(Dex.species.get('braviary').evoLevel === 40 && Dex.species.get('magcargo').evoLevel === 30, 'evolution levels lowered');
-check(Dex.species.get('garchomp').evoLevel === 48 && Dex.species.get('volcarona').evoLevel === 59, 'pseudo-legendaries and Volcarona keep theirs');
+check(Dex.species.get('garchomp').evoLevel === 48, 'levels already under the caps are untouched');
+{
+	let worst = null;
+	for (const s of Dex.species.all()) {
+		if (!s.prevo || !s.evoLevel || s.evoType || (s.isNonstandard && s.isNonstandard !== 'Past') || /Totem|Gmax|Mega/.test(s.forme || '')) continue;
+		const cap = s.evos && s.evos.length ? 40 : 50;
+		if (s.evoLevel > cap) worst = `${s.name} at ${s.evoLevel}`;
+		for (const e of s.evos || []) {
+			const next = Dex.species.get(e);
+			if (next.evoLevel && !next.evoType && next.evoLevel <= s.evoLevel) worst = `${s.name} ${s.evoLevel} >= ${next.name} ${next.evoLevel}`;
+		}
+	}
+	check(!worst, `no final evolution after 50, no middle after 40, lines in order (${worst || 'all fine'})`);
+}
+check(Dex.species.get('hydreigon').evoLevel === 50 && Dex.species.get('zweilous').evoLevel === 40, 'Hydreigon 50, Zweilous 40');
 const learns = (sp, m) => {
 	let s = Dex.species.get(sp);
 	while (s && s.exists) {

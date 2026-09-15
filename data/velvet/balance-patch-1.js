@@ -25,9 +25,8 @@
  * Game Freak put some Pokemon behind levels that belong to pseudo-legendaries:
  * a 510 base stat Braviary at 54, a 430 Magcargo at 38, a 410 Medicham at 37.
  * In a roleplay where a trainer's level is capped by badges, that is a Pokemon
- * nobody ever sees evolved. Pseudo-legendaries, Volcarona and the genuinely
- * strong (Amoonguss, Ferrothorn, Haxorus) keep their levels: waiting is the
- * price of what they become.
+ * nobody ever sees evolved. The strong keep a late level, but never past the
+ * caps at the bottom of this table: 50 for a final stage, 40 for a middle one.
  *
  * Keyed by the Pokemon it evolves INTO, which is where Showdown keeps evoLevel.
  */
@@ -35,7 +34,7 @@ exports.EVOLUTIONS = {
 	braviary: { from: 54, to: 40, why: '510 BST: a mid-game bird, not a pseudo-legendary' },
 	braviaryhisui: { from: 54, to: 40, why: 'Same line as Braviary' },
 	mandibuzz: { from: 54, to: 40, why: "Braviary's counterpart, same wait for no reason" },
-	bisharp: { from: 52, to: 42, why: '490 BST middle stage; Kingambit still needs the Crest' },
+	bisharp: { from: 52, to: 40, why: '490 BST middle stage (cap 40); Kingambit still needs the Crest' },
 	mienshao: { from: 50, to: 40, why: '510 BST fighter stuck behind a pseudo level' },
 	klang: { from: 38, to: 32, why: 'A 440 BST middle stage at 38' },
 	klinklang: { from: 49, to: 40, why: '520 BST, and no stronger for the wait' },
@@ -71,6 +70,25 @@ exports.EVOLUTIONS = {
 	seaking: { from: 33, to: 28, why: '450 BST' },
 	cacturne: { from: 32, to: 28, why: '475 BST' },
 	lumineon: { from: 31, to: 26, why: '460 BST' },
+
+	/*
+	 * The caps. No evolution into a final stage after level 50 - pseudo-
+	 * legendaries included - and no middle stage after 40, so nobody spends the
+	 * back half of the game waiting on a Pokemon that has not become itself.
+	 */
+	dragonite: { from: 55, to: 50, why: 'Cap: no final evolution after 50' },
+	tyranitar: { from: 55, to: 50, why: 'Cap: no final evolution after 50' },
+	zweilous: { from: 50, to: 40, why: 'Cap: no middle stage after 40' },
+	hydreigon: { from: 64, to: 50, why: 'Cap: the latest evolution in the game, now 50' },
+	volcarona: { from: 59, to: 50, why: 'Cap: no final evolution after 50' },
+	drakloak: { from: 50, to: 40, why: 'Cap: no middle stage after 40' },
+	dragapult: { from: 60, to: 50, why: 'Cap: no final evolution after 50' },
+	baxcalibur: { from: 54, to: 50, why: 'Cap: no final evolution after 50' },
+	solgaleo: { from: 53, to: 50, why: 'Cap: no final evolution after 50' },
+	lunala: { from: 53, to: 50, why: 'Cap: no final evolution after 50' },
+	cosmoem: { from: 43, to: 40, why: 'Cap: no middle stage after 40' },
+	rhydon: { from: 42, to: 40, why: 'Cap: no middle stage after 40' },
+	lampent: { from: 41, to: 40, why: 'Cap: no middle stage after 40' },
 };
 
 /*
