@@ -9,7 +9,7 @@
   "scripts": {
     "start": "node src/index.js",
     "setup": "node scripts/setup-config.js",
-    "postinstall": "node scripts/setup-config.js",
+    "postinstall": "node scripts/rebuild-native.js && node scripts/setup-config.js",
     "test": "node test/teams.test.js && node test/behaviour.test.js && node test/ai.test.js 20 gen9ou",
     "test:teams": "node test/teams.test.js",
     "test:ai": "node test/ai.test.js",
