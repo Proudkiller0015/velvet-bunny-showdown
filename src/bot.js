@@ -30,10 +30,14 @@ class ShowdownBot {
 		// no login server the bot is a guest, so it has to ask for its own.
 		this.avatar = options.avatar || process.env.PS_BOT_AVATAR || 'bunny.png';
 		this.defaultDifficulty = options.difficulty || process.env.PS_DIFFICULTY || 'hard';
-		this.homeRoom = options.homeRoom || process.env.PS_HOME_ROOM || 'lobby';
+		// `null` means stand nowhere: the RP bot's short-lived trainers have no
+		// business sitting in a room's user list.
+		this.homeRoom = options.homeRoom === null ? null : (options.homeRoom || process.env.PS_HOME_ROOM || 'lobby');
 
-		this.builder = new TeamBuilder();
+		this.builder = options.builder || new TeamBuilder();
 		this.battles = new Map();        // roomid -> {state, ai}
+		// Battles this bot has finished and left - see forgetBattle().
+		this.ended = new Set();
 		// Shared with the ladder queues, so a difficulty picked here applies to a
 		// ladder game too rather than only to a direct challenge.
 		this.difficultyFor = options.difficultyFor || new Map();  // userid -> difficulty
@@ -54,6 +58,7 @@ class ShowdownBot {
 		this.ws.on('message', data => this.onData(String(data)));
 		this.ws.on('error', err => this.log('socket error:', err.message));
 		this.ws.on('close', () => {
+			if (this.stopped) return;   // closed on purpose
 			this.log(`disconnected, retrying in ${this.reconnectDelay}ms`);
 			setTimeout(() => this.connect(), this.reconnectDelay);
 			this.reconnectDelay = Math.min(this.reconnectDelay * 2, 30000);
@@ -94,7 +99,8 @@ class ShowdownBot {
 				if (this.avatar) this.send(`|/avatar ${this.avatar}`);
 				// /pminfobox is a chat command: it has to be sent from a room, not
 				// from the console, so the bot needs somewhere to stand.
-				this.send(`|/join ${this.homeRoom}`);
+				if (this.homeRoom) this.send(`|/join ${this.homeRoom}`);
+				this.onReady();
 			}
 			return;
 		case 'updatechallenges':
@@ -119,6 +125,19 @@ class ShowdownBot {
 
 		if (roomid && roomid.startsWith('battle-')) this.onBattleLine(roomid, parts, raw);
 	}
+
+	/** Logged in and named. Nothing to do for the house bot; subclasses start here. */
+	onReady() {}
+
+	/** Close for good, without the reconnect a dropped connection gets. */
+	stop() {
+		this.stopped = true;
+		try { if (this.ws) this.ws.close(); } catch (e) { /* already closed */ }
+	}
+
+	/** The line said when a battle starts, and the one when it ends. */
+	greeting(ai) { return `Good luck! Playing on **${ai.difficultyName}**. (PM me to change it.)`; }
+	farewell(winner) { return winner && winner !== this.name ? 'Good game!' : 'Good game - rematch any time.'; }
 
 	login(challstr1, challstr2) {
 		const challstr = `${challstr1}|${challstr2}`;
@@ -302,8 +321,13 @@ class ShowdownBot {
 	}
 
 	// ----------------------------------------------------------------- battles
+	onBattleStart(roomid) {}
+	onBattleEnd(roomid, winner) {}
+
 	onBattleLine(roomid, parts, raw) {
 		let battle = this.battles.get(roomid);
+		// A line for a battle that is already over is not the start of a new one.
+		if (!battle && isEndedBattle(this, roomid, parts)) return;
 		if (!battle) {
 			battle = { state: new BattleState(roomid), ai: new BattleAI({ difficulty: this.defaultDifficulty }), greeted: false };
 			battle.state.myName = this.name;
@@ -338,7 +362,9 @@ class ShowdownBot {
 				if (wanted) ai.setDifficulty(wanted);
 				if (!battle.greeted) {
 					battle.greeted = true;
-					this.room(roomid, `Good luck! Playing on **${ai.difficultyName}**. (PM me to change it.)`);
+					const hello = this.greeting(ai, roomid);
+					if (hello) this.room(roomid, hello);
+					this.onBattleStart(roomid);
 				}
 			}
 			break;
@@ -348,6 +374,7 @@ class ShowdownBot {
 			if (!rawJson) return;
 			let request;
 			try { request = JSON.parse(rawJson); } catch (e) { return; }
+			battle.retries = 0;
 			const choice = ai.decide(request, state);
 			if (choice) this.room(roomid, `/choose ${choice}|${request.rqid || ''}`);
 			return;
@@ -356,13 +383,21 @@ class ShowdownBot {
 			// An illegal choice must never strand the battle - fall back to a
 			// choice the server will always accept.
 			this.log(`battle error in ${roomid}: ${parts.slice(1).join('|')}`);
+			// Unless there is nothing to choose - the battle ended under a choice
+			// already on its way, as a caught Pokemon does - where "default" is
+			// refused in turn and the two would answer each other forever.
+			const message = parts.slice(1).join('|');
+			if (/nothing to choose|game is over|too late/i.test(message)) return;
+			battle.retries = (battle.retries || 0) + 1;
+			if (battle.retries > 5) return;
 			this.room(roomid, '/choose default');
 			return;
 		}
 		case 'win': case 'tie': {
 			const winner = (parts[1] || '').trim();
-			this.room(roomid, winner && winner !== this.name ? 'Good game!' : 'Good game - rematch any time.');
-			setTimeout(() => { this.room(roomid, '/leave'); this.battles.delete(roomid); }, 4000);
+			const bye = this.farewell(winner, roomid);
+			if (bye) this.room(roomid, bye);
+			setTimeout(() => { this.room(roomid, '/leave'); forgetBattle(this, roomid); this.onBattleEnd(roomid, winner); }, 4000);
 			break;
 		}
 		}
@@ -371,4 +406,40 @@ class ShowdownBot {
 	}
 }
 
-module.exports = { ShowdownBot };
+/**
+ * Let a finished battle go, and keep it gone.
+ *
+ * Deleting the battle was only half of it. Leaving the room makes the server
+ * answer with a `|deinit` for that room, and anything already on its way - the
+ * other player leaving, the replay link - lands after the delete too. Every one
+ * of those is a line for a battle room this bot has no record of, which is
+ * exactly what the start of a new battle looks like, so each finished game was
+ * quietly brought back as a fresh entry with its own AI and nothing would ever
+ * remove it again.
+ *
+ * An AI is not small: it holds the format's usage statistics, and those were a
+ * new copy for nearly every game. Measured with six people playing the bots
+ * back to back, the process holding the bots grew by a megabyte or two a game
+ * and hit its 160MB ceiling in about seventy seconds - which is a crash, and on
+ * the host a restart that drops every battle in progress. A server that is
+ * merely busy for an evening gets there too, only slower.
+ *
+ * So a finished room is remembered, and lines for it are ignored until the
+ * server says the bot is out of it. Room ids are never reused within a boot, and
+ * the list is trimmed in case a `deinit` never arrives.
+ */
+const ENDED_LIMIT = 500;
+
+function forgetBattle(bot, roomid) {
+	bot.battles.delete(roomid);
+	bot.ended.add(roomid);
+	if (bot.ended.size > ENDED_LIMIT) bot.ended.delete(bot.ended.values().next().value);
+}
+
+function isEndedBattle(bot, roomid, parts) {
+	if (!bot.ended.has(roomid)) return false;
+	if (parts[0] === 'deinit') bot.ended.delete(roomid);
+	return true;
+}
+
+module.exports = { ShowdownBot, forgetBattle, isEndedBattle };

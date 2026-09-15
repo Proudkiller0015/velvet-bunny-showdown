@@ -18,6 +18,8 @@ const WebSocket = require('ws');
 const { TeamBuilder } = require('./teambuilder');
 const { BattleAI } = require('./ai');
 const { BattleState } = require('./battle');
+// A finished battle has to stay finished; see forgetBattle() in src/bot.js.
+const { forgetBattle, isEndedBattle } = require('./bot');
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
@@ -64,6 +66,7 @@ class LadderBot {
 		this.password = options.password || perRung || process.env.PS_LADDER_PASSWORD ||
 			process.env.PS_BOT_PASSWORD || '';
 		this.battles = new Map();
+		this.ended = new Set();
 		this.searching = false;
 		this.ws = null;
 		this.reconnectDelay = 2000;
@@ -86,6 +89,7 @@ class LadderBot {
 		this.ws.on('close', () => {
 			this.searching = false;
 			this.ready = false;
+			if (this.guestRetry) { clearTimeout(this.guestRetry); this.guestRetry = null; }
 			noteQueue(this.name, { connected: false });
 			if (this.stopped) return;
 			setTimeout(() => this.connect(), this.reconnectDelay);
@@ -127,6 +131,8 @@ class LadderBot {
 		case 'updateuser':
 			if (parts[2] === '1' && !this.ready) {
 				this.ready = true;
+				// Named now, so the guest retry below has nothing left to do. See there.
+				if (this.guestRetry) { clearTimeout(this.guestRetry); this.guestRetry = null; }
 				if (this.avatar) this.send(`|/avatar ${this.avatar}`);
 				this.log(`${this.name} queueing for ${this.format}`);
 				noteQueue(this.name, { connected: true, named: parts[1], error: null, since: new Date().toISOString() });
@@ -161,8 +167,24 @@ class LadderBot {
 					 * failed together come back one at a time.
 					 */
 					const wait = Math.max(15000, this.reconnectDelay) + Math.floor(Math.random() * 30000);
+					/*
+					 * Only if the name still has not come through.
+					 *
+					 * Showdown says "you are a guest" to every connection the moment it
+					 * opens, before the login has even been tried - so this timer was
+					 * armed on every connection, and nothing disarmed it when the name
+					 * was accepted a second later. Fifteen to forty-five seconds after
+					 * every login, every queue closed its own perfectly good socket,
+					 * reconnected, logged in again, rebuilt its team and went back in
+					 * the queue: the "queueing for" and "is now a global bot" pair the
+					 * live log shows for all fifteen of them, around the clock, with a
+					 * login-server request and a fresh parse of the format's usage
+					 * statistics each time. A game that happened to start inside the
+					 * window had its bot's socket shut under it.
+					 */
 					this.guestRetry = setTimeout(() => {
 						this.guestRetry = null;
+						if (this.ready) return;
 						try { this.ws.close(); } catch (e) {}
 					}, wait);
 				}
@@ -202,6 +224,7 @@ class LadderBot {
 
 	onBattleLine(roomid, parts) {
 		let battle = this.battles.get(roomid);
+		if (!battle && isEndedBattle(this, roomid, parts)) return;
 		if (!battle) {
 			battle = { state: new BattleState(roomid), ai: new BattleAI({ difficulty: this.difficulty }), greeted: false };
 			battle.state.myName = this.name;
@@ -248,7 +271,7 @@ class LadderBot {
 			const wait = battle.versusBot ? this.selfPlayCooldown : 4000;
 			setTimeout(() => {
 				this.send(`${roomid}|/leave`);
-				this.battles.delete(roomid);
+				forgetBattle(this, roomid);
 				void this.search();
 			}, wait);
 			break;

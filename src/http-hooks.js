@@ -475,6 +475,15 @@ function serveHealth(url, res) {
  * It also has to sit in front, not behind: a body can only be read once, and
  * their handler discards it before config would ever get a look in.
  */
+/**
+ * Routes added from outside this file - the RP encounter endpoint, from the
+ * server config. Each is `(req, res) => boolean`, true when it answered.
+ */
+const ROUTES = [];
+function addRoute(route) {
+	if (!ROUTES.includes(route)) ROUTES.push(route);
+}
+
 function hookServer(server, log) {
 	if (server.velvetHttpHooks) return;
 	server.velvetHttpHooks = true;
@@ -495,6 +504,9 @@ function hookServer(server, log) {
 			if (serveLadderStatus(req.url, res)) return true;
 			if (serveHealth(req.url, res)) return true;
 			if (serveReplay(req.url, res, log)) return true;
+			for (const route of ROUTES) {
+				if (route(req, res)) return true;
+			}
 
 			if (isPage(req.url)) revalidate(res);
 		}
@@ -521,4 +533,4 @@ function installHttpHooks(log = () => {}) {
 	};
 }
 
-module.exports = { installHttpHooks, isLoginRequest, UPSTREAM_HOST, UPSTREAM_PATH };
+module.exports = { installHttpHooks, addRoute, isLoginRequest, UPSTREAM_HOST, UPSTREAM_PATH };

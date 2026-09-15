@@ -4,7 +4,7 @@
   "description": "A hosted Pokemon Showdown server whose resident bot accepts a challenge in any format, builds a legal team for it, and plays a decent game.",
   "main": "src/index.js",
   "engines": {
-    "node": ">=20"
+    "node": ">=22"
   },
   "scripts": {
     "start": "node src/index.js",

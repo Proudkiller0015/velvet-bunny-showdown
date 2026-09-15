@@ -331,6 +331,291 @@ const UNBAN_TERA = ['!Terastal Clause'];
 const UNBAN_DYNAMAX = ['!Dynamax Clause'];
 
 /**
+ * Catching, for the RP Wild Encounter format.
+ *
+ * The rules live in src/encounters.js, shared with the chat commands and the
+ * RP bot. This file is copied into the package's dist/config before it runs, so
+ * the project is four directories up from here - and one when a test loads it
+ * from config/ directly.
+ */
+function encounters() {
+	const path = require('path');
+	for (const up of ['../../../../src/encounters', '../src/encounters']) {
+		try { return require(path.join(__dirname, up)); } catch (e) { if (e.code !== 'MODULE_NOT_FOUND') throw e; }
+	}
+	throw new Error('src/encounters.js not found');
+}
+
+const aOrAn = name => (/^[AEIOU]/i.test(name) ? `an ${name}` : `a ${name}`);
+
+/** The ball buttons, posted into the battle so nobody has to type a command. */
+function ballPanel(E, note) {
+	const main = ['poke', 'great', 'ultra'].map(id => E.findBall(id));
+	const buttons = main.map(b =>
+		`<button class="button" name="send" value="/throwball ${b.id}">Throw ${aOrAn(b.name)}</button>`).join(' ');
+	const others = E.BALLS.filter(b => !['poke', 'great', 'ultra'].includes(b.id)).map(b =>
+		`<option value="${b.id}">${b.name}${b.note ? ` (${b.note})` : ''}</option>`).join('');
+	return `<div class="infobox" style="margin:4px 0">` +
+		(note ? `<div style="margin-bottom:4px">${note}</div>` : '') +
+		`<b>Catch it:</b> ${buttons}` +
+		`<form data-submitsend="/throwball {ball}" style="margin-top:4px">` +
+		`<select name="ball">${others}</select> <button class="button" type="submit">Throw</button></form>` +
+		`<small>Throwing a ball uses your turn. Weaken it and give it a status first to make it easier. ` +
+		`Only use balls your character actually has.</small></div>`;
+}
+
+/** A side is wild when it is one or two Pokemon under a "Wild ..." name - which only the RP bot plays as. */
+function isWildSide(side) {
+	return !!side && /^Wild /.test(side.name) && side.pokemon.length <= 2;
+}
+
+/**
+ * A choice for one of your Pokemon that the engine will accept, for a turn
+ * spent throwing. Its move never happens - the format stops it - but the
+ * engine needs a real choice for every Pokemon before the turn can run, and a
+ * move that needs a target needs a legal one.
+ */
+function fillerChoice(battle, pokemon) {
+	if (!pokemon || pokemon.fainted) return 'pass';
+	const request = pokemon.getMoveRequestData();
+	for (let i = 0; i < request.moves.length; i++) {
+		const move = request.moves[i];
+		if (move.disabled) continue;
+		const needsTarget = battle.gameType !== 'singles' &&
+			['normal', 'any', 'adjacentFoe', 'adjacentAlly', 'adjacentAllyOrSelf'].includes(move.target);
+		if (!needsTarget) return `move ${i + 1}`;
+		for (const loc of [1, 2, -1, -2]) {
+			if (battle.validTargetLoc(loc, pokemon, move.target)) return `move ${i + 1} ${loc}`;
+		}
+	}
+	return null;
+}
+
+/**
+ * Using an item from the bag: "item potion Pikachu" is a choice, like a ball.
+ *
+ * Same machinery as throwing a ball, and for the same reasons: the choice is
+ * filled with a move the engine accepts, flagged, and the format swaps it for
+ * the item when the turn runs. It takes the whole turn and goes first. The
+ * target is named rather than numbered, because a party's order changes every
+ * time someone switches and nobody can be expected to track it.
+ *
+ * Installed in every RP Battle format. Whether a character may use an item at
+ * all - is it an RP encounter, is there one in the bag - is the server's call,
+ * made in /useitem before the choice ever reaches the battle.
+ */
+function installItems(battle) {
+	const E = encounters();
+	for (const side of battle.sides) {
+		if (side.rpItemsInstalled) continue;
+		side.rpItemsInstalled = true;
+		const choose = side.choose;
+		const clearChoice = side.clearChoice;
+		const commitChoices = side.commitChoices;
+		side.clearChoice = function (...args) {
+			this.rpPendingItem = null;
+			return clearChoice.apply(this, args);
+		};
+		side.commitChoices = function (...args) {
+			this.rpItem = this.rpPendingItem || null;
+			return commitChoices.apply(this, args);
+		};
+		side.choose = function (input) {
+			const m = /^\s*item\s+(\S+)\s+(.+)$/i.exec(String(input));
+			if (!m) return choose.call(this, input);
+			if (this.requestState !== 'move') return this.emitChoiceError(`Can't use an item right now`);
+			const item = E.findBattleItem(m[1]);
+			if (!item) return this.emitChoiceError(`There's no battle item called "${m[1]}"`);
+			const wanted = E.toID(m[2]);
+			const named = this.pokemon.filter(p => E.toID(p.name) === wanted || E.toID(p.species.name) === wanted || E.toID(p.species.baseSpecies) === wanted);
+			if (!named.length) return this.emitChoiceError(`None of your Pokémon is called "${m[2]}"`);
+			const target = named.find(p => (item.revive ? p.fainted : !p.fainted && (item.pp ? p.moveSlots.some(s => s.pp < s.maxpp) : p.hp < p.maxhp || (item.cure && p.status))));
+			if (!target) {
+				return this.emitChoiceError(item.revive ? `${named[0].name} hasn't fainted` :
+					named[0].fainted ? `${named[0].name} has fainted: it needs a Revive` : `${named[0].name} doesn't need a ${item.name}`);
+			}
+			const fillers = this.active.map(p => fillerChoice(battle, p));
+			if (fillers.some(f => f === null) || fillers.every(f => f === 'pass')) {
+				return this.emitChoiceError(`Can't use an item this turn`);
+			}
+			if (!choose.call(this, fillers.join(', '))) return false;
+			this.rpPendingItem = { id: item.id, target: target.position === undefined ? null : target, turn: battle.turn, used: false };
+			this.rpPendingItem.target = target;
+			return true;
+		};
+	}
+}
+
+function useItem(battle, side, itemId, target) {
+	const E = encounters();
+	const item = E.findBattleItem(itemId);
+	if (!item || !target) return;
+	battle.add('-message', `${side.name} used ${aOrAn(item.name)} on ${target.name}!`);
+	if (item.revive) {
+		if (!target.fainted) return battle.add('-message', `It had no effect.`);
+		target.fainted = false;
+		target.faintQueued = false;
+		target.status = '';
+		target.hp = Math.max(1, Math.floor(target.maxhp * item.revive));
+		side.pokemonLeft++;
+		battle.add('-message', `${target.name} was revived!`);
+		return;
+	}
+	if (target.fainted) return battle.add('-message', `It had no effect.`);
+	if (item.pp) {
+		for (const slot of target.moveSlots) slot.pp = slot.maxpp;
+		battle.add('-message', `${target.name}'s PP was restored.`);
+		return;
+	}
+	const amount = item.heal === 'full' ? target.maxhp : item.heal;
+	const healed = target.heal(amount);
+	if (target.isActive) battle.add('-heal', target, target.getHealth, `[from] item: ${item.name}`);
+	else if (healed) battle.add('-message', `${target.name} recovered ${healed} HP.`);
+	if (item.cure && target.status) {
+		target.cureStatus();
+	}
+}
+
+/** Everything RP battles do instead of a move: throwing a ball, using an item. */
+const RP_TURN_ACTIONS = {
+	onModifyPriority(priority, pokemon) {
+		const side = pokemon.side;
+		if ((side.rpBall && side.rpBall.turn === this.turn) || (side.rpItem && side.rpItem.turn === this.turn)) return priority + 20;
+	},
+	onBeforeMovePriority: 100,
+	onBeforeMove(pokemon) {
+		const side = pokemon.side;
+		const ball = side.rpBall;
+		const item = side.rpItem;
+		if (item && item.turn === this.turn) {
+			// The first of your Pokemon to act uses it; any other just waits.
+			if (!item.used) { item.used = true; useItem(this, side, item.id, item.target); }
+			return false;
+		}
+		if (!ball || ball.turn !== this.turn) return;
+		if (!ball.thrown) {
+			ball.thrown = true;
+			throwBall(this, pokemon, ball.id);
+		}
+		return false;
+	},
+};
+
+function installCatching(battle) {
+	const E = encounters();
+	for (const side of battle.sides) {
+		side.rpMisses = 0;
+		const choose = side.choose;
+		const clearChoice = side.clearChoice;
+		const commitChoices = side.commitChoices;
+		// A pending throw belongs to the choice, so undoing the choice drops it.
+		side.clearChoice = function (...args) {
+			this.rpPendingBall = null;
+			return clearChoice.apply(this, args);
+		};
+		// The engine clears every choice after queueing it and before running it,
+		// so the throw is moved off the choice at the moment it is locked in.
+		side.commitChoices = function (...args) {
+			this.rpBall = this.rpPendingBall || null;
+			return commitChoices.apply(this, args);
+		};
+		/*
+		 * "ball ultra" is a choice, like "move 1".
+		 *
+		 * It is turned into the first move the Pokemon can use, flagged, so the
+		 * engine does everything it normally does with a choice - timers, undo,
+		 * both players locking in - and the format swaps the move for the throw
+		 * when it comes up. Everything about the throw, including the random roll,
+		 * happens inside the battle, so replays show exactly what happened.
+		 */
+		side.choose = function (input) {
+			const m = /^\s*ball\b\s*(.*)$/i.exec(String(input));
+			if (!m) return choose.call(this, input);
+			const foe = this.foe;
+			if (this.requestState !== 'move' || !this.active[0] || this.active[0].fainted) {
+				return this.emitChoiceError(`Can't throw a ball right now: pick a Pokémon to send out first`);
+			}
+			if (!isWildSide(foe)) {
+				return this.emitChoiceError(`Can't throw a ball: that Pokémon belongs to somebody`);
+			}
+			// Two wild Pokemon at once can't be caught: the ball wouldn't know which.
+			// Same as the games - knock one out, then throw at the other.
+			const standing = foe.active.filter(p => p && !p.fainted);
+			if (standing.length > 1) {
+				return this.emitChoiceError(`There are two wild Pokémon out. Knock one out first, then throw at the other`);
+			}
+			const wild = standing[0];
+			if (!wild) return this.emitChoiceError(`There's nothing to throw at`);
+			if (E.isLegendary(wild.species)) {
+				return this.emitChoiceError(`${wild.species.name} can't be caught on Showdown: legendaries happen in the RP`);
+			}
+			const ball = E.findBall(m[1]);
+			if (!ball) return this.emitChoiceError(`There's no ball called "${m[1]}"`);
+			// Throwing is the whole turn. In a double battle both of your
+			// Pokemon wait for it, so neither can knock out what you're catching.
+			const fillers = this.active.map(p => fillerChoice(battle, p));
+			if (fillers.some(f => f === null) || fillers.every(f => f === 'pass')) {
+				return this.emitChoiceError(`Can't throw a ball this turn`);
+			}
+			if (!choose.call(this, fillers.join(', '))) return false;
+			this.rpPendingBall = { id: ball.id, turn: battle.turn, thrown: false };
+			return true;
+		};
+	}
+}
+
+function throwBall(battle, pokemon, ballId) {
+	const E = encounters();
+	const side = pokemon.side;
+	const wild = side.foe.active.find(p => p && !p.fainted);
+	const ball = E.findBall(ballId);
+	if (!wild || wild.fainted || !ball) return;
+
+	const species = wild.species;
+	const chance = E.catchChance({
+		ball,
+		hpFraction: wild.hp / wild.maxhp,
+		status: wild.status,
+		rate: E.catchRate(species),
+		misses: side.rpMisses,
+		turn: battle.turn,
+		types: wild.getTypes(),
+		wildLevel: wild.level,
+		myLevel: pokemon.level,
+		baseSpeed: species.baseStats.spe,
+		weightkg: species.weightkg,
+		moonStone: (species.evos || []).some(e => battle.dex.species.get(e).evoItem === 'Moon Stone'),
+		sameSpeciesOppositeGender: pokemon.species.baseSpecies === species.baseSpecies &&
+			!!pokemon.gender && !!wild.gender && pokemon.gender !== wild.gender,
+		ultraBeast: (species.tags || []).includes('Ultra Beast'),
+	});
+
+	const rng = () => battle.random();
+	const caught = rng() < chance;
+	const shakes = caught ? 3 : E.shakesFor(chance, rng);
+
+	battle.add('-message', `${side.name} threw ${aOrAn(ball.name)}!`);
+	for (let i = 0; i < shakes; i++) battle.add('-message', '...wobble...');
+	if (caught) {
+		battle.add('-message', `Gotcha! ${wild.name} was caught!`);
+		battle.add('raw', `<div class="broadcast-green"><b>Caught ${species.name}!</b> ` +
+			`Post this in your RP scene so the doc can be updated:<br/>` +
+			`<code>((Caught ${species.name}, Lv. ${wild.level}, with ${aOrAn(ball.name)}))</code></div>`);
+		battle.win(side);
+		return;
+	}
+	side.rpMisses++;
+	battle.add('-message', [
+		'Oh no! The Pokémon broke free!',
+		'Aww! It appeared to be caught!',
+		'Aargh! Almost had it!',
+		'Shoot! It was so close, too!',
+	][shakes]);
+	battle.add('uhtml', `rpball${battle.turn}`, ballPanel(E,
+		`Missed. The next ball is ${Math.round(E.PITY_PER_MISS * 100)}% likelier to hold.`));
+}
+
+/**
  * The Broken Pact, kept where it belongs.
  *
  * A Nuzleaf is an RU Pokemon holding a nine-hundred-point base stat total: the
@@ -345,6 +630,9 @@ const UNBAN_DYNAMAX = ['!Dynamax Clause'];
  * own, so the past-gen RP tiers are already covered.
  */
 const UBERS_ONLY_ITEM = { banlist: ['Broken Pact'] };
+
+/* Assigned inside the list below; RP Wild Double Encounter borrows its handlers. */
+let WILD;
 
 exports.Formats = [
 	{
@@ -386,10 +674,92 @@ exports.Formats = [
 		 */
 		battle: { trunc: Math.trunc },
 
-		onBegin: allGimmicks,
+		onBegin() {
+			allGimmicks.call(this);
+			installItems(this);
+		},
+		...RP_TURN_ACTIONS,
 
 		// Challengeable and usable in the builder, but kept off the ladder:
 		// nothing with no rules at all belongs on a rating.
+		searchShow: false,
+		challengeShow: true,
+		rated: false,
+	},
+	WILD = {
+		name: "[Gen 9] RP Battle (Wild Encounter)",
+		desc: "A wild Pokémon from the RP. Beat it, or weaken it and throw a ball.",
+
+		/**
+		 * RP Battle's rules, plus a ball.
+		 *
+		 * The wild side is always one Pokemon played by the RP bot under a
+		 * "Wild ..." name, and it comes from /wild in the Roleplay room rather
+		 * than from a challenge anybody types. Your own side is your RP team,
+		 * as free as RP Battle is, because the level cap and what you own are
+		 * the RP's business and not this server's.
+		 *
+		 * No team preview: you don't get to see what's in the grass before it
+		 * jumps out.
+		 */
+		ruleset: [
+			'Cancel Mod',
+			'Max Team Size = 24',
+			'Max Move Count = 24',
+			'Max Level = 9999',
+			'Default Level = 100',
+		],
+		battle: { trunc: Math.trunc },
+
+		onBegin() {
+			allGimmicks.call(this);
+			installCatching(this);
+			installItems(this);
+		},
+		onBattleStart() {
+			if (this.sides.some(isWildSide)) this.add('uhtml', 'rpball0', ballPanel(encounters()));
+		},
+
+		// A throw or an item happens before anything else that turn, the way it does in the games.
+		...RP_TURN_ACTIONS,
+
+		searchShow: false,
+		challengeShow: true,
+		rated: false,
+	},
+
+
+	{
+		name: "[Gen 9] RP Battle (Wild Doubles)",
+		desc: "Two wild Pokémon at once. Knock one out, then catch the other.",
+		/*
+		 * The same as RP Wild Encounter in every respect but the number of
+		 * Pokemon: it borrows that format's rules and handlers rather than
+		 * keeping a second copy of them that could drift.
+		 */
+		gameType: 'doubles',
+		ruleset: ['Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
+		battle: { trunc: Math.trunc },
+		onBegin() { WILD.onBegin.call(this); },
+		onBattleStart() { WILD.onBattleStart.call(this); },
+		onModifyPriority(priority, pokemon) { return WILD.onModifyPriority.call(this, priority, pokemon); },
+		onBeforeMovePriority: 100,
+		onBeforeMove(pokemon) { return WILD.onBeforeMove.call(this, pokemon); },
+		searchShow: false,
+		challengeShow: true,
+		rated: false,
+	},
+	{
+		name: "[Gen 9] RP Battle (Doubles)",
+		desc: "RP Battle as a double battle: no rules, two Pokémon out a side.",
+		gameType: 'doubles',
+		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
+		battle: { trunc: Math.trunc },
+		onBegin() {
+			allGimmicks.call(this);
+			installItems(this);
+		},
+		...RP_TURN_ACTIONS,
 		searchShow: false,
 		challengeShow: true,
 		rated: false,

@@ -160,6 +160,12 @@ if (fs.existsSync(formatsSrc)) {
 	console.log('custom formats -> copied');
 }
 
+// What level each format is played at, written down so the server can build its
+// format list without loading every mod Showdown ships - see src/format-levels.js.
+// After the formats and the data hooks above, because both feed into it. Only
+// does any work when one of those has changed since the file was written.
+require('../src/format-levels').ensureLevels(msg => console.log(msg));
+
 // ---------------------------------------------------------------- avatars
 // Custom avatars are served from the package's config/avatars, which npm owns,
 // so they are copied in from avatars/ here the same way the config is.

@@ -62,7 +62,22 @@ function startServer() {
 			...process.env,
 			PORT: String(PORT),
 			NODE_OPTIONS: process.env.PS_SERVER_NODE_OPTIONS ||
-				`--max-old-space-size=${Number(process.env.PS_SERVER_HEAP_MB || 400)}`,
+				`--max-old-space-size=${Number(process.env.PS_SERVER_HEAP_MB || 400)} ` +
+				/*
+				 * And a small young generation, which is the one V8 knob that paid.
+				 *
+				 * Node lets the space new objects are born in grow to 16MB a half,
+				 * and under battle load both processes kept it at full size, so a
+				 * good 30-50MB of the container was allocation scratch space.
+				 * Capped at 4MB, measured on Node 22 with six people battling the
+				 * bots non-stop for three minutes: the two processes peaked 45MB
+				 * lower (435 to 390MB) and averaged 35MB lower, with the same number
+				 * of battles, the same turn times and no more CPU. 2MB was no better
+				 * than 4. The wrapper gets the same flag through NODE_OPTIONS in
+				 * render.yaml; this line is the server's copy, because its
+				 * NODE_OPTIONS is replaced rather than inherited.
+				 */
+				`--max-semi-space-size=${Number(process.env.PS_SEMI_SPACE_MB || 4)}`,
 		},
 		stdio: ['ignore', 'inherit', 'inherit'],
 	});
@@ -223,6 +238,13 @@ function startServer() {
 	const { ShowdownBot } = require('./bot');
 	const bot = new ShowdownBot({ url, difficultyFor });
 	bot.connect();
+
+	// The RP bot, in the Roleplay room: wild Pokemon and trainers for the
+	// Discord RP. Shares the team builder so it carries no second copy of it.
+	if (process.env.PS_NO_RP_BOT !== '1') {
+		const { RpGuide } = require('./rp-bot');
+		new RpGuide({ url, builder: bot.builder }).connect();
+	}
 
 	const { describeBrain } = require('./brain');
 	console.log(`[boot] ${describeBrain()}`);

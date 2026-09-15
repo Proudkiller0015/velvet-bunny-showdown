@@ -112,6 +112,9 @@ class TeamBuilder {
 		this.speciesOk = new Map();   // `${formatId}|${speciesid}` -> boolean
 		this.smogon = new Map();      // formatId -> strategy-dex sets | null
 		this.usage = new Map();       // formatId -> usage stats | null
+		this.fetchedAt = new Map();   // `${kind}|${formatId}` -> when it was loaded; see prefetch()
+		this.inflight = new Map();    // formatId -> the prefetch already under way
+		this.parsed = new Map();      // cache file -> {mtimeMs, data}, shared between formats; see fetchJSON()
 	}
 
 	/** Random-team formats are generated server-side; we must NOT send a team. */
@@ -134,6 +137,15 @@ class TeamBuilder {
 			// are on disk anyway, so let them go too.
 			this.smogon.delete(oldest);
 			this.usage.delete(oldest);
+			this.fetchedAt.delete(`sets|${oldest}`);
+			this.fetchedAt.delete(`stats|${oldest}`);
+		}
+		// A parsed file nobody holds any more goes too, or the sharing above
+		// would quietly become a cache of everything ever read.
+		const held = new Set([...this.smogon.values(), ...this.usage.values()]);
+		for (const [file, entry] of this.parsed) {
+			const data = entry.data;
+			if (data && !held.has(data) && !held.has(data.pokemon)) this.parsed.delete(file);
 		}
 	}
 
@@ -145,10 +157,39 @@ class TeamBuilder {
 	 */
 	async prefetch(formatId) {
 		const id = Dex.formats.get(formatId).id;
-		await Promise.all([
-			this.fetchJSON('sets', id).then(d => this.smogon.set(id, d)),
-			this.fetchJSON('stats', id).then(d => this.usage.set(id, d && d.pokemon)),
-		]);
+		/*
+		 * Once per format, not once per game.
+		 *
+		 * This was called before every challenge and every time a ladder queue
+		 * went back into the queue, and every call read the cached file off disk
+		 * and parsed it again - for gen9ou the usage stats alone are about 9MB of
+		 * heap once parsed. The copy it replaced was only garbage if nothing still
+		 * held it, and every AI mid-battle did, so a busy few minutes meant a
+		 * dozen copies of the same statistics alive at once; the heap limit of
+		 * the process running the bots was being hit by that and nothing else.
+		 *
+		 * The data is the same file for a week (CACHE_TTL), so what is already in
+		 * memory is kept until then and every caller shares the one copy. Nothing
+		 * writes to it. A kind that came back empty - offline, or a format Smogon
+		 * has no page for - is still asked again next time, exactly as before, so
+		 * an outage does not stick. Callers arriving together share one read.
+		 */
+		const fresh = (kind, map) => !!map.get(id) && Date.now() - (this.fetchedAt.get(`${kind}|${id}`) || 0) < CACHE_TTL;
+		const load = (kind, map, pickData) => {
+			if (fresh(kind, map)) return null;
+			return this.fetchJSON(kind, id).then(d => {
+				map.set(id, pickData(d));
+				this.fetchedAt.set(`${kind}|${id}`, Date.now());
+			});
+		};
+		if (fresh('sets', this.smogon) && fresh('stats', this.usage)) return;
+		if (this.inflight.has(id)) return this.inflight.get(id);
+		const loading = Promise.all([
+			load('sets', this.smogon, d => d),
+			load('stats', this.usage, d => d && d.pokemon),
+		]).finally(() => this.inflight.delete(id));
+		this.inflight.set(id, loading);
+		return loading;
 	}
 
 	/** Formats data.pkmn.cc might file this format under, most specific first. */
@@ -171,9 +212,26 @@ class TeamBuilder {
 			try {
 				const stat = fs.statSync(file);
 				if (Date.now() - stat.mtimeMs < CACHE_TTL) {
+					/*
+					 * One parse per file, however many formats read it.
+					 *
+					 * Formats Smogon has no page for borrow a neighbour's -
+					 * RP Battle and RP OU both fall back to gen9ou - and each was
+					 * given its own parse of the same file: 4.5MB of heap apiece
+					 * for identical usage statistics, sitting side by side from
+					 * the moment the ladder queues came up. Same file, same
+					 * modification time, same object.
+					 */
+					const seen = this.parsed.get(file);
+					if (seen && seen.mtimeMs === stat.mtimeMs) {
+						if (seen.data === null) continue;
+						return seen.data;
+					}
 					const raw = fs.readFileSync(file, 'utf8');
-					if (raw === 'null') continue;
-					return JSON.parse(raw);
+					const data = raw === 'null' ? null : JSON.parse(raw);
+					this.parsed.set(file, { mtimeMs: stat.mtimeMs, data });
+					if (data === null) continue;
+					return data;
 				}
 			} catch (e) { /* not cached yet */ }
 

@@ -218,6 +218,38 @@ heap. `NODE_OPTIONS=--max-old-space-size=400` is set in the blueprint. If it eve
 dies with exit 137, the next cuts are the format cache down to 4, and
 lazy-loading the damage calculator.
 
+## RP encounters
+
+Battles for the **Poke-p Revamp** Pokémon RP on Discord. Players never challenge
+anyone for these: they type `!encounter` on Discord, and a wild Pokémon or a
+trainer challenges them here, in the **Roleplay** room (`/roleplay`), whose
+introduction is the whole beginner tutorial. The lobby is untouched.
+
+- **`src/encounters.js`**: what turns up. Badge *count* (gyms have no order)
+  decides how strong a line may be, stronger lines get rarer instead of
+  impossible, and the level cap sets levels. Evolution lines come together, at
+  the stage a level allows. Starters, pseudo-legendaries, Ultra Beasts and
+  Paradox Pokémon are the rarest finds; legendaries and mythicals never appear.
+  Trainers come from 53 classes with real Showdown avatars, a random name and
+  a team weighted to their type. Sometimes it's a double battle. Also the ball
+  multipliers, the (deliberately generous) catch formula and shiny odds.
+- **`src/encounter-tables/kagura.js`**: every map place and route - its types,
+  the species that define it, its rare surprises, which Discord channels have
+  wild Pokémon, and which trainer classes are met there.
+- **`src/rp-server.js`**: the `/rp/encounter` endpoint. Requests must be signed
+  by the Discord bot's ed25519 key; this repo holds only the public half
+  (`config/rp-encounter-key.pub.pem`). Also `/rp/result/<id>` and the replay
+  feed `/rp/finished`.
+- **`src/rp-bot.js`**: the RP Guide account, and a short-lived connection per
+  encounter named for what it is ("Wild Pidgey", "Hiker Bob").
+- **Formats**: `[Gen 9] RP Battle (Wild Encounter)`, `(Wild Doubles)` and
+  `(Doubles)`. The bracketed names mean the client files them under RP Battle,
+  so one RP team works for everything. Catching is part of the wild formats:
+  `/throwball` (the buttons in the battle chat) checks the character's bag, the
+  throw happens inside the simulator, and replays show every wobble.
+
+---
+
 ## Tests
 
 ```bash
@@ -230,6 +262,8 @@ npm run test:lobby       # the lobby panel, locally or against a live server
 npm run test:live        # boot, log in, challenge, play it out
 npm run test:remote -- wss://host/showdown/websocket   # the same, deployed
 npm run ablate -- '{"switching":true}' '{"switching":false}' 60
+node test/catching.test.js        # the wild formats: throwing, catching, doubles, refusals
+node test/rp-encounter.test.js    # an encounter end to end against a running server (see the file header)
 ```
 
 `test/ablation.js` plays two configurations against each other so a change is
@@ -249,7 +283,11 @@ src/brain.js         loads data/brain.json
 src/battle.js        battle state tracked from the public protocol
 src/bot.js           the Showdown client: login, challenges, difficulty, play
 src/ladder.js        one queue per format, so Battle! finds the bot
-src/index.js         boots the server, then the bot and the queues
+src/index.js         boots the server, then the bot, the queues and the RP bot
+src/encounters.js    RP encounters: rolls, trainer classes, catching maths
+src/encounter-tables/ per-region encounter tables (kagura.js)
+src/rp-server.js     the signed encounter endpoint, results and replay feed
+src/rp-bot.js        the RP Guide and its per-encounter opponents
 client/              our build of the Showdown client, served at /play/
 client-build/        scripts that produce it, and why each patch is needed
 server-static/       the stock root page, restored on every boot

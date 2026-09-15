@@ -176,10 +176,29 @@ const NO_SUBPROCESSES = {
  * looking at /velvet/health.json rather than by whoever deploys next. Turning
  * it on and off again costs a restart and no code.
  */
-const FRIENDS = process.env.PS_FRIENDS === '1';
+// And only where SQLite will not crash the process: on Node 20 it is a
+// segmentation fault rather than an error - see sqliteUsable() in
+// src/friends-store.js - so a host on the wrong Node goes without friends.
+const FRIENDS = process.env.PS_FRIENDS === '1' && (() => {
+	const usable = require('../../../src/friends-store').sqliteUsable();
+	if (!usable) console.log(`[config] PS_FRIENDS=1 but Node ${process.version} cannot run better-sqlite3; friends stay off`);
+	return usable;
+})();
+/*
+ * And no child for it either, unless PS_FRIENDS_PROCESS=1 asks for the old way.
+ *
+ * The 51MB was never the database - the file is tens of kilobytes - it was a
+ * whole second Node runtime whose only job was to hold it open and answer the
+ * odd query about who is online. better-sqlite3 answers those in microseconds,
+ * so they are answered in this process instead: see friendsInProcess() below,
+ * which opens the same file with Showdown's own schema and statements and routes
+ * the same queries to them. On a 512MB container that was running at 97%, a
+ * process spent keeping one small file open was the cheapest thing to give up.
+ */
+const FRIENDS_CHILD = FRIENDS && process.env.PS_FRIENDS_PROCESS === '1';
 exports.subprocesses = Number(process.env.PS_SUBPROCESSES || 0) ?
 	Number(process.env.PS_SUBPROCESSES) :
-	{ ...NO_SUBPROCESSES, friends: FRIENDS ? 1 : 0 };
+	{ ...NO_SUBPROCESSES, friends: FRIENDS_CHILD ? 1 : 0 };
 
 /**
  * Accounts: real Pokemon Showdown ones.
@@ -213,11 +232,11 @@ exports.subprocesses = Number(process.env.PS_SUBPROCESSES || 0) ?
  * login server - which is worth having for local testing without an account.
  */
 const realAccounts = process.env.PS_REAL_ACCOUNTS !== '0';
-if (realAccounts) {
-	// `loginserver` and the public key it is checked against are inherited from
-	// Showdown's own config; only the forwarding has to be set up here.
-	require('../../../src/http-hooks').installHttpHooks(msg => console.log('[login]', msg));
-} else {
+// The HTTP hooks carry more than the login relay now - health, replays, the
+// RP encounter endpoint - so they go in either way. `loginserver` and the key
+// it is checked against are inherited from Showdown's own config.
+require('../../../src/http-hooks').installHttpHooks(msg => console.log('[login]', msg));
+if (!realAccounts) {
 	// Open server: anyone picks a name and plays immediately, and nobody's name
 	// is proof of anything.
 	exports.noguestsecurity = true;
@@ -231,12 +250,12 @@ if (realAccounts) {
  * wants a database. Switching it on is these two lines plus better-sqlite3,
  * which ships prebuilt and needs no compiler.
  *
- * The cost is a child process: the database is queried through a process
- * manager, and with no child to query the whole system silently answers null.
- * That is a real price on a 512MB tier - it is the same reason battles run in
- * this process rather than their own, a few lines up - so it was measured
- * rather than assumed, at 51MB, and left off until somebody says otherwise.
- * PS_FRIENDS=1 on the host is the whole switch; see FRIENDS above.
+ * The cost used to be a child process: the database is queried through a
+ * process manager, and with no child to query the whole system silently answers
+ * null. That was measured at 51MB, which is why it is a switch. It now runs in
+ * this process instead (FRIENDS_CHILD above, friendsInProcess() below), so the
+ * switch costs a few megabytes rather than a runtime. PS_FRIENDS=1 on the host
+ * is still the whole switch; see FRIENDS above.
  *
  * The rank is the floor for using it at all: a space means everybody. Being
  * autoconfirmed is checked separately by Showdown itself and cannot be turned
@@ -423,7 +442,98 @@ function velvetRoster() {
 // Not a difficulty, so it can never match one: it is the absence of them.
 const PVP = 'pvp';
 
+const aOrAnName = name => (/^[AEIOU]/i.test(name) ? `an ${name}` : `a ${name}`);
+
+/** The in-battle medicine panel: what's in the bag, and who to use it on. */
+function itemPanel(bag) {
+	const E = require('../../../src/encounters');
+	const options = bag.map(([id, n]) => {
+		const item = E.findBattleItem(id);
+		return item ? `<option value="${id}">${item.name} (${n})</option>` : '';
+	}).join('');
+	return `<div class="infobox" style="margin:4px 0"><b>Use an item:</b> ` +
+		`<form data-submitsend="/useitem {item}, {target}" style="display:inline">` +
+		`<select name="item">${options}</select> on <input name="target" placeholder="Pokémon name" size="12" /> ` +
+		`<button class="button" type="submit">Use</button></form><br/>` +
+		`<small>Uses your whole turn. Revives only work on a Pokémon that fainted this battle.</small></div>`;
+}
+
 exports.commands = {
+	/**
+	 * Use a battle item (Potion, Revive...) from the character's bag in an RP
+	 * encounter. Sent by the item panel.
+	 */
+	useitem(target, room, user) {
+		room = this.requireRoom();
+		const game = room.battle;
+		if (!game || !/^gen\d+rp/.test(game.format)) throw new Chat.ErrorMessage('Items can only be used in RP battles.');
+		if (!game.playerTable[user.id]) throw new Chat.ErrorMessage("You're watching this battle, not in it.");
+		const E = require('../../../src/encounters');
+		const rp = require('../../../src/rp-server');
+		const [itemName, ...who] = String(target || '').split(',');
+		const item = E.findBattleItem(itemName);
+		const pokemon = who.join(',').trim();
+		if (!item) throw new Chat.ErrorMessage(`There's no battle item called "${itemName}". Try Potion, Super Potion, Hyper Potion, Max Potion, Full Restore, Revive, Max Revive or Max Elixir.`);
+		if (!pokemon) throw new Chat.ErrorMessage('Which Pokémon? Type its name in the box.');
+		const enc = game.rpEncounter && rp.encounters.get(game.rpEncounter);
+		const allowed = rp.canUseItem(enc, item.id, rp.usedInLog(room.log.log, user.name, item.name));
+		if (!allowed.ok) throw new Chat.ErrorMessage(allowed.message);
+		game.rpItemFrom = user.id;
+		try {
+			game.choose(user, `item ${item.id} ${pokemon}`);
+		} finally {
+			game.rpItemFrom = null;
+		}
+		const player = game.playerTable[user.id];
+		if (player && player.request && player.request.isWait) {
+			this.sendReply(`|raw|<small>Using ${aOrAnName(item.name)} on ${Chat.escapeHTML(pokemon)} (${allowed.left} left after this). Don't pick a move now, or it replaces the item.</small>`);
+		}
+	},
+	useitemhelp: ['/useitem [item], [pokemon] - In an RP encounter, use a Potion, Revive or similar from your bag instead of attacking.'],
+
+	/**
+	 * Throw a ball in an RP wild encounter. Sent by the buttons the battle
+	 * posts; typing it works too.
+	 */
+	throwball(target, room, user) {
+		room = this.requireRoom();
+		const game = room.battle;
+		if (!game || !RP_FORMATS.has(game.format)) {
+			throw new Chat.ErrorMessage('You can only throw a ball in an RP wild encounter.');
+		}
+		if (!game.playerTable[user.id]) throw new Chat.ErrorMessage("You're watching this battle, not in it.");
+		const E = require('../../../src/encounters');
+		const rp = require('../../../src/rp-server');
+		const ball = E.findBall(target || 'poke');
+		if (!ball) throw new Chat.ErrorMessage(`There's no ball called "${target}".`);
+
+		const enc = game.rpEncounter && rp.encounters.get(game.rpEncounter);
+		const thrown = rp.thrownInLog(room.log.log, user.name, ball.name);
+		const allowed = rp.canThrow(enc, ball.id, thrown);
+		if (!allowed.ok) throw new Chat.ErrorMessage(allowed.message);
+
+		game.rpBallFrom = user.id;
+		try {
+			game.choose(user, `ball ${ball.id}`);
+		} finally {
+			game.rpBallFrom = null;
+		}
+		const player = game.playerTable[user.id];
+		if (player && player.request && player.request.isWait) {
+			const left = allowed.left === undefined ? '' : ` (${allowed.left} left after this one)`;
+			this.sendReply(`|raw|<small>Throwing ${ball.name}${left}. Don't pick a move now, or it replaces the throw.</small>`);
+		}
+	},
+	throwballhelp: ['/throwball [ball] - In an RP wild encounter, throw a ball instead of attacking this turn.'],
+
+	rp: 'roleplay',
+	encounter: 'roleplay',
+	roleplay(target, room, user) {
+		this.runBroadcast();
+		return this.sendReplyBox(roleplayIntro());
+	},
+	roleplayhelp: ['/roleplay - How RP battles work: names, the RP team, encounters and catching.'],
+
 	botdifficulty: 'bot',
 	difficulty: 'bot',
 	bot(target, room, user) {
@@ -809,6 +919,8 @@ function hostReplays() {
 	 * boots this makes it unique too.
 	 */
 	const BOOT = Math.trunc(Date.now() / 1000).toString(36);
+	// The RP replay feed names replays before they are uploaded, so it needs this too.
+	LoginServer.velvetReplayBoot = BOOT;
 
 	LoginServer.request = async function (action, data) {
 		if (action !== 'addreplay') return original(action, data);
@@ -1125,6 +1237,275 @@ function applyAvatar(user) {
 	} catch (e) { /* they are on their way out */ }
 }
 
+
+/**
+ * The Roleplay room, and everything RP encounters need from the server.
+ *
+ * The RP happens on Discord; its battles happen here. This room is where those
+ * players are sent: its introduction is the whole tutorial, written for people
+ * who have never used Showdown, and the RP bot stands in it. The lobby stays
+ * what it was - the house bot, its difficulties and the ladder - so the two
+ * audiences never have to read each other's instructions.
+ *
+ * The encounter logic itself is in src/rp-server.js; this is the wiring.
+ */
+const RP_BOT = process.env.PS_RP_BOT_NAME || 'RP Guide';
+const RP_FORMATS = new Set(['gen9rpbattlewildencounter', 'gen9rpbattlewilddoubles']);
+
+function roleplayIntro() {
+	const discord = '<b>Discord</b>';
+	const step = (title, body, open = false) =>
+		`<details${open ? ' open' : ''} style="margin:4px 0"><summary><b>${title}</b></summary><div style="padding:4px 0 4px 12px">${body}</div></details>`;
+	return `<div style="padding:4px">` +
+		`<h2 style="margin:0 0 4px">Roleplay</h2>` +
+		`<p style="margin:0 0 6px">Battles for the Kagura RP. <b>You don't challenge anybody here</b>: ` +
+		`you ask for an encounter on ${discord}, and a wild Pok&eacute;mon or a trainer challenges you here.</p>` +
+
+		step('1. First time? Set up your name (once)',
+			`<ol style="margin:0;padding-left:18px">` +
+			`<li>Click <b>Choose name</b> at the top right and pick a name. Keep using the same one.</li>` +
+			`<li>On ${discord}, type <code>!showdown YourName</code> so the bot knows where to send your battles.</li>` +
+			`</ol>`, true) +
+
+		step('2. Build your RP team (once, then update it as your team changes)',
+			`<ol style="margin:0;padding-left:18px">` +
+			`<li>Click <b>Teambuilder</b> (on the home screen, top left).</li>` +
+			`<li>Click <b>New Team</b>. Set the format to <b>[Gen 9] RP Battle</b>. That one team is used for every RP battle, wild or trainer.</li>` +
+			`<li>Click <b>Add Pok&eacute;mon</b> and type its name. Add the Pok&eacute;mon your character <i>actually has</i> in the doc, nothing else.</li>` +
+			`<li>Set its <b>Level</b> to its level in the doc. It can't be higher than your level cap.</li>` +
+			`<li>Pick up to 4 <b>moves</b> it could know at that level. TMs are free. Not sure? Its level-up moves are the safe choice.</li>` +
+			`<li>Pick its <b>ability</b>. <b>Held items</b> are allowed once you have your first badge.</li>` +
+			`<li>Nature and EVs are optional. Leave them if you don't know what they are.</li>` +
+			`<li>Repeat for each Pok&eacute;mon, then click back to the team list. It saves on its own.</li>` +
+			`</ol>` +
+			`<small>Your first Pok&eacute;mon in the list is the one you send out first.</small>`) +
+
+		step('3. Get an encounter',
+			`<ol style="margin:0;padding-left:18px">` +
+			`<li>Have this site open and your name chosen.</li>` +
+			`<li>On ${discord}, in the channel your character is in, type <code>!encounter</code>. The bot already knows your badges and trainer level.</li>` +
+			`<li>A challenge pops up here from someone like <b>Wild Pidgey</b> or <b>Hiker Bob</b>. Click <b>Accept</b> and choose your RP team.</li>` +
+			`</ol>` +
+			`<small>Only routes, wilds and outdoor spots have wild Pok&eacute;mon; the bot tells you if you're somewhere without any. ` +
+			`Sometimes it's a double battle, so carry at least two Pok&eacute;mon once you have a badge.</small>`) +
+
+		step('4. In the battle',
+			`<ul style="margin:0;padding-left:18px">` +
+			`<li>Click a move to attack, or a Pok&eacute;mon to switch. That's all a battle is.</li>` +
+			`<li><b>Catching:</b> against a wild Pok&eacute;mon, <b>Throw</b> buttons appear in the battle chat. Throwing uses your whole turn.</li>` +
+			`<li>Lower its HP and give it a status (sleep is best) to make catching easier. Every miss makes the next ball likelier.</li>` +
+			`<li>Two wild Pok&eacute;mon? Knock one out first, then throw at the other.</li>` +
+			`<li>You can only throw balls your character has. Legendary and Mythical Pok&eacute;mon never appear here; those happen in the RP.</li>` +
+			`</ul>`) +
+
+		step('5. After the battle',
+			`<ul style="margin:0;padding-left:18px">` +
+			`<li>The bot on ${discord} posts the result: money for a win, the Pok&eacute;mon you caught, and the balls you used.</li>` +
+			`<li>Then write it into your scene. Caught something? Add it to your team here when you want to use it.</li>` +
+			`</ul>`) +
+
+		step('Something went wrong?',
+			`<ul style="margin:0;padding-left:18px">` +
+			`<li><b>No challenge came:</b> check your name here matches <code>!showdown</code>, and that this page is open. ` +
+			`If the site was asleep it takes about a minute to wake up; just try again.</li>` +
+			`<li><b>Declined it by accident:</b> use <code>!encounter</code> again. The same one comes back.</li>` +
+			`<li><b>"Your team is invalid":</b> the team's format must be <b>[Gen 9] RP Battle</b>.</li>` +
+			`<li><b>Still stuck:</b> ask in this room, or ask Sam or Saku.</li>` +
+			`</ul>`) +
+		`</div>`;
+}
+
+function roleplay() {
+	const rp = require('../../../src/rp-server');
+	const E = require('../../../src/encounters');
+
+	const room = makeRoom('Roleplay', {
+		isPrivate: false,
+		modjoin: false,
+		modchat: false,
+		autojoin: false,
+		introMessage: roleplayIntro(),
+	});
+	if (room) console.log('[roleplay] the roleplay room is open');
+
+	/*
+	 * Names the RP bot may take without an account.
+	 *
+	 * Its trainers are called things like "Hiker Bob", and some of those are
+	 * somebody's registered Showdown name. Only a name belonging to an encounter
+	 * that was just rolled - or that name with a number after it, in case the
+	 * plain one is taken - and only from this machine.
+	 */
+	const allowed = new Set([toID(RP_BOT)]);
+	const proto = Users && Users.User && Users.User.prototype;
+	if (proto && proto.validateToken && !proto.velvetRpNames) {
+		proto.velvetRpNames = true;
+		const LOOPBACK = ['127.0.0.1', '::1', '::ffff:127.0.0.1'];
+		const original = proto.validateToken;
+		proto.validateToken = function (token, name, userid, connection) {
+			const local = connection && LOOPBACK.includes(connection.ip);
+			if (!token && local && [...allowed].some(id => userid === id || (userid.startsWith(id) && /^\d{1,3}$/.test(userid.slice(id.length))))) {
+				return Promise.resolve('1');
+			}
+			return original.call(this, token, name, userid, connection);
+		};
+	}
+
+	const deps = {
+		isOnline: userid => {
+			const user = Users.get(userid);
+			return !!(user && user.connected);
+		},
+		spawn: enc => {
+			const guide = Users.get(toID(RP_BOT));
+			if (!guide || !guide.connected) {
+				enc.status = 'error';
+				enc.result = { outcome: 'error', message: 'The RP bot is not connected. Try again in a minute.' };
+				return false;
+			}
+			allowed.add(toID(enc.name));
+			const spawn = {
+				id: enc.id, target: enc.showdown, name: enc.name, avatar: enc.avatar, format: enc.format,
+				team: Teams.pack(enc.team), ai: enc.ai, kind: enc.kind, character: enc.character, balls: enc.balls,
+				className: enc.className || null, classId: enc.classId || null, warning: enc.warning || '',
+			};
+			// Straight down the bot's socket, as a PM from the server itself. A
+			// player can't send one of these: a PM they type starting with "/" is
+			// run as a command, and the bot only listens to "~".
+			guide.send(`|pm|~|${guide.getIdentity()}|/rpspawn ${JSON.stringify(spawn)}`);
+			return true;
+		},
+	};
+	deps.cancel = enc => {
+		const guide = Users.get(toID(RP_BOT));
+		if (guide && guide.connected) guide.send(`|pm|~|${guide.getIdentity()}|/rpcancel ${enc.id}`);
+	};
+	require('../../../src/http-hooks').addRoute(rp.httpRoute(deps, msg => console.log('[roleplay]', msg)));
+
+	const battle = Rooms.RoomBattle && Rooms.RoomBattle.prototype;
+	if (!battle || battle.velvetRoleplay) return;
+	battle.velvetRoleplay = true;
+
+	/** The encounter a battle belongs to: same format, the player, and the bot's name. */
+	const encounterFor = game => {
+		const ids = game.players.map(p => p.id);
+		for (const enc of rp.encounters.values()) {
+			if (enc.status !== 'waiting' || enc.format !== game.format || !ids.includes(enc.userid)) continue;
+			const botId = toID(enc.name);
+			if (ids.some(id => id !== enc.userid && id.startsWith(botId))) return enc;
+		}
+		return null;
+	};
+
+	const start = battle.start;
+	battle.start = function (...args) {
+		const out = start.apply(this, args);
+		try {
+			const enc = encounterFor(this);
+			if (enc) {
+				enc.status = 'battling';
+				enc.roomid = this.room.roomid;
+				this.rpEncounter = enc.id;
+				// The medicine panel, for the player only.
+				const player = this.playerTable[enc.userid];
+				const bag = enc.items ? Object.entries(enc.items).filter(([, n]) => n > 0) : [];
+				if (player && bag.length) player.sendRoom(`|uhtml|rpitems|${itemPanel(bag)}`);
+			}
+		} catch (e) { console.log(`[roleplay] ${e.message}`); }
+		return out;
+	};
+
+	const end = battle.end;
+	battle.end = function (winnerName, ...rest) {
+		const wasEnded = this.ended;
+		let replay = null;
+		let enc = null;
+		try {
+			// Every RP battle keeps a replay, so it can be posted on Discord - PvP
+			// ones included. The name is known before the upload finishes.
+			if (!wasEnded && /^gen\d+rp/.test(this.format)) {
+				const boot = typeof LoginServer !== 'undefined' && LoginServer.velvetReplayBoot;
+				const { id } = this.room.getReplayData();
+				if (boot && id) replay = `/replay/${id}-${boot}`;
+			}
+			enc = this.rpEncounter && rp.encounters.get(this.rpEncounter);
+			if (enc && !wasEnded && enc.status !== 'done') {
+				enc.result = { ...rp.resultFromLog(enc, this.room.log.log, toID(winnerName)), replay };
+				enc.status = 'done';
+			}
+		} catch (e) { console.log(`[roleplay] ${e.message}`); }
+		const out = end.call(this, winnerName, ...rest);
+		if (replay && !wasEnded) {
+			try {
+				rp.recordFinished({
+					kind: enc ? enc.kind : 'pvp',
+					format: this.format,
+					players: this.players.map(p => p.name),
+					winner: winnerName || '',
+					replay,
+					encounter: enc ? rp.publicView(enc) : null,
+				});
+				if (!this.replaySaved) void this.room.uploadReplay(undefined, undefined, 'silent');
+			} catch (e) { console.log(`[roleplay] replay: ${e.message}`); }
+		}
+		return out;
+	};
+
+	// A ball only comes from /throwball, which checks the bag first. Typing the
+	// choice by hand would skip that check.
+	const choose = battle.choose;
+	battle.choose = function (user, data) {
+		if (RP_FORMATS.has(this.format) && /(^|,)\s*ball\b/i.test(String(data)) && this.rpBallFrom !== user.id) {
+			const player = this.playerTable[user.id];
+			if (player) player.sendRoom(`|error|[Invalid choice] Use the Throw buttons in the chat to throw a ball`);
+			return;
+		}
+		// Same for items: only /useitem, which checks the bag, may send one.
+		if (/^\s*item\s/i.test(String(data)) && this.rpItemFrom !== user.id) {
+			const player = this.playerTable[user.id];
+			if (player) player.sendRoom(`|error|[Invalid choice] Use the item panel in the chat to use an item`);
+			return;
+		}
+		return choose.call(this, user, data);
+	};
+}
+
+/**
+ * The friends database, opened here rather than in a child process.
+ *
+ * Showdown only ever talks to it through a process manager: every query is
+ * posted to the child, which runs one of a fixed set of prepared statements and
+ * posts the answer back. With no child, `query` simply answers null and the
+ * friends system goes quietly dead - which is how it was found the first time.
+ *
+ * So this does in this process exactly what the child does at startup - Showdown's
+ * own setupDatabase(), same file, same schema, same statements - and points
+ * `query` at the same handler the child would have run, error handling included.
+ * The rest of the friends code, the commands and the pages, cannot tell the
+ * difference. The one thing that does change is that a query now runs on this
+ * process's thread, and these are single-row lookups on a tiny local file.
+ */
+function friendsInProcess() {
+	if (!FRIENDS || FRIENDS_CHILD) return;
+	if (typeof Chat === 'undefined' || !Chat.Friends || Chat.Friends.velvetInProcess) return;
+	try {
+		const friends = require('../dist/server/friends');
+		friends.FriendsDatabase.setupDatabase();
+		const handle = friends.PM._query;
+		Chat.Friends.query = async function (input) {
+			if (!Config.usesqlite || !Config.usesqlitefriends) return null;
+			const result = handle(input);
+			if (result.error) throw new Chat.ErrorMessage(result.error);
+			return result.result;
+		};
+		Chat.Friends.velvetInProcess = true;
+		console.log('[config] friends database opened in this process; no child process for it');
+	} catch (e) {
+		// Left as it was: queries answer null and nothing else is affected.
+		console.log(`[config] could not open the friends database: ${e.message}`);
+	}
+}
+
 exports.startuphook = function () {
 	const botId = toID(process.env.PS_BOT_NAME || 'Velvet Bunny');
 	// The people who run the place. Promoted the same way as the bot and for the
@@ -1155,9 +1536,15 @@ exports.startuphook = function () {
 	fixMatchmaking(BOT_IDS);
 	exemptBots(BOT_IDS);
 	hostReplays();
+	friendsInProcess();
+	// Before anyone connects: the first connection is what builds the list.
+	require('../../../src/format-levels').installFormatList({
+		Rooms, Dex, log: msg => console.log(msg),
+	});
 	rpSectionFirst();
 	battleLog();
 	helpRoom();
+	roleplay();
 	goodbye();
 
 	setInterval(() => {

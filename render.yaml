@@ -11,30 +11,40 @@ services:
     startCommand: npm start
     healthCheckPath: /
     envVars:
+      # 22, not 20. better-sqlite3 (the friends database) needs Node 22 and on 20
+      # it does not throw - it segfaults. The wrapper saves the friends list every
+      # 15 minutes, so on 20 the whole service died with "Segmentation fault (core
+      # dumped)" and restarted on that clock, dropping every battle in progress.
+      # Local development and every test run on 22+.
       - key: NODE_VERSION
-        value: "20"
+        value: "22"
       # The wrapper's ceiling. The Showdown server gets its own, below.
       #
       # These were one number, and one number meant 400MB *each* in a box that
-      # is killed at 512MB for the pair - so neither had any reason to collect
-      # until it was alone past what the two could afford together. Measured
-      # live with every ladder queue up, which is the state that matters:
+      # is killed at 512MB for the pair. Split, they were 160 and 300 - and 160
+      # turned out to be the number that crashed: under play the wrapper leaked
+      # a copy of the format's usage statistics per game and hit it in about
+      # seventy seconds of steady battling. That leak is fixed (src/bot.js,
+      # src/teambuilder.js), and the server stopped loading all 46 of
+      # Showdown's mods on the first connection (src/format-levels.js), so the
+      # balance is the other way round now. Measured on Node 22 with six people
+      # battling the bots non-stop, every queue up:
       #
-      #   showdown   heap 192/203MB   non-heap ~95MB
-      #   wrapper    heap 108/116MB   non-heap ~95MB
-      #   container  435MB of 512
+      #   server    heap 60MB idle, 130MB peak   (was 187 idle)
+      #   wrapper   heap 88MB idle, 141MB peak   (was 59 idle, then OOM)
+      #   the two   rss 390MB peak, 369MB average
       #
-      # So: about 40% above what each actually holds. Not enough to be a
-      # straitjacket, low enough that V8 starts working well before the kernel
-      # does - which at the moment it never does.
+      # 200 gives the wrapper room for a full format cache on top of that peak;
+      # 256 is double what the server needed. The sum is lower than before.
       #
-      # The non-heap ~95MB each is the Node binary and V8's own code, twice
-      # over, and no cap touches it. That is the floor this container cannot
-      # get under without running one process instead of two.
+      # --max-semi-space-size=4 keeps V8's allocation scratch space small: 45MB
+      # off the peak for no measurable CPU. src/index.js gives the server the
+      # same flag (PS_SEMI_SPACE_MB). --optimize-for-size would have been the
+      # next thing to try, but Node refuses it in NODE_OPTIONS.
       - key: NODE_OPTIONS
-        value: --max-old-space-size=160
+        value: --max-old-space-size=200 --max-semi-space-size=4
       - key: PS_SERVER_HEAP_MB
-        value: "300"
+        value: "256"
       - key: PS_BOT_NAME
         value: Velvet Bunny
       - key: PS_DIFFICULTY
@@ -42,10 +52,10 @@ services:
       - key: PS_SERVERID
         value: velvetbunny
       # Showdown's friends system: requests, a friends list, and being told when
-      # one of them comes online. It costs a child process holding the database,
-      # measured at 51MB - see the note in config/showdown-config.js - which is
-      # why it is a switch rather than simply on. Turn it off by setting this to
-      # anything but 1 if the container starts running out of room.
+      # one of them comes online. It used to cost a child process holding the
+      # database, measured at 51MB; the database is now opened inside the server
+      # instead (config/showdown-config.js, friendsInProcess), so it costs a few
+      # MB. PS_FRIENDS_PROCESS=1 brings the child back if that ever misbehaves.
       - key: PS_FRIENDS
         value: "1"
       # Smogon set data is cached here between requests. Render's free disk is

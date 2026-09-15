@@ -21,6 +21,30 @@
 const { RepoFile } = require('./repo-file');
 const fs = require('fs');
 
+/**
+ * Whether better-sqlite3 can be loaded here without taking the process with it.
+ *
+ * It does not fail politely. Version 13 needs Node 22 or later, and on Node 20
+ * the first database it opens is a segmentation fault - no exception, no log
+ * line, just the process gone. The host was on Node 20, so every quarter of an
+ * hour this store's periodic save opened the database and the whole service
+ * died with "Segmentation fault (core dumped)" and was restarted, taking every
+ * battle in progress with it; the friends process inside the server was dying
+ * the same way on every start. Checked here so that a host on the wrong version
+ * loses the friends list rather than the server.
+ */
+function sqliteUsable() {
+	const major = Number(String(process.versions.node).split('.')[0]);
+	let wants = 22;
+	try {
+		const range = require('better-sqlite3/package.json').engines.node;
+		wants = Number((/(\d+)/.exec(range) || [])[1]) || wants;
+	} catch (e) {
+		// No package, or no engines field: the version it needed when this was written.
+	}
+	return major >= wants;
+}
+
 class FriendsStore {
 	/**
 	 * @param {string} dbPath the database file Showdown will open
@@ -51,6 +75,13 @@ class FriendsStore {
 	async snapshot() {
 		const temp = `${this.path}.snapshot`;
 		let Database;
+		if (!sqliteUsable()) {
+			if (!this.warnedVersion) {
+				this.warnedVersion = true;
+				this.log(`Node ${process.version} cannot run better-sqlite3 without crashing; not saving the friends list`);
+			}
+			return null;
+		}
 		try {
 			Database = require('better-sqlite3');
 		} catch (e) {
@@ -102,4 +133,4 @@ class FriendsStore {
 	}
 }
 
-module.exports = { FriendsStore };
+module.exports = { FriendsStore, sqliteUsable };
