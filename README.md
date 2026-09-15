@@ -250,6 +250,10 @@ introduction is the whole beginner tutorial. The lobby is untouched.
   `[Gen 9] RP Custom Game` is the anything-goes one (hackmons, illegal
   Pokémon): challenge only, never an encounter, and the Discord bot gives its
   PvP replays no EXP.
+- **Teambuilder search**: typing `awakened` lists the Pokémon with one of our
+  signature abilities or moves, `signature` every Pokémon with a signature move
+  (`installAwakenedSearch` in `client/js/velvet-data.js`, lists from
+  `scripts/build-buffs.js` and `velvet-signatures.js`).
 
 ---
 
