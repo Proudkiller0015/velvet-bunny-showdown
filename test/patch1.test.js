@@ -404,7 +404,7 @@ check(!Dex.moves.get('undertow').flags.nosketch, 'the other ten can be Sketched'
 check(learns('glaceon', 'earthpower') && learns('flareon', 'closecombat') && learns('leafeon', 'stoneedge') && learns('leafeon', 'solarblade') && learns('flareon', 'facade'), 'Eeveelution coverage: Glaceon Earth Power, Flareon Close Combat, Leafeon Stone Edge');
 check(!learns('eevee', 'closecombat') && !Object.values(Dex.species.get('eevee').abilities).includes('Kindled Fury'), 'Eevee is not given any of it');
 check(['Leafeon:Solstice', 'Flareon:Kindled Fury', 'Glaceon:Diamond Dust'].every(x => Object.values(Dex.species.get(x.split(':')[0]).abilities).includes(x.split(':')[1])), 'each keeps its old abilities and gains its signature');
-check(['leafeon', 'glaceon', 'flareon', 'espeon', 'umbreon', 'vaporeon'].every(id => Dex.species.get(id).natDexTier === 'UU') && Dex.species.get('luxray').natDexTier === 'OU' && Dex.species.get('urshifu').natDexTier === 'Uber' && Dex.species.get('urshifurapidstrike').natDexTier === 'Uber', 'Tier review: six eeveelutions UU, Luxray OU, both Urshifu Uber');
+check(['leafeon', 'glaceon', 'flareon', 'umbreon', 'vaporeon'].every(id => Dex.species.get(id).natDexTier === 'UU') && Dex.species.get('espeon').natDexTier === 'OU' && Dex.species.get('melmetal').natDexTier === 'Uber' && Dex.species.get('weavile').natDexTier === 'OU' && Dex.species.get('luxray').natDexTier === 'OU' && Dex.species.get('urshifu').natDexTier === 'Uber' && Dex.species.get('urshifurapidstrike').natDexTier === 'Uber', 'Tier review: five eeveelutions UU, Espeon, Luxray and Weavile OU, both Urshifu and Melmetal Uber');
 
 // Umbreon: Moonlit Venom.
 {
@@ -431,6 +431,16 @@ check(['leafeon', 'glaceon', 'flareon', 'espeon', 'umbreon', 'vaporeon'].every(i
 	check(!b.p1.sideConditions.stealthrock && !!b.p2.sideConditions.stealthrock, 'and Stealth Rock bounces back');
 	b.makeChoices('move 1', 'move 2');
 	check(!espeon.status && b.p2.active[0].status === 'tox', 'and so does Toxic');
+}
+{
+	const b = battle(
+		[{ species: 'Espeon', ability: 'Prescience', moves: ['splash'] }, { species: 'Blissey', ability: 'Natural Cure', moves: ['splash'] }],
+		[{ species: 'Blissey', ability: 'Natural Cure', moves: ['splash'] }],
+	);
+	const espeon = b.p1.active[0];
+	espeon.hp = 50;
+	b.makeChoices('switch 2', 'move 1');
+	check(espeon.hp === 50 + Math.floor(espeon.baseMaxhp / 3), `Prescience: Espeon heals a third switching out (${espeon.hp})`);
 }
 // Vaporeon: Liquid Body.
 {

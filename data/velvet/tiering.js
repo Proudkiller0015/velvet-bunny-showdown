@@ -183,7 +183,6 @@ const TIERS = {
 	leafeon: 'UU',
 	glaceon: 'UU',
 	flareon: 'UU',
-	espeon: 'UU',
 	umbreon: 'UU',
 	vaporeon: 'UU',
 
@@ -196,6 +195,29 @@ const TIERS = {
 	// doubles both attacks on 120 Speed, which is not ZU. Eevee keeps its LC tier
 	// (partner stats plus Eviolite are strong there; one to watch).
 	pikachu: 'PU',
+
+	// Espeon with Prescience (Magic Guard + Magic Bounce + Regenerator): OU, the
+	// owner's decision.
+	espeon: 'OU',
+
+	/*
+	 * UUBL Pokemon strong enough for OU, moved up at the owner's call: Weavile,
+	 * and the ones that already bullied UU - Speed Boost Blaziken, Hoopa-Unbound,
+	 * Kartana, Latios, Galarian Zapdos, Meowscarada - plus Kommo-o and Hawlucha,
+	 * which this patch gave Shuffle Jab. The niche UUBL Pokemon stay UUBL.
+	 */
+	weavile: 'OU',
+	blaziken: 'OU',
+	hoopaunbound: 'OU',
+	kartana: 'OU',
+	latios: 'OU',
+	zapdosgalar: 'OU',
+	meowscarada: 'OU',
+	kommoo: 'OU',
+	hawlucha: 'OU',
+
+	// Melmetal: banned to Ubers at the owner's call.
+	melmetal: 'Uber',
 
 	// Urshifu, both styles: banned to Ubers at the owner's call.
 	urshifu: 'Uber',

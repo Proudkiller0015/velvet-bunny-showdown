@@ -200,8 +200,8 @@ Elsewhere: `unnerfs.js` holds changed species sheets (Cresselia's defences,
 Pikachu's and Eevee's Let's Go partner stats, Luxray's Electric/Dark), which
 reach the client through `overrides.species`, the calculator through
 `changedSpecies` and the bot through `ai.js`'s `changedSpecies()`. The tier
-review is in `tiering.js` (Regigigas and both Urshifu Uber, Luxray OU, six
-eeveelutions and the lake trio UU, Articuno and Regice RU, Pikachu, Dodrio and
+review is in `tiering.js` (Regigigas, Melmetal and both Urshifu Uber; Espeon, Luxray, Weavile and the
+stronger UUBL Pokémon OU; five eeveelutions and the lake trio UU; Articuno and Regice RU, Pikachu, Dodrio and
 Lilligant PU); a tier below RU moves only the SV list. The bot and calculator
 read our abilities as the vanilla one that does the same to damage
 (`CALC_ABILITY` / `asVanilla`), and the tooltip hooks in `velvet-data.js` show

@@ -1373,6 +1373,13 @@ class BattleAI {
 				if (this.cfg.playbook) {
 					margin = playbook.adjustSwitchMargin(this.formatId, this.situation(state, entry, foes), margin);
 				}
+				// Regenerator (and the signatures that include it) makes leaving a heal:
+				// a worn-down one pivots out more readily.
+				if (/^(regenerator|prescience|liquidbody)$/.test(String(entry.ability || entry.baseAbility || '').toLowerCase().replace(/[^a-z]/g, ''))) {
+					const cond = /^(\d+)\/(\d+)/.exec(entry.condition || '');
+					const hp = cond ? +cond[1] / +cond[2] : 1;
+					if (hp < 0.75) margin = Math.max(0, margin - 20);
+				}
 				if (alt && alt.score > best.score + margin) return `switch ${alt.i}`;
 			}
 		}

@@ -730,6 +730,9 @@ exports.ABILITIES = {
 	 */
 	prescience: {
 		name: "Prescience",
+		onSwitchOut(pokemon) {
+			pokemon.heal(pokemon.baseMaxhp / 3);
+		},
 		onDamage(damage, target, source, effect) {
 			if (effect.effectType !== 'Move') {
 				if (effect.effectType === 'Ability') this.add('-activate', source, 'ability: ' + effect.name);
@@ -759,8 +762,8 @@ exports.ABILITIES = {
 		num: -18,
 		gen: 9,
 		flavor: "The jewel on Espeon's brow glows before any harm arrives, and the harm turns around.",
-		shortDesc: "Magic Guard + Magic Bounce.",
-		desc: "This Pokemon can only be damaged by direct attacks, and it reflects back status moves and hazards aimed at it or its side, as Magic Bounce does.",
+		shortDesc: "Magic Guard + Magic Bounce + Regenerator.",
+		desc: "This Pokemon can only be damaged by direct attacks, and it reflects back status moves and hazards aimed at it or its side, as Magic Bounce does. It restores 1/3 of its maximum HP when it switches out.",
 	},
 	/*
 	 * Liquid Body - Vaporeon's. It melts into water: Water moves heal it instead
