@@ -1151,7 +1151,7 @@ function serverHelpBox(user) {
 			`<b>First time?</b> <button class="button" name="send" value="/tutorial"><b>Start the tutorial</b></button> ${cmd('/tutorial')}: a 2-minute practice battle (Lv. 5 Pikachu, 1 Potion, 1 Pok&eacute; Ball vs a wild Rattata). No team needed, nothing counts.`,
 			`${btn('roleplay', 'Roleplay room')} ${cmd('/roleplay')}: the full guide (team, encounters, catching).`,
 			`Use <b>[Gen 9] RP Battle</b> for your RP team, built from your box in the <a href="https://docs.google.com/spreadsheets/d/1-XoCX0qkrshpiVvY4Sw1sBNAfiEnJYX67ZXZUkDDGrs/edit">RP doc</a>: ` +
-			`any move it can learn whatever its level (TMs free), held items from your first gym badge. Wild Pok&eacute;mon and trainers come from ${cmd('!encounter')} on the <a href="https://discord.gg/pH86q7sdg7">Kagura Discord</a>.`,
+			`any move it can learn whatever its level (TMs free), held items from your first gym badge. Wild Pok&eacute;mon and trainers come from ${cmd('!encounter')} on the Discord.`,
 			`In a wild battle, the <b>Throw</b> buttons or ${cmd('/throwball [ball]')} catch; ${cmd('/useitem [item], [pokemon]')} uses a Potion or Revive from your bag, in any RP battle (unlimited in RP Custom Game).`,
 			`Your team is checked against your character's box, and Mega / Z / Dynamax / Tera need the story item.`,
 			`<b>[Gen 9] RP Custom Game</b> is for hackmons, illegal and fun battles: anything goes (items unlimited), challenge only, and no EXP or RP progress.`,
