@@ -1745,6 +1745,7 @@
 		aurorasquall: ['blizzard', 'icywind'],
 		voltaiclance: ['boltstrike', 'wildcharge', 'thunderbolt'],
 		rimecleaver: ['iciclecrash', 'mountaingale', 'icepunch'],
+		oxidize: ['sludgewave', 'acid', 'sludgebomb'],
 		memorywipe: ['psychic', 'confusion'],
 		soulresonance: ['heartstamp', 'drainingkiss', 'psyshock'],
 		resolutestrike: ['zenheadbutt', 'psychocut'],

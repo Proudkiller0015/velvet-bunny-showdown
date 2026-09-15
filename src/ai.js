@@ -521,6 +521,11 @@ class BattleAI {
 				const rest = defender.types.filter(t => t !== 'Dark');
 				defender.types = rest.length ? rest : ['Normal'];
 			}
+			// Oxidize (Balance Patch 1) is super effective on Steel: read Steel as Grass for it.
+			if (moveName === 'Oxidize' && defender.types && defender.types.includes('Steel')) {
+				defender = defender.clone();
+				defender.types = defender.types.map(t => (t === 'Steel' ? 'Grass' : t));
+			}
 			const result = calc.calculate(gen, attacker, defender, move, field);
 			const dmg = result.damage;
 			const rolls = Array.isArray(dmg) ? dmg.flat().filter(n => typeof n === 'number') : [dmg];

@@ -444,6 +444,12 @@
 			}
 			if (String(us.ability || '') === 'Unbending Will') us.ability = 'Tinted Lens';
 
+			// Oxidize is super effective on Steel (Poison's Freeze-Dry). The chart says
+			// Steel is immune, so Steel is read as Grass - also 2x from Poison - for it.
+			if (theMove.name === 'Oxidize' && them.types && them.types.indexOf('Steel') >= 0) {
+				them.types = them.types.map(function (t) { return t === 'Steel' ? 'Grass' : t; });
+			}
+
 			var result = original.call(this, gen, us, them, theMove, field);
 
 			// A move that deals a flat number ignores the formula entirely, so the

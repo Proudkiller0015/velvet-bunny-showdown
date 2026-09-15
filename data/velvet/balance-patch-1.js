@@ -348,6 +348,25 @@ exports.MOVES = {
 		shortDesc: "100% accurate. No drawback.",
 		desc: "The user brings down a blade of ancient frost in one clean, slicing stroke.",
 	},
+	/*
+	 * Oxidize: Poison's Freeze-Dry. Steel is normally immune to Poison; this
+	 * rusts it instead, for super-effective damage. 70 power, 100%, and a 10%
+	 * chance to confuse. It never poisons.
+	 */
+	oxidize: {
+		num: -27, gen: 9, name: "Oxidize", type: "Poison", category: "Special",
+		basePower: 70, accuracy: 100, pp: 20, priority: 0,
+		ignoreImmunity: { Poison: true },
+		onEffectiveness(typeMod, target, type) {
+			if (type === 'Steel') return 1;
+		},
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		secondary: { chance: 10, volatileStatus: 'confusion' },
+		target: "normal", contestType: "Clever", velvetShared: true,
+		flavor: "A bitter, eating mist that turns even steel to flaking rust.",
+		shortDesc: "Super effective on Steel. 10% chance to confuse. Never poisons.",
+		desc: "A corrosive mist. This move's type effectiveness against Steel is changed to be super effective no matter what this move's type is, and Steel-types are not immune to it. Has a 10% chance to confuse the target. It cannot poison.",
+	},
 	continentalheave: {
 		num: -20, gen: 9, name: "Continental Heave", type: "Normal", category: "Physical",
 		basePower: 110, accuracy: 95, pp: 5, priority: 0,
@@ -717,6 +736,12 @@ const TM_DISTRIBUTION = {
 	// Tactics) or the Ice legends; Mamoswine is the borderline one kept.
 	rimecleaver: ['mamoswine', 'cetitan', 'beartic', 'avalugg', 'avalugghisui', 'glalie', 'abomasnow', 'walrein',
 		'crabominable', 'eiscue', 'arctozolt', 'arctovish', 'lapras'],
+	// Poison special and mixed attackers. Not Gengar or Glimmora (a Steel answer
+	// on top of what they already threaten), Amoonguss, Venusaur, or the Poison
+	// legends and Ultra Beasts.
+	oxidize: ['nidoking', 'nidoqueen', 'muk', 'mukalola', 'weezing', 'weezinggalar', 'tentacruel', 'dragalge', 'salazzle', 'toxapex',
+		'vileplume', 'victreebel', 'roserade', 'venomoth', 'swalot', 'toxtricity', 'toxtricitylowkey', 'garbodor', 'skuntank', 'dustox',
+		'seviper', 'toedscruel'],
 	shufflejab: ['hitmonlee', 'hitmonchan', 'hitmontop', 'throh', 'sawk', 'hariyama', 'falinks', 'granbull', 'spinda', 'machamp', 'conkeldurr', 'pangoro', 'primeape', 'poliwrath', 'toxicroak', 'lucario', 'infernape', 'medicham', 'mienshao', 'crabominable', 'passimian', 'hawlucha', 'grapploct', 'lopunny', 'scrafty', 'pawmot', 'kommoo'],
 };
 
@@ -944,6 +969,175 @@ const NEWER_MOVES = {
 	]
 };
 
+/*
+ * Grass gets coverage: existing moves that answer the seven types resisting
+ * Grass, matched to each Pokemon's stats and theme. Not Rillaboom, Ogerpon,
+ * Venusaur, Amoonguss, Meowscarada, Breloom or Ferrothorn.
+ */
+const GRASS_COVERAGE = {
+	'sunflora': [
+		'earthpower',
+		'sludgebomb',
+		'fireblast'
+	],
+	'cherrim': [
+		'earthpower',
+		'fireblast'
+	],
+	'maractus': [
+		'earthpower',
+		'sludgebomb',
+		'knockoff'
+	],
+	'jumpluff': [
+		'knockoff',
+		'earthquake'
+	],
+	'tropius': [
+		'earthquake',
+		'stoneedge',
+		'knockoff'
+	],
+	'carnivine': [
+		'knockoff',
+		'earthquake',
+		'gunkshot'
+	],
+	'shiinotic': [
+		'earthpower',
+		'sludgebomb'
+	],
+	'eldegoss': [
+		'earthpower',
+		'knockoff'
+	],
+	'sawsbuck': [
+		'highhorsepower',
+		'stoneedge',
+		'knockoff'
+	],
+	'parasect': [
+		'rockslide',
+		'knockoff'
+	],
+	'wormadam': [
+		'earthpower',
+		'sludgebomb'
+	],
+	'cacturne': [
+		'earthquake',
+		'gunkshot'
+	],
+	'bellossom': [
+		'earthpower',
+		'sludgebomb'
+	],
+	'victreebel': [
+		'earthquake',
+		'knockoff'
+	],
+	'exeggutor': [
+		'earthpower',
+		'fireblast'
+	],
+	'exeggutoralola': [
+		'dragonpulse',
+		'earthquake',
+		'flamethrower'
+	],
+	'ludicolo': [
+		'earthpower'
+	],
+	'shiftry': [
+		'rockslide',
+		'earthquake'
+	],
+	'lurantis': [
+		'knockoff',
+		'earthquake',
+		'stoneedge'
+	],
+	'gogoat': [
+		'stoneedge',
+		'highhorsepower'
+	],
+	'leavanny': [
+		'knockoff',
+		'rockslide'
+	],
+	'appletun': [
+		'dragonpulse',
+		'earthpower'
+	],
+	'flapple': [
+		'stoneedge',
+		'earthquake'
+	],
+	'dhelmise': [
+		'stoneedge',
+		'earthquake'
+	],
+	'abomasnow': [
+		'earthpower',
+		'earthquake'
+	],
+	'sceptile': [
+		'earthpower',
+		'sludgebomb'
+	],
+	'meganium': [
+		'earthquake',
+		'knockoff'
+	],
+	'arboliva': [
+		'earthpower',
+		'sludgebomb'
+	],
+	'scovillain': [
+		'earthpower',
+		'sludgebomb'
+	],
+	'cradily': [
+		'earthpower',
+		'sludgebomb'
+	],
+	'lilligant': [
+		'earthpower',
+		'sludgebomb'
+	],
+	'roserade': [
+		'earthpower'
+	],
+	'trevenant': [
+		'rockslide',
+		'highhorsepower'
+	],
+	'gourgeist': [
+		'earthquake',
+		'rockslide'
+	],
+	'vileplume': [
+		'earthpower'
+	],
+	'decidueye': [
+		'stoneedge',
+		'knockoff'
+	],
+	'chesnaught': [
+		'stoneedge'
+	],
+	'toedscruel': [
+		'sludgebomb',
+		'knockoff'
+	],
+	'torterra': [
+		'stoneedge'
+	],
+	'whimsicott': [
+		'sludgebomb'
+	]
+};
+
 /**
  * Build the buff table: finals first (so each records its own additions before
  * a pre-evolution claims them), then their pre-evolutions with the same new
@@ -961,6 +1155,9 @@ exports.buildBuffs = (Pokedex) => {
 	}
 	for (const [id, moves] of Object.entries(SMALL)) add(id, moves, []);
 	for (const [id, ability] of Object.entries(ABILITY_GRANTS)) add(id, [], [ability]);
+
+	// Coverage for Grass types.
+	for (const [id, moves] of Object.entries(GRASS_COVERAGE)) if (Pokedex[id]) add(id, moves, []);
 
 	// Newer (Gen 8-9) shared moves for older Pokemon that fit them.
 	for (const [move, ids] of Object.entries(NEWER_MOVES)) {
@@ -1005,5 +1202,6 @@ exports.buildBuffs = (Pokedex) => {
 exports.GROUPS = GROUPS;
 exports.TM_DISTRIBUTION = TM_DISTRIBUTION;
 exports.NEWER_MOVES = NEWER_MOVES;
+exports.GRASS_COVERAGE = GRASS_COVERAGE;
 exports.SMALL = SMALL;
 exports.ABILITY_GRANTS = ABILITY_GRANTS;

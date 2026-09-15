@@ -285,6 +285,22 @@ check(!['memorywipe', 'soulresonance', 'resolutestrike', 'aurorasquall'].some(mv
 	check(/\|-supereffective\|p2a: Garchomp/.test(log(b)), 'and it lands (super effective on Garchomp)');
 }
 
+// Oxidize: super effective on Steel, normal otherwise, never poisons.
+{
+	const hitOn = (species, ability) => {
+		const b = battle([{ species: 'Muk', ability: 'Stench', moves: ['oxidize'] }], [{ species, ability, moves: ['splash'] }]);
+		b.makeChoices('move 1', 'move 1');
+		return log(b);
+	};
+	check(/\|-supereffective\|p2a: Skarmory/.test(hitOn('Skarmory', 'Sturdy')), 'Oxidize is super effective on Skarmory (Steel)');
+	const neutral = hitOn('Snorlax', 'Thick Fat');
+	check(!/\|-supereffective\|/.test(neutral) && !/\|-immune\|/.test(neutral), 'and neutral on Snorlax');
+	const m = Dex.moves.get('oxidize');
+	check(m.basePower === 70 && m.secondary.volatileStatus === 'confusion' && m.secondary.chance === 10 && !m.secondary.status, 'Oxidize: 70 power, 10% confusion, never poisons');
+	check(learns('nidoking', 'oxidize') && learns('mew', 'oxidize') && !learns('gengar', 'oxidize'), 'Oxidize: Nidoking and Mew yes, Gengar no');
+}
+check(learns('sunflora', 'fireblast') && learns('carnivine', 'gunkshot') && learns('exeggutoralola', 'dragonpulse'), 'Grass coverage: Sunflora Fire Blast, Carnivine Gunk Shot, Alolan Exeggutor Dragon Pulse');
+
 // Whole-dex distribution, with the deliberate exclusions.
 check(learns('venusaur', 'solarnectar') && learns('bulbasaur', 'solarnectar'), 'Venusaur line learns Solar Nectar');
 check(learns('rhyperior', 'craghammer') && learns('rhyhorn', 'craghammer') && !learns('tyranitar', 'craghammer'), 'Crag Hammer: Rhyperior line yes, Tyranitar no');
