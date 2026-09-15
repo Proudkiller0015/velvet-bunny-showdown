@@ -1409,6 +1409,16 @@ function roleplay() {
 		return null;
 	};
 
+	// Each player's team as it was sent in, so an RP encounter can check it against the box.
+	const addPlayer = battle.addPlayer;
+	battle.addPlayer = function (user, playerOpts, ...rest) {
+		try {
+			const id = user && typeof user === 'object' ? user.id : toID(user);
+			if (id && playerOpts && playerOpts.team) (this.rpTeams || (this.rpTeams = {}))[id] = playerOpts.team;
+		} catch (e) { /* only ever used for the check */ }
+		return addPlayer.call(this, user, playerOpts, ...rest);
+	};
+
 	const start = battle.start;
 	battle.start = function (...args) {
 		const out = start.apply(this, args);
@@ -1418,6 +1428,27 @@ function roleplay() {
 				enc.status = 'battling';
 				enc.roomid = this.room.roomid;
 				this.rpEncounter = enc.id;
+
+				// A team that doesn't match the character's box calls the battle off
+				// before a turn is played. The encounter stays open, so fixing the team
+				// and asking again brings the same one back.
+				const raw = this.rpTeams && this.rpTeams[enc.userid];
+				let sets = null;
+				try { sets = typeof raw === 'string' ? (raw.trim().startsWith('[') ? JSON.parse(raw) : Teams.unpack(raw)) : raw; } catch (e) { sets = null; }
+				const check = rp.checkTeam(enc, sets);
+				if (!check.ok) {
+					const list = check.problems.slice(0, 6);
+					const message = list.join('; ').replace(/\*\*/g, '') + (check.problems.length > list.length ? ` (and ${check.problems.length - list.length} more)` : '') + '.';
+					enc.invalid = { at: Date.now(), message: list.join('; ') + '.' };
+					enc.status = 'waiting';
+					this.rpEncounter = null;
+					this.rpInvalid = true;
+					this.room.add(`|raw|<div class="broadcast-red"><b>This RP battle is called off: your team doesn't match your box.</b><br />${message.replace(/[&<>"']/g, ch => `&#${ch.charCodeAt(0)};`)}<br />` +
+						`Fix the team in the Teambuilder (only Pok&eacute;mon your character owns, at or below their box level), then use <code>!encounter</code> on Discord again. The same encounter comes back.</div>`);
+					this.room.update();
+					void this.stream.write('>forcetie');
+					return out;
+				}
 				// The medicine panel, for the player only.
 				const player = this.playerTable[enc.userid];
 				const bag = enc.items ? Object.entries(enc.items).filter(([, n]) => n > 0) : [];
@@ -1435,7 +1466,7 @@ function roleplay() {
 		try {
 			// Every RP battle keeps a replay, so it can be posted on Discord - PvP
 			// ones included. The name is known before the upload finishes.
-			if (!wasEnded && /^gen\d+rp/.test(this.format)) {
+			if (!wasEnded && /^gen\d+rp/.test(this.format) && !this.rpInvalid) {
 				const boot = typeof LoginServer !== 'undefined' && LoginServer.velvetReplayBoot;
 				const { id } = this.room.getReplayData();
 				if (boot && id) replay = `/replay/${id}-${boot}`;
@@ -1471,6 +1502,16 @@ function roleplay() {
 			const player = this.playerTable[user.id];
 			if (player) player.sendRoom(`|error|[Invalid choice] Use the Throw buttons in the chat to throw a ball`);
 			return;
+		}
+		// Gimmicks need the story item: no Key Stone, no Mega Evolution, and so on.
+		const enc = this.rpEncounter && rp.encounters.get(this.rpEncounter);
+		if (enc && enc.gimmicks && user.id === enc.userid) {
+			const used = rp.gimmickIn(data);
+			if (used && !enc.gimmicks[used]) {
+				const player = this.playerTable[user.id];
+				if (player) player.sendRoom(`|error|[Invalid choice] ${enc.character || 'Your character'} can't ${rp.GIMMICK_NAME[used]} without ${rp.GIMMICK_ITEM[used]}. The story hands it out; choose again without it.`);
+				return;
+			}
 		}
 		// Same for items: only /useitem, which checks the bag, may send one.
 		if (/^\s*item\s/i.test(String(data)) && this.rpItemFrom !== user.id) {

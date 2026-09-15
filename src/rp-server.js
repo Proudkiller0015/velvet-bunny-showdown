@@ -146,7 +146,11 @@ function requestEncounter(payload, deps) {
 		if (!deps.isOnline(userid)) {
 			return { ok: false, code: 'offline', message: `You're not on Showdown as ${payload.showdown} right now.`, encounter: publicView(existing) };
 		}
-		// Declining it and asking again brings the same one back.
+		// Declining it (or having it called off) and asking again brings the same
+		// one back - checked against the box and bag as they are now.
+		if (payload.box) existing.box = normaliseBox(payload.box);
+		if (payload.balls && typeof payload.balls === 'object') existing.balls = normaliseBalls(payload.balls);
+		if (payload.items && typeof payload.items === 'object') existing.items = normaliseItems(payload.items);
 		if (existing.status === 'waiting') deps.spawn(existing);
 		return { ok: true, again: true, encounter: publicView(existing) };
 	}
@@ -182,6 +186,10 @@ function requestEncounter(payload, deps) {
 		balls: payload.balls && typeof payload.balls === 'object' ? normaliseBalls(payload.balls) : null,
 		items: payload.items && typeof payload.items === 'object' ? normaliseItems(payload.items) : null,
 		warning: String(payload.warning || '').slice(0, 300),
+		box: normaliseBox(payload.box),
+		gimmicks: payload.gimmicks && typeof payload.gimmicks === 'object'
+			? { mega: !!payload.gimmicks.mega, zmove: !!payload.gimmicks.zmove, dynamax: !!payload.gimmicks.dynamax, tera: !!payload.gimmicks.tera }
+			: null,
 		...rolled,
 		status: 'waiting',
 		result: null,
@@ -287,8 +295,79 @@ function publicView(enc) {
 		text: E.describe(enc),
 		status: enc.status,
 		result: enc.result,
+		invalid: enc.invalid || null,
 	};
 }
+
+/*
+ * The player's team against their character's box.
+ *
+ * RP is honour-based everywhere else, but a team is easy to check and easy to
+ * get wrong - a Pokémon left at the builder's default level of 100, or one the
+ * character never caught. Every Pokémon on the team has to be one in the box
+ * (each box Pokémon counts once), at or below its box level. A form that only
+ * exists in battle, or a cosmetic one, counts as its base Pokémon.
+ */
+function normaliseBox(box) {
+	if (!Array.isArray(box)) return null;
+	return box.slice(0, 500).map(m => ({
+		species: String(m.species || ''), level: m.level == null ? null : Number(m.level),
+		// Not on hand: fainted until a Pokémon Centre, or left at the daycare.
+		away: m.fainted ? 'fainted' : m.daycare ? 'daycare' : null,
+	}));
+}
+
+function checkTeam(enc, sets) {
+	if (!enc || !enc.box || !Array.isArray(sets)) return { ok: true, problems: [] };
+	const { Dex } = require('pokemon-showdown');
+	const idsFor = name => {
+		const s = Dex.species.get(name);
+		if (!s.exists) return [toID(name)];
+		const ids = [s.id];
+		if (s.battleOnly) ids.push(...[].concat(s.battleOnly).map(toID));
+		if (s.changesFrom) ids.push(toID(s.changesFrom));
+		if (s.baseSpecies !== s.name && (Dex.species.get(s.baseSpecies).cosmeticFormes || []).includes(s.name)) ids.push(toID(s.baseSpecies));
+		return ids;
+	};
+	const all = enc.box.map(m => ({ id: toID(Dex.species.get(m.species).exists ? Dex.species.get(m.species).id : m.species), level: m.level, away: m.away }));
+	const left = all.filter(m => !m.away);
+	const problems = [];
+	for (const set of sets) {
+		const name = set.species || set.name;
+		const level = Number(set.level) || 100;
+		const ids = idsFor(name);
+		const owned = left.filter(m => ids.includes(m.id));
+		if (!owned.length) {
+			const away = all.find(m => m.away && ids.includes(m.id));
+			problems.push(away && away.away === 'fainted' ? `**${name}** has fainted: heal it at a Pokémon Centre first (\`!heal\`)`
+				: away ? `**${name}** is at the daycare`
+				: `${enc.character || 'Your character'} doesn't have a **${name}**`);
+			continue;
+		}
+		// Use up the box Pokémon that fits best: the lowest level it still fits under.
+		const fits = owned.filter(m => m.level == null || level <= m.level).sort((a, b) => (a.level ?? 999) - (b.level ?? 999));
+		if (!fits.length) {
+			const best = Math.max(...owned.map(m => m.level));
+			problems.push(`**${name}** is Lv. ${level} on your team but Lv. ${best} in your box`);
+			left.splice(left.indexOf(owned.sort((a, b) => b.level - a.level)[0]), 1);
+			continue;
+		}
+		left.splice(left.indexOf(fits[0]), 1);
+	}
+	return { ok: !problems.length, problems };
+}
+
+/** Which gimmick a battle choice uses, if any: "move 1 terastallize" -> 'tera'. */
+function gimmickIn(choice) {
+	const words = String(choice).toLowerCase();
+	if (/\bterastall?ize\b/.test(words)) return 'tera';
+	if (/\bmega[xy]?\b/.test(words)) return 'mega';
+	if (/\b(zmove|ultra)\b/.test(words)) return 'zmove';
+	if (/\b(dynamax|max|gigantamax)\b/.test(words)) return 'dynamax';
+	return null;
+}
+const GIMMICK_ITEM = { tera: 'a Tera Orb', mega: 'a Key Stone', zmove: 'a Z-Ring', dynamax: 'a Dynamax Band' };
+const GIMMICK_NAME = { tera: 'Terastallize', mega: 'Mega Evolve', zmove: 'use Z-Moves', dynamax: 'Dynamax' };
 
 // -------------------------------------------------------------------- balls
 
@@ -347,8 +426,41 @@ function resultFromLog(enc, lines, winnerid) {
 		caught,
 		ballsUsed: used,
 		itemsUsed,
+		fainted: faintedInLog(enc, lines),
 		player: playerName,
 	};
+}
+
+/**
+ * The player's Pokémon that ended the battle fainted. In the RP they stay that
+ * way until a Pokémon Centre, so Discord marks them. A Revive used mid-battle
+ * brings one back, so it doesn't count.
+ */
+function faintedInLog(enc, lines) {
+	let slot = null;
+	for (const line of lines) {
+		const m = /^\|player\|(p\d)\|([^|]*)/.exec(line);
+		if (m && toID(m[2]) === enc.userid) slot = m[1];
+	}
+	if (!slot) return [];
+	const who = new Map();   // nickname -> { species, level }
+	const down = new Map();
+	for (const line of lines) {
+		const parts = line.split('|');
+		if ((parts[1] === 'switch' || parts[1] === 'drag' || parts[1] === 'replace') && parts[2] && parts[2].startsWith(slot)) {
+			const nick = parts[2].replace(/^p\d[a-z]?: /, '');
+			const [species, ...rest] = (parts[3] || '').split(', ');
+			const lv = rest.find(x => /^L\d+$/.test(x));
+			who.set(nick, { species, level: lv ? Number(lv.slice(1)) : 100 });
+		} else if (parts[1] === 'faint' && parts[2] && parts[2].startsWith(slot)) {
+			const nick = parts[2].replace(/^p\d[a-z]?: /, '');
+			if (who.has(nick)) down.set(nick, who.get(nick));
+		} else if (parts[1] === '-message') {
+			const m = /used an? (?:Max )?Revive on (.+)!$/.exec(parts.slice(2).join('|'));
+			if (m && toID(parts.slice(2).join('|').split(' used ')[0]) === enc.userid) down.delete(m[1]);
+		}
+	}
+	return [...down.values()];
 }
 
 // ------------------------------------------------------------ replay feed
@@ -434,5 +546,6 @@ function httpRoute(deps, log) {
 
 module.exports = {
 	verify, placeFor, requestEncounter, completeEncounter, canUseItem, usedInLog, publicView, canThrow, thrownInLog, resultFromLog, openFor,
+	checkTeam, gimmickIn, GIMMICK_ITEM, GIMMICK_NAME,
 	httpRoute, encounters, RP_ROOM, CHALLENGE_MS, recordFinished, finishedSince,
 };

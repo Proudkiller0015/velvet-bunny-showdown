@@ -206,8 +206,15 @@ class RpGuide extends ShowdownBot {
 		const existing = this.live.get(spawn.id);
 		if (existing && !existing.finished) {
 			// Asked again for the same one: challenge again rather than start another.
-			if (!existing.battleRoom) existing.send(`|/challenge ${spawn.target}, ${spawn.format}`);
-			return;
+			if (!existing.battleRoom) {
+				existing.send(`|/challenge ${spawn.target}, ${spawn.format}`);
+				return;
+			}
+			// It already had a battle, which the server has called off (the team didn't
+			// match the box) - the server only asks again for an encounter that isn't
+			// being battled. That opponent may not have noticed yet: retire it, send a new one.
+			existing.finish('replaced after a called-off battle');
+			this.live.delete(spawn.id);
 		}
 		if (this.live.size >= MAX_LIVE) {
 			this.pm(spawn.target, 'The RP bot is running a lot of battles right now. Try !encounter again in a few minutes.');

@@ -176,7 +176,8 @@ module.exports = {
     },
     'ruins': {
       name: 'The Standing Stones',
-      channels: ['the-standing-stones', 'the-fallen-ninth'],
+      // The Psychic gym meets here (moved from N's Castle). Like the other gyms, its channel has trainers but no wild Pokémon.
+      channels: ['the-standing-stones', 'stones-gym', 'the-fallen-ninth'],
       types: ['Psychic', 'Rock', 'Ghost', 'Fairy'],
       wild: ['the-standing-stones', 'the-fallen-ninth'],
       trainers: ['ruinmaniac', 'psychic', 'psychicf', 'hexmaniac', 'sage'],

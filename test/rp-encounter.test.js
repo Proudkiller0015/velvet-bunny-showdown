@@ -88,15 +88,31 @@ const TEAM = Teams.pack([
 	const offline = await post('/rp/encounter', signed({ at: Date.now(), showdown: 'NobodyOnline123', channel: 'route-1', kind: 'wild', badges: 1 }));
 	check(offline.body.code === 'offline', 'an offline player is told to log in first');
 
-	// The real thing.
+	// A team that doesn't match the box: Pikachu is Lv. 30 on the team but 5 in the box, and there's no Chansey.
 	const answer = await post('/rp/encounter', signed({
 		at: Date.now(), showdown: NAME, character: 'Mira', channel: 'the-long-grass', kind: 'wild', badges: 0, levelCap: 8,
-		balls: { poke: 2 },
+		balls: { poke: 2 }, box: [{ species: 'Pikachu', level: 5 }], gimmicks: { mega: false, zmove: false, dynamax: false, tera: false },
 	}));
 	check(answer.body.ok, `a wild encounter is rolled: ${answer.body.encounter && answer.body.encounter.text}`);
 	const id = answer.body.encounter && answer.body.encounter.id;
+	for (let i = 0; i < 40 && !seen.challenge; i++) await wait(500);
+	let invalid = null;
+	for (let i = 0; i < 40 && !invalid; i++) {
+		const r = await (await fetch(`${BASE}/rp/result/${id}`)).json();
+		if (r.encounter && r.encounter.invalid) invalid = r.encounter;
+		await wait(500);
+	}
+	check(invalid && invalid.status === 'waiting' && /Chansey/.test(invalid.invalid.message) && /Pikachu\*\* is Lv\. 30/.test(invalid.invalid.message),
+		`a team that doesn't match the box calls the battle off (${invalid && invalid.invalid.message})`);
+	check(/called off/.test(seen.log.join('\n')), 'the player is told why in the battle');
+	check(!/threw a Poké Ball/.test(seen.log.join('\n')), 'nothing happened in the called-off battle');
+	await wait(3000);   // the opponent logs off after the called-off battle
+	seen.challenge = null;
+	seen.log = [];
 
-	const again = await post('/rp/encounter', signed({ at: Date.now(), showdown: NAME, channel: 'the-long-grass', kind: 'wild', badges: 0, levelCap: 8 }));
+	// The team fixed (here: the box it's checked against), and asked again: the same encounter, and it battles.
+	const again = await post('/rp/encounter', signed({ at: Date.now(), showdown: NAME, channel: 'the-long-grass', kind: 'wild', badges: 0, levelCap: 8,
+		balls: { poke: 2 }, box: [{ species: 'Pikachu', level: 30 }, { species: 'Chansey', level: 35 }] }));
 	check(again.body.again && again.body.encounter.id === id, 'asking again brings back the same encounter');
 
 	for (let i = 0; i < 40 && !seen.challenge; i++) await wait(500);
