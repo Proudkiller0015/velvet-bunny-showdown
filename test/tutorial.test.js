@@ -43,12 +43,14 @@ const wait = ms => new Promise(r => setTimeout(r, ms));
 			seen.log.push(line);
 			const button = /\|uhtml\|rpitems\|.*value="(\/useitem potion, Pikachu)"/.exec(line);
 			if (button) seen.potionButton = button[1];
+			// The newest panel, whichever side of the request it lands on.
+			if (line.startsWith('|uhtml|rpitems|')) seen.panelButton = button ? button[1] : null;
 			if (button && seen.awaitPanel && !potion) { potion = true; ws.send(`${seen.awaitPanel}|${button[1]}`); seen.awaitPanel = null; }
 			if (line.startsWith('|error|')) seen.errors.push(line);
 			// Another ball once that one is thrown: there was only one.
 			if (/threw a Poké Ball!/.test(line) && !seen.second) { seen.second = true; ws.send(`${room}|/throwball poke`); }
 			if (process.env.DEBUG && /error|rpitems|threw|win/.test(line)) console.log('  >', line.slice(0, 120));
-			if (line.startsWith('|win|') || line.startsWith('|tie')) seen.ended = true;
+			if (line.startsWith('|win|') || line === '|tie' || line.startsWith('|tie|')) seen.ended = true;   // not '|tier|'
 			if (!line.startsWith('|request|')) continue;
 			const raw = line.slice(9);
 			if (!raw) continue;
@@ -60,6 +62,7 @@ const wait = ms => new Promise(r => setTimeout(r, ms));
 			const [hp, max] = String(request.side.pokemon[0].condition).split(' ')[0].split('/').map(Number);
 			// Growl until Rattata hurts Pikachu, then wait for the item panel sent right
 			// behind this request and press its Potion button; throw after that.
+			if (!potion && hp < max && seen.panelButton) { potion = true; ws.send(`${room}|${seen.panelButton}`); continue; }
 			if (!potion && hp < max) { seen.awaitPanel = room; continue; }
 			if (!threw && (potion || turn > 10)) {
 				threw = true;

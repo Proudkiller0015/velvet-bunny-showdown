@@ -1524,7 +1524,7 @@ function roleplay() {
 			allowed.add(toID(enc.name));
 			const spawn = {
 				id: enc.id, target: enc.showdown, name: enc.name, avatar: enc.avatar, format: enc.format,
-				team: Teams.pack(enc.team), ai: enc.ai, kind: enc.kind, character: enc.character, balls: enc.balls,
+				team: Teams.pack(enc.team), ai: enc.ai, kind: enc.kind, character: enc.character, balls: enc.balls, items: enc.items || null,
 				className: enc.className || null, classId: enc.classId || null, warning: enc.warning || '',
 			};
 			// Straight down the bot's socket, as a PM from the server itself. A
