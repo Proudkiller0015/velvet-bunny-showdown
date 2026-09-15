@@ -23,14 +23,25 @@ const fs = require('fs');
 const path = require('path');
 
 // From a 7,480-game marathon (test/marathon.js), refitted after the rating fit
-// itself was corrected. Re-run it and update these together if the rungs change.
+// itself was corrected, then all lifted by the same 226 so the easiest rung
+// starts at BOT_FLOOR rather than 777 (below a new player). The gaps between
+// rungs are the measurement; the absolute level is a choice.
 const MEASURED = {
-	easy: 777,
-	normal: 985,
-	hard: 1057,
-	champion: 1076,
-	stockfish: 1106,
+	easy: 1003,
+	normal: 1211,
+	hard: 1283,
+	champion: 1302,
+	stockfish: 1332,
 };
+
+/**
+ * Each rung's plateau: a bot never drops below the rating it starts at. Bots can
+ * climb, but losing to people never drags a rung down to where beating it is
+ * worth nothing, so there is always rating to gain from every rung. Enforced in
+ * config/showdown-config.js. BOT_FLOOR is the lowest of them.
+ */
+const BOT_FLOORS = MEASURED;
+const BOT_FLOOR = Math.min(...Object.values(MEASURED));
 
 const HEADER = 'Elo\tUsername\tW\tL\tT\tLast update';
 
@@ -73,4 +84,4 @@ function seedLadder(dir, format, queues, log = () => {}) {
 	return added;
 }
 
-module.exports = { seedLadder, MEASURED };
+module.exports = { seedLadder, MEASURED, BOT_FLOOR, BOT_FLOORS };

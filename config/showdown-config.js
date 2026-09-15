@@ -1159,6 +1159,20 @@ function serverHelp() {
 	return true;
 }
 
+/**
+ * Every bot rung has a plateau it never drops below.
+ *
+ * Bots can climb, but a run of losses to people used to drag a rung down until
+ * beating it was worth almost nothing. Each rung is held at its own floor (its
+ * starting rating, src/ladder-seed.js), so there is always rating to win from
+ * it. Showdown still prints its own "+0 for losing" line; this adds one saying why.
+ */
+function botLadderPlateaus() {
+	const store = typeof Ladders !== 'undefined' && Ladders && Ladders.LadderStore;
+	const on = require('../../../src/ladder-plateau').installPlateaus(store && store.prototype, userid => BOT_RUNG.get(userid), { escape: Chat.escapeHTML });
+	console.log(on ? '[config] bot ladder plateaus on' : '[config] could not find the ladder to put plateaus on');
+}
+
 function helpRoom() {
 	const room = makeRoom('Help', {
 		isPrivate: false,
@@ -1672,6 +1686,7 @@ exports.startuphook = function () {
 
 	fixMatchmaking(BOT_IDS);
 	exemptBots(BOT_IDS);
+	botLadderPlateaus();
 	hostReplays();
 	friendsInProcess();
 	// Before anyone connects: the first connection is what builds the list.
