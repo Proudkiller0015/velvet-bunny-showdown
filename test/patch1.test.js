@@ -275,6 +275,16 @@ check(!['memorywipe', 'soulresonance', 'resolutestrike', 'aurorasquall'].some(mv
 	check(hp === b.p1.active[0].hp, 'turn setup ran');
 }
 
+// Rime Cleaver: 100 power, 100% accurate physical Ice.
+{
+	const m = Dex.moves.get('rimecleaver');
+	check(m.basePower === 100 && m.accuracy === 100 && m.category === 'Physical' && m.type === 'Ice', 'Rime Cleaver: Ice, physical, 100 power, 100%');
+	check(learns('mamoswine', 'rimecleaver') && learns('swinub', 'rimecleaver') && learns('mew', 'rimecleaver') && !learns('weavile', 'rimecleaver') && !learns('baxcalibur', 'rimecleaver'), 'Rime Cleaver: Mamoswine line and Mew yes, Weavile and Baxcalibur no');
+	const b = battle([{ species: 'Beartic', ability: 'Swift Swim', moves: ['rimecleaver'] }], [{ species: 'Garchomp', ability: 'Rough Skin', moves: ['splash'] }]);
+	b.makeChoices('move 1', 'move 1');
+	check(/\|-supereffective\|p2a: Garchomp/.test(log(b)), 'and it lands (super effective on Garchomp)');
+}
+
 // Whole-dex distribution, with the deliberate exclusions.
 check(learns('venusaur', 'solarnectar') && learns('bulbasaur', 'solarnectar'), 'Venusaur line learns Solar Nectar');
 check(learns('rhyperior', 'craghammer') && learns('rhyhorn', 'craghammer') && !learns('tyranitar', 'craghammer'), 'Crag Hammer: Rhyperior line yes, Tyranitar no');

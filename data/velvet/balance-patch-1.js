@@ -334,6 +334,20 @@ exports.MOVES = {
 		shortDesc: "100% accurate, no contact. No drawback.",
 		desc: "The user hurls a spear of lightning. Does not make contact.",
 	},
+	/*
+	 * Rime Cleaver: Ice's third strong physical attack, and the reliable one.
+	 * Icicle Crash is 85 at 90% and Triple Axel rolls its accuracy three times;
+	 * this is 100 power that never misses, with no drawback.
+	 */
+	rimecleaver: {
+		num: -26, gen: 9, name: "Rime Cleaver", type: "Ice", category: "Physical",
+		basePower: 100, accuracy: 100, pp: 10, priority: 0,
+		flags: { contact: 1, protect: 1, mirror: 1, slicing: 1, metronome: 1 },
+		secondary: null, target: "normal", contestType: "Cool", velvetShared: true,
+		flavor: "A blade of frost as old as the glacier it was broken from comes down in one clean stroke.",
+		shortDesc: "100% accurate. No drawback.",
+		desc: "The user brings down a blade of ancient frost in one clean, slicing stroke.",
+	},
 	continentalheave: {
 		num: -20, gen: 9, name: "Continental Heave", type: "Normal", category: "Physical",
 		basePower: 110, accuracy: 95, pp: 5, priority: 0,
@@ -698,7 +712,236 @@ const TM_DISTRIBUTION = {
 	voltaiclance: ['electivire', 'luxray', 'zeraora', 'eelektross', 'pawmot', 'morpeko', 'dracozolt', 'arctozolt',
 		'ironthorns', 'zebstrika', 'manectric', 'raichu', 'raichualola', 'pikachu', 'emolga', 'pachirisu', 'dedenne',
 		'togedemaru', 'stunfisk', 'boltund', 'pincurchin', 'minun', 'plusle'],
+	// Ice physical attackers. Not Weavile or Sneasel (it would outclass Icicle
+	// Crash on a UU sweeper), Baxcalibur (Uber), Galarian Darmanitan (Gorilla
+	// Tactics) or the Ice legends; Mamoswine is the borderline one kept.
+	rimecleaver: ['mamoswine', 'cetitan', 'beartic', 'avalugg', 'avalugghisui', 'glalie', 'abomasnow', 'walrein',
+		'crabominable', 'eiscue', 'arctozolt', 'arctovish', 'lapras'],
 	shufflejab: ['hitmonlee', 'hitmonchan', 'hitmontop', 'throh', 'sawk', 'hariyama', 'falinks', 'granbull', 'spinda', 'machamp', 'conkeldurr', 'pangoro', 'primeape', 'poliwrath', 'toxicroak', 'lucario', 'infernape', 'medicham', 'mienshao', 'crabominable', 'passimian', 'hawlucha', 'grapploct', 'lopunny', 'scrafty', 'pawmot', 'kommoo'],
+};
+
+/*
+ * Newer moves for older Pokemon: shared moves from Generations 8 and 9 that
+ * skipped Pokemon who obviously fit them. Moves they already know are skipped
+ * when the buffs are applied.
+ */
+const NEWER_MOVES = {
+	'tripleaxel': [
+		'froslass',
+		'eiscue',
+		'jynx',
+		'smoochum',
+		'mrrime',
+		'mrmimegalar',
+		'delibird',
+		'hitmonlee',
+		'hitmontop',
+		'tyrogue',
+		'lopunny',
+		'buneary'
+	],
+	'icespinner': [
+		'froslass',
+		'snorunt',
+		'glalie',
+		'jynx',
+		'smoochum',
+		'cryogonal',
+		'hitmontop',
+		'delibird',
+		'eiscue'
+	],
+	'chillingwater': [
+		'seel',
+		'dewgong',
+		'spheal',
+		'sealeo',
+		'walrein',
+		'lapras',
+		'shellder',
+		'cloyster',
+		'bergmite',
+		'avalugg',
+		'cetoddle',
+		'cetitan'
+	],
+	'snowscape': [
+		'articuno',
+		'regice',
+		'jynx',
+		'smoochum',
+		'glalie',
+		'froslass',
+		'snorunt',
+		'beartic',
+		'cubchoo',
+		'vanillite',
+		'vanillish',
+		'vanilluxe',
+		'cryogonal',
+		'snover',
+		'abomasnow',
+		'walrein',
+		'avalugg',
+		'eiscue',
+		'delibird',
+		'lapras',
+		'dewgong',
+		'swinub',
+		'piloswine',
+		'mamoswine',
+		'glaceon',
+		'snom',
+		'frosmoth'
+	],
+	'axekick': [
+		'hitmonlee',
+		'hitmontop',
+		'tyrogue',
+		'lopunny',
+		'buneary',
+		'sawk',
+		'mienfoo',
+		'mienshao',
+		'medicham',
+		'meditite'
+	],
+	'temperflare': [
+		'growlithe',
+		'arcanine',
+		'houndour',
+		'houndoom',
+		'magby',
+		'magmar',
+		'magmortar',
+		'darumaka',
+		'darmanitan',
+		'tepig',
+		'pignite',
+		'emboar',
+		'litten',
+		'torracat',
+		'incineroar',
+		'numel',
+		'camerupt',
+		'flareon',
+		'ponyta',
+		'rapidash'
+	],
+	'trailblaze': [
+		'treecko',
+		'grovyle',
+		'sceptile',
+		'tropius',
+		'deerling',
+		'sawsbuck',
+		'skiddo',
+		'gogoat',
+		'leavanny',
+		'shroomish',
+		'breloom',
+		'cacnea',
+		'cacturne',
+		'ludicolo',
+		'shiftry',
+		'turtwig',
+		'grotle',
+		'torterra',
+		'snover',
+		'abomasnow',
+		'carnivine',
+		'maractus'
+	],
+	'pounce': [
+		'spinarak',
+		'ariados',
+		'joltik',
+		'galvantula',
+		'scyther',
+		'leavanny',
+		'ninjask',
+		'yanmega',
+		'heracross',
+		'pinsir',
+		'durant',
+		'escavalier',
+		'accelgor',
+		'dwebble',
+		'crustle'
+	],
+	'hardpress': [
+		'aron',
+		'lairon',
+		'aggron',
+		'onix',
+		'steelix',
+		'shieldon',
+		'bastiodon',
+		'nosepass',
+		'probopass',
+		'bronzor',
+		'bronzong',
+		'klink',
+		'klang',
+		'klinklang',
+		'cufant',
+		'copperajah'
+	],
+	'psychicnoise': [
+		'jynx',
+		'mrmime',
+		'grumpig',
+		'chimecho',
+		'xatu',
+		'girafarig',
+		'bronzong',
+		'claydol',
+		'gothitelle',
+		'reuniclus',
+		'beheeyem',
+		'musharna',
+		'sigilyph',
+		'delphox',
+		'meowstic',
+		'meowsticf'
+	],
+	'alluringvoice': [
+		'clefairy',
+		'clefable',
+		'jigglypuff',
+		'wigglytuff',
+		'togekiss',
+		'gardevoir',
+		'florges',
+		'aromatisse',
+		'slurpuff',
+		'sylveon',
+		'whimsicott',
+		'primarina',
+		'comfey'
+	],
+	'upperhand': [
+		'hitmonlee',
+		'hitmonchan',
+		'hitmontop',
+		'medicham',
+		'mienshao',
+		'sawk',
+		'hawlucha',
+		'infernape',
+		'lucario'
+	],
+	'dragoncheer': [
+		'altaria',
+		'flygon',
+		'kingdra',
+		'dragalge',
+		'noivern',
+		'haxorus',
+		'druddigon',
+		'goodra',
+		'turtonator'
+	]
 };
 
 /**
@@ -718,6 +961,11 @@ exports.buildBuffs = (Pokedex) => {
 	}
 	for (const [id, moves] of Object.entries(SMALL)) add(id, moves, []);
 	for (const [id, ability] of Object.entries(ABILITY_GRANTS)) add(id, [], [ability]);
+
+	// Newer (Gen 8-9) shared moves for older Pokemon that fit them.
+	for (const [move, ids] of Object.entries(NEWER_MOVES)) {
+		for (const id of ids) if (Pokedex[id]) add(id, [move], []);
+	}
 
 	// The ten shared moves, handed out like TMs to everything they suit.
 	for (const [move, ids] of Object.entries(TM_DISTRIBUTION)) {
@@ -756,5 +1004,6 @@ exports.buildBuffs = (Pokedex) => {
 
 exports.GROUPS = GROUPS;
 exports.TM_DISTRIBUTION = TM_DISTRIBUTION;
+exports.NEWER_MOVES = NEWER_MOVES;
 exports.SMALL = SMALL;
 exports.ABILITY_GRANTS = ABILITY_GRANTS;
