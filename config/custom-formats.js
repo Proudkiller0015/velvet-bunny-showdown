@@ -686,6 +686,37 @@ exports.Formats = [
 		challengeShow: true,
 		rated: false,
 	},
+	{
+		name: "[Gen 9] RP Custom Game",
+		desc: "Anything goes: hackmons, illegal Pokémon, fun battles. Not for RP progression.",
+
+		/**
+		 * Custom Game, with RP's name on it, for the battles that are not part of
+		 * the story: hackmons sets, Pokemon that are not legal anywhere else
+		 * (Eevee-Starter), levels and movepools nobody could have. Nothing is
+		 * checked, as in Custom Game.
+		 *
+		 * Challenge only and unrated, and never an encounter format: encounters
+		 * keep RP Battle. It still keeps a replay like every RP battle, which
+		 * Discord posts to the PvP replays, but the bot gives it no EXP.
+		 */
+		ruleset: [
+			'Team Preview',
+			'Cancel Mod',
+			'Max Team Size = 24',
+			'Max Move Count = 24',
+			'Max Level = 9999',
+			'Default Level = 100',
+		],
+		battle: { trunc: Math.trunc },
+		onBegin() {
+			allGimmicks.call(this);
+		},
+
+		searchShow: false,
+		challengeShow: true,
+		rated: false,
+	},
 	WILD = {
 		name: "[Gen 9] RP Battle (Wild Encounter)",
 		desc: "A wild Pokémon from the RP. Beat it, or weaken it and throw a ball.",

@@ -33,6 +33,15 @@ check(!r.ok && /Eevee\*\* has fainted/.test(r.problems[0]) && /Ditto\*\* is at t
 r = rp.checkTeam({ box: [{ species: 'Eevee', level: 15 }] }, team(['Eevee-Starter', 15]));
 check(!r.ok, 'Eevee-Starter does not count as a box Eevee');
 
+// RP Custom Game takes anything; RP Battle still takes Samantha.
+{
+	const { Dex, TeamValidator } = require('pokemon-showdown');
+	const illegal = [{ species: 'Eevee-Starter', ability: 'Huge Power', item: '', moves: ['veeveevolley', 'spore'], level: 250, evs: {}, ivs: {}, nature: 'Hardy' }];
+	check(Dex.formats.get('gen9rpcustomgame').exists && !Dex.formats.get('gen9rpcustomgame').rated, 'RP Custom Game exists, unrated');
+	check(!new TeamValidator('gen9rpcustomgame').validateTeam(illegal), 'and accepts an illegal hackmons team');
+	check(!new TeamValidator('gen9rpbattle').validateTeam([{ species: 'Samantha', ability: 'Queen Wrath', item: '', moves: ['queenbeam'], level: 100, evs: {}, ivs: {}, nature: 'Hardy' }]), 'Samantha is still legal in RP Battle');
+}
+
 // Who fainted, read off a battle log.
 const log = [
 	'|player|p1|RpTester|1|', '|player|p2|Wild Rattata|1|',

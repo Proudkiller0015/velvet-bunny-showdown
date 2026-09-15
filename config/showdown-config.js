@@ -1127,6 +1127,7 @@ function serverHelpBox(user) {
 			`any move it can learn whatever its level (TMs free), held items from your first gym badge. Wild Pok&eacute;mon and trainers come from ${cmd('!encounter')} on the Discord.`,
 			`In a wild battle, the <b>Throw</b> buttons or ${cmd('/throwball [ball]')} catch; ${cmd('/useitem [item], [pokemon]')} uses a Potion or Revive.`,
 			`Your team is checked against your character's box, and Mega / Z / Dynamax / Tera need the story item.`,
+			`<b>[Gen 9] RP Custom Game</b> is for hackmons, illegal and fun battles: anything goes, challenge only, and no EXP or RP progress.`,
 		]) +
 
 		section('Replays and more', [
