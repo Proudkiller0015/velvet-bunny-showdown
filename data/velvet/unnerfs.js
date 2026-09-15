@@ -149,10 +149,30 @@ function unnerfAbilities(Abilities) {
  * the dex, and ships them to the client. Add an un-nerf above and it reaches the
  * builder without anything else being touched.
  */
+/**
+ * Base stats Generation 9 cut, put back.
+ *
+ * Cresselia lost 10 Defense and 10 Special Defense in Scarlet and Violet
+ * (120/130 to 110/120). These are its Generation 8 numbers.
+ */
+const SPECIES_STATS = {
+	cresselia: { def: 120, spd: 130 },
+};
+
+function unnerfSpecies(Pokedex) {
+	if (!Pokedex) return Pokedex;
+	for (const [id, stats] of Object.entries(SPECIES_STATS)) {
+		if (Pokedex[id] && Pokedex[id].baseStats) Object.assign(Pokedex[id].baseStats, stats);
+	}
+	return Pokedex;
+}
+
 exports.CHANGED = {
 	moves: ['darkvoid', ...Object.keys(RECOVERY_PP)],
 	abilities: ['protean', 'libero', 'battlebond'],
+	species: Object.keys(SPECIES_STATS),
 };
+exports.unnerfSpecies = unnerfSpecies;
 
 exports.unnerfMoves = unnerfMoves;
 exports.unnerfAbilities = unnerfAbilities;

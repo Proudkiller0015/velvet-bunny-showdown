@@ -29,7 +29,7 @@ const { patchItems } = require('./items.js');
 const { applyBuffs } = require('./buffs.js');
 const { applyZaMegas, applyZaStones } = require('./za-megas.js');
 const { applyTiers } = require('./tiering.js');
-const { unnerfMoves, unnerfAbilities } = require('./unnerfs.js');
+const { unnerfMoves, unnerfAbilities, unnerfSpecies } = require('./unnerfs.js');
 
 // The buffed Pokemon are Showdown's own, so they are changed in place rather
 // than added - and the learnsets they need are added when that file is loaded,
@@ -51,6 +51,7 @@ function buffWhatWeHave() {
 
 exports.pokedex = data => {
 	Object.assign(data, Pokedex);
+	unnerfSpecies(data);
 	buffedPokedex = data;
 	buffWhatWeHave();
 };

@@ -147,6 +147,19 @@ const TIERS = {
 	// 110 power move that ignores Protect and shatters screens. 160 base Attack
 	// with all of that is not a ZU Pokemon any more; it is an Ubers one.
 	regigigas: 'Uber',
+
+	// Balance Patch 1's second legend, aimed low on purpose: Polar Mantle halves
+	// the Rock damage that kept Articuno out of every tier and sets snow, and
+	// Aurora Squall gives it a spread Ice attack. A solid RU pick, no more.
+	articuno: 'RU',
+
+	// The rest of Balance Patch 1's "Legends Rise": each got a signature (Regice's
+	// Permafrost Core, the lake trio's Memory Wipe, Soul Resonance and Resolute
+	// Strike) aimed at RU. Azelf, the strongest of them with its offences, UU.
+	regice: 'RU',
+	uxie: 'RU',
+	mesprit: 'RU',
+	azelf: 'UU',
 };
 
 /**

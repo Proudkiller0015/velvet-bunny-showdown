@@ -1280,10 +1280,17 @@
 			for (var i in buffs.items) if (!window.BattleItems[i]) window.BattleItems[i] = buffs.items[i];
 		} else ready = false;
 
+		// Base stats this server restored (Cresselia's Generation 8 defences).
+		correct(window.BattlePokedex, buffs.overrides && buffs.overrides.species);
+
 		// Balance Patch 1's evolution levels: the CDN's rows still carry Game Freak's.
 		if (window.BattlePokedex && buffs.evoLevels) {
 			for (var evo in buffs.evoLevels) {
-				if (window.BattlePokedex[evo]) window.BattlePokedex[evo].evoLevel = buffs.evoLevels[evo];
+				var row = window.BattlePokedex[evo];
+				if (!row) continue;
+				// A stone evolution that can now also happen by level keeps its stone here.
+				if (buffs.evoAlso && buffs.evoAlso[evo]) row.velvetLevelToo = buffs.evoAlso[evo];
+				else row.evoLevel = buffs.evoLevels[evo];
 			}
 		}
 
@@ -1538,6 +1545,12 @@
 				if (ability === 'verdantsurge' && moveType === 'Grass' && grassy && grounded && out && out.modify) {
 					out.modify(4726 / 4096, 'Verdant Surge');
 				}
+				// Solar Nectar: 135 power in harsh sunlight (Balance Patch 1).
+				var moveId = move && (move.id || window.toID(move.name || ''));
+				var weather = this.battle && window.toID(this.battle.weather || '');
+				if (moveId === 'solarnectar' && (weather === 'sunnyday' || weather === 'desolateland') && out && out.modify) {
+					out.modify(135 / 80, 'Sunlight');
+				}
 			} catch (e) {
 				// A tooltip is never worth throwing over.
 			}
@@ -1729,6 +1742,10 @@
 		craghammer: ['headsmash', 'rockwrecker', 'stoneedge'],
 		hypnowhirl: ['psybeam', 'confusion'],
 		shufflejab: ['machpunch', 'drainpunch'],
+		aurorasquall: ['blizzard', 'icywind'],
+		memorywipe: ['psychic', 'confusion'],
+		soulresonance: ['heartstamp', 'drainingkiss', 'psyshock'],
+		resolutestrike: ['zenheadbutt', 'psychocut'],
 	};
 	function installMoveAnims() {
 		var anims = window.BattleMoveAnims;

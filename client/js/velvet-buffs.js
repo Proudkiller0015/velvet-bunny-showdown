@@ -32,43 +32,52 @@ window.VelvetBuffs = {
 		},
 		"psyduck": {
 			"moves": [
-				"wavecharge"
+				"wavecharge",
+				"undertow"
 			],
 			"abilities": []
 		},
 		"golduck": {
 			"moves": [
-				"wavecharge"
+				"wavecharge",
+				"undertow"
 			],
 			"abilities": []
 		},
 		"poliwag": {
 			"moves": [
-				"wavecharge"
+				"wavecharge",
+				"undertow",
+				"shufflejab"
 			],
 			"abilities": []
 		},
 		"poliwhirl": {
 			"moves": [
-				"wavecharge"
+				"wavecharge",
+				"undertow",
+				"shufflejab"
 			],
 			"abilities": []
 		},
 		"poliwrath": {
 			"moves": [
-				"wavecharge"
+				"wavecharge",
+				"shufflejab"
 			],
 			"abilities": []
 		},
 		"tentacool": {
 			"moves": [
-				"wavecharge"
+				"wavecharge",
+				"undertow"
 			],
 			"abilities": []
 		},
 		"tentacruel": {
 			"moves": [
-				"wavecharge"
+				"wavecharge",
+				"undertow"
 			],
 			"abilities": []
 		},
@@ -125,13 +134,15 @@ window.VelvetBuffs = {
 		},
 		"horsea": {
 			"moves": [
-				"wavecharge"
+				"wavecharge",
+				"undertow"
 			],
 			"abilities": []
 		},
 		"seadra": {
 			"moves": [
-				"wavecharge"
+				"wavecharge",
+				"undertow"
 			],
 			"abilities": []
 		},
@@ -181,7 +192,8 @@ window.VelvetBuffs = {
 		},
 		"lapras": {
 			"moves": [
-				"wavecharge"
+				"wavecharge",
+				"undertow"
 			],
 			"abilities": []
 		},
@@ -205,13 +217,15 @@ window.VelvetBuffs = {
 		},
 		"kabuto": {
 			"moves": [
-				"wavecharge"
+				"wavecharge",
+				"craghammer"
 			],
 			"abilities": []
 		},
 		"kabutops": {
 			"moves": [
-				"wavecharge"
+				"wavecharge",
+				"craghammer"
 			],
 			"abilities": []
 		},
@@ -261,19 +275,22 @@ window.VelvetBuffs = {
 		},
 		"politoed": {
 			"moves": [
-				"wavecharge"
+				"wavecharge",
+				"undertow"
 			],
 			"abilities": []
 		},
 		"wooper": {
 			"moves": [
-				"wavecharge"
+				"wavecharge",
+				"undertow"
 			],
 			"abilities": []
 		},
 		"quagsire": {
 			"moves": [
-				"wavecharge"
+				"wavecharge",
+				"undertow"
 			],
 			"abilities": []
 		},
@@ -285,7 +302,8 @@ window.VelvetBuffs = {
 		},
 		"qwilfish": {
 			"moves": [
-				"wavecharge"
+				"wavecharge",
+				"undertow"
 			],
 			"abilities": []
 		},
@@ -299,25 +317,29 @@ window.VelvetBuffs = {
 		},
 		"remoraid": {
 			"moves": [
-				"wavecharge"
+				"wavecharge",
+				"undertow"
 			],
 			"abilities": []
 		},
 		"octillery": {
 			"moves": [
-				"wavecharge"
+				"wavecharge",
+				"undertow"
 			],
 			"abilities": []
 		},
 		"mantine": {
 			"moves": [
-				"wavecharge"
+				"wavecharge",
+				"undertow"
 			],
 			"abilities": []
 		},
 		"kingdra": {
 			"moves": [
-				"wavecharge"
+				"wavecharge",
+				"undertow"
 			],
 			"abilities": []
 		},
@@ -347,19 +369,22 @@ window.VelvetBuffs = {
 		},
 		"lotad": {
 			"moves": [
-				"wavecharge"
+				"wavecharge",
+				"solarnectar"
 			],
 			"abilities": []
 		},
 		"lombre": {
 			"moves": [
-				"wavecharge"
+				"wavecharge",
+				"solarnectar"
 			],
 			"abilities": []
 		},
 		"ludicolo": {
 			"moves": [
-				"wavecharge"
+				"wavecharge",
+				"solarnectar"
 			],
 			"abilities": []
 		},
@@ -400,13 +425,15 @@ window.VelvetBuffs = {
 		},
 		"wailmer": {
 			"moves": [
-				"wavecharge"
+				"wavecharge",
+				"undertow"
 			],
 			"abilities": []
 		},
 		"wailord": {
 			"moves": [
-				"wavecharge"
+				"wavecharge",
+				"undertow"
 			],
 			"abilities": []
 		},
@@ -455,13 +482,15 @@ window.VelvetBuffs = {
 		},
 		"feebas": {
 			"moves": [
-				"wavecharge"
+				"wavecharge",
+				"undertow"
 			],
 			"abilities": []
 		},
 		"milotic": {
 			"moves": [
-				"wavecharge"
+				"wavecharge",
+				"undertow"
 			],
 			"abilities": []
 		},
@@ -491,25 +520,30 @@ window.VelvetBuffs = {
 		},
 		"clamperl": {
 			"moves": [
-				"wavecharge"
+				"wavecharge",
+				"undertow"
 			],
 			"abilities": []
 		},
 		"huntail": {
 			"moves": [
-				"wavecharge"
+				"wavecharge",
+				"undertow"
 			],
 			"abilities": []
 		},
 		"gorebyss": {
 			"moves": [
-				"wavecharge"
+				"wavecharge",
+				"undertow"
 			],
 			"abilities": []
 		},
 		"relicanth": {
 			"moves": [
-				"wavecharge"
+				"wavecharge",
+				"undertow",
+				"craghammer"
 			],
 			"abilities": []
 		},
@@ -601,7 +635,8 @@ window.VelvetBuffs = {
 		},
 		"mantyke": {
 			"moves": [
-				"wavecharge"
+				"wavecharge",
+				"undertow"
 			],
 			"abilities": []
 		},
@@ -822,19 +857,22 @@ window.VelvetBuffs = {
 		},
 		"frillish": {
 			"moves": [
-				"wavecharge"
+				"wavecharge",
+				"undertow"
 			],
 			"abilities": []
 		},
 		"jellicent": {
 			"moves": [
-				"wavecharge"
+				"wavecharge",
+				"undertow"
 			],
 			"abilities": []
 		},
 		"alomomola": {
 			"moves": [
-				"wavecharge"
+				"wavecharge",
+				"undertow"
 			],
 			"abilities": []
 		},
@@ -882,31 +920,36 @@ window.VelvetBuffs = {
 		},
 		"binacle": {
 			"moves": [
-				"wavecharge"
+				"wavecharge",
+				"craghammer"
 			],
 			"abilities": []
 		},
 		"barbaracle": {
 			"moves": [
-				"wavecharge"
+				"wavecharge",
+				"craghammer"
 			],
 			"abilities": []
 		},
 		"skrelp": {
 			"moves": [
-				"wavecharge"
+				"wavecharge",
+				"undertow"
 			],
 			"abilities": []
 		},
 		"clauncher": {
 			"moves": [
-				"wavecharge"
+				"wavecharge",
+				"undertow"
 			],
 			"abilities": []
 		},
 		"clawitzer": {
 			"moves": [
-				"wavecharge"
+				"wavecharge",
+				"undertow"
 			],
 			"abilities": []
 		},
@@ -949,13 +992,15 @@ window.VelvetBuffs = {
 		},
 		"mareanie": {
 			"moves": [
-				"wavecharge"
+				"wavecharge",
+				"undertow"
 			],
 			"abilities": []
 		},
 		"toxapex": {
 			"moves": [
-				"wavecharge"
+				"wavecharge",
+				"undertow"
 			],
 			"abilities": []
 		},
@@ -973,13 +1018,15 @@ window.VelvetBuffs = {
 		},
 		"wimpod": {
 			"moves": [
-				"wavecharge"
+				"wavecharge",
+				"hivefrenzy"
 			],
 			"abilities": []
 		},
 		"golisopod": {
 			"moves": [
-				"wavecharge"
+				"wavecharge",
+				"hivefrenzy"
 			],
 			"abilities": []
 		},
@@ -998,7 +1045,8 @@ window.VelvetBuffs = {
 		},
 		"bruxish": {
 			"moves": [
-				"wavecharge"
+				"wavecharge",
+				"hypnowhirl"
 			],
 			"abilities": []
 		},
@@ -1058,13 +1106,15 @@ window.VelvetBuffs = {
 		},
 		"arrokuda": {
 			"moves": [
-				"wavecharge"
+				"wavecharge",
+				"undertow"
 			],
 			"abilities": []
 		},
 		"barraskewda": {
 			"moves": [
-				"wavecharge"
+				"wavecharge",
+				"undertow"
 			],
 			"abilities": []
 		},
@@ -1158,7 +1208,8 @@ window.VelvetBuffs = {
 		},
 		"dondozo": {
 			"moves": [
-				"wavecharge"
+				"wavecharge",
+				"undertow"
 			],
 			"abilities": []
 		},
@@ -1221,19 +1272,22 @@ window.VelvetBuffs = {
 		},
 		"corsolagalar": {
 			"moves": [
-				"wavecharge"
+				"wavecharge",
+				"undertow"
 			],
 			"abilities": []
 		},
 		"cursola": {
 			"moves": [
-				"wavecharge"
+				"wavecharge",
+				"undertow"
 			],
 			"abilities": []
 		},
 		"dhelmise": {
 			"moves": [
-				"wavecharge"
+				"wavecharge",
+				"undertow"
 			],
 			"abilities": []
 		},
@@ -1484,7 +1538,7 @@ window.VelvetBuffs = {
 		},
 		"nuzleaf": {
 			"moves": [
-				"merchantscall"
+				"carrionfeast"
 			],
 			"abilities": []
 		},
@@ -1514,7 +1568,8 @@ window.VelvetBuffs = {
 				"hivefrenzy",
 				"leechlife",
 				"knockoff",
-				"swordsdance"
+				"swordsdance",
+				"chrysalisveil"
 			],
 			"abilities": []
 		},
@@ -1523,7 +1578,8 @@ window.VelvetBuffs = {
 				"hivefrenzy",
 				"leechlife",
 				"knockoff",
-				"swordsdance"
+				"swordsdance",
+				"chrysalisveil"
 			],
 			"abilities": []
 		},
@@ -1941,13 +1997,13 @@ window.VelvetBuffs = {
 				"nuzzle"
 			],
 			"abilities": [
-				"Volt Absorb"
+				"Mudflat Ambush"
 			],
 			"slots": {
 				"0": "Static",
 				"1": "Limber",
 				"H": "Sand Veil",
-				"V0": "Volt Absorb"
+				"V0": "Mudflat Ambush"
 			}
 		},
 		"cherrim": {
@@ -2199,7 +2255,8 @@ window.VelvetBuffs = {
 		},
 		"spinda": {
 			"moves": [
-				"shufflejab"
+				"shufflejab",
+				"hustleup"
 			],
 			"abilities": []
 		},
@@ -2212,6 +2269,802 @@ window.VelvetBuffs = {
 		"sunflora": {
 			"moves": [
 				"solarnectar"
+			],
+			"abilities": []
+		},
+		"stunfiskgalar": {
+			"moves": [],
+			"abilities": [
+				"Mudflat Ambush"
+			],
+			"slots": {
+				"0": "Mimicry",
+				"1": "Mudflat Ambush"
+			}
+		},
+		"scyther": {
+			"moves": [
+				"hivefrenzy"
+			],
+			"abilities": []
+		},
+		"scizor": {
+			"moves": [],
+			"abilities": []
+		},
+		"kleavor": {
+			"moves": [],
+			"abilities": []
+		},
+		"pinsir": {
+			"moves": [
+				"hivefrenzy"
+			],
+			"abilities": []
+		},
+		"heracross": {
+			"moves": [
+				"hivefrenzy"
+			],
+			"abilities": []
+		},
+		"drapion": {
+			"moves": [
+				"hivefrenzy",
+				"carrionfeast"
+			],
+			"abilities": []
+		},
+		"gligar": {
+			"moves": [
+				"hivefrenzy"
+			],
+			"abilities": []
+		},
+		"gliscor": {
+			"moves": [],
+			"abilities": []
+		},
+		"escavalier": {
+			"moves": [
+				"hivefrenzy"
+			],
+			"abilities": []
+		},
+		"durant": {
+			"moves": [
+				"hivefrenzy"
+			],
+			"abilities": []
+		},
+		"leavanny": {
+			"moves": [
+				"hivefrenzy",
+				"chrysalisveil"
+			],
+			"abilities": []
+		},
+		"lokix": {
+			"moves": [
+				"hivefrenzy"
+			],
+			"abilities": []
+		},
+		"ribombee": {
+			"moves": [
+				"hivefrenzy",
+				"chrysalisveil",
+				"solarnectar"
+			],
+			"abilities": []
+		},
+		"yanmega": {
+			"moves": [
+				"hivefrenzy"
+			],
+			"abilities": []
+		},
+		"ninjask": {
+			"moves": [
+				"hivefrenzy"
+			],
+			"abilities": []
+		},
+		"crustle": {
+			"moves": [
+				"hivefrenzy",
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"venomoth": {
+			"moves": [
+				"chrysalisveil"
+			],
+			"abilities": []
+		},
+		"frosmoth": {
+			"moves": [
+				"chrysalisveil"
+			],
+			"abilities": []
+		},
+		"shuckle": {
+			"moves": [
+				"chrysalisveil"
+			],
+			"abilities": []
+		},
+		"forretress": {
+			"moves": [
+				"chrysalisveil"
+			],
+			"abilities": []
+		},
+		"linoonegalar": {
+			"moves": [
+				"hustleup"
+			],
+			"abilities": []
+		},
+		"sirfetchd": {
+			"moves": [
+				"hustleup"
+			],
+			"abilities": []
+		},
+		"stoutland": {
+			"moves": [
+				"hustleup"
+			],
+			"abilities": []
+		},
+		"lopunny": {
+			"moves": [
+				"hustleup",
+				"shufflejab"
+			],
+			"abilities": []
+		},
+		"cinccino": {
+			"moves": [
+				"hustleup"
+			],
+			"abilities": []
+		},
+		"tauros": {
+			"moves": [
+				"hustleup"
+			],
+			"abilities": []
+		},
+		"miltank": {
+			"moves": [
+				"hustleup"
+			],
+			"abilities": []
+		},
+		"obstagoon": {
+			"moves": [],
+			"abilities": []
+		},
+		"greedent": {
+			"moves": [
+				"hustleup"
+			],
+			"abilities": []
+		},
+		"oinkologne": {
+			"moves": [
+				"hustleup"
+			],
+			"abilities": []
+		},
+		"bouffalant": {
+			"moves": [
+				"hustleup"
+			],
+			"abilities": []
+		},
+		"unfezant": {
+			"moves": [
+				"hustleup"
+			],
+			"abilities": []
+		},
+		"ambipom": {
+			"moves": [
+				"hustleup"
+			],
+			"abilities": []
+		},
+		"ursaring": {
+			"moves": [
+				"hustleup"
+			],
+			"abilities": []
+		},
+		"smeargle": {
+			"moves": [
+				"hustleup"
+			],
+			"abilities": []
+		},
+		"mandibuzz": {
+			"moves": [
+				"carrionfeast"
+			],
+			"abilities": []
+		},
+		"honchkrow": {
+			"moves": [
+				"carrionfeast"
+			],
+			"abilities": []
+		},
+		"krookodile": {
+			"moves": [
+				"carrionfeast"
+			],
+			"abilities": []
+		},
+		"houndoom": {
+			"moves": [
+				"carrionfeast"
+			],
+			"abilities": []
+		},
+		"bisharp": {
+			"moves": [
+				"carrionfeast"
+			],
+			"abilities": []
+		},
+		"zoroark": {
+			"moves": [
+				"carrionfeast"
+			],
+			"abilities": []
+		},
+		"skuntank": {
+			"moves": [
+				"carrionfeast"
+			],
+			"abilities": []
+		},
+		"scrafty": {
+			"moves": [
+				"carrionfeast",
+				"shufflejab"
+			],
+			"abilities": []
+		},
+		"grimmsnarl": {
+			"moves": [
+				"carrionfeast"
+			],
+			"abilities": []
+		},
+		"mabosstiff": {
+			"moves": [
+				"carrionfeast"
+			],
+			"abilities": []
+		},
+		"shiftry": {
+			"moves": [],
+			"abilities": []
+		},
+		"spiritomb": {
+			"moves": [
+				"carrionfeast"
+			],
+			"abilities": []
+		},
+		"malamar": {
+			"moves": [
+				"carrionfeast",
+				"hypnowhirl"
+			],
+			"abilities": []
+		},
+		"houndstone": {
+			"moves": [
+				"carrionfeast"
+			],
+			"abilities": []
+		},
+		"pikachu": {
+			"moves": [
+				"sparkscamper"
+			],
+			"abilities": []
+		},
+		"raichu": {
+			"moves": [],
+			"abilities": []
+		},
+		"raichualola": {
+			"moves": [],
+			"abilities": []
+		},
+		"jolteon": {
+			"moves": [
+				"sparkscamper"
+			],
+			"abilities": []
+		},
+		"morpeko": {
+			"moves": [
+				"sparkscamper"
+			],
+			"abilities": []
+		},
+		"pawmot": {
+			"moves": [
+				"sparkscamper",
+				"shufflejab"
+			],
+			"abilities": []
+		},
+		"luxray": {
+			"moves": [
+				"sparkscamper"
+			],
+			"abilities": []
+		},
+		"zebstrika": {
+			"moves": [
+				"sparkscamper"
+			],
+			"abilities": []
+		},
+		"electrode": {
+			"moves": [
+				"sparkscamper"
+			],
+			"abilities": []
+		},
+		"electrodehisui": {
+			"moves": [
+				"sparkscamper"
+			],
+			"abilities": []
+		},
+		"dragalge": {
+			"moves": [
+				"undertow"
+			],
+			"abilities": []
+		},
+		"overqwil": {
+			"moves": [
+				"undertow"
+			],
+			"abilities": []
+		},
+		"venusaur": {
+			"moves": [
+				"solarnectar"
+			],
+			"abilities": []
+		},
+		"bellossom": {
+			"moves": [
+				"solarnectar"
+			],
+			"abilities": []
+		},
+		"vileplume": {
+			"moves": [
+				"solarnectar"
+			],
+			"abilities": []
+		},
+		"roserade": {
+			"moves": [
+				"solarnectar"
+			],
+			"abilities": []
+		},
+		"florges": {
+			"moves": [
+				"solarnectar"
+			],
+			"abilities": []
+		},
+		"comfey": {
+			"moves": [
+				"solarnectar"
+			],
+			"abilities": []
+		},
+		"lilligant": {
+			"moves": [
+				"solarnectar"
+			],
+			"abilities": []
+		},
+		"whimsicott": {
+			"moves": [
+				"solarnectar"
+			],
+			"abilities": []
+		},
+		"meganium": {
+			"moves": [
+				"solarnectar"
+			],
+			"abilities": []
+		},
+		"victreebel": {
+			"moves": [
+				"solarnectar"
+			],
+			"abilities": []
+		},
+		"exeggutor": {
+			"moves": [
+				"solarnectar"
+			],
+			"abilities": []
+		},
+		"exeggutoralola": {
+			"moves": [
+				"solarnectar"
+			],
+			"abilities": []
+		},
+		"lurantis": {
+			"moves": [
+				"solarnectar"
+			],
+			"abilities": []
+		},
+		"arboliva": {
+			"moves": [
+				"solarnectar"
+			],
+			"abilities": []
+		},
+		"scovillain": {
+			"moves": [
+				"solarnectar"
+			],
+			"abilities": []
+		},
+		"breloom": {
+			"moves": [
+				"solarnectar"
+			],
+			"abilities": []
+		},
+		"appletun": {
+			"moves": [
+				"solarnectar"
+			],
+			"abilities": []
+		},
+		"sceptile": {
+			"moves": [
+				"solarnectar"
+			],
+			"abilities": []
+		},
+		"golem": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"golemalola": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"rhyperior": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"aggron": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"rampardos": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"bastiodon": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"probopass": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"gigalith": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"coalossal": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"lycanroc": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"lycanrocmidnight": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"lycanrocdusk": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"tyrantrum": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"archeops": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"aerodactyl": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"armaldo": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"cradily": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"avalugg": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"avalugghisui": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"steelix": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"tinkaton": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"conkeldurr": {
+			"moves": [
+				"craghammer",
+				"shufflejab"
+			],
+			"abilities": []
+		},
+		"carbink": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"mrrime": {
+			"moves": [
+				"hypnowhirl"
+			],
+			"abilities": []
+		},
+		"hypno": {
+			"moves": [
+				"hypnowhirl"
+			],
+			"abilities": []
+		},
+		"xatu": {
+			"moves": [
+				"hypnowhirl"
+			],
+			"abilities": []
+		},
+		"girafarig": {
+			"moves": [
+				"hypnowhirl"
+			],
+			"abilities": []
+		},
+		"farigiraf": {
+			"moves": [],
+			"abilities": []
+		},
+		"bronzong": {
+			"moves": [
+				"hypnowhirl"
+			],
+			"abilities": []
+		},
+		"claydol": {
+			"moves": [
+				"hypnowhirl"
+			],
+			"abilities": []
+		},
+		"gothitelle": {
+			"moves": [
+				"hypnowhirl"
+			],
+			"abilities": []
+		},
+		"reuniclus": {
+			"moves": [
+				"hypnowhirl"
+			],
+			"abilities": []
+		},
+		"beheeyem": {
+			"moves": [
+				"hypnowhirl"
+			],
+			"abilities": []
+		},
+		"musharna": {
+			"moves": [
+				"hypnowhirl"
+			],
+			"abilities": []
+		},
+		"gardevoir": {
+			"moves": [
+				"hypnowhirl"
+			],
+			"abilities": []
+		},
+		"sigilyph": {
+			"moves": [
+				"hypnowhirl"
+			],
+			"abilities": []
+		},
+		"delphox": {
+			"moves": [
+				"hypnowhirl"
+			],
+			"abilities": []
+		},
+		"orbeetle": {
+			"moves": [
+				"hypnowhirl"
+			],
+			"abilities": []
+		},
+		"oranguru": {
+			"moves": [
+				"hypnowhirl"
+			],
+			"abilities": []
+		},
+		"alakazam": {
+			"moves": [
+				"hypnowhirl"
+			],
+			"abilities": []
+		},
+		"machamp": {
+			"moves": [
+				"shufflejab"
+			],
+			"abilities": []
+		},
+		"pangoro": {
+			"moves": [
+				"shufflejab"
+			],
+			"abilities": []
+		},
+		"primeape": {
+			"moves": [
+				"shufflejab"
+			],
+			"abilities": []
+		},
+		"toxicroak": {
+			"moves": [
+				"shufflejab"
+			],
+			"abilities": []
+		},
+		"lucario": {
+			"moves": [
+				"shufflejab"
+			],
+			"abilities": []
+		},
+		"infernape": {
+			"moves": [
+				"shufflejab"
+			],
+			"abilities": []
+		},
+		"medicham": {
+			"moves": [
+				"shufflejab"
+			],
+			"abilities": []
+		},
+		"mienshao": {
+			"moves": [
+				"shufflejab"
+			],
+			"abilities": []
+		},
+		"crabominable": {
+			"moves": [
+				"shufflejab"
+			],
+			"abilities": []
+		},
+		"passimian": {
+			"moves": [
+				"shufflejab"
+			],
+			"abilities": []
+		},
+		"hawlucha": {
+			"moves": [
+				"shufflejab"
+			],
+			"abilities": []
+		},
+		"grapploct": {
+			"moves": [
+				"shufflejab"
+			],
+			"abilities": []
+		},
+		"kommoo": {
+			"moves": [
+				"shufflejab"
 			],
 			"abilities": []
 		},
@@ -2626,6 +3479,809 @@ window.VelvetBuffs = {
 			],
 			"abilities": []
 		},
+		"skorupi": {
+			"moves": [
+				"hivefrenzy",
+				"carrionfeast"
+			],
+			"abilities": []
+		},
+		"karrablast": {
+			"moves": [
+				"hivefrenzy"
+			],
+			"abilities": []
+		},
+		"swadloon": {
+			"moves": [
+				"hivefrenzy",
+				"chrysalisveil"
+			],
+			"abilities": []
+		},
+		"sewaddle": {
+			"moves": [
+				"hivefrenzy",
+				"chrysalisveil"
+			],
+			"abilities": []
+		},
+		"nymble": {
+			"moves": [
+				"hivefrenzy"
+			],
+			"abilities": []
+		},
+		"cutiefly": {
+			"moves": [
+				"hivefrenzy",
+				"chrysalisveil",
+				"solarnectar"
+			],
+			"abilities": []
+		},
+		"yanma": {
+			"moves": [
+				"hivefrenzy"
+			],
+			"abilities": []
+		},
+		"nincada": {
+			"moves": [
+				"hivefrenzy"
+			],
+			"abilities": []
+		},
+		"dwebble": {
+			"moves": [
+				"hivefrenzy",
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"venonat": {
+			"moves": [
+				"chrysalisveil"
+			],
+			"abilities": []
+		},
+		"snom": {
+			"moves": [
+				"chrysalisveil"
+			],
+			"abilities": []
+		},
+		"pineco": {
+			"moves": [
+				"chrysalisveil"
+			],
+			"abilities": []
+		},
+		"zigzagoongalar": {
+			"moves": [
+				"hustleup"
+			],
+			"abilities": []
+		},
+		"farfetchdgalar": {
+			"moves": [
+				"hustleup"
+			],
+			"abilities": []
+		},
+		"herdier": {
+			"moves": [
+				"hustleup"
+			],
+			"abilities": []
+		},
+		"lillipup": {
+			"moves": [
+				"hustleup"
+			],
+			"abilities": []
+		},
+		"buneary": {
+			"moves": [
+				"hustleup",
+				"shufflejab"
+			],
+			"abilities": []
+		},
+		"minccino": {
+			"moves": [
+				"hustleup"
+			],
+			"abilities": []
+		},
+		"skwovet": {
+			"moves": [
+				"hustleup"
+			],
+			"abilities": []
+		},
+		"lechonk": {
+			"moves": [
+				"hustleup"
+			],
+			"abilities": []
+		},
+		"tranquill": {
+			"moves": [
+				"hustleup"
+			],
+			"abilities": []
+		},
+		"pidove": {
+			"moves": [
+				"hustleup"
+			],
+			"abilities": []
+		},
+		"aipom": {
+			"moves": [
+				"hustleup"
+			],
+			"abilities": []
+		},
+		"teddiursa": {
+			"moves": [
+				"hustleup"
+			],
+			"abilities": []
+		},
+		"vullaby": {
+			"moves": [
+				"carrionfeast"
+			],
+			"abilities": []
+		},
+		"murkrow": {
+			"moves": [
+				"carrionfeast"
+			],
+			"abilities": []
+		},
+		"krokorok": {
+			"moves": [
+				"carrionfeast"
+			],
+			"abilities": []
+		},
+		"sandile": {
+			"moves": [
+				"carrionfeast"
+			],
+			"abilities": []
+		},
+		"houndour": {
+			"moves": [
+				"carrionfeast"
+			],
+			"abilities": []
+		},
+		"pawniard": {
+			"moves": [
+				"carrionfeast"
+			],
+			"abilities": []
+		},
+		"zorua": {
+			"moves": [
+				"carrionfeast"
+			],
+			"abilities": []
+		},
+		"stunky": {
+			"moves": [
+				"carrionfeast"
+			],
+			"abilities": []
+		},
+		"scraggy": {
+			"moves": [
+				"carrionfeast",
+				"shufflejab"
+			],
+			"abilities": []
+		},
+		"morgrem": {
+			"moves": [
+				"carrionfeast"
+			],
+			"abilities": []
+		},
+		"impidimp": {
+			"moves": [
+				"carrionfeast"
+			],
+			"abilities": []
+		},
+		"maschiff": {
+			"moves": [
+				"carrionfeast"
+			],
+			"abilities": []
+		},
+		"seedot": {
+			"moves": [
+				"carrionfeast"
+			],
+			"abilities": []
+		},
+		"inkay": {
+			"moves": [
+				"carrionfeast",
+				"hypnowhirl"
+			],
+			"abilities": []
+		},
+		"greavard": {
+			"moves": [
+				"carrionfeast"
+			],
+			"abilities": []
+		},
+		"pichu": {
+			"moves": [
+				"sparkscamper"
+			],
+			"abilities": []
+		},
+		"eevee": {
+			"moves": [
+				"sparkscamper"
+			],
+			"abilities": []
+		},
+		"pawmo": {
+			"moves": [
+				"sparkscamper",
+				"shufflejab"
+			],
+			"abilities": []
+		},
+		"pawmi": {
+			"moves": [
+				"sparkscamper",
+				"shufflejab"
+			],
+			"abilities": []
+		},
+		"luxio": {
+			"moves": [
+				"sparkscamper"
+			],
+			"abilities": []
+		},
+		"shinx": {
+			"moves": [
+				"sparkscamper"
+			],
+			"abilities": []
+		},
+		"blitzle": {
+			"moves": [
+				"sparkscamper"
+			],
+			"abilities": []
+		},
+		"voltorb": {
+			"moves": [
+				"sparkscamper"
+			],
+			"abilities": []
+		},
+		"voltorbhisui": {
+			"moves": [
+				"sparkscamper"
+			],
+			"abilities": []
+		},
+		"qwilfishhisui": {
+			"moves": [
+				"undertow"
+			],
+			"abilities": []
+		},
+		"ivysaur": {
+			"moves": [
+				"solarnectar"
+			],
+			"abilities": []
+		},
+		"bulbasaur": {
+			"moves": [
+				"solarnectar"
+			],
+			"abilities": []
+		},
+		"gloom": {
+			"moves": [
+				"solarnectar"
+			],
+			"abilities": []
+		},
+		"oddish": {
+			"moves": [
+				"solarnectar"
+			],
+			"abilities": []
+		},
+		"roselia": {
+			"moves": [
+				"solarnectar"
+			],
+			"abilities": []
+		},
+		"budew": {
+			"moves": [
+				"solarnectar"
+			],
+			"abilities": []
+		},
+		"floette": {
+			"moves": [
+				"solarnectar"
+			],
+			"abilities": []
+		},
+		"flabebe": {
+			"moves": [
+				"solarnectar"
+			],
+			"abilities": []
+		},
+		"petilil": {
+			"moves": [
+				"solarnectar"
+			],
+			"abilities": []
+		},
+		"cottonee": {
+			"moves": [
+				"solarnectar"
+			],
+			"abilities": []
+		},
+		"bayleef": {
+			"moves": [
+				"solarnectar"
+			],
+			"abilities": []
+		},
+		"chikorita": {
+			"moves": [
+				"solarnectar"
+			],
+			"abilities": []
+		},
+		"weepinbell": {
+			"moves": [
+				"solarnectar"
+			],
+			"abilities": []
+		},
+		"bellsprout": {
+			"moves": [
+				"solarnectar"
+			],
+			"abilities": []
+		},
+		"exeggcute": {
+			"moves": [
+				"solarnectar"
+			],
+			"abilities": []
+		},
+		"fomantis": {
+			"moves": [
+				"solarnectar"
+			],
+			"abilities": []
+		},
+		"dolliv": {
+			"moves": [
+				"solarnectar"
+			],
+			"abilities": []
+		},
+		"smoliv": {
+			"moves": [
+				"solarnectar"
+			],
+			"abilities": []
+		},
+		"capsakid": {
+			"moves": [
+				"solarnectar"
+			],
+			"abilities": []
+		},
+		"shroomish": {
+			"moves": [
+				"solarnectar"
+			],
+			"abilities": []
+		},
+		"applin": {
+			"moves": [
+				"solarnectar"
+			],
+			"abilities": []
+		},
+		"grovyle": {
+			"moves": [
+				"solarnectar"
+			],
+			"abilities": []
+		},
+		"treecko": {
+			"moves": [
+				"solarnectar"
+			],
+			"abilities": []
+		},
+		"graveler": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"geodude": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"graveleralola": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"geodudealola": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"rhydon": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"rhyhorn": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"lairon": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"aron": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"cranidos": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"shieldon": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"nosepass": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"boldore": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"roggenrola": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"carkol": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"rolycoly": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"rockruff": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"rockruffdusk": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"tyrunt": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"archen": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"anorith": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"lileep": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"bergmite": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"onix": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"tinkatuff": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"tinkatink": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"gurdurr": {
+			"moves": [
+				"craghammer",
+				"shufflejab"
+			],
+			"abilities": []
+		},
+		"timburr": {
+			"moves": [
+				"craghammer",
+				"shufflejab"
+			],
+			"abilities": []
+		},
+		"mrmimegalar": {
+			"moves": [],
+			"abilities": []
+		},
+		"drowzee": {
+			"moves": [
+				"hypnowhirl"
+			],
+			"abilities": []
+		},
+		"natu": {
+			"moves": [
+				"hypnowhirl"
+			],
+			"abilities": []
+		},
+		"bronzor": {
+			"moves": [
+				"hypnowhirl"
+			],
+			"abilities": []
+		},
+		"baltoy": {
+			"moves": [
+				"hypnowhirl"
+			],
+			"abilities": []
+		},
+		"gothorita": {
+			"moves": [
+				"hypnowhirl"
+			],
+			"abilities": []
+		},
+		"gothita": {
+			"moves": [
+				"hypnowhirl"
+			],
+			"abilities": []
+		},
+		"duosion": {
+			"moves": [
+				"hypnowhirl"
+			],
+			"abilities": []
+		},
+		"solosis": {
+			"moves": [
+				"hypnowhirl"
+			],
+			"abilities": []
+		},
+		"elgyem": {
+			"moves": [
+				"hypnowhirl"
+			],
+			"abilities": []
+		},
+		"munna": {
+			"moves": [
+				"hypnowhirl"
+			],
+			"abilities": []
+		},
+		"kirlia": {
+			"moves": [
+				"hypnowhirl"
+			],
+			"abilities": []
+		},
+		"ralts": {
+			"moves": [
+				"hypnowhirl"
+			],
+			"abilities": []
+		},
+		"braixen": {
+			"moves": [
+				"hypnowhirl"
+			],
+			"abilities": []
+		},
+		"fennekin": {
+			"moves": [
+				"hypnowhirl"
+			],
+			"abilities": []
+		},
+		"dottler": {
+			"moves": [
+				"hypnowhirl"
+			],
+			"abilities": []
+		},
+		"blipbug": {
+			"moves": [
+				"hypnowhirl"
+			],
+			"abilities": []
+		},
+		"kadabra": {
+			"moves": [
+				"hypnowhirl"
+			],
+			"abilities": []
+		},
+		"abra": {
+			"moves": [
+				"hypnowhirl"
+			],
+			"abilities": []
+		},
+		"machoke": {
+			"moves": [
+				"shufflejab"
+			],
+			"abilities": []
+		},
+		"machop": {
+			"moves": [
+				"shufflejab"
+			],
+			"abilities": []
+		},
+		"pancham": {
+			"moves": [
+				"shufflejab"
+			],
+			"abilities": []
+		},
+		"mankey": {
+			"moves": [
+				"shufflejab"
+			],
+			"abilities": []
+		},
+		"croagunk": {
+			"moves": [
+				"shufflejab"
+			],
+			"abilities": []
+		},
+		"riolu": {
+			"moves": [
+				"shufflejab"
+			],
+			"abilities": []
+		},
+		"monferno": {
+			"moves": [
+				"shufflejab"
+			],
+			"abilities": []
+		},
+		"chimchar": {
+			"moves": [
+				"shufflejab"
+			],
+			"abilities": []
+		},
+		"meditite": {
+			"moves": [
+				"shufflejab"
+			],
+			"abilities": []
+		},
+		"mienfoo": {
+			"moves": [
+				"shufflejab"
+			],
+			"abilities": []
+		},
+		"crabrawler": {
+			"moves": [
+				"shufflejab"
+			],
+			"abilities": []
+		},
+		"clobbopus": {
+			"moves": [
+				"shufflejab"
+			],
+			"abilities": []
+		},
+		"hakamoo": {
+			"moves": [
+				"shufflejab"
+			],
+			"abilities": []
+		},
+		"jangmoo": {
+			"moves": [
+				"shufflejab"
+			],
+			"abilities": []
+		},
 		"regigigas": {
 			"moves": [
 				"continentalheave"
@@ -2636,20 +4292,93 @@ window.VelvetBuffs = {
 			"slots": {
 				"0": "Colossus Unbound"
 			}
+		},
+		"articuno": {
+			"moves": [
+				"aurorasquall",
+				"calmmind"
+			],
+			"abilities": [
+				"Polar Mantle"
+			],
+			"slots": {
+				"0": "Pressure",
+				"1": "Polar Mantle",
+				"H": "Snow Cloak"
+			}
+		},
+		"regice": {
+			"moves": [
+				"freezedry",
+				"recover",
+				"aurorabeam",
+				"chillingwater"
+			],
+			"abilities": [
+				"Permafrost Core"
+			],
+			"slots": {
+				"0": "Clear Body",
+				"1": "Permafrost Core",
+				"H": "Ice Body"
+			}
+		},
+		"uxie": {
+			"moves": [
+				"memorywipe",
+				"slackoff",
+				"teleport"
+			],
+			"abilities": [
+				"Unaware"
+			],
+			"slots": {
+				"0": "Levitate",
+				"1": "Unaware"
+			}
+		},
+		"mesprit": {
+			"moves": [
+				"soulresonance",
+				"moonblast",
+				"wish"
+			],
+			"abilities": [
+				"Opportunist"
+			],
+			"slots": {
+				"0": "Levitate",
+				"1": "Opportunist"
+			}
+		},
+		"azelf": {
+			"moves": [
+				"resolutestrike",
+				"closecombat",
+				"swordsdance"
+			],
+			"abilities": [
+				"Tinted Lens"
+			],
+			"slots": {
+				"0": "Levitate",
+				"1": "Tinted Lens"
+			}
 		}
 	},
-	moves: {"junglerush":{"num":-4,"name":"Jungle Rush","type":"Grass","category":"Physical","basePower":80,"accuracy":100,"pp":15,"priority":0,"target":"normal","flags":{"contact":1,"protect":1,"mirror":1,"metronome":1},"secondary":null,"shortDesc":"Uses the user's better attacking stat. +1 priority on Grassy Terrain.","desc":"This move uses whichever of the user's Attack or Special Attack is higher, before any boosts. It gains +1 priority while Grassy Terrain is active and the user is grounded."},"cinderrush":{"num":-6,"name":"Cinder Rush","type":"Fire","category":"Physical","basePower":80,"accuracy":100,"pp":15,"priority":0,"target":"normal","flags":{"contact":1,"protect":1,"mirror":1,"metronome":1},"secondary":null,"shortDesc":"Uses the user's better attacking stat. +1 priority in harsh sunlight.","desc":"This move uses whichever of the user's Attack or Special Attack is higher, before any boosts. It gains +1 priority in harsh sunlight."},"wavecharge":{"num":-5,"name":"Wave Charge","type":"Water","category":"Physical","basePower":50,"accuracy":100,"pp":20,"priority":0,"target":"normal","flags":{"contact":1,"protect":1,"mirror":1,"metronome":1},"secondary":{"chance":100,"self":{"boosts":{"spe":1}}},"shortDesc":"100% chance to raise the user's Speed by 1.","desc":"Has a 100% chance to raise the user's Speed by 1 stage."},"torrentrush":{"num":-7,"name":"Torrent Rush","type":"Water","category":"Physical","basePower":80,"accuracy":100,"pp":15,"priority":0,"target":"normal","flags":{"contact":1,"protect":1,"mirror":1,"metronome":1},"secondary":null,"shortDesc":"Uses the user's better attacking stat. +1 priority in rain.","desc":"This move uses whichever of the user's Attack or Special Attack is higher, before any boosts. It gains +1 priority in rain."},"merchantscall":{"num":-9,"name":"Merchant's Call","type":"Dark","category":"Special","basePower":0,"accuracy":100,"pp":5,"priority":1,"target":"normal","flags":{"protect":1,"mirror":1,"metronome":1,"noparentalbond":1},"secondary":null,"shortDesc":"Deals damage equal to the user's HP. The user faints. Nuzleaf only.","desc":"Deals damage to the target equal to the user's current HP, and the user faints. Fails unless the user is Nuzleaf. If the user is holding a Broken Pact, fainting this way returns it to the field as Nuzleaf-SOLD at full HP and uses the item up."},"hivefrenzy":{"num":-10,"name":"Hive Frenzy","type":"Bug","category":"Physical","basePower":75,"accuracy":100,"pp":15,"priority":0,"target":"normal","flags":{"contact":1,"protect":1,"mirror":1,"metronome":1},"secondary":{"chance":50,"self":{"boosts":{"atk":1}}},"shortDesc":"50% chance to raise the user's Attack by 1.","desc":"The user whips itself into the fury of a whole hive. Has a 50% chance to raise the user's Attack by 1 stage."},"solarnectar":{"num":-16,"name":"Solar Nectar","type":"Grass","category":"Special","basePower":80,"accuracy":100,"pp":10,"priority":0,"target":"normal","flags":{"protect":1,"mirror":1,"metronome":1},"secondary":null,"shortDesc":"Heals 25% of damage dealt, 50% in harsh sunlight.","desc":"The user bursts with sun-warmed nectar. It recovers 1/4 of the HP lost by the target, or 1/2 in harsh sunlight."},"chrysalisveil":{"num":-11,"name":"Chrysalis Veil","type":"Bug","category":"Status","basePower":0,"accuracy":true,"pp":10,"priority":0,"target":"self","flags":{"snatch":1,"heal":1,"metronome":1},"secondary":null,"shortDesc":"Heals 1/3 of max HP and raises Sp. Def by 1.","desc":"The user wraps itself in shimmering silk. Restores 1/3 of its maximum HP, rounded up, and raises its Special Defense by 1 stage."},"hypnowhirl":{"num":-18,"name":"Hypno Whirl","type":"Psychic","category":"Special","basePower":75,"accuracy":100,"pp":15,"priority":0,"target":"normal","flags":{"protect":1,"mirror":1,"metronome":1},"secondary":{"chance":20,"volatileStatus":"confusion"},"shortDesc":"20% chance to confuse the target.","desc":"Spinning rings of psychic light disorient the target. Has a 20% chance to confuse it."},"hustleup":{"num":-12,"name":"Hustle Up","type":"Normal","category":"Status","basePower":0,"accuracy":true,"pp":20,"priority":0,"target":"self","flags":{"snatch":1,"metronome":1},"secondary":null,"shortDesc":"Raises the user's Attack and Speed by 1.","desc":"Scrappy, stubborn and underestimated, the user gets serious. Raises its Attack and Speed by 1 stage each."},"carrionfeast":{"num":-13,"name":"Carrion Feast","type":"Dark","category":"Physical","basePower":70,"accuracy":100,"pp":15,"priority":0,"target":"normal","flags":{"contact":1,"protect":1,"mirror":1,"bite":1,"metronome":1},"secondary":null,"shortDesc":"User recovers 50% of the damage dealt.","desc":"The user tears into the target like a starving scavenger. It recovers 1/2 of the HP lost by the target, rounded half up."},"shufflejab":{"num":-19,"name":"Shuffle Jab","type":"Fighting","category":"Physical","basePower":60,"accuracy":100,"pp":15,"priority":0,"target":"normal","flags":{"contact":1,"protect":1,"mirror":1,"punch":1,"metronome":1},"secondary":{"chance":100,"self":{"boosts":{"spe":1}}},"shortDesc":"100% chance to raise the user's Speed by 1.","desc":"The user slips in a quick jab and keeps moving. Has a 100% chance to raise the user's Speed by 1 stage."},"sparkscamper":{"num":-14,"name":"Spark Scamper","type":"Electric","category":"Physical","basePower":40,"accuracy":100,"pp":30,"priority":1,"target":"normal","flags":{"contact":1,"protect":1,"mirror":1,"metronome":1},"secondary":null,"shortDesc":"Usually goes first.","desc":"The user darts in trailing sparks before the target can react. Priority +1."},"undertow":{"num":-15,"name":"Undertow","type":"Water","category":"Special","basePower":85,"accuracy":100,"pp":20,"priority":0,"target":"normal","flags":{"protect":1,"mirror":1,"metronome":1},"secondary":{"chance":50,"boosts":{"spe":-1}},"shortDesc":"50% chance to lower the target's Speed by 1.","desc":"A deceptively calm current drags at the target. Has a 50% chance to lower the target's Speed by 1 stage."},"craghammer":{"num":-17,"name":"Crag Hammer","type":"Rock","category":"Physical","basePower":90,"accuracy":90,"pp":10,"priority":0,"target":"normal","flags":{"contact":1,"protect":1,"mirror":1,"metronome":1},"secondary":{"chance":20,"boosts":{"def":-1}},"shortDesc":"20% chance to lower the target's Defense by 1.","desc":"The user brings its full stony weight down on the target. Has a 20% chance to lower the target's Defense by 1 stage."},"continentalheave":{"num":-20,"name":"Continental Heave","type":"Normal","category":"Physical","basePower":110,"accuracy":95,"pp":5,"priority":0,"target":"normal","flags":{"contact":1,"mirror":1,"metronome":1,"nosketch":1},"secondary":null,"shortDesc":"Ignores Protect. Breaks screens. Regigigas's signature move.","desc":"The strength that dragged continents across the sea. Hits through Protect, Detect and similar moves, and destroys Reflect, Light Screen and Aurora Veil on the target's side before dealing damage."}},
-	abilities: {"verdantsurge":{"num":-3,"name":"Verdant Surge","rating":4,"shortDesc":"Sets Grassy Terrain on entry; this Pokemon's Grass moves get 1.5x from it instead of 1.3x.","desc":"On switch-in, this Pokemon summons Grassy Terrain. While Grassy Terrain is active and this Pokemon is grounded, its Grass-type moves are boosted to 1.5x rather than the usual 1.3x."},"solarsurge":{"num":-4,"name":"Solar Surge","rating":4,"shortDesc":"On switch-in, this Pokemon summons harsh sunlight.","desc":"On switch-in, the weather becomes harsh sunlight, which lasts until the weather is changed or five turns have passed. Held Heat Rock extends it to eight."},"tidalsurge":{"num":-5,"name":"Tidal Surge","rating":4,"shortDesc":"On switch-in, this Pokemon summons rain.","desc":"On switch-in, the weather becomes rain, which lasts until the weather is changed or five turns have passed. Held Damp Rock extends it to eight."},"colossusunbound":{"num":-7,"name":"Colossus Unbound","rating":4.5,"shortDesc":"Mold Breaker + Clear Body. 1.2x Attack while above 50% HP.","desc":"This Pokemon's moves and their effects ignore the Abilities of other Pokemon, other Pokemon cannot lower its stat stages, and its Attack is multiplied by 1.2 while its HP is above half."}},
+	moves: {"junglerush":{"num":-4,"name":"Jungle Rush","type":"Grass","category":"Physical","basePower":80,"accuracy":100,"pp":15,"priority":0,"target":"normal","flags":{"contact":1,"protect":1,"mirror":1,"metronome":1},"secondary":null,"shortDesc":"Uses the user's better attacking stat. +1 priority on Grassy Terrain.","desc":"This move uses whichever of the user's Attack or Special Attack is higher, before any boosts. It gains +1 priority while Grassy Terrain is active and the user is grounded."},"cinderrush":{"num":-6,"name":"Cinder Rush","type":"Fire","category":"Physical","basePower":80,"accuracy":100,"pp":15,"priority":0,"target":"normal","flags":{"contact":1,"protect":1,"mirror":1,"metronome":1},"secondary":null,"shortDesc":"Uses the user's better attacking stat. +1 priority in harsh sunlight.","desc":"This move uses whichever of the user's Attack or Special Attack is higher, before any boosts. It gains +1 priority in harsh sunlight."},"wavecharge":{"num":-5,"name":"Wave Charge","type":"Water","category":"Physical","basePower":50,"accuracy":100,"pp":20,"priority":0,"target":"normal","flags":{"contact":1,"protect":1,"mirror":1,"metronome":1},"secondary":{"chance":100,"self":{"boosts":{"spe":1}}},"shortDesc":"100% chance to raise the user's Speed by 1.","desc":"Has a 100% chance to raise the user's Speed by 1 stage."},"torrentrush":{"num":-7,"name":"Torrent Rush","type":"Water","category":"Physical","basePower":80,"accuracy":100,"pp":15,"priority":0,"target":"normal","flags":{"contact":1,"protect":1,"mirror":1,"metronome":1},"secondary":null,"shortDesc":"Uses the user's better attacking stat. +1 priority in rain.","desc":"This move uses whichever of the user's Attack or Special Attack is higher, before any boosts. It gains +1 priority in rain."},"carrionfeast":{"num":-13,"name":"Carrion Feast","type":"Dark","category":"Physical","basePower":70,"accuracy":100,"pp":15,"priority":0,"target":"normal","flags":{"contact":1,"protect":1,"mirror":1,"bite":1,"metronome":1},"secondary":null,"shortDesc":"User recovers 50% of the damage dealt.","desc":"The user tears into the target like a starving scavenger. It recovers 1/2 of the HP lost by the target, rounded half up."},"hivefrenzy":{"num":-10,"name":"Hive Frenzy","type":"Bug","category":"Physical","basePower":75,"accuracy":100,"pp":15,"priority":0,"target":"normal","flags":{"contact":1,"protect":1,"mirror":1,"metronome":1},"secondary":{"chance":50,"self":{"boosts":{"atk":1}}},"shortDesc":"50% chance to raise the user's Attack by 1.","desc":"The user whips itself into the fury of a whole hive. Has a 50% chance to raise the user's Attack by 1 stage."},"chrysalisveil":{"num":-11,"name":"Chrysalis Veil","type":"Bug","category":"Status","basePower":0,"accuracy":true,"pp":10,"priority":0,"target":"self","flags":{"snatch":1,"heal":1,"metronome":1},"secondary":null,"shortDesc":"Heals 1/3 of max HP and raises Sp. Def by 1.","desc":"The user wraps itself in shimmering silk. Restores 1/3 of its maximum HP, rounded up, and raises its Special Defense by 1 stage."},"solarnectar":{"num":-16,"name":"Solar Nectar","type":"Grass","category":"Special","basePower":80,"accuracy":100,"pp":10,"priority":0,"target":"normal","flags":{"protect":1,"mirror":1,"metronome":1},"secondary":null,"shortDesc":"135 power and heals 50% of damage in sun; else 80 power, heals 25%.","desc":"The user bursts with sun-warmed nectar. It recovers 1/4 of the HP lost by the target. In harsh sunlight its power rises to 135 and it recovers 1/2 of the HP lost instead."},"hypnowhirl":{"num":-18,"name":"Hypno Whirl","type":"Psychic","category":"Special","basePower":75,"accuracy":100,"pp":15,"priority":0,"target":"normal","flags":{"protect":1,"mirror":1,"metronome":1},"secondary":{"chance":20,"volatileStatus":"confusion"},"shortDesc":"20% chance to confuse the target.","desc":"Spinning rings of psychic light disorient the target. Has a 20% chance to confuse it."},"hustleup":{"num":-12,"name":"Hustle Up","type":"Normal","category":"Status","basePower":0,"accuracy":true,"pp":20,"priority":0,"target":"self","flags":{"snatch":1,"metronome":1},"secondary":null,"shortDesc":"Raises the user's Attack and Speed by 1.","desc":"Scrappy, stubborn and underestimated, the user gets serious. Raises its Attack and Speed by 1 stage each."},"shufflejab":{"num":-19,"name":"Shuffle Jab","type":"Fighting","category":"Physical","basePower":60,"accuracy":100,"pp":15,"priority":0,"target":"normal","flags":{"contact":1,"protect":1,"mirror":1,"punch":1,"metronome":1},"secondary":{"chance":100,"self":{"boosts":{"spe":1}}},"shortDesc":"100% chance to raise the user's Speed by 1.","desc":"The user slips in a quick jab and keeps moving. Has a 100% chance to raise the user's Speed by 1 stage."},"sparkscamper":{"num":-14,"name":"Spark Scamper","type":"Electric","category":"Physical","basePower":40,"accuracy":100,"pp":30,"priority":1,"target":"normal","flags":{"contact":1,"protect":1,"mirror":1,"metronome":1},"secondary":null,"shortDesc":"Usually goes first.","desc":"The user darts in trailing sparks before the target can react. Priority +1."},"undertow":{"num":-15,"name":"Undertow","type":"Water","category":"Special","basePower":85,"accuracy":100,"pp":20,"priority":0,"target":"normal","flags":{"protect":1,"mirror":1,"metronome":1},"secondary":{"chance":50,"boosts":{"spe":-1}},"shortDesc":"50% chance to lower the target's Speed by 1.","desc":"A deceptively calm current drags at the target. Has a 50% chance to lower the target's Speed by 1 stage."},"craghammer":{"num":-17,"name":"Crag Hammer","type":"Rock","category":"Physical","basePower":90,"accuracy":100,"pp":10,"priority":0,"target":"normal","flags":{"contact":1,"protect":1,"mirror":1,"metronome":1},"secondary":{"chance":20,"boosts":{"def":-1}},"shortDesc":"100% accurate. 20% chance to lower the target's Defense by 1.","desc":"Never misses unless evasion or accuracy drops say otherwise. The user brings its full stony weight down on the target. Has a 20% chance to lower the target's Defense by 1 stage."},"continentalheave":{"num":-20,"name":"Continental Heave","type":"Normal","category":"Physical","basePower":110,"accuracy":95,"pp":5,"priority":0,"target":"normal","flags":{"contact":1,"mirror":1,"metronome":1,"nosketch":1},"secondary":null,"shortDesc":"Ignores Protect. Breaks screens. Regigigas's signature move.","desc":"The strength that dragged continents across the sea. Hits through Protect, Detect and similar moves, and destroys Reflect, Light Screen and Aurora Veil on the target's side before dealing damage."},"aurorasquall":{"num":-21,"name":"Aurora Squall","type":"Ice","category":"Special","basePower":85,"accuracy":95,"pp":10,"priority":0,"target":"allAdjacentFoes","flags":{"protect":1,"mirror":1,"wind":1,"metronome":1,"nosketch":1},"secondary":{"chance":30,"boosts":{"spe":-1}},"shortDesc":"Hits all foes. 30% chance to lower Speed. Can't miss in snow. Articuno's signature.","desc":"Curtains of polar light come down as a freezing gale. Hits all adjacent foes, with a 30% chance to lower each target's Speed by 1 stage. This move does not check accuracy in snow."},"memorywipe":{"num":-22,"name":"Memory Wipe","type":"Psychic","category":"Special","basePower":70,"accuracy":100,"pp":15,"priority":0,"target":"normal","flags":{"protect":1,"mirror":1,"metronome":1,"nosketch":1},"secondary":null,"shortDesc":"Resets the target's stat changes. Uxie's signature.","desc":"Uxie opens its eyes and the target forgets. After dealing damage, all of the target's stat stages are reset to 0."},"soulresonance":{"num":-23,"name":"Soul Resonance","type":"Psychic","category":"Special","basePower":80,"accuracy":100,"pp":10,"priority":0,"target":"normal","flags":{"protect":1,"mirror":1,"heal":1,"metronome":1,"nosketch":1},"secondary":null,"shortDesc":"User recovers 50% of the damage dealt. Mesprit's signature.","desc":"Mesprit feels the target's pain as its own. The user recovers 1/2 of the HP lost by the target, rounded half up."},"resolutestrike":{"num":-24,"name":"Resolute Strike","type":"Psychic","category":"Special","basePower":85,"accuracy":100,"pp":10,"priority":0,"target":"normal","flags":{"protect":1,"mirror":1,"metronome":1,"nosketch":1},"secondary":{"chance":10,"volatileStatus":"flinch"},"shortDesc":"Uses the higher attacking stat. 10% flinch. Azelf's signature.","desc":"Azelf's willpower becomes a blow. Uses whichever of the user's Attack or Special Attack is higher, before boosts, and has a 10% chance to make the target flinch."}},
+	abilities: {"verdantsurge":{"num":-3,"name":"Verdant Surge","rating":4,"shortDesc":"Sets Grassy Terrain on entry; this Pokemon's Grass moves get 1.5x from it instead of 1.3x.","desc":"On switch-in, this Pokemon summons Grassy Terrain. While Grassy Terrain is active and this Pokemon is grounded, its Grass-type moves are boosted to 1.5x rather than the usual 1.3x."},"solarsurge":{"num":-4,"name":"Solar Surge","rating":4,"shortDesc":"On switch-in, this Pokemon summons harsh sunlight.","desc":"On switch-in, the weather becomes harsh sunlight, which lasts until the weather is changed or five turns have passed. Held Heat Rock extends it to eight."},"tidalsurge":{"num":-5,"name":"Tidal Surge","rating":4,"shortDesc":"On switch-in, this Pokemon summons rain.","desc":"On switch-in, the weather becomes rain, which lasts until the weather is changed or five turns have passed. Held Damp Rock extends it to eight."},"mudflatambush":{"num":-8,"name":"Mudflat Ambush","rating":3.5,"shortDesc":"Contact attackers lose 1/8 HP, 30% paralysis. Electric moves heal it 1/4.","desc":"Pokemon making contact with this Pokemon lose 1/8 of their maximum HP, rounded down, and have a 30% chance to be paralyzed. This Pokemon is immune to Electric-type moves and restores 1/4 of its maximum HP, rounded down, when hit by one."},"colossusunbound":{"num":-7,"name":"Colossus Unbound","rating":4.5,"shortDesc":"Mold Breaker + Clear Body. 1.2x Attack while above 50% HP.","desc":"This Pokemon's moves and their effects ignore the Abilities of other Pokemon, other Pokemon cannot lower its stat stages, and its Attack is multiplied by 1.2 while its HP is above half."},"polarmantle":{"num":-9,"name":"Polar Mantle","rating":4,"shortDesc":"Sets snow on entry. Takes half damage from Rock moves and Stealth Rock.","desc":"On switch-in, this Pokemon summons snow. It takes half damage from Rock-type moves and from Stealth Rock."},"permafrostcore":{"num":-10,"name":"Permafrost Core","rating":3.5,"shortDesc":"Takes half damage from Fire and Fighting moves. Can't be burned or frozen.","desc":"This Pokemon takes half damage from Fire-type and Fighting-type moves, and cannot be burned or frozen."}},
 	items: {"elementalbanana":{"num":-1,"name":"Elemental Banana","spritenum":0,"itemUser":["Pansage","Simisage","Pansear","Simisear","Panpour","Simipour"],"fling":{"basePower":30},"gen":9,"shortDesc":"Simi family: 1.3x Atk, SpA and Speed, and cannot be removed. 1.5x after Tera/Dynamax, which also re-sets their weather.","desc":"If held by a Pansage, Pansear, Panpour, Simisage, Simisear or Simipour, that Pokemon's Attack, Special Attack and Speed are multiplied by 1.3, and the item cannot be removed by Knock Off, Trick, Thief or anything else. Once that Pokemon Terastallizes or Dynamaxes the multiplier becomes 1.5, and its weather- or terrain-setting Ability activates again."},"brokenpact":{"num":-2,"name":"Broken Pact","spritenum":0,"itemUser":["Nuzleaf"],"fling":{"basePower":10},"gen":9,"shortDesc":"If Nuzleaf would faint while holding this, it returns at full HP as Nuzleaf-SOLD.","desc":"A reminder of a Trainer who abandoned their partner when it mattered most. If Nuzleaf is knocked out while holding this item - by an attack, by an ally, or by its own Merchant's Call - it does not faint. It returns at once as Nuzleaf-SOLD, restored to full HP and cured of status, and this item is used up."}},
-	search: [["junglerush","move","0000001111"],["cinderrush","move","0000001111"],["wavecharge","move","0000111111"],["torrentrush","move","00000001111"],["merchantscall","move","0000000012222"],["hivefrenzy","move","0000111111"],["solarnectar","move","00000111111"],["chrysalisveil","move","0000000001111"],["hypnowhirl","move","0000011111"],["hustleup","move","00000011"],["carrionfeast","move","000000011111"],["shufflejab","move","0000000111"],["sparkscamper","move","000001111111"],["undertow","move","00000000"],["craghammer","move","0000111111"],["continentalheave","move","0000000000011111"],["verdantsurge","ability","000000011111"],["solarsurge","ability","0000011111"],["tidalsurge","ability","0000011111"],["colossusunbound","ability","000000001111111"],["elementalbanana","item","000000000111111"],["brokenpact","item","0000001111"]],
-	overrides: {"moves":{"darkvoid":{"num":464,"name":"Dark Void","type":"Dark","category":"Status","basePower":0,"accuracy":80,"pp":10,"priority":0,"target":"allAdjacentFoes","flags":{"protect":1,"reflectable":1,"mirror":1,"metronome":1,"nosketch":1},"secondary":null,"shortDesc":"Darkrai: Causes the foe(s) to fall asleep.","desc":"Causes the target to fall asleep. This move cannot be used successfully unless the user's current form, while considering Transform, is Darkrai."},"recover":{"num":105,"name":"Recover","type":"Normal","category":"Status","basePower":0,"accuracy":true,"pp":10,"priority":0,"target":"self","flags":{"snatch":1,"heal":1,"metronome":1},"secondary":null,"shortDesc":"Heals the user by 50% of its max HP.","desc":"The user restores 1/2 of its maximum HP, rounded half up."},"roost":{"num":355,"name":"Roost","type":"Flying","category":"Status","basePower":0,"accuracy":true,"pp":10,"priority":0,"target":"self","flags":{"snatch":1,"heal":1,"metronome":1},"secondary":null,"shortDesc":"Heals 50% HP. Flying-type removed 'til turn ends.","desc":"The user restores 1/2 of its maximum HP, rounded half up. If the user is not Terastallized, until the end of the turn Flying-type users lose their Flying type and pure Flying-type users become Normal type. Does nothing if the user's HP is full."},"softboiled":{"num":135,"name":"Soft-Boiled","type":"Normal","category":"Status","basePower":0,"accuracy":true,"pp":10,"priority":0,"target":"self","flags":{"snatch":1,"heal":1,"metronome":1},"secondary":null,"shortDesc":"Heals the user by 50% of its max HP.","desc":"The user restores 1/2 of its maximum HP, rounded half up."},"slackoff":{"num":303,"name":"Slack Off","type":"Normal","category":"Status","basePower":0,"accuracy":true,"pp":10,"priority":0,"target":"self","flags":{"snatch":1,"heal":1,"metronome":1},"secondary":null,"shortDesc":"Heals the user by 50% of its max HP.","desc":"The user restores 1/2 of its maximum HP, rounded half up."},"milkdrink":{"num":208,"name":"Milk Drink","type":"Normal","category":"Status","basePower":0,"accuracy":true,"pp":10,"priority":0,"target":"self","flags":{"snatch":1,"heal":1,"metronome":1},"secondary":null,"shortDesc":"Heals the user by 50% of its max HP.","desc":"The user restores 1/2 of its maximum HP, rounded half up."},"shoreup":{"num":659,"name":"Shore Up","type":"Ground","category":"Status","basePower":0,"accuracy":true,"pp":10,"priority":0,"target":"self","flags":{"snatch":1,"heal":1,"metronome":1},"secondary":null,"shortDesc":"User restores 1/2 its max HP; 2/3 in Sandstorm.","desc":"The user restores 1/2 of its maximum HP, rounded half down. If the weather is Sandstorm, the user instead restores 2/3 of its maximum HP, rounded half down."},"rest":{"num":156,"name":"Rest","type":"Psychic","category":"Status","basePower":0,"accuracy":true,"pp":10,"priority":0,"target":"self","flags":{"snatch":1,"heal":1,"metronome":1},"secondary":null,"shortDesc":"User sleeps 2 turns and restores HP and status.","desc":"The user falls asleep for the next two turns and restores all of its HP, curing itself of any non-volatile status condition in the process. Fails if the user has full HP, is already asleep, or if another effect is preventing sleep."}},"abilities":{"protean":{"num":168,"name":"Protean","rating":4.5,"shortDesc":"This Pokemon's type changes to the type of the move it is using.","desc":"This Pokemon's type changes to match the type of the move it is about to use. This effect comes after all effects that change a move's type."},"libero":{"num":236,"name":"Libero","rating":4.5,"shortDesc":"This Pokemon's type changes to the type of the move it is using.","desc":"This Pokemon's type changes to match the type of the move it is about to use. This effect comes after all effects that change a move's type."},"battlebond":{"num":210,"name":"Battle Bond","rating":4,"shortDesc":"After KOing a Pokemon: becomes Ash-Greninja, Water Shuriken hits 3 times.","desc":"If this Pokemon is a Greninja with this Ability, it transforms into Ash-Greninja after knocking out a Pokemon. As Ash-Greninja, its Water Shuriken has 20 base power and always hits 3 times."}}},
-	tiers: {"gliscor":"Uber","terapagos":"Uber","greninjabond":"Uber","regigigas":"Uber"},
+	search: [["junglerush","move","0000001111"],["cinderrush","move","0000001111"],["wavecharge","move","0000111111"],["torrentrush","move","00000001111"],["carrionfeast","move","000000011111"],["hivefrenzy","move","0000111111"],["chrysalisveil","move","0000000001111"],["solarnectar","move","00000111111"],["hypnowhirl","move","0000011111"],["hustleup","move","00000011"],["shufflejab","move","0000000111"],["sparkscamper","move","000001111111"],["undertow","move","00000000"],["craghammer","move","0000111111"],["continentalheave","move","0000000000011111"],["aurorasquall","move","000000111111"],["memorywipe","move","0000001111"],["soulresonance","move","0000111111111"],["resolutestrike","move","00000000111111"],["verdantsurge","ability","000000011111"],["solarsurge","ability","0000011111"],["tidalsurge","ability","0000011111"],["mudflatambush","ability","0000000111111"],["colossusunbound","ability","000000001111111"],["polarmantle","ability","00000111111"],["permafrostcore","ability","00000000001111"],["elementalbanana","item","000000000111111"],["brokenpact","item","0000001111"]],
+	overrides: {"moves":{"darkvoid":{"num":464,"name":"Dark Void","type":"Dark","category":"Status","basePower":0,"accuracy":80,"pp":10,"priority":0,"target":"allAdjacentFoes","flags":{"protect":1,"reflectable":1,"mirror":1,"metronome":1,"nosketch":1},"secondary":null,"shortDesc":"Darkrai: Causes the foe(s) to fall asleep.","desc":"Causes the target to fall asleep. This move cannot be used successfully unless the user's current form, while considering Transform, is Darkrai."},"recover":{"num":105,"name":"Recover","type":"Normal","category":"Status","basePower":0,"accuracy":true,"pp":10,"priority":0,"target":"self","flags":{"snatch":1,"heal":1,"metronome":1},"secondary":null,"shortDesc":"Heals the user by 50% of its max HP.","desc":"The user restores 1/2 of its maximum HP, rounded half up."},"roost":{"num":355,"name":"Roost","type":"Flying","category":"Status","basePower":0,"accuracy":true,"pp":10,"priority":0,"target":"self","flags":{"snatch":1,"heal":1,"metronome":1},"secondary":null,"shortDesc":"Heals 50% HP. Flying-type removed 'til turn ends.","desc":"The user restores 1/2 of its maximum HP, rounded half up. If the user is not Terastallized, until the end of the turn Flying-type users lose their Flying type and pure Flying-type users become Normal type. Does nothing if the user's HP is full."},"softboiled":{"num":135,"name":"Soft-Boiled","type":"Normal","category":"Status","basePower":0,"accuracy":true,"pp":10,"priority":0,"target":"self","flags":{"snatch":1,"heal":1,"metronome":1},"secondary":null,"shortDesc":"Heals the user by 50% of its max HP.","desc":"The user restores 1/2 of its maximum HP, rounded half up."},"slackoff":{"num":303,"name":"Slack Off","type":"Normal","category":"Status","basePower":0,"accuracy":true,"pp":10,"priority":0,"target":"self","flags":{"snatch":1,"heal":1,"metronome":1},"secondary":null,"shortDesc":"Heals the user by 50% of its max HP.","desc":"The user restores 1/2 of its maximum HP, rounded half up."},"milkdrink":{"num":208,"name":"Milk Drink","type":"Normal","category":"Status","basePower":0,"accuracy":true,"pp":10,"priority":0,"target":"self","flags":{"snatch":1,"heal":1,"metronome":1},"secondary":null,"shortDesc":"Heals the user by 50% of its max HP.","desc":"The user restores 1/2 of its maximum HP, rounded half up."},"shoreup":{"num":659,"name":"Shore Up","type":"Ground","category":"Status","basePower":0,"accuracy":true,"pp":10,"priority":0,"target":"self","flags":{"snatch":1,"heal":1,"metronome":1},"secondary":null,"shortDesc":"User restores 1/2 its max HP; 2/3 in Sandstorm.","desc":"The user restores 1/2 of its maximum HP, rounded half down. If the weather is Sandstorm, the user instead restores 2/3 of its maximum HP, rounded half down."},"rest":{"num":156,"name":"Rest","type":"Psychic","category":"Status","basePower":0,"accuracy":true,"pp":10,"priority":0,"target":"self","flags":{"snatch":1,"heal":1,"metronome":1},"secondary":null,"shortDesc":"User sleeps 2 turns and restores HP and status.","desc":"The user falls asleep for the next two turns and restores all of its HP, curing itself of any non-volatile status condition in the process. Fails if the user has full HP, is already asleep, or if another effect is preventing sleep."}},"abilities":{"protean":{"num":168,"name":"Protean","rating":4.5,"shortDesc":"This Pokemon's type changes to the type of the move it is using.","desc":"This Pokemon's type changes to match the type of the move it is about to use. This effect comes after all effects that change a move's type."},"libero":{"num":236,"name":"Libero","rating":4.5,"shortDesc":"This Pokemon's type changes to the type of the move it is using.","desc":"This Pokemon's type changes to match the type of the move it is about to use. This effect comes after all effects that change a move's type."},"battlebond":{"num":210,"name":"Battle Bond","rating":4,"shortDesc":"After KOing a Pokemon: becomes Ash-Greninja, Water Shuriken hits 3 times.","desc":"If this Pokemon is a Greninja with this Ability, it transforms into Ash-Greninja after knocking out a Pokemon. As Ash-Greninja, its Water Shuriken has 20 base power and always hits 3 times."}},"species":{"cresselia":{"baseStats":{"hp":120,"atk":70,"def":120,"spa":75,"spd":130,"spe":85}}}},
+	tiers: {"gliscor":"Uber","terapagos":"Uber","greninjabond":"Uber","regigigas":"Uber","articuno":"RU","regice":"RU","uxie":"RU","mesprit":"RU","azelf":"UU"},
 	megaTiers: {"raichumegax":"RU","raichumegay":"RU","clefablemega":"UU","victreebelmega":"RU","starmiemega":"Uber","dragonitemega":"Uber","meganiummega":"RU","feraligatrmega":"RU","skarmorymega":"UU","chimechomega":"RU","absolmegaz":"Uber","staraptormega":"RU","garchompmegaz":"Uber","lucariomegaz":"Uber","froslassmega":"RU","heatranmega":"Uber","darkraimega":"Uber","emboarmega":"RU","excadrillmega":"UU","scolipedemega":"UU","scraftymega":"RU","eelektrossmega":"RU","chandeluremega":"Uber","golurkmega":"RU","chesnaughtmega":"RU","delphoxmega":"RU","greninjamega":"Uber","pyroarmega":"RU","floettemega":"Uber","meowsticmmega":"RU","meowsticfmega":"RU","malamarmega":"RU","barbaraclemega":"RU","dragalgemega":"RU","hawluchamega":"OU","zygardemega":"Uber","crabominablemega":"RU","golisopodmega":"RU","drampamega":"RU","magearnamega":"Uber","magearnaoriginalmega":"Uber","zeraoramega":"Uber","falinksmega":"RU","scovillainmega":"RU","glimmoramega":"UU","tatsugiricurlymega":"RU","tatsugiridroopymega":"RU","tatsugiristretchymega":"RU","baxcaliburmega":"Uber"},
 	natdexTiers: {"shedinja":"Uber","simisage":"UU","simisear":"UU","simipour":"UU"},
 	cutMoves: {"butterfree":["pounce","skittersmack","terablast","trailblaze"],"beedrill":["pounce","skittersmack","terablast","trailblaze"],"pidgey":["dualwingbeat","terablast","trailblaze"],"pidgeotto":["dualwingbeat","terablast","trailblaze"],"pidgeot":["dualwingbeat","terablast","trailblaze"],"rattata":["terablast","trailblaze"],"raticate":["terablast","trailblaze"],"spearow":["dualwingbeat","terablast","trailblaze"],"fearow":["dualwingbeat","terablast","trailblaze"],"nidoranf":["terablast"],"nidorina":["terablast"],"nidoqueen":["terablast"],"nidoranm":["terablast"],"nidorino":["terablast"],"nidoking":["terablast"],"zubat":["terablast"],"golbat":["terablast"],"paras":["grassyglide","pounce","skittersmack","terablast","trailblaze"],"parasect":["grassyglide","pounce","skittersmack","terablast","trailblaze"],"abra":["expandingforce","psychicnoise","terablast"],"kadabra":["psychicnoise","terablast"],"alakazam":["psychicnoise","terablast"],"machop":["terablast","upperhand"],"machoke":["terablast","upperhand"],"machamp":["terablast","upperhand"],"ponyta":["burningjealousy","temperflare","terablast"],"rapidash":["burningjealousy","temperflare","terablast"],"farfetchd":["terablast","trailblaze"],"onix":["terablast"],"krabby":["chillingwater","flipturn","terablast"],"kingler":["chillingwater","flipturn","terablast"],"cubone":["terablast"],"marowak":["terablast"],"lickitung":["terablast","trailblaze"],"tangela":["terablast","trailblaze"],"kangaskhan":["terablast","trailblaze"],"goldeen":["chillingwater","terablast"],"seaking":["chillingwater","terablast"],"staryu":["chillingwater","terablast"],"starmie":["chillingwater","psychicnoise","terablast"],"mrmime":["alluringvoice","psychicnoise","terablast","trailblaze"],"jynx":["chillingwater","icespinner","psychicnoise","snowscape","terablast"],"pinsir":["pounce","skittersmack","terablast","trailblaze"],"omanyte":["bodypress","chillingwater","flipturn","terablast"],"omastar":["bodypress","chillingwater","flipturn","terablast"],"kabuto":["bodypress","chillingwater","flipturn","terablast"],"kabutops":["bodypress","chillingwater","terablast"],"aerodactyl":["bodypress","terablast"],"ledyba":["dualwingbeat","pounce","skittersmack","terablast","trailblaze"],"ledian":["dualwingbeat","pounce","skittersmack","terablast","trailblaze"],"crobat":["terablast"],"togepi":["alluringvoice","terablast","trailblaze"],"togetic":["alluringvoice","terablast","trailblaze"],"natu":["psychicnoise","terablast"],"xatu":["psychicnoise","terablast"],"steelix":["terablast"],"shuckle":["bodypress","pounce","terablast","trailblaze"],"corsola":["bodypress","chillingwater","flipturn","terablast"],"remoraid":["chillingwater","flipturn","terablast"],"octillery":["chillingwater","flipturn","terablast"],"mantine":["chillingwater","flipturn","terablast"],"smoochum":["chillingwater","expandingforce","icespinner","psychicnoise","snowscape","terablast"],"miltank":["terablast","trailblaze"],"celebi":["psychicnoise","terablast","trailblaze"],"zigzagoon":["terablast","trailblaze"],"linoone":["terablast","trailblaze"],"wurmple":["pounce","skittersmack","terablast","trailblaze"],"beautifly":["dualwingbeat","pounce","skittersmack","terablast","trailblaze"],"dustox":["pounce","skittersmack","terablast","trailblaze"],"taillow":["dualwingbeat","terablast","trailblaze"],"swellow":["dualwingbeat","terablast","trailblaze"],"nincada":["pounce","scorchingsands","terablast","trailblaze"],"ninjask":["pounce","terablast","trailblaze"],"shedinja":["pounce","terablast","trailblaze"],"whismur":["terablast","trailblaze"],"loudred":["terablast","trailblaze"],"exploud":["terablast","trailblaze"],"skitty":["terablast","trailblaze"],"delcatty":["terablast","trailblaze"],"mawile":["alluringvoice","terablast","trailblaze"],"aron":["meteorbeam","terablast"],"lairon":["meteorbeam","terablast"],"aggron":["terablast"],"electrike":["supercellslam","terablast"],"manectric":["supercellslam","terablast"],"roselia":["terablast","trailblaze"],"carvanha":["chillingwater","lashout","terablast","trailblaze"],"sharpedo":["chillingwater","lashout","terablast","trailblaze"],"wailmer":["chillingwater","flipturn","terablast"],"wailord":["chillingwater","flipturn","terablast"],"spinda":["terablast","trailblaze"],"lunatone":["bodypress","expandingforce","psychicnoise","terablast"],"solrock":["bodypress","expandingforce","psychicnoise","terablast"],"baltoy":["psychicnoise","terablast"],"claydol":["psychicnoise","terablast"],"lileep":["bodypress","grassyglide","terablast","trailblaze"],"cradily":["bodypress","grassyglide","terablast","trailblaze"],"anorith":["bodypress","pounce","skittersmack","terablast","trailblaze"],"armaldo":["bodypress","pounce","skittersmack","terablast","trailblaze"],"castform":["terablast","trailblaze"],"kecleon":["terablast","trailblaze"],"absol":["lashout","terablast","trailblaze"],"spheal":["chillingwater","flipturn","icespinner","snowscape","terablast"],"sealeo":["chillingwater","flipturn","icespinner","snowscape","terablast"],"walrein":["chillingwater","flipturn","icespinner","snowscape","terablast"],"clamperl":["chillingwater","flipturn","terablast"],"huntail":["chillingwater","flipturn","terablast"],"gorebyss":["chillingwater","flipturn","terablast"],"relicanth":["chillingwater","flipturn","terablast"],"bidoof":["terablast","trailblaze"],"bibarel":["chillingwater","flipturn","terablast","trailblaze"],"budew":["terablast","trailblaze"],"roserade":["terablast","trailblaze"],"burmy":["pounce","skittersmack","terablast","trailblaze"],"wormadam":["grassyglide","pounce","skittersmack","terablast","trailblaze"],"mothim":["dualwingbeat","pounce","skittersmack","terablast","trailblaze"],"cherubi":["terablast","trailblaze"],"cherrim":["terablast","trailblaze"],"buneary":["terablast","trailblaze"],"lopunny":["terablast","trailblaze"],"glameow":["terablast","trailblaze"],"purugly":["terablast","trailblaze"],"mimejr":["alluringvoice","expandingforce","psychicnoise","terablast","trailblaze"],"chatot":["dualwingbeat","terablast","trailblaze"],"skorupi":["pounce","terablast","trailblaze"],"drapion":["terablast","trailblaze"],"carnivine":["grassyglide","terablast","trailblaze"],"mantyke":["chillingwater","dualwingbeat","flipturn","terablast"],"lickilicky":["terablast","trailblaze"],"tangrowth":["terablast","trailblaze"],"togekiss":["alluringvoice","terablast","trailblaze"],"victini":["burningjealousy","psychicnoise","temperflare","terablast"],"patrat":["terablast","trailblaze"],"watchog":["terablast","trailblaze"],"lillipup":["terablast","trailblaze"],"herdier":["terablast","trailblaze"],"stoutland":["terablast","trailblaze"],"purrloin":["terablast","trailblaze"],"liepard":["terablast","trailblaze"],"panpour":["flipturn"],"simipour":["flipturn"],"munna":["psychicnoise","terablast"],"musharna":["psychicnoise","terablast"],"pidove":["terablast","trailblaze"],"tranquill":["terablast","trailblaze"],"unfezant":["terablast","trailblaze"],"roggenrola":["terablast"],"boldore":["terablast"],"gigalith":["terablast"],"woobat":["psychicnoise","terablast"],"swoobat":["psychicnoise","terablast"],"audino":["terablast","trailblaze"],"tympole":["chillingwater","flipturn","terablast"],"palpitoad":["chillingwater","flipturn","scorchingsands","terablast"],"seismitoad":["chillingwater","flipturn","scorchingsands","terablast"],"throh":["terablast","upperhand"],"sawk":["terablast","upperhand"],"venipede":["pounce","terablast","trailblaze"],"whirlipede":["pounce","terablast","trailblaze"],"scolipede":["pounce","terablast","trailblaze"],"darumaka":["burningjealousy","temperflare","terablast"],"darmanitan":["temperflare","terablast"],"maractus":["terablast","trailblaze"],"dwebble":["bodypress","meteorbeam","pounce","terablast","trailblaze"],"crustle":["pounce","terablast","trailblaze"],"sigilyph":["psychicnoise","terablast"],"yamask":["terablast"],"cofagrigus":["terablast"],"tirtouga":["bodypress","chillingwater","flipturn","terablast"],"carracosta":["bodypress","chillingwater","flipturn","terablast"],"archen":["bodypress","terablast"],"archeops":["bodypress","terablast"],"trubbish":["terablast"],"garbodor":["terablast"],"vanillite":["chillingwater","icespinner","snowscape","terablast"],"vanillish":["chillingwater","icespinner","snowscape","terablast"],"vanilluxe":["chillingwater","icespinner","snowscape","terablast"],"emolga":["supercellslam","terablast"],"karrablast":["pounce","skittersmack","terablast","trailblaze"],"escavalier":["pounce","skittersmack","terablast","trailblaze"],"frillish":["chillingwater","flipturn","terablast"],"jellicent":["chillingwater","flipturn","terablast"],"ferroseed":["grassyglide","terablast","trailblaze"],"ferrothorn":["grassyglide","terablast","trailblaze"],"klink":["terablast"],"klang":["terablast"],"klinklang":["terablast"],"elgyem":["psychicnoise","terablast"],"beheeyem":["psychicnoise","terablast"],"shelmet":["pounce","terablast","trailblaze"],"accelgor":["pounce","terablast","trailblaze"],"stunfisk":["scorchingsands","supercellslam","terablast"],"druddigon":["breakingswipe","dragoncheer","terablast"],"bouffalant":["terablast","trailblaze"],"heatmor":["temperflare","terablast"],"durant":["pounce","terablast","trailblaze"],"genesect":["pounce","skittersmack","terablast","trailblaze"],"bunnelby":["terablast","trailblaze"],"diggersby":["terablast","trailblaze"],"pancham":["terablast","upperhand"],"pangoro":["terablast","trailblaze","upperhand"],"furfrou":["terablast","trailblaze"],"honedge":["poltergeist","terablast"],"doublade":["poltergeist","terablast"],"aegislash":["poltergeist","terablast"],"spritzee":["alluringvoice","terablast","trailblaze"],"aromatisse":["alluringvoice","terablast","trailblaze"],"swirlix":["alluringvoice","terablast","trailblaze"],"slurpuff":["alluringvoice","terablast","trailblaze"],"binacle":["bodypress","chillingwater","flipturn","meteorbeam","terablast"],"barbaracle":["bodypress","chillingwater","flipturn","terablast"],"helioptile":["supercellslam","terablast","trailblaze"],"heliolisk":["supercellslam","terablast","trailblaze"],"tyrunt":["bodypress","breakingswipe","dragoncheer","terablast"],"tyrantrum":["bodypress","dragoncheer","terablast"],"amaura":["bodypress","chillingwater","icespinner","snowscape","terablast"],"aurorus":["bodypress","chillingwater","icespinner","snowscape","terablast"],"pumpkaboo":["terablast","trailblaze"],"gourgeist":["terablast","trailblaze"],"xerneas":["alluringvoice","terablast","trailblaze"],"yveltal":["terablast","trailblaze"],"zygarde":["dragoncheer","terablast"],"wishiwashi":["chillingwater","terablast"],"morelull":["alluringvoice","grassyglide","terablast","trailblaze"],"shiinotic":["alluringvoice","grassyglide","terablast","trailblaze"],"stufful":["terablast","trailblaze","upperhand"],"bewear":["terablast","trailblaze","upperhand"],"wimpod":["chillingwater","flipturn","pounce","terablast","trailblaze"],"golisopod":["chillingwater","flipturn","pounce","terablast","trailblaze"],"typenull":["terablast","trailblaze"],"silvally":["terablast","trailblaze"],"turtonator":["breakingswipe","dragoncheer","temperflare","terablast"],"togedemaru":["supercellslam","terablast"],"drampa":["dragoncheer","terablast","trailblaze"],"dhelmise":["terablast","trailblaze"],"tapukoko":["alluringvoice","supercellslam","terablast","trailblaze"],"tapulele":["alluringvoice","expandingforce","psychicnoise","terablast","trailblaze"],"tapubulu":["alluringvoice","grassyglide","terablast","trailblaze"],"tapufini":["alluringvoice","chillingwater","flipturn","terablast","trailblaze"],"nihilego":["bodypress","terablast"],"buzzwole":["pounce","skittersmack","terablast","trailblaze","upperhand"],"pheromosa":["pounce","terablast","trailblaze","upperhand"],"xurkitree":["supercellslam","terablast"],"celesteela":["dualwingbeat","terablast"],"kartana":["grassyglide","terablast","trailblaze"],"guzzlord":["breakingswipe","dragoncheer","scaleshot","terablast","trailblaze"],"marshadow":["terablast","upperhand"],"poipole":["terablast"],"naganadel":["dragoncheer","terablast"],"stakataka":["terablast"],"blacephalon":["burningjealousy","poltergeist","temperflare","terablast"],"zeraora":["supercellslam","terablast"],"meltan":["terablast"],"melmetal":["terablast"],"dottler":["pounce","psychicnoise","skittersmack","terablast","trailblaze"],"orbeetle":["pounce","psychicnoise","skittersmack","terablast","trailblaze"],"nickit":["terablast","trailblaze"],"thievul":["terablast","trailblaze"],"gossifleur":["terablast","trailblaze"],"eldegoss":["terablast","trailblaze"],"wooloo":["terablast","trailblaze"],"dubwool":["terablast","trailblaze"],"yamper":["supercellslam","terablast"],"boltund":["supercellslam","terablast"],"sizzlipede":["burningjealousy","pounce","temperflare","terablast","trailblaze"],"centiskorch":["burningjealousy","pounce","temperflare","terablast","trailblaze"],"clobbopus":["terablast","upperhand"],"grapploct":["terablast","upperhand"],"obstagoon":["terablast","trailblaze"],"cursola":["terablast"],"sirfetchd":["terablast","upperhand"],"mrrime":["chillingwater","icespinner","psychicnoise","snowscape","terablast"],"runerigus":["scorchingsands","terablast"],"dracozolt":["dragoncheer","scaleshot","supercellslam","terablast"],"arctozolt":["chillingwater","icespinner","snowscape","supercellslam","terablast"],"dracovish":["breakingswipe","chillingwater","dragoncheer","flipturn","scaleshot","terablast"],"arctovish":["chillingwater","flipturn","icespinner","snowscape","terablast"]},
 	cutMoveSources: {"pounce":"9M","skittersmack":"9M8M","terablast":"9M","trailblaze":"9M","dualwingbeat":"9M8M","grassyglide":"9M8M","expandingforce":"9M8M","psychicnoise":"9M","upperhand":"9M","burningjealousy":"9M8M","temperflare":"9M","chillingwater":"9M","flipturn":"9M8M","alluringvoice":"9M","icespinner":"9M","snowscape":"9M","bodypress":"9M8M","scorchingsands":"9M8M","meteorbeam":"9M8M","supercellslam":"9M","lashout":"9M8M","breakingswipe":"9M8M","dragoncheer":"9M","poltergeist":"9M8M","scaleshot":"9M8M"},
 	unlocked: {"species":["raichumegax","raichumegay","clefablemega","victreebelmega","starmiemega","dragonitemega","meganiummega","feraligatrmega","skarmorymega","chimechomega","absolmegaz","staraptormega","garchompmegaz","lucariomegaz","froslassmega","heatranmega","darkraimega","emboarmega","excadrillmega","scolipedemega","scraftymega","eelektrossmega","chandeluremega","golurkmega","chesnaughtmega","delphoxmega","greninjamega","pyroarmega","floettemega","meowsticmmega","meowsticfmega","malamarmega","barbaraclemega","dragalgemega","hawluchamega","zygardemega","crabominablemega","golisopodmega","drampamega","magearnamega","magearnaoriginalmega","zeraoramega","falinksmega","scovillainmega","glimmoramega","tatsugiricurlymega","tatsugiridroopymega","tatsugiristretchymega","baxcaliburmega"],"items":["absolitez","barbaracite","baxcalibrite","chandelurite","chesnaughtite","chimechite","clefablite","crabominite","darkranite","delphoxite","dragalgite","dragoninite","drampanite","eelektrossite","emboarite","excadrite","falinksite","feraligite","floettite","froslassite","garchompitez","glimmoranite","golisopite","golurkite","greninjite","hawluchanite","heatranite","lucarionitez","magearnite","malamarite","meganiumite","meowsticite","pyroarite","raichunitex","raichunitey","scolipite","scovillainite","scraftinite","skarmorite","staraptite","starminite","tatsugirinite","victreebelite","zeraorite","zygardite"]},
-	evoLevels: {"braviary":40,"braviaryhisui":40,"mandibuzz":40,"bisharp":40,"mienshao":40,"klang":32,"klinklang":40,"dragalge":38,"noivern":38,"vanillish":30,"vanilluxe":40,"vibrava":30,"flygon":38,"sealeo":30,"walrein":38,"golurk":35,"glalie":35,"beheeyem":36,"palossand":34,"exploud":35,"wailord":35,"drapion":34,"jellicent":34,"revavroom":34,"scrafty":32,"eelektrik":30,"barbaracle":34,"magcargo":30,"purugly":30,"medicham":30,"banette":30,"garbodor":32,"pidgeot":32,"swanna":30,"dewgong":30,"sawsbuck":30,"seaking":28,"cacturne":28,"lumineon":26,"dragonite":50,"tyranitar":50,"zweilous":40,"hydreigon":50,"volcarona":50,"drakloak":40,"dragapult":50,"baxcalibur":50,"solgaleo":50,"lunala":50,"cosmoem":40,"rhydon":40,"lampent":40},
+	evoLevels: {"braviary":40,"braviaryhisui":40,"mandibuzz":40,"bisharp":40,"mienshao":40,"klang":32,"klinklang":40,"dragalge":38,"noivern":38,"vanillish":30,"vanilluxe":40,"vibrava":30,"flygon":38,"sealeo":30,"walrein":38,"golurk":35,"glalie":35,"beheeyem":36,"palossand":34,"exploud":35,"wailord":35,"drapion":34,"jellicent":34,"revavroom":34,"scrafty":32,"eelektrik":30,"barbaracle":34,"magcargo":30,"purugly":30,"medicham":30,"banette":30,"garbodor":32,"pidgeot":32,"swanna":30,"dewgong":30,"sawsbuck":30,"seaking":28,"cacturne":28,"lumineon":26,"dragonite":50,"tyranitar":50,"zweilous":40,"hydreigon":50,"volcarona":50,"drakloak":40,"dragapult":50,"baxcalibur":50,"solgaleo":50,"lunala":50,"cosmoem":40,"rhydon":40,"lampent":24,"chandelure":36,"mismagius":33,"honchkrow":33,"cinccino":32,"ludicolo":36,"heliolisk":32,"scovillain":30},
+	evoAlso: {"chandelure":36,"mismagius":33,"honchkrow":33,"cinccino":32,"ludicolo":36,"heliolisk":32,"scovillain":30},
 
 	/** What this Pokemon gained, or an empty record. */
 	get: function (speciesid) {

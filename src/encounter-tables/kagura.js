@@ -171,7 +171,7 @@ module.exports = {
       types: ['Rock', 'Steel', 'Ground', 'Dark'],
       wild: ['the-old-mine', 'upper-galleries', 'the-water-line'],
       trainers: ['hiker', 'worker', 'ruinmaniac', 'punk', 'backpacker'],
-      common: ['Zubat', 'Geodude', 'Roggenrola', 'Aron', 'Nosepass', 'Woobat', 'Nacli', 'Pawniard', 'Rolycoly', 'Diglett-Alola', 'Tinkatink', 'Barboach'],
+      common: ['Zubat', 'Geodude', 'Roggenrola', 'Aron', 'Nosepass', 'Woobat', 'Nacli', 'Pawniard', 'Rolycoly', 'Diglett-Alola', 'Tinkatink', 'Barboach', 'Litwick'],
       rare: ['Sableye', 'Larvitar', 'Gimmighoul'],
     },
     'ruins': {

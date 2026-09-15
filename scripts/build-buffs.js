@@ -243,9 +243,14 @@ const unlocked = {
  */
 const { EVOLUTIONS } = require(path.join(PACKAGE, 'dist', 'data', 'velvet', 'balance-patch-1.js'));
 const evoLevels = {};
-for (const [id, change] of Object.entries(EVOLUTIONS)) evoLevels[id] = Dex.species.get(id).evoLevel || change.to;
+const evoAlso = {};
+for (const [id, change] of Object.entries(EVOLUTIONS)) {
+	evoLevels[id] = Dex.species.get(id).evoLevel || change.to;
+	if (typeof change.from === 'string') evoAlso[id] = change.to;   // a stone evolution that can also happen by level
+}
 
-const overrides = { moves: {}, abilities: {} };
+const overrides = { moves: {}, abilities: {}, species: {} };
+for (const id of CHANGED.species || []) overrides.species[id] = { baseStats: Object.assign({}, Dex.species.get(id).baseStats) };
 for (const id of CHANGED.moves) overrides.moves[id] = moveRow(Dex.moves.get(id));
 for (const id of CHANGED.abilities) overrides.abilities[id] = abilityRow(Dex.abilities.get(id));
 const items = {};
@@ -303,6 +308,7 @@ window.VelvetBuffs = {
 \tcutMoveSources: ${JSON.stringify(cutMoveSources)},
 \tunlocked: ${JSON.stringify(unlocked)},
 \tevoLevels: ${JSON.stringify(evoLevels)},
+\tevoAlso: ${JSON.stringify(evoAlso)},
 
 \t/** What this Pokemon gained, or an empty record. */
 \tget: function (speciesid) {

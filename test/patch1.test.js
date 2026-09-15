@@ -125,6 +125,105 @@ check(Dex.species.get('regigigas').natDexTier === 'Uber', 'Regigigas is Uber');
 	check(sunny > 0.45 && sunny < 0.55, `and about 1/2 in sun (${sunny.toFixed(2)})`);
 }
 
+// Solar Nectar: 135 power in sun.
+{
+	const b = battle([{ species: 'Sunflora', ability: 'Chlorophyll', moves: ['solarnectar'] }], [{ species: 'Blissey', ability: 'Natural Cure', moves: ['sunnyday'] }]);
+	const move = Dex.moves.get('solarnectar');
+	const gigas = b.p1.active[0];
+	check(move.basePowerCallback.call(b, gigas, b.p2.active[0], move) === 80, 'Solar Nectar is 80 power without sun');
+	b.makeChoices('move 1', 'move 1');
+	check(move.basePowerCallback.call(b, gigas, b.p2.active[0], move) === 135, 'and 135 in harsh sunlight');
+}
+check(Dex.moves.get('craghammer').accuracy === 100 && Dex.moves.get('craghammer').basePower === 90, 'Crag Hammer: 90 power, 100% accurate');
+
+// Mudflat Ambush: contact costs 1/8, Electric heals.
+{
+	const b = battle(
+		[{ species: 'Stunfisk', ability: 'Mudflat Ambush', moves: ['splash'] }],
+		[{ species: 'Machamp', ability: 'No Guard', moves: ['tackle', 'thunderpunch'] }],
+	);
+	b.makeChoices('move 1', 'move 1');
+	check(b.p2.active[0].hp <= b.p2.active[0].maxhp - Math.floor(b.p2.active[0].maxhp / 8), 'Mudflat Ambush hurts contact attackers for 1/8');
+	const before = b.p1.active[0].hp;
+	b.makeChoices('move 1', 'move 2');
+	check(b.p1.active[0].hp >= before && /Mudflat Ambush/.test(log(b)), 'and Electric moves heal it instead');
+}
+check(Object.values(Dex.species.get('stunfiskgalar').abilities).includes('Mudflat Ambush'), 'Galarian Stunfisk has it too');
+
+// Articuno: Polar Mantle sets snow and halves Rock; Aurora Squall hits both foes and never misses in snow.
+{
+	const b = battle(
+		[{ species: 'Articuno', ability: 'Polar Mantle', moves: ['roost'] }],
+		[{ species: 'Rhyperior', ability: 'Solid Rock', moves: ['rockslide', 'stealthrock'] }],
+	);
+	check(b.field.isWeather('snowscape'), 'Polar Mantle sets snow');
+	const control = battle(
+		[{ species: 'Articuno', ability: 'Pressure', moves: ['roost'] }],
+		[{ species: 'Rhyperior', ability: 'Solid Rock', moves: ['rockslide', 'stealthrock'] }],
+	);
+	const hit = (bat) => { const hp = bat.p1.active[0].hp; bat.makeChoices('move 1', 'move 1'); return /\|-miss\|/.test(log(bat)) ? null : hp - bat.p1.active[0].hp; };
+	const mantle = hit(b), plain = hit(control);
+	check(mantle === null || plain === null || mantle < plain * 0.7, `Rock Slide does about half through Polar Mantle (${mantle} vs ${plain})`);
+}
+check(Dex.moves.get('aurorasquall').target === 'allAdjacentFoes' && Dex.moves.get('aurorasquall').flags.nosketch, 'Aurora Squall: spread, not Sketchable');
+check(learns('articuno', 'aurorasquall') && !learns('mew', 'aurorasquall'), "Aurora Squall is Articuno's alone");
+check(Dex.species.get('articuno').natDexTier === 'RU', 'Articuno is RU');
+
+// The rest of the legends.
+{
+	const b = battle(
+		[{ species: 'Regice', ability: 'Permafrost Core', moves: ['splash'] }],
+		[{ species: 'Machamp', ability: 'No Guard', moves: ['closecombat', 'willowisp'] }],
+	);
+	const control = battle(
+		[{ species: 'Regice', ability: 'Clear Body', moves: ['splash'] }],
+		[{ species: 'Machamp', ability: 'No Guard', moves: ['closecombat', 'willowisp'] }],
+	);
+	const dmg = (bat) => { const hp = bat.p1.active[0].hp; bat.makeChoices('move 1', 'move 1'); return hp - bat.p1.active[0].hp; };
+	const core = dmg(b), plain = dmg(control);
+	check(core < plain * 0.7, `Permafrost Core halves Close Combat (${core} vs ${plain})`);
+	b.makeChoices('move 1', 'move 2');
+	check(b.p1.active[0].status !== 'brn', 'and Regice cannot be burned');
+}
+{
+	const b = battle(
+		[{ species: 'Uxie', ability: 'Levitate', moves: ['memorywipe'] }],
+		[{ species: 'Blissey', ability: 'Natural Cure', moves: ['calmmind'] }],
+	);
+	b.makeChoices('move 1', 'move 1');
+	b.makeChoices('move 1', 'move 1');
+	check(!b.p2.active[0].boosts.spa || b.p2.active[0].boosts.spa <= 1, 'Memory Wipe clears the target\'s boosts');
+	check(/\|-clearboost\|p2a: Blissey/.test(log(b)), 'and says so');
+}
+{
+	const b = battle(
+		[{ species: 'Mesprit', ability: 'Levitate', moves: ['soulresonance'] }],
+		[{ species: 'Blissey', ability: 'Natural Cure', moves: ['seismictoss'] }],
+	);
+	b.p1.active[0].hp = 100;
+	b.makeChoices('move 1', 'move 1');
+	check(/\|-heal\|p1a: Mesprit.*drain/.test(log(b)), 'Soul Resonance drains');
+}
+{
+	const move = Dex.moves.get('resolutestrike');
+	const b = battle([{ species: 'Azelf', ability: 'Levitate', moves: ['resolutestrike'], evs: { atk: 252 }, nature: 'Adamant' }], [{ species: 'Blissey', ability: 'Natural Cure', moves: ['splash'] }]);
+	const m = { ...move };
+	move.onModifyMove.call(b, m, b.p1.active[0]);
+	check(m.category === 'Physical', 'Resolute Strike goes physical for a physical Azelf');
+}
+check(['regice', 'uxie', 'mesprit'].every(id => Dex.species.get(id).natDexTier === 'RU') && Dex.species.get('azelf').natDexTier === 'UU', 'Regice, Uxie, Mesprit RU; Azelf UU');
+check(!['memorywipe', 'soulresonance', 'resolutestrike', 'aurorasquall'].some(mv => learns('mew', mv)), 'the legends\' moves stay theirs');
+{
+	const c = Dex.species.get('cresselia').baseStats;
+	check(c.def === 120 && c.spd === 130, `Cresselia's Generation 8 defences are back (${c.def}/${c.spd})`);
+}
+
+// Whole-dex distribution, with the deliberate exclusions.
+check(learns('venusaur', 'solarnectar') && learns('bulbasaur', 'solarnectar'), 'Venusaur line learns Solar Nectar');
+check(learns('rhyperior', 'craghammer') && learns('rhyhorn', 'craghammer') && !learns('tyranitar', 'craghammer'), 'Crag Hammer: Rhyperior line yes, Tyranitar no');
+check(learns('scizor', 'hivefrenzy') && !learns('scolipede', 'hivefrenzy'), 'Hive Frenzy: Scizor yes, Scolipede no');
+check(!learns('volcarona', 'chrysalisveil') && !learns('diggersby', 'hustleup'), 'Volcarona and Diggersby left out');
+
 // Secondary effects exist as written.
 check(Dex.moves.get('undertow').secondary.boosts.spe === -1 && Dex.moves.get('undertow').secondary.chance === 50 && Dex.moves.get('undertow').basePower === 85, 'Undertow is 85 power with a 50% chance to lower Speed');
 check(Dex.moves.get('craghammer').secondary.boosts.def === -1, 'Crag Hammer can lower Defense');
@@ -148,7 +247,7 @@ check(Dex.species.get('garchomp').evoLevel === 48, 'levels already under the cap
 	check(!worst, `no final evolution after 50, no middle after 40, lines in order (${worst || 'all fine'})`);
 }
 check(Dex.species.get('hydreigon').evoLevel === 50 && Dex.species.get('zweilous').evoLevel === 40, 'Hydreigon 50, Zweilous 40');
-const learns = (sp, m) => {
+function learns(sp, m) {
 	let s = Dex.species.get(sp);
 	while (s && s.exists) {
 		const l = Dex.species.getLearnsetData(s.id).learnset;
@@ -156,7 +255,7 @@ const learns = (sp, m) => {
 		s = s.prevo ? Dex.species.get(s.prevo) : null;
 	}
 	return false;
-};
+}
 check(['hivefrenzy', 'chrysalisveil', 'hustleup', 'carrionfeast', 'sparkscamper', 'undertow', 'solarnectar', 'craghammer', 'hypnowhirl', 'shufflejab'].every(m => learns('mew', m)), 'Mew learns all ten');
 check(!learns('mew', 'continentalheave') && learns('regigigas', 'continentalheave'), "Continental Heave is Regigigas's alone");
 check(Dex.moves.get('continentalheave').flags.nosketch, 'and cannot be Sketched');

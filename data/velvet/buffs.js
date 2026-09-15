@@ -391,7 +391,18 @@ exports.applyBuffs = (Pokedex, Learnsets) => {
 		Object.assign(exports.Buffs, PATCH1.buildBuffs(Pokedex));
 	}
 	for (const [id, change] of Object.entries(PATCH1.EVOLUTIONS)) {
-		if (Pokedex[id] && Pokedex[id].evoLevel === change.from) Pokedex[id].evoLevel = change.to;
+		const species = Pokedex[id];
+		if (!species) continue;
+		if (species.evoLevel === change.from) species.evoLevel = change.to;
+		/*
+		 * `from` naming an item adds a level evolution beside it: the stone still
+		 * works any time, and the level is the other way. The dex keeps the item
+		 * (so the validator does not start demanding that level); the extra level
+		 * rides along as data for the RP bot, the doc and the patch notes.
+		 */
+		else if (typeof change.from === 'string' && species.evoItem === change.from) {
+			species.velvetLevelToo = change.to;
+		}
 	}
 
 	/*

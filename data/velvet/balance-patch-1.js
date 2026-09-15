@@ -88,7 +88,23 @@ exports.EVOLUTIONS = {
 	lunala: { from: 53, to: 50, why: 'Cap: no final evolution after 50' },
 	cosmoem: { from: 43, to: 40, why: 'Cap: no middle stage after 40' },
 	rhydon: { from: 42, to: 40, why: 'Cap: no middle stage after 40' },
-	lampent: { from: 41, to: 40, why: 'Cap: no middle stage after 40' },
+	lampent: { from: 41, to: 24, why: 'Early-game friendly: Litwick is met early' },
+
+	// Stone or level: the Dusk Stone still works any time, and Lampent now also evolves by itself at 36.
+	chandelure: { from: 'Dusk Stone', to: 36, why: 'Now also evolves at level 36; the Dusk Stone still works' },
+
+	/*
+	 * The same case as Chandelure: a Pokemon met early whose only way forward
+	 * was a stone nobody has mid-RP. Not Aegislash (strong enough that the Dusk
+	 * Stone is a fair gate), not Eevee (the stones are the point) and no trade
+	 * evolutions (the bot already handles trades and the Link Cable).
+	 */
+	mismagius: { from: 'Dusk Stone', to: 33, why: 'Now also evolves at level 33; the Dusk Stone still works' },
+	honchkrow: { from: 'Dusk Stone', to: 33, why: 'Now also evolves at level 33; the Dusk Stone still works' },
+	cinccino: { from: 'Shiny Stone', to: 32, why: 'Now also evolves at level 32; the Shiny Stone still works' },
+	ludicolo: { from: 'Water Stone', to: 36, why: 'Now also evolves at level 36; the Water Stone still works' },
+	heliolisk: { from: 'Sun Stone', to: 32, why: 'Now also evolves at level 32; the Sun Stone still works' },
+	scovillain: { from: 'Fire Stone', to: 30, why: 'Now also evolves at level 30; the Fire Stone still works' },
 };
 
 /*
@@ -176,21 +192,27 @@ exports.MOVES = {
 		basePower: 80, accuracy: 100, pp: 10, priority: 0,
 		drain: [1, 4],
 		onModifyMove: drainIn([1, 2], [1, 4]),
+		// 135 in harsh sunlight. The user's effective weather, so Air Lock and Utility Umbrella turn it off.
+		basePowerCallback(pokemon, target, move) {
+			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather())) return 135;
+			return move.basePower;
+		},
 		flags: { protect: 1, mirror: 1, metronome: 1 },
 		secondary: null, target: "normal", contestType: "Beautiful", velvetShared: true,
 		flavor: "The user drinks in the sun's warmth and returns it as a burst of sweet, scalding nectar.",
-		shortDesc: "Heals 25% of damage dealt, 50% in harsh sunlight.",
-		desc: "The user bursts with sun-warmed nectar. It recovers 1/4 of the HP lost by the target, or 1/2 in harsh sunlight.",
+		shortDesc: "135 power and heals 50% of damage in sun; else 80 power, heals 25%.",
+		desc: "The user bursts with sun-warmed nectar. It recovers 1/4 of the HP lost by the target. In harsh sunlight its power rises to 135 and it recovers 1/2 of the HP lost instead.",
 	},
 	craghammer: {
 		num: -17, gen: 9, name: "Crag Hammer", type: "Rock", category: "Physical",
-		basePower: 90, accuracy: 90, pp: 10, priority: 0,
+		// The first strong Rock attack that never misses: Liquidation's shape, for Rock.
+		basePower: 90, accuracy: 100, pp: 10, priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
 		secondary: { chance: 20, boosts: { def: -1 } },
 		target: "normal", contestType: "Tough", velvetShared: true,
 		flavor: "The user brings its whole stony weight down like a mountain falling on a single spot.",
-		shortDesc: "20% chance to lower the target's Defense by 1.",
-		desc: "The user brings its full stony weight down on the target. Has a 20% chance to lower the target's Defense by 1 stage.",
+		shortDesc: "100% accurate. 20% chance to lower the target's Defense by 1.",
+		desc: "Never misses unless evasion or accuracy drops say otherwise. The user brings its full stony weight down on the target. Has a 20% chance to lower the target's Defense by 1 stage.",
 	},
 	hypnowhirl: {
 		num: -18, gen: 9, name: "Hypno Whirl", type: "Psychic", category: "Special",
@@ -226,6 +248,68 @@ exports.MOVES = {
 	 *
 	 * `nosketch`, and Mew does not get it: this one is Regigigas's.
 	 */
+	/*
+	 * Articuno's signature: the storm it has always been said to bring.
+	 *
+	 * A spread Ice move that slows everything it touches, and never misses in snow
+	 * (like Blizzard). 85 power is Ice Beam's neighbourhood, not Blizzard's.
+	 */
+	aurorasquall: {
+		num: -21, gen: 9, name: "Aurora Squall", type: "Ice", category: "Special",
+		basePower: 85, accuracy: 95, pp: 10, priority: 0,
+		onModifyMove(move, pokemon) {
+			if (['snowscape', 'hail'].includes(pokemon.effectiveWeather())) move.accuracy = true;
+		},
+		flags: { protect: 1, mirror: 1, wind: 1, metronome: 1, nosketch: 1 },
+		secondary: { chance: 30, boosts: { spe: -1 } },
+		target: "allAdjacentFoes", contestType: "Beautiful",
+		flavor: "Curtains of polar light come down as a gale that freezes the air in its path.",
+		shortDesc: "Hits all foes. 30% chance to lower Speed. Can't miss in snow. Articuno's signature.",
+		desc: "Curtains of polar light come down as a freezing gale. Hits all adjacent foes, with a 30% chance to lower each target's Speed by 1 stage. This move does not check accuracy in snow.",
+	},
+	/*
+	 * The lake trio: knowledge, emotion and willpower, each with its own move.
+	 */
+	// Uxie's: knowledge taken back. Removes the target's stat boosts, the way
+	// Clear Smog does, on a Psychic attack. A support move with teeth, not a nuke.
+	memorywipe: {
+		num: -22, gen: 9, name: "Memory Wipe", type: "Psychic", category: "Special",
+		basePower: 70, accuracy: 100, pp: 15, priority: 0,
+		onHit(target) {
+			target.clearBoosts();
+			this.add('-clearboost', target);
+		},
+		flags: { protect: 1, mirror: 1, metronome: 1, nosketch: 1 },
+		secondary: null, target: "normal", contestType: "Clever",
+		flavor: "Uxie opens its eyes, and whatever the target had learned this battle is gone.",
+		shortDesc: "Resets the target's stat changes. Uxie's signature.",
+		desc: "Uxie opens its eyes and the target forgets. After dealing damage, all of the target's stat stages are reset to 0.",
+	},
+	// Mesprit's: shared feeling. A Psychic attack that heals half of what it deals.
+	soulresonance: {
+		num: -23, gen: 9, name: "Soul Resonance", type: "Psychic", category: "Special",
+		basePower: 80, accuracy: 100, pp: 10, priority: 0,
+		drain: [1, 2],
+		flags: { protect: 1, mirror: 1, heal: 1, metronome: 1, nosketch: 1 },
+		secondary: null, target: "normal", contestType: "Beautiful",
+		flavor: "Mesprit feels the target's pain as its own, and takes some of the target's strength to bear it.",
+		shortDesc: "User recovers 50% of the damage dealt. Mesprit's signature.",
+		desc: "Mesprit feels the target's pain as its own. The user recovers 1/2 of the HP lost by the target, rounded half up.",
+	},
+	// Azelf's: willpower made into a blow. Physical or special, whichever is stronger.
+	resolutestrike: {
+		num: -24, gen: 9, name: "Resolute Strike", type: "Psychic", category: "Special",
+		basePower: 85, accuracy: 100, pp: 10, priority: 0,
+		onModifyMove(move, pokemon) {
+			if (pokemon.getStat('atk', false, true) > pokemon.getStat('spa', false, true)) move.category = 'Physical';
+		},
+		flags: { protect: 1, mirror: 1, metronome: 1, nosketch: 1 },
+		secondary: { chance: 10, volatileStatus: 'flinch' },
+		target: "normal", contestType: "Cool",
+		flavor: "Azelf's will alone is enough to hit, and it never hesitates.",
+		shortDesc: "Uses the higher attacking stat. 10% flinch. Azelf's signature.",
+		desc: "Azelf's willpower becomes a blow. Uses whichever of the user's Attack or Special Attack is higher, before boosts, and has a 10% chance to make the target flinch.",
+	},
 	continentalheave: {
 		num: -20, gen: 9, name: "Continental Heave", type: "Normal", category: "Physical",
 		basePower: 110, accuracy: 95, pp: 5, priority: 0,
@@ -258,6 +342,97 @@ exports.MOVES = {
  * Ubers, and moved there in tiering.js.
  */
 exports.ABILITIES = {
+	/*
+	 * Mudflat Ambush - Stunfisk's, both formes.
+	 *
+	 * A flat fish buried in the mud, waiting to be stepped on. Three abilities'
+	 * worth of trap: anything that touches it takes 1/8 of its HP (Rough Skin)
+	 * and may be paralysed (Static, 30%), and Electric moves are soaked up to heal
+	 * a quarter (Volt Absorb). Strong for a slow, bulky PU Pokemon; none of it
+	 * helps it hit harder.
+	 */
+	mudflatambush: {
+		name: "Mudflat Ambush",
+		onTryHitPriority: 1,
+		onTryHit(target, source, move) {
+			if (target !== source && move.type === 'Electric') {
+				if (!this.heal(target.baseMaxhp / 4)) this.add('-immune', target, '[from] ability: Mudflat Ambush');
+				return null;
+			}
+		},
+		onDamagingHitOrder: 1,
+		onDamagingHit(damage, target, source, move) {
+			if (!this.checkMoveMakesContact(move, source, target, true)) return;
+			this.damage(source.baseMaxhp / 8, source, target);
+			if (this.randomChance(3, 10)) source.trySetStatus('par', target);
+		},
+		flags: { breakable: 1 },
+		rating: 3.5,
+		num: -8,
+		gen: 9,
+		flavor: "Step on a Stunfisk and you'll find out why it's smiling.",
+		shortDesc: "Contact attackers lose 1/8 HP, 30% paralysis. Electric moves heal it 1/4.",
+		desc: "Pokemon making contact with this Pokemon lose 1/8 of their maximum HP, rounded down, and have a 30% chance to be paralyzed. This Pokemon is immune to Electric-type moves and restores 1/4 of its maximum HP, rounded down, when hit by one.",
+	},
+	/*
+	 * Polar Mantle - Articuno's.
+	 *
+	 * Ice/Flying's whole problem is Rock: a quarter of its HP to Stealth Rock on
+	 * every entry, and double damage from every Rock move. The mantle halves both,
+	 * and it brings the snow with it (Snow Warning), which raises an Ice-type's
+	 * Defense and makes Blizzard and Aurora Squall sure hits.
+	 */
+	polarmantle: {
+		name: "Polar Mantle",
+		onStart(source) {
+			this.field.setWeather('snowscape');
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.type === 'Rock') {
+				this.debug('Polar Mantle halves Rock');
+				return this.chainModify(0.5);
+			}
+		},
+		onDamage(damage, target, source, effect) {
+			if (effect && effect.id === 'stealthrock') return Math.max(1, Math.floor(damage / 2));
+		},
+		flags: { breakable: 1 },
+		rating: 4,
+		num: -9,
+		gen: 9,
+		flavor: "The legendary bird of ice arrives wrapped in the blizzard it was named for.",
+		shortDesc: "Sets snow on entry. Takes half damage from Rock moves and Stealth Rock.",
+		desc: "On switch-in, this Pokemon summons snow. It takes half damage from Rock-type moves and from Stealth Rock.",
+	},
+	/*
+	 * Permafrost Core - Regice's.
+	 *
+	 * Regice's 200 Special Defense was always undone by being weak to Fire,
+	 * Fighting, Rock and Steel. The core is cold enough that Fire and Fighting
+	 * do half, and nothing can burn or freeze it. Two of four weaknesses,
+	 * softened, on a special wall: bulk, not power.
+	 */
+	permafrostcore: {
+		name: "Permafrost Core",
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.type === 'Fire' || move.type === 'Fighting') {
+				this.debug('Permafrost Core halves');
+				return this.chainModify(0.5);
+			}
+		},
+		onSetStatus(status, target, source, effect) {
+			if (status.id !== 'brn' && status.id !== 'frz') return;
+			if (effect && effect.status) this.add('-immune', target, '[from] ability: Permafrost Core');
+			return false;
+		},
+		flags: { breakable: 1 },
+		rating: 3.5,
+		num: -10,
+		gen: 9,
+		flavor: "Ice that has not melted in ten thousand years does not start now.",
+		shortDesc: "Takes half damage from Fire and Fighting moves. Can't be burned or frozen.",
+		desc: "This Pokemon takes half damage from Fire-type and Fighting-type moves, and cannot be burned or frozen.",
+	},
 	colossusunbound: {
 		name: "Colossus Unbound",
 		onStart(pokemon) {
@@ -385,11 +560,40 @@ const ABILITY_GRANTS = {
 	dodrio: 'Reckless',
 	swanna: 'Swift Swim',
 	whiscash: 'Water Absorb',
-	stunfisk: 'Volt Absorb',
+	stunfisk: 'Mudflat Ambush',
+	stunfiskgalar: 'Mudflat Ambush',
 	magcargo: 'Solid Rock',
 	banette: 'Prankster',
 	seviper: 'Intimidate',
 	stonjourner: 'Sturdy',
+};
+
+/*
+ * The ten shared moves, like TMs: every Pokemon across the dex that each one
+ * suits, not only the underdogs. Final stages are listed; pre-evolutions follow.
+ * Mew gets all ten; Smeargle can Sketch them.
+ */
+const TM_DISTRIBUTION = {
+	// Stinging, swarming and pincered bugs. Not Scolipede: Speed Boost plus a 50% Attack raise is a sweeper it doesn't need to be.
+	hivefrenzy: ['beedrill', 'ariados', 'ledian', 'volbeat', 'vespiquen', 'parasect', 'scyther', 'scizor', 'kleavor', 'pinsir', 'heracross', 'drapion', 'gligar', 'gliscor', 'escavalier', 'durant', 'leavanny', 'lokix', 'spidops', 'kricketune', 'mothim', 'ribombee', 'golisopod', 'yanmega', 'ninjask', 'crustle'],
+	// Cocoons, moths and silk-spinners. Not Volcarona: reliable recovery beside Quiver Dance pushes an OU sweeper too far.
+	chrysalisveil: ['butterfree', 'beautifly', 'dustox', 'venomoth', 'masquerain', 'mothim', 'vivillon', 'frosmoth', 'ribombee', 'leavanny', 'illumise', 'volbeat', 'wormadam', 'wormadamsandy', 'wormadamtrash', 'shuckle', 'rabsca', 'forretress'],
+	// Scrappy, stubborn Normal-types. Not Diggersby (Huge Power), Maushold (Technician multi-hits), Ursaluna or Kangaskhan.
+	hustleup: ['furret', 'raticate', 'raticatealola', 'linoone', 'linoonegalar', 'watchog', 'fearow', 'dodrio', 'swellow', 'persian', 'purugly', 'zangoose', 'delcatty', 'bibarel', 'gumshoos', 'squawkabilly', 'granbull', 'delibird', 'farfetchd', 'sirfetchd', 'stoutland', 'lopunny', 'cinccino', 'tauros', 'miltank', 'obstagoon', 'greedent', 'oinkologne', 'bouffalant', 'unfezant', 'ambipom', 'ursaring', 'smeargle', 'spinda'],
+	// Scavengers and predators. Not Kingambit, Weavile or Crawdaunt: a draining Dark move is too much of a gift to all three.
+	carrionfeast: ['mightyena', 'liepard', 'thievul', 'persianalola', 'raticatealola', 'cacturne', 'sharpedo', 'mawile', 'banette', 'seviper', 'arbok', 'sableye', 'absol', 'mandibuzz', 'honchkrow', 'krookodile', 'houndoom', 'bisharp', 'zoroark', 'skuntank', 'drapion', 'scrafty', 'grimmsnarl', 'mabosstiff', 'shiftry', 'spiritomb', 'malamar', 'houndstone'],
+	// Small, quick electric critters.
+	sparkscamper: ['pikachu', 'raichu', 'raichualola', 'pachirisu', 'plusle', 'minun', 'emolga', 'dedenne', 'togedemaru', 'manectric', 'stunfisk', 'pincurchin', 'jolteon', 'morpeko', 'pawmot', 'luxray', 'zebstrika', 'electrode', 'electrodehisui'],
+	// Currents, reefs and the deep. Not Starmie or Palafin: strong special Water with a 50% Speed drop is too much on either.
+	undertow: ['lumineon', 'seaking', 'whiscash', 'corsola', 'lanturn', 'dewgong', 'swanna', 'wugtrio', 'basculin', 'luvdisc', 'wishiwashi', 'pyukumuku', 'tentacruel', 'octillery', 'mantine', 'huntail', 'gorebyss', 'relicanth', 'wailord', 'milotic', 'kingdra', 'dhelmise', 'dragalge', 'clawitzer', 'jellicent', 'alomomola', 'lapras', 'cursola', 'barraskewda', 'golduck', 'politoed', 'quagsire', 'qwilfish', 'overqwil', 'toxapex', 'dondozo'],
+	// Sun, flowers, nectar and pollen. Venusaur is the borderline one (135 in sun on Chlorophyll), kept because the move is its theme and the sun must be set first.
+	solarnectar: ['sunflora', 'cherrim', 'maractus', 'jumpluff', 'tropius', 'carnivine', 'shiinotic', 'eldegoss', 'sawsbuck', 'parasect', 'wormadam', 'cacturne', 'venusaur', 'bellossom', 'vileplume', 'roserade', 'florges', 'comfey', 'lilligant', 'whimsicott', 'meganium', 'ribombee', 'victreebel', 'exeggutor', 'exeggutoralola', 'lurantis', 'arboliva', 'scovillain', 'ludicolo', 'breloom', 'appletun', 'sceptile'],
+	// Heavy stone bodies, boulders and hammers. Not Tyranitar, Garganacl or Landorus: reliable Rock STAB or coverage on those tips OU; they keep Stone Edge.
+	craghammer: ['sudowoodo', 'magcargo', 'solrock', 'klawf', 'stonjourner', 'sandslash', 'marowak', 'dugtrio', 'golem', 'golemalola', 'rhyperior', 'aggron', 'rampardos', 'bastiodon', 'probopass', 'gigalith', 'coalossal', 'lycanroc', 'lycanrocmidnight', 'lycanrocdusk', 'tyrantrum', 'barbaracle', 'crustle', 'archeops', 'aerodactyl', 'kabutops', 'armaldo', 'cradily', 'avalugg', 'avalugghisui', 'relicanth', 'steelix', 'tinkaton', 'conkeldurr', 'carbink'],
+	// Hypnotists and spinning psychic lights. Not Espathra, Hatterene or Starmie.
+	hypnowhirl: ['chimecho', 'grumpig', 'meowstic', 'meowsticf', 'swoobat', 'lunatone', 'mrmime', 'mrrime', 'jynx', 'indeedee', 'indeedeef', 'rabsca', 'unown', 'hypno', 'xatu', 'girafarig', 'farigiraf', 'bronzong', 'claydol', 'gothitelle', 'reuniclus', 'beheeyem', 'malamar', 'musharna', 'gardevoir', 'sigilyph', 'delphox', 'orbeetle', 'oranguru', 'bruxish', 'alakazam'],
+	// Boxers and fighters light on their feet. Not Annihilape (Uber) or Quaquaval, which already has a Speed-raising signature.
+	shufflejab: ['hitmonlee', 'hitmonchan', 'hitmontop', 'throh', 'sawk', 'hariyama', 'falinks', 'granbull', 'spinda', 'machamp', 'conkeldurr', 'pangoro', 'primeape', 'poliwrath', 'toxicroak', 'lucario', 'infernape', 'medicham', 'mienshao', 'crabominable', 'passimian', 'hawlucha', 'grapploct', 'lopunny', 'scrafty', 'pawmot', 'kommoo'],
 };
 
 /**
@@ -410,8 +614,14 @@ exports.buildBuffs = (Pokedex) => {
 	for (const [id, moves] of Object.entries(SMALL)) add(id, moves, []);
 	for (const [id, ability] of Object.entries(ABILITY_GRANTS)) add(id, [], [ability]);
 
+	// The ten shared moves, handed out like TMs to everything they suit.
+	for (const [move, ids] of Object.entries(TM_DISTRIBUTION)) {
+		for (const id of ids) if (Pokedex[id]) add(id, [move], []);
+	}
+
 	// Pre-evolutions: the new move (not the coverage) and the ability.
-	const newMove = m => exports.MOVES[m] && m !== 'continentalheave';
+	const SIGNATURES = ['continentalheave', 'aurorasquall', 'memorywipe', 'soulresonance', 'resolutestrike'];
+	const newMove = m => exports.MOVES[m] && !SIGNATURES.includes(m);
 	for (const id of Object.keys(out)) {
 		let species = Pokedex[id];
 		const seen = new Set([id]);
@@ -428,9 +638,18 @@ exports.buildBuffs = (Pokedex) => {
 	add('mew', Object.keys(exports.MOVES).filter(newMove), []);
 
 	out.regigigas = { moves: ['continentalheave'], abilities: ['Colossus Unbound'], sole: true };
+	// A Second Legend: Articuno keeps Pressure and Snow Cloak and gains its own.
+	out.articuno = { moves: ['aurorasquall', 'freezedry', 'hurricane', 'calmmind', 'roost', 'uturn'], abilities: ['Polar Mantle'] };
+	// The Legends Rise: each keeps what it had and gains its own. Existing abilities
+	// for the lake trio (Unaware, Opportunist, Tinted Lens) fit each one's idea.
+	out.regice = { moves: ['freezedry', 'recover', 'aurorabeam', 'chillingwater', 'auroraveil'], abilities: ['Permafrost Core'] };
+	out.uxie = { moves: ['memorywipe', 'slackoff', 'teleport', 'healbell'], abilities: ['Unaware'] };
+	out.mesprit = { moves: ['soulresonance', 'moonblast', 'calmmind', 'wish'], abilities: ['Opportunist'] };
+	out.azelf = { moves: ['resolutestrike', 'closecombat', 'swordsdance', 'knockoff'], abilities: ['Tinted Lens'] };
 	return out;
 };
 
 exports.GROUPS = GROUPS;
+exports.TM_DISTRIBUTION = TM_DISTRIBUTION;
 exports.SMALL = SMALL;
 exports.ABILITY_GRANTS = ABILITY_GRANTS;
