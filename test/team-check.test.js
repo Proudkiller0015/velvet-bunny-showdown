@@ -33,6 +33,19 @@ check(!r.ok && /Eevee\*\* has fainted/.test(r.problems[0]) && /Ditto\*\* is at t
 r = rp.checkTeam({ box: [{ species: 'Eevee', level: 15 }] }, team(['Eevee-Starter', 15]));
 check(!r.ok, 'Eevee-Starter does not count as a box Eevee');
 
+// Another form of a Pokémon in the box is the same Pokémon; a regional variant is not.
+check(rp.checkTeam({ box: [{ species: 'Landorus', level: 50 }], badges: 0 }, team(['Landorus-Therian', 50])).ok, 'Landorus-Therian for a box Landorus');
+check(rp.checkTeam({ box: [{ species: 'Rotom-Wash', level: 30 }], badges: 0 }, team(['Rotom-Heat', 30])).ok, 'Rotom-Heat for a box Rotom-Wash');
+check(rp.checkTeam({ box: [{ species: 'Pikachu', level: 30 }], badges: 0 }, team(['Pikachu-Alola', 30])).ok, "Pikachu's Alola cap is a costume");
+r = rp.checkTeam({ box: [{ species: 'Vulpix', level: 20 }], badges: 3 }, team(['Vulpix-Alola', 20]));
+check(!r.ok, 'an Alolan Vulpix is not a box Vulpix');
+r = rp.checkTeam({ box: [{ species: 'Landorus', level: 50 }], badges: 0 }, team(['Landorus-Therian', 51]));
+check(!r.ok && /Lv\. 51/.test(r.problems[0]), 'a form still has to fit the box level');
+// A form that needs its held item waits for the first badge.
+r = rp.checkTeam({ box: [{ species: 'Giratina', level: 60 }], badges: 0 }, team(['Giratina-Origin', 60]));
+check(!r.ok && /held items unlock at the first badge/.test(r.problems[0]), `Giratina-Origin before a badge is refused (${r.problems[0]})`);
+check(rp.checkTeam({ box: [{ species: 'Giratina', level: 60 }], badges: 1 }, team(['Giratina-Origin', 60])).ok, 'and fine with one badge');
+
 // RP Custom Game takes anything; RP Battle still takes Samantha.
 {
 	const { Dex, TeamValidator } = require('pokemon-showdown');

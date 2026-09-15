@@ -152,6 +152,7 @@ function requestEncounter(payload, deps) {
 		if (payload.box) existing.box = normaliseBox(payload.box);
 		if (payload.balls && typeof payload.balls === 'object') existing.balls = normaliseBalls(payload.balls);
 		if (payload.items && typeof payload.items === 'object') existing.items = normaliseItems(payload.items);
+		if (payload.badges !== undefined) existing.badges = E.clampBadges(payload.badges);
 		if (existing.status === 'waiting') deps.spawn(existing);
 		return { ok: true, again: true, encounter: publicView(existing) };
 	}
@@ -186,6 +187,7 @@ function requestEncounter(payload, deps) {
 		channel: found.channel,
 		balls: payload.balls && typeof payload.balls === 'object' ? normaliseBalls(payload.balls) : null,
 		items: payload.items && typeof payload.items === 'object' ? normaliseItems(payload.items) : null,
+		badges,
 		warning: String(payload.warning || '').slice(0, 300),
 		box: normaliseBox(payload.box),
 		gimmicks: payload.gimmicks && typeof payload.gimmicks === 'object'
@@ -416,14 +418,37 @@ function checkTeam(enc, sets) {
 		if (s.baseSpecies !== s.name && (Dex.species.get(s.baseSpecies).cosmeticFormes || []).includes(s.name)) ids.push(toID(s.baseSpecies));
 		return ids;
 	};
-	const all = enc.box.map(m => ({ id: toID(Dex.species.get(m.species).exists ? Dex.species.get(m.species).id : m.species), level: m.level, away: m.away }));
+	/*
+	 * Another form of a Pokémon you own is the same Pokémon (Landorus-Therian for
+	 * a Landorus in the box): forms are free in the RP. A regional variant is not
+	 * (an Alolan Vulpix is its own Pokémon), except Pikachu's caps.
+	 */
+	const REGION = /(^|-)(Alola|Galar|Hisui|Paldea)(-|$)/;
+	const groupOf = name => {
+		const s = Dex.species.get(name);
+		if (!s.exists) return toID(name);
+		const region = s.baseSpecies === 'Pikachu' ? '' : ((s.forme || '').match(REGION) || [])[2] || '';
+		return `${toID(s.baseSpecies)}|${region}`;
+	};
+	const badges = Number(enc.badges) || 0;
+	const all = enc.box.map(m => ({ id: toID(Dex.species.get(m.species).exists ? Dex.species.get(m.species).id : m.species), group: groupOf(m.species), level: m.level, away: m.away }));
 	const left = all.filter(m => !m.away);
 	const problems = [];
 	for (const set of sets) {
 		const name = set.species || set.name;
 		const level = Number(set.level) || 100;
 		const ids = idsFor(name);
-		const owned = left.filter(m => ids.includes(m.id));
+		const species = Dex.species.get(name);
+		let owned = left.filter(m => ids.includes(m.id));
+		// The Let's Go partners stay illegal: an Eevee-Starter is not a box Eevee.
+		if (!owned.length && species.isNonstandard !== 'LGPE') owned = left.filter(m => m.group === groupOf(name));
+		// A different form that needs its held item (Giratina-Origin, Ogerpon's masks) waits for the first badge.
+		const needsItem = species.exists && !species.battleOnly && (species.requiredItem || (species.requiredItems && species.requiredItems.length));
+		if (owned.length && needsItem && badges < 1 && !owned.some(m => m.id === species.id)) {
+			problems.push(`**${name}** needs its held item (${species.requiredItem || species.requiredItems.join(' or ')}), and held items unlock at the first badge: bring **${Dex.species.get(species.changesFrom || species.baseSpecies).name}** instead`);
+			left.splice(left.indexOf(owned[0]), 1);
+			continue;
+		}
 		if (!owned.length) {
 			const away = all.find(m => m.away && ids.includes(m.id));
 			problems.push(away && away.away === 'fainted' ? `**${name}** has fainted: heal it at a Pokémon Centre first (\`!heal\`)`
