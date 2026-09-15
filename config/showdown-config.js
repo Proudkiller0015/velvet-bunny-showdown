@@ -1089,6 +1089,75 @@ function makeRoom(title, settings) {
  * close rooms; this one is in the room list, which is where someone looking for
  * help looks.
  */
+/**
+ * What `/help` says first on this server.
+ *
+ * Showdown's own `/help` lists its generic commands, which says nothing about
+ * what is actually here: the bots and their difficulty picker, the RP rooms and
+ * battles, replays. This box comes first; Showdown's list still follows, and
+ * `/help [command]` is untouched. Staff see the staff commands too.
+ */
+function serverHelpBox(user) {
+	const cmd = c => `<code>${c}</code>`;
+	const btn = (room, label) => `<button class="button" name="joinRoom" value="${room}">${label}</button>`;
+	const staff = user && user.can && user.can('bypassall');
+	const section = (title, items) => `<p style="margin:6px 0 2px"><b>${title}</b></p><ul style="margin:0;padding-left:18px">` +
+		items.map(i => `<li>${i}</li>`).join('') + `</ul>`;
+	return `<div style="padding:2px">` +
+		`<h3 style="margin:0 0 4px">Velvet Bunny Showdown: help</h3>` +
+		`<p style="margin:0 0 4px">A custom Pok&eacute;mon Showdown server: the RP tiers, house bots you can ladder against, ` +
+		`and the <b>Kagura RP</b> battles. Questions? ${btn('help', 'Help room')}</p>` +
+
+		section('Getting started', [
+			`Click <b>Choose name</b> (top right). You can play as a guest or with a Showdown account.`,
+			`<b>Teambuilder</b> to make a team, then pick a format and <b>Battle!</b> Random Battle formats need no team.`,
+			`${cmd('/avatar [name]')} to change your avatar &middot; ${cmd('/avatarlist')} to see this server's custom ones.`,
+		]) +
+
+		section('Battling the bots', [
+			`Ladder formats match you against a house bot when nobody else is queuing.`,
+			`${cmd('/bot')} picks which bot: ${cmd('/bot easy')}, ${cmd('normal')}, ${cmd('hard')}, ${cmd('champion')} or ${cmd('stockfish')}. ` +
+			`${cmd('/bot pvp')} for players only, ${cmd('/bot anyone')} to match on rating again.`,
+			`You can also challenge a bot directly, in any format.`,
+		]) +
+
+		section('Kagura RP battles', [
+			`${btn('roleplay', 'Roleplay room')} ${cmd('/roleplay')}: the full guide (team, encounters, catching).`,
+			`Use <b>[Gen 9] RP Battle</b> for your RP team. Wild Pok&eacute;mon and trainers come from ${cmd('!encounter')} on the Discord.`,
+			`In a wild battle, the <b>Throw</b> buttons or ${cmd('/throwball [ball]')} catch; ${cmd('/useitem [item], [pokemon]')} uses a Potion or Revive.`,
+			`Your team is checked against your character's box, and Mega / Z / Dynamax / Tera need the story item.`,
+		]) +
+
+		section('Replays and more', [
+			`Save a battle with the <b>Upload replay</b> button after it ends; replays stay on this server.`,
+			`${cmd('/help [command]')} explains any command, e.g. ${cmd('/help bot')}.`,
+		]) +
+
+		(staff ? section('Staff', [
+			`${cmd('/setrank [user], [rank]')}: a global rank that survives restarts.`,
+			`${cmd('/players [name]')}: everyone who has visited (the guest book).`,
+			`The <b>Logs</b> room records every battle.`,
+		]) : '') +
+		`</div>`;
+}
+
+/** Put the server's box in front of Showdown's own `/help`. */
+function serverHelp() {
+	const original = Chat.commands && Chat.commands.help;
+	if (typeof original !== 'function' || original.velvet) return false;
+	const help = function (target, room, user, connection, cmd, message) {
+		if (!String(target || '').trim()) {
+			if (!this.runBroadcast()) return;
+			this.sendReplyBox(serverHelpBox(user));
+		}
+		return original.call(this, target, room, user, connection, cmd, message);
+	};
+	help.velvet = true;
+	Chat.commands.help = help;
+	if (Chat.commands.h === original) Chat.commands.h = help;
+	return true;
+}
+
 function helpRoom() {
 	const room = makeRoom('Help', {
 		isPrivate: false,
@@ -1097,11 +1166,13 @@ function helpRoom() {
 		autojoin: false,
 		introMessage: '<h2>Help</h2>' +
 			'<p>Ask here. Anything about this server, the custom Pok&eacute;mon and moves, ' +
-			'the RP tiers, or Pok&eacute;mon Showdown itself.</p>' +
+			'the RP tiers, the Kagura RP battles, or Pok&eacute;mon Showdown itself.</p>' +
 			'<p>This server is a custom Pok&eacute;mon Showdown server: your account is a real ' +
 			'Showdown account, and you can also play without one. What is different here ' +
-			'is the RP tiers, a house bot with a ladder of its own, a few buffed ' +
-			'Pok&eacute;mon, and one that exists nowhere else.</p>',
+			'is the RP tiers, house bots with a ladder of their own (<code>/bot</code> picks one), a few buffed ' +
+			'Pok&eacute;mon, one that exists nowhere else, and the <b>Roleplay</b> room where Kagura RP battles happen ' +
+			'(<code>/roleplay</code>).</p>' +
+			'<p>Type <code>/help</code> for everything this server adds, or <code>/help [command]</code> for one command.</p>',
 	});
 	if (room) console.log('[config] the help room is open');
 }
@@ -1605,6 +1676,8 @@ exports.startuphook = function () {
 	rpSectionFirst();
 	battleLog();
 	helpRoom();
+	// Chat's commands may not all be loaded yet at startup; try again shortly if not.
+	if (!serverHelp()) setTimeout(serverHelp, 3000).unref();
 	roleplay();
 	goodbye();
 
