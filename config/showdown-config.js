@@ -444,18 +444,33 @@ const PVP = 'pvp';
 
 const aOrAnName = name => (/^[AEIOU]/i.test(name) ? `an ${name}` : `a ${name}`);
 
-/** The in-battle medicine panel: what's in the bag, and who to use it on. */
-function itemPanel(bag) {
+/**
+ * The in-battle medicine panel: one button per item per Pokémon it can help,
+ * rebuilt from each turn's request. It used to be a form with a typed Pokémon
+ * name, which the client replaces with "Submitted!" after one use and which
+ * failed silently on any typo, so players never got a Potion to work.
+ */
+function itemPanel(bag, team) {
 	const E = require('../../../src/encounters');
-	const options = bag.map(([id, n]) => {
+	const esc = s => String(s).replace(/[&<>"']/g, ch => `&#${ch.charCodeAt(0)};`);
+	const mons = (team || []).map(p => {
+		const [hp, max] = String(p.condition || '').split(' ')[0].split('/').map(Number);
+		return {
+			name: String(p.ident || '').replace(/^p\d+[a-z]?:\s*/, ''),
+			fainted: / fnt$/.test(String(p.condition)) || hp === 0,
+			hurt: hp < max,
+			status: /\s(brn|par|slp|frz|psn|tox)$/.test(String(p.condition)),
+		};
+	});
+	const rows = bag.map(([id, n]) => {
 		const item = E.findBattleItem(id);
-		return item ? `<option value="${id}">${item.name} (${n})</option>` : '';
+		if (!item) return '';
+		const helps = mons.filter(m => (item.revive ? m.fainted : !m.fainted && (item.pp || m.hurt || (item.cure && m.status))));
+		const buttons = helps.map(m => `<button class="button" name="send" value="/useitem ${item.id}, ${esc(m.name)}">${esc(m.name)}</button>`).join(' ');
+		return `<div>${item.name} <small>(${n})</small>: ${buttons || `<small style="opacity:.7">${item.revive ? 'nobody has fainted' : 'nobody needs it'}</small>`}</div>`;
 	}).join('');
-	return `<div class="infobox" style="margin:4px 0"><b>Use an item:</b> ` +
-		`<form data-submitsend="/useitem {item}, {target}" style="display:inline">` +
-		`<select name="item">${options}</select> on <input name="target" placeholder="Pokémon name" size="12" /> ` +
-		`<button class="button" type="submit">Use</button></form><br/>` +
-		`<small>Uses your whole turn. Revives only work on a Pokémon that fainted this battle.</small></div>`;
+	if (!rows) return '';
+	return `<div class="infobox" style="margin:4px 0"><b>Use an item</b> <small>(click the Pokémon; uses your whole turn, so don't pick a move after)</small>${rows}</div>`;
 }
 
 exports.commands = {
@@ -1560,10 +1575,12 @@ function roleplay() {
 	 * exists, and it arrives; so the panel waits for that request and goes out
 	 * right behind it.
 	 */
-	const sendPanel = (player, data) => {
+	// The item panel is re-sent with every new turn's request, so its buttons
+	// follow who is hurt or fainted and the counts follow what was used.
+	const sendPanel = (player, bag) => {
 		const game = player && player.game;
 		if (!game) return;
-		(game.rpPanels || (game.rpPanels = {}))[player.slot] = data;
+		(game.rpPanels || (game.rpPanels = {}))[player.slot] = bag;
 	};
 	const receive = battle.receive;
 	battle.receive = function (lines) {
@@ -1571,9 +1588,16 @@ function roleplay() {
 		try {
 			if (lines[0] === 'sideupdate' && this.rpPanels && this.rpPanels[lines[1]] && String(lines[2]).startsWith('|request|')) {
 				const player = this[lines[1]];
-				const data = this.rpPanels[lines[1]];
-				delete this.rpPanels[lines[1]];
-				if (player) player.sendRoom(data);
+				const request = JSON.parse(String(lines[2]).slice(9) || 'null');
+				if (player && request && !request.wait && !request.update && !request.teamPreview && !request.forceSwitch && request.side) {
+					const bag = this.rpPanels[lines[1]].map(([id, n]) => {
+						if (typeof n !== 'number') return [id, n];
+						const item = require('../../../src/encounters').findBattleItem(id);
+						return [id, Math.max(0, n - (item ? rp.usedInLog(this.room.log.log, player.name, item.name) : 0))];
+					}).filter(([, n]) => n !== 0);
+					const html = (bag.length && itemPanel(bag, request.side.pokemon)) || '<div class="infobox" style="margin:4px 0"><small>No items left in your bag.</small></div>';
+					player.sendRoom(`|uhtml|rpitems|${html}`);
+				}
 			}
 		} catch (e) { console.log(`[roleplay] panel: ${e.message}`); }
 		return out;
@@ -1612,19 +1636,19 @@ function roleplay() {
 				// The medicine panel, for the player only.
 				const player = this.playerTable[enc.userid];
 				const bag = enc.items ? Object.entries(enc.items).filter(([, n]) => n > 0) : [];
-				if (player && bag.length) sendPanel(player, `|uhtml|rpitems|${itemPanel(bag)}`);
+				if (player && bag.length) sendPanel(player, bag);
 			} else if (RP_PVP_FORMATS.has(this.format)) {
 				// Players battling each other: each sees a panel of their own character's items.
 				for (const player of this.players) {
 					const items = rp.pvpItemsFor(player.id);
 					const bag = items ? Object.entries(items).filter(([, n]) => n > 0) : [];
-					if (bag.length) sendPanel(player, `|uhtml|rpitems|${itemPanel(bag)}`);
+					if (bag.length) sendPanel(player, bag);
 				}
 			} else if (this.format === 'gen9rpcustomgame') {
 				// RP Custom Game: every item, unlimited, for everyone.
 				const E = require('../../../src/encounters');
 				const every = E.BATTLE_ITEMS.map(item => [item.id, '∞']);
-				for (const player of this.players) sendPanel(player, `|uhtml|rpitems|${itemPanel(every)}`);
+				for (const player of this.players) sendPanel(player, every);
 			}
 		} catch (e) { console.log(`[roleplay] ${e.message}`); }
 		return out;

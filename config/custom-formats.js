@@ -353,13 +353,13 @@ function ballPanel(E, note) {
 	const main = ['poke', 'great', 'ultra'].map(id => E.findBall(id));
 	const buttons = main.map(b =>
 		`<button class="button" name="send" value="/throwball ${b.id}">Throw ${aOrAn(b.name)}</button>`).join(' ');
+	// Buttons, not a form: the client turns a submitted form into "Submitted!", so a second throw had nothing to press.
 	const others = E.BALLS.filter(b => !['poke', 'great', 'ultra'].includes(b.id)).map(b =>
-		`<option value="${b.id}">${b.name}${b.note ? ` (${b.note})` : ''}</option>`).join('');
+		`<button class="button" name="send" value="/throwball ${b.id}"${b.note ? ` title="${b.note.replace(/"/g, '&quot;')}"` : ''}>${b.name}</button>`).join(' ');
 	return `<div class="infobox" style="margin:4px 0">` +
 		(note ? `<div style="margin-bottom:4px">${note}</div>` : '') +
 		`<b>Catch it:</b> ${buttons}` +
-		`<form data-submitsend="/throwball {ball}" style="margin-top:4px">` +
-		`<select name="ball">${others}</select> <button class="button" type="submit">Throw</button></form>` +
+		`<details style="margin-top:4px"><summary>Other balls</summary>${others}</details>` +
 		`<small>Throwing a ball uses your turn. Weaken it and give it a status first to make it easier. ` +
 		`Only use balls your character actually has.</small></div>`;
 }
@@ -768,7 +768,7 @@ exports.Formats = [
 		},
 		// The Throw buttons, as in a wild encounter (which posts them from its own onBattleStart).
 		onBattleStart() {
-			this.add('uhtml', 'rpball0', ballPanel(encounters(), 'You have 1 Poké Ball.'));
+			this.add('uhtml', 'rpball0', ballPanel(encounters(), 'You have 1 Poké Ball and 1 Potion. The Potion buttons appear in the item panel once Pikachu is hurt.'));
 		},
 		onFaint(pokemon) {
 			if (pokemon.side.pokemonLeft > 1) return;

@@ -41,6 +41,9 @@ const wait = ms => new Promise(r => setTimeout(r, ms));
 			}
 			seen.battle = room;
 			seen.log.push(line);
+			const button = /\|uhtml\|rpitems\|.*value="(\/useitem potion, Pikachu)"/.exec(line);
+			if (button) seen.potionButton = button[1];
+			if (button && seen.awaitPanel && !potion) { potion = true; ws.send(`${seen.awaitPanel}|${button[1]}`); seen.awaitPanel = null; }
 			if (line.startsWith('|error|')) seen.errors.push(line);
 			// Another ball once that one is thrown: there was only one.
 			if (/threw a Poké Ball!/.test(line) && !seen.second) { seen.second = true; ws.send(`${room}|/throwball poke`); }
@@ -55,13 +58,15 @@ const wait = ms => new Promise(r => setTimeout(r, ms));
 			if (request.forceSwitch || request.teamPreview) { ws.send(`${room}|/choose default`); continue; }
 			turn++;
 			const [hp, max] = String(request.side.pokemon[0].condition).split(' ')[0].split('/').map(Number);
-			if (!threw) {
+			// Growl until Rattata hurts Pikachu, then wait for the item panel sent right
+			// behind this request and press its Potion button; throw after that.
+			if (!potion && hp < max) { seen.awaitPanel = room; continue; }
+			if (!threw && (potion || turn > 10)) {
 				threw = true;
 				ws.send(`${room}|/throwball poke`);
 				continue;
 			}
-			if (!potion && hp < max) { potion = true; ws.send(`${room}|/useitem potion, Pikachu`); continue; }
-			ws.send(`${room}|/choose move ${potion || turn > 8 ? 1 : 3}`);
+			ws.send(`${room}|/choose move ${threw || turn > 12 ? 1 : 3}`);
 		}
 	});
 	await new Promise(r => ws.on('open', r));
@@ -77,10 +82,11 @@ const wait = ms => new Promise(r => setTimeout(r, ms));
 	const log = seen.log.join('\n');
 	check(/\|switch\|p\d+a: Pikachu\|Pikachu, L5/.test(log) && /Rattata, L5/.test(log), 'Lv. 5 Pikachu against Lv. 5 Rattata');
 	check(/\|uhtml\|rpball0\|.*\/throwball poke/.test(log), 'the Throw buttons are in the battle');
-	check(/\|uhtml\|rpitems\|.*\/useitem/.test(log), 'the item panel is in the battle');
+	check(/\|uhtml\|rpitems\|/.test(log), 'the item panel is in the battle');
+	check(!!seen.potionButton, 'the item panel offers a Potion button once Pikachu is hurt');
 	check(/threw a Poké Ball!/.test(log), '/throwball throws the Poké Ball');
 	check(seen.errors.some(e => /last Poké Ball/.test(e)) || /Gotcha!/.test(log), `a second ball is refused, or the first one caught it (${seen.errors.join(' ; ')})`);
-	check(!potion || /used a Potion on Pikachu!/.test(log), '/useitem uses the Potion');
+	check(potion && /used a Potion on Pikachu!/.test(log), 'pressing the Potion button uses the Potion');
 	check(seen.ended, 'the battle ends');
 
 	ws.close();
