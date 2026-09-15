@@ -552,5 +552,21 @@ for (const [species, ability, effect] of [
 }
 check(learns('luxray', 'gleamstalk') && !learns('luxio', 'gleamstalk') && !learns('mew', 'gleamstalk') && Dex.moves.get('gleamstalk').flags.nosketch, "Gleamstalk is Luxray's alone");
 
+// The client's signature-move table is generated (scripts/build-signature-moves.js) and has to be rebuilt
+// when a signature is added: Gleamstalk once shipped without it and showed as an ordinary Awakened move.
+{
+	const src = require('fs').readFileSync(require('path').join(__dirname, '..', 'client', 'js', 'velvet-signatures.js'), 'utf8');
+	const table = new Function('window', `${src}; return window.VelvetSignatureMoves;`)({});
+	const missing = [];
+	for (const move of Dex.moves.all().filter(m => m.exists && m.num < 0 && m.isNonstandard !== 'CAP' && !m.velvetShared)) {
+		for (const s of Dex.species.all()) {
+			if (!s.exists || s.isNonstandard === 'Custom') continue;
+			const l = Dex.species.getLearnsetData(s.id).learnset;
+			if (l && l[move.id] && !table.get(s.id).includes(move.id)) missing.push(`${s.name}: ${move.name}`);
+		}
+	}
+	check(!missing.length, `every signature move is in the client signature table (${missing.join(', ') || 'all there'})`);
+}
+
 console.log(failed ? `\n${failed} failed` : '\nall passed');
 process.exit(failed ? 1 : 0);

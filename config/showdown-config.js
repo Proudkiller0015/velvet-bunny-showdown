@@ -1551,6 +1551,34 @@ function roleplay() {
 		return addPlayer.call(this, user, playerOpts, ...rest);
 	};
 
+	/*
+	 * A panel for one player, delivered with their battle request.
+	 *
+	 * The battle starts before its players have joined the room, and a message to
+	 * a room only reaches connections already in it - so the item panel sent at the
+	 * start went nowhere. A player's request is sent the same way, the moment it
+	 * exists, and it arrives; so the panel waits for that request and goes out
+	 * right behind it.
+	 */
+	const sendPanel = (player, data) => {
+		const game = player && player.game;
+		if (!game) return;
+		(game.rpPanels || (game.rpPanels = {}))[player.slot] = data;
+	};
+	const receive = battle.receive;
+	battle.receive = function (lines) {
+		const out = receive.call(this, lines);
+		try {
+			if (lines[0] === 'sideupdate' && this.rpPanels && this.rpPanels[lines[1]] && String(lines[2]).startsWith('|request|')) {
+				const player = this[lines[1]];
+				const data = this.rpPanels[lines[1]];
+				delete this.rpPanels[lines[1]];
+				if (player) player.sendRoom(data);
+			}
+		} catch (e) { console.log(`[roleplay] panel: ${e.message}`); }
+		return out;
+	};
+
 	const start = battle.start;
 	battle.start = function (...args) {
 		const out = start.apply(this, args);
@@ -1584,19 +1612,19 @@ function roleplay() {
 				// The medicine panel, for the player only.
 				const player = this.playerTable[enc.userid];
 				const bag = enc.items ? Object.entries(enc.items).filter(([, n]) => n > 0) : [];
-				if (player && bag.length) player.sendRoom(`|uhtml|rpitems|${itemPanel(bag)}`);
+				if (player && bag.length) sendPanel(player, `|uhtml|rpitems|${itemPanel(bag)}`);
 			} else if (RP_PVP_FORMATS.has(this.format)) {
 				// Players battling each other: each sees a panel of their own character's items.
 				for (const player of this.players) {
 					const items = rp.pvpItemsFor(player.id);
 					const bag = items ? Object.entries(items).filter(([, n]) => n > 0) : [];
-					if (bag.length) player.sendRoom(`|uhtml|rpitems|${itemPanel(bag)}`);
+					if (bag.length) sendPanel(player, `|uhtml|rpitems|${itemPanel(bag)}`);
 				}
 			} else if (this.format === 'gen9rpcustomgame') {
 				// RP Custom Game: every item, unlimited, for everyone.
 				const E = require('../../../src/encounters');
 				const every = E.BATTLE_ITEMS.map(item => [item.id, '∞']);
-				for (const player of this.players) player.sendRoom(`|uhtml|rpitems|${itemPanel(every)}`);
+				for (const player of this.players) sendPanel(player, `|uhtml|rpitems|${itemPanel(every)}`);
 			}
 		} catch (e) { console.log(`[roleplay] ${e.message}`); }
 		return out;

@@ -766,6 +766,10 @@ exports.Formats = [
 			this.add('-message', 'Step 1: pick Thunder Shock to attack.');
 			this.add('-message', 'Hurt? Use your 1 Potion from the item panel in the chat (it uses your turn).');
 		},
+		// The Throw buttons, as in a wild encounter (which posts them from its own onBattleStart).
+		onBattleStart() {
+			this.add('uhtml', 'rpball0', ballPanel(encounters(), 'You have 1 Poké Ball.'));
+		},
 		onFaint(pokemon) {
 			if (pokemon.side.pokemonLeft > 1) return;
 			this.add('-message', "Normally you'd earn money, EXP and team EXP (!share) now, and a fainted Pokémon stays fainted until !heal at a Pokémon Centre.");
