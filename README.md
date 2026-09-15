@@ -250,6 +250,13 @@ introduction is the whole beginner tutorial. The lobby is untouched.
   `[Gen 9] RP Custom Game` is the anything-goes one (hackmons, illegal
   Pokémon): challenge only, never an encounter, and the Discord bot gives its
   PvP replays no EXP.
+- **Healing items** work in every RP battle: encounters use the encounter's bag,
+  RP Battle / RP Doubles between players use the bag table the Discord bot pushes
+  to `POST /rp/bags` (NPC characters get 5 of each), and RP Custom Game is
+  unlimited. The replay feed carries each side's `itemsUsed` so Discord takes them off.
+- **The tutorial**: `/tutorial` (anyone, even guests) or `!tutorial` on Discord starts
+  `[Gen 9] RP Tutorial`, which hands out both teams (Lv. 5 Pikachu vs a wild Rattata)
+  with 1 Potion and 1 Poke Ball. Nothing is recorded and no replay reaches the feed.
 - **Teambuilder search**: typing `awakened` lists the Pokémon with one of our
   signature abilities or moves, `signature` every Pokémon with a signature move
   (`installAwakenedSearch` in `client/js/velvet-data.js`, lists from
