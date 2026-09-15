@@ -887,10 +887,15 @@ class BattleAI {
 		const foes = state.foes();
 		if (!foes.length) return 0;
 		const me = this.switchInAs(gen, entry, state, foes);
+		// Imposter copies the moves too: a Ditto's own moveset is just Transform, and
+		// judging it by that scored it as doing nothing, so it never came in to copy
+		// a boosted sweeper - which is the one thing it is for.
+		const imposter = String(entry.ability || entry.baseAbility || '').toLowerCase() === 'imposter';
 		let best = 0, worst = 0;
 		for (const foe of foes) {
 			const them = this.foePokemon(gen, foe);
-			const mine = (entry.moves || []).map(m => this.damageToFoe(gen, me, foe, toName(m, 'moves'), field));
+			const copied = imposter && foes[0] ? [...new Set([...foes[0].moves, ...(this.knownAttacks(gen, (this.foePokemon(gen, foes[0]).species || {}).name) || [])])] : null;
+			const mine = (copied || (entry.moves || []).map(m => toName(m, 'moves'))).map(m => this.damageToFoe(gen, me, foe, m, field));
 			best = Math.max(best, ...(mine.length ? mine : [0]));
 			const seen = [...foe.moves];
 			const back = seen.length
@@ -900,6 +905,13 @@ class BattleAI {
 		}
 
 		let score = best - worst;
+
+		// A boosted foe is exactly what Ditto answers: it arrives with the same
+		// boosts, and a revenge kill on a setup sweeper swings the whole game.
+		if (imposter && !this.cfg.naive && foes[0] && foes[0].boosts) {
+			const up = Object.values(foes[0].boosts).reduce((sum, v) => sum + Math.max(0, v || 0), 0);
+			if (up >= 2) score += 20 + 10 * Math.min(up, 6);
+		}
 
 		// Whether it can win the exchange, which matters far more than how hard it
 		// hits. Against a sweeper that outruns the whole team, every Pokemon looks
@@ -992,6 +1004,14 @@ class BattleAI {
 			if (probe) worst = Math.max(worst, this.damagePct(gen, them, me, probe, field));
 		}
 		return worst;
+	}
+
+	/** The stage of the stat a self-dropping move lowers (0 for any other move). */
+	droppedFor(data, me) {
+		const drops = (data && ((data.self && data.self.boosts) || (data.selfBoost && data.selfBoost.boosts))) || null;
+		if (!drops || !me || !me.boosts) return 0;
+		const stat = data.category === 'Special' ? 'spa' : 'atk';
+		return (drops[stat] || 0) < 0 ? (me.boosts[stat] || 0) : 0;
 	}
 
 	forceSwitch(request, state) {
@@ -1270,6 +1290,9 @@ class BattleAI {
 					// A KO we land first costs us nothing, so it beats retreating.
 					if (pct >= 100 && (movesFirst || (data && data.priority > 0))) s += 40;
 					if (data && data.recoil && pct < 100) s -= 6;
+					// Draco Meteor, Overheat, Leaf Storm...: fired again from -2 or lower
+					// they hit like wet paper. Anyone past Easy notices and looks elsewhere.
+					if (!this.cfg.naive && pct < 100 && this.droppedFor(data, me) <= -2) s -= 12 + 4 * Math.abs(this.droppedFor(data, me));
 					// We are dead before this lands unless it kills or it has priority.
 					if (outsped && pct < 100 && !(data && data.priority > 0)) s *= 0.35;
 					if (s > score) { score = s; target = foe.slot === 'b' ? 2 : 1; }
@@ -1302,7 +1325,10 @@ class BattleAI {
 		if (this.cfg.switching && request.side.pokemon.length > 1 && !active.trapped && !active.maybeTrapped) {
 			const myHpPct = (me.originalCurHP / me.maxHP()) * 100;
 			const doomed = incoming >= myHpPct;
-			const losing = (incoming >= myHpPct * 0.5 && best.score < 55) ||
+			// Stuck with a self-dropped attacking stat and nothing that kills: switching resets it.
+			const bestData = PkmnDex.forGen(gen.num).moves.get(best.name);
+			const drained = bestData && bestData.category !== 'Status' && this.droppedFor(bestData, me) <= -2 && best.score < 70;
+			const losing = drained || (incoming >= myHpPct * 0.5 && best.score < 55) ||
 				// Outsped and dying, with nothing lethal of our own to fire back:
 				// staying is a free knockout for them.
 				(outsped && best.score < 100);

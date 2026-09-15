@@ -250,7 +250,7 @@ function summoned(summon, { place, badges, levelCap }) {
 	if (summon.kind === 'trainer') {
 		const cls = summon.classId ? E.findClass(summon.classId) : null;
 		if (summon.classId && !cls) return { error: `No trainer class called "${summon.classId}".` };
-		return E.rollTrainer({ place, badges, levelCap, classId: cls && cls.id });
+		return E.rollTrainer({ place, badges, levelCap, classId: cls && cls.id, double: summon.double === undefined ? null : !!summon.double });
 	}
 	const { Dex } = require('pokemon-showdown');
 	const species = Dex.species.get(summon.species);
@@ -258,6 +258,15 @@ function summoned(summon, { place, badges, levelCap }) {
 	const level = E.clampLevel(summon.level || levelCap || 5);
 	const set = E.wildSet(species, level);
 	if (summon.shiny) set.shiny = true;
+	// Staff can summon two at once: a wild double battle (a second species, or two of the same).
+	if (summon.double) {
+		const second = Dex.species.get(summon.species2 || summon.species);
+		if (!second.exists || !E.encounterable(second)) return { error: `No Pokémon called "${summon.species2}".` };
+		return {
+			kind: 'wild', double: true, name: 'Wild Pokemon', avatar: '', team: [set, E.wildSet(second, level)],
+			ai: badges >= 6 ? 'hard' : badges >= 3 ? 'normal' : 'easy', format: E.WILD_DOUBLE_FORMAT, badges,
+		};
+	}
 	return {
 		kind: 'wild', double: false, name: E.wildName(species), avatar: '', team: [set],
 		ai: badges >= 6 ? 'hard' : badges >= 3 ? 'normal' : 'easy', format: E.WILD_FORMAT, badges,

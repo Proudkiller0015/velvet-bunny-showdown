@@ -712,20 +712,76 @@ function trainerSet(species, level, badges, rng) {
  * is the one place a revive happens outside a Pokemon Centre - during the
  * battle it fainted in.
  */
+/*
+ * Items a player can use mid-battle, as in the games (Patch 1.3 added the rest).
+ *
+ *   heal     HP restored ('full' for all of it); cure: true also heals status
+ *   cure     a status-only item: 'all', or the statuses it heals
+ *   revive   a fainted Pokémon comes back with this much HP; all: every fainted one
+ *   pp       'all' = every move to full, { all: 10 } = +10 each, { one: n | 'full' } = the emptiest move
+ *   boost    stat stages for the Pokémon out on the field (X items)
+ *   crit     Dire Hit: a higher critical-hit ratio while it stays in
+ *   mist     Guard Spec.: Mist on your side, no stat drops for 5 turns
+ */
 const BATTLE_ITEMS = [
 	{ id: 'potion', name: 'Potion', heal: 20 },
 	{ id: 'superpotion', name: 'Super Potion', heal: 60 },
 	{ id: 'hyperpotion', name: 'Hyper Potion', heal: 120 },
 	{ id: 'maxpotion', name: 'Max Potion', heal: 'full' },
 	{ id: 'fullrestore', name: 'Full Restore', heal: 'full', cure: true },
+	{ id: 'freshwater', name: 'Fresh Water', heal: 30 },
+	{ id: 'sodapop', name: 'Soda Pop', heal: 50 },
+	{ id: 'lemonade', name: 'Lemonade', heal: 70 },
+	{ id: 'moomoomilk', name: 'Moomoo Milk', heal: 100 },
+	{ id: 'berryjuice', name: 'Berry Juice', heal: 20 },
+	{ id: 'energypowder', name: 'Energy Powder', heal: 60 },
+	{ id: 'energyroot', name: 'Energy Root', heal: 120 },
+	{ id: 'antidote', name: 'Antidote', cure: ['psn', 'tox'] },
+	{ id: 'burnheal', name: 'Burn Heal', cure: ['brn'] },
+	{ id: 'iceheal', name: 'Ice Heal', cure: ['frz'] },
+	{ id: 'awakening', name: 'Awakening', cure: ['slp'] },
+	{ id: 'paralyzeheal', name: 'Paralyze Heal', cure: ['par'] },
+	{ id: 'fullheal', name: 'Full Heal', cure: 'all' },
+	{ id: 'healpowder', name: 'Heal Powder', cure: 'all' },
 	{ id: 'revive', name: 'Revive', revive: 0.5 },
 	{ id: 'maxrevive', name: 'Max Revive', revive: 1 },
-	{ id: 'maxelixir', name: 'Max Elixir', pp: true },
+	{ id: 'revivalherb', name: 'Revival Herb', revive: 1 },
+	{ id: 'sacredash', name: 'Sacred Ash', revive: 1, all: true },
+	{ id: 'ether', name: 'Ether', pp: { one: 10 } },
+	{ id: 'maxether', name: 'Max Ether', pp: { one: 'full' } },
+	{ id: 'elixir', name: 'Elixir', pp: { all: 10 } },
+	{ id: 'maxelixir', name: 'Max Elixir', pp: 'all' },
+	{ id: 'xattack', name: 'X Attack', boost: { atk: 2 } },
+	{ id: 'xdefense', name: 'X Defense', boost: { def: 2 } },
+	{ id: 'xspatk', name: 'X Sp. Atk', boost: { spa: 2 } },
+	{ id: 'xspdef', name: 'X Sp. Def', boost: { spd: 2 } },
+	{ id: 'xspeed', name: 'X Speed', boost: { spe: 2 } },
+	{ id: 'xaccuracy', name: 'X Accuracy', boost: { accuracy: 2 } },
+	{ id: 'direhit', name: 'Dire Hit', crit: true },
+	{ id: 'guardspec', name: 'Guard Spec.', mist: true },
 ];
+
+/**
+ * Whether an item would do anything for a Pokémon, from what's known about it:
+ * { fainted, hurt, status ('' or 'brn'...), ppUsed, active }. The battle and the
+ * item panel both ask this, so a button never offers what the battle refuses.
+ */
+function itemHelps(item, mon) {
+	if (!item || !mon) return false;
+	// A fainted Pokémon still standing in a doubles slot can't be revived in place; one on the bench can.
+	if (item.revive) return !!mon.fainted && !mon.active;
+	if (mon.fainted) return false;
+	if (item.heal) return !!mon.hurt || (!!item.cure && !!mon.status);
+	if (item.cure) return !!mon.status && (item.cure === 'all' || item.cure.includes(mon.status === 'tox' ? 'tox' : mon.status));
+	if (item.pp) return !!mon.ppUsed;
+	if (item.boost || item.crit || item.mist) return !!mon.active;
+	return false;
+}
 
 function findBattleItem(input) {
 	const id = toID(input);
-	return BATTLE_ITEMS.find(i => i.id === id || toID(i.name) === id) || (id === 'fullrevive' ? BATTLE_ITEMS.find(i => i.id === 'maxrevive') : null);
+	const aliases = { fullrevive: 'maxrevive', maxelexir: 'maxelixir', paralyseheal: 'paralyzeheal', parlyzheal: 'paralyzeheal', energypowder: 'energypowder', guardspec: 'guardspec', xspecialattack: 'xspatk', xspecialdefense: 'xspdef', xspecial: 'xspatk', xdefend: 'xdefense' };
+	return BATTLE_ITEMS.find(i => i.id === id || toID(i.name) === id) || (aliases[id] ? BATTLE_ITEMS.find(i => i.id === aliases[id]) : null);
 }
 
 const WILD_FORMAT = 'gen9rpbattlewildencounter';
@@ -762,7 +818,7 @@ function describe(enc) {
 }
 
 module.exports = {
-	BATTLE_ITEMS, findBattleItem,
+	BATTLE_ITEMS, findBattleItem, itemHelps,
 	toID, LEGEND_TAGS, isLegendary, encounterable, findSpecies,
 	levelUpMoves, wildSet, wildName, clampLevel, clampBadges, levelRange, shinyChance,
 	catchRate, BALLS, findBall, catchChance, shakesFor, CATCH_BOOST, PITY_PER_MISS,

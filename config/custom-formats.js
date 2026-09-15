@@ -346,7 +346,8 @@ function encounters() {
 	throw new Error('src/encounters.js not found');
 }
 
-const aOrAn = name => (/^[AEIOU]/i.test(name) ? `an ${name}` : `a ${name}`);
+// "an X Attack": X is said "ex".
+const aOrAn = name => (/^([AEIOU]|X )/i.test(name) ? `an ${name}` : `a ${name}`);
 
 /** The ball buttons, posted into the battle so nobody has to type a command. */
 function ballPanel(E, note) {
@@ -429,10 +430,13 @@ function installItems(battle) {
 			const wanted = E.toID(m[2]);
 			const named = this.pokemon.filter(p => E.toID(p.name) === wanted || E.toID(p.species.name) === wanted || E.toID(p.species.baseSpecies) === wanted);
 			if (!named.length) return this.emitChoiceError(`None of your Pokémon is called "${m[2]}"`);
-			const target = named.find(p => (item.revive ? p.fainted : !p.fainted && (item.pp ? p.moveSlots.some(s => s.pp < s.maxpp) : p.hp < p.maxhp || (item.cure && p.status))));
+			const state = p => ({ fainted: p.fainted, hurt: p.hp < p.maxhp, status: p.status, active: p.isActive, ppUsed: p.moveSlots.some(s => s.pp < s.maxpp) });
+			const target = named.find(p => E.itemHelps(item, state(p)));
 			if (!target) {
-				return this.emitChoiceError(item.revive ? `${named[0].name} hasn't fainted` :
-					named[0].fainted ? `${named[0].name} has fainted: it needs a Revive` : `${named[0].name} doesn't need a ${item.name}`);
+				const p = named[0];
+				return this.emitChoiceError(item.revive ? (p.fainted ? `${p.name} has to be on the bench to be revived` : `${p.name} hasn't fainted`) :
+					p.fainted ? `${p.name} has fainted: it needs a Revive` :
+					(item.boost || item.crit || item.mist) ? `${item.name} only works on a Pokémon out on the field` : `${p.name} doesn't need ${aOrAn(item.name)}`);
 			}
 			const fillers = this.active.map(p => fillerChoice(battle, p));
 			if (fillers.some(f => f === null) || fillers.every(f => f === 'pass')) {
@@ -454,7 +458,9 @@ function tutorialNextSteps(battle) {
 		'1. <a href="https://discord.gg/pH86q7sdg7">Join the Kagura RP on Discord</a> to play for real, and make a character: <code>!character add &lt;name&gt;</code><br/>' +
 		'2. Pick your starter: <code>!pick</code><br/>' +
 		'3. Link this Showdown account: <code>!showdown &lt;your name&gt;</code><br/>' +
-		'4. Build your RP team in the Teambuilder, then type <code>!encounter</code> in your character\'s channel.</div>');
+		'4. Build your RP team in the Teambuilder, then type <code>!encounter</code> in your character\'s channel.<br/>' +
+		// Players reported no way out of the finished practice battle; this does what the Main menu button does.
+		'<button class="button" name="closeAndMainMenu">Close this battle</button></div>');
 }
 
 function useItem(battle, side, itemId, target) {
@@ -462,29 +468,62 @@ function useItem(battle, side, itemId, target) {
 	const item = E.findBattleItem(itemId);
 	if (!item || !target) return;
 	battle.add('-message', `${side.name} used ${aOrAn(item.name)} on ${target.name}!`);
-	if ((battle.format.id || battle.format) === 'gen9rptutorial') battle.add('-message', 'Real items come from your character\'s bag (!bag on Discord, buy more with !buy).');
+	if ((battle.format.id || battle.format) === 'gen9rptutorial') battle.add('-message', "Real items come from your character's bag (!bag on Discord, buy more with !buy).");
+	const noEffect = () => battle.add('-message', 'It had no effect.');
 	if (item.revive) {
-		if (!target.fainted) return battle.add('-message', `It had no effect.`);
-		target.fainted = false;
-		target.faintQueued = false;
-		target.status = '';
-		target.hp = Math.max(1, Math.floor(target.maxhp * item.revive));
-		side.pokemonLeft++;
-		battle.add('-message', `${target.name} was revived!`);
+		// Sacred Ash brings back every fainted Pokémon on the bench.
+		const who = item.all ? side.pokemon.filter(p => p.fainted && !p.isActive) : [target];
+		if (!who.some(p => p.fainted && !p.isActive)) return noEffect();
+		for (const p of who) {
+			if (!p.fainted || p.isActive) continue;
+			p.fainted = false;
+			p.faintQueued = false;
+			p.status = '';
+			p.hp = Math.max(1, Math.floor(p.maxhp * item.revive));
+			side.pokemonLeft++;
+			battle.add('-message', `${p.name} was revived!`);
+		}
 		return;
 	}
-	if (target.fainted) return battle.add('-message', `It had no effect.`);
+	if (target.fainted) return noEffect();
 	if (item.pp) {
-		for (const slot of target.moveSlots) slot.pp = slot.maxpp;
-		battle.add('-message', `${target.name}'s PP was restored.`);
+		const slots = target.moveSlots;
+		if (item.pp === 'all') for (const slot of slots) slot.pp = slot.maxpp;
+		else if (item.pp.all) for (const slot of slots) slot.pp = Math.min(slot.maxpp, slot.pp + item.pp.all);
+		else {
+			// The move that has used the most of its PP.
+			const slot = slots.filter(x => x.pp < x.maxpp).sort((a, b) => a.pp / a.maxpp - b.pp / b.maxpp)[0];
+			if (!slot) return noEffect();
+			slot.pp = item.pp.one === 'full' ? slot.maxpp : Math.min(slot.maxpp, slot.pp + item.pp.one);
+			return battle.add('-message', `${target.name}'s ${slot.move} had its PP restored.`);
+		}
+		return battle.add('-message', `${target.name}'s PP was restored.`);
+	}
+	if (item.boost) {
+		if (!target.isActive) return noEffect();
+		battle.boost(item.boost, target, target);
 		return;
 	}
-	const amount = item.heal === 'full' ? target.maxhp : item.heal;
-	const healed = target.heal(amount);
-	if (target.isActive) battle.add('-heal', target, target.getHealth, `[from] item: ${item.name}`);
-	else if (healed) battle.add('-message', `${target.name} recovered ${healed} HP.`);
-	if (item.cure && target.status) {
+	if (item.crit) {
+		if (!target.isActive || !target.addVolatile('focusenergy')) return noEffect();
+		return;
+	}
+	if (item.mist) {
+		if (!side.addSideCondition('mist')) return noEffect();
+		return;
+	}
+	if (item.heal) {
+		const amount = item.heal === 'full' ? target.maxhp : item.heal;
+		const healed = target.heal(amount);
+		if (target.isActive) battle.add('-heal', target, target.getHealth, `[from] item: ${item.name}`);
+		else if (healed) battle.add('-message', `${target.name} recovered ${healed} HP.`);
+	}
+	if (item.cure && target.status && (item.cure === true || item.cure === 'all' || item.cure.includes(target.status))) {
+		const was = target.status;
 		target.cureStatus();
+		if (!target.isActive) battle.add('-message', `${target.name} was cured of its ${{ brn: 'burn', par: 'paralysis', slp: 'sleep', frz: 'freeze', psn: 'poison', tox: 'poison' }[was] || 'status'}.`);
+	} else if (!item.heal) {
+		noEffect();
 	}
 }
 
@@ -607,6 +646,8 @@ function throwBall(battle, pokemon, ballId) {
 	const shakes = caught ? 3 : E.shakesFor(chance, rng);
 
 	battle.add('-message', `${side.name} threw ${aOrAn(ball.name)}!`);
+	// A ball arcing onto the target: Weather Ball's animation, which is a ball thrown up and down onto it.
+	battle.add('-anim', pokemon, 'Weather Ball', wild);
 	for (let i = 0; i < shakes; i++) battle.add('-message', '...wobble...');
 	if (caught && (battle.format.id || battle.format) === 'gen9rptutorial') {
 		battle.add('-message', `Gotcha! ${wild.name} was caught!`);

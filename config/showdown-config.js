@@ -442,7 +442,7 @@ function velvetRoster() {
 // Not a difficulty, so it can never match one: it is the absence of them.
 const PVP = 'pvp';
 
-const aOrAnName = name => (/^[AEIOU]/i.test(name) ? `an ${name}` : `a ${name}`);
+const aOrAnName = name => (/^([AEIOU]|X )/i.test(name) ? `an ${name}` : `a ${name}`);
 
 /**
  * The in-battle medicine panel: one button per item per Pokémon it can help,
@@ -453,27 +453,37 @@ const aOrAnName = name => (/^[AEIOU]/i.test(name) ? `an ${name}` : `a ${name}`);
 function itemPanel(bag, team, active, beenIn) {
 	const E = require('../../../src/encounters');
 	const esc = s => String(s).replace(/[&<>"']/g, ch => `&#${ch.charCodeAt(0)};`);
+	let activeIndex = 0;
 	const mons = (team || []).map(p => {
-		const [hp, max] = String(p.condition || '').split(' ')[0].split('/').map(Number);
+		const cond = String(p.condition || '');
+		const [hp, max] = cond.split(' ')[0].split('/').map(Number);
 		const name = String(p.ident || '').replace(/^p\d+[a-z]?:\s*/, '');
+		// Which of the request's active entries is this Pokémon's (doubles have two).
+		const moves = p.active ? ((active || [])[activeIndex++] || {}).moves : null;
 		return {
 			name,
-			fainted: / fnt$/.test(String(p.condition)) || hp === 0,
+			active: !!p.active,
+			fainted: / fnt$/.test(cond) || hp === 0,
 			hurt: hp < max,
-			status: /\s(brn|par|slp|frz|psn|tox)$/.test(String(p.condition)),
-			// Max Elixir: the request has the active Pokémon's PP; a benched one can only have used PP if it has been in.
-			pp: p.active ? !!(active || []).some(a => a && (a.moves || []).some(mv => mv.maxpp && mv.pp < mv.maxpp)) : !!(beenIn && beenIn.has(name)),
+			status: (cond.match(/\s(brn|par|slp|frz|psn|tox)$/) || [])[1] || '',
+			// PP: the request has it for the Pokémon out; one on the bench can only have used PP if it has been in.
+			ppUsed: p.active ? !!(moves || []).some(mv => mv.maxpp && mv.pp < mv.maxpp) : !!(beenIn && beenIn.has(name)),
 		};
 	});
-	const rows = bag.map(([id, n]) => {
+	const rows = [];
+	const idle = [];
+	for (const [id, n] of bag) {
 		const item = E.findBattleItem(id);
-		if (!item) return '';
-		const helps = mons.filter(m => (item.revive ? m.fainted : !m.fainted && (item.pp ? m.pp : m.hurt || (item.cure && m.status))));
+		if (!item) continue;
+		const helps = mons.filter(m => E.itemHelps(item, m));
+		if (!helps.length) { idle.push(`${item.name} (${n})`); continue; }
 		const buttons = helps.map(m => `<button class="button" name="send" value="/useitem ${item.id}, ${esc(m.name)}">${esc(m.name)}</button>`).join(' ');
-		return `<div>${item.name} <small>(${n})</small>: ${buttons || `<small style="opacity:.7">${item.revive ? 'nobody has fainted' : 'nobody needs it'}</small>`}</div>`;
-	}).join('');
-	if (!rows) return '';
-	return `<div class="infobox" style="margin:4px 0"><b>Use an item</b> <small>(click the Pokémon; uses your whole turn, so don't pick a move after)</small>${rows}</div>`;
+		rows.push(`<div>${item.name} <small>(${n})</small>: ${buttons}</div>`);
+	}
+	if (!rows.length && !idle.length) return '';
+	return `<div class="infobox" style="margin:4px 0"><b>Use an item</b> <small>(click the Pokémon; it uses your whole turn, so don't pick a move after)</small>` +
+		(rows.length ? rows.join('') : '<div><small>Nothing in your bag would help right now.</small></div>') +
+		(idle.length && idle.length <= 12 ? `<div><small style="opacity:.7">Not needed right now: ${idle.join(', ')}</small></div>` : '') + '</div>';
 }
 
 exports.commands = {
@@ -491,7 +501,7 @@ exports.commands = {
 		const [itemName, ...who] = String(target || '').split(',');
 		const item = E.findBattleItem(itemName);
 		const pokemon = who.join(',').trim();
-		if (!item) throw new Chat.ErrorMessage(`There's no battle item called "${itemName}". Try Potion, Super Potion, Hyper Potion, Max Potion, Full Restore, Revive, Max Revive or Max Elixir.`);
+		if (!item) throw new Chat.ErrorMessage(`There's no battle item called "${itemName}". Use the buttons in the item panel: they only show items in your bag that would help.`);
 		if (!pokemon) throw new Chat.ErrorMessage('Which Pokémon? Type its name in the box.');
 		const enc = game.rpEncounter && rp.encounters.get(game.rpEncounter);
 		const used = rp.usedInLog(room.log.log, user.name, item.name);
@@ -533,7 +543,7 @@ exports.commands = {
 	},
 	tutorialhelp: ['/tutorial - A practice wild battle: a Lv. 5 Pikachu with 1 Potion and 1 Poké Ball against a Lv. 5 Rattata. Nothing is recorded.'],
 
-	useitemhelp: ["/useitem [item], [pokemon] - In any RP battle, use a Potion, Revive or similar from your character's bag instead of attacking (NPCs have 5 of each; RP Custom Game is unlimited)."],
+	useitemhelp: ["/useitem [item], [pokemon] - In any RP battle, use an item from your character's bag instead of attacking: Potions, status heals, Revives (on a benched Pokémon), Ethers, X items... The item panel's buttons do this for you. NPCs have 5 of each; RP Custom Game is unlimited."],
 
 	/**
 	 * Throw a ball in an RP wild encounter. Sent by the buttons the battle
@@ -1598,8 +1608,14 @@ function roleplay() {
 						const item = require('../../../src/encounters').findBattleItem(id);
 						return [id, Math.max(0, n - (item ? rp.usedInLog(this.room.log.log, player.name, item.name) : 0))];
 					}).filter(([, n]) => n !== 0);
-					const been = new Set(this.room.log.log.filter(l => l.startsWith(`|switch|${lines[1]}`) || l.startsWith(`|drag|${lines[1]}`))
-						.map(l => l.split('|')[2].replace(/^p\d+[a-z]?:\s*/, '')));
+					// Benched Pokémon that have used PP: they used a move since their PP was last restored.
+					const been = new Set();
+					for (const l of this.room.log.log) {
+						const moved = l.startsWith(`|move|${lines[1]}`) && /^\|move\|p\d[a-z]: ([^|]+)\|/.exec(l);
+						if (moved) been.add(moved[1]);
+						const restored = /^\|-message\|(.+?)(?:'s .+ had its PP restored|'s PP was restored)\.$/.exec(l);
+						if (restored) been.delete(restored[1]);
+					}
 					const html = (bag.length && itemPanel(bag, request.side.pokemon, request.active, been)) || '<div class="infobox" style="margin:4px 0"><small>No items left in your bag.</small></div>';
 					player.sendRoom(`|uhtml|rpitems|${html}`);
 				}
@@ -1659,6 +1675,21 @@ function roleplay() {
 		return out;
 	};
 
+	/** The team a player brought, as { species, level }: from the team sent in, so benched Pokémon count too. */
+	const partyOf = (game, userid) => {
+		try {
+			const raw = game.rpTeams && game.rpTeams[userid];
+			const sets = typeof raw === 'string' ? (raw.trim().startsWith('[') ? JSON.parse(raw) : Teams.unpack(raw)) : raw;
+			return Array.isArray(sets) ? sets.map(set => ({ species: set.species || set.name, level: Number(set.level) || 100 })) : null;
+		} catch (e) { return null; }
+	};
+	const withParties = (game, sides) => {
+		for (const [id, side] of Object.entries(sides)) {
+			const party = partyOf(game, id);
+			if (party) side.party = party;
+		}
+		return sides;
+	};
 	const end = battle.end;
 	battle.end = function (winnerName, ...rest) {
 		const wasEnded = this.ended;
@@ -1674,7 +1705,8 @@ function roleplay() {
 			}
 			enc = this.rpEncounter && rp.encounters.get(this.rpEncounter);
 			if (enc && !wasEnded && enc.status !== 'done') {
-				enc.result = { ...rp.resultFromLog(enc, this.room.log.log, toID(winnerName)), replay };
+				// party: the whole team the player brought, benched Pokémon included (party EXP goes to all of it).
+				enc.result = { ...rp.resultFromLog(enc, this.room.log.log, toID(winnerName)), replay, party: partyOf(this, enc.userid) };
 				enc.status = 'done';
 			}
 		} catch (e) { console.log(`[roleplay] ${e.message}`); }
@@ -1688,7 +1720,7 @@ function roleplay() {
 					winner: winnerName || '',
 					replay,
 					// Each player's team and who ended fainted: NPC trainer battles and the Hall of Fame use them on Discord.
-					sides: rp.sidesInLog(this.room.log.log),
+					sides: withParties(this, rp.sidesInLog(this.room.log.log)),
 					encounter: enc ? rp.publicView(enc) : null,
 				});
 				if (!this.replaySaved) void this.room.uploadReplay(undefined, undefined, 'silent');

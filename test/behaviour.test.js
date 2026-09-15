@@ -179,6 +179,36 @@ console.log('\n--- transform / Imposter ---');
 	const dScore = ai.benchScore(gen, ditto, s2.state, field, s2.request);
 	const aScore = ai.benchScore(gen, articuno, s2.state, field, s2.request);
 	check('Imposter beats a Pokemon that is 4x weak to what is out', dScore > aScore, true);
+
+	// Patch 1.2b: a boosted sweeper is the time to bring the Ditto in, and it is
+	// judged with the foe's attacks, not its own Transform.
+	const s3 = scenario({ me: 'Blissey', myMoves: ['Seismic Toss'], foe: 'Dragonite', foeMoves: ['Dragon Dance', 'Extreme Speed', 'Earthquake'] });
+	const ditto3 = benchMon('Ditto', ['Transform'], { item: 'choicescarf' });
+	ditto3.ability = 'imposter'; ditto3.baseAbility = 'imposter';
+	delete ditto3.stats;
+	const calm = ai.benchScore(gen, ditto3, s3.state, field, s3.request);
+	s3.state.opponent.a.boosts = { atk: 2, spe: 2 };
+	const boosted = ai.benchScore(gen, ditto3, s3.state, field, s3.request);
+	check('a boosted foe makes the Imposter switch-in worth much more', boosted > calm + 30, true);
+	check('the Imposter is scored with the foe\'s own attacks', calm > -50, true);
+}
+
+console.log('\n--- self-dropping moves (Patch 1.2b) ---');
+{
+	for (const difficulty of ['normal', 'hard', 'champion']) {
+		const ai = new BattleAI({ difficulty, cfg: { blunder: 0, noise: 0 } });
+		const gen = ai.gen(9);
+		// A Latios at -4 Sp. Atk from two Draco Meteors, with Psyshock and Flamethrower too.
+		const s = scenario({ me: 'Latios', myMoves: ['Draco Meteor', 'Psyshock', 'Flamethrower'], foe: 'Heatran', foeMoves: ['Magma Storm'] });
+		s.state.mine.a.boosts = { spa: -4 };
+		const choice = ai.turnChoice(s.request, s.state);
+		check(`${difficulty}: stops firing Draco Meteor from -4`, choice !== 'move 1', true);
+	}
+	// Easy is the in-game trainer that doesn't notice.
+	const easy = new BattleAI({ difficulty: 'easy', cfg: { blunder: 0, noise: 0 } });
+	const s = scenario({ me: 'Latios', myMoves: ['Draco Meteor', 'Tackle'], foe: 'Snorlax', foeMoves: [] });
+	s.state.mine.a.boosts = { spa: -4 };
+	check('easy: still reaches for the biggest number', easy.turnChoice(s.request, s.state), 'move 1');
 }
 
 console.log('\n--- terastallizing ---');
