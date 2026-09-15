@@ -1285,7 +1285,9 @@ function roleplayIntro() {
 			`<li>Nature and EVs are optional. Leave them if you don't know what they are.</li>` +
 			`<li>Repeat for each Pok&eacute;mon, then click back to the team list. It saves on its own.</li>` +
 			`</ol>` +
-			`<small>Your first Pok&eacute;mon in the list is the one you send out first.</small>`) +
+			`<small>Your first Pok&eacute;mon in the list is the one you send out first. ` +
+			`<b>The team is checked against your box:</b> a Pok&eacute;mon you don't own, one above its box level (a blank level counts as 100), ` +
+			`or one that's fainted or at the daycare gets the battle called off before it starts.</small>`) +
 
 		step('3. Get an encounter',
 			`<ol style="margin:0;padding-left:18px">` +
@@ -1303,12 +1305,15 @@ function roleplayIntro() {
 			`<li>Lower its HP and give it a status (sleep is best) to make catching easier. Every miss makes the next ball likelier.</li>` +
 			`<li>Two wild Pok&eacute;mon? Knock one out first, then throw at the other.</li>` +
 			`<li>You can only throw balls your character has. Legendary and Mythical Pok&eacute;mon never appear here; those happen in the RP.</li>` +
+			`<li><b>Mega Evolution, Z-Moves, Dynamax and Terastallization</b> stay locked until the story gives your character the Key Stone, Z-Ring, Dynamax Band or Tera Orb.</li>` +
 			`</ul>`) +
 
 		step('5. After the battle',
 			`<ul style="margin:0;padding-left:18px">` +
 			`<li>The bot on ${discord} posts the result: money for a win, the Pok&eacute;mon you caught, and the balls you used.</li>` +
 			`<li>Then write it into your scene. Caught something? Add it to your team here when you want to use it.</li>` +
+			`<li><b>Fainted Pok&eacute;mon stay fainted</b> (tagged KO) until you use <code>!heal</code> in a Pok&eacute;mon Centre channel. Take them off your team until then.</li>` +
+			`<li>Winning also earns <b>team EXP</b>: give it to any Pok&eacute;mon with <code>!share</code>, then raise its level here to match.</li>` +
 			`</ul>`) +
 
 		step('Something went wrong?',
@@ -1317,6 +1322,7 @@ function roleplayIntro() {
 			`If the site was asleep it takes about a minute to wake up; just try again.</li>` +
 			`<li><b>Declined it by accident:</b> use <code>!encounter</code> again. The same one comes back.</li>` +
 			`<li><b>"Your team is invalid":</b> the team's format must be <b>[Gen 9] RP Battle</b>.</li>` +
+			`<li><b>"This RP battle is called off":</b> your team doesn't match your box. Fix what it lists, then <code>!encounter</code> again: the same one comes back.</li>` +
 			`<li><b>Still stuck:</b> ask in this room, or ask Sam or Saku.</li>` +
 			`</ul>`) +
 		`</div>`;
@@ -1486,6 +1492,8 @@ function roleplay() {
 					players: this.players.map(p => p.name),
 					winner: winnerName || '',
 					replay,
+					// Each player's team and who ended fainted: NPC trainer battles and the Hall of Fame use them on Discord.
+					sides: rp.sidesInLog(this.room.log.log),
 					encounter: enc ? rp.publicView(enc) : null,
 				});
 				if (!this.replaySaved) void this.room.uploadReplay(undefined, undefined, 'silent');

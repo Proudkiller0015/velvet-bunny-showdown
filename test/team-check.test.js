@@ -38,6 +38,10 @@ const log = [
 ];
 const fainted = rp.resultFromLog({ userid: 'rptester', showdown: 'RpTester' }, log, 'rptester').fainted;
 check(fainted.length === 1 && fainted[0].species === 'Pikachu' && fainted[0].level === 12, `fainted Pokémon are reported, revived ones aren't (${JSON.stringify(fainted)})`);
+const sides = rp.sidesInLog(log);
+check(sides.rptester.team.length === 2 && sides.wildrattata.fainted.length === 1, 'both sides of a battle: team sent out and fainted');
+const withPreview = rp.sidesInLog(['|player|p1|Ace|1|', '|player|p2|Leader|1|', '|poke|p1|Garchomp, L50, F|', '|poke|p1|Lucario, L48, M|', '|poke|p2|Onix, L40|', '|switch|p1a: Chompy|Garchomp, L50, F|100/100']);
+check(withPreview.ace.team.map(p => p.species).join() === 'Garchomp,Lucario', 'Team Preview gives the whole team, not just who came out');
 
 check(rp.gimmickIn('move 1 terastallize') === 'tera', 'Tera is spotted in a choice');
 check(rp.gimmickIn('move 2 mega') === 'mega', 'Mega');

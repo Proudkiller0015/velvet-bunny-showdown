@@ -437,12 +437,29 @@ function resultFromLog(enc, lines, winnerid) {
  * brings one back, so it doesn't count.
  */
 function faintedInLog(enc, lines) {
-	let slot = null;
+	return sidesInLog(lines)[enc.userid]?.fainted || [];
+}
+
+/**
+ * Each player's side of a battle, read off its log: the Pokémon they sent out
+ * and the ones that ended it fainted. Used for PvP results (NPC trainer battles,
+ * the Hall of Fame) as well as encounters.
+ */
+function sidesInLog(lines) {
+	const out = {};
 	for (const line of lines) {
-		const m = /^\|player\|(p\d)\|([^|]*)/.exec(line);
-		if (m && toID(m[2]) === enc.userid) slot = m[1];
+		const m = /^\|player\|(p\d)\|([^|]+)/.exec(line);
+		if (m && !Object.values(out).some(s => s.slot === m[1])) out[toID(m[2])] = { slot: m[1], name: m[2], fainted: [], team: [] };
 	}
-	if (!slot) return [];
+	for (const [id, side] of Object.entries(out)) {
+		const { fainted, team } = sideInLog(lines, side.slot, id);
+		side.fainted = fainted;
+		side.team = team;
+	}
+	return out;
+}
+
+function sideInLog(lines, slot, userid) {
 	const who = new Map();   // nickname -> { species, level }
 	const down = new Map();
 	for (const line of lines) {
@@ -457,10 +474,19 @@ function faintedInLog(enc, lines) {
 			if (who.has(nick)) down.set(nick, who.get(nick));
 		} else if (parts[1] === '-message') {
 			const m = /used an? (?:Max )?Revive on (.+)!$/.exec(parts.slice(2).join('|'));
-			if (m && toID(parts.slice(2).join('|').split(' used ')[0]) === enc.userid) down.delete(m[1]);
+			if (m && toID(parts.slice(2).join('|').split(' used ')[0]) === userid) down.delete(m[1]);
 		}
 	}
-	return [...down.values()];
+	// Team Preview lists the whole team; without one, the Pokémon that came out are all there is to go on.
+	const preview = [];
+	for (const line of lines) {
+		const parts = line.split('|');
+		if (parts[1] !== 'poke' || parts[2] !== slot) continue;
+		const [species, ...rest] = (parts[3] || '').split(', ');
+		const lv = rest.find(x => /^L\d+$/.test(x));
+		preview.push({ species, level: lv ? Number(lv.slice(1)) : 100 });
+	}
+	return { fainted: [...down.values()], team: preview.length ? preview : [...who.values()] };
 }
 
 // ------------------------------------------------------------ replay feed
@@ -484,7 +510,8 @@ function finishedSince(seq) {
 
 // ------------------------------------------------------------------- HTTP
 
-function readJson(req, limit = 16 * 1024) {
+// Big enough for a character's whole box (sent with every encounter, for the team check).
+function readJson(req, limit = 256 * 1024) {
 	return new Promise((resolve, reject) => {
 		let size = 0;
 		const chunks = [];
@@ -546,6 +573,6 @@ function httpRoute(deps, log) {
 
 module.exports = {
 	verify, placeFor, requestEncounter, completeEncounter, canUseItem, usedInLog, publicView, canThrow, thrownInLog, resultFromLog, openFor,
-	checkTeam, gimmickIn, GIMMICK_ITEM, GIMMICK_NAME,
+	checkTeam, gimmickIn, GIMMICK_ITEM, GIMMICK_NAME, sidesInLog,
 	httpRoute, encounters, RP_ROOM, CHALLENGE_MS, recordFinished, finishedSince,
 };
