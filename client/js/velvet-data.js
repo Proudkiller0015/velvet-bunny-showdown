@@ -1743,6 +1743,7 @@
 		hypnowhirl: ['psybeam', 'confusion'],
 		shufflejab: ['machpunch', 'drainpunch'],
 		aurorasquall: ['blizzard', 'icywind'],
+		voltaiclance: ['boltstrike', 'wildcharge', 'thunderbolt'],
 		memorywipe: ['psychic', 'confusion'],
 		soulresonance: ['heartstamp', 'drainingkiss', 'psyshock'],
 		resolutestrike: ['zenheadbutt', 'psychocut'],

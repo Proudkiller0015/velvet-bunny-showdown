@@ -320,6 +320,20 @@ exports.MOVES = {
 		shortDesc: "Uses the higher attacking stat. Always ignores the target's stat boosts. Azelf's signature.",
 		desc: "Azelf's willpower becomes a blow. Uses whichever of the user's Attack or Special Attack is higher, before boosts, and always ignores the target's Defense, Special Defense and evasion boosts.",
 	},
+	/*
+	 * Voltaic Lance: the reliable physical Electric attack the type never had.
+	 * Wild Charge hurts its user and Thunder Punch is 75; this is 100 power, never
+	 * misses, and doesn't touch the target, so Rough Skin and Static can't punish it.
+	 */
+	voltaiclance: {
+		num: -25, gen: 9, name: "Voltaic Lance", type: "Electric", category: "Physical",
+		basePower: 100, accuracy: 100, pp: 10, priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		secondary: null, target: "normal", contestType: "Cool", velvetShared: true,
+		flavor: "The user gathers every spark it has into a spear of lightning and hurls it.",
+		shortDesc: "100% accurate, no contact. No drawback.",
+		desc: "The user hurls a spear of lightning. Does not make contact.",
+	},
 	continentalheave: {
 		num: -20, gen: 9, name: "Continental Heave", type: "Normal", category: "Physical",
 		basePower: 110, accuracy: 95, pp: 5, priority: 0,
@@ -679,6 +693,11 @@ const TM_DISTRIBUTION = {
 	// Hypnotists and spinning psychic lights. Not Espathra, Hatterene or Starmie.
 	hypnowhirl: ['chimecho', 'grumpig', 'meowstic', 'meowsticf', 'swoobat', 'lunatone', 'mrmime', 'mrrime', 'jynx', 'indeedee', 'indeedeef', 'rabsca', 'unown', 'hypno', 'xatu', 'girafarig', 'farigiraf', 'bronzong', 'claydol', 'gothitelle', 'reuniclus', 'beheeyem', 'malamar', 'musharna', 'gardevoir', 'sigilyph', 'delphox', 'orbeetle', 'oranguru', 'bruxish', 'alakazam'],
 	// Boxers and fighters light on their feet. Not Annihilape (Uber) or Quaquaval, which already has a Speed-raising signature.
+	// Electric physical attackers. Not Iron Hands (OU, and it would replace a
+	// drawback move with none), Regieleki (Uber) or the special legendaries.
+	voltaiclance: ['electivire', 'luxray', 'zeraora', 'eelektross', 'pawmot', 'morpeko', 'dracozolt', 'arctozolt',
+		'ironthorns', 'zebstrika', 'manectric', 'raichu', 'raichualola', 'pikachu', 'emolga', 'pachirisu', 'dedenne',
+		'togedemaru', 'stunfisk', 'boltund', 'pincurchin', 'minun', 'plusle'],
 	shufflejab: ['hitmonlee', 'hitmonchan', 'hitmontop', 'throh', 'sawk', 'hariyama', 'falinks', 'granbull', 'spinda', 'machamp', 'conkeldurr', 'pangoro', 'primeape', 'poliwrath', 'toxicroak', 'lucario', 'infernape', 'medicham', 'mienshao', 'crabominable', 'passimian', 'hawlucha', 'grapploct', 'lopunny', 'scrafty', 'pawmot', 'kommoo'],
 };
 

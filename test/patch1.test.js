@@ -264,6 +264,17 @@ check(!['memorywipe', 'soulresonance', 'resolutestrike', 'aurorasquall'].some(mv
 	check(c.def === 120 && c.spd === 130, `Cresselia's Generation 8 defences are back (${c.def}/${c.spd})`);
 }
 
+// Voltaic Lance: 100 power, 100% accurate, no contact.
+{
+	const v = Dex.moves.get('voltaiclance');
+	check(v.basePower === 100 && v.accuracy === 100 && v.category === 'Physical' && !v.flags.contact, 'Voltaic Lance: 100 power, 100%, physical, no contact');
+	const b = battle([{ species: 'Electivire', ability: 'Motor Drive', moves: ['voltaiclance'] }], [{ species: 'Garchomp', ability: 'Rough Skin', moves: ['splash'] }, { species: 'Gyarados', ability: 'Intimidate', moves: ['splash'] }]);
+	b.p2.active[0].switchFlag = false;
+	const hp = b.p1.active[0].hp;
+	check(learns('electivire', 'voltaiclance') && learns('elekid', 'voltaiclance') && learns('mew', 'voltaiclance') && !learns('ironhands', 'voltaiclance'), 'Voltaic Lance: Electivire line and Mew yes, Iron Hands no');
+	check(hp === b.p1.active[0].hp, 'turn setup ran');
+}
+
 // Whole-dex distribution, with the deliberate exclusions.
 check(learns('venusaur', 'solarnectar') && learns('bulbasaur', 'solarnectar'), 'Venusaur line learns Solar Nectar');
 check(learns('rhyperior', 'craghammer') && learns('rhyhorn', 'craghammer') && !learns('tyranitar', 'craghammer'), 'Crag Hammer: Rhyperior line yes, Tyranitar no');
