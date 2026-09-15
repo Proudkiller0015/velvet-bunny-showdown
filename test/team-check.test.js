@@ -29,14 +29,9 @@ check(rp.checkTeam({ box: null }, team(['Darkrai', 100])).ok, 'no box sent (an o
 r = rp.checkTeam({ box: [{ species: 'Eevee', level: 10, away: 'fainted' }, { species: 'Ditto', level: 10, away: 'daycare' }] }, team(['Eevee', 10], ['Ditto', 10]));
 check(!r.ok && /Eevee\*\* has fainted/.test(r.problems[0]) && /Ditto\*\* is at the daycare/.test(r.problems[1]), 'fainted and daycare Pokémon can\'t be on the team');
 
-// Partner Pikachu and Eevee: the OG starter only.
-const trainer = { character: 'Mira', box: [{ species: 'Eevee', level: 15, og: true }, { species: 'Eevee', level: 20 }, { species: 'Pikachu', level: 18 }] };
-check(rp.checkTeam(trainer, team(['Eevee-Starter', 15])).ok, 'an OG Eevee may be brought as Eevee-Starter');
-r = rp.checkTeam(trainer, team(['Eevee-Starter', 20]));
-check(!r.ok && /Lv\. 20 on your team but Lv\. 15/.test(r.problems[0]), `but not above its level: the caught Lv. 20 Eevee does not count (${r.problems[0]})`);
-r = rp.checkTeam(trainer, team(['Pikachu-Starter', 18]));
-check(!r.ok && /\(OG\) starter Pikachu/.test(r.problems[0]), `a caught, non-OG Pikachu may not (${r.problems[0]})`);
-check(rp.checkTeam(trainer, team(['Eevee', 20], ['Eevee-Starter', 15])).ok, 'and the OG and a caught Eevee can both come');
+// The Let's Go partner formes stay illegal: a box Eevee is not an Eevee-Starter.
+r = rp.checkTeam({ box: [{ species: 'Eevee', level: 15 }] }, team(['Eevee-Starter', 15]));
+check(!r.ok, 'Eevee-Starter does not count as a box Eevee');
 
 // Who fainted, read off a battle log.
 const log = [

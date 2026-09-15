@@ -233,22 +233,8 @@ for (const [id, tier] of Object.entries(Object.assign({}, za.assigned, TIERS))) 
 	else if (!inThisGen(id)) natdexTiers[id] = tier;
 	else tiers[id] = tier;
 }
-/*
- * Partner Pikachu and Eevee: legal, tiered, and with the base line's
- * ninth-generation movepool in place of the Let's Go one. The builder's own
- * learnset row for each carries the partner moves, so it is replaced outright.
- */
-const { PARTNERS } = require(path.join(PACKAGE, 'dist', 'data', 'velvet', 'partners.js'));
-const partners = {};
-for (const id of Object.keys(PARTNERS)) {
-	const species = Dex.species.get(id);
-	partners[id] = {
-		tier: species.tier, natDexTier: species.natDexTier,
-		moves: Object.keys(Dex.species.getLearnsetData(id).learnset || {}).sort(),
-	};
-}
 const unlocked = {
-	species: Object.keys(za.assigned).concat(Object.keys(PARTNERS)),
+	species: Object.keys(za.assigned),
 	items: za.ZA_STONES.slice(),
 };
 /*
@@ -325,7 +311,6 @@ window.VelvetBuffs = {
 \tunlocked: ${JSON.stringify(unlocked)},
 \tevoLevels: ${JSON.stringify(evoLevels)},
 \tevoAlso: ${JSON.stringify(evoAlso)},
-\tpartners: ${JSON.stringify(partners)},
 
 \t/** What this Pokemon gained, or an empty record. */
 \tget: function (speciesid) {

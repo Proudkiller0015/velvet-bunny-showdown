@@ -157,6 +157,10 @@ function unnerfAbilities(Abilities) {
  */
 const SPECIES_STATS = {
 	cresselia: { def: 120, spd: 130 },
+	// Balance Patch 1: Kagura's starter Pikachu and Eevee get their Let's Go
+	// partner stats. The partner formes themselves stay illegal.
+	pikachu: { hp: 45, atk: 80, def: 50, spa: 75, spd: 60, spe: 120 },
+	eevee: { hp: 65, atk: 75, def: 70, spa: 65, spd: 85, spe: 75 },
 };
 
 /*

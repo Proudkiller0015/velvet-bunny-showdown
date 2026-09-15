@@ -314,8 +314,6 @@ function normaliseBox(box) {
 		species: String(m.species || ''), level: m.level == null ? null : Number(m.level),
 		// Not on hand: fainted until a Pokémon Centre, or left at the daycare.
 		away: m.fainted ? 'fainted' : m.daycare ? 'daycare' : null,
-		// The character's original starter, which may be brought as a partner forme.
-		og: !!m.og,
 	}));
 }
 
@@ -331,30 +329,16 @@ function checkTeam(enc, sets) {
 		if (s.baseSpecies !== s.name && (Dex.species.get(s.baseSpecies).cosmeticFormes || []).includes(s.name)) ids.push(toID(s.baseSpecies));
 		return ids;
 	};
-	const all = enc.box.map(m => ({ id: toID(Dex.species.get(m.species).exists ? Dex.species.get(m.species).id : m.species), level: m.level, away: m.away, og: !!m.og }));
-	/*
-	 * Partner Pikachu and Partner Eevee are a starter's forme: only the box
-	 * Pikachu or Eevee tagged OG may be brought as one.
-	 */
-	const PARTNER = { pikachustarter: 'pikachu', eeveestarter: 'eevee' };
-	const matches = (m, name, ids) => {
-		const partner = PARTNER[toID(Dex.species.get(name).exists ? Dex.species.get(name).id : name)];
-		return partner ? m.og && m.id === partner : ids.includes(m.id);
-	};
+	const all = enc.box.map(m => ({ id: toID(Dex.species.get(m.species).exists ? Dex.species.get(m.species).id : m.species), level: m.level, away: m.away }));
 	const left = all.filter(m => !m.away);
 	const problems = [];
 	for (const set of sets) {
 		const name = set.species || set.name;
 		const level = Number(set.level) || 100;
 		const ids = idsFor(name);
-		const owned = left.filter(m => matches(m, name, ids));
+		const owned = left.filter(m => ids.includes(m.id));
 		if (!owned.length) {
-			const away = all.find(m => m.away && matches(m, name, ids));
-			const partner = PARTNER[toID(Dex.species.get(name).id || name)];
-			if (partner && !away) {
-				problems.push(`**${name}** is a starter's partner forme: only ${enc.character || 'your character'}'s original (OG) starter ${Dex.species.get(partner).name} can be brought as one`);
-				continue;
-			}
+			const away = all.find(m => m.away && ids.includes(m.id));
 			problems.push(away && away.away === 'fainted' ? `**${name}** has fainted: heal it at a Pokémon Centre first (\`!heal\`)`
 				: away ? `**${name}** is at the daycare`
 				: `${enc.character || 'Your character'} doesn't have a **${name}**`);

@@ -30,7 +30,6 @@ const { applyBuffs } = require('./buffs.js');
 const { applyZaMegas, applyZaStones } = require('./za-megas.js');
 const { applyTiers } = require('./tiering.js');
 const { unnerfMoves, unnerfAbilities, unnerfSpecies } = require('./unnerfs.js');
-const { applyPartners } = require('./partners.js');
 
 // The buffed Pokemon are Showdown's own, so they are changed in place rather
 // than added - and the learnsets they need are added when that file is loaded,
@@ -48,9 +47,6 @@ function buffWhatWeHave() {
 		// Last, so a deliberate decision beats a derived one.
 		applyTiers(tierTable, buffedPokedex, msg => console.log('[velvet] ' + msg));
 	}
-	// Partner Pikachu and Eevee copy the base line's movepool, buffs included, so
-	// they wait for all three tables.
-	if (buffedPokedex && buffedLearnsets && tierTable) applyPartners(buffedPokedex, buffedLearnsets, tierTable);
 }
 
 exports.pokedex = data => {

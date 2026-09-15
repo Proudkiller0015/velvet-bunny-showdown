@@ -990,29 +990,6 @@
 			}
 		}
 
-		/*
-		 * Partner Pikachu and Eevee, listed under their tier: the SV tier in the
-		 * ninth-generation tables, RU in National Dex (which stops there). Neither
-		 * is in any list the CDN ships, so each goes in once and is left alone.
-		 */
-		if (buffs && buffs.partners) {
-			for (var pid in buffs.partners) {
-				var partner = buffs.partners[pid];
-				for (var pt = 0; pt < targets.length; pt++) {
-					var list = targets[pt];
-					if (natdexTargets.indexOf(list) >= 0) continue;
-					if (list.overrideTier) list.overrideTier[pid] = partner.tier;
-					if (list.tiers && list.formatSlices && list.tiers.indexOf(pid) < 0) placeSpecies(list, pid, partner.tier);
-				}
-				for (var pn = 0; pn < natdexTargets.length; pn++) {
-					var ndList = natdexTargets[pn];
-					if (!ndList.overrideTier) ndList.overrideTier = {};
-					ndList.overrideTier[pid] = partner.natDexTier;
-					if (ndList.tiers && ndList.formatSlices && ndList.tiers.indexOf(pid) < 0) placeSpecies(ndList, pid, partner.natDexTier);
-				}
-			}
-		}
-
 		installLearnset(table);
 		if (!landed) return false;
 		return true;
@@ -1339,17 +1316,6 @@
 				if (entry && slots) entry.abilities = slots;
 			}
 		} else ready = false;
-
-		// Partner Pikachu and Eevee: their learnset row is replaced, not merged -
-		// the one the CDN ships is the Let's Go movepool with the partner moves.
-		if (table && table.learnsets && buffs.partners) {
-			for (var partnerId in buffs.partners) {
-				var row2 = {};
-				var list2 = buffs.partners[partnerId].moves;
-				for (var pm = 0; pm < list2.length; pm++) row2[list2[pm]] = '9a';
-				table.learnsets[partnerId] = row2;
-			}
-		}
 
 		// The movepool. Merged into what is already there, never replacing it:
 		// this table is the only copy of the Pokemon's real learnset the builder

@@ -493,16 +493,11 @@ check(['voltswitch', 'partingshot', 'encore', 'swagger', 'taunt', 'knockoff', 's
 	check(b.p1.active[0].hp === b.p1.active[0].maxhp && /\|-immune\|p1a: Luxray/.test(log(b)), 'and Psychic does nothing to Luxray');
 }
 
-// Partner Pikachu and Eevee.
-{
-	const pika = Dex.species.get('pikachustarter'), eevee = Dex.species.get('eeveestarter');
-	check(!pika.isNonstandard && !eevee.isNonstandard && pika.baseStats.spe === 120 && eevee.baseStats.spd === 85, 'Partner Pikachu and Eevee exist with their partner stats');
-	check(learns('pikachustarter', 'thunderbolt') && learns('pikachustarter', 'voltaiclance') && !learns('pikachustarter', 'zippyzap') && !learns('eeveestarter', 'veeveevolley'), 'with the base line\'s movepool, patch moves included, and no partner moves');
-	const { TeamValidator } = require('pokemon-showdown');
-	const set = { species: 'Pikachu-Starter', ability: 'Static', item: 'Light Ball', moves: ['thunderbolt', 'voltswitch'], level: 100, evs: { hp: 4 }, ivs: {}, nature: 'Hardy' };
-	check(!new TeamValidator('gen9rppu').validateTeam([set]), 'Partner Pikachu is legal in RP PU');
-	check(!!new TeamValidator('gen9ou').validateTeam([set]), 'and still refused in plain Gen 9 OU');
-}
+// Pikachu and Eevee have their Let's Go partner stats; the partner formes stay illegal.
+check(Object.values(Dex.species.get('pikachu').baseStats).join('/') === '45/80/50/75/60/120', 'Pikachu has its partner stats (45/80/50/75/60/120)');
+check(Object.values(Dex.species.get('eevee').baseStats).join('/') === '65/75/70/65/85/75', 'Eevee has its partner stats (65/75/70/65/85/75)');
+check(Dex.species.get('pikachustarter').isNonstandard === 'LGPE' && Dex.species.get('eeveestarter').isNonstandard === 'LGPE', 'Pikachu-Starter and Eevee-Starter stay illegal');
+check(!learns('pikachu', 'zippyzap') && !learns('eevee', 'veeveevolley'), 'and no partner-only moves');
 
 // Gleamstalk, Luxray's.
 {

@@ -192,6 +192,11 @@ const TIERS = {
 	// after it removes a full-health physically defensive Toxapex. Tested in OU.
 	luxray: 'OU',
 
+	// Pikachu with its Let's Go partner stats (45/80/50/75/60/120): a Light Ball
+	// doubles both attacks on 120 Speed, which is not ZU. Eevee keeps its LC tier
+	// (partner stats plus Eviolite are strong there; one to watch).
+	pikachu: 'PU',
+
 	// Urshifu, both styles: banned to Ubers at the owner's call.
 	urshifu: 'Uber',
 	urshifurapidstrike: 'Uber',
