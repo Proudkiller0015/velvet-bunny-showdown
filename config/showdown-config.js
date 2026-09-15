@@ -1123,7 +1123,8 @@ function serverHelpBox(user) {
 
 		section('Kagura RP battles', [
 			`${btn('roleplay', 'Roleplay room')} ${cmd('/roleplay')}: the full guide (team, encounters, catching).`,
-			`Use <b>[Gen 9] RP Battle</b> for your RP team. Wild Pok&eacute;mon and trainers come from ${cmd('!encounter')} on the Discord.`,
+			`Use <b>[Gen 9] RP Battle</b> for your RP team, built from your box in the <a href="https://docs.google.com/spreadsheets/d/1-XoCX0qkrshpiVvY4Sw1sBNAfiEnJYX67ZXZUkDDGrs/edit">RP doc</a>: ` +
+			`any move it can learn whatever its level (TMs free), held items from your first gym badge. Wild Pok&eacute;mon and trainers come from ${cmd('!encounter')} on the Discord.`,
 			`In a wild battle, the <b>Throw</b> buttons or ${cmd('/throwball [ball]')} catch; ${cmd('/useitem [item], [pokemon]')} uses a Potion or Revive.`,
 			`Your team is checked against your character's box, and Mega / Z / Dynamax / Tera need the story item.`,
 		]) +
@@ -1338,6 +1339,9 @@ function roleplayIntro() {
 		`<h2 style="margin:0 0 4px">Roleplay</h2>` +
 		`<p style="margin:0 0 6px">Battles for the Kagura RP. <b>You don't challenge anybody here</b>: ` +
 		`you ask for an encounter on ${discord}, and a wild Pok&eacute;mon or a trainer challenges you here.</p>` +
+		`<p style="margin:0 0 6px"><b>The RP doc is your record</b>: your box (every Pok&eacute;mon, its level and ball), bag, money and badges. ` +
+		`Build your team from it: <a href="https://docs.google.com/spreadsheets/d/1-XoCX0qkrshpiVvY4Sw1sBNAfiEnJYX67ZXZUkDDGrs/edit">open the doc</a>. ` +
+		`<b>Moves:</b> any move it can learn, whatever its level, and TMs are free. <b>Held items:</b> from your first gym badge.</p>` +
 
 		step('1. First time? Set up your name (once)',
 			`<ol style="margin:0;padding-left:18px">` +
@@ -1351,9 +1355,10 @@ function roleplayIntro() {
 			`<li>Click <b>New Team</b>. Set the format to <b>[Gen 9] RP Battle</b>. That one team is used for every RP battle, wild or trainer.</li>` +
 			`<li>Click <b>Add Pok&eacute;mon</b> and type its name. Add the Pok&eacute;mon your character <i>actually has</i> in the doc, nothing else.</li>` +
 			`<li>Set its <b>Level</b> to its level in the doc. It can't be higher than your level cap.</li>` +
-			`<li>Pick up to 4 <b>moves</b> it could know at that level. TMs are free. Not sure? Its level-up moves are the safe choice.</li>` +
+			`<li>Pick up to 4 <b>moves</b>: any move it can learn, whatever its level. TMs are free too.</li>` +
 			`<li>Pick its <b>ability</b>. <b>Held items</b> are allowed once you have your first badge.</li>` +
-			`<li>Nature and EVs are optional. Leave them if you don't know what they are.</li>` +
+			`<li>Nature, EVs and IVs are free: set them however you like, as long as they're legal (nobody checks). ` +
+			`Not sure what they are? Leave them; but trainers you meet get more EVs and IVs with every badge you earn.</li>` +
 			`<li>Repeat for each Pok&eacute;mon, then click back to the team list. It saves on its own.</li>` +
 			`</ol>` +
 			`<small>Your first Pok&eacute;mon in the list is the one you send out first. ` +
