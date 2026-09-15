@@ -206,6 +206,13 @@ exports.Buffs = {
 	...NUZLEAF,
 };
 
+/*
+ * Balance Patch 1: a hundred-odd underdogs, Mew, Regigigas, and the evolution
+ * levels. Its table needs the Pokedex to find pre-evolutions, so it is merged in
+ * when the buffs are applied - see applyBuffs below and balance-patch-1.js.
+ */
+const PATCH1 = require('./balance-patch-1.js');
+
 /**
  * Add the abilities to a species, past the three slots it has.
  *
@@ -375,6 +382,18 @@ exports.applied = {};
 
 /** Put the buffs into the dex the server is about to use. */
 exports.applyBuffs = (Pokedex, Learnsets) => {
+	/*
+	 * Balance Patch 1 first joins the table (once), then its evolution levels go
+	 * onto the species that evolve - Showdown keeps evoLevel on the evolved form.
+	 */
+	if (!exports.Buffs.__patch1) {
+		Object.defineProperty(exports.Buffs, '__patch1', { value: true, enumerable: false });
+		Object.assign(exports.Buffs, PATCH1.buildBuffs(Pokedex));
+	}
+	for (const [id, change] of Object.entries(PATCH1.EVOLUTIONS)) {
+		if (Pokedex[id] && Pokedex[id].evoLevel === change.from) Pokedex[id].evoLevel = change.to;
+	}
+
 	/*
 	 * The type-wide moves first, so a Pokemon that also has a buff of its own
 	 * ends up with both and is recorded once for each.

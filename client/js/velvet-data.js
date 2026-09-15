@@ -1149,6 +1149,17 @@
 				stats.spe = Math.floor(stats.spe * ripe);
 			}
 
+			/*
+			 * Colossus Unbound's 1.2x Attack, while Regigigas is above half HP.
+			 * The tooltip recalculates stats from its own list of abilities by
+			 * name, so without this the number shown ignores the ability.
+			 */
+			if (ability === 'colossusunbound') {
+				var hp = clientPokemon ? clientPokemon.hp : serverPokemon && serverPokemon.hp;
+				var maxhp = clientPokemon ? clientPokemon.maxhp : serverPokemon && serverPokemon.maxhp;
+				if (!maxhp || hp > maxhp / 2) stats.atk = Math.floor(stats.atk * 4915 / 4096);
+			}
+
 			if (speciesid !== 'samantha') {
 				for (var capped in stats) {
 					if (stats[capped] > 9999) stats[capped] = 9999;
@@ -1268,6 +1279,13 @@
 		if (window.BattleItems) {
 			for (var i in buffs.items) if (!window.BattleItems[i]) window.BattleItems[i] = buffs.items[i];
 		} else ready = false;
+
+		// Balance Patch 1's evolution levels: the CDN's rows still carry Game Freak's.
+		if (window.BattlePokedex && buffs.evoLevels) {
+			for (var evo in buffs.evoLevels) {
+				if (window.BattlePokedex[evo]) window.BattlePokedex[evo].evoLevel = buffs.evoLevels[evo];
+			}
+		}
 
 		// The ability slots, straight from the server's own table - including any
 		// slot past the four a species is built with, which is how a buffed
@@ -1677,6 +1695,66 @@
 		};
 		return true;
 	}
+
+	/**
+	 * Animations for the moves this server invented.
+	 *
+	 * The client looks a move up in BattleMoveAnims by id and plays Tackle for
+	 * anything it cannot find, so every custom move - Queen Beam, the Rush moves,
+	 * Balance Patch 1's - hit like a Tackle. Each is given the animation of the
+	 * real move it most looks like, trying a few in order because the animation
+	 * table differs between client builds. Continental Heave gets a composite:
+	 * Giga Impact on the target with the ground shaking under both sides.
+	 *
+	 * Its own timer, not the install() loop: the animation table only loads with
+	 * the battle scripts, which may be long after the builder has finished.
+	 */
+	var MOVE_ANIMS = {
+		queenbeam: ['lightofruin', 'moonblast'],
+		queensdance: ['quiverdance', 'dragondance'],
+		queensheal: ['lunardance', 'recover'],
+		queensblitz: ['wickedblow', 'nightslash'],
+		merchantscall: ['finalgambit', 'memento'],
+		wavecharge: ['aquastep', 'aquajet'],
+		junglerush: ['grassyglide', 'woodhammer', 'leafblade'],
+		cinderrush: ['flamecharge', 'flareblitz'],
+		torrentrush: ['aquajet', 'wavecrash'],
+		hivefrenzy: ['lunge', 'attackorder', 'xscissor'],
+		chrysalisveil: ['defendorder', 'quiverdance', 'recover'],
+		hustleup: ['howl', 'bulkup', 'dragondance'],
+		carrionfeast: ['crunch', 'bite'],
+		sparkscamper: ['zippyzap', 'spark', 'quickattack'],
+		undertow: ['whirlpool', 'surf', 'waterpulse'],
+		solarnectar: ['gigadrain', 'energyball'],
+		craghammer: ['headsmash', 'rockwrecker', 'stoneedge'],
+		hypnowhirl: ['psybeam', 'confusion'],
+		shufflejab: ['machpunch', 'drainpunch'],
+	};
+	function installMoveAnims() {
+		var anims = window.BattleMoveAnims;
+		if (!anims || !anims.tackle) return false;
+		for (var id in MOVE_ANIMS) {
+			if (anims[id]) continue;
+			for (var i = 0; i < MOVE_ANIMS[id].length; i++) {
+				var base = anims[MOVE_ANIMS[id][i]];
+				if (base && base.anim) { anims[id] = { anim: base.anim, velvetFrom: MOVE_ANIMS[id][i] }; break; }
+			}
+		}
+		if (!anims.continentalheave && anims.gigaimpact) {
+			anims.continentalheave = {
+				velvetFrom: 'gigaimpact+earthquake',
+				anim: function (scene, sprites) {
+					anims.gigaimpact.anim(scene, sprites);
+					if (anims.earthquake && anims.earthquake.anim) anims.earthquake.anim(scene, sprites);
+				},
+			};
+		}
+		return true;
+	}
+	var animTimer = setInterval(function () {
+		if (installMoveAnims()) clearInterval(animTimer);
+	}, 250);
+	installMoveAnims();
 
 	// The data files come from a CDN and arrive in their own time, so each piece
 	// is installed as soon as the thing it extends turns up rather than all at

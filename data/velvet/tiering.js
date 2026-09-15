@@ -141,6 +141,12 @@ const TIERS = {
 	// That is precisely the set Smogon banned from OU when it last existed, and
 	// we put it back.
 	greninjabond: 'Uber',
+
+	// Balance Patch 1 took Slow Start away and gave it Colossus Unbound (Mold
+	// Breaker, Clear Body, 1.2x Attack above half HP) and Continental Heave, a
+	// 110 power move that ignores Protect and shatters screens. 160 base Attack
+	// with all of that is not a ZU Pokemon any more; it is an Ubers one.
+	regigigas: 'Uber',
 };
 
 /**

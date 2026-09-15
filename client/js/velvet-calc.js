@@ -239,6 +239,15 @@
 			out.push(['atk', 2, 1], ['spa', 2, 1]);
 		}
 
+		// Colossus Unbound (Regigigas, Balance Patch 1): 1.2x Attack while above
+		// half HP. Its Mold Breaker half the calculator cannot be told about by
+		// name, so a defender's ability is still applied here.
+		if (ability === 'Colossus Unbound') {
+			var cur = Number(pokemon.originalCurHP);
+			var max = typeof pokemon.maxHP === 'function' ? pokemon.maxHP() : 0;
+			if (!max || !(cur >= 0) || cur > max / 2) out.push(['atk', 4915, 4096]);
+		}
+
 		// The Elemental Banana, for the six it belongs to. 1.3x, or 1.5x once
 		// that Pokemon has Terastallized or Dynamaxed - which the calculator
 		// knows about, so it can be asked.

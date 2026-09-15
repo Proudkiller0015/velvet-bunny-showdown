@@ -237,6 +237,14 @@ const unlocked = {
 	species: Object.keys(za.assigned),
 	items: za.ZA_STONES.slice(),
 };
+/*
+ * Balance Patch 1's evolution levels, for the builder and the dex lookups: the
+ * client's own Pokedex rows still carry Game Freak's numbers.
+ */
+const { EVOLUTIONS } = require(path.join(PACKAGE, 'dist', 'data', 'velvet', 'balance-patch-1.js'));
+const evoLevels = {};
+for (const [id, change] of Object.entries(EVOLUTIONS)) evoLevels[id] = Dex.species.get(id).evoLevel || change.to;
+
 const overrides = { moves: {}, abilities: {} };
 for (const id of CHANGED.moves) overrides.moves[id] = moveRow(Dex.moves.get(id));
 for (const id of CHANGED.abilities) overrides.abilities[id] = abilityRow(Dex.abilities.get(id));
@@ -294,6 +302,7 @@ window.VelvetBuffs = {
 \tcutMoves: ${JSON.stringify(cutMoves)},
 \tcutMoveSources: ${JSON.stringify(cutMoveSources)},
 \tunlocked: ${JSON.stringify(unlocked)},
+\tevoLevels: ${JSON.stringify(evoLevels)},
 
 \t/** What this Pokemon gained, or an empty record. */
 \tget: function (speciesid) {

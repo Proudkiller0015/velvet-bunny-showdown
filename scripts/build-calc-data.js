@@ -36,8 +36,15 @@ const { Dex } = require(path.join(PACKAGE, 'dist', 'sim', 'dex.js'));
 
 /** Everything this server invented, as opposed to everything it changed. */
 const SPECIES = ['samantha', 'nuzleafsold'];
-const MOVES = ['junglerush', 'cinderrush', 'torrentrush', 'wavecharge', 'queenbeam', 'queensdance', 'queensheal', 'queensblitz', 'merchantscall'];
-const ABILITIES = ['verdantsurge', 'solarsurge', 'tidalsurge', 'queenwrath', 'queensmorph', 'norefunds'];
+/*
+ * Moves and abilities are worked out rather than listed: anything with a
+ * negative number is ours. A hand-written list is how Balance Patch 1's eleven
+ * moves and Colossus Unbound nearly shipped to the server and not to the
+ * calculator.
+ */
+// Smogon's CAP Pokemon number theirs negatively too; those are not ours.
+const MOVES = Dex.moves.all().filter(m => m.exists && m.num < 0 && m.isNonstandard !== 'CAP').map(m => m.id);
+const ABILITIES = Dex.abilities.all().filter(a => a.exists && a.num < 0 && a.isNonstandard !== 'CAP').map(a => a.id);
 const ITEMS = ['elementalbanana', 'brokenpact'];
 
 /**

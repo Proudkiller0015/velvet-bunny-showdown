@@ -598,3 +598,6 @@ function patchAbilities(Abilities) {
 /** Shared with data/velvet/moves.js, which patches Destiny Bond the same way. */
 
 exports.patchAbilities = patchAbilities;
+
+// Balance Patch 1's ability (Regigigas's Colossus Unbound) joins the table here.
+Object.assign(exports.Abilities, require('./balance-patch-1.js').ABILITIES);

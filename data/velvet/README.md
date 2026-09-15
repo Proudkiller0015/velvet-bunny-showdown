@@ -184,6 +184,22 @@ faint. Roar drags an ordinary Nuzleaf out and is refused by No Refunds;
 Intimidate lands for −2 on the control and is refused here. The second knockout
 is real, and it reverts to Nuzleaf.
 
+## Balance Patch 1
+
+`balance-patch-1.js` holds the whole patch in one place, and each part joins
+the file that already owns that kind of change:
+
+| part | what | joins |
+| --- | --- | --- |
+| `EVOLUTIONS` | 39 lowered evolution levels (Braviary 54 → 40, Magcargo 38 → 30…) | `buffs.js` sets `evoLevel`; `scripts/build-buffs.js` ships them to the client; the Discord bot copies them with `rp-bot/tools/sync-evo-levels.js` |
+| `MOVES` | Hive Frenzy, Chrysalis Veil, Hustle Up, Carrion Feast, Spark Scamper, Undertow, Solar Nectar, Crag Hammer, Hypno Whirl, Shuffle Jab (nums −10…−19, `velvetShared`), and Regigigas's Continental Heave (−20, `nosketch`) | `moves.js` |
+| `ABILITIES` | Colossus Unbound (−7): Mold Breaker + Clear Body + 1.2x Attack above half HP | `abilities.js`; tooltip in `velvet-data.js`, calculator in `velvet-calc.js` |
+| `buildBuffs` | ten type groups, the joke Pokémon (`SMALL`), ability grants, pre-evolutions, Mew | `buffs.js`'s table, applied with everything else |
+
+Regigigas is Uber in `tiering.js`. Custom move animations (all of ours, not
+only this patch's) are borrowed from real moves in `installMoveAnims()` in
+`client/js/velvet-data.js`. `test/patch1.test.js` checks every effect in battle.
+
 ## The damage calculator
 
 `/calc` is Showdown's own calculator with this server's data and effects in it,

@@ -602,3 +602,6 @@ function patchMoves(Moves) {
 }
 
 exports.patchMoves = patchMoves;
+
+// Balance Patch 1's moves live with the rest of that patch, and join the table here.
+Object.assign(exports.Moves, require('./balance-patch-1.js').MOVES);
