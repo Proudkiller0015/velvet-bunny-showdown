@@ -1250,6 +1250,13 @@ function applyAvatar(user) {
  * The encounter logic itself is in src/rp-server.js; this is the wiring.
  */
 const RP_BOT = process.env.PS_RP_BOT_NAME || 'RP Guide';
+/**
+ * Whether a user is one of the RP bot's own connections: the RP Guide, or a
+ * "Wild Pidgey" / "Hiker Bob" it logged in for an encounter. Filled in by
+ * roleplay(), which knows the rolled names. These get the bot rank like every
+ * other bot, but are never remembered - the next "Hiker Bob" could be a person.
+ */
+let isRpBot = () => false;
 const RP_FORMATS = new Set(['gen9rpbattlewildencounter', 'gen9rpbattlewilddoubles']);
 
 function roleplayIntro() {
@@ -1344,12 +1351,17 @@ function roleplay() {
 		const original = proto.validateToken;
 		proto.validateToken = function (token, name, userid, connection) {
 			const local = connection && LOOPBACK.includes(connection.ip);
-			if (!token && local && [...allowed].some(id => userid === id || (userid.startsWith(id) && /^\d{1,3}$/.test(userid.slice(id.length))))) {
+			if (!token && local && rolled(userid)) {
 				return Promise.resolve('1');
 			}
 			return original.call(this, token, name, userid, connection);
 		};
 	}
+	function rolled(userid) {
+		return [...allowed].some(id => userid === id || (userid.startsWith(id) && /^\d{1,3}$/.test(userid.slice(id.length))));
+	}
+	isRpBot = user => rolled(user.id) && user.connections.length > 0 &&
+		user.connections.every(c => ['127.0.0.1', '::1', '::ffff:127.0.0.1'].includes(c.ip));
 
 	const deps = {
 		isOnline: userid => {
@@ -1575,6 +1587,14 @@ exports.startuphook = function () {
 			// given, so this puts an avatar on and never takes one back off.
 			applyAvatar(user);
 			if (botIds.has(user.id)) continue;   // ranks for the bot are handled above
+			if (isRpBot(user)) {
+				// The RP Guide and its wild Pokémon and trainers are bots too.
+				if (user.tempGroup !== '*') {
+					user.setGroup('*');
+					try { user.updateIdentity(); user.update(); } catch (e) { /* on their way out */ }
+				}
+				continue;
+			}
 
 			// The rank this account is supposed to have: whatever was last set for
 			// them in chat, otherwise whatever the config declares. Owners are the

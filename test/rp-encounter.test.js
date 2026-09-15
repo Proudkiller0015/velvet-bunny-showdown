@@ -52,7 +52,7 @@ const TEAM = Teams.pack([
 			if (line.startsWith('|challstr|')) ws.send(`|/trn ${NAME},0,`);
 			if (line.startsWith('|pm|') && line.includes('|/challenge gen9rpbattle')) {
 				const from = line.split('|')[2].trim().replace(/^[^A-Za-z0-9]/, '');
-				seen.challenge = { from, format: /\/challenge (\w+)/.exec(line)[1] };
+				seen.challenge = { from, rank: line.split('|')[2][0], format: /\/challenge (\w+)/.exec(line)[1] };
 				ws.send(`|/utm ${TEAM}`);
 				ws.send(`|/accept ${from}`);
 			}
@@ -101,6 +101,7 @@ const TEAM = Teams.pack([
 
 	for (let i = 0; i < 40 && !seen.challenge; i++) await wait(500);
 	check(!!seen.challenge, `the RP bot challenged the player (${seen.challenge && seen.challenge.from})`);
+	check(seen.challenge && seen.challenge.rank === '*', `the wild Pokémon has the bot rank (got "${seen.challenge && seen.challenge.rank}")`);
 
 	let result = null;
 	for (let i = 0; i < 180; i++) {
