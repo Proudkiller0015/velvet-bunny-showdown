@@ -450,22 +450,25 @@ const aOrAnName = name => (/^[AEIOU]/i.test(name) ? `an ${name}` : `a ${name}`);
  * name, which the client replaces with "Submitted!" after one use and which
  * failed silently on any typo, so players never got a Potion to work.
  */
-function itemPanel(bag, team) {
+function itemPanel(bag, team, active, beenIn) {
 	const E = require('../../../src/encounters');
 	const esc = s => String(s).replace(/[&<>"']/g, ch => `&#${ch.charCodeAt(0)};`);
 	const mons = (team || []).map(p => {
 		const [hp, max] = String(p.condition || '').split(' ')[0].split('/').map(Number);
+		const name = String(p.ident || '').replace(/^p\d+[a-z]?:\s*/, '');
 		return {
-			name: String(p.ident || '').replace(/^p\d+[a-z]?:\s*/, ''),
+			name,
 			fainted: / fnt$/.test(String(p.condition)) || hp === 0,
 			hurt: hp < max,
 			status: /\s(brn|par|slp|frz|psn|tox)$/.test(String(p.condition)),
+			// Max Elixir: the request has the active Pokémon's PP; a benched one can only have used PP if it has been in.
+			pp: p.active ? !!(active || []).some(a => a && (a.moves || []).some(mv => mv.maxpp && mv.pp < mv.maxpp)) : !!(beenIn && beenIn.has(name)),
 		};
 	});
 	const rows = bag.map(([id, n]) => {
 		const item = E.findBattleItem(id);
 		if (!item) return '';
-		const helps = mons.filter(m => (item.revive ? m.fainted : !m.fainted && (item.pp || m.hurt || (item.cure && m.status))));
+		const helps = mons.filter(m => (item.revive ? m.fainted : !m.fainted && (item.pp ? m.pp : m.hurt || (item.cure && m.status))));
 		const buttons = helps.map(m => `<button class="button" name="send" value="/useitem ${item.id}, ${esc(m.name)}">${esc(m.name)}</button>`).join(' ');
 		return `<div>${item.name} <small>(${n})</small>: ${buttons || `<small style="opacity:.7">${item.revive ? 'nobody has fainted' : 'nobody needs it'}</small>`}</div>`;
 	}).join('');
@@ -1595,7 +1598,9 @@ function roleplay() {
 						const item = require('../../../src/encounters').findBattleItem(id);
 						return [id, Math.max(0, n - (item ? rp.usedInLog(this.room.log.log, player.name, item.name) : 0))];
 					}).filter(([, n]) => n !== 0);
-					const html = (bag.length && itemPanel(bag, request.side.pokemon)) || '<div class="infobox" style="margin:4px 0"><small>No items left in your bag.</small></div>';
+					const been = new Set(this.room.log.log.filter(l => l.startsWith(`|switch|${lines[1]}`) || l.startsWith(`|drag|${lines[1]}`))
+						.map(l => l.split('|')[2].replace(/^p\d+[a-z]?:\s*/, '')));
+					const html = (bag.length && itemPanel(bag, request.side.pokemon, request.active, been)) || '<div class="infobox" style="margin:4px 0"><small>No items left in your bag.</small></div>';
 					player.sendRoom(`|uhtml|rpitems|${html}`);
 				}
 			}
