@@ -116,6 +116,8 @@ const TIERS = {
 	roaringmoon: 'OU',
 	// Bloodmoon Ursaluna too (Patch 1.5).
 	ursalunabloodmoon: 'OU',
+	// Mega Zeraora (base Zeraora was already UU), unbanned by the owner's call (Patch 1.5).
+	zeraoramega: 'OU',
 
 	// Its only ability is Shadow Tag. Base Chandelure can pick Flash Fire and go
 	// on being an RU Pokemon, and the ability ban in the tiers below Ubers
