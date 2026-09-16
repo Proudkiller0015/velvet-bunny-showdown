@@ -268,7 +268,7 @@ for (const [id, change] of Object.entries(EVOLUTIONS)) {
 
 const overrides = { moves: {}, abilities: {}, species: {} };
 for (const id of CHANGED.species || []) {
-	overrides.species[id] = { baseStats: Object.assign({}, Dex.species.get(id).baseStats), types: Dex.species.get(id).types.slice() };
+	overrides.species[id] = { baseStats: Object.assign({}, Dex.species.get(id).baseStats), types: Dex.species.get(id).types.slice(), abilities: Object.assign({}, Dex.species.get(id).abilities) };
 }
 for (const id of CHANGED.moves) overrides.moves[id] = moveRow(Dex.moves.get(id));
 for (const id of CHANGED.abilities) overrides.abilities[id] = abilityRow(Dex.abilities.get(id));

@@ -172,6 +172,15 @@ const SPECIES_TYPES = {
 	luxray: ['Electric', 'Dark'],
 };
 
+/*
+ * Abilities this server changed on a species, replacing the whole set.
+ * Mega Heatran (Patch 1.5, the owner's call): Earth Eater, so the Ground
+ * weakness it walks around with becomes a heal.
+ */
+const SPECIES_ABILITIES = {
+	heatranmega: { 0: 'Earth Eater' },
+};
+
 function unnerfSpecies(Pokedex) {
 	if (!Pokedex) return Pokedex;
 	for (const [id, types] of Object.entries(SPECIES_TYPES)) {
@@ -180,13 +189,16 @@ function unnerfSpecies(Pokedex) {
 	for (const [id, stats] of Object.entries(SPECIES_STATS)) {
 		if (Pokedex[id] && Pokedex[id].baseStats) Object.assign(Pokedex[id].baseStats, stats);
 	}
+	for (const [id, abilities] of Object.entries(SPECIES_ABILITIES)) {
+		if (Pokedex[id]) Pokedex[id].abilities = Object.assign({}, abilities);
+	}
 	return Pokedex;
 }
 
 exports.CHANGED = {
 	moves: ['darkvoid', ...Object.keys(RECOVERY_PP)],
 	abilities: ['protean', 'libero', 'battlebond'],
-	species: [...new Set([...Object.keys(SPECIES_STATS), ...Object.keys(SPECIES_TYPES)])],
+	species: [...new Set([...Object.keys(SPECIES_STATS), ...Object.keys(SPECIES_TYPES), ...Object.keys(SPECIES_ABILITIES)])],
 };
 exports.unnerfSpecies = unnerfSpecies;
 

@@ -709,13 +709,22 @@ check(learns('luxray', 'gleamstalk') && !learns('luxio', 'gleamstalk') && !learn
 	const client = require('fs').readFileSync(require('path').join(__dirname, '..', 'client', 'js', 'velvet-data.js'), 'utf8');
 	check(/installDescriptions\(\)/.test(client) && /BattleText/.test(client), 'and the client writes them into its language table');
 }
-check(['walkingwake', 'dragapult', 'dragonitemega', 'lucariomegaz', 'deoxysspeed', 'greninjabond', 'magearna', 'magearnaoriginal', 'roaringmoon', 'ursalunabloodmoon', 'zeraoramega'].every(id => Dex.species.get(id).natDexTier === 'OU'), 'Walking Wake, Dragapult, Mega Dragonite, Mega Lucario Z, Deoxys-Speed, Ash-Greninja, Magearna, Roaring Moon, Bloodmoon Ursaluna and Mega Zeraora are unbanned (OU)');
+check(['walkingwake', 'dragapult', 'dragonitemega', 'lucariomegaz', 'deoxysspeed', 'greninjabond', 'magearna', 'magearnaoriginal', 'roaringmoon', 'ursalunabloodmoon', 'zeraoramega', 'heatranmega'].every(id => Dex.species.get(id).natDexTier === 'OU'), 'Walking Wake, Dragapult, Mega Dragonite, Mega Lucario Z, Deoxys-Speed, Ash-Greninja, Magearna, Roaring Moon, Bloodmoon Ursaluna, Mega Zeraora and Mega Heatran are unbanned (OU)');
 {
 	const vm = require('vm');
 	const ctx = { window: {} };
 	vm.runInNewContext(require('fs').readFileSync(require('path').join(__dirname, '..', 'client', 'js', 'velvet-buffs.js'), 'utf8'), ctx);
 	const nd = ctx.window.VelvetBuffs.natdexTiers;
 	check(['terapagos', 'terapagosterastal', 'terapagosstellar'].every(id => nd[id] === 'Uber'), 'the client labels every Terapagos forme Uber in National Dex, as the server does');
+}
+
+// Mega Heatran eats Ground moves.
+{
+	check(JSON.stringify(Dex.species.get('heatranmega').abilities) === '{"0":"Earth Eater"}', 'Mega Heatran has Earth Eater');
+	const b = battle([{ species: 'Heatran', item: 'Heatranite', ability: 'Flash Fire', moves: ['splash'] }], [{ species: 'Garchomp', ability: 'Rough Skin', moves: ['earthquake'] }]);
+	b.makeChoices('move 1 mega', 'move 1');
+	const h = b.p1.active[0];
+	check(h.species.name === 'Heatran-Mega' && h.hp === h.maxhp && /Earth Eater/.test(log(b)), `and Earthquake heals it instead of hitting (${h.species.name}, ${h.hp}/${h.maxhp})`);
 }
 
 console.log(failed ? `\n${failed} failed` : '\nall passed');
