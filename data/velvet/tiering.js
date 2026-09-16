@@ -122,6 +122,8 @@ const TIERS = {
 	heatranmega: 'OU',
 	// Mega Blaziken, unbanned by the owner's call (Patch 1.5).
 	blazikenmega: 'OU',
+	// Pheromosa, unbanned by the owner's call (Patch 1.5).
+	pheromosa: 'OU',
 
 	// Its only ability is Shadow Tag. Base Chandelure can pick Flash Fire and go
 	// on being an RU Pokemon, and the ability ban in the tiers below Ubers
