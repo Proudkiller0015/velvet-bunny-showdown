@@ -22,7 +22,7 @@ module.exports = {
     // ---------------------------------------------------------------- Hinode
     'sakura': {
       name: 'Sakura Town',
-      channels: ['poke-center', 'sakura-lab', 'sakura-square', 'shrine-steps', 'sakura-mart', 'blossom-road', 'the-old-well', 'sakura-houses', 'sakura-beach', 'cynthias-house'],
+      channels: ['poke-center', 'sakura-lab', 'sakura-square', 'shrine-steps', 'sakura-mart', 'blossom-road', 'the-old-well', 'sakura-houses', 'sakura-beach', 'sakura-ferry', 'cynthias-house'],
       types: ['Normal', 'Bug', 'Flying', 'Grass'],
       wild: ['blossom-road', 'shrine-steps', 'the-old-well', 'sakura-beach'],
       trainers: ['youngster', 'lass', 'schoolkid', 'bugcatcher'],
@@ -329,7 +329,7 @@ module.exports = {
     },
     'cinder': {
       name: 'Cinder Row',
-      channels: ['cinder-row', 'row-shop', 'the-jetty'],
+      channels: ['cinder-row', 'row-shop', 'the-jetty', 'cinder-ferry'],
       types: ['Fire', 'Water', 'Rock', 'Normal'],
       wild: ['cinder-row', 'the-jetty'],
       trainers: ['fisherman', 'sailor', 'firebreather', 'delinquent', 'youngster', 'worker'],
@@ -395,7 +395,7 @@ module.exports = {
     },
     'tidecall': {
       name: 'Tidecall Town',
-      channels: ['the-stacks', 'tidecall-gym', 'poke-center-tsuki', 'tidecall-mart', 'the-causeway', 'stilt-houses'],
+      channels: ['the-stacks', 'tidecall-gym', 'poke-center-tsuki', 'tidecall-mart', 'the-causeway', 'stilt-houses', 'tidecall-ferry'],
       types: ['Rock', 'Water', 'Ground', 'Flying'],
       wild: ['the-stacks', 'the-causeway'],
       trainers: ['sailor', 'swimmer', 'fisherman', 'hiker', 'birdkeeper', 'tuber'],
@@ -425,7 +425,7 @@ module.exports = {
     // ------------------------------------------------------- Strait crossings
     'watari': {
       name: 'Watari Bridge',
-      channels: ['watari-bridge', 'the-toll-house', 'under-the-span'],
+      channels: ['watari-bridge', 'the-toll-house', 'under-the-span', 'watari-ferry'],
       types: ['Water', 'Flying', 'Ghost'],
       wild: ['watari-bridge', 'under-the-span'],
       trainers: ['fisherman', 'cyclist', 'hiker', 'channeler', 'backpacker'],
@@ -446,7 +446,7 @@ module.exports = {
     // -------------------------------------------------------------- Open sea
     'beacon': {
       name: 'Beacon Rock',
-      channels: ['beacon-rock', 'the-light', 'keepers-room'],
+      channels: ['beacon-rock', 'beacon-ferry', 'the-light', 'keepers-room'],
       types: ['Water', 'Flying', 'Ice'],
       wild: ['beacon-rock', 'the-light'],
       trainers: ['sailor', 'swimmer', 'birdkeeper', 'fisherman'],
@@ -483,12 +483,25 @@ module.exports = {
       rare: ['Nihilego', 'Iron Jugulis'],
     },
 
+    // ------------------------------------------------------------ Kitaura
+    // The north ferry's harbour below N's Castle: a cold coast.
+    'kitaura': {
+      name: 'Kitaura',
+      channels: ['kitaura-harbour', 'kitaura-ferry', 'net-sheds', 'kitaura-inn'],
+      types: ['Water', 'Ice', 'Flying', 'Normal'],
+      wild: ['kitaura-harbour'],
+      trainers: ['sailor', 'fisherman', 'worker', 'skier'],
+      noTrainers: ['kitaura-inn'],
+      common: ['Wingull', 'Spheal', 'Seel', 'Shellder', 'Krabby', 'Snorunt', 'Delibird', 'Cubchoo', 'Buizel', 'Arrokuda', 'Wattrel', 'Bergmite'],
+      rare: ['Lapras', 'Eiscue'],
+    },
+
     // ---------------------------------------------------------------- Tokoyo
     // The far isle with the gate, where crossovers arrive. What comes through the
     // portal is from somewhere else, which is the one story reason for Ultra Beasts.
     'tokoyo': {
       name: 'The Tokoyo Gate',
-      channels: ['tokoyo-shore', 'the-far-gate', 'the-other-side'],
+      channels: ['tokoyo-shore', 'tokoyo-ferry', 'the-far-gate', 'the-other-side'],
       types: ['Psychic', 'Ghost', 'Dragon', 'Fairy'],
       wild: ['tokoyo-shore', 'the-other-side'],
       trainers: ['psychic', 'psychicf', 'hexmaniac', 'sage', 'dragontamer', 'acetrainer'],
