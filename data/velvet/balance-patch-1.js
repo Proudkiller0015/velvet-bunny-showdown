@@ -119,6 +119,16 @@ exports.EVOLUTIONS = {
 	rhydon: { from: 42, to: 40, why: 'Cap: no middle stage after 40' },
 	lampent: { from: 41, to: 24, why: 'Early-game friendly: Litwick is met early' },
 
+	// September 2026 review: ordinary three-stage lines finish with the starters' tier (36-38),
+	// and nothing that isn't a pseudo-legendary evolves later than the pseudo-legendaries do.
+	gothitelle: { from: 41, to: 38, why: '490 BST: finishes with the other ordinary three-stage lines' },
+	reuniclus: { from: 41, to: 38, why: "490 BST: Gothitelle's counterpart, same level" },
+	hatterene: { from: 42, to: 38, why: '510 BST: finishes with the other ordinary three-stage lines' },
+	grimmsnarl: { from: 42, to: 38, why: "510 BST: Hatterene's counterpart, same level" },
+	aggron: { from: 42, to: 38, why: '530 BST, the same as a starter, which finishes at 36' },
+	mrrime: { from: 42, to: 38, why: '520 BST: finishes with the other ordinary three-stage lines' },
+	haxorus: { from: 48, to: 45, why: 'Not a pseudo-legendary (540 BST), so no later than Metagross and Kommo-o' },
+
 	// Stone or level: the Dusk Stone still works any time, and Lampent now also evolves by itself at 36.
 	chandelure: { from: 'Dusk Stone', to: 36, why: 'Now also evolves at level 36; the Dusk Stone still works' },
 
