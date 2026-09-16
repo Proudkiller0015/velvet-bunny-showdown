@@ -483,6 +483,20 @@ module.exports = {
       rare: ['Nihilego', 'Iron Jugulis'],
     },
 
+    // ---------------------------------------------------------------- Tokoyo
+    // The far isle with the gate, where crossovers arrive. What comes through the
+    // portal is from somewhere else, which is the one story reason for Ultra Beasts.
+    'tokoyo': {
+      name: 'The Tokoyo Gate',
+      channels: ['tokoyo-shore', 'the-far-gate', 'the-other-side'],
+      types: ['Psychic', 'Ghost', 'Dragon', 'Fairy'],
+      wild: ['tokoyo-shore', 'the-other-side'],
+      trainers: ['psychic', 'psychicf', 'hexmaniac', 'sage', 'dragontamer', 'acetrainer'],
+      noTrainers: ['the-far-gate'],
+      common: ['Hatenna', 'Sinistea', 'Mimikyu', 'Espurr', 'Duskull', 'Litwick', 'Swablu', 'Clefairy', 'Dedenne', 'Elgyem', 'Drifloon', 'Spritzee'],
+      rare: ['Poipole', 'Blacephalon', 'Stakataka'],
+    },
+
     // ---------------------------------------------------------------- Routes
     'route-1': {
       name: 'Route 1',
