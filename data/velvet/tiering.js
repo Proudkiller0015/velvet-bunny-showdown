@@ -112,6 +112,8 @@ const TIERS = {
 	// Magearna, both colours, unbanned by the owner's call (Patch 1.5). Its Mega stays Uber.
 	magearna: 'OU',
 	magearnaoriginal: 'OU',
+	// Roaring Moon, unbanned by the owner's call (Patch 1.5).
+	roaringmoon: 'OU',
 
 	// Its only ability is Shadow Tag. Base Chandelure can pick Flash Fire and go
 	// on being an RU Pokemon, and the ability ban in the tiers below Ubers
