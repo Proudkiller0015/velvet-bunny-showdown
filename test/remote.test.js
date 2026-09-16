@@ -48,7 +48,17 @@ class Player {
 		for (const line of lines) {
 			if (!line.startsWith('|')) continue;
 			const parts = line.slice(1).split('|');
-			if (parts[0] === 'challstr') this.send(`|/trn ${NAME},0,`);
+			// The live server checks names with Showdown's login server (real accounts), so a
+			// bare `/trn` is refused as "authentication token was invalid". Ask for a token
+			// for an unregistered name, as the client does.
+			if (parts[0] === 'challstr') {
+				const challstr = parts.slice(1).join('|');
+				const body = new URLSearchParams({ act: 'getassertion', userid: NAME.toLowerCase(), challstr });
+				fetch('https://play.pokemonshowdown.com/api/getassertion', { method: 'POST', body })
+					.then(r => r.text())
+					.then(token => this.send(`|/trn ${NAME},0,${token.trim()}`))
+					.catch(() => this.send(`|/trn ${NAME},0,`));
+			}
 			if (parts[0] === 'updateuser' && parts[2] === '1' && !this.ready) { this.ready = true; this.onReady && this.onReady(); }
 			if (parts[0] === 'popup') this.errors.push(`popup: ${parts.slice(1).join('|').slice(0, 200)}`);
 			if (parts[0] === 'pm' && /<button/i.test(line)) this.sawBox = true;
