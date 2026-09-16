@@ -39,8 +39,8 @@ const TIERS = {
 	// Poison Heal plus Protect plus Toxic plus Substitute is a Pokemon that wins
 	// by not losing, and the things that break it through are largely the things
 	// already in Ubers. Moved up rather than banned outright so it still has a
-	// tier to be played in.
-	gliscor: 'Uber',
+	// tier to be played in. Then unbanned back to OU by the owner's call (Patch 1.5).
+	gliscor: 'OU',
 
 	/*
 	 * The two that National Dex tiered under a Terastal ban this server does
