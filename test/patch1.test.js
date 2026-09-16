@@ -709,7 +709,7 @@ check(learns('luxray', 'gleamstalk') && !learns('luxio', 'gleamstalk') && !learn
 	const client = require('fs').readFileSync(require('path').join(__dirname, '..', 'client', 'js', 'velvet-data.js'), 'utf8');
 	check(/installDescriptions\(\)/.test(client) && /BattleText/.test(client), 'and the client writes them into its language table');
 }
-check(Dex.species.get('walkingwake').natDexTier === 'OU', 'Walking Wake is unbanned (OU)');
+check(Dex.species.get('walkingwake').natDexTier === 'OU' && Dex.species.get('dragapult').natDexTier === 'OU', 'Walking Wake and Dragapult are unbanned (OU)');
 
 console.log(failed ? `\n${failed} failed` : '\nall passed');
 process.exit(failed ? 1 : 0);

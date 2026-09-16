@@ -103,6 +103,8 @@ const TIERS = {
 
 	// Walking Wake, unbanned by the owner's call (Patch 1.5) "for the funny".
 	walkingwake: 'OU',
+	// Dragapult too (Patch 1.5), by the owner's call.
+	dragapult: 'OU',
 
 	// Its only ability is Shadow Tag. Base Chandelure can pick Flash Fire and go
 	// on being an RU Pokemon, and the ability ban in the tiers below Ubers
