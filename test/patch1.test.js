@@ -718,6 +718,20 @@ check(['walkingwake', 'dragapult', 'dragonitemega', 'lucariomegaz', 'deoxysspeed
 	check(['terapagos', 'terapagosterastal', 'terapagosstellar'].every(id => nd[id] === 'Uber'), 'the client labels every Terapagos forme Uber in National Dex, as the server does');
 }
 
+// Mega Zeraora: Speed Boost.
+{
+	const b = battle([{ species: 'Zeraora', item: 'Zeraorite', ability: 'Volt Absorb', moves: ['splash'] }], [{ species: 'Blissey', ability: 'Natural Cure', moves: ['splash'] }]);
+	b.makeChoices('move 1 mega', 'move 1');
+	const z = b.p1.active[0];
+	check(z.species.name === 'Zeraora-Mega' && z.boosts.spe === 1, `Mega Zeraora has Speed Boost (+${z.boosts.spe} Speed after a turn)`);
+}
+// Every Mega has a sprite: Showdown's own, or one we ship (client/js/velvet-data.js MEGA_SPRITES).
+{
+	const src = require('fs').readFileSync(require('path').join(__dirname, '..', 'client', 'js', 'velvet-data.js'), 'utf8');
+	const files = ['raichu-megax', 'heatran-mega', 'zeraora-mega', 'zygarde-mega'];
+	const present = files.every(f => src.includes(`'${f}'`) && require('fs').existsSync(require('path').join(__dirname, '..', 'client', 'sprites', `${f}.png`)) && require('fs').existsSync(require('path').join(__dirname, '..', 'client', 'sprites', `${f}-back.png`)));
+	check(present, 'Megas Showdown has no sprite for ship with ours (front and back)');
+}
 // Mega Heatran eats Ground moves.
 {
 	check(JSON.stringify(Dex.species.get('heatranmega').abilities) === '{"0":"Earth Eater"}', 'Mega Heatran has Earth Eater');

@@ -71,6 +71,43 @@
 		},
 	};
 
+	/*
+	 * Megas Showdown has no sprite for - most of the Z-A ones (its CDN only has an
+	 * April Fools placeholder for Heatran's). Standard 96x96 front and back sprites
+	 * from PokeAPI's sprite collection, drawn like any other gen 5 sprite. Mega
+	 * Zygarde has no pixel sprite anywhere, so its HOME render is scaled down.
+	 */
+	var MEGA_SPRITES = {
+		raichumegax: 'raichu-megax',
+		raichumegay: 'raichu-megay',
+		staraptormega: 'staraptor-mega',
+		heatranmega: 'heatran-mega',
+		darkraimega: 'darkrai-mega',
+		scolipedemega: 'scolipede-mega',
+		scraftymega: 'scrafty-mega',
+		eelektrossmega: 'eelektross-mega',
+		pyroarmega: 'pyroar-mega',
+		malamarmega: 'malamar-mega',
+		barbaraclemega: 'barbaracle-mega',
+		dragalgemega: 'dragalge-mega',
+		magearnamega: 'magearna-mega',
+		magearnaoriginalmega: 'magearna-originalmega',
+		zeraoramega: 'zeraora-mega',
+		falinksmega: 'falinks-mega',
+		tatsugiricurlymega: 'tatsugiri-curlymega',
+		tatsugiridroopymega: 'tatsugiri-droopymega',
+		tatsugiristretchymega: 'tatsugiri-stretchymega',
+		zygardemega: 'zygarde-mega',
+	};
+	Object.keys(MEGA_SPRITES).forEach(function (id) {
+		var file = MEGA_SPRITES[id];
+		ART[id] = {
+			standard: true,
+			still: { front: [file + '.png', 96, 96], back: [file + '-back.png', 96, 96] },
+			builder: 'background-image:url(#SPRITES#' + file + '.png);background-position:10px 5px;background-repeat:no-repeat;',
+		};
+	});
+
 	// Which of ours this is, if it is one of ours at all. The client passes a
 	// name in some places and a Pokemon in others, and its two kinds of Pokemon
 	// do not agree on how to ask: a battle's own objects carry `speciesForme` as

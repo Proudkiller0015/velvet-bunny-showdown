@@ -179,6 +179,8 @@ const SPECIES_TYPES = {
  */
 const SPECIES_ABILITIES = {
 	heatranmega: { 0: 'Earth Eater' },
+	// Mega Zeraora (Patch 1.5, the owner's call): Speed Boost.
+	zeraoramega: { 0: 'Speed Boost' },
 };
 
 function unnerfSpecies(Pokedex) {
