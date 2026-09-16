@@ -97,6 +97,18 @@ const CASES = [
 		move: 'Flamethrower',
 	},
 	{
+		name: 'Crown of Flame: a Fire punch, 1.56x',
+		attacker: 'A|infernape||crownofflame|firepunch,machpunch,icepunch,uturn|Adamant|252,252,4,,,|||||',
+		defender: 'B|blissey||naturalcure|tackle,protect,rest,softboiled|Bold|252,,252,,,|||||',
+		move: 'Fire Punch',
+	},
+	{
+		name: 'Crown of Flame: its built-in Expert Belt, on a super effective Ice Punch',
+		attacker: 'A|infernape||crownofflame|icepunch,machpunch,firepunch,uturn|Adamant|252,252,4,,,|||||',
+		defender: 'B|garchomp||roughskin|earthquake,protect,rest,swordsdance|Impish|252,,252,,,|||||',
+		move: 'Ice Punch',
+	},
+	{
 		name: "Merchant's Call: the whole HP bar, as damage",
 		attacker: 'A|nuzleaf|brokenpact|chlorophyll|merchantscall,tackle,protect,rest|Adamant|252,252,4,,,|||||',
 		defender: 'B|blissey||naturalcure|tackle,protect,rest,softboiled|Bold|252,,252,,,|||||',

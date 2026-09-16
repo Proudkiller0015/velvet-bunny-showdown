@@ -430,6 +430,34 @@ exports.MOVES = {
 		shortDesc: "Paralyzes the target. User: +2 Speed, next Electric move 2x power.",
 		desc: "Never misses and hits through Substitute. Paralyzes the target, Ground types included; abilities that absorb Electric moves (Volt Absorb, Lightning Rod, Motor Drive and the like) absorb it instead, and then the user gains nothing. Whether or not the paralysis takes, the user's Speed rises by 2 stages and its next Electric-type attack has doubled power, as with Charge.",
 	},
+	/*
+	 * Infernape's two (Patch 1.5), by the owner's request. Great Sage Strike -
+	 * after the Great Sage Equal to Heaven, the monkey king Infernape is drawn
+	 * from - is the Focus Blast that lands: Close Combat on the special side, with the same
+	 * price. Pyre Strike is Flare Blitz without the recoil, so the knife does not
+	 * cut the hand holding it - it keeps the thaw and the burn chance.
+	 */
+	greatsagestrike: {
+		num: -29, gen: 9, name: "Great Sage Strike", type: "Fighting", category: "Special",
+		basePower: 120, accuracy: 100, pp: 5, priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1, nosketch: 1 },
+		self: { boosts: { def: -1, spd: -1 } },
+		secondary: null,
+		target: "normal", contestType: "Tough",
+		flavor: "The strike of the monkey king who called himself Heaven's equal: every limb, all the fire, at once.",
+		shortDesc: "Lowers the user's Defense and Sp. Def by 1.",
+		desc: "Lowers the user's Defense and Special Defense by 1 stage.",
+	},
+	pyrestrike: {
+		num: -30, gen: 9, name: "Pyre Strike", type: "Fire", category: "Physical",
+		basePower: 120, accuracy: 100, pp: 15, priority: 0,
+		flags: { contact: 1, protect: 1, mirror: 1, defrost: 1, metronome: 1, nosketch: 1 },
+		secondary: { chance: 10, status: 'brn' },
+		target: "normal", contestType: "Cool",
+		flavor: "Infernape wraps itself in flame and crashes into the foe - and walks out of the fire unburnt.",
+		shortDesc: "10% chance to burn. Thaws user. No recoil.",
+		desc: "Has a 10% chance to burn the target. If the user is frozen, it thaws out before using this move. Unlike Flare Blitz, the user takes no recoil damage.",
+	},
 	continentalheave: {
 		num: -20, gen: 9, name: "Continental Heave", type: "Normal", category: "Physical",
 		basePower: 110, accuracy: 95, pp: 5, priority: 0,
@@ -907,6 +935,11 @@ exports.ABILITIES = {
 	 * crown burns hotter the harder it hits. Its two abilities fused and made
 	 * constant - Blaze without the wait, Iron Fist - so Mach Punch, Drain Punch
 	 * and Fire Punch are where it is strongest, with no weather or item needed.
+	 * And a built-in Expert Belt, by the owner's call: Infernape is the pocket
+	 * knife, with an answer for everything - Ice, Thunder and Fire Punch, Grass
+	 * Knot, U-turn, Knock Off, Stealth Rock, Taunt, Encore, Will-O-Wisp - and
+	 * whichever blade it picks for the target cuts deeper, with the item slot
+	 * still free.
 	 */
 	crownofflame: {
 		name: "Crown of Flame",
@@ -917,13 +950,17 @@ exports.ABILITIES = {
 			if (move.flags['punch']) mod = Math.round(mod * 4915 / 4096);
 			if (mod !== 4096) return this.chainModify([mod, 4096]);
 		},
+		// A built-in Expert Belt, so the item slot stays free for the rest of the knife.
+		onModifyDamage(damage, source, target, move) {
+			if (move && target.getMoveHitData(move).typeMod > 0) return this.chainModify([4915, 4096]);
+		},
 		flags: {},
 		rating: 4,
 		num: -22,
 		gen: 9,
 		flavor: "The flame on Infernape's head is a crown, and every blow it lands makes it burn brighter.",
-		shortDesc: "Fire and Fighting moves 1.3x power; punching moves 1.2x (both stack).",
-		desc: "This Pokemon's Fire- and Fighting-type moves have 1.3x power, and its punch-based moves have 1.2x power. A Fire or Fighting punch gets both, for 1.56x.",
+		shortDesc: "Fire/Fighting moves 1.3x, punches 1.2x, super effective hits 1.2x (all stack).",
+		desc: "This Pokemon's Fire- and Fighting-type moves have 1.3x power, and its punch-based moves have 1.2x power; a Fire or Fighting punch gets both. Its super effective attacks also deal 1.2x damage, as if it held an Expert Belt, and this stacks with a held item.",
 	},
 };
 
@@ -1061,9 +1098,19 @@ const EEVEE = ['recover', 'teleport', 'healingwish', 'knockoff', 'focusblast'];
  * Infernape (Patch 1.5): Crown of Flame (above), and the one elemental punch it
  * was missing - Ice Punch, for the Flying, Ground and Dragon types that stop a
  * Fire/Fighting cold. Thunder Punch and Fire Punch it had, and Blaze Kick comes
- * from Chimchar already. Infernape only, not Chimchar or Monferno.
+ * from Chimchar already.
+ * Plus its two signatures, Great Sage Strike and Pyre Strike; three of the
+ * shared moves that suit a fast martial artist (Hustle Up, Crag Hammer, Spark
+ * Scamper); Explosion; and the monkey moves it never had - Copycat (monkey see,
+ * monkey do), Screech, Double Hit, Tickle, and High Jump Kick and Bounce for the
+ * monkey king's leaps.
+ * Infernape only, not Chimchar or Monferno.
  */
-const INFERNAPE = { ability: 'Crown of Flame', moves: ['icepunch'] };
+const INFERNAPE = {
+	ability: 'Crown of Flame',
+	moves: ['icepunch', 'greatsagestrike', 'pyrestrike', 'hustleup', 'craghammer', 'sparkscamper',
+		'explosion', 'copycat', 'screech', 'doublehit', 'tickle', 'highjumpkick', 'bounce'],
+};
 
 const LUXRAY = { ability: 'Prankster', moves: ['gleamstalk', 'knockoff', 'suckerpunch', 'taunt', 'partingshot', 'encore', 'yawn', 'swagger', 'swordsdance'] };
 
@@ -1553,7 +1600,7 @@ exports.buildBuffs = (Pokedex) => {
 	}
 
 	// Pre-evolutions: the new move (not the coverage) and the ability.
-	const SIGNATURES = ['continentalheave', 'aurorasquall', 'memorywipe', 'soulresonance', 'resolutestrike', 'gleamstalk'];
+	const SIGNATURES = ['continentalheave', 'aurorasquall', 'memorywipe', 'soulresonance', 'resolutestrike', 'gleamstalk', 'greatsagestrike', 'pyrestrike'];
 	const newMove = m => exports.MOVES[m] && !SIGNATURES.includes(m);
 	for (const id of Object.keys(out)) {
 		let species = Pokedex[id];

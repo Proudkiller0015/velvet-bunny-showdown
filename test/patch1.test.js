@@ -576,6 +576,35 @@ check(['megahorn', 'shoreup', 'rapidspin'].every(m => learns('golisopod', m)) &&
 	check(Object.values(Dex.species.get('infernape').abilities).includes('Crown of Flame') && !Object.values(Dex.species.get('monferno').abilities).includes('Crown of Flame') &&
 		learns('infernape', 'icepunch') && !learns('monferno', 'icepunch') && Dex.species.get('infernape').natDexTier === 'OU',
 		'Infernape (not Monferno) gets Crown of Flame and Ice Punch, and is OU');
+
+	// The built-in Expert Belt: Ice Punch on Garchomp (4x) against the same punch on Blaze.
+	const onChomp = ability => {
+		const b = battle([{ species: 'Infernape', ability, moves: ['icepunch'] }], [{ species: 'Garchomp', ability: 'Rough Skin', moves: ['splash'] }], [7, 7, 7, 7]);
+		const foe = b.p2.active[0];
+		foe.sethp(foe.maxhp); foe.maxhp = 9999; foe.hp = 9999;
+		b.makeChoices('move 1', 'move 1');
+		return 9999 - foe.hp;
+	};
+	const [ip, ipCrown] = [onChomp('Blaze'), onChomp('Crown of Flame')];
+	check(near(ipCrown, ip, 1.44), `and a built-in Expert Belt: super effective Ice Punch x${(ipCrown / ip).toFixed(2)} (punch 1.2 x belt 1.2)`);
+
+	// Great Sage Strike: special, never misses its 100, drops both defences. Pyre Strike: no recoil.
+	{
+		const b = battle([{ species: 'Infernape', ability: 'Blaze', moves: ['greatsagestrike', 'pyrestrike'] }], [{ species: 'Blissey', ability: 'Natural Cure', moves: ['splash'] }]);
+		const ape = b.p1.active[0];
+		b.makeChoices('move 1', 'move 1');
+		const gss = Dex.moves.get('greatsagestrike');
+		check(gss.category === 'Special' && gss.accuracy === 100 && gss.basePower === 120 && ape.boosts.def === -1 && ape.boosts.spd === -1,
+			'Great Sage Strike: special 120, 100% accurate, and the user loses 1 Defense and 1 Sp. Def');
+		const before = ape.hp;
+		b.makeChoices('move 2', 'move 1');
+		check(ape.hp === before && Dex.moves.get('pyrestrike').basePower === 120, 'Pyre Strike: 120 power and no recoil');
+	}
+	const kit = ['greatsagestrike', 'pyrestrike', 'hustleup', 'craghammer', 'sparkscamper', 'explosion', 'copycat', 'screech', 'doublehit', 'tickle', 'highjumpkick', 'bounce'];
+	const gaps = kit.filter(m => !learns('infernape', m));
+	check(!gaps.length && !learns('monferno', 'pyrestrike') && !learns('mew', 'greatsagestrike') && Dex.moves.get('pyrestrike').flags.nosketch,
+		`Infernape learns its kit, signatures its own (not Monferno, Mew or Sketch)${gaps.length ? ` missing ${gaps.join(', ')}` : ''}`);
+	check(!learns('simisear', 'explosion'), 'the Simi monkeys do not get Explosion');
 }
 check(learns('luxray', 'gleamstalk') && !learns('luxio', 'gleamstalk') && !learns('mew', 'gleamstalk') && Dex.moves.get('gleamstalk').flags.nosketch, "Gleamstalk is Luxray's alone");
 

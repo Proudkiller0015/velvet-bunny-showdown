@@ -277,6 +277,19 @@
 	 * something the calculator understands, so only the ability's own boost has
 	 * to be added here.
 	 */
+	/** Whether a move type hits these defending types super effectively, off the calculator's own chart. */
+	function superEffective(genNum, moveType, defTypes) {
+		try {
+			var types = window.calc.Generations.get(genNum).types;
+			var chart = types.get(String(moveType).toLowerCase()).effectiveness;
+			var mod = 1;
+			(defTypes || []).forEach(function (t) { if (chart[t] !== undefined) mod *= chart[t]; });
+			return mod > 1;
+		} catch (e) {
+			return false;
+		}
+	}
+
 	function basePowerModifiers(attacker, move) {
 		var out = [];
 		if (String(attacker.ability || '') === 'Verdant Surge' && move.type === 'Grass') {
@@ -284,8 +297,11 @@
 		}
 		// Crown of Flame (Infernape): Fire and Fighting 1.3x, punches 1.2x, both stack.
 		if (String(attacker.ability || '') === 'Crown of Flame') {
-			if (move.type === 'Fire' || move.type === 'Fighting') out.push([5325, 4096]);
-			if ((move.flags && move.flags.punch) || / Punch$/.test(String(move.name || ''))) out.push([4915, 4096]);
+			// One modifier, rounded the way the server chains the two.
+			var crown = 4096;
+			if (move.type === 'Fire' || move.type === 'Fighting') crown = Math.round(crown * 5325 / 4096);
+			if ((move.flags && move.flags.punch) || / Punch$/.test(String(move.name || ''))) crown = Math.round(crown * 4915 / 4096);
+			if (crown !== 4096) out.push([crown, 4096]);
 		}
 		return out;
 	}
@@ -470,7 +486,21 @@
 				them.types = them.types.map(function (t) { return t === 'Steel' ? 'Grass' : t; });
 			}
 
+			/*
+			 * Crown of Flame's built-in Expert Belt. Holding nothing, it is exactly an
+			 * Expert Belt, which the calculator knows. Holding something else, the
+			 * belt is applied to each roll afterwards - within a point of the server,
+			 * since the server chains the two into one modifier.
+			 */
+			var crownBelt = String(us.ability || '') === 'Crown of Flame';
+			if (crownBelt && !us.item) { us.item = 'Expert Belt'; crownBelt = false; }
+
 			var result = original.call(this, gen, us, them, theMove, field);
+
+			if (crownBelt && superEffective(genNum, theMove.type, them.types)) {
+				var belt = function (d) { var x = d * 4915 / 4096; return (x % 1 > 0.5) ? Math.ceil(x) : Math.floor(x); };
+				result.damage = Array.isArray(result.damage) ? result.damage.map(function (d) { return Array.isArray(d) ? d.map(belt) : belt(d); }) : belt(result.damage);
+			}
 
 			// A move that deals a flat number ignores the formula entirely, so the
 			// result is corrected rather than computed.
