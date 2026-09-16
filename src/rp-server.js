@@ -170,7 +170,7 @@ function requestEncounter(payload, deps) {
 		if (rolled.error) return { ok: false, code: 'summon', message: rolled.error };
 	} else {
 		rolled = kind === 'wild'
-			? E.rollWild({ place, badges, levelCap, shiny: payload.shiny || {} })
+			? E.rollWild({ place, badges, levelCap, shiny: payload.shiny || {}, ace: E.aceLevel(payload.box) })
 			: E.rollTrainer({ place, badges, levelCap });
 	}
 	if (!rolled.team.length) return { ok: false, code: 'empty', message: 'Nothing turned up. Try again.' };

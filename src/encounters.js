@@ -21,6 +21,7 @@
  */
 
 const { Dex } = require('pokemon-showdown');
+const Rarity = require('./rarity');
 
 const toID = s => String(s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
 
@@ -397,21 +398,12 @@ function lineOf(root) {
 }
 
 /*
- * The two groups the RP wants rarest, below only the legendaries, which never
- * appear at all. Listed by the first stage of each line.
+ * Who is rare is decided in one place, src/rarity.js: the ladder from box-art
+ * legends down to common lines, with usage tier inside each class. Kept as
+ * 'rarest' / 'normal' here for anything still asking the old question.
  */
-const STARTERS = new Set(['bulbasaur', 'charmander', 'squirtle', 'chikorita', 'cyndaquil', 'totodile', 'treecko',
-	'torchic', 'mudkip', 'turtwig', 'chimchar', 'piplup', 'snivy', 'tepig', 'oshawott', 'chespin', 'fennekin',
-	'froakie', 'rowlet', 'litten', 'popplio', 'grookey', 'scorbunny', 'sobble', 'sprigatito', 'fuecoco', 'quaxly',
-	'pikachu', 'pichu', 'eevee']);
-const PSEUDOS = new Set(['dratini', 'larvitar', 'bagon', 'beldum', 'gible', 'deino', 'goomy', 'jangmoo', 'dreepy', 'frigibax']);
-
 function rarityClass(root) {
-	if (STARTERS.has(root.id) || PSEUDOS.has(root.id)) return 'rarest';
-	const tags = root.tags || [];
-	const line = lineOf(root);
-	if (line.some(s => (s.tags || []).some(t => t === 'Ultra Beast' || t === 'Paradox'))) return 'rarest';
-	return 'normal';
+	return Rarity.HEADLINERS.has(Rarity.classOf(root)) ? 'rarest' : 'normal';
 }
 
 /**
@@ -468,26 +460,146 @@ function lineWeight(root, { badges, types = [], maxLevel = null }) {
 
 	if (power > tier.power) w *= Math.pow(0.25, (power - tier.power) / 40);
 
-	// Late bloomers. A Larvitar is a Larvitar until 55, which is a long time to
+	// Late bloomers. A Larvitar is a Larvitar until 50, which is a long time to
 	// carry dead weight; those lines belong later in a journey than early ones.
+	// Balance Patch 1 capped final stages at 50, so 45 is what "late" means now
+	// - it is what keeps Gible (48), Beldum and Jangmo-o in with the other pseudos.
 	const finalLevel = Math.max(...line.map(minLevelOf));
-	if (finalLevel >= 50 && badges < 6) w *= 0.35;
+	if (finalLevel >= 45 && badges < 6) w *= 0.35;
 
-	if (rarityClass(root) === 'rarest') w *= 0.03;
+	// The ladder: class, usage tier inside it, and badges short of where it is at home.
+	w *= Rarity.wildWeight(root, badges);
 	return w;
 }
 
-/** Which stage of a line you meet at a level: mostly the one it would be, sometimes one behind. */
-function stageFor(root, level, rng, { behind = 0.3 } = {}) {
-	const line = lineOf(root).filter(s => minLevelOf(s) <= level);
+/**
+ * Which stage of a line you meet at a level: mostly the one it would be,
+ * sometimes one behind, and once in a while one ahead - like the games, where
+ * a Pidgeotto on Route 1 is a story, not a bug.
+ *
+ * Levels are the Balance Patch 1 evolution levels (data/velvet/balance-patch-1.js
+ * patches the Dex, and minLevel reads it), so "the stage it would be" moves
+ * with that patch.
+ *
+ * `behind` defaults to shrinking with level: young lines hang back a lot at
+ * level 10 and hardly at all at 60. `ahead` is the chance of the next stage up
+ * before its level.
+ */
+function stageFor(root, level, rng, { behind = null, ahead = 0 } = {}) {
+	const full = lineOf(root);
+	const line = full.filter(s => minLevelOf(s) <= level);
 	if (!line.length) return root;
 	// Branches (Eevee, Tyrogue) all qualify at the same depth; pick among the deepest.
 	const depth = s => { let d = 0; let x = s; while (x.prevo && d < 5) { x = Dex.species.get(x.prevo); d++; } return d; };
 	const maxDepth = Math.max(...line.map(depth));
+	if (behind === null) behind = Math.max(0.08, 0.45 - level / 150);
+	const early = full.filter(s => depth(s) === maxDepth + 1);
+	if (early.length && rng() < ahead) return pick(early, rng);
 	let wanted = maxDepth;
 	if (maxDepth > 0 && rng() < behind) wanted--;
 	const options = line.filter(s => depth(s) === wanted);
 	return pick(options.length ? options : line, rng);
+}
+
+/*
+ * Baby Pokemon: common while levels are low, thinning out as they climb, and
+ * never gone - a Pichu at level 40 is unusual, not impossible.
+ */
+const BABIES = new Set(['pichu', 'cleffa', 'igglybuff', 'togepi', 'tyrogue', 'smoochum', 'elekid', 'magby', 'azurill',
+	'wynaut', 'budew', 'chingling', 'bonsly', 'mimejr', 'happiny', 'munchlax', 'riolu', 'mantyke', 'toxel']);
+function babyWeight(root, level) {
+	if (!BABIES.has(root.id)) return 1;
+	if (level <= 15) return 2.5;
+	if (level <= 25) return 1.6;
+	if (level <= 40) return 1;
+	return 0.5;
+}
+
+/*
+ * The clock: what is out depends a little on the hour, the day and the season,
+ * the way it does in the games - never so much that a Dark type is impossible
+ * at noon or an Ice type in August.
+ *
+ * Kagura keeps the server's players' time, Europe/Paris, and its seasons (the
+ * northern ones). Each type's weight is nudged by the time of day, the day of
+ * the week and the season; a line takes the average nudge of its types,
+ * clamped so nothing moves by more than about half.
+ */
+const CLOCK_ZONE = 'Europe/Paris';
+const TIME_OF_DAY = {
+	morning: { Bug: 1.2, Flying: 1.2, Grass: 1.15, Water: 1.1, Ghost: 0.75, Dark: 0.8 },
+	day: { Grass: 1.2, Fire: 1.2, Bug: 1.15, Normal: 1.1, Ground: 1.1, Ghost: 0.65, Dark: 0.7 },
+	evening: { Psychic: 1.2, Fairy: 1.2, Ghost: 1.1, Flying: 1.1, Bug: 0.9 },
+	night: { Dark: 1.45, Ghost: 1.45, Poison: 1.2, Psychic: 1.1, Fairy: 1.1, Grass: 0.8, Bug: 0.85, Normal: 0.85, Fire: 0.9 },
+};
+/** One or two favoured types a day. Ghost and Dark already own the night. */
+const DAY_OF_WEEK = [
+	{ Grass: 1.2, Bug: 1.2 },          // Sunday
+	{ Fairy: 1.2, Psychic: 1.2 },      // Monday
+	{ Fire: 1.2, Fighting: 1.2 },      // Tuesday
+	{ Electric: 1.2, Steel: 1.2 },     // Wednesday
+	{ Flying: 1.2, Dragon: 1.2 },      // Thursday
+	{ Water: 1.2, Ice: 1.2 },          // Friday
+	{ Rock: 1.2, Ground: 1.2, Poison: 1.1 }, // Saturday
+];
+const SEASONS = {
+	spring: { Grass: 1.2, Bug: 1.15, Fairy: 1.15, Flying: 1.1, Ice: 0.8 },
+	summer: { Fire: 1.2, Water: 1.15, Bug: 1.15, Electric: 1.1, Ice: 0.6 },
+	autumn: { Ghost: 1.2, Dark: 1.1, Poison: 1.1, Ground: 1.1, Grass: 0.9 },
+	winter: { Ice: 1.45, Steel: 1.1, Normal: 1.05, Bug: 0.75, Grass: 0.8, Fire: 0.9 },
+};
+/*
+ * Themed days. On these the nudges are bigger - an event should feel like one -
+ * but still nudges: Halloween is thick with Ghosts, and a Pidgey can still turn
+ * up. Dates are month-day in Kagura's time, inclusive; `species` boosts whole
+ * lines by their first stage.
+ */
+const EVENTS = [
+	{ id: 'newyear', name: '🎆 New Year', from: '12-31', to: '01-01', types: { Fire: 1.5, Electric: 1.3, Fairy: 1.2 } },
+	{ id: 'valentine', name: '💝 Valentine’s Day', from: '02-13', to: '02-14', types: { Fairy: 1.7, Psychic: 1.2 }, species: { luvdisc: 4, alomomola: 3, woobat: 2, flabebe: 2 } },
+	{ id: 'pokemonday', name: '🎂 Pokémon Day', from: '02-27', to: '02-27', types: {}, species: { pichu: 3, clefairy: 2, cleffa: 2, jigglypuff: 2, igglybuff: 2, meowth: 2, psyduck: 2 } },
+	{ id: 'aprilfools', name: '🃏 April Fools', from: '04-01', to: '04-01', types: { Normal: 1.3, Dark: 1.2 }, species: { ditto: 4, zorua: 4, smeargle: 3, mimikyu: 3, spinda: 3, kecleon: 3, sudowoodo: 3 } },
+	{ id: 'solstice', name: '☀️ Midsummer', from: '06-20', to: '06-22', types: { Fire: 1.6, Grass: 1.3, Bug: 1.2 }, species: { sunkern: 3, volbeat: 2, illumise: 2 } },
+	{ id: 'halloween', name: '🎃 Halloween', from: '10-25', to: '11-01', types: { Ghost: 2.2, Dark: 1.6, Poison: 1.2 }, species: { pumpkaboo: 3, phantump: 2, sinistea: 2, greavard: 2, litwick: 2, yamask: 2 } },
+	{ id: 'christmas', name: '🎄 Christmas', from: '12-20', to: '12-26', types: { Ice: 2, Grass: 1.2 }, species: { delibird: 4, stantler: 3, snover: 3, cetoddle: 2, cubchoo: 2, snom: 2 } },
+];
+const md = (m, d) => m * 100 + d;
+function eventOn(month, day) {
+	const today = md(month, day);
+	return EVENTS.find((e) => {
+		const [fm, fd] = e.from.split('-').map(Number);
+		const [tm, td] = e.to.split('-').map(Number);
+		const from = md(fm, fd); const to = md(tm, td);
+		return from <= to ? today >= from && today <= to : today >= from || today <= to;
+	}) || null;
+}
+
+let clockFormat = null;
+function clock(now = Date.now()) {
+	// Building a DateTimeFormat is slow; one is kept for the life of the process.
+	clockFormat = clockFormat || new Intl.DateTimeFormat('en-GB', { timeZone: CLOCK_ZONE, hour: 'numeric', hourCycle: 'h23', weekday: 'short', month: 'numeric', day: 'numeric' });
+	const parts = Object.fromEntries(clockFormat.formatToParts(new Date(now)).map(p => [p.type, p.value]));
+	const hour = Number(parts.hour);
+	const month = Number(parts.month);
+	const weekday = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].indexOf(parts.weekday);
+	const period = hour >= 6 && hour < 11 ? 'morning' : hour >= 11 && hour < 18 ? 'day' : hour >= 18 && hour < 21 ? 'evening' : 'night';
+	const season = month >= 3 && month <= 5 ? 'spring' : month >= 6 && month <= 8 ? 'summer' : month >= 9 && month <= 11 ? 'autumn' : 'winter';
+	return { hour, weekday, month, period, season, event: eventOn(month, Number(parts.day)) };
+}
+/** `at` is a clock() result or a timestamp; pass the clock when weighing many lines at once. */
+function clockWeight(root, at = Date.now()) {
+	const { period, weekday, season, event } = typeof at === 'object' ? at : clock(at);
+	const types = [...new Set(lineOf(root).flatMap(s => s.types))];
+	if (!types.length) return 1;
+	const nudge = t => (TIME_OF_DAY[period][t] || 1) * (DAY_OF_WEEK[weekday][t] || 1) * (SEASONS[season][t] || 1);
+	if (event) {
+		const eventNudge = t => nudge(t) * ((event.types || {})[t] || 1);
+		const mean = types.reduce((n, t) => n + eventNudge(t), 0) / types.length;
+		const species = (event.species || {})[root.id];
+		return Math.max(0.5, Math.min(3, mean)) * (species ? Math.max(1, species) : 1);
+	}
+	const mean = types.reduce((n, t) => n + nudge(t), 0) / types.length;
+	return Math.max(0.6, Math.min(1.6, mean));
 }
 
 function weightedPick(entries, rng) {
@@ -521,12 +633,35 @@ function allRoots() {
  * level goes - from about 70% of the cap up to the cap itself. Without a cap,
  * the range that usually goes with that many badges.
  */
-function levelRange(badges, levelCap) {
+function levelRange(badges, levelCap, ace = null) {
+	let range;
 	if (levelCap) {
 		const cap = clampLevel(levelCap);
-		return [Math.max(2, Math.round(cap * 0.7)), cap];
+		range = [Math.max(2, Math.round(cap * 0.7)), cap];
+	} else {
+		range = BADGE_TIERS[badges].levels;
 	}
-	return BADGE_TIERS[badges].levels;
+	return ace ? aceAdjusted(range, ace) : range;
+}
+
+/**
+ * Your ace pulls the wild toward itself. A trainer whose strongest Pokemon sits
+ * well under their cap meets somewhat lower levels - and, because levels decide
+ * stages, fewer evolved Pokemon and more babies - while one with an ace at the
+ * cap meets exactly what the cap says. Never above the range, never below its
+ * floor by more than the ace itself is.
+ */
+function aceAdjusted([lo, hi], ace) {
+	ace = clampLevel(ace);
+	if (ace >= hi) return [lo, hi];
+	const top = Math.max(2, Math.round(hi * 0.6 + ace * 0.4));
+	return [Math.max(2, Math.min(lo, Math.round(top * 0.7))), top];
+}
+
+/** The level of a trainer's strongest Pokemon that can battle, from the box they sent. */
+function aceLevel(box) {
+	const levels = (Array.isArray(box) ? box : []).filter(m => m && !m.daycare).map(m => Number(m.level) || 0);
+	return levels.length ? Math.max(...levels) : null;
 }
 
 // --------------------------------------------------------------- encounters
@@ -548,9 +683,9 @@ function shinyChance({ charm = false, spray = false } = {}) {
 	return (1 / 1024) * (charm ? 3 : 1) * (spray ? 10 : 1);
 }
 
-function rollWild({ place, badges, levelCap = null, rng = Math.random, double = null, shiny = {} }) {
+function rollWild({ place, badges, levelCap = null, rng = Math.random, double = null, shiny = {}, now = Date.now(), ace = null }) {
 	badges = clampBadges(badges);
-	const [lo, hi] = levelRange(badges, levelCap);
+	const [lo, hi] = levelRange(badges, levelCap, ace);
 	const rootsOf = list => (list || []).map(n => Dex.species.get(n)).filter(s => s.exists && !isLegendary(s)).map(rootOf);
 	const common = rootsOf(place.common);
 	const rare = rootsOf(place.rare);
@@ -565,15 +700,31 @@ function rollWild({ place, badges, levelCap = null, rng = Math.random, double = 
 	 * Pokemon drown out the five that make a cave feel like that cave.
 	 * Inside each pool, badges decide as usual.
 	 */
-	const pool = (roots, types) => roots.map(item => ({ item, w: lineWeight(item, { badges, types, maxLevel: hi }) })).filter(e => e.w > 0);
+	const time = clock(now);
+	const pool = (roots, types) => roots.map(item => ({
+		item,
+		w: lineWeight(item, { badges, types, maxLevel: hi }) * babyWeight(item, hi) * clockWeight(item, time),
+	})).filter(e => e.w > 0);
 	const scale = (entries, share) => {
 		const total = entries.reduce((n, e) => n + e.w, 0);
 		return total > 0 ? entries.map(e => ({ item: e.item, w: e.w / total * share })) : [];
 	};
-	const typed = pool(allRoots().filter(r => !special.has(r.id)), place.types || []);
+	// Starters, pseudos, Ultra Beasts and Paradox forms live where a place lists
+	// them and nowhere else: "anything of the right type" never includes them.
+	const typed = pool(allRoots().filter(r => !special.has(r.id) && !Rarity.HEADLINERS.has(Rarity.classOf(r))), place.types || []);
+	/*
+	 * The surprises get up to 4%, shrunk by how rare they really are. Scaling
+	 * them to a flat share let a route whose list is only Bagon and Frigibax
+	 * hand out a pseudo one encounter in twenty-five at any badge count; now a
+	 * list of ordinary Pokemon keeps the full 4%, a list of starters about half
+	 * of it, and pseudos, Ultra Beasts and Paradox forms less again - and less
+	 * still for a trainer short on badges.
+	 */
+	const rarePool = pool(rare, []);
+	const rareMean = rarePool.length ? rarePool.reduce((n, e) => n + e.w, 0) / rarePool.length : 0;
 	const entries = [
 		...scale(pool(common, []), common.length ? 0.55 : 0),
-		...scale(pool(rare, []), 0.04),
+		...scale(rarePool, 0.04 * Math.min(1, rareMean * 25)),
 		...scale(typed, 0.41),
 	];
 
@@ -585,7 +736,7 @@ function rollWild({ place, badges, levelCap = null, rng = Math.random, double = 
 		if (!root) break;
 		taken.add(root.id);
 		const level = randInt(lo, hi, rng);
-		const species = stageFor(root, level, rng);
+		const species = stageFor(root, level, rng, { ahead: 0.04 });
 		const set = wildSet(species, level, rng);
 		if (rng() < shinyChance(shiny)) set.shiny = true;
 		if (rng() < 0.05) set.item = pick(['Oran Berry', 'Sitrus Berry', 'Pecha Berry', 'Nugget', 'Big Mushroom', 'Pearl', 'Stardust'], rng);
@@ -827,7 +978,8 @@ module.exports = {
 	toID, LEGEND_TAGS, isLegendary, encounterable, findSpecies,
 	levelUpMoves, wildSet, wildName, clampLevel, clampBadges, levelRange, shinyChance,
 	catchRate, BALLS, findBall, catchChance, shakesFor, CATCH_BOOST, PITY_PER_MISS,
-	TRAINER_CLASSES, findClass, trainerName, minLevel, rootOf, lineOf, lineWeight, rarityClass, BADGE_TIERS,
+	TRAINER_CLASSES, findClass, trainerName, minLevel, rootOf, lineOf, lineWeight, rarityClass, BADGE_TIERS, Rarity,
+	stageFor, BABIES, babyWeight, clock, clockWeight, TIME_OF_DAY, DAY_OF_WEEK, SEASONS, EVENTS, eventOn, aceAdjusted, aceLevel,
 	rollWild, rollTrainer, describe,
 	WILD_FORMAT, WILD_DOUBLE_FORMAT, TUTORIAL_FORMAT, TUTORIAL_PIKACHU, TUTORIAL_RATTATA, TUTORIAL_BAG, TRAINER_FORMAT, TRAINER_DOUBLE_FORMAT,
 };
