@@ -48,10 +48,22 @@ services:
       # off the peak for no measurable CPU. src/index.js gives the server the
       # same flag (PS_SEMI_SPACE_MB). --optimize-for-size would have been the
       # next thing to try, but Node refuses it in NODE_OPTIONS.
+      #
+      # Since then the bots moved out of the wrapper into their own process
+      # (src/bots.js), because a ladder for every tier loads a dex mod per
+      # generation that is never freed, and in the wrapper that took the server
+      # down with it. Measured running every format one after another: wrapper
+      # rss 52MB (heap 5), bots rss ~250MB (heap ~180). The bots restart
+      # themselves when their heap passes PS_BOTS_RECYCLE_MB with nobody
+      # playing, and a crash only restarts the bots.
       - key: NODE_OPTIONS
         value: --max-old-space-size=200 --max-semi-space-size=4
       - key: PS_SERVER_HEAP_MB
         value: "256"
+      - key: PS_BOTS_HEAP_MB
+        value: "200"
+      - key: PS_BOTS_RECYCLE_MB
+        value: "150"
       - key: PS_BOT_NAME
         value: Velvet Bunny
       - key: PS_DIFFICULTY

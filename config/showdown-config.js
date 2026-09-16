@@ -919,6 +919,16 @@ function fixMatchmaking(botIds) {
 		// own: a tight window that opens up the longer someone is left waiting.
 		const times = matches.map(([search]) => search.time);
 		const waiting = Date.now() - Math.max(...times);
+		/*
+		 * A bot and a player: no rating check at all. The bot was rung for this
+		 * player (summonBots), its rating rests on a plateau well above a new
+		 * player's 1000, and a window only meant waiting for it to open. The result
+		 * is still rated. Between two players, Showdown's window as before.
+		 */
+		if (bots.length) {
+			for (let i = 0; i < users.length; i++) users[i].lastMatch = users[(i + 1) % users.length].id;
+			return true;
+		}
 		let range = toID(this.formatid) === `gen${Dex.gen}randombattle` ? 50 : 100;
 		range += waiting / 300;
 		if (range > 300) range = 300 + (range - 300) / 10;
@@ -934,6 +944,137 @@ function fixMatchmaking(botIds) {
 		return true;
 	};
 	console.log('[config] matchmaking now goes by rating, and bots do not play each other');
+}
+
+/**
+ * Ring the right bot when somebody is waiting.
+ *
+ * No rung sits in any queue. Every couple of seconds (and the moment anyone
+ * presses Battle!) this looks at who is searching: a player with nobody to play
+ * gets the rung they picked with /bot, or, if they did not pick one, the rung
+ * whose measured strength is nearest their rating. That rung is sent
+ * `|velvetsummon|<format>` and builds a team and searches (src/ladder.js). A bot
+ * left searching a format nobody has waited in for a minute is sent
+ * `|velvetunsummon|<format>` and drops out. So a format costs nothing until
+ * somebody wants to play it, and every format works - OU included, which used to
+ * wait forever because only four formats had bots sitting in them.
+ */
+function summonBots(botIds) {
+	if (typeof Ladders === 'undefined' || !Ladders || !Ladders.searches) {
+		console.log('[config] no ladder here; the bots will not be rung');
+		return;
+	}
+	if (global.velvetSummonBots) return;
+	global.velvetSummonBots = true;
+
+	const { MEASURED } = require('../../../src/ladder-seed');
+	const RUNG_ID = new Map();
+	for (const [id, rung] of BOT_RUNG) RUNG_ID.set(rung, id);
+	const online = id => { const u = Users.get(id); return u && u.connected ? u : null; };
+
+	/*
+	 * Each rung's actual rating in a format, looked up and kept for a minute.
+	 * Ratings drift from the measured strength they were seeded at, and ringing a
+	 * rung whose real rating is outside the player's window just means waiting
+	 * for the window to open. Until a format's ratings have been read, the
+	 * measured strengths stand in.
+	 */
+	const ratings = new Map();   // formatid -> { at, byRung: Map(rung -> rating) }
+	const RATINGS_MS = 60000;
+	const ratingsFor = formatid => {
+		const cached = ratings.get(formatid);
+		if (cached && (cached.byRung || Date.now() - cached.at < RATINGS_MS)) {
+			if (cached.byRung && Date.now() - cached.at > RATINGS_MS && !cached.loading) load(formatid, cached);
+			return cached.byRung;
+		}
+		load(formatid, cached || null);
+		return null;
+	};
+	const load = (formatid, cached) => {
+		const entry = cached || { at: Date.now(), byRung: null };
+		entry.loading = true;
+		ratings.set(formatid, entry);
+		const store = new Ladders.LadderStore(formatid);
+		Promise.all([...RUNG_ID].map(([rung, id]) => store.getRating(id).then(r => [rung, Number(r) || 1000], () => [rung, MEASURED[rung] || 1000])))
+			.then(pairs => { entry.byRung = new Map(pairs); })
+			.catch(() => {})
+			.finally(() => { entry.at = Date.now(); entry.loading = false; setImmediate(() => { try { tick(); } catch (e) {} }); });
+	};
+
+	/** The rung a waiting player should get, or null for players only. */
+	const rungFor = (search, formatid) => {
+		const wanted = wantedRung.get(search.userid);
+		if (wanted === PVP) return null;
+		if (wanted && RUNG_ID.has(wanted)) return wanted;
+		const rating = Number(search.rating) || 1000;
+		const actual = ratingsFor(formatid);
+		let best = null;
+		let gap = Infinity;
+		for (const rung of RUNG_ID.keys()) {
+			const r = actual ? actual.get(rung) : MEASURED[rung];
+			if (r === undefined) continue;
+			const d = Math.abs(r - rating);
+			if (d < gap) { gap = d; best = rung; }
+		}
+		return best || RUNG_ID.keys().next().value || null;
+	};
+
+	const rungAt = new Map();     // `${format}|${player}|${rung wanted}` -> when a bot was last rung for them
+	const RING_AGAIN_MS = 15000;  // a bot still building a team is not rung twice
+	const RELEASE_MS = 60000;     // how long a bot waits in a format nobody is in
+
+	const tick = () => {
+		const now = Date.now();
+		for (const [formatid, table] of Ladders.searches) {
+			if (!table || table.playerCount > 2) continue;
+			const searches = [...table.searches.values()];
+			const humans = searches.filter(search => !botIds.has(search.userid));
+			const botsIn = new Set(searches.filter(search => botIds.has(search.userid)).map(search => search.userid));
+
+			for (const human of humans) {
+				const rung = rungFor(human, formatid);
+				if (!rung) continue;
+				const id = RUNG_ID.get(rung);
+				// Already served: the rung they asked for is searching, or, with no
+				// preference, any bot is.
+				if (wantedRung.get(human.userid) ? botsIn.has(id) : botsIn.size) continue;
+				const bot = online(id);
+				if (!bot) continue;
+				// One ring per waiting player at a time: a rung that is still building its
+				// team is not joined by a second one because the ratings came in meanwhile.
+				const key = `${formatid}|${human.userid}|${wantedRung.get(human.userid) || 'any'}`;
+				if (now - (rungAt.get(key) || 0) < RING_AGAIN_MS) continue;
+				rungAt.set(key, now);
+				bot.send(`|velvetsummon|${formatid}`);
+				if (process.env.PS_DEBUG_SUMMON) console.log(`[summon] ${formatid}: ${human.userid} (${human.rating}) -> ${id}`);
+			}
+
+			if (humans.length) continue;
+			for (const id of botsIn) {
+				const search = table.searches.get(id);
+				if (!search || now - search.time < RELEASE_MS) continue;
+				const bot = online(id);
+				if (bot) bot.send(`|velvetunsummon|${formatid}`);
+			}
+		}
+	};
+
+	const timer = setInterval(() => { try { tick(); } catch (e) { console.log('[config] ringing bots failed:', e.message); } }, 2000);
+	if (timer.unref) timer.unref();
+
+	// And straight away when somebody presses Battle!, instead of up to two seconds later.
+	let proto = null;
+	try { proto = Object.getPrototypeOf(Ladders('gen9randombattle')); } catch (e) { /* timer only */ }
+	if (proto && typeof proto.addSearch === 'function' && !proto.velvetSummon) {
+		proto.velvetSummon = true;
+		const addSearch = proto.addSearch;
+		proto.addSearch = function (search, user) {
+			const out = addSearch.call(this, search, user);
+			if (user && !botIds.has(user.id)) setImmediate(() => { try { tick(); } catch (e) { /* the timer will */ } });
+			return out;
+		};
+	}
+	console.log(`[config] bots are rung on demand (${RUNG_ID.size} rung(s), any format)`);
 }
 
 /**
@@ -1130,6 +1271,32 @@ function rpSectionFirst() {
 	// Built on first use and cached; drop it so the new order is what gets sent.
 	Rooms.global.formatList = null;
 	console.log(`[formats] RP first: ${ours.length} format(s) across ${SECTIONS.length} section(s)`);
+}
+
+/**
+ * Every tier can be queued for.
+ *
+ * Showdown ships most of its formats challenge-only: 247 of 361, Gen 5 NU among
+ * them, which means Battle! simply cannot search them. On a server where the
+ * bots are rung on demand (summonBots) there is always an opponent, so every
+ * two-player format Showdown offers for challenges is offered on the ladder too.
+ * Nobody plays Gen 5 NU; now it can be played at all. The RP sections keep their
+ * own settings - the tutorial and encounter formats are challenge-only on purpose.
+ */
+function everyTierLadderable() {
+	const RP_SECTIONS = ['RP', 'RP Past Gens'];
+	let section = '';
+	let opened = 0;
+	for (const format of Dex.formats.all()) {
+		if (format.section) section = format.section;
+		if (!format.name || RP_SECTIONS.includes(section)) continue;
+		if (format.searchShow || !format.challengeShow) continue;
+		if ((format.playerCount || 2) !== 2 || /multi|freeforall/i.test(format.gameType || '')) continue;
+		format.searchShow = true;
+		opened++;
+	}
+	Rooms.global.formatList = null;
+	console.log(`[formats] ${opened} challenge-only format(s) opened to the ladder`);
 }
 
 /**
@@ -1857,6 +2024,7 @@ exports.startuphook = function () {
 	if (savedCount) console.log(`[config] ${savedCount} remembered rank(s) restored`);
 
 	fixMatchmaking(BOT_IDS);
+	summonBots(BOT_IDS);
 	exemptBots(BOT_IDS);
 	botLadderPlateaus();
 	hostReplays();
@@ -1866,6 +2034,7 @@ exports.startuphook = function () {
 		Rooms, Dex, log: msg => console.log(msg),
 	});
 	rpSectionFirst();
+	everyTierLadderable();
 	battleLog();
 	helpRoom();
 	// Chat's commands may not all be loaded yet at startup; try again shortly if not.

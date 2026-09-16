@@ -404,27 +404,33 @@ function serveHealth(url, res) {
 	 * It writes a line about itself to the disk both of them share; this picks it
 	 * up, with its age, because a stale number is worse than none.
 	 */
-	let wrapper = null;
-	try {
-		const raw = JSON.parse(fs.readFileSync(
-			path.join(process.env.PS_CACHE_DIR || os.tmpdir(), 'velvet-wrapper.json'), 'utf8'));
-		wrapper = {
-			pid: raw.pid,
-			rssMB: mb(raw.rss),
-			heapUsedMB: mb(raw.heapUsed),
-			heapTotalMB: mb(raw.heapTotal),
-			heapLimitMB: raw.heapLimit ? mb(raw.heapLimit) : null,
-			nodeOptions: raw.nodeOptions || '',
-			uptimeSeconds: raw.uptimeSeconds,
-			secondsOld: Math.round((Date.now() - new Date(raw.at).getTime()) / 1000),
-		};
-	} catch (e) {
-		// It has not written one yet, or this is not that kind of deployment.
-	}
+	// The wrapper and, since the bots moved out of it, the bots' own process.
+	const noteOf = file => {
+		try {
+			const raw = JSON.parse(fs.readFileSync(path.join(process.env.PS_CACHE_DIR || os.tmpdir(), file), 'utf8'));
+			return {
+				pid: raw.pid,
+				rssMB: mb(raw.rss),
+				heapUsedMB: mb(raw.heapUsed),
+				heapTotalMB: mb(raw.heapTotal),
+				heapLimitMB: raw.heapLimit ? mb(raw.heapLimit) : null,
+				nodeOptions: raw.nodeOptions || '',
+				uptimeSeconds: raw.uptimeSeconds,
+				...(raw.recycleMB ? { recycleMB: raw.recycleMB, busy: raw.busy || '' } : {}),
+				secondsOld: Math.round((Date.now() - new Date(raw.at).getTime()) / 1000),
+			};
+		} catch (e) {
+			// It has not written one yet, or this is not that kind of deployment.
+			return null;
+		}
+	};
+	const wrapper = noteOf('velvet-wrapper.json');
+	const bots = noteOf('velvet-bots.json');
 
 	const body = {
 		container,
 		wrapper,
+		bots,
 		uptimeSeconds: Math.round(process.uptime()),
 		process: {
 			rssMB: mb(memory.rss),

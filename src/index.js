@@ -10,7 +10,7 @@
 const path = require('path');
 const fs = require('fs');
 const os = require('os');
-const { spawn } = require('child_process');
+const { spawn, fork } = require('child_process');
 const net = require('net');
 
 require('../scripts/setup-config');
@@ -123,13 +123,13 @@ function startServer() {
 	await roster.restore();
 
 	const { seedLadder } = require('./ladder-seed');
-	const { ladderQueues } = require('./ladder');
-	// The same list the queues themselves are built from, so a seeded row can
-	// never be named for a queue that does not exist.
+	// The names only: ./ladder would load the dex and the builder into this process.
+	const { ladderQueues, DEFAULT_FORMATS } = require('./ladder-defaults');
+	// The same list the rungs themselves are built from, so a seeded row can
+	// never be named for an account that does not exist.
 	const queues = ladderQueues(process.env.PS_BOT_NAME || 'Velvet Bunny');
-	for (const format of new Set(queues.map(queue => queue.format))) {
-		seedLadder(ladderDir, format, queues.filter(queue => queue.format === format),
-			msg => console.log('[ladder-seed]', msg));
+	for (const format of DEFAULT_FORMATS) {
+		seedLadder(ladderDir, format, queues, msg => console.log('[ladder-seed]', msg));
 	}
 
 	console.log(`[boot] starting Pokemon Showdown on port ${PORT}`);
@@ -193,10 +193,12 @@ function startServer() {
 	 */
 	const GOODBYE_MS = Number(process.env.PS_SHUTDOWN_GRACE_MS || 22000);
 	let leaving = false;
+	let stopBots = () => {};
 
 	const shutdown = () => {
 		if (leaving) return;   // a second Ctrl-C should not cut the first one short
 		leaving = true;
+		stopBots();
 
 		// Ask the server to wind down. It has its own handler for this, and it
 		// exits on its own when it is done.
@@ -231,37 +233,45 @@ function startServer() {
 		console.log('[boot] PS_NO_BOT=1, not starting the bot');
 		return;
 	}
-	const url = `ws://${HOST}:${PORT}/showdown/websocket`;
-	// One map, written by whoever the player talks to and read by every queue.
-	const difficultyFor = new Map();
-
-	const { ShowdownBot } = require('./bot');
-	const bot = new ShowdownBot({ url, difficultyFor });
-	bot.connect();
-
-	// The RP bot, in the Roleplay room: wild Pokemon and trainers for the
-	// Discord RP. Shares the team builder so it carries no second copy of it.
-	if (process.env.PS_NO_RP_BOT !== '1') {
-		const { RpGuide } = require('./rp-bot');
-		new RpGuide({ url, builder: bot.builder }).connect();
-	}
-
-	const { describeBrain } = require('./brain');
-	console.log(`[boot] ${describeBrain()}`);
-
-	// Queues so that the client's own Battle! button finds the bot, and the
-	// result counts on a real ladder. One connection per format, because an
-	// account can only queue for one at a time.
-	const { startLadderBots } = require('./ladder');
-	const ladder = startLadderBots({
-		url,
-		baseName: bot.name,
-		builder: bot.builder,
-		difficulty: bot.defaultDifficulty,
-		difficultyFor,
-		log: (...a) => console.log('[ladder]', ...a),
-	});
-	console.log(`[boot] ${ladder.length} ladder queue(s) starting`);
+	/*
+	 * The bots run in their own process (src/bots.js), and this one only minds it.
+	 *
+	 * Building teams for every tier loads a dex mod per generation that is never
+	 * freed; in here that eventually killed this process, and with it the server.
+	 * Over there it either restarts itself while nobody is playing, or at worst
+	 * crashes alone - and is started again from here.
+	 */
+	const BOTS_HEAP_MB = Number(process.env.PS_BOTS_HEAP_MB || 200);
+	let bots = null;
+	let botsStartedAt = 0;
+	let botsDelay = 1000;
+	const startBots = () => {
+		if (leaving) return;
+		botsStartedAt = Date.now();
+		bots = fork(path.join(__dirname, 'bots.js'), [], {
+			execArgv: [],
+			env: {
+				...process.env,
+				NODE_OPTIONS: process.env.PS_BOTS_NODE_OPTIONS ||
+					`--max-old-space-size=${BOTS_HEAP_MB} --max-semi-space-size=${Number(process.env.PS_SEMI_SPACE_MB || 4)}`,
+			},
+			stdio: ['ignore', 'inherit', 'inherit', 'ipc'],
+		});
+		bots.on('exit', (code, signal) => {
+			bots = null;
+			if (leaving) return;
+			// A clean exit is a planned recycle: straight back. A crash backs off,
+			// so a bot that dies on boot does not spin; a long run resets that.
+			if (code === 0) botsDelay = 1000;
+			else if (Date.now() - botsStartedAt > 5 * 60000) botsDelay = 2000;
+			else botsDelay = Math.min(botsDelay * 2, 60000);
+			console.log(`[boot] bots exited (${signal || `code ${code}`}); starting them again in ${botsDelay / 1000}s`);
+			const timer = setTimeout(startBots, botsDelay);
+			if (timer.unref) timer.unref();
+		});
+	};
+	stopBots = () => { try { if (bots) bots.kill('SIGTERM'); } catch (e) {} };
+	startBots();
 	store.start();
 })().catch(err => {
 	console.error('[boot] failed:', err);

@@ -8,10 +8,15 @@
  * against the bot, and because it came through the ladder the result is rated
  * and lands on a real Elo table that /ladder will show.
  *
- * One account can only queue for one format at a time, so each format gets its
- * own connection. They are cheap - the expensive data (dex, damage calculator,
- * team builder) is module state shared by all of them, so an extra queue costs a
- * socket and a little bookkeeping, not another copy of Pokemon.
+ * One account per rung, for every format. An account can search several formats
+ * at once and play several battles at once, so a rung never needed more than one.
+ *
+ * And a rung does not sit in any queue. It connects, and waits to be rung: when a
+ * player presses Battle! in some format, the server sends the rung that player
+ * wants a `|velvetsummon|<format>` line (config/showdown-config.js). Only then is a
+ * team built for that format and the search started, and when nobody is waiting
+ * any more the server sends `|velvetunsummon|<format>` and the search is dropped.
+ * Five bots idling in every queue cost memory for nothing; this costs a socket each.
  */
 
 const WebSocket = require('ws');
@@ -48,7 +53,9 @@ class LadderBot {
 	constructor(options) {
 		this.url = options.url;
 		this.name = options.name;
-		this.format = options.format;
+		// No fixed format any more: whatever the server rings this rung for.
+		this.formats = new Set();       // formats currently being searched
+		this.pending = new Set();       // formats a team is being built for
 		this.builder = options.builder;
 		// Fixed for the life of this queue. Deliberately NOT taken from the
 		// player's preference: a rating only means something if the thing being
@@ -67,7 +74,7 @@ class LadderBot {
 			process.env.PS_BOT_PASSWORD || '';
 		this.battles = new Map();
 		this.ended = new Set();
-		this.searching = false;
+
 		this.ws = null;
 		this.reconnectDelay = 2000;
 		// A pause after a game against another rung. The server refuses to pair two
@@ -87,7 +94,8 @@ class LadderBot {
 			noteQueue(this.name, { connected: false, error: `socket: ${err && err.message ? err.message : err}` });
 		});
 		this.ws.on('close', () => {
-			this.searching = false;
+			this.formats.clear();
+			this.pending.clear();
 			this.ready = false;
 			if (this.guestRetry) { clearTimeout(this.guestRetry); this.guestRetry = null; }
 			noteQueue(this.name, { connected: false });
@@ -134,9 +142,8 @@ class LadderBot {
 				// Named now, so the guest retry below has nothing left to do. See there.
 				if (this.guestRetry) { clearTimeout(this.guestRetry); this.guestRetry = null; }
 				if (this.avatar) this.send(`|/avatar ${this.avatar}`);
-				this.log(`${this.name} queueing for ${this.format}`);
-				noteQueue(this.name, { connected: true, named: parts[1], error: null, since: new Date().toISOString() });
-				void this.search();
+				this.log(`${this.name} ready, waiting to be rung`);
+				noteQueue(this.name, { connected: true, named: parts[1], error: null, since: new Date().toISOString(), searching: [] });
 			} else if (parts[2] !== '1' && !this.ready) {
 				/*
 				 * Still a guest, which used to be the end of it.
@@ -191,34 +198,49 @@ class LadderBot {
 			}
 			return;
 		case 'updatesearch': {
-			// Re-queue as soon as we stop being in the queue, unless a battle is
-			// running - which is the usual reason the search ended.
+			// What the server says we are searching for. No re-queueing: if a player
+			// is still waiting once a game starts, the server rings again.
 			let data = {};
 			try { data = JSON.parse(parts.slice(1).join('|') || '{}'); } catch (e) { return; }
-			const inQueue = Array.isArray(data.searching) && data.searching.length > 0;
-			const inGame = data.games && Object.keys(data.games).length > 0;
-			this.searching = inQueue;
-			if (!inQueue && !inGame) setTimeout(() => void this.search(), 3000);
+			this.formats = new Set(Array.isArray(data.searching) ? data.searching : []);
+			noteQueue(this.name, { searching: [...this.formats] });
 			return;
 		}
+		case 'velvetsummon':
+			if (parts[1]) void this.search(parts[1]);
+			return;
+		case 'velvetunsummon':
+			if (parts[1] && this.formats.has(parts[1])) this.send(`|/cancelsearch ${parts[1]}`);
+			return;
 		}
 		if (roomid && roomid.startsWith('battle-')) this.onBattleLine(roomid, parts);
 	}
 
-	/** Put a legal team up and join the queue. */
-	async search() {
-		if (this.stopped || this.searching) return;
+	/**
+	 * Build a team for this format and search it. The team is sent immediately
+	 * before its /search, so each search carries its own team even when several
+	 * formats are being searched at once.
+	 */
+	async search(format) {
+		format = String(format || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+		if (this.stopped || !this.ready || !format || this.formats.has(format) || this.pending.has(format)) return;
+		this.pending.add(format);
 		try {
-			if (this.builder.needsTeam(this.format)) {
-				try { await this.builder.prefetch(this.format); } catch (e) { /* offline */ }
-				this.send(`|/utm ${this.builder.build(this.format)}`);
-			} else {
-				this.send('|/utm null');
+			let team = 'null';
+			if (this.builder.needsTeam(format)) {
+				try { await this.builder.prefetch(format); } catch (e) { /* offline */ }
+				// Building is synchronous work; give running battles a turn first.
+				await new Promise(resolve => setImmediate(resolve));
+				team = this.builder.build(format);
 			}
-			this.send(`|/search ${this.format}`);
-			this.searching = true;
+			this.send(`|/utm ${team}`);
+			this.send(`|/search ${format}`);
+			this.formats.add(format);
+			this.log(`${this.name} rung for ${format}`);
 		} catch (e) {
-			this.log(`${this.name}: cannot queue for ${this.format}: ${e.message}`);
+			this.log(`${this.name}: cannot queue for ${format}: ${e.message}`);
+		} finally {
+			this.pending.delete(format);
 		}
 	}
 
@@ -230,8 +252,10 @@ class LadderBot {
 			battle.state.myName = this.name;
 			// The format decides what the bot may assume about the other side: in
 			// Random Battle the sets are published, in a built format they are not.
-			battle.ai.setFormat(this.format);
-			const usage = this.builder.usage.get(this.format);
+			// It is in the room id: battle-<format>-<number>.
+			const format = roomid.split('-')[1] || '';
+			battle.ai.setFormat(format);
+			const usage = this.builder.usage.get(format);
 			if (usage) battle.ai.setUsage(usage);
 			this.battles.set(roomid, battle);
 		}
@@ -272,7 +296,6 @@ class LadderBot {
 			setTimeout(() => {
 				this.send(`${roomid}|/leave`);
 				forgetBattle(this, roomid);
-				void this.search();
 			}, wait);
 			break;
 		}
@@ -322,14 +345,13 @@ function startLadderBots(options) {
 		return [];
 	}
 	status.reason = 'starting';
-	status.formats = [...new Set(queues.map(queue => queue.format))];
+	status.formats = 'any, on demand';
 	status.difficulties = [...new Set(queues.map(queue => queue.difficulty))];
 
 	const builder = options.builder || new TeamBuilder();
 	const bots = queues.map(queue => new LadderBot({
 		url: options.url,
 		name: queue.name,
-		format: queue.format,
 		builder,
 		difficulty: queue.difficulty,
 		baseName: base,
@@ -358,7 +380,7 @@ function startLadderBots(options) {
 	const spacing = Number(process.env.PS_LADDER_LOGIN_SPACING_MS || 9000);
 	status.reason = `${bots.length} queue(s) starting, ${spacing}ms apart`;
 	bots.forEach((bot, i) => {
-		noteQueue(bot.name, { format: bot.format, difficulty: bot.difficulty, connected: false, error: null });
+		noteQueue(bot.name, { difficulty: bot.difficulty, connected: false, error: null, searching: [] });
 		const timer = setTimeout(() => bot.connect(), i * spacing);
 		if (timer.unref) timer.unref();
 	});

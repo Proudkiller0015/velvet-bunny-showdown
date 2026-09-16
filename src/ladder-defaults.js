@@ -1,91 +1,54 @@
 'use strict';
 /**
- * What the bot ladder runs, by default.
+ * Who plays on the ladder.
  *
  * Separated from src/ladder.js so that anything needing only the names can have
  * them without dragging in the dex, the damage calculator and a websocket
  * client. scripts/setup-config.js is the case that matters: it has to grant the
- * bot's avatar to every queue account, and it runs before the server starts.
+ * bot's avatar to every rung's account, and it runs before the server starts.
  *
- * Keeping one copy is not tidiness. When setup-config worked the names out for
- * itself it went on granting the avatar to "Velvet Bunny Easy" long after the
- * queues had been renamed to fit Showdown's eighteen-character user id limit, so
- * four accounts that did not exist held the rights and every queue that did was
- * refused its own face. Five different files were doing the same "read the
- * environment, split on commas, cross the two lists" dance; `ladderQueues()` is
- * that dance, once, and everything else asks it.
+ * One account per rung, for every format.
+ *
+ * It used to be one account per rung *per format*: fifteen accounts sitting in
+ * four queues all day, and every other tier - OU, UU, the lot - with nobody in it
+ * at all, so Battle! there simply waited forever. A Showdown account can search
+ * several formats at once and play several battles at once, and its rating is
+ * kept per format anyway, so there was never any need for more than one account
+ * per rung. Nothing queues until somebody does: the server rings the rung that
+ * player wants (see summonBots in config/showdown-config.js), that rung builds a
+ * team for the format and searches, and it leaves the queue again when nobody is
+ * waiting.
  */
 
 const { queueName, toId } = require('./queue-names');
 
+/** The rungs, easiest first. Each is one account. */
+const RUNGS = ['easy', 'normal', 'hard', 'champion', 'stockfish'];
+
 /**
- * Every format the bots queue, and which rungs each one runs.
- *
- * Rungs are per format because a queue is an account and a socket, and the
- * ceiling on this host is memory. The two Random Battles carry the full ladder;
- * the team formats carry the middle of it, which is who most people want to
- * play anyway - nobody is learning a tier against Easy, and Stockfish spends the
- * most time thinking for the least difference.
- *
- * Random Battle stays first, which is load-bearing: the first format's queues
- * keep their plain account names, so the ratings those five have been building
- * since the start survive another format being added.
- *
- * The RP tiers are here because they are what this server is *for*, and a tier
- * nobody is queuing for is a tier nobody can play - pressing Battle! in RP OU
- * simply waited. They cost more than the Random Battles do: the bot has to build
- * a legal team for each, which it can (it is legal in all 283 formats), rather
- * than being handed one by the server.
+ * The formats whose ratings are seeded at the measured strength of each rung
+ * (src/ladder-seed.js). Any other format works just the same; its first game
+ * starts from Showdown's default rating, and the plateau still applies.
  */
-const LADDER = [
-	{ format: 'gen9randombattle', rungs: ['easy', 'normal', 'hard', 'champion', 'stockfish'] },
-	{ format: 'gen9rprandombattle', rungs: ['easy', 'normal', 'hard', 'champion', 'stockfish'] },
-	{ format: 'gen9rpbattle', rungs: ['normal', 'hard', 'champion'] },
-	{ format: 'gen9rpou', rungs: ['normal', 'hard'] },
-];
+const DEFAULT_FORMATS = ['gen9randombattle', 'gen9rprandombattle', 'gen9rpbattle', 'gen9rpou'];
 
-/** The formats, in order. Kept for anything that only wants the names. */
-const DEFAULT_FORMATS = LADDER.map(entry => entry.format);
-
-/** Every rung that appears anywhere, which is the full ladder. */
-const DEFAULT_DIFFICULTIES = [...new Set(LADDER.flatMap(entry => entry.rungs))];
+const DEFAULT_DIFFICULTIES = RUNGS.slice();
 
 const split = text => String(text || '').split(',').map(part => part.trim()).filter(part => part);
 
 /**
- * Every queue that should exist: one entry per account.
+ * Every rung account that should exist.
  *
- * `PS_LADDER_FORMATS` and `PS_LADDER_DIFFICULTIES` still work and still mean
- * what they meant - a plain list, crossed with each other - because that is
- * what anybody setting them expects. They are the override; the table above is
- * the default.
+ * `PS_LADDER_DIFFICULTIES` still narrows the rungs. `format` is null: a rung plays
+ * whatever it is rung for.
  */
 function ladderQueues(base) {
-	const chosenFormats = split(process.env.PS_LADDER_FORMATS);
-	const chosenRungs = split(process.env.PS_LADDER_DIFFICULTIES);
-
-	let spec;
-	if (chosenFormats.length) {
-		const rungs = chosenRungs.length ? chosenRungs : DEFAULT_DIFFICULTIES;
-		spec = chosenFormats.map(format => ({ format, rungs }));
-	} else {
-		spec = LADDER.map(entry => ({
-			format: entry.format,
-			rungs: chosenRungs.length ? chosenRungs : entry.rungs,
-		}));
-	}
-
-	const multiFormat = spec.length > 1;
-	const queues = [];
-	spec.forEach((entry, index) => {
-		// The first format keeps the plain names; see queueName.
-		const tagging = multiFormat && { primary: index === 0 };
-		for (const difficulty of entry.rungs) {
-			const name = queueName(base || process.env.PS_BOT_NAME || 'Velvet Bunny', difficulty, entry.format, tagging);
-			queues.push({ format: entry.format, difficulty, name, id: toId(name) });
-		}
+	const chosen = split(process.env.PS_LADDER_DIFFICULTIES);
+	const rungs = chosen.length ? chosen : RUNGS;
+	return rungs.map(difficulty => {
+		const name = queueName(base || process.env.PS_BOT_NAME || 'Velvet Bunny', difficulty, null, false);
+		return { format: null, difficulty, name, id: toId(name) };
 	});
-	return queues;
 }
 
-module.exports = { LADDER, DEFAULT_FORMATS, DEFAULT_DIFFICULTIES, ladderQueues };
+module.exports = { RUNGS, DEFAULT_FORMATS, DEFAULT_DIFFICULTIES, ladderQueues };
