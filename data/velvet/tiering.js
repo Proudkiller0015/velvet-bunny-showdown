@@ -87,9 +87,12 @@ const TIERS = {
 	 * This is the case the file was written for: a tier we invalidated
 	 * ourselves, moved by us rather than left to drift.
 	 */
-	simisage: 'UU',
-	simisear: 'UU',
-	simipour: 'UU',
+	// And then to OU, by the owner's call (Patch 1.5): with the Elemental Banana,
+	// their terrain and the Rush moves they are built to be played with the best,
+	// and OU is where people will actually meet them.
+	simisage: 'OU',
+	simisear: 'OU',
+	simipour: 'OU',
 
 	// Its only ability is Shadow Tag. Base Chandelure can pick Flash Fire and go
 	// on being an RU Pokemon, and the ability ban in the tiers below Ubers
