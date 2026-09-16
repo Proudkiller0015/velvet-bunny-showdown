@@ -231,8 +231,70 @@
 		var powerIn = installBuffedBasePower();
 		var dmaxIn = installDynamaxBuilder();
 		var awakenedIn = installAwakenedSearch();
+		var textIn = installDescriptions();
 		return tableIn && orderIn && spritesIn && iconIn && builderIn && tipsIn && rpIn &&
-			cutIn && listIn && buffsIn && abilitiesIn && itemIn && sigItemIn && powerIn && dmaxIn && awakenedIn;
+			cutIn && listIn && buffsIn && abilitiesIn && itemIn && sigItemIn && powerIn && dmaxIn && awakenedIn && textIn;
+	}
+
+	/*
+	 * Descriptions: every move, ability and item of ours, and every one we changed.
+	 *
+	 * The client does not read a description off the dex row. It asks
+	 * `getTextEntry`, which looks in the language file (data/text/en.js, loaded
+	 * later and on its own) and only falls back to the row when that has nothing -
+	 * and by then the Move object it falls back to has no description either. So
+	 * Oxidize, Prescience and every other one of ours showed a blank, and a move we
+	 * changed showed Game Freak's text. The rows are written into the language
+	 * table itself, as soon as it exists, and again if it is ever replaced.
+	 */
+	function fillDescriptions() {
+		var text = window.BattleText;
+		var en = text && text.en;
+		if (!en || !en.Moves || !en.Abilities || !en.Items) return false;
+		if (en.__velvetDescriptions) return true;
+		var fill = function (tableName, dexTable, overrides) {
+			var table = en[tableName];
+			var put = function (id, row) {
+				if (!row || (!row.desc && !row.shortDesc)) return;
+				var entry = table[id] || (table[id] = { name: row.name });
+				if (row.name && !entry.name) entry.name = row.name;
+				if (row.desc) entry.desc = row.desc;
+				if (row.shortDesc) entry.shortDesc = row.shortDesc;
+				// A generation-specific line would otherwise win in older formats.
+				for (var g = 1; g <= 8; g++) {
+					var gen = entry['gen' + g];
+					if (gen && typeof gen === 'object') { delete gen.desc; delete gen.shortDesc; }
+				}
+			};
+			// Ours: negative numbers, whether they came with the buffs or with Samantha.
+			for (var id in dexTable || {}) {
+				var row = dexTable[id];
+				if (row && typeof row.num === 'number' && row.num < 0) put(id, row);
+			}
+			for (var changed in overrides || {}) put(changed, overrides[changed]);
+		};
+		var buffs = window.VelvetBuffs || {};
+		var over = buffs.overrides || {};
+		fill('Moves', window.BattleMovedex, over.moves);
+		fill('Abilities', window.BattleAbilities, over.abilities);
+		fill('Items', window.BattleItems, over.items);
+		en.__velvetDescriptions = true;
+		return true;
+	}
+
+	function installDescriptions() {
+		if (typeof window.getTextEntry !== 'function') return false;
+		if (!window.getTextEntry.__velvet) {
+			var original = window.getTextEntry;
+			var wrapped = function () {
+				fillDescriptions();
+				return original.apply(this, arguments);
+			};
+			wrapped.__velvet = true;
+			window.getTextEntry = wrapped;
+		}
+		fillDescriptions();
+		return true;
 	}
 
 	/**

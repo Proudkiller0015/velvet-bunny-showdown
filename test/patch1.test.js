@@ -698,5 +698,18 @@ check(learns('luxray', 'gleamstalk') && !learns('luxio', 'gleamstalk') && !learn
 	check(!missing.length, `every signature move is in the client signature table (${missing.join(', ') || 'all there'})`);
 }
 
+// Every move, ability and item of ours has both descriptions: the client shows a
+// blank without them (and client/js/velvet-data.js installDescriptions() ships them).
+{
+	const blank = [];
+	for (const [kind, all] of [['move', Dex.moves.all()], ['ability', Dex.abilities.all()], ['item', Dex.items.all()]]) {
+		for (const x of all) if (x.num < 0 && (!x.shortDesc || !x.desc || x.desc === 'No additional effect.')) blank.push(`${kind} ${x.name}`);
+	}
+	check(!blank.length, `every custom move, ability and item has a description${blank.length ? ` (missing: ${blank.join(', ')})` : ''}`);
+	const client = require('fs').readFileSync(require('path').join(__dirname, '..', 'client', 'js', 'velvet-data.js'), 'utf8');
+	check(/installDescriptions\(\)/.test(client) && /BattleText/.test(client), 'and the client writes them into its language table');
+}
+check(Dex.species.get('walkingwake').natDexTier === 'OU', 'Walking Wake is unbanned (OU)');
+
 console.log(failed ? `\n${failed} failed` : '\nall passed');
 process.exit(failed ? 1 : 0);

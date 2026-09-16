@@ -101,6 +101,9 @@ const TIERS = {
 	torterra: 'OU',
 	empoleon: 'OU',
 
+	// Walking Wake, unbanned by the owner's call (Patch 1.5) "for the funny".
+	walkingwake: 'OU',
+
 	// Its only ability is Shadow Tag. Base Chandelure can pick Flash Fire and go
 	// on being an RU Pokemon, and the ability ban in the tiers below Ubers
 	// already stops the trapping set there - but a Mega has one ability slot and
