@@ -763,6 +763,21 @@ class BattleAI {
 		// unless the opponent is not going to be there to take it.
 		if (dying && !(isSetup && pressure >= 0.7)) return move.priority > 0 ? 5 : -20;
 
+		// Tectonic Shell (Torterra): a heal and Stealth Rock in one. Worth it when
+		// hurt, or while their side has no rocks yet.
+		if (move.id === 'tectonicshell') {
+			const rocksUp = !!(state.hazards[state.theirPlayer] || {})['Stealth Rock'];
+			const heal = myHpPct < 55 ? 60 - myHpPct : -10;
+			return Math.max(heal, rocksUp ? -10 : 38) + (!rocksUp && myHpPct < 55 ? 10 : 0);
+		}
+		// Royal Decree (Empoleon): Roar and a layer of Spikes. Best into a boosted
+		// foe; otherwise it is Spikes, while there is room for another layer.
+		if (move.id === 'royaldecree') {
+			const layers = Number((state.hazards[state.theirPlayer] || {}).Spikes) || 0;
+			const boosts = (foe && foe.boosts) ? Object.values(foe.boosts).reduce((n, v) => n + Math.max(0, v), 0) : 0;
+			if (boosts >= 2) return 55 + boosts * 8;
+			return layers < 3 ? 34 - layers * 6 : 4;
+		}
 		if (RECOVERY.includes(move.name)) return myHpPct < 55 ? 60 - myHpPct : -10;
 
 		// Into a Magic Bounce (or Espeon's Prescience) a status move or hazard comes

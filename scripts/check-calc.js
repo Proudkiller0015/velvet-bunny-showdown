@@ -109,6 +109,30 @@ const CASES = [
 		move: 'Ice Punch',
 	},
 	{
+		name: 'World Turtle: 1.3x on Elder Timber',
+		attacker: 'A|torterra||worldturtle|eldertimber,earthquake,tectonicshell,shellsmash|Adamant|252,252,4,,,|||||',
+		defender: 'B|blissey||naturalcure|tackle,protect,rest,softboiled|Bold|252,,252,,,|||||',
+		move: 'Elder Timber',
+	},
+	{
+		name: 'World Turtle: a super effective Ice Beam does 0.75x',
+		attacker: 'A|weavile||pressure|icebeam,protect,rest,taunt|Modest|252,,4,252,,|||||',
+		defender: 'B|torterra||worldturtle|eldertimber,earthquake,tectonicshell,shellsmash|Calm|252,,4,,252,|||||',
+		move: 'Ice Beam',
+	},
+	{
+		name: "Emperor's Pride: 1.3x on Imperial Torrent",
+		attacker: 'A|empoleon||emperorspride|imperialtorrent,flashcannon,roost,royaldecree|Modest|252,,4,252,,|||||',
+		defender: 'B|blissey||naturalcure|tackle,protect,rest,softboiled|Bold|252,,252,,,|||||',
+		move: 'Imperial Torrent',
+	},
+	{
+		name: 'Kindling Crown: Mach Punch, both boosts',
+		attacker: 'A|monferno||kindlingcrown|machpunch,firepunch,uturn,protect|Adamant|252,252,4,,,|||||',
+		defender: 'B|blissey||naturalcure|tackle,protect,rest,softboiled|Bold|252,,252,,,|||||',
+		move: 'Mach Punch',
+	},
+	{
 		name: "Merchant's Call: the whole HP bar, as damage",
 		attacker: 'A|nuzleaf|brokenpact|chlorophyll|merchantscall,tackle,protect,rest|Adamant|252,252,4,,,|||||',
 		defender: 'B|blissey||naturalcure|tackle,protect,rest,softboiled|Bold|252,,252,,,|||||',

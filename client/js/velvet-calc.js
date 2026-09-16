@@ -303,6 +303,21 @@
 			if ((move.flags && move.flags.punch) || / Punch$/.test(String(move.name || ''))) crown = Math.round(crown * 4915 / 4096);
 			if (crown !== 4096) out.push([crown, 4096]);
 		}
+		// The rest of the Sinnoh trio and the lesser abilities: their two types.
+		var TRIO = {
+			'Kindling Crown': [['Fire', 'Fighting'], 4915, 4505],
+			'World Turtle': [['Grass', 'Ground'], 5325],
+			'Sapling Shell': [['Grass', 'Ground'], 4915],
+			"Emperor's Pride": [['Water', 'Steel'], 5325],
+			'Proud Chick': [['Water', 'Steel'], 4915],
+		};
+		var trio = TRIO[String(attacker.ability || '')];
+		if (trio) {
+			var m = 4096;
+			if (trio[0].indexOf(move.type) >= 0) m = Math.round(m * trio[1] / 4096);
+			if (trio[2] && ((move.flags && move.flags.punch) || / Punch$/.test(String(move.name || '')))) m = Math.round(m * trio[2] / 4096);
+			if (m !== 4096) out.push([m, 4096]);
+		}
 		return out;
 	}
 
@@ -476,6 +491,9 @@
 			var asVanilla = {
 				'Kindled Fury': 'Guts', 'Diamond Dust': 'Slush Rush', 'Solstice': 'Chlorophyll',
 				'Prescience': 'Magic Guard', 'Liquid Body': 'Water Absorb', 'Static Needles': 'Volt Absorb', 'Ribbon Hymn': 'Pixilate',
+				// Defending, these are the vanilla halves that change damage. Their own
+				// power boosts were already counted above, before this renaming.
+				'World Turtle': 'Solid Rock', 'Sapling Shell': 'Shell Armor', "Emperor's Pride": 'Competitive', 'Proud Chick': 'Competitive',
 			};
 			if (asVanilla[String(us.ability || '')]) us.ability = asVanilla[String(us.ability)];
 			if (asVanilla[String(them.ability || '')]) them.ability = asVanilla[String(them.ability)];

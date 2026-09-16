@@ -97,6 +97,9 @@ const TIERS = {
 	// Infernape, with Crown of Flame (Patch 1.5): up from RU beside the monkey it
 	// was being measured against.
 	infernape: 'OU',
+	// And the rest of its trio, rebuilt the same way (Patch 1.5).
+	torterra: 'OU',
+	empoleon: 'OU',
 
 	// Its only ability is Shadow Tag. Base Chandelure can pick Flash Fire and go
 	// on being an RU Pokemon, and the ability ban in the tiers below Ubers

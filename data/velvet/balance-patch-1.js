@@ -458,6 +458,68 @@ exports.MOVES = {
 		shortDesc: "10% chance to burn. Thaws user. No recoil.",
 		desc: "Has a 10% chance to burn the target. If the user is frozen, it thaws out before using this move. Unlike Flare Blitz, the user takes no recoil damage.",
 	},
+	/*
+	 * Torterra's two (Patch 1.5). Elder Timber is Wood Hammer without the recoil:
+	 * the tree on its back is old enough not to splinter. Tectonic Shell is the
+	 * turtle that carries the world settling into it - half its health back, and
+	 * the ground on the other side turns to jagged rock (Stealth Rock).
+	 */
+	eldertimber: {
+		num: -31, gen: 9, name: "Elder Timber", type: "Grass", category: "Physical",
+		basePower: 120, accuracy: 100, pp: 15, priority: 0,
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, nosketch: 1 },
+		secondary: null,
+		target: "normal", contestType: "Tough",
+		flavor: "Torterra swings the ancient tree on its back down on the foe. The wood is too old to splinter.",
+		shortDesc: "No recoil.",
+		desc: "A Wood Hammer that deals no recoil damage to the user.",
+	},
+	tectonicshell: {
+		num: -32, gen: 9, name: "Tectonic Shell", type: "Ground", category: "Status",
+		basePower: 0, accuracy: true, pp: 10, priority: 0,
+		flags: { snatch: 1, heal: 1, metronome: 1, nosketch: 1 },
+		onHit(pokemon) {
+			const healed = !!this.heal(this.modify(pokemon.maxhp, 0.5));
+			if (!healed) this.add('-fail', pokemon, 'heal');
+			const rocks = pokemon.side.foe.addSideCondition('stealthrock', pokemon);
+			// Something happened if either half did.
+			if (!healed && !rocks) return this.NOT_FAIL;
+		},
+		secondary: null,
+		target: "self", contestType: "Tough",
+		flavor: "The continent on Torterra's back settles, and the land on the far side splits into jagged stone.",
+		shortDesc: "Heals the user by 50%. Sets Stealth Rock on the foe's side.",
+		desc: "The user restores 1/2 of its maximum HP, rounded half up, and sets Stealth Rock on the opposing side. It still sets the rocks at full HP, and still heals if rocks are already up.",
+	},
+	/*
+	 * Empoleon's two (Patch 1.5). Imperial Torrent is the Hydro Pump that an
+	 * emperor does not miss with. Royal Decree dismisses the foe from its presence
+	 * (Roar) and leaves Spikes where it stood, so every dismissal costs more.
+	 */
+	imperialtorrent: {
+		num: -33, gen: 9, name: "Imperial Torrent", type: "Water", category: "Special",
+		basePower: 110, accuracy: 100, pp: 5, priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1, nosketch: 1 },
+		secondary: null,
+		target: "normal", contestType: "Beautiful",
+		flavor: "The emperor commands the tide, and the tide does not miss.",
+		shortDesc: "Never misses its 100% accuracy (a Hydro Pump that lands).",
+		desc: "A 110-power Water attack with 100% accuracy.",
+	},
+	royaldecree: {
+		num: -34, gen: 9, name: "Royal Decree", type: "Steel", category: "Status",
+		basePower: 0, accuracy: true, pp: 10, priority: -6,
+		flags: { reflectable: 1, mirror: 1, bypasssub: 1, allyanim: 1, metronome: 1, noassist: 1, failcopycat: 1, nosketch: 1 },
+		onHit(target, source) {
+			target.side.addSideCondition('spikes', source);
+		},
+		forceSwitch: true,
+		secondary: null,
+		target: "normal", contestType: "Cool",
+		flavor: "Empoleon points its beak, and the foe is dismissed from the emperor's presence - over a floor of spikes.",
+		shortDesc: "Forces the target to switch. Sets a layer of Spikes on its side.",
+		desc: "Always goes last (-6 priority). Lays a layer of Spikes on the target's side, then forces the target to switch to a random ally, as Roar does. Bounced back by Magic Bounce.",
+	},
 	continentalheave: {
 		num: -20, gen: 9, name: "Continental Heave", type: "Normal", category: "Physical",
 		basePower: 110, accuracy: 95, pp: 5, priority: 0,
@@ -962,6 +1024,119 @@ exports.ABILITIES = {
 		shortDesc: "Fire/Fighting moves 1.3x, punches 1.2x, super effective hits 1.2x (all stack).",
 		desc: "This Pokemon's Fire- and Fighting-type moves have 1.3x power, and its punch-based moves have 1.2x power; a Fire or Fighting punch gets both. Its super effective attacks also deal 1.2x damage, as if it held an Expert Belt, and this stacks with a held item.",
 	},
+	/*
+	 * The Sinnoh starters' abilities (Patch 1.5), and lesser ones for the first two
+	 * stages, each with a name of its own. Every one boosts the line's two types;
+	 * the final stage adds the rest.
+	 */
+	kindlingcrown: {
+		name: "Kindling Crown",
+		onBasePowerPriority: 23,
+		onBasePower(basePower, attacker, defender, move) {
+			let mod = 4096;
+			if (move.type === 'Fire' || move.type === 'Fighting') mod = Math.round(mod * 4915 / 4096);
+			if (move.flags['punch']) mod = Math.round(mod * 4505 / 4096);
+			if (mod !== 4096) return this.chainModify([mod, 4096]);
+		},
+		flags: {},
+		rating: 3,
+		num: -23,
+		gen: 9,
+		flavor: "The first sparks of a crown that has not caught yet.",
+		shortDesc: "Fire and Fighting moves 1.2x power; punching moves 1.1x (both stack).",
+		desc: "This Pokemon's Fire- and Fighting-type moves have 1.2x power, and its punch-based moves have 1.1x power; a Fire or Fighting punch gets both.",
+	},
+	worldturtle: {
+		name: "World Turtle",
+		onBasePowerPriority: 23,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.type === 'Grass' || move.type === 'Ground') return this.chainModify([5325, 4096]);
+		},
+		onCriticalHit: false,
+		onSourceModifyDamage(damage, source, target, move) {
+			if (target.getMoveHitData(move).typeMod > 0) return this.chainModify(0.75);
+		},
+		flags: { breakable: 1 },
+		rating: 4,
+		num: -24,
+		gen: 9,
+		flavor: "People once believed a giant Torterra carried the world on its back. Nothing is getting through that shell.",
+		shortDesc: "Grass/Ground moves 1.3x. Can't be crit. Super effective hits on it 0.75x.",
+		desc: "This Pokemon's Grass- and Ground-type moves have 1.3x power. It cannot be struck by a critical hit (Shell Armor), and super effective attacks against it deal 3/4 damage (Solid Rock).",
+	},
+	saplingshell: {
+		name: "Sapling Shell",
+		onBasePowerPriority: 23,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.type === 'Grass' || move.type === 'Ground') return this.chainModify([4915, 4096]);
+		},
+		onCriticalHit: false,
+		flags: { breakable: 1 },
+		rating: 3,
+		num: -25,
+		gen: 9,
+		flavor: "A shell hardening around a sapling that will one day be a forest.",
+		shortDesc: "Grass and Ground moves 1.2x power. Can't be struck by a critical hit.",
+		desc: "This Pokemon's Grass- and Ground-type moves have 1.2x power, and it cannot be struck by a critical hit.",
+	},
+	emperorspride: {
+		name: "Emperor's Pride",
+		onBasePowerPriority: 23,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.type === 'Water' || move.type === 'Steel') return this.chainModify([5325, 4096]);
+		},
+		// Competitive's own code, since an ability can only have one name.
+		onAfterEachBoost(boost, target, source, effect) {
+			if (!source || target.isAlly(source)) return;
+			for (const stat in boost) {
+				if (boost[stat] < 0) {
+					this.boost({ spa: 2 }, target, target, null, false, true);
+					return;
+				}
+			}
+		},
+		// Queenly Majesty: priority aimed at the emperor or its allies does not reach it.
+		onFoeTryMove(target, source, move) {
+			const targetAllExceptions = ['perishsong', 'flowershield', 'rototiller'];
+			if (move.target === 'foeSide' || (move.target === 'all' && !targetAllExceptions.includes(move.id))) return;
+			const holder = this.effectState.target;
+			if ((source.isAlly(holder) || move.target === 'all') && move.priority > 0.1) {
+				this.attrLastMove('[still]');
+				this.add('cant', holder, "ability: Emperor's Pride", move, '[of] ' + target);
+				return false;
+			}
+		},
+		flags: { breakable: 1 },
+		rating: 4,
+		num: -26,
+		gen: 9,
+		flavor: "Hurt Empoleon's pride and it only grows fiercer - and no one strikes before the emperor.",
+		shortDesc: "Water/Steel moves 1.3x. Competitive. Immune to priority moves.",
+		desc: "This Pokemon's Water- and Steel-type moves have 1.3x power. When an opponent lowers any of its stats, its Special Attack rises by 2 stages (Competitive). Opposing moves with priority above 0 cannot target it or its allies (Queenly Majesty).",
+	},
+	proudchick: {
+		name: "Proud Chick",
+		onBasePowerPriority: 23,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.type === 'Water' || move.type === 'Steel') return this.chainModify([4915, 4096]);
+		},
+		onAfterEachBoost(boost, target, source, effect) {
+			if (!source || target.isAlly(source)) return;
+			for (const stat in boost) {
+				if (boost[stat] < 0) {
+					this.boost({ spa: 2 }, target, target, null, false, true);
+					return;
+				}
+			}
+		},
+		flags: {},
+		rating: 3,
+		num: -27,
+		gen: 9,
+		flavor: "Too proud to accept food from anyone, and too proud to back down.",
+		shortDesc: "Water and Steel moves 1.2x power. Competitive.",
+		desc: "This Pokemon's Water- and Steel-type moves have 1.2x power, and when an opponent lowers any of its stats, its Special Attack rises by 2 stages.",
+	},
 };
 
 /*
@@ -1106,6 +1281,29 @@ const EEVEE = ['recover', 'teleport', 'healingwish', 'knockoff', 'focusblast'];
  * monkey king's leaps.
  * Infernape only, not Chimchar or Monferno.
  */
+/*
+ * Torterra and Empoleon (Patch 1.5), the rest of the trio, treated as Infernape
+ * was: an ability, two signatures, Explosion, and their animal's moves -
+ * a turtle's for Torterra (Rapid Spin, Head Smash, Yawn, Flail, Rollout, Ancient
+ * Power, Shell Smash), and for Empoleon a bird's that doesn't need to fly (Roost,
+ * Defog, Tailwind, Wing Attack) and a penguin's (Freeze-Dry, Ice Shard, Icicle
+ * Crash, Frost Breath, Aurora Veil). The first two stages get the lesser abilities.
+ */
+const TORTERRA = {
+	ability: 'World Turtle',
+	moves: ['eldertimber', 'tectonicshell', 'explosion', 'rapidspin', 'headsmash', 'yawn', 'flail', 'rollout', 'ancientpower', 'shellsmash'],
+};
+const EMPOLEON = {
+	ability: "Emperor's Pride",
+	moves: ['imperialtorrent', 'royaldecree', 'explosion', 'roost', 'defog', 'tailwind', 'wingattack',
+		'freezedry', 'iceshard', 'iciclecrash', 'frostbreath', 'auroraveil'],
+};
+const TRIO_BABIES = {
+	chimchar: 'Kindling Crown', monferno: 'Kindling Crown',
+	turtwig: 'Sapling Shell', grotle: 'Sapling Shell',
+	piplup: 'Proud Chick', prinplup: 'Proud Chick',
+};
+
 const INFERNAPE = {
 	ability: 'Crown of Flame',
 	moves: ['icepunch', 'greatsagestrike', 'pyrestrike', 'hustleup', 'craghammer', 'sparkscamper',
@@ -1600,7 +1798,7 @@ exports.buildBuffs = (Pokedex) => {
 	}
 
 	// Pre-evolutions: the new move (not the coverage) and the ability.
-	const SIGNATURES = ['continentalheave', 'aurorasquall', 'memorywipe', 'soulresonance', 'resolutestrike', 'gleamstalk', 'greatsagestrike', 'pyrestrike'];
+	const SIGNATURES = ['continentalheave', 'aurorasquall', 'memorywipe', 'soulresonance', 'resolutestrike', 'gleamstalk', 'greatsagestrike', 'pyrestrike', 'eldertimber', 'tectonicshell', 'imperialtorrent', 'royaldecree'];
 	const newMove = m => exports.MOVES[m] && !SIGNATURES.includes(m);
 	for (const id of Object.keys(out)) {
 		let species = Pokedex[id];
@@ -1629,6 +1827,9 @@ exports.buildBuffs = (Pokedex) => {
 
 	// Infernape only: after the pre-evolution pass.
 	if (Pokedex.infernape) add('infernape', INFERNAPE.moves, [INFERNAPE.ability]);
+	if (Pokedex.torterra) add('torterra', TORTERRA.moves, [TORTERRA.ability]);
+	if (Pokedex.empoleon) add('empoleon', EMPOLEON.moves, [EMPOLEON.ability]);
+	for (const [id, ability] of Object.entries(TRIO_BABIES)) if (Pokedex[id]) add(id, [], [ability]);
 
 	// Mew learns every machine move there is, and these are handed out like machines.
 	add('mew', Object.keys(exports.MOVES).filter(newMove), []);
@@ -1675,3 +1876,6 @@ exports.LUXRAY = LUXRAY;
 exports.GOLISOPOD = GOLISOPOD;
 exports.EEVEE = EEVEE;
 exports.INFERNAPE = INFERNAPE;
+exports.TORTERRA = TORTERRA;
+exports.EMPOLEON = EMPOLEON;
+exports.TRIO_BABIES = TRIO_BABIES;

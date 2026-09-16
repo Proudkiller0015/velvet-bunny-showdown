@@ -50,8 +50,10 @@ const ITEMS = ['elementalbanana', 'brokenpact'];
 /**
  * The calculator's own field names, which are not Showdown's.
  *
- * Stats are `bs` with two-letter keys, and a move's category is left out
- * entirely when it is Special - that is the default over there.
+ * Stats are `bs` with two-letter keys. A move's category is always written:
+ * the calculator's data leaves it out for Special moves, but a move added
+ * without one comes out as a Status move there, and every special move of ours
+ * (Oxidize, the lake trio's, Great Sage Strike...) calculated 0 damage.
  */
 function speciesRow(species) {
 	return {
@@ -70,7 +72,7 @@ function speciesRow(species) {
 
 function moveRow(move) {
 	const row = { bp: move.basePower, type: move.type };
-	if (move.category !== 'Special') row.category = move.category;
+	row.category = move.category;
 	if (move.priority) row.priority = move.priority;
 	if (move.flags && move.flags.contact) row.makesContact = true;
 	if (move.drain) row.drain = move.drain;

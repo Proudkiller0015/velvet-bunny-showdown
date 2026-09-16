@@ -606,6 +606,80 @@ check(['megahorn', 'shoreup', 'rapidspin'].every(m => learns('golisopod', m)) &&
 		`Infernape learns its kit, signatures its own (not Monferno, Mew or Sketch)${gaps.length ? ` missing ${gaps.join(', ')}` : ''}`);
 	check(!learns('simisear', 'explosion'), 'the Simi monkeys do not get Explosion');
 }
+
+// The rest of the Sinnoh trio: Torterra and Empoleon, and the lesser abilities.
+{
+	const near = (a, b, ratio) => Math.abs(a / b - ratio) < 0.06;
+	const has = (id, ability) => Object.values(Dex.species.get(id).abilities).includes(ability);
+	check(has('torterra', 'World Turtle') && has('empoleon', "Emperor's Pride") &&
+		['chimchar', 'monferno'].every(id => has(id, 'Kindling Crown')) && ['turtwig', 'grotle'].every(id => has(id, 'Sapling Shell')) &&
+		['piplup', 'prinplup'].every(id => has(id, 'Proud Chick')) && !has('grotle', 'World Turtle') && !has('monferno', 'Crown of Flame'),
+		'the trio has its abilities; the first two stages get the lesser ones');
+	check(['infernape', 'torterra', 'empoleon'].every(id => Dex.species.get(id).natDexTier === 'OU'), 'Infernape, Torterra and Empoleon are OU');
+	const kitT = ['eldertimber', 'tectonicshell', 'explosion', 'rapidspin', 'headsmash', 'yawn', 'flail', 'rollout', 'ancientpower', 'shellsmash'];
+	const kitE = ['imperialtorrent', 'royaldecree', 'explosion', 'roost', 'defog', 'tailwind', 'wingattack', 'freezedry', 'iceshard', 'iciclecrash', 'frostbreath', 'auroraveil'];
+	const gapsTE = [...kitT.filter(m => !learns('torterra', m)), ...kitE.filter(m => !learns('empoleon', m))];
+	check(!gapsTE.length && !learns('empoleon', 'bravebird') && !learns('grotle', 'eldertimber') && !learns('prinplup', 'royaldecree'),
+		`Torterra and Empoleon learn their kits, signatures their own, and Empoleon still can't fly${gapsTE.length ? ` (missing ${gapsTE.join(', ')})` : ''}`);
+
+	// World Turtle: 0.75x from a super effective hit, and no crits.
+	const iceBeam = (ability, crit) => {
+		const b = battle([{ species: 'Weavile', ability: 'Pressure', moves: [crit ? 'frostbreath' : 'icebeam'] }], [{ species: 'Torterra', ability, moves: ['splash'] }], [3, 3, 3, 3]);
+		const t = b.p2.active[0];
+		t.maxhp = 9999; t.hp = 9999;
+		b.makeChoices('move 1', 'move 1');
+		return { dmg: 9999 - t.hp, crit: /\|-crit\|/.test(log(b)) };
+	};
+	const plain = iceBeam('Overgrow'), turtle = iceBeam('World Turtle');
+	check(near(turtle.dmg, plain.dmg, 0.75), `World Turtle: a 4x Ice Beam does x${(turtle.dmg / plain.dmg).toFixed(2)}`);
+	check(iceBeam('Overgrow', true).crit && !iceBeam('World Turtle', true).crit, 'World Turtle: Frost Breath cannot crit it');
+
+	// Tectonic Shell: heals half, and Stealth Rock goes up on the other side.
+	{
+		const b = battle([{ species: 'Torterra', ability: 'World Turtle', moves: ['tectonicshell'] }], [{ species: 'Blissey', ability: 'Natural Cure', moves: ['splash'] }]);
+		const t = b.p1.active[0];
+		t.hp = Math.floor(t.maxhp / 4);
+		const before = t.hp;
+		b.makeChoices('move 1', 'move 1');
+		check(t.hp - before === Math.floor(t.maxhp / 2) || t.hp - before === Math.ceil(t.maxhp / 2), `Tectonic Shell heals half (${t.hp - before} of ${t.maxhp})`);
+		check(!!b.p2.sideConditions.stealthrock && !b.p1.sideConditions.stealthrock, "and sets Stealth Rock on the foe's side");
+	}
+
+	// Emperor's Pride: priority does not reach it; a stat drop gives +2 Sp. Atk.
+	{
+		const b = battle([{ species: 'Scizor', ability: 'Technician', moves: ['bulletpunch', 'screech'] }], [{ species: 'Empoleon', ability: "Emperor's Pride", moves: ['splash'] }]);
+		const emp = b.p2.active[0];
+		b.makeChoices('move 1', 'move 1');
+		check(emp.hp === emp.maxhp && /ability: Emperor's Pride/.test(log(b)), "Emperor's Pride: Bullet Punch can't reach it");
+		b.makeChoices('move 2', 'move 1');
+		check(emp.boosts.def === -2 && emp.boosts.spa === 2, "and Screech gives it +2 Sp. Atk (Competitive)");
+	}
+
+	// Royal Decree: Spikes on their side, and they are dragged out.
+	{
+		const b = battle([{ species: 'Empoleon', ability: "Emperor's Pride", moves: ['royaldecree'] }],
+			[{ species: 'Blissey', ability: 'Natural Cure', moves: ['splash'] }, { species: 'Chansey', ability: 'Natural Cure', moves: ['splash'] }]);
+		b.makeChoices('move 1', 'move 1');
+		check(b.p2.sideConditions.spikes && b.p2.sideConditions.spikes.layers === 1 && b.p2.active[0].species.name === 'Chansey',
+			`Royal Decree: a layer of Spikes and the foe is forced out (${b.p2.active[0].species.name} is in)`);
+	}
+
+	// The lesser abilities: 1.2x on their types.
+	const small = (species, ability, move, target) => {
+		const b = battle([{ species, ability, moves: [move] }], [{ species: target, ability: 'Pressure', moves: ['splash'] }], [7, 7, 7, 7]);
+		const foe = b.p2.active[0];
+		foe.maxhp = 9999; foe.hp = 9999;
+		b.makeChoices('move 1', 'move 1');
+		return 9999 - foe.hp;
+	};
+	const ratios = [
+		['Grotle', 'Overgrow', 'Sapling Shell', 'seedbomb', 'Snorlax'],
+		['Prinplup', 'Torrent', 'Proud Chick', 'surf', 'Snorlax'],
+		['Monferno', 'Blaze', 'Kindling Crown', 'machpunch', 'Snorlax'],
+	].map(([sp, a, b, m, t]) => [sp, small(sp, b, m, t) / small(sp, a, m, t)]);
+	check(near(ratios[0][1], 1, 1.2) && near(ratios[1][1], 1, 1.2) && near(ratios[2][1], 1, 1.32),
+		`lesser abilities: ${ratios.map(([sp, r]) => `${sp} x${r.toFixed(2)}`).join(', ')} (Mach Punch gets the punch bonus too)`);
+}
 check(learns('luxray', 'gleamstalk') && !learns('luxio', 'gleamstalk') && !learns('mew', 'gleamstalk') && Dex.moves.get('gleamstalk').flags.nosketch, "Gleamstalk is Luxray's alone");
 
 // The client's signature-move table is generated (scripts/build-signature-moves.js) and has to be rebuilt
