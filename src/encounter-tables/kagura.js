@@ -483,6 +483,72 @@ module.exports = {
       rare: ['Nihilego', 'Iron Jugulis'],
     },
 
+    // ----------------------------------------------------------- Hangouts
+    // Places to meet rather than battle: nothing to encounter, but !map knows them.
+    'hanami': {
+      name: 'Hanami Park',
+      channels: ['hanami-park'],
+      types: [],
+      wild: [],
+      trainers: [],
+      common: [],
+      rare: [],
+    },
+    'nightmarket': {
+      name: 'Harbour Night Market',
+      channels: ['night-market'],
+      types: [],
+      wild: [],
+      trainers: [],
+      common: [],
+      rare: [],
+    },
+    'crossroads': {
+      name: 'The Crossroads Tavern',
+      channels: ['crossroads-tavern'],
+      types: [],
+      wild: [],
+      trainers: [],
+      common: [],
+      rare: [],
+    },
+    'laststop': {
+      name: 'Last Stop Café',
+      channels: ['last-stop-cafe'],
+      types: [],
+      wild: [],
+      trainers: [],
+      common: [],
+      rare: [],
+    },
+    'windchime': {
+      name: 'Windchime Terrace',
+      channels: ['windchime-terrace'],
+      types: [],
+      wild: [],
+      trainers: [],
+      common: [],
+      rare: [],
+    },
+    'bonfire': {
+      name: 'Bonfire Beach',
+      channels: ['bonfire-beach'],
+      types: [],
+      wild: [],
+      trainers: [],
+      common: [],
+      rare: [],
+    },
+    'festival': {
+      name: 'Moonrise Festival Grounds',
+      channels: ['festival-grounds'],
+      types: [],
+      wild: [],
+      trainers: [],
+      common: [],
+      rare: [],
+    },
+
     // ------------------------------------------------------------ Kitaura
     // The north ferry's harbour below N's Castle: a cold coast.
     'kitaura': {
