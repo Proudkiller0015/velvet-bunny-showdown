@@ -709,7 +709,7 @@ check(learns('luxray', 'gleamstalk') && !learns('luxio', 'gleamstalk') && !learn
 	const client = require('fs').readFileSync(require('path').join(__dirname, '..', 'client', 'js', 'velvet-data.js'), 'utf8');
 	check(/installDescriptions\(\)/.test(client) && /BattleText/.test(client), 'and the client writes them into its language table');
 }
-check(['walkingwake', 'dragapult', 'dragonitemega', 'lucariomegaz', 'deoxysspeed', 'greninjabond', 'magearna', 'magearnaoriginal', 'roaringmoon'].every(id => Dex.species.get(id).natDexTier === 'OU'), 'Walking Wake, Dragapult, Mega Dragonite, Mega Lucario Z, Deoxys-Speed, Ash-Greninja, Magearna and Roaring Moon are unbanned (OU)');
+check(['walkingwake', 'dragapult', 'dragonitemega', 'lucariomegaz', 'deoxysspeed', 'greninjabond', 'magearna', 'magearnaoriginal', 'roaringmoon', 'ursalunabloodmoon'].every(id => Dex.species.get(id).natDexTier === 'OU'), 'Walking Wake, Dragapult, Mega Dragonite, Mega Lucario Z, Deoxys-Speed, Ash-Greninja, Magearna, Roaring Moon and Bloodmoon Ursaluna are unbanned (OU)');
 {
 	const vm = require('vm');
 	const ctx = { window: {} };
