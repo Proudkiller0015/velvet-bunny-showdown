@@ -233,6 +233,23 @@ for (const [id, tier] of Object.entries(Object.assign({}, za.assigned, TIERS))) 
 	else if (!inThisGen(id)) natdexTiers[id] = tier;
 	else tiers[id] = tier;
 }
+/*
+ * The battle-only formes of anything re-tiered, in the National Dex tables too.
+ *
+ * The CDN tiers a forme on its own, so Terapagos-Terastal read OU in the National
+ * Dex builder while this server bans every Terapagos - the label a player sees
+ * has to be the server's, forme by forme. The values are the patched dex's own.
+ */
+for (const id of Object.keys(TIERS)) {
+	const species = Dex.species.get(id);
+	if (!species.exists || isMegaForme(id)) continue;
+	const formes = [species.id, ...(species.otherFormes || []).map(f => Dex.species.get(f)).filter(f => f.exists && f.battleOnly).map(f => f.id)];
+	for (const forme of formes) {
+		const nd = Dex.species.get(forme).natDexTier;
+		if (nd) natdexTiers[forme] = nd;
+		if (forme !== species.id && inThisGen(forme)) tiers[forme] = Dex.species.get(forme).tier;
+	}
+}
 const unlocked = {
 	species: Object.keys(za.assigned),
 	items: za.ZA_STONES.slice(),

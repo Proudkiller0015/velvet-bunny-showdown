@@ -105,6 +105,13 @@ const TIERS = {
 	walkingwake: 'OU',
 	// Dragapult too (Patch 1.5), by the owner's call.
 	dragapult: 'OU',
+	// Derived Uber from its 700 base stats; unbanned by the owner's call (Patch 1.5).
+	dragonitemega: 'OU',
+	// Deoxys-Speed, unbanned by the owner's call (Patch 1.5).
+	deoxysspeed: 'OU',
+	// Magearna, both colours, unbanned by the owner's call (Patch 1.5). Its Mega stays Uber.
+	magearna: 'OU',
+	magearnaoriginal: 'OU',
 
 	// Its only ability is Shadow Tag. Base Chandelure can pick Flash Fire and go
 	// on being an RU Pokemon, and the ability ban in the tiers below Ubers
@@ -131,9 +138,9 @@ const TIERS = {
 	// Speed rather than 50.
 	starmiemega: 'Uber',
 
-	// Adaptability on 164 Special Attack at 151 Speed. There is no defensive
-	// answer to that below Ubers.
-	lucariomegaz: 'Uber',
+	// Adaptability on 164 Special Attack at 151 Speed. It was Uber for that; the
+	// owner unbanned it (Patch 1.5), along with Mega Dragonite below.
+	lucariomegaz: 'OU',
 
 	// 154 Attack at 151 Speed behind Magic Bounce, so the hazards and status
 	// that would otherwise wear it down bounce back at whoever tried.
@@ -155,7 +162,8 @@ const TIERS = {
 	// Special Attack, 132 Speed and a Water Shuriken that hits three times.
 	// That is precisely the set Smogon banned from OU when it last existed, and
 	// we put it back.
-	greninjabond: 'Uber',
+	// ...and then unbanned by the owner's call (Patch 1.5): OU.
+	greninjabond: 'OU',
 
 	// Balance Patch 1 took Slow Start away and gave it Colossus Unbound (Mold
 	// Breaker, Clear Body, 1.2x Attack above half HP) and Continental Heave, a

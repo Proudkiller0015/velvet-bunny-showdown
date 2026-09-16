@@ -709,7 +709,14 @@ check(learns('luxray', 'gleamstalk') && !learns('luxio', 'gleamstalk') && !learn
 	const client = require('fs').readFileSync(require('path').join(__dirname, '..', 'client', 'js', 'velvet-data.js'), 'utf8');
 	check(/installDescriptions\(\)/.test(client) && /BattleText/.test(client), 'and the client writes them into its language table');
 }
-check(Dex.species.get('walkingwake').natDexTier === 'OU' && Dex.species.get('dragapult').natDexTier === 'OU', 'Walking Wake and Dragapult are unbanned (OU)');
+check(['walkingwake', 'dragapult', 'dragonitemega', 'lucariomegaz', 'deoxysspeed', 'greninjabond', 'magearna', 'magearnaoriginal'].every(id => Dex.species.get(id).natDexTier === 'OU'), 'Walking Wake, Dragapult, Mega Dragonite, Mega Lucario Z, Deoxys-Speed, Ash-Greninja and Magearna are unbanned (OU)');
+{
+	const vm = require('vm');
+	const ctx = { window: {} };
+	vm.runInNewContext(require('fs').readFileSync(require('path').join(__dirname, '..', 'client', 'js', 'velvet-buffs.js'), 'utf8'), ctx);
+	const nd = ctx.window.VelvetBuffs.natdexTiers;
+	check(['terapagos', 'terapagosterastal', 'terapagosstellar'].every(id => nd[id] === 'Uber'), 'the client labels every Terapagos forme Uber in National Dex, as the server does');
+}
 
 console.log(failed ? `\n${failed} failed` : '\nall passed');
 process.exit(failed ? 1 : 0);
