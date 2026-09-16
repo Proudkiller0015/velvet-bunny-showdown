@@ -399,12 +399,8 @@ function lineOf(root) {
 
 /*
  * Who is rare is decided in one place, src/rarity.js: the ladder from box-art
- * legends down to common lines, with usage tier inside each class. Kept as
- * 'rarest' / 'normal' here for anything still asking the old question.
+ * legends down to common lines, with usage tier inside each class.
  */
-function rarityClass(root) {
-	return Rarity.HEADLINERS.has(Rarity.classOf(root)) ? 'rarest' : 'normal';
-}
 
 /**
  * What badges unlock.
@@ -978,7 +974,7 @@ module.exports = {
 	toID, LEGEND_TAGS, isLegendary, encounterable, findSpecies,
 	levelUpMoves, wildSet, wildName, clampLevel, clampBadges, levelRange, shinyChance,
 	catchRate, BALLS, findBall, catchChance, shakesFor, CATCH_BOOST, PITY_PER_MISS,
-	TRAINER_CLASSES, findClass, trainerName, minLevel, rootOf, lineOf, lineWeight, rarityClass, BADGE_TIERS, Rarity,
+	TRAINER_CLASSES, findClass, trainerName, minLevel, rootOf, lineOf, lineWeight, BADGE_TIERS, Rarity,
 	stageFor, BABIES, babyWeight, clock, clockWeight, TIME_OF_DAY, DAY_OF_WEEK, SEASONS, EVENTS, eventOn, aceAdjusted, aceLevel,
 	rollWild, rollTrainer, describe,
 	WILD_FORMAT, WILD_DOUBLE_FORMAT, TUTORIAL_FORMAT, TUTORIAL_PIKACHU, TUTORIAL_RATTATA, TUTORIAL_BAG, TRAINER_FORMAT, TRAINER_DOUBLE_FORMAT,
