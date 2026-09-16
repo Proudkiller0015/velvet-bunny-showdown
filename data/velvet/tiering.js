@@ -94,6 +94,10 @@ const TIERS = {
 	simisear: 'OU',
 	simipour: 'OU',
 
+	// Infernape, with Crown of Flame (Patch 1.5): up from RU beside the monkey it
+	// was being measured against.
+	infernape: 'OU',
+
 	// Its only ability is Shadow Tag. Base Chandelure can pick Flash Fire and go
 	// on being an RU Pokemon, and the ability ban in the tiers below Ubers
 	// already stops the trapping set there - but a Mega has one ability slot and

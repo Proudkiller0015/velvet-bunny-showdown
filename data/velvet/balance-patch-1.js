@@ -900,6 +900,31 @@ exports.ABILITIES = {
 		shortDesc: "Mold Breaker + Clear Body. 1.2x Attack while above 50% HP.",
 		desc: "This Pokemon's moves and their effects ignore the Abilities of other Pokemon, other Pokemon cannot lower its stat stages, and its Attack is multiplied by 1.2 while its HP is above half.",
 	},
+	/*
+	 * Crown of Flame - Infernape's (Patch 1.5). Simisear, with the Elemental Banana,
+	 * Solar Surge and Cinder Rush, had become a better Infernape than Infernape.
+	 * This is what the Simisear can't be: a Fire/Fighting mixed attacker whose
+	 * crown burns hotter the harder it hits. Its two abilities fused and made
+	 * constant - Blaze without the wait, Iron Fist - so Mach Punch, Drain Punch
+	 * and Fire Punch are where it is strongest, with no weather or item needed.
+	 */
+	crownofflame: {
+		name: "Crown of Flame",
+		onBasePowerPriority: 23,
+		onBasePower(basePower, attacker, defender, move) {
+			let mod = 4096;
+			if (move.type === 'Fire' || move.type === 'Fighting') mod = Math.round(mod * 5325 / 4096);
+			if (move.flags['punch']) mod = Math.round(mod * 4915 / 4096);
+			if (mod !== 4096) return this.chainModify([mod, 4096]);
+		},
+		flags: {},
+		rating: 4,
+		num: -22,
+		gen: 9,
+		flavor: "The flame on Infernape's head is a crown, and every blow it lands makes it burn brighter.",
+		shortDesc: "Fire and Fighting moves 1.3x power; punching moves 1.2x (both stack).",
+		desc: "This Pokemon's Fire- and Fighting-type moves have 1.3x power, and its punch-based moves have 1.2x power. A Fire or Fighting punch gets both, for 1.56x.",
+	},
 };
 
 /*
@@ -1031,6 +1056,14 @@ const GOLISOPOD = ['megahorn', 'shoreup', 'rapidspin'];
  * client see it on every one of them, not only through the pre-evolution.
  */
 const EEVEE = ['recover', 'teleport', 'healingwish', 'knockoff', 'focusblast'];
+
+/*
+ * Infernape (Patch 1.5): Crown of Flame (above), and the one elemental punch it
+ * was missing - Ice Punch, for the Flying, Ground and Dragon types that stop a
+ * Fire/Fighting cold. Thunder Punch and Fire Punch it had, and Blaze Kick comes
+ * from Chimchar already. Infernape only, not Chimchar or Monferno.
+ */
+const INFERNAPE = { ability: 'Crown of Flame', moves: ['icepunch'] };
 
 const LUXRAY = { ability: 'Prankster', moves: ['gleamstalk', 'knockoff', 'suckerpunch', 'taunt', 'partingshot', 'encore', 'yawn', 'swagger', 'swordsdance'] };
 
@@ -1547,6 +1580,9 @@ exports.buildBuffs = (Pokedex) => {
 	// Eevee's kit (Patch 1.5), for Eevee and all eight.
 	for (const id of ['eevee', ...Object.keys(EEVEELUTIONS)]) if (Pokedex[id]) add(id, EEVEE, []);
 
+	// Infernape only: after the pre-evolution pass.
+	if (Pokedex.infernape) add('infernape', INFERNAPE.moves, [INFERNAPE.ability]);
+
 	// Mew learns every machine move there is, and these are handed out like machines.
 	add('mew', Object.keys(exports.MOVES).filter(newMove), []);
 
@@ -1591,3 +1627,4 @@ exports.patchAbsorbers = Abilities => {
 exports.LUXRAY = LUXRAY;
 exports.GOLISOPOD = GOLISOPOD;
 exports.EEVEE = EEVEE;
+exports.INFERNAPE = INFERNAPE;

@@ -557,6 +557,26 @@ check(['megahorn', 'shoreup', 'rapidspin'].every(m => learns('golisopod', m)) &&
 	const missing = nine.flatMap(s => kit.filter(m => !learns(s, m)).map(m => `${s}:${m}`));
 	check(!missing.length, `Eevee and all eight eeveelutions learn Recover, Teleport, Healing Wish, Knock Off and Focus Blast${missing.length ? ` (missing ${missing.join(', ')})` : ''}`);
 }
+// Infernape: Crown of Flame, measured against Iron Fist on the same attacker and target.
+{
+	// Hippowdon for Close Combat (Blissey's Defense can't take one), Blissey for the punches.
+	const hit = (ability, move) => {
+		const target = move === 'closecombat' ? { species: 'Hippowdon', ability: 'Sand Stream', moves: ['splash'] } : { species: 'Blissey', ability: 'Natural Cure', moves: ['splash'] };
+		const b = battle([{ species: 'Infernape', ability, moves: [move] }], [target], [7, 7, 7, 7]);
+		const foe = b.p2.active[0];
+		b.makeChoices('move 1', 'move 1');
+		return foe.maxhp - foe.hp;
+	};
+	const near = (a, b, ratio) => Math.abs(a / b - ratio) < 0.06;
+	const [cc, ccCrown] = [hit('Blaze', 'closecombat'), hit('Crown of Flame', 'closecombat')];
+	const [tp, tpCrown] = [hit('Blaze', 'thunderpunch'), hit('Crown of Flame', 'thunderpunch')];
+	const [fp, fpCrown] = [hit('Blaze', 'firepunch'), hit('Crown of Flame', 'firepunch')];
+	check(near(ccCrown, cc, 1.3) && near(tpCrown, tp, 1.2) && near(fpCrown, fp, 1.56),
+		`Crown of Flame: Close Combat x${(ccCrown / cc).toFixed(2)}, Thunder Punch x${(tpCrown / tp).toFixed(2)}, Fire Punch x${(fpCrown / fp).toFixed(2)}`);
+	check(Object.values(Dex.species.get('infernape').abilities).includes('Crown of Flame') && !Object.values(Dex.species.get('monferno').abilities).includes('Crown of Flame') &&
+		learns('infernape', 'icepunch') && !learns('monferno', 'icepunch') && Dex.species.get('infernape').natDexTier === 'OU',
+		'Infernape (not Monferno) gets Crown of Flame and Ice Punch, and is OU');
+}
 check(learns('luxray', 'gleamstalk') && !learns('luxio', 'gleamstalk') && !learns('mew', 'gleamstalk') && Dex.moves.get('gleamstalk').flags.nosketch, "Gleamstalk is Luxray's alone");
 
 // The client's signature-move table is generated (scripts/build-signature-moves.js) and has to be rebuilt

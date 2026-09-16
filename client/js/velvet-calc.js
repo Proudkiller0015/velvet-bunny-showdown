@@ -282,6 +282,11 @@
 		if (String(attacker.ability || '') === 'Verdant Surge' && move.type === 'Grass') {
 			out.push([4726, 4096]);
 		}
+		// Crown of Flame (Infernape): Fire and Fighting 1.3x, punches 1.2x, both stack.
+		if (String(attacker.ability || '') === 'Crown of Flame') {
+			if (move.type === 'Fire' || move.type === 'Fighting') out.push([5325, 4096]);
+			if ((move.flags && move.flags.punch) || / Punch$/.test(String(move.name || ''))) out.push([4915, 4096]);
+		}
 		return out;
 	}
 
