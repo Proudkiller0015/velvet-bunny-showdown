@@ -1009,6 +1009,14 @@ const ABILITY_GRANTS = {
  * pins its prey - Taunt, Parting Shot, Encore, Yawn, Swagger, Swords Dance. Volt Switch,
  * Thunder Wave, Snarl, Fake Tears, Protect and Substitute it already had.
  */
+/*
+ * Golisopod, by the owner's request: its movepool, not its ability. First Impression
+ * only works on the first turn out, which left it without a strong Bug move after;
+ * it had no real recovery for a Pokemon built to sit in; and a beach scavenger that
+ * curls up and rolls should be able to clear hazards. One of each.
+ */
+const GOLISOPOD = ['megahorn', 'shoreup', 'rapidspin'];
+
 const LUXRAY = { ability: 'Prankster', moves: ['gleamstalk', 'knockoff', 'suckerpunch', 'taunt', 'partingshot', 'encore', 'yawn', 'swagger', 'swordsdance'] };
 
 const EEVEELUTIONS = {
@@ -1515,6 +1523,9 @@ exports.buildBuffs = (Pokedex) => {
 	// Prankster with the stalker's support moves. Luxray only, not Shinx or Luxio.
 	if (Pokedex.luxray) add('luxray', LUXRAY.moves, [LUXRAY.ability]);
 
+	// Golisopod only, not Wimpod: after the pre-evolution pass.
+	if (Pokedex.golisopod) add('golisopod', GOLISOPOD, []);
+
 	// The eeveelutions, after the pre-evolution pass so Eevee does not inherit them.
 	for (const [id, e] of Object.entries(EEVEELUTIONS)) if (Pokedex[id]) add(id, e.moves, [e.ability]);
 
@@ -1560,3 +1571,4 @@ exports.patchAbsorbers = Abilities => {
 	return Abilities;
 };
 exports.LUXRAY = LUXRAY;
+exports.GOLISOPOD = GOLISOPOD;
