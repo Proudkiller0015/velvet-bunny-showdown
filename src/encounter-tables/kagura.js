@@ -22,12 +22,12 @@ module.exports = {
     // ---------------------------------------------------------------- Hinode
     'sakura': {
       name: 'Sakura Town',
-      channels: ['poke-center', 'sakura-lab', 'sakura-square', 'shrine-steps', 'sakura-mart', 'blossom-road', 'the-old-well', 'sakura-houses'],
+      channels: ['poke-center', 'sakura-lab', 'sakura-square', 'shrine-steps', 'sakura-mart', 'blossom-road', 'the-old-well', 'sakura-houses', 'sakura-beach', 'cynthias-house'],
       types: ['Normal', 'Bug', 'Flying', 'Grass'],
-      wild: ['blossom-road', 'shrine-steps', 'the-old-well'],
+      wild: ['blossom-road', 'shrine-steps', 'the-old-well', 'sakura-beach'],
       trainers: ['youngster', 'lass', 'schoolkid', 'bugcatcher'],
-      noTrainers: ['poke-center', 'sakura-lab', 'sakura-mart', 'sakura-houses'],
-      common: ['Pidgey', 'Sentret', 'Hoppip', 'Caterpie', 'Weedle', 'Oddish', 'Bidoof', 'Starly', 'Sewaddle', 'Wurmple', 'Petilil', 'Cottonee', 'Sunkern', 'Skwovet'],
+      noTrainers: ['poke-center', 'sakura-lab', 'sakura-mart', 'sakura-houses', 'cynthias-house'],
+      common: ['Pidgey', 'Sentret', 'Hoppip', 'Caterpie', 'Weedle', 'Oddish', 'Bidoof', 'Starly', 'Sewaddle', 'Wurmple', 'Petilil', 'Cottonee', 'Sunkern', 'Skwovet', 'Wingull', 'Shellder', 'Krabby'],
       rare: ['Eevee', 'Mimikyu', 'Smeargle', 'Munchlax'],
     },
     'station': {

@@ -759,6 +759,11 @@ const BATTLE_ITEMS = [
 	{ id: 'xaccuracy', name: 'X Accuracy', boost: { accuracy: 2 } },
 	{ id: 'direhit', name: 'Dire Hit', crit: true },
 	{ id: 'guardspec', name: 'Guard Spec.', mist: true },
+	// Getting out (Patch 1.4). These do nothing to a Pokemon, so itemHelps never
+	// offers them on the item panel; the Run button is where they are used.
+	{ id: 'pokedoll', name: 'Poké Doll', escape: true },
+	{ id: 'fluffytail', name: 'Fluffy Tail', escape: true },
+	{ id: 'poketoy', name: 'Poké Toy', escape: true },
 ];
 
 /**

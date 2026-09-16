@@ -536,7 +536,8 @@ function resultFromLog(enc, lines, winnerid) {
 	}
 	const itemsUsed = {};
 	for (const line of lines) {
-		const m = /^\|-message\|(.+) used an? (.+) on .+!$/.exec(line);
+		// "used a Potion on Gible!", and for an escape item plain "used a Poké Doll!".
+		const m = /^\|-message\|(.+) used an? (.+) on .+!$/.exec(line) || /^\|-message\|(.+) used an? ([^!]+)!$/.exec(line);
 		if (!m || toID(m[1]) !== enc.userid) continue;
 		const item = E.findBattleItem(m[2]);
 		if (item) itemsUsed[item.id] = (itemsUsed[item.id] || 0) + 1;

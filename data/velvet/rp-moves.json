@@ -1,0 +1,261 @@
+{
+ "bulbasaur": [
+  "earthpower"
+ ],
+ "ivysaur": [
+  "earthpower"
+ ],
+ "charmander": [
+  "earthpower",
+  "scorchingsands"
+ ],
+ "charmeleon": [
+  "earthpower",
+  "scorchingsands"
+ ],
+ "charizard": [
+  "earthpower"
+ ],
+ "chikorita": [
+  "earthpower",
+  "weatherball"
+ ],
+ "bayleef": [
+  "earthpower",
+  "weatherball"
+ ],
+ "meganium": [
+  "earthpower"
+ ],
+ "cyndaquil": [
+  "earthpower",
+  "scorchingsands"
+ ],
+ "quilava": [
+  "earthpower",
+  "scorchingsands"
+ ],
+ "typhlosion": [
+  "earthpower"
+ ],
+ "treecko": [
+  "earthpower",
+  "weatherball"
+ ],
+ "grovyle": [
+  "earthpower",
+  "weatherball"
+ ],
+ "sceptile": [
+  "weatherball"
+ ],
+ "torchic": [
+  "earthpower",
+  "scorchingsands"
+ ],
+ "combusken": [
+  "earthpower",
+  "scorchingsands"
+ ],
+ "blaziken": [
+  "earthpower"
+ ],
+ "mudkip": [
+  "flipturn"
+ ],
+ "marshtomp": [
+  "flipturn"
+ ],
+ "turtwig": [
+  "weatherball"
+ ],
+ "grotle": [
+  "weatherball"
+ ],
+ "torterra": [
+  "weatherball"
+ ],
+ "chimchar": [
+  "earthpower",
+  "scorchingsands"
+ ],
+ "monferno": [
+  "earthpower",
+  "scorchingsands"
+ ],
+ "infernape": [
+  "earthpower"
+ ],
+ "piplup": [
+  "muddywater"
+ ],
+ "prinplup": [
+  "muddywater"
+ ],
+ "empoleon": [
+  "muddywater"
+ ],
+ "snivy": [
+  "earthpower",
+  "weatherball"
+ ],
+ "servine": [
+  "earthpower",
+  "weatherball"
+ ],
+ "serperior": [
+  "earthpower",
+  "weatherball"
+ ],
+ "tepig": [
+  "earthpower",
+  "scorchingsands"
+ ],
+ "pignite": [
+  "earthpower",
+  "scorchingsands"
+ ],
+ "emboar": [
+  "earthpower",
+  "scorchingsands"
+ ],
+ "oshawott": [
+  "muddywater"
+ ],
+ "dewott": [
+  "muddywater"
+ ],
+ "samurott": [
+  "muddywater"
+ ],
+ "chespin": [
+  "earthpower",
+  "weatherball"
+ ],
+ "quilladin": [
+  "earthpower",
+  "weatherball"
+ ],
+ "chesnaught": [
+  "earthpower",
+  "weatherball"
+ ],
+ "fennekin": [
+  "earthpower",
+  "scorchingsands"
+ ],
+ "braixen": [
+  "earthpower",
+  "scorchingsands"
+ ],
+ "delphox": [
+  "earthpower"
+ ],
+ "froakie": [
+  "muddywater",
+  "flipturn"
+ ],
+ "frogadier": [
+  "muddywater",
+  "flipturn"
+ ],
+ "greninja": [
+  "muddywater",
+  "flipturn"
+ ],
+ "rowlet": [
+  "earthpower",
+  "weatherball"
+ ],
+ "dartrix": [
+  "earthpower",
+  "weatherball"
+ ],
+ "decidueye": [
+  "earthpower",
+  "weatherball"
+ ],
+ "litten": [
+  "earthpower",
+  "scorchingsands"
+ ],
+ "torracat": [
+  "earthpower",
+  "scorchingsands"
+ ],
+ "incineroar": [
+  "earthpower"
+ ],
+ "popplio": [
+  "muddywater"
+ ],
+ "brionne": [
+  "muddywater"
+ ],
+ "primarina": [
+  "muddywater"
+ ],
+ "grookey": [
+  "earthpower",
+  "weatherball"
+ ],
+ "thwackey": [
+  "earthpower",
+  "weatherball"
+ ],
+ "rillaboom": [
+  "weatherball"
+ ],
+ "scorbunny": [
+  "earthpower",
+  "scorchingsands"
+ ],
+ "raboot": [
+  "earthpower",
+  "scorchingsands"
+ ],
+ "cinderace": [
+  "earthpower"
+ ],
+ "sobble": [
+  "flipturn",
+  "icebeam"
+ ],
+ "drizzile": [
+  "flipturn",
+  "icebeam"
+ ],
+ "sprigatito": [
+  "earthpower",
+  "weatherball"
+ ],
+ "floragato": [
+  "earthpower",
+  "weatherball"
+ ],
+ "meowscarada": [
+  "earthpower",
+  "weatherball"
+ ],
+ "fuecoco": [
+  "earthpower",
+  "scorchingsands"
+ ],
+ "crocalor": [
+  "earthpower",
+  "scorchingsands"
+ ],
+ "quaxly": [
+  "muddywater",
+  "flipturn",
+  "icebeam"
+ ],
+ "quaxwell": [
+  "muddywater",
+  "icebeam"
+ ],
+ "quaquaval": [
+  "muddywater",
+  "icebeam"
+ ]
+}

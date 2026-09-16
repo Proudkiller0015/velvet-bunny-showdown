@@ -213,11 +213,26 @@ try {
  * has no learnset of its own, and neither does a Mega. So the base form is
  * asked first and the forme only if it somehow has its own row.
  */
+/*
+ * The starter moves the games never gave them (Patch 1.4).
+ *
+ * Built by scripts/build-rp-moves.js and read exactly the way CUT_MOVES is: a
+ * starter line gets the coverage its own first type received everywhere else,
+ * and nothing else. Meganium has never learned Earth Power in any game, which
+ * is the complaint this answers.
+ */
+let RP_MOVES = {};
+try {
+	RP_MOVES = require('../data/velvet/rp-moves.json');
+} catch (e) {
+	console.log('[velvet] no rp-moves.json; run scripts/build-rp-moves.js - ' + e.message);
+}
+
 function grantedToCut(dex, species, move) {
 	const base = species.baseSpecies && species.baseSpecies !== species.name ?
 		dex.species.get(species.baseSpecies) : species;
-	const list = CUT_MOVES[base.id] || CUT_MOVES[species.id];
-	return !!list && list.includes(move.id);
+	const list = [...(CUT_MOVES[base.id] || CUT_MOVES[species.id] || []), ...(RP_MOVES[base.id] || RP_MOVES[species.id] || [])];
+	return list.includes(move.id);
 }
 
 /**
@@ -357,10 +372,15 @@ function ballPanel(E, note) {
 	// Buttons, not a form: the client turns a submitted form into "Submitted!", so a second throw had nothing to press.
 	const others = E.BALLS.filter(b => !['poke', 'great', 'ultra'].includes(b.id)).map(b =>
 		`<button class="button" name="send" value="/throwball ${b.id}"${b.note ? ` title="${b.note.replace(/"/g, '&quot;')}"` : ''}>${b.name}</button>`).join(' ');
+	// Running is a wild-battle option like throwing, so it sits with the throws.
+	const escapes = E.BATTLE_ITEMS.filter(i => i.escape).map(i =>
+		`<button class="button" name="send" value="/run ${i.id}">${i.name}</button>`).join(' ');
 	return `<div class="infobox" style="margin:4px 0">` +
 		(note ? `<div style="margin-bottom:4px">${note}</div>` : '') +
 		`<b>Catch it:</b> ${buttons}` +
 		`<details style="margin-top:4px"><summary>Other balls</summary>${others}</details>` +
+		`<div style="margin-top:4px"><b>Or leave:</b> <button class="button" name="send" value="/run">Run</button> ${escapes}` +
+		`<br/><small>Running is your turn, and it goes on your Speed against its Speed - each failed try makes the next easier. A Poké Doll always works. Legendaries never let you go.</small></div>` +
 		`<small>Throwing a ball uses your turn. Weaken it and give it a status first to make it easier. ` +
 		`Only use balls your character actually has.</small></div>`;
 }
@@ -531,13 +551,19 @@ function useItem(battle, side, itemId, target) {
 const RP_TURN_ACTIONS = {
 	onModifyPriority(priority, pokemon) {
 		const side = pokemon.side;
-		if ((side.rpBall && side.rpBall.turn === this.turn) || (side.rpItem && side.rpItem.turn === this.turn)) return priority + 20;
+		if ((side.rpBall && side.rpBall.turn === this.turn) || (side.rpItem && side.rpItem.turn === this.turn) ||
+			(side.rpRun && side.rpRun.turn === this.turn)) return priority + 20;
 	},
 	onBeforeMovePriority: 100,
 	onBeforeMove(pokemon) {
 		const side = pokemon.side;
 		const ball = side.rpBall;
 		const item = side.rpItem;
+		const run = side.rpRun;
+		if (run && run.turn === this.turn) {
+			if (!run.tried) { run.tried = true; tryRun(this, pokemon); }
+			return false;
+		}
 		if (item && item.turn === this.turn) {
 			// The first of your Pokemon to act uses it; any other just waits.
 			if (!item.used) { item.used = true; useItem(this, side, item.id, item.target); }
@@ -562,12 +588,14 @@ function installCatching(battle) {
 		// A pending throw belongs to the choice, so undoing the choice drops it.
 		side.clearChoice = function (...args) {
 			this.rpPendingBall = null;
+			this.rpPendingRun = null;
 			return clearChoice.apply(this, args);
 		};
 		// The engine clears every choice after queueing it and before running it,
 		// so the throw is moved off the choice at the moment it is locked in.
 		side.commitChoices = function (...args) {
 			this.rpBall = this.rpPendingBall || null;
+			this.rpRun = this.rpPendingRun || null;
 			return commitChoices.apply(this, args);
 		};
 		/*
@@ -580,6 +608,32 @@ function installCatching(battle) {
 		 * happens inside the battle, so replays show exactly what happened.
 		 */
 		side.choose = function (input) {
+			// "run [item]" is a choice like "ball ultra": the turn is spent either way.
+			const r = /^\s*run\b\s*(.*)$/i.exec(String(input));
+			if (r) {
+				const foe = this.foe;
+				if (this.requestState !== 'move' || !this.active[0] || this.active[0].fainted) {
+					return this.emitChoiceError(`Can't run right now: send a Pokémon out first`);
+				}
+				if (!isWildSide(foe)) {
+					return this.emitChoiceError(`You can't run from a trainer - that battle is settled in the RP`);
+				}
+				const wild = foe.active.find(p => p && !p.fainted);
+				if (!wild) return this.emitChoiceError(`There's nothing to run from`);
+				if (E.isLegendary(wild.species)) {
+					return this.emitChoiceError(`${wild.species.name} will not let you leave. Legendaries are not escapable`);
+				}
+				const item = r[1] ? E.findBattleItem(r[1]) : null;
+				if (r[1] && (!item || !item.escape)) return this.emitChoiceError(`"${r[1]}" is not something that gets you out of a battle`);
+				const fillers = this.active.map(p => fillerChoice(battle, p));
+				if (fillers.some(f => f === null) || fillers.every(f => f === 'pass')) {
+					return this.emitChoiceError(`Can't run this turn`);
+				}
+				if (!choose.call(this, fillers.join(', '))) return false;
+				this.rpRunItem = item || null;
+				this.rpPendingRun = { turn: battle.turn, tried: false };
+				return true;
+			}
 			const m = /^\s*ball\b\s*(.*)$/i.exec(String(input));
 			if (!m) return choose.call(this, input);
 			const foe = this.foe;
@@ -613,6 +667,48 @@ function installCatching(battle) {
 			return true;
 		};
 	}
+}
+
+/*
+ * Running away (Patch 1.4).
+ *
+ * The games' own arithmetic, kept: your Speed against its Speed, and every
+ * failed attempt makes the next one likelier, so nobody is ever truly stuck -
+ *
+ *   odds = (yourSpeed * 128 / itsSpeed + 30 * attempts) out of 256
+ *
+ * and being faster than it is an escape every time. Two things change it: a
+ * Poké Doll or a Smoke Ball in the bag walks you out on the spot, and a
+ * legendary never lets you leave at all. A trainer battle is not escapable
+ * either - that is a person standing in front of you, and the RP settles it.
+ */
+function tryRun(battle, pokemon) {
+	const E = encounters();
+	const side = pokemon.side;
+	const wild = side.foe.active.find(p => p && !p.fainted);
+	if (!wild) return;
+	side.rpRuns = (side.rpRuns || 0) + 1;
+	if (E.isLegendary(wild.species)) {
+		battle.add('-message', `${pokemon.name} tried to get away - but ${wild.name} is not letting anyone leave.`);
+		return;
+	}
+	const item = side.rpRunItem;
+	side.rpRunItem = null;
+	const mine = pokemon.getStat('spe');
+	const theirs = Math.max(1, wild.getStat('spe'));
+	const odds = mine > theirs ? 256 : (mine * 128) / theirs + 30 * side.rpRuns;
+	const got = !!item || battle.random(256) < odds;
+	battle.add('-message', item ?
+		`${side.name} used ${aOrAn(item.name)}!` :
+		`${pokemon.name} tried to get away...`);
+	if (!got) {
+		battle.add('-message', `${wild.name} blocked the way! (the next try is easier)`);
+		return;
+	}
+	battle.add('-message', `Got away safely!`);
+	battle.add('raw', `<div class="broadcast-blue"><b>You ran.</b> Nothing was caught and nothing was lost - ` +
+		`the encounter closes with no winner.</div>`);
+	battle.tie();
 }
 
 function throwBall(battle, pokemon, ballId) {

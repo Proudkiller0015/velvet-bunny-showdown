@@ -580,6 +580,41 @@ exports.commands = {
 	},
 	throwballhelp: ['/throwball [ball] - In an RP wild encounter, throw a ball instead of attacking this turn.'],
 
+	flee: 'run',
+	escape: 'run',
+	/**
+	 * Run from a wild Pokémon (Patch 1.4). Your Speed against its Speed, every
+	 * failed try making the next one likelier; a Poké Doll in the bag skips all
+	 * of that. Trainers and legendaries are not escapable.
+	 */
+	run(target, room, user) {
+		room = this.requireRoom();
+		const game = room.battle;
+		// A trainer battle (and a battle with another player, which uses the same
+		// formats) is a person standing in front of you: the RP settles it.
+		if (game && RP_PVP_FORMATS.has(game.format)) {
+			throw new Chat.ErrorMessage("You can't run from a trainer - that battle is settled in the RP.");
+		}
+		if (!game || !RP_FORMATS.has(game.format)) {
+			throw new Chat.ErrorMessage('You can only run in an RP wild encounter.');
+		}
+		if (!game.playerTable[user.id]) throw new Chat.ErrorMessage("You're watching this battle, not in it.");
+		const E = require('../../../src/encounters');
+		const item = target ? E.findBattleItem(target) : null;
+		if (target && (!item || !item.escape)) throw new Chat.ErrorMessage(`"${target}" doesn't get you out of a battle. Try a Poké Doll.`);
+		// An escape item comes out of the character's bag, like any other item.
+		if (item) {
+			const rp = require('../../../src/rp-server');
+			const enc = game.rpEncounter && rp.encounters.get(game.rpEncounter);
+			const used = rp.usedInLog(room.log.log, user.name, item.name);
+			const allowed = enc && enc.userid === user.id ? rp.canUseItem(enc, item.id, used)
+				: game.format === 'gen9rpcustomgame' ? { ok: true } : { ok: false, message: 'Escape items come from an !encounter bag.' };
+			if (!allowed.ok) throw new Chat.ErrorMessage(allowed.message);
+		}
+		game.choose(user, `run ${item ? item.id : ''}`.trim());
+	},
+	runhelp: ['/run - In an RP wild encounter, try to get away instead of attacking this turn. /run pokedoll uses a Poké Doll.'],
+
 	rp: 'roleplay',
 	encounter: 'roleplay',
 	roleplay(target, room, user) {
