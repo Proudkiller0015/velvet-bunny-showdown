@@ -1,0 +1,12 @@
+{
+	"id": "gen9rpbattle-4-tlfe0l",
+	"format": "[Gen 9] RP Battle",
+	"players": [
+		"Bug Catcher Ivan",
+		"SlimeQueenSamantha"
+	],
+	"rating": null,
+	"log": "|j|☆Bug Catcher Ivan\n|j|☆SlimeQueenSamantha\n|t:|1789525155\n|gametype|singles\n|player|p1|Bug Catcher Ivan|bugcatcher-gen4dp|\n|player|p2|SlimeQueenSamantha|queen.png|\n|gen|9\n|tier|[Gen 9] RP Battle\n|clearpoke\n|poke|p1|Burmy, L9|\n|poke|p1|Snom, L13|\n|poke|p2|Chikorita, L5|\n|teampreview\n|inactive|Battle timer is ON: inactive players will automatically lose when time's up. (requested by Bug Catcher Ivan)\n|c|☆Bug Catcher Ivan|⚠️ Slime Queen Samantha can't use held items (they unlock with your first badge) yet (not blocked, so just don't).\n|c|☆Bug Catcher Ivan|🔒 Mega Evolution, Z-Moves, Dynamax, Terastallization are locked until the story gives Slime Queen Samantha the item; the battle won't allow them.\n|c|☆Bug Catcher Ivan|Your Showdown team must match your box\n|c|☆Bug Catcher Ivan|My bugs are the best bugs!\n|\n|t:|1789525158\n|teamsize|p1|2\n|teamsize|p2|1\n|start\n|switch|p1a: Snom|Snom, L13|100/100\n|switch|p2a: Chikorita|Chikorita, L5|100/100\n|turn|1\n|inactive|SlimeQueenSamantha has 270 seconds left.\n|\n|t:|1789525198\n|move|p1a: Snom|Powder Snow|p2a: Chikorita\n|-supereffective|p2a: Chikorita\n|-damage|p2a: Chikorita|0 fnt\n|faint|p2a: Chikorita\n|\n|win|Bug Catcher Ivan\n",
+	"inputlog": ">start {\"formatid\":\"gen9rpbattle\",\"seed\":\"sodium,1518d7b1be00f7994e7d436299f0d506\"}\n>player p1 {\"name\":\"Bug Catcher Ivan\",\"avatar\":\"bugcatcher-gen4dp\",\"team\":\"Burmy|||Overcoat|Protect|Modest|252,252,252,252,252,252|N|8,8,8,8,8,8||9|,,,,,Bug]Snom|||ShieldDust|PowderSnow,StruggleBug|Careful|252,252,252,252,252,252|N|8,8,8,8,8,8||13|,,,,,Ice\",\"rating\":0}\n>player p2 {\"name\":\"SlimeQueenSamantha\",\"avatar\":\"queen.png\",\"team\":\"Chikorita|||Overgrow|SolarNectar,AncientPower,Substitute,LeechSeed|Timid|236,,,,,236|N|,0,,,,||5|,,,,,Grass\",\"rating\":0}\n>chat ☆Bug Catcher Ivan|⚠️ Slime Queen Samantha can't use held items (they unlock with your first badge) yet (not blocked, so just don't).\n>chat ☆Bug Catcher Ivan|🔒 Mega Evolution, Z-Moves, Dynamax, Terastallization are locked until the story gives Slime Queen Samantha the item; the battle won't allow them.\n>chat ☆Bug Catcher Ivan|Your Showdown team must match your box\n>chat ☆Bug Catcher Ivan|My bugs are the best bugs!\n>p1 team 2, 1\n>p2 team 1\n>p1 move powdersnow\n>p2 move ancientpower",
+	"uploadtime": 1789525198
+}
