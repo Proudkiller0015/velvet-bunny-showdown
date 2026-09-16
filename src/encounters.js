@@ -198,7 +198,7 @@ function catchRate(species) {
  * the tutorial says which.
  */
 const BALLS = [
-	{ id: 'poke', name: 'Poké Ball', mult: () => 1 },
+	{ id: 'poke', name: 'Pokéball', mult: () => 1 },
 	{ id: 'great', name: 'Great Ball', mult: () => 1.5 },
 	{ id: 'ultra', name: 'Ultra Ball', mult: () => 2 },
 	{ id: 'master', name: 'Master Ball', mult: () => Infinity },
@@ -219,7 +219,7 @@ const BALLS = [
 	{ id: 'moon', name: 'Moon Ball', mult: c => (c.moonStone ? 4 : 1), note: '4× on Moon Stone families' },
 	{ id: 'love', name: 'Love Ball', mult: c => (c.sameSpeciesOppositeGender ? 8 : 1), note: '8× on the same species, opposite gender' },
 	{ id: 'dream', name: 'Dream Ball', mult: c => (c.status === 'slp' ? 4 : 1), note: '4× if it is asleep' },
-	{ id: 'repeat', name: 'Repeat Ball', mult: () => 1, note: 'counts as a Poké Ball here' },
+	{ id: 'repeat', name: 'Repeat Ball', mult: () => 1, note: 'counts as a Pokéball here' },
 	{ id: 'beast', name: 'Beast Ball', mult: c => (c.ultraBeast ? 5 : 0.1), note: 'only good on Ultra Beasts' },
 ];
 
@@ -237,7 +237,7 @@ function findBall(input) {
  * in the same proportions - and the result is doubled, and every ball that
  * misses makes the next one 5% likelier.
  *
- *   Pidgey at full HP, Poké Ball              ~67%
+ *   Pidgey at full HP, Pokéball              ~67%
  *   Garchomp at full HP, Ultra Ball           ~24%
  *   Garchomp in the red, asleep, Ultra Ball   ~100%
  */
@@ -945,7 +945,7 @@ const WILD_FORMAT = 'gen9rpbattlewildencounter';
 /*
  * The tutorial: a practice wild battle anyone can start, from Discord or with
  * /tutorial on Showdown. The format hands out both teams, so nobody needs one:
- * a Lv. 5 Pikachu against a Lv. 5 Rattata, with 1 Potion and 1 Poke Ball that
+ * a Lv. 5 Pikachu against a Lv. 5 Rattata, with 1 Potion and 1 Pokéball that
  * come from nowhere. Nothing is recorded anywhere.
  */
 const TUTORIAL_FORMAT = 'gen9rptutorial';

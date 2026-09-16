@@ -204,7 +204,7 @@ function requestEncounter(payload, deps) {
 
 /**
  * The tutorial battle: a Lv. 5 Rattata challenges the player, whose team the
- * format replaces with a Lv. 5 Pikachu. 1 Potion and 1 Poke Ball, no box, no
+ * format replaces with a Lv. 5 Pikachu. 1 Potion and 1 Pokéball, no box, no
  * cooldown. Asked for from Discord (`!tutorial`) or on Showdown (`/tutorial`).
  */
 function requestTutorial(payload, deps) {
