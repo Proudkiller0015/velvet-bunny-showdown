@@ -250,7 +250,7 @@ exports.Moves = {
 		secondary: null,
 		target: "normal",
 		contestType: "Tough",
-		shortDesc: "Deals damage equal to the user's HP. The user faints. Nuzleaf only.",
+		shortDesc: "Usually goes first (+1). Deals damage equal to the user's HP. The user faints. Nuzleaf only.",
 		desc: "Deals damage to the target equal to the user's current HP, and the user faints. Fails unless the user is Nuzleaf. If the user is holding a Broken Pact, fainting this way returns it to the field as Nuzleaf-SOLD at full HP and uses the item up.",
 	},
 

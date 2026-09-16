@@ -517,7 +517,7 @@ exports.MOVES = {
 		secondary: null,
 		target: "normal", contestType: "Cool",
 		flavor: "Empoleon points its beak, and the foe is dismissed from the emperor's presence - over a floor of spikes.",
-		shortDesc: "Forces the target to switch. Sets a layer of Spikes on its side.",
+		shortDesc: "Usually goes last (-6). Forces the target out; sets a layer of Spikes.",
 		desc: "Always goes last (-6 priority). Lays a layer of Spikes on the target's side, then forces the target to switch to a random ally, as Roar does. Bounced back by Magic Bounce.",
 	},
 	continentalheave: {
