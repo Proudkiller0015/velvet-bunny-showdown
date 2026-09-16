@@ -551,6 +551,12 @@ for (const [species, ability, effect] of [
 	check(!foe.status && effect(foe) && !lux.boosts.spe && !lux.volatiles.charge, `${ability} absorbs Gleamstalk (and Luxray gains nothing)`);
 }
 check(['megahorn', 'shoreup', 'rapidspin'].every(m => learns('golisopod', m)) && !learns('wimpod', 'shoreup'), 'Golisopod learns Megahorn, Shore Up and Rapid Spin (Wimpod does not)');
+{
+	const kit = ['recover', 'teleport', 'healingwish', 'knockoff', 'focusblast'];
+	const nine = ['eevee', 'vaporeon', 'jolteon', 'flareon', 'espeon', 'umbreon', 'leafeon', 'glaceon', 'sylveon'];
+	const missing = nine.flatMap(s => kit.filter(m => !learns(s, m)).map(m => `${s}:${m}`));
+	check(!missing.length, `Eevee and all eight eeveelutions learn Recover, Teleport, Healing Wish, Knock Off and Focus Blast${missing.length ? ` (missing ${missing.join(', ')})` : ''}`);
+}
 check(learns('luxray', 'gleamstalk') && !learns('luxio', 'gleamstalk') && !learns('mew', 'gleamstalk') && Dex.moves.get('gleamstalk').flags.nosketch, "Gleamstalk is Luxray's alone");
 
 // The client's signature-move table is generated (scripts/build-signature-moves.js) and has to be rebuilt

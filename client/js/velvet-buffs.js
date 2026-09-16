@@ -2685,7 +2685,12 @@ window.VelvetBuffs = {
 		"glaceon": {
 			"moves": [
 				"earthpower",
-				"psyshock"
+				"psyshock",
+				"recover",
+				"teleport",
+				"healingwish",
+				"knockoff",
+				"focusblast"
 			],
 			"abilities": [
 				"Diamond Dust"
@@ -2807,7 +2812,11 @@ window.VelvetBuffs = {
 			"moves": [
 				"highhorsepower",
 				"closecombat",
-				"knockoff"
+				"knockoff",
+				"recover",
+				"teleport",
+				"healingwish",
+				"focusblast"
 			],
 			"abilities": [
 				"Kindled Fury"
@@ -3140,7 +3149,13 @@ window.VelvetBuffs = {
 			"abilities": []
 		},
 		"sylveon": {
-			"moves": [],
+			"moves": [
+				"recover",
+				"teleport",
+				"healingwish",
+				"knockoff",
+				"focusblast"
+			],
 			"abilities": [
 				"Ribbon Hymn"
 			],
@@ -3446,7 +3461,12 @@ window.VelvetBuffs = {
 		},
 		"jolteon": {
 			"moves": [
-				"sparkscamper"
+				"sparkscamper",
+				"recover",
+				"teleport",
+				"healingwish",
+				"knockoff",
+				"focusblast"
 			],
 			"abilities": [
 				"Static Needles"
@@ -4349,7 +4369,12 @@ window.VelvetBuffs = {
 		},
 		"eevee": {
 			"moves": [
-				"sparkscamper"
+				"sparkscamper",
+				"recover",
+				"teleport",
+				"healingwish",
+				"knockoff",
+				"focusblast"
 			],
 			"abilities": []
 		},

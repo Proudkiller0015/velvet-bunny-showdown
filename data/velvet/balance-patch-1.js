@@ -1017,6 +1017,21 @@ const ABILITY_GRANTS = {
  */
 const GOLISOPOD = ['megahorn', 'shoreup', 'rapidspin'];
 
+/*
+ * Eevee (Patch 1.5), by the owner's request: reliable recovery and a few moves its
+ * evolutions put to use. Eevee only had Wish and Protect to stay alive, and of the
+ * eight only Espeon (Morning Sun) and Umbreon (Moonlight) could heal themselves,
+ * both at the weather's mercy.
+ *   Recover       the recovery, for all nine
+ *   Teleport      a slow pivot: Umbreon, Vaporeon and Sylveon bring a sweeper in safely
+ *   Healing Wish  Jolteon and Espeon, fast and frail, can hand their health on
+ *   Knock Off     Umbreon's utility, and item removal for the physical ones
+ *   Focus Blast   coverage for the special ones against Dark, Steel, Normal, Ice and Rock
+ * Given to Eevee and to each eeveelution by name, so the team builder and the
+ * client see it on every one of them, not only through the pre-evolution.
+ */
+const EEVEE = ['recover', 'teleport', 'healingwish', 'knockoff', 'focusblast'];
+
 const LUXRAY = { ability: 'Prankster', moves: ['gleamstalk', 'knockoff', 'suckerpunch', 'taunt', 'partingshot', 'encore', 'yawn', 'swagger', 'swordsdance'] };
 
 const EEVEELUTIONS = {
@@ -1529,6 +1544,9 @@ exports.buildBuffs = (Pokedex) => {
 	// The eeveelutions, after the pre-evolution pass so Eevee does not inherit them.
 	for (const [id, e] of Object.entries(EEVEELUTIONS)) if (Pokedex[id]) add(id, e.moves, [e.ability]);
 
+	// Eevee's kit (Patch 1.5), for Eevee and all eight.
+	for (const id of ['eevee', ...Object.keys(EEVEELUTIONS)]) if (Pokedex[id]) add(id, EEVEE, []);
+
 	// Mew learns every machine move there is, and these are handed out like machines.
 	add('mew', Object.keys(exports.MOVES).filter(newMove), []);
 
@@ -1572,3 +1590,4 @@ exports.patchAbsorbers = Abilities => {
 };
 exports.LUXRAY = LUXRAY;
 exports.GOLISOPOD = GOLISOPOD;
+exports.EEVEE = EEVEE;
