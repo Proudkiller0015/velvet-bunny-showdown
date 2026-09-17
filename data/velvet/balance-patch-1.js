@@ -1191,6 +1191,36 @@ exports.ABILITIES = {
 		desc: "This Pokemon's Water- and Steel-type moves have 1.2x power, and when an opponent lowers any of its stats, its Special Attack rises by 2 stages.",
 	},
 	/*
+	 * Masquerade - Roserade's (Patch 1.5), by the owner's design. Roserade arrives like
+	 * the masked dancer it is: every foe is taunted, and whatever screens the other side
+	 * put up are torn down before the dance starts. Walls that would sit on it with
+	 * Recover and set-up, and the screens they hide behind, both go.
+	 */
+	masquerade: {
+		name: "Masquerade",
+		onStart(pokemon) {
+			this.add('-ability', pokemon, 'Masquerade');
+			const side = pokemon.side.foe;
+			let removed = false;
+			for (const screen of ['reflect', 'lightscreen', 'auroraveil']) {
+				if (side.removeSideCondition(screen)) {
+					this.add('-sideend', side, this.dex.conditions.get(screen).name, '[from] ability: Masquerade', `[of] ${pokemon}`);
+					removed = true;
+				}
+			}
+			for (const foe of pokemon.foes()) {
+				if (!foe.volatiles['taunt']) foe.addVolatile('taunt', pokemon);
+			}
+		},
+		flags: {},
+		rating: 4,
+		num: -29,
+		gen: 9,
+		flavor: "The masked dancer arrives, and no one gets to hide or stall.",
+		shortDesc: "On switch-in: taunts every foe and removes screens on their side.",
+		desc: "When this Pokemon enters the battle, Reflect, Light Screen and Aurora Veil are removed from the opposing side, and every opposing Pokemon is taunted (as by Taunt: it can only use attacking moves for 3 turns). Oblivious and Aroma Veil block the taunt as usual.",
+	},
+	/*
 	 * Keystone Legion - Spiritomb's (Patch 1.5), by the owner's request: something
 	 * new rather than two abilities glued together. Spiritomb is 108 spirits bound
 	 * to the Odd Keystone. The first blow that would break it, the legion takes
@@ -1199,32 +1229,6 @@ exports.ABILITIES = {
 	 * keystone mends when any Pokemon faints, on either side: a new soul joins the
 	 * legion, and it can hold on again.
 	 */
-	/*
-	 * Venom Garden - Roserade's (Patch 1.5), and no sun about it. Poison in Roserade's
-	 * garden does not wear off: a poisoned foe cannot heal at all while Roserade is on
-	 * the field - no Recover, no Leftovers, no drain, no Regenerator, no Poison Heal -
-	 * and Roserade's attacks do not miss it. The walls that sit on Roserade stop being
-	 * able to sit on it.
-	 */
-	venomgarden: {
-		name: "Venom Garden",
-		onFoeTryHeal(damage, target, source, effect) {
-			if (target && ['psn', 'tox'].includes(target.status)) {
-				if (effect && effect.effectType === 'Move') this.add('-hint', `${target.name} is poisoned in Roserade's garden and cannot heal.`);
-				return false;
-			}
-		},
-		onModifyMove(move, pokemon, target) {
-			if (move.category !== 'Status' && target && ['psn', 'tox'].includes(target.status)) move.accuracy = true;
-		},
-		flags: {},
-		rating: 3.5,
-		num: -29,
-		gen: 9,
-		flavor: "Poison in Roserade's garden does not wear off - and nothing there grows back.",
-		shortDesc: "Poisoned foes can't heal. This Pokemon's attacks never miss poisoned foes.",
-		desc: "While this Pokemon is active, opposing Pokemon that are poisoned or badly poisoned cannot restore HP by any means, including healing moves, draining moves, held items and abilities such as Regenerator and Poison Heal. This Pokemon's attacks cannot miss a poisoned or badly poisoned target.",
-	},
 	keystonelegion: {
 		name: "Keystone Legion",
 		// A new soul for the legion: any faint, either side, mends the keystone.
@@ -1431,11 +1435,11 @@ const TRIO_BABIES = {
  * with their owners; Poltergeist and Hex it already had. Its own is Soul Toll.
  */
 /*
- * Roserade (Patch 1.5): Venom Garden and Thorned Bouquet (above), not a sun kit.
+ * Roserade (Patch 1.5): Masquerade and Thorned Bouquet (above), not a sun kit.
  * Strength Sap is recovery that needs no weather, Mortal Spin clears hazards and
  * spreads poison. HP 60 to 75 in unnerfs.js. Aimed at UU.
  */
-const ROSERADE = { ability: 'Venom Garden', moves: ['thornedbouquet', 'strengthsap', 'mortalspin'] };
+const ROSERADE = { ability: 'Masquerade', moves: ['thornedbouquet', 'strengthsap', 'mortalspin'] };
 
 // Togekiss (Patch 1.5, the owner's call): a pivot.
 const TOGEKISS = ['uturn'];
