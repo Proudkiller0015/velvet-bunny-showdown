@@ -81,6 +81,17 @@ const ABILITY_IMMUNITY = {
 };
 
 /** Move targets that must be given an explicit slot number in doubles. */
+// Moves that deal a set amount: (attacker, defender, defender's current HP) -> HP taken.
+const FIXED_DAMAGE = {
+	'Seismic Toss': a => a.level,
+	'Night Shade': a => a.level,
+	'Super Fang': (a, d, hp) => Math.floor(hp / 2),
+	'Ruination': (a, d, hp) => Math.floor(hp / 2),
+	"Nature's Madness": (a, d, hp) => Math.floor(hp / 2),
+	'Dragon Rage': () => 40,
+	'Sonic Boom': () => 20,
+	'Endeavor': (a, d, hp) => Math.max(0, hp - (a.originalCurHP || a.maxHP())),
+};
 const PHAZES = new Set(['roar', 'whirlwind', 'dragontail', 'circlethrow', 'royaldecree', 'yawn', 'encore']);
 const PROTECTS = new Set(['protect', 'detect', 'kingsshield', 'spikyshield', 'banefulbunker', 'silktrap', 'burningbulwark', 'obstruct', 'maxguard', 'endure']);
 const SCREENS = { reflect: 'Reflect', lightscreen: 'Light Screen', auroraveil: 'Aurora Veil' };
@@ -568,6 +579,22 @@ class BattleAI {
 	damagePct(gen, attacker, defender, moveName, field) {
 		try {
 			const move = new calc.Move(gen, moveName);
+			/*
+			 * Fixed damage: Seismic Toss, Night Shade, Super Fang, Ruination... have no
+			 * base power, and returning 0 for them made a Blissey or a Ting-Lu think it
+			 * had nothing to click - so it clicked whatever tied at zero, immune target
+			 * or not. Their damage is known exactly; only the type immunity applies.
+			 */
+			const fixed = FIXED_DAMAGE[move.name];
+			if (fixed) {
+				const dex = PkmnDex.forGen(gen.num);
+				const moveType = dex.moves.get(move.name).type;
+				const types = (defender.teraType ? [defender.teraType] : defender.types) || [];
+				if (types.some(t => { const td = dex.types.get(t); return td && td.damageTaken && td.damageTaken[moveType] === 3; })) return 0;
+				const hp = defender.originalCurHP || defender.maxHP();
+				const dealt = fixed(attacker, defender, hp);
+				return Math.max(0, Math.min(100, (dealt / hp) * 100));
+			}
 			if (!move.bp) return 0;
 			// A Charge doubles the next Electric move; the calculator has no idea.
 			const charged = attacker.velvetCharged && move.type === 'Electric' ? 2 : 1;
@@ -1469,6 +1496,10 @@ class BattleAI {
 						? (data.basePower || 0) * (me.types && me.types.includes(data.type) ? 1.5 : 1) * 0.6
 						: this.damageToFoe(gen, me, foe, name, field);
 					let s = pct;
+					// An attack that does nothing (an immunity, an absorbing ability, an Air
+					// Balloon) is worse than any status move, not level with them: at 0 it won
+					// ties, and Dragonite clicked Extreme Speed into Spiritomb.
+					if (!this.cfg.naive && this.cfg.sanity !== false && pct <= 0) s = -35;
 					if (pct >= 100) s += 60;                                  // a kill is worth more than damage
 					if (pct >= 100 && data && data.priority > 0) s += 25;      // and a priority kill even more
 					// A KO we land first costs us nothing, so it beats retreating.
@@ -1478,7 +1509,7 @@ class BattleAI {
 					// they hit like wet paper. Anyone past Easy notices and looks elsewhere.
 					if (!this.cfg.naive && pct < 100 && this.droppedFor(data, me) <= -2) s -= 12 + 4 * Math.abs(this.droppedFor(data, me));
 					// We are dead before this lands unless it kills or it has priority.
-					if (outsped && pct < 100 && !(data && data.priority > 0)) s *= 0.35;
+					if (outsped && pct < 100 && !(data && data.priority > 0) && s > 0) s *= 0.35;
 					if (s > score) { score = s; target = foe.slot === 'b' ? 2 : 1; }
 				}
 				// A second Future Sight before the first lands fails (the Stockfish reviews).
@@ -1619,6 +1650,10 @@ class BattleAI {
 				// look only a little better than a hit it cannot land.
 				if (crippled || drained) margin = Math.min(margin, 8);
 				if (walled) margin = Math.min(margin, 15);
+				// A spent Dynamax is thrown away by switching (the replay's Heatran left on
+				// its second turn of three): stay unless this turn kills it.
+				const liveMe = state.mine && state.mine['abc'[index]];
+				if (this.cfg.sanity !== false && liveMe && liveMe.dynamaxed && !doomed) margin += 45;
 				if (alt && alt.score > best.score + margin) return `switch ${alt.i}`;
 			}
 		}

@@ -393,6 +393,24 @@ console.log('\n--- the Stockfish reviews: moves that fail, setup into its answer
 		check(`${difficulty}: no second Future Sight while one is pending`, pickWith({ me: 'Slowking', myMoves: ['Future Sight', 'Psyshock', 'Slack Off'], foe: 'Toxapex', foeMoves: ['Toxic'] },
 			difficulty, (r, s) => { s.turn = 6; s.futureSight = { p1: -9, p2: 5 }; }), c => c !== 'Future Sight');
 	}
+	for (const difficulty of ['champion', 'stockfish']) {
+		// The replay gen9rpou-1-tlhpoc: Tera Normal Dragonite used Extreme Speed into Spiritomb.
+		check(`${difficulty}: no Normal attack into a Ghost when something else hits`, pickWith({ me: 'Dragonite', myMoves: ['Extreme Speed', 'Outrage', 'Earthquake', 'Fire Punch'], foe: 'Spiritomb' },
+			difficulty, (r, s) => { s.mine.a.tera = 'Normal'; }), c => c !== 'Extreme Speed');
+		check(`${difficulty}: no Seismic Toss into a Ghost, even with nothing better`, pickWith({ me: 'Blissey', myMoves: ['Seismic Toss', 'Soft-Boiled', 'Stealth Rock', 'Heal Bell'], foe: 'Gengar' },
+			difficulty, (r, s) => { s.hazards.p1 = { 'Stealth Rock': 1 }; }), c => c !== 'Seismic Toss');
+	}
+	{
+		const ai = new BattleAI({ difficulty: 'stockfish' });
+		ai.setFormat('gen9ou');
+		const gen = ai.gen(9);
+		const { request, state } = scenario({ me: 'Blissey', myMoves: ['Seismic Toss'], foe: 'Toxapex' });
+		const blissey = ai.myPokemon(gen, request.side.pokemon[0], state);
+		const foe = n => ai.foePokemon(gen, { species: n, level: 100, hp: 100, maxhp: 100, status: '', boosts: {}, moves: new Set() });
+		check('Seismic Toss is worth its level in damage, not 0', Math.round(ai.damagePct(gen, blissey, foe('Toxapex'), 'Seismic Toss')) > 30, true);
+		check('and nothing into a Ghost', ai.damagePct(gen, blissey, foe('Gengar'), 'Seismic Toss'), 0);
+		check('Ruination takes half', Math.round(ai.damagePct(gen, blissey, foe('Garchomp'), 'Ruination')), 50);
+	}
 	// Scarf: a base 85 Speed foe moved before our 300 Speed Pokemon with no priority.
 	const { request, state } = scenario({ me: 'Garchomp', myMoves: ['Earthquake'], foe: 'Heracross', foeMoves: ['Close Combat'] });
 	request.side.pokemon[0].stats.spe = 300;

@@ -264,6 +264,13 @@ class BattleState {
 			break;
 		}
 		case '-start': case '-end': {
+			// Dynamax: three turns a Pokemon should stay in for, once spent.
+			if (/^Dynamax$/.test(String(args[1] || '').trim())) {
+				const dm = this.slotOf(args[0]);
+				const dstore = dm && (dm.side === this.myPlayer ? this.mine : this.opponent);
+				if (dstore && dstore[dm.slot]) dstore[dm.slot].dynamaxed = cmd === '-start';
+				break;
+			}
 			// Charge (the move, or Luxray's Gleamstalk): the next Electric move is doubled.
 			if (!/charge/i.test(String(args[1] || ''))) break;
 			const id = this.slotOf(args[0]);
