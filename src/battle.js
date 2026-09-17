@@ -76,6 +76,23 @@ class BattleState {
 	/** Feed one protocol line (already split on '|', without the leading empty). */
 	line(parts) {
 		const [cmd, ...args] = parts;
+		/*
+		 * Any line that says an ability did something names it: "|-weather|Snowscape|
+		 * [from] ability: Diamond Dust|[of] p2a: Glaceon". Only the ability's own
+		 * -ability line was read, so a Glaceon that announced Diamond Dust by setting
+		 * snow stayed an unknown ability - and the bot went on thinking it outran a
+		 * Pokemon whose Speed that weather doubles.
+		 */
+		const from = parts.find(p => /^\[from\] ability: /.test(p));
+		const of = parts.find(p => /^\[of\] p[12][a-c]?: /.test(p));
+		if (from) {
+			const ability = from.slice('[from] ability: '.length).trim();
+			const owner = of ? this.slotOf(of.slice('[of] '.length)) : this.slotOf(args[0]);
+			if (owner && ability) {
+				const store = owner.side === this.myPlayer ? this.mine : this.opponent;
+				if (store[owner.slot]) store[owner.slot].ability = ability;
+			}
+		}
 		switch (cmd) {
 		case 'player': {
 			// |player|p1|Username|avatar|rating
@@ -127,6 +144,22 @@ class BattleState {
 			if (cond) Object.assign(mon, cond);
 			// HP for the opponent arrives as a percentage; ours arrives exact.
 			store[id.slot] = mon;
+			break;
+		}
+		case 'detailschange': case '-formechange': {
+			/*
+			 * It changed into something else and fights as that: a Mega Evolution, a
+			 * Primal, Terapagos, Aegislash's stance. None of this was tracked, so the
+			 * bot kept calculating against base Lucario while a Lucario-Mega-Z hit it
+			 * with the Mega's Special Attack.
+			 */
+			const id = this.slotOf(args[0]);
+			if (!id) break;
+			const store = id.side === this.myPlayer ? this.mine : this.opponent;
+			const species = String(args[1] || '').split(',')[0].trim();
+			// -formechange is an in-battle forme (Aegislash, Meloetta): it goes back on switch,
+			// which is fine, because a switch replaces the entry anyway.
+			if (store[id.slot] && species) store[id.slot].species = species;
 			break;
 		}
 		case 'faint': {

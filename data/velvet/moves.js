@@ -581,8 +581,29 @@ function patchImprison(Moves) {
 	}
 }
 
+/**
+ * Max Hailstorm summons snow, not hail.
+ *
+ * Hail is the ninth generation's leftover: it chips everything that is not Ice
+ * and nothing else uses it, so a Dynamaxed Ice move set a weather no ability or
+ * move on this server is written for. Snow is what Snowscape, Snow Warning and
+ * Diamond Dust set, so the Max Move now joins them (owner's request).
+ */
+function patchMaxHailstorm(Moves) {
+	const max = Moves && Moves.maxhailstorm;
+	if (!max || !max.self || max.velvetSnow) return;
+	max.velvetSnow = true;
+	max.self = {
+		onHit(source) {
+			if (!source.volatiles['dynamax']) return;
+			this.field.setWeather('snowscape');
+		},
+	};
+}
+
 function patchMoves(Moves) {
 	patchImprison(Moves);
+	patchMaxHailstorm(Moves);
 
 	const destinyBond = Moves && Moves.destinybond;
 	if (!destinyBond || !destinyBond.condition) return Moves;

@@ -474,6 +474,29 @@ console.log('\n--- the Stockfish reviews: moves that fail, setup into its answer
 		choice.setFormat('gen9rpou');
 		check('Choice-locked into a resisted move, it switches', /^switch/.test(choice.decide(request, state)), true);
 	}
+	{
+		// What the log says about the other side, from the 21 games of 2026-09-17.
+		const st = new BattleState('t');
+		st.myPlayer = 'p1';
+		const feed = line => st.line(line.slice(1).split('|'));
+		feed('|switch|p2a: Glaceon|Glaceon, L100, F|100/100');
+		feed('|-weather|Snowscape|[from] ability: Diamond Dust|[of] p2a: Glaceon');
+		check('an ability that announces itself in a weather line is learned', st.opponent.a.ability, 'Diamond Dust');
+		feed('|switch|p2a: Lucario|Lucario, L100, M|100/100');
+		feed('|detailschange|p2a: Lucario|Lucario-Mega-Z');
+		check('and a Mega Evolution changes what we are calculating against', st.opponent.a.species, 'Lucario-Mega-Z');
+		const ai = new BattleAI({ difficulty: 'champion' });
+		ai.setFormat('gen9rpou');
+		const gen = ai.gen(9);
+		const mega = ai.foePokemon(gen, { ...st.opponent.a, slot: 'a' });
+		check('the Mega hits with the Mega\'s Special Attack', mega.stats.spa > 350, true);
+		st.opponent.a = { species: 'Glaceon', ability: 'Diamond Dust', level: 100, hp: 100, maxhp: 100, status: '', boosts: {}, moves: new Set(), item: null, tera: null, immuneTo: new Set(), notImmuneTo: new Set() };
+		const plain = ai.foeSpeed(gen, st.opponent.a, '');
+		check('Diamond Dust doubles its Speed in snow (and hail), like Slush Rush', ai.foeSpeed(gen, st.opponent.a, 'Snowscape'), plain * 2);
+		check('and in hail too', ai.foeSpeed(gen, st.opponent.a, 'Hail'), plain * 2);
+		// Dynamaxed, a Max Move hits harder than the move it came from.
+		check('a Max Move is scored as the Max Move', ai.maxRatio(gen, 'Iron Head', true) > 1.5, true);
+	}
 	// Scarf: a base 85 Speed foe moved before our 300 Speed Pokemon with no priority.
 	const { request, state } = scenario({ me: 'Garchomp', myMoves: ['Earthquake'], foe: 'Heracross', foeMoves: ['Close Combat'] });
 	request.side.pokemon[0].stats.spe = 300;

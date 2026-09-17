@@ -533,6 +533,25 @@ class BattleAI {
 	 * exactly the caution wanted: clicking a move that might do nothing at all is
 	 * a far worse mistake than clicking a slightly weaker one that always lands.
 	 */
+	/**
+	 * How much harder a move hits as a Max Move, for a Dynamaxed side.
+	 *
+	 * The calculator has no Dynamax, so both sides were judged on the base move:
+	 * the bot under-rated its own Max Moves (Kingambit's Max Steelspike ran into
+	 * Keystone Legion because the kill did not look like one) and under-rated a
+	 * Dynamaxed opponent's, which is how Glaceon's Max Hailstorm kept coming as a
+	 * surprise. Max Guard and status moves are not attacks, so they stay at 1.
+	 */
+	maxRatio(gen, moveName, dynamaxed) {
+		if (!dynamaxed || this.cfg.naive) return 1;
+		try {
+			const move = PkmnDex.forGen(Math.max(8, gen.num)).moves.get(moveName);
+			const max = move && move.maxMove && move.maxMove.basePower;
+			if (!move || !max || move.category === 'Status' || !move.basePower) return 1;
+			return max / move.basePower;
+		} catch (e) { return 1; }
+	}
+
 	damageToFoe(gen, attacker, foe, moveName, field) {
 		const variants = this.foeVariants(gen, foe);
 		if (variants.length === 1) return this.damagePct(gen, attacker, variants[0].mon, moveName, field);
@@ -1065,8 +1084,8 @@ class BattleAI {
 			best = Math.max(best, ...(mine.length ? mine : [0]));
 			const seen = [...foe.moves];
 			const back = seen.length
-				? [...seen, ...this.hiddenAttacks(gen, foe)].map(m => this.damagePct(gen, them, me, m, field))
-				: [this.roughIncoming(gen, them, me, field)];
+				? [...seen, ...this.hiddenAttacks(gen, foe)].map(m => this.damagePct(gen, them, me, m, field) * this.maxRatio(gen, m, foe.dynamaxed))
+				: [this.roughIncoming(gen, them, me, field) * (foe.dynamaxed ? 1.3 : 1)];
 			worst = Math.max(worst, ...back);
 		}
 
@@ -1282,8 +1301,8 @@ class BattleAI {
 			const them = this.foePokemon(gen, foe);
 			const seen = [...foe.moves];
 			const back = seen.length ?
-				[...seen, ...this.hiddenAttacks(gen, foe)].map(m => this.damagePct(gen, them, me, m, field)) :
-				[this.roughIncoming(gen, them, me, field)];
+				[...seen, ...this.hiddenAttacks(gen, foe)].map(m => this.damagePct(gen, them, me, m, field) * this.maxRatio(gen, m, foe.dynamaxed)) :
+				[this.roughIncoming(gen, them, me, field) * (foe.dynamaxed ? 1.3 : 1)];
 			worst = Math.max(worst, ...back);
 		}
 		return worst;
@@ -1518,8 +1537,8 @@ class BattleAI {
 		for (const foe of foes) {
 			const them = this.foePokemon(gen, foe);
 			const seen = [...foe.moves];
-			const back = seen.length ? [...seen, ...this.hiddenAttacks(gen, foe)].map(m => this.damagePct(gen, them, me, m, field))
-				: [this.roughIncoming(gen, them, me, field)];
+			const back = seen.length ? [...seen, ...this.hiddenAttacks(gen, foe)].map(m => this.damagePct(gen, them, me, m, field) * this.maxRatio(gen, m, foe.dynamaxed))
+				: [this.roughIncoming(gen, them, me, field) * (foe.dynamaxed ? 1.3 : 1)];
 			incoming = Math.max(incoming, ...back);
 		}
 
@@ -1580,7 +1599,7 @@ class BattleAI {
 					// Flying type - which is exactly how it loses.
 					const pct = this.cfg.naive
 						? (data.basePower || 0) * (me.types && me.types.includes(data.type) ? 1.5 : 1) * 0.6
-						: this.damageToFoe(gen, me, foe, name, field);
+						: this.damageToFoe(gen, me, foe, name, field) * this.maxRatio(gen, name, state.mine && state.mine['abc'[index]] && state.mine['abc'[index]].dynamaxed);
 					let s = pct;
 					// An attack that does nothing (an immunity, an absorbing ability, an Air
 					// Balloon) is worse than any status move, not level with them: at 0 it won
