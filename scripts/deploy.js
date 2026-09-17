@@ -88,7 +88,15 @@ const wait = ms => new Promise(r => setTimeout(r, ms));
 
 (async () => {
 	const force = process.argv.includes('--force');
-	const players = await playersOnline();
+	/*
+	 * The owner's own accounts never hold a deploy up: the owner is the one asking
+	 * for it, and kept having to say so twice. Everyone else still does.
+	 */
+	const OWNER = new Set(['slimequeensamantha', 'unseenface']);
+	const everyone = await playersOnline();
+	const owner = everyone.filter(name => OWNER.has(name.toLowerCase().replace(/[^a-z0-9]/g, '')));
+	const players = everyone.filter(name => !owner.includes(name));
+	if (owner.length) console.log(`[deploy] owner online (${owner.join(', ')}): not waiting for them`);
 	if (players.length && !force) {
 		console.error(
 			`[deploy] ${players.length} player(s) on the server right now: ${players.join(', ')}.
