@@ -709,7 +709,7 @@ check(learns('luxray', 'gleamstalk') && !learns('luxio', 'gleamstalk') && !learn
 	const client = require('fs').readFileSync(require('path').join(__dirname, '..', 'client', 'js', 'velvet-data.js'), 'utf8');
 	check(/installDescriptions\(\)/.test(client) && /BattleText/.test(client), 'and the client writes them into its language table');
 }
-check(['walkingwake', 'dragapult', 'dragonitemega', 'lucariomegaz', 'deoxysspeed', 'greninjabond', 'magearna', 'magearnaoriginal', 'roaringmoon', 'ursalunabloodmoon', 'zeraoramega', 'heatranmega', 'blazikenmega', 'gliscor', 'pheromosa', 'genesect', 'genesectdouse', 'genesectshock', 'genesectburn', 'genesectchill', 'zygarde'].every(id => Dex.species.get(id).natDexTier === 'OU'), 'Walking Wake, Dragapult, Mega Dragonite, Mega Lucario Z, Deoxys-Speed, Ash-Greninja, Magearna, Roaring Moon, Bloodmoon Ursaluna, Mega Zeraora, Mega Heatran, Mega Blaziken, Gliscor, Pheromosa, Genesect and Zygarde-50% are unbanned (OU)');
+check(['walkingwake', 'dragapult', 'dragonitemega', 'lucariomegaz', 'deoxysspeed', 'greninjabond', 'magearna', 'magearnaoriginal', 'roaringmoon', 'ursalunabloodmoon', 'zeraoramega', 'heatranmega', 'blazikenmega', 'gliscor', 'pheromosa', 'genesect', 'genesectdouse', 'genesectshock', 'genesectburn', 'genesectchill', 'zygarde', 'garchompmegaz'].every(id => Dex.species.get(id).natDexTier === 'OU'), 'Walking Wake, Dragapult, Mega Dragonite, Mega Lucario Z, Deoxys-Speed, Ash-Greninja, Magearna, Roaring Moon, Bloodmoon Ursaluna, Mega Zeraora, Mega Heatran, Mega Blaziken, Gliscor, Pheromosa, Genesect, Zygarde-50% and Mega Garchomp Z are unbanned (OU)');
 {
 	const vm = require('vm');
 	const ctx = { window: {} };
