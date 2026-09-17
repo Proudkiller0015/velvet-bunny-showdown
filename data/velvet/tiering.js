@@ -137,6 +137,8 @@ const TIERS = {
 
 	// Spiritomb, rebuilt with Keystone Legion, Strength Sap and Parting Shot (Patch 1.5).
 	spiritomb: 'UU',
+	// Roserade, rebuilt with Venom Garden and Thorned Bouquet (Patch 1.5).
+	roserade: 'UU',
 
 	// Its only ability is Shadow Tag. Base Chandelure can pick Flash Fire and go
 	// on being an RU Pokemon, and the ability ban in the tiers below Ubers

@@ -528,6 +528,25 @@ exports.MOVES = {
 	 * Spiritomb's Attack and Sp. Atk are equal, so it strikes with whichever is higher
 	 * (boosts included), physical or special.
 	 */
+	/*
+	 * Thorned Bouquet - Roserade's (Patch 1.5). The bouquet in each hand: one of
+	 * flowers, one hiding thorns. A Grass attack that can badly poison, and once the
+	 * target is poisoned the thorns count too - it also hits as Poison, the way
+	 * Flying Press is Fighting and Flying at once.
+	 */
+	thornedbouquet: {
+		num: -36, gen: 9, name: "Thorned Bouquet", type: "Grass", category: "Special",
+		basePower: 90, accuracy: 100, pp: 10, priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1, nosketch: 1 },
+		onEffectiveness(typeMod, target, type, move) {
+			if (target && ['psn', 'tox'].includes(target.status)) return typeMod + this.dex.getEffectiveness('Poison', type);
+		},
+		secondary: { chance: 20, status: 'tox' },
+		target: "normal", contestType: "Beautiful",
+		flavor: "One bouquet is flowers. The other is thorns, and they are poisoned.",
+		shortDesc: "20% to badly poison. Vs a poisoned target, also Poison-type.",
+		desc: "Has a 20% chance to badly poison the target. If the target is already poisoned or badly poisoned, this move's type effectiveness combines Grass and Poison against it, as Flying Press combines Fighting and Flying.",
+	},
 	soultoll: {
 		num: -35, gen: 9, name: "Soul Toll", type: "Ghost", category: "Physical",
 		basePower: 90, accuracy: 100, pp: 10, priority: 0,
@@ -1177,6 +1196,32 @@ exports.ABILITIES = {
 	 * keystone mends when any Pokemon faints, on either side: a new soul joins the
 	 * legion, and it can hold on again.
 	 */
+	/*
+	 * Venom Garden - Roserade's (Patch 1.5), and no sun about it. Poison in Roserade's
+	 * garden does not wear off: a poisoned foe cannot heal at all while Roserade is on
+	 * the field - no Recover, no Leftovers, no drain, no Regenerator, no Poison Heal -
+	 * and Roserade's attacks do not miss it. The walls that sit on Roserade stop being
+	 * able to sit on it.
+	 */
+	venomgarden: {
+		name: "Venom Garden",
+		onFoeTryHeal(damage, target, source, effect) {
+			if (target && ['psn', 'tox'].includes(target.status)) {
+				if (effect && effect.effectType === 'Move') this.add('-hint', `${target.name} is poisoned in Roserade's garden and cannot heal.`);
+				return false;
+			}
+		},
+		onModifyMove(move, pokemon, target) {
+			if (move.category !== 'Status' && target && ['psn', 'tox'].includes(target.status)) move.accuracy = true;
+		},
+		flags: {},
+		rating: 3.5,
+		num: -29,
+		gen: 9,
+		flavor: "Poison in Roserade's garden does not wear off - and nothing there grows back.",
+		shortDesc: "Poisoned foes can't heal. This Pokemon's attacks never miss poisoned foes.",
+		desc: "While this Pokemon is active, opposing Pokemon that are poisoned or badly poisoned cannot restore HP by any means, including healing moves, draining moves, held items and abilities such as Regenerator and Poison Heal. This Pokemon's attacks cannot miss a poisoned or badly poisoned target.",
+	},
 	keystonelegion: {
 		name: "Keystone Legion",
 		// A new soul for the legion: any faint, either side, mends the keystone.
@@ -1382,6 +1427,16 @@ const TRIO_BABIES = {
  * signatures (Rage Fist, Bitter Malice, Infernal Parade, Last Respects), which stay
  * with their owners; Poltergeist and Hex it already had. Its own is Soul Toll.
  */
+/*
+ * Roserade (Patch 1.5): Venom Garden and Thorned Bouquet (above), not a sun kit.
+ * Strength Sap is recovery that needs no weather, Mortal Spin clears hazards and
+ * spreads poison. HP 60 to 75 in unnerfs.js. Aimed at UU.
+ */
+const ROSERADE = { ability: 'Venom Garden', moves: ['thornedbouquet', 'strengthsap', 'mortalspin'] };
+
+// Togekiss (Patch 1.5, the owner's call): a pivot.
+const TOGEKISS = ['uturn'];
+
 const SPIRITOMB = { ability: 'Keystone Legion', moves: ['soultoll', 'strengthsap', 'partingshot', 'knockoff'] };
 
 const INFERNAPE = {
@@ -1878,7 +1933,7 @@ exports.buildBuffs = (Pokedex) => {
 	}
 
 	// Pre-evolutions: the new move (not the coverage) and the ability.
-	const SIGNATURES = ['continentalheave', 'aurorasquall', 'memorywipe', 'soulresonance', 'resolutestrike', 'gleamstalk', 'greatsagestrike', 'pyrestrike', 'eldertimber', 'tectonicshell', 'imperialtorrent', 'royaldecree', 'soultoll'];
+	const SIGNATURES = ['continentalheave', 'aurorasquall', 'memorywipe', 'soulresonance', 'resolutestrike', 'gleamstalk', 'greatsagestrike', 'pyrestrike', 'eldertimber', 'tectonicshell', 'imperialtorrent', 'royaldecree', 'soultoll', 'thornedbouquet'];
 	const newMove = m => exports.MOVES[m] && !SIGNATURES.includes(m);
 	for (const id of Object.keys(out)) {
 		let species = Pokedex[id];
@@ -1908,6 +1963,8 @@ exports.buildBuffs = (Pokedex) => {
 	// Infernape only: after the pre-evolution pass.
 	if (Pokedex.infernape) add('infernape', INFERNAPE.moves, [INFERNAPE.ability]);
 	if (Pokedex.spiritomb) add('spiritomb', SPIRITOMB.moves, [SPIRITOMB.ability]);
+	if (Pokedex.roserade) add('roserade', ROSERADE.moves, [ROSERADE.ability]);
+	if (Pokedex.togekiss) add('togekiss', TOGEKISS, []);
 	if (Pokedex.torterra) add('torterra', TORTERRA.moves, [TORTERRA.ability]);
 	if (Pokedex.empoleon) add('empoleon', EMPOLEON.moves, [EMPOLEON.ability]);
 	for (const [id, ability] of Object.entries(TRIO_BABIES)) if (Pokedex[id]) add(id, [], [ability]);
@@ -1958,6 +2015,8 @@ exports.GOLISOPOD = GOLISOPOD;
 exports.EEVEE = EEVEE;
 exports.INFERNAPE = INFERNAPE;
 exports.SPIRITOMB = SPIRITOMB;
+exports.ROSERADE = ROSERADE;
+exports.TOGEKISS = TOGEKISS;
 exports.TORTERRA = TORTERRA;
 exports.EMPOLEON = EMPOLEON;
 exports.TRIO_BABIES = TRIO_BABIES;

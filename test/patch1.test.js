@@ -808,6 +808,44 @@ check(['walkingwake', 'dragapult', 'dragonitemega', 'lucariomegaz', 'deoxysspeed
 	b.makeChoices('move 1', 'move 1');
 	check(b.p1.active[0].fainted || b.p1.active[0].hp === 0, 'Mold Breaker goes through Keystone Legion');
 }
+// Roserade: Venom Garden stops poisoned foes healing, and its attacks don't miss them.
+{
+	const b = battle(
+		[{ species: 'Roserade', ability: 'Venom Garden', moves: ['splash', 'toxic'] }],
+		[{ species: 'Blissey', ability: 'Natural Cure', item: 'Leftovers', moves: ['softboiled'] }],
+	);
+	const bliss = b.p2.active[0];
+	bliss.setStatus('tox');
+	bliss.hp = Math.floor(bliss.maxhp / 2);
+	const before = bliss.hp;
+	b.makeChoices('move 1', 'move 1');
+	check(bliss.hp < before, `Venom Garden: a poisoned Blissey's Soft-Boiled and Leftovers do nothing (${before} -> ${bliss.hp})`);
+	const c = battle([{ species: 'Roserade', ability: 'Venom Garden', moves: ['splash'] }], [{ species: 'Blissey', ability: 'Natural Cure', moves: ['softboiled'] }]);
+	c.p2.active[0].hp = 100;
+	c.makeChoices('move 1', 'move 1');
+	check(c.p2.active[0].hp > 100, 'an unpoisoned foe still heals');
+	const move = Dex.moves.get('thornedbouquet');
+	const m = Object.assign({}, Dex.moves.get('focusblast'));
+	Dex.abilities.get('venomgarden').onModifyMove.call(b, m, b.p1.active[0], bliss);
+	check(m.accuracy === true, "and Roserade's attacks never miss a poisoned foe (Focus Blast)");
+	check(Object.values(Dex.species.get('roserade').abilities).includes('Venom Garden') && Dex.species.get('roserade').baseStats.hp === 75 && Dex.species.get('roserade').natDexTier === 'UU' &&
+		['thornedbouquet', 'strengthsap', 'mortalspin'].every(x => learns('roserade', x)) && !learns('roselia', 'thornedbouquet') && move.flags.nosketch,
+		'Roserade: Venom Garden, 75 HP, Thorned Bouquet (its own), Strength Sap, Mortal Spin, UU');
+	check(learns('togekiss', 'uturn'), 'Togekiss learns U-turn');
+}
+// Thorned Bouquet: Grass, and also Poison against a poisoned target.
+{
+	const hit = poisoned => {
+		const b = battle([{ species: 'Roserade', ability: 'Natural Cure', moves: ['thornedbouquet'], evs: { spa: 252 }, nature: 'Modest' }], [{ species: 'Sylveon', ability: 'Pixilate', moves: ['splash'] }], [9, 9, 9, 9]);
+		const foe = b.p2.active[0];
+		if (poisoned) foe.setStatus('psn');
+		foe.maxhp = 9999; foe.hp = 9999;
+		b.makeChoices('move 1', 'move 1');
+		return 9999 - foe.hp - (poisoned ? Math.floor(foe.baseMaxhp / 8) : 0);
+	};
+	const plain = hit(false), poisoned = hit(true);
+	check(poisoned / plain > 1.6 && poisoned / plain < 2.5, `Thorned Bouquet hits a poisoned Sylveon as Grass and Poison (x${(poisoned / plain).toFixed(2)})`);
+}
 // Mega Zeraora: Speed Boost.
 {
 	const b = battle([{ species: 'Zeraora', item: 'Zeraorite', ability: 'Volt Absorb', moves: ['splash'] }], [{ species: 'Blissey', ability: 'Natural Cure', moves: ['splash'] }]);
