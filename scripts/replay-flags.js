@@ -64,16 +64,35 @@ function flagsFor(replay) {
 	const active = { [side]: '', [foeSide]: '' };
 	const hpNow = { [side]: {}, [foeSide]: {} };
 
+	/*
+	 * The turn's attack is judged once the turn is over.
+	 *
+	 * It used to be judged on the move line itself, where dealt[turn] is still
+	 * zero because the damage lines come next - so every attack in the game
+	 * looked like it did nothing, and "locked" fired on Pokemon that were
+	 * knocking things out. Settled at the next |turn| instead, and at the end.
+	 */
+	let pending = null;               // the bot's attack this turn, waiting for the damage
+	const settle = () => {
+		if (!pending) return;
+		const took = dealt[pending.turn] || 0;
+		if (took < 10) { smallHits++; if (smallHits === 1) smallFrom = pending.turn; } else smallHits = 0;
+		if (smallHits === 3) add(smallFrom, 'locked', `${pending.mon} spent turns ${smallFrom}-${pending.turn} doing under 10% a hit`);
+		pending = null;
+	};
+
 	for (let i = 0; i < lines.length; i++) {
 		const line = lines[i];
 		const parts = line.slice(1).split('|');
 		const cmd = parts[0];
 		const identSide = (parts[1] || '').slice(0, 2);
 		const name = String(parts[1] || '').replace(/^p[12][a-c]?: /, '');
-		if (cmd === 'turn') { turn = Number(parts[1]) || turn; turnStart = i; continue; }
+		if (cmd === 'turn') { settle(); turn = Number(parts[1]) || turn; turnStart = i; continue; }
 		if (cmd === 'switch' || cmd === 'drag' || cmd === 'replace') {
 			active[identSide] = name;
-			if (identSide === side) cameIn.set(name, turn);
+			// A new Pokemon is a new chain of decisions: a streak of weak hits
+			// belongs to the one that made them, not to whoever came in after.
+			if (identSide === side) { cameIn.set(name, turn); smallHits = 0; }
 			else cameIn.set(`foe:${name}`, i);
 			const cond = /(\d+)\/(\d+)/.exec(parts[3] || '');
 			hpNow[identSide][name] = cond ? (+cond[1] / +cond[2]) * 100 : 100;
@@ -138,13 +157,19 @@ function flagsFor(replay) {
 		const theirMove = after.findIndex(l => l.startsWith('|move|') && !l.startsWith(`|move|${side}`));
 		if (ourFail >= 0 && (theirMove < 0 || ourFail < theirMove)) add(turn, 'failed', `${name}'s ${moveName} failed`);
 		if (after.some(l => /\|-ability\|/.test(l) && /Keystone Legion/.test(l))) add(turn, 'keystone', `${name}'s ${moveName} hit the keystone: ${target} lived at 1 HP and cursed it`);
-		// Three turns of chip in a row.
-		const took = dealt[turn] || 0;
-		if (move.category !== 'Status') {
-			if (took < 10) { smallHits++; if (smallHits === 1) smallFrom = turn; } else smallHits = 0;
-			if (smallHits === 3) add(smallFrom, 'locked', `${name} spent turns ${smallFrom}-${turn} doing under 10% a hit`);
-		}
+		/*
+		 * Three turns of chip in a row - but a miss is not a bad click.
+		 *
+		 * Rotom was flagged for "under 10% a hit" over four turns in which it fired
+		 * Hydro Pump at a Simisear it was beating and missed twice. The move was
+		 * right and the dice were wrong; counting that as a mistake sends the next
+		 * fix at the wrong thing.
+		 */
+		// Old logs put [miss] on the move line itself; newer ones send |-miss|.
+		const missed = /\[miss\]/.test(line) || after.some(l => l.startsWith(`|-miss|${side}`));
+		if (move.category !== 'Status' && !missed) pending = { turn, mon: name };
 	}
+	settle();
 	// Five-turn windows where the bot achieved almost nothing.
 	for (let t = 1; t + 4 <= turn; t++) {
 		let sum = 0;
