@@ -736,8 +736,40 @@ check(['walkingwake', 'dragapult', 'dragonitemega', 'lucariomegaz', 'deoxysspeed
 	check(!!foe.volatiles['curse'] && foe.hp < foeHp, `and the attacker is cursed and loses HP (${foeHp} -> ${foe.hp})`);
 	b.makeChoices('move 1', 'move 1');
 	check(tomb.fainted || tomb.hp === 0, 'spent: the next KO hit lands while nothing has fainted');
-	check(['strengthsap', 'partingshot', 'knockoff', 'infernalparade'].every(m => learns('spiritomb', m)) && Dex.species.get('spiritomb').natDexTier === 'UU' && Dex.species.get('spiritomb').baseStats.hp === 85,
-		'Spiritomb: 85 HP, learns Strength Sap, Parting Shot, Knock Off and Infernal Parade, and is UU');
+	check(['strengthsap', 'partingshot', 'knockoff'].every(m => learns('spiritomb', m)) && !['ragefist', 'bittermalice', 'infernalparade', 'lastrespects'].some(m => learns('spiritomb', m)) && Dex.species.get('spiritomb').natDexTier === 'UU' && Dex.species.get('spiritomb').baseStats.hp === 85,
+		'Spiritomb: 85 HP, learns Strength Sap, Parting Shot and Knock Off (no other Pokemon signature moves), and is UU');
+}
+// Soul Toll: doubled and draining against a cursed target; physical or special by the higher stat.
+{
+	const toll = (cursed, nature, evs) => {
+		const b = battle([{ species: 'Spiritomb', ability: 'Pressure', moves: ['soultoll'], nature, evs }], [{ species: 'Mudsdale', ability: 'Own Tempo', moves: ['splash'] }], [5, 5, 5, 5]);
+		const foe = b.p2.active[0], tomb = b.p1.active[0];
+		foe.maxhp = 9999; foe.hp = 9999;
+		if (cursed) foe.addVolatile('curse', tomb);
+		tomb.hp = 100;
+		b.makeChoices('move 1', 'move 1');
+		const dealt = 9999 - foe.hp - (cursed ? Math.floor(foe.baseMaxhp / 4) : 0);
+		return { dealt, healed: tomb.hp - 100, special: /\|-damage\|/.test(log(b)) && b.log.join('\n'), cat: b.queue && null };
+	};
+	const plain = toll(false, 'Adamant', { atk: 252 });
+	const cursed = toll(true, 'Adamant', { atk: 252 });
+	check(cursed.dealt / plain.dealt > 1.8 && cursed.dealt / plain.dealt < 2.2, `Soul Toll doubles against a cursed target (${plain.dealt} -> ${cursed.dealt})`);
+	check(plain.healed <= 0 && cursed.healed > 0, `and heals only then (${plain.healed} vs ${cursed.healed})`);
+	const move = Dex.moves.get('soultoll');
+	const b = battle([{ species: 'Spiritomb', ability: 'Pressure', moves: ['soultoll'], nature: 'Modest', evs: { spa: 252 } }], [{ species: 'Snorlax', ability: 'Thick Fat', moves: ['splash'] }]);
+	const m = Object.assign({}, move);
+	move.onModifyMove.call(b, m, b.p1.active[0], b.p2.active[0]);
+	check(m.category === 'Special', 'a Sp. Atk Spiritomb tolls on the special side');
+	check(learns('spiritomb', 'soultoll') && !learns('mew', 'soultoll') && move.flags.nosketch, "Soul Toll is Spiritomb's alone");
+	// +1 priority while the foe is cursed: a slow Spiritomb outspeeds a Weavile only then.
+	const first = cursedFoe => {
+		const bb = battle([{ species: 'Spiritomb', ability: 'Pressure', moves: ['soultoll'] }], [{ species: 'Weavile', ability: 'Pressure', moves: ['swordsdance'] }]);
+		if (cursedFoe) bb.p2.active[0].addVolatile('curse', bb.p1.active[0]);
+		bb.p2.active[0].maxhp = 9999; bb.p2.active[0].hp = 9999;
+		bb.makeChoices('move 1', 'move 1');
+		return /Spiritomb/.test(log(bb).split('\n').filter(l => /^\|move\|/.test(l))[0]);
+	};
+	check(!first(false) && first(true), 'Soul Toll goes first against a cursed foe, and only then');
 }
 // The keystone mends when another Pokemon faints.
 {

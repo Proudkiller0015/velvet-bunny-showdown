@@ -520,6 +520,36 @@ exports.MOVES = {
 		shortDesc: "Usually goes last (-6). Forces the target out; sets a layer of Spikes.",
 		desc: "Always goes last (-6 priority). Lays a layer of Spikes on the target's side, then forces the target to switch to a random ally, as Roar does. Bounced back by Magic Bounce.",
 	},
+	/*
+	 * Soul Toll - Spiritomb's (Patch 1.5). Touch the keystone and the toll comes due:
+	 * against a cursed target - and Keystone Legion curses whoever tries to finish
+	 * Spiritomb - it strikes first (+1 priority), the power doubles, and Spiritomb
+	 * takes half the damage back as HP.
+	 * Spiritomb's Attack and Sp. Atk are equal, so it strikes with whichever is higher
+	 * (boosts included), physical or special.
+	 */
+	soultoll: {
+		num: -35, gen: 9, name: "Soul Toll", type: "Ghost", category: "Physical",
+		basePower: 70, accuracy: 100, pp: 10, priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1, nosketch: 1 },
+		basePowerCallback(pokemon, target, move) {
+			return target && target.volatiles['curse'] ? move.basePower * 2 : move.basePower;
+		},
+		// Priority is decided before a target is, so it asks whether the foe in front
+		// of it is cursed (in doubles: either foe).
+		onModifyPriority(priority, source) {
+			if (source && source.foes().some(foe => foe.volatiles['curse'])) return priority + 1;
+		},
+		onModifyMove(move, pokemon, target) {
+			if (pokemon.getStat('atk', false, true) < pokemon.getStat('spa', false, true)) move.category = 'Special';
+			if (target && target.volatiles['curse']) move.drain = [1, 2];
+		},
+		secondary: null,
+		target: "normal", contestType: "Tough",
+		flavor: "The 108 spirits collect what they are owed.",
+		shortDesc: "Higher attacking stat. Vs a cursed foe: +1 priority, 2x power, heals 50% of damage.",
+		desc: "This move is special if the user's Special Attack is higher than its Attack (boosts included), physical otherwise. If the target is cursed, as by Curse or Keystone Legion, this move's power doubles to 140 and the user recovers 1/2 of the HP lost by the target, rounded half up. While an opposing Pokemon is cursed, this move has +1 priority.",
+	},
 	continentalheave: {
 		num: -20, gen: 9, name: "Continental Heave", type: "Normal", category: "Physical",
 		basePower: 110, accuracy: 95, pp: 5, priority: 0,
@@ -1346,10 +1376,12 @@ const TRIO_BABIES = {
 /*
  * Spiritomb (Patch 1.5): Keystone Legion (above), and what a slow Ghost with 50 HP
  * needs to use it - Strength Sap for recovery that also blunts physical attackers,
- * Parting Shot to leave on its own terms, Knock Off, and Infernal Parade to cash in
- * its Will-O-Wisps. Its HP goes from 50 to 85 in unnerfs.js. Aimed at UU.
+ * Parting Shot to leave on its own terms, and Knock Off. Its HP goes from 50 to 85
+ * in unnerfs.js. Aimed at UU. The recent generations' new Ghost moves are all
+ * signatures (Rage Fist, Bitter Malice, Infernal Parade, Last Respects), which stay
+ * with their owners; Poltergeist and Hex it already had. Its own is Soul Toll.
  */
-const SPIRITOMB = { ability: 'Keystone Legion', moves: ['strengthsap', 'partingshot', 'knockoff', 'infernalparade'] };
+const SPIRITOMB = { ability: 'Keystone Legion', moves: ['soultoll', 'strengthsap', 'partingshot', 'knockoff'] };
 
 const INFERNAPE = {
 	ability: 'Crown of Flame',
@@ -1845,7 +1877,7 @@ exports.buildBuffs = (Pokedex) => {
 	}
 
 	// Pre-evolutions: the new move (not the coverage) and the ability.
-	const SIGNATURES = ['continentalheave', 'aurorasquall', 'memorywipe', 'soulresonance', 'resolutestrike', 'gleamstalk', 'greatsagestrike', 'pyrestrike', 'eldertimber', 'tectonicshell', 'imperialtorrent', 'royaldecree'];
+	const SIGNATURES = ['continentalheave', 'aurorasquall', 'memorywipe', 'soulresonance', 'resolutestrike', 'gleamstalk', 'greatsagestrike', 'pyrestrike', 'eldertimber', 'tectonicshell', 'imperialtorrent', 'royaldecree', 'soultoll'];
 	const newMove = m => exports.MOVES[m] && !SIGNATURES.includes(m);
 	for (const id of Object.keys(out)) {
 		let species = Pokedex[id];
