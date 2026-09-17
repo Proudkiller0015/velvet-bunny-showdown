@@ -845,6 +845,12 @@ check(['walkingwake', 'dragapult', 'dragonitemega', 'lucariomegaz', 'deoxysspeed
 	};
 	const plain = hit(false), poisoned = hit(true);
 	check(poisoned / plain > 1.6 && poisoned / plain < 2.5, `Thorned Bouquet hits a poisoned Sylveon as Grass and Poison (x${(poisoned / plain).toFixed(2)})`);
+	// And like Giga Drain: 75 power, half back, and the target is always poisoned.
+	const b = battle([{ species: 'Roserade', ability: 'Natural Cure', moves: ['thornedbouquet'] }], [{ species: 'Swampert', ability: 'Torrent', moves: ['splash'] }]);
+	const rose = b.p1.active[0], foe = b.p2.active[0];
+	rose.hp = 50;
+	b.makeChoices('move 1', 'move 1');
+	check(Dex.moves.get('thornedbouquet').basePower === 75 && foe.status === 'psn' && rose.hp > 50, `and it drains (${50} -> ${rose.hp}) and always poisons (${foe.status})`);
 }
 // Mega Zeraora: Speed Boost.
 {

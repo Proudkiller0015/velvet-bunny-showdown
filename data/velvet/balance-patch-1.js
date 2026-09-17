@@ -530,22 +530,25 @@ exports.MOVES = {
 	 */
 	/*
 	 * Thorned Bouquet - Roserade's (Patch 1.5). The bouquet in each hand: one of
-	 * flowers, one hiding thorns. A Grass attack that can badly poison, and once the
+	 * flowers, one hiding thorns. A draining Grass attack that always poisons, and once the
 	 * target is poisoned the thorns count too - it also hits as Poison, the way
 	 * Flying Press is Fighting and Flying at once.
 	 */
 	thornedbouquet: {
 		num: -36, gen: 9, name: "Thorned Bouquet", type: "Grass", category: "Special",
-		basePower: 90, accuracy: 100, pp: 10, priority: 0,
-		flags: { protect: 1, mirror: 1, metronome: 1, nosketch: 1 },
+		// Giga Drain's shape, by the owner's call: 75 power, half the damage back, and the
+		// thorns always poison.
+		basePower: 75, accuracy: 100, pp: 10, priority: 0,
+		flags: { protect: 1, mirror: 1, heal: 1, metronome: 1, nosketch: 1 },
+		drain: [1, 2],
 		onEffectiveness(typeMod, target, type, move) {
 			if (target && ['psn', 'tox'].includes(target.status)) return typeMod + this.dex.getEffectiveness('Poison', type);
 		},
-		secondary: { chance: 20, status: 'tox' },
+		secondary: { chance: 100, status: 'psn' },
 		target: "normal", contestType: "Beautiful",
 		flavor: "One bouquet is flowers. The other is thorns, and they are poisoned.",
-		shortDesc: "20% to badly poison. Vs a poisoned target, also Poison-type.",
-		desc: "Has a 20% chance to badly poison the target. If the target is already poisoned or badly poisoned, this move's type effectiveness combines Grass and Poison against it, as Flying Press combines Fighting and Flying.",
+		shortDesc: "Heals 50% of damage dealt. Always poisons. Vs a poisoned target, also Poison-type.",
+		desc: "The user recovers 1/2 of the HP lost by the target, rounded half up, and the target is poisoned. If the target is already poisoned or badly poisoned, this move's type effectiveness combines Grass and Poison against it, as Flying Press combines Fighting and Flying.",
 	},
 	soultoll: {
 		num: -35, gen: 9, name: "Soul Toll", type: "Ghost", category: "Physical",
