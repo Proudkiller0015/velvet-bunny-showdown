@@ -107,6 +107,23 @@ const wait = ms => new Promise(r => setTimeout(r, ms));
 	}
 	if (players.length) console.log(`[deploy] --force, dropping ${players.join(', ')}`);
 
+	/*
+	 * And no battle in progress, anyone's - the owner's included. The owner's
+	 * account not holding a deploy up still cut two of their games in one evening,
+	 * because being online and being mid-battle are different things. The server
+	 * counts its unfinished battles on the health page; read that right before the
+	 * hook fires. (An older server without the count reports nothing and passes.)
+	 */
+	const health = await get(SITE + '/velvet/health.json').catch(() => null);
+	let battles = [];
+	try { battles = JSON.parse(health.body).battles || []; } catch (e) { /* no count */ }
+	if (battles.length && !force) {
+		console.error(`[deploy] ${battles.length} battle(s) in progress: ${battles.map(b => `${b.players.join(' vs ')} (${b.format}, turn ${b.turn})`).join('; ')}.
+` +
+			'A deploy would end them. Wait, or pass --force.');
+		process.exit(1);
+	}
+
 	const before = await get(SITE).catch(() => ({ headers: {} }));
 	const mark = before.headers['last-modified'] || '';
 	console.log(`[deploy] currently serving a build from ${mark || 'an unknown time'}`);

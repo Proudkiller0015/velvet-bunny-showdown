@@ -1194,6 +1194,64 @@ function hostReplays() {
  * for this process rather than killing it - and the whole thing is kept well
  * inside the time the host allows before it stops waiting.
  */
+/*
+ * A replay saved during the battle, not only at its end.
+ *
+ * The goodbye below is meant to save unfinished battles when the server stops,
+ * and in practice no replay has ever carried its notice: on the host the process
+ * does not get its grace period, and two of the owner's games were lost to
+ * deploys in one evening. So every battle is saved as it goes - every few turns -
+ * and a restart or a crash leaves the game up to those few turns back.
+ *
+ * Each save is a commit (src/replay-store.js), overwriting the same file, so it
+ * is kept to one every SNAPSHOT_TURNS turns. The snapshot must not count as the
+ * battle's replay: the end-of-battle upload only runs when `replaySaved` is
+ * unset, so it is put back afterwards and the finished game is still saved whole.
+ */
+// The battle's turn, from its own log: a RoomBattle keeps no turn counter of its own
+// (`battle.timer.turn` exists, but only while the timer is running).
+function currentTurn(room) {
+	const lines = (room.log && room.log.log) || [];
+	for (let i = lines.length - 1; i >= 0; i--) {
+		const m = /^\|turn\|(\d+)/.exec(lines[i]);
+		if (m) return Number(m[1]);
+	}
+	return 0;
+}
+global.velvetCurrentTurn = currentTurn;
+
+function replaySnapshots() {
+	if (global.velvetSnapshots) return;
+	global.velvetSnapshots = true;
+	const SNAPSHOT_TURNS = Number(process.env.PS_REPLAY_SNAPSHOT_TURNS || 5);
+	console.log(`[replays] saving battles every ${SNAPSHOT_TURNS} turns as they go`);
+	const timer = setInterval(() => {
+		if (process.env.PS_DEBUG_SNAPSHOT) {
+			const battles = [...Rooms.rooms.values()].filter(r => r.battle);
+			console.log(`[snapshot] tick: ${battles.length} battle room(s)` + battles.map(r => ` ${r.roomid} ended=${!!r.battle.ended} turn=${currentTurn(r)} last=${r.battle.velvetSnapshotTurn || 0}`).join(''));
+		}
+		for (const room of Rooms.rooms.values()) {
+			try {
+				const battle = room.battle;
+				if (!battle || battle.ended || !room.uploadReplay) continue;
+				const turn = currentTurn(room);
+				if (turn < 1 || turn - (battle.velvetSnapshotTurn || 0) < SNAPSHOT_TURNS) continue;
+				battle.velvetSnapshotTurn = turn;
+				const wasSaved = battle.replaySaved;
+				const upload = room.uploadReplay(undefined, undefined, 'auto');
+				// uploadReplay marks the battle saved before its first await, so put the
+				// mark back straight away - not when the upload finishes, by which time the
+				// battle may have ended and its own save been skipped because of it.
+				battle.replaySaved = wasSaved;
+				if (upload && upload.catch) upload.catch(() => {});
+			} catch (e) {
+				// One room failing is no reason to stop saving the rest.
+			}
+		}
+	}, Number(process.env.PS_REPLAY_SNAPSHOT_MS || 20000));
+	if (timer.unref) timer.unref();
+}
+
 function goodbye() {
 	if (global.velvetGoodbye) return;
 	global.velvetGoodbye = true;
@@ -2040,6 +2098,7 @@ exports.startuphook = function () {
 	// Chat's commands may not all be loaded yet at startup; try again shortly if not.
 	if (!serverHelp()) setTimeout(serverHelp, 3000).unref();
 	roleplay();
+	replaySnapshots();
 	goodbye();
 
 	setInterval(() => {

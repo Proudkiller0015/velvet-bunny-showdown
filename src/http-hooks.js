@@ -427,7 +427,18 @@ function serveHealth(url, res) {
 	const wrapper = noteOf('velvet-wrapper.json');
 	const bots = noteOf('velvet-bots.json');
 
+	// Battles in progress, of any kind: scripts/deploy.js will not restart the server over one.
+	const battles = [];
+	try {
+		for (const room of (typeof Rooms !== 'undefined' ? Rooms.rooms.values() : [])) {
+			if (room.battle && !room.battle.ended) {
+				battles.push({ format: room.battle.format, turn: global.velvetCurrentTurn ? global.velvetCurrentTurn(room) : 0, players: room.battle.players.map(p => p.name) });
+			}
+		}
+	} catch (e) { /* no rooms here */ }
+
 	const body = {
+		battles,
 		container,
 		wrapper,
 		bots,
