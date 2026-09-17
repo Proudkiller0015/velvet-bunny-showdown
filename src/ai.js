@@ -1732,6 +1732,18 @@ class BattleAI {
 				// A second Future Sight before the first lands fails (the Stockfish reviews).
 				if (this.cfg.sanity !== false && data && /^(futuresight|doomdesire)$/.test(data.id) && state.futureSight &&
 					state.turn <= (state.futureSight[state.myPlayer] || -9) + 2) score = -30;
+				/*
+				 * Fake Out, First Impression and Mat Block work on the turn the
+				 * Pokemon comes in and never again until it leaves and returns.
+				 *
+				 * A Lokix clicked First Impression on seven turns in a row, failing
+				 * every one of them, while the Kingambit across from it used the free
+				 * turns to set up two Swords Dances (replay gen9rpou-5-tlj24k). The
+				 * move's damage still looked like the best number on the board,
+				 * because nothing in the scoring knew it would not happen at all.
+				 */
+				if (this.cfg.sanity !== false && data && /^(fakeout|firstimpression|matblock)$/.test(data.id) &&
+					state.turn > (state.mineCameIn || 0)) score = -30;
 			}
 			score += this.jitter();
 			if (!best || score > best.score) best = { score, n: move.n, target, name };

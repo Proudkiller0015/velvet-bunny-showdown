@@ -593,6 +593,24 @@ console.log('\n--- the Stockfish reviews: moves that fail, setup into its answer
 	check('and one that could simply be faster is not', state.opponent.a.item, null);
 }
 
+console.log('\n--- moves that only work on the way in ---');
+{
+	/*
+	 * A Lokix clicked First Impression on seven turns in a row and failed every
+	 * one while the Kingambit opposite set up twice (replay gen9rpou-5-tlj24k).
+	 */
+	const ai = new BattleAI({ difficulty: 'champion' });
+	const fresh = scenario({ me: 'Lokix', myMoves: ['First Impression', 'U-turn'], foe: 'Kingambit', foeMoves: ['Swords Dance'] });
+	fresh.state.turn = 4;
+	fresh.state.mineCameIn = 4;
+	check('First Impression on the turn it comes in', ai.decide(fresh.request, fresh.state), c => /move 1\b/.test(c));
+
+	const stale = scenario({ me: 'Lokix', myMoves: ['First Impression', 'U-turn'], foe: 'Kingambit', foeMoves: ['Swords Dance'] });
+	stale.state.turn = 7;
+	stale.state.mineCameIn = 4;
+	check('and never again while it stands there', ai.decide(stale.request, stale.state), c => !/move 1\b/.test(c));
+}
+
 console.log('\n--- phazing a sweeper ---');
 {
 	/*
