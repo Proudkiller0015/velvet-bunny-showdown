@@ -15,15 +15,37 @@ function check(name, got, want) {
 }
 
 /** Build a request/state pair for a one-on-one situation. */
+/*
+ * The Pokemon's real numbers, not 100 HP behind 200 of everything.
+ *
+ * The flat stats made every hit read as lethal, which sends the AI down its
+ * "this is the last turn" path and flattens every score to the same number - so
+ * a test would fail while the rule under test was working perfectly. Level 100,
+ * a neutral nature and the spread the AI itself assumes for an opponent.
+ */
+function realStats(species) {
+	const { Dex } = require('pokemon-showdown');
+	const sheet = Dex.species.get(species);
+	const base = (sheet.exists && sheet.baseStats) || { hp: 100, atk: 100, def: 100, spa: 100, spd: 100, spe: 100 };
+	const stat = n => Math.floor(Math.floor((2 * n + 31 + 21) * 100 / 100 + 5));
+	return {
+		hp: Math.floor((2 * base.hp + 31 + 21) * 100 / 100 + 100 + 10),
+		atk: stat(base.atk), def: stat(base.def), spa: stat(base.spa), spd: stat(base.spd), spe: stat(base.spe),
+	};
+}
+
 function scenario({ me, myMoves, myItem, foe, foeMoves = [], foeHp = 100, trickRoom = false, bench = [], myHp = 100, myStatus = '' }) {
 	const state = new BattleState('test');
 	state.myPlayer = 'p2';
 	state.gen = 9;
+	const mine = realStats(me);
+	const myMax = mine.hp;
+	const myNow = Math.max(1, Math.round(myMax * myHp / 100));
 	state.opponent.a = {
 		species: foe, level: 100, hp: foeHp, maxhp: 100, status: '', fainted: false,
 		boosts: {}, moves: new Set(foeMoves), item: null, ability: null, tera: null,
 	};
-	state.mine.a = { species: me, level: 100, hp: myHp, maxhp: 100, status: myStatus, fainted: false, boosts: {}, moves: new Set(), tera: null };
+	state.mine.a = { species: me, level: 100, hp: myNow, maxhp: myMax, status: myStatus, fainted: false, boosts: {}, moves: new Set(), tera: null };
 	if (trickRoom) state.pseudo['Trick Room'] = true;
 
 	const active = [{ moves: myMoves.map(m => ({ move: m, id: m.toLowerCase().replace(/\W/g, ''), pp: 16, maxpp: 16, target: 'normal', disabled: false })) }];
@@ -31,9 +53,10 @@ function scenario({ me, myMoves, myItem, foe, foeMoves = [], foeHp = 100, trickR
 		name: 'Bot', id: 'p2',
 		pokemon: [
 			{
-				ident: `p2a: ${me}`, details: `${me}, M`, condition: `${myHp}/100${myStatus ? ' ' + myStatus : ''}`,
+				ident: `p2a: ${me}`, details: `${me}, M`, condition: `${myNow}/${myMax}${myStatus ? ` ${myStatus}` : ''}`,
 				active: true, moves: myMoves.map(m => m.toLowerCase().replace(/\W/g, '')),
-				baseAbility: '', ability: '', item: myItem || '', stats: { atk: 200, def: 200, spa: 200, spd: 200, spe: 200 },
+				baseAbility: '', ability: '', item: myItem || '',
+				stats: { atk: mine.atk, def: mine.def, spa: mine.spa, spd: mine.spd, spe: mine.spe },
 			},
 			...bench,
 		],
@@ -229,7 +252,9 @@ console.log('\n--- terastallizing ---');
 
 	// A Tera that neither adds damage nor removes the threat is hoarded.
 	const s2 = scenario({ me: 'Gallade', myMoves: ['Close Combat'], foe: 'Dachsbun', foeMoves: ['Play Rough'] });
-	s2.request.active[0].canTerastallize = 'Fighting';
+	// Dragon is still weak to Fairy, so Play Rough knocks it out all the same, and
+	// Close Combat loses its STAB on top. There is nothing here to buy.
+	s2.request.active[0].canTerastallize = 'Dragon';
 	const entry2 = s2.request.side.pokemon[0];
 	delete entry2.stats;
 	check('does not tera into a type that leaves it just as dead',
@@ -530,6 +555,27 @@ console.log('\n--- the Stockfish reviews: moves that fail, setup into its answer
 		state.opponent.a.moves = new Set(['Cinder Rush']);
 		check('but Tera when the hit coming would knock it out and Tera survives it',
 			ai.teraWorthIt(gen, request.active[0], entry, state, state.foes(), field, best, 60), true);
+	}
+	{
+		// Replay gen9rpou-5-tliyi7: a Dynamax spent on turn one, and Amnesia against Earthquake.
+		const ai = new BattleAI({ difficulty: 'champion' });
+		ai.setFormat('gen9rpou');
+		const best = { name: 'Surging Strikes', score: 60 };
+		check('no Dynamax on turn one unless it kills now', ai.dynamaxWorthIt(100, 20, best, { attacks: 3, damage: 60, turn: 1 }), false);
+		check('but yes when it does kill now', ai.dynamaxWorthIt(100, 20, best, { attacks: 3, damage: 120, turn: 1 }), true);
+		check('and later, when it is what breaks something', ai.dynamaxWorthIt(100, 20, best, { attacks: 3, damage: 60, turn: 8 }), true);
+		for (const difficulty of ['champion', 'stockfish']) {
+			check(`${difficulty}: no Special Defence boost against a physical attacker`, pickWith({
+				me: 'Clodsire', myMoves: ['Amnesia', 'Earthquake', 'Recover', 'Toxic'],
+				foe: 'Landorus-Therian', foeMoves: ['Earthquake', 'U-turn'],
+			}, difficulty, (r, s) => {
+				// Its real bulk: with the scenario's 100 HP every hit reads as lethal and the
+				// dying branch flattens every status move to the same score.
+				r.side.pokemon[0].condition = '441/441';
+				s.mine.a.hp = 441;
+				s.mine.a.maxhp = 441;
+			}), c => c !== 'Amnesia');
+		}
 	}
 	// Scarf: a base 85 Speed foe moved before our 300 Speed Pokemon with no priority.
 	const { request, state } = scenario({ me: 'Garchomp', myMoves: ['Earthquake'], foe: 'Heracross', foeMoves: ['Close Combat'] });

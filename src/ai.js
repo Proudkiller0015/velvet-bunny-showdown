@@ -838,6 +838,24 @@ class BattleAI {
 				if (drops && Object.entries(drops).some(([stat, v]) => v < 0 && (boostsUp[stat] || 0) > 0)) return true;
 			}
 		}
+		/*
+		 * Raising the defence the attack is not coming at. Clodsire used Amnesia twice
+		 * while a Landorus took it apart with Earthquake (replay gen9rpou-5-tliyi7).
+		 */
+		if (this.cfg.setupRisk !== false && ctx && ctx.foes && ctx.foes.length) {
+			const raisesDef = (boostsUp.def || 0) > 0, raisesSpd = (boostsUp.spd || 0) > 0;
+			const offensive = ['atk', 'spa', 'spe'].some(stat => (boostsUp[stat] || 0) > 0);
+			if (!offensive && raisesDef !== raisesSpd) {
+				const dex = PkmnDex.forGen(gen.num);
+				const their = ctx.foes[0];
+				const attacks = [...(their.moves || [])].map(m => dex.moves.get(m)).filter(m => m && m.exists && m.category !== 'Status');
+				const sheet = dex.species.get(their.transformed || their.species);
+				const physical = attacks.length
+					? attacks.filter(m => m.category === 'Physical').length >= attacks.filter(m => m.category === 'Special').length
+					: !!(sheet && sheet.baseStats && sheet.baseStats.atk >= sheet.baseStats.spa);
+				if ((physical && raisesSpd) || (!physical && raisesDef)) return true;
+			}
+		}
 		if (this.cfg.setupRisk !== false && ctx && ctx.me) {
 			// Burned, Attack boosts are half of nothing (Kingambit: Swords Dance three times while burned).
 			const burned = ctx.me.status === 'brn' && !/^(guts|flareboost)$/.test(String(ctx.me.ability || '').toLowerCase().replace(/[^a-z]/g, ''));
@@ -862,7 +880,20 @@ class BattleAI {
 
 		// Nothing that takes a turn is worth it when the turn is the last one -
 		// unless the opponent is not going to be there to take it.
-		if (dying && !(isSetup && pressure >= 0.7)) return move.priority > 0 ? 5 : -20;
+		if (dying && !(isSetup && pressure >= 0.7)) {
+			if (move.priority > 0) return 5;
+			/*
+			 * On the last turn, what matters is what outlives us. A boost or a heal is
+			 * thrown away, but poison, a layer of hazards or a Parting Shot is still
+			 * working after we are gone - Clodsire spent its last turn on Amnesia
+			 * because every status move scored the same (replay gen9rpou-5-tliyi7).
+			 */
+			const theirSide = state.hazards[state.theirPlayer] || {};
+			if (HAZARDS.includes(move.name) && !theirSide[move.name]) return 8;
+			if (/^(partingshot|healingwish|lunardance|memento|uturn|voltswitch|flipturn|teleport)$/.test(move.id)) return 7;
+			if (move.status && move.target !== 'self' && foe && !foe.status) return 6;
+			return -20;
+		}
 
 		// Tectonic Shell (Torterra): a heal and Stealth Rock in one. Worth it when
 		// hurt, or while their side has no rocks yet.
@@ -1467,7 +1498,7 @@ class BattleAI {
 	 * defensive use: a hit that would knock us out may not once the HP bar is
 	 * twice the size.
 	 */
-	dynamaxWorthIt(hpPct, incoming, best, { attacks = 4, damage = 100 } = {}) {
+	dynamaxWorthIt(hpPct, incoming, best, { attacks = 4, damage = 100, turn = 99 } = {}) {
 		if (incoming >= hpPct && incoming < hpPct * 2) return true;   // survives it
 		if (incoming >= hpPct) return false;                          // dies regardless
 		if (this.cfg.sanity !== false) {
@@ -1480,6 +1511,12 @@ class BattleAI {
 			// Its three turns are three Max Moves: a Pokemon with one or two attacks spends the
 			// rest on Max Guard, and one whose best hit is resisted gains nothing from the boost.
 			if (attacks < 2 || damage < 35) return false;
+			/*
+			 * Not on the opening turns for the sake of it. Samurott Dynamaxed into a Landorus
+			 * that simply U-turned away, and two of its three turns were gone before the
+			 * Pokemon it was meant to break had been seen. Early on, it has to kill now.
+			 */
+			if (turn <= 2 && damage < 100) return false;
 		}
 		return best ? best.score >= 40 : false;
 	}
@@ -1841,6 +1878,7 @@ class BattleAI {
 		else if (active.canDynamax && this.dynamaxWorthIt((me.originalCurHP / me.maxHP()) * 100, incoming, best, {
 			attacks: ranked.filter(r => r.kind === 'move' && r.damage > 0).length,
 			damage: (ranked.find(r => r.name === best.name) || {}).damage || 0,
+			turn: state.turn || 99,
 		})) {
 			choice += ' dynamax';
 		}
