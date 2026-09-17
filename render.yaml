@@ -10,6 +10,14 @@ services:
     buildCommand: npm install
     startCommand: npm start
     healthCheckPath: /
+    # Never deploy just because something was pushed.
+    #
+    # A push redeployed the service straight away, which restarts it and ends every
+    # battle in progress - the one thing scripts/deploy.js exists to prevent. The
+    # guard checked /velvet/health.json, refused, and Render had already restarted
+    # the server from the same push. Deploys now happen only through the deploy
+    # hook that scripts/deploy.js calls, after that check passes.
+    autoDeploy: false
     # The server saves replays, ladders, battle logs, friends and the roster to
     # data/ in this repository as it runs. Each save is a commit, and without this
     # every one of them redeployed - restarting the server at the end of every
