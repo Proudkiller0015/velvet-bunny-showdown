@@ -345,5 +345,29 @@ console.log('\n--- hazard removal only when there are hazards ---');
 	}
 }
 
+console.log('\n--- the AI knows our moves ---');
+{
+	// Its damage calculator runs on a separate copy of the game data; without
+	// src/velvet-pkmn.js every custom attack estimated 0 damage.
+	const ai = new BattleAI({ difficulty: 'stockfish' });
+	ai.setFormat('gen9ou');
+	const gen = ai.gen(9);
+	const mon = (species, ability) => {
+		const { state } = scenario({ me: species, myMoves: ['Tackle'], foe: 'Clefable' });
+		return ai.myPokemon(gen, { ident: `p2a: ${species}`, details: `${species}, M`, condition: '300/300', active: true, moves: [], baseAbility: ability || '', ability: ability || '', item: '', stats: { atk: 300, def: 200, spa: 300, spd: 200, spe: 200 } }, state);
+	};
+	const foe = species => ai.foePokemon(gen, { species, level: 100, hp: 100, maxhp: 100, status: '', boosts: {}, moves: new Set() });
+	const zero = [['Infernape', 'Pyre Strike'], ['Infernape', 'Great Sage Strike'], ['Spiritomb', 'Soul Toll'], ['Roserade', 'Thorned Bouquet'], ['Simisear', 'Cinder Rush'], ['Empoleon', 'Imperial Torrent']]
+		.filter(([species, move]) => !(ai.damagePct(gen, mon(species), foe('Clefable'), move) > 5)).map(([, move]) => move);
+	check('every custom attack has a real damage estimate', zero.join(', ') || 'none', 'none');
+	const onSteel = ai.damagePct(gen, mon('Glimmora'), foe('Metagross'), 'Oxidize');
+	const onGholdengo = ai.damagePct(gen, mon('Glimmora'), foe('Gholdengo'), 'Oxidize');
+	check('Oxidize is super effective on Steel (Metagross)', onSteel > 40, true);
+	check('and neutral on Steel/Ghost Gholdengo', onGholdengo > 10 && onGholdengo < onSteel, true);
+	check('a lake trio ability lets Psychic hit Dark', ai.damagePct(gen, mon('Azelf', 'Unbending Will'), foe('Umbreon'), 'Psychic') > 5, true);
+	const pd = require('@pkmn/dex').Dex.forGen(9);
+	check('its move data knows Royal Decree goes last', pd.moves.get('royaldecree').priority, -6);
+}
+
 console.log(`\n=== ${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

@@ -18,6 +18,8 @@
  * compensate.
  */
 
+// Our moves and abilities into the AI's data before anything caches it (src/velvet-pkmn.js).
+require('./velvet-pkmn').patchPkmnData();
 const { Generations } = require('@pkmn/data');
 const { Dex: PkmnDex } = require('@pkmn/dex');
 const playbook = require('./playbook');
@@ -27,6 +29,19 @@ const { loadBrain } = require('./brain');
 const { presetsFor } = require('./presets');
 
 const GENS = new Generations(PkmnDex);
+
+/**
+ * A copy of a calc Pokemon with different types. Setting `types` on a clone is
+ * not enough: the calculator clones its inputs again, rebuilding them from
+ * `species`, so the types have to be written there too - otherwise the change
+ * silently vanishes (Oxidize kept reading Steel as immune).
+ */
+function retype(mon, types) {
+	const copy = mon.clone();
+	copy.species = Object.assign({}, copy.species, { types: types.slice() });
+	copy.types = types.slice();
+	return copy;
+}
 
 const HAZARDS = ['Stealth Rock', 'Spikes', 'Toxic Spikes', 'Sticky Web'];
 const RECOVERY = ['Recover', 'Roost', 'Soft-Boiled', 'Slack Off', 'Synthesis', 'Moonlight',
@@ -565,14 +580,12 @@ class BattleAI {
 			// the calculator only knows the chart, so Dark comes off a copy of the defender for them.
 			if (LAKE_ABILITIES.has(String(attacker.ability || '')) && move.type === 'Psychic' &&
 				defender.types && defender.types.includes('Dark')) {
-				defender = defender.clone();
 				const rest = defender.types.filter(t => t !== 'Dark');
-				defender.types = rest.length ? rest : ['Normal'];
+				defender = retype(defender, rest.length ? rest : ['Normal']);
 			}
 			// Oxidize (Balance Patch 1) is super effective on Steel: read Steel as Grass for it.
 			if (moveName === 'Oxidize' && defender.types && defender.types.includes('Steel')) {
-				defender = defender.clone();
-				defender.types = defender.types.map(t => (t === 'Steel' ? 'Grass' : t));
+				defender = retype(defender, defender.types.map(t => (t === 'Steel' ? 'Grass' : t)));
 			}
 			const result = calc.calculate(gen, attacker, defender, move, field);
 			const dmg = result.damage;
