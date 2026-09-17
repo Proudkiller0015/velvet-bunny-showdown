@@ -1,0 +1,12 @@
+{
+	"id": "gen9rpbattle-6-tlhjc9",
+	"format": "[Gen 9] RP Battle",
+	"players": [
+		"DynaProbe7368",
+		"Velvet Bunny"
+	],
+	"rating": null,
+	"log": "|j|☆DynaProbe7368\n|j|☆Velvet Bunny\n|t:|1789609575\n|gametype|singles\n|player|p1|DynaProbe7368|2|\n|player|p2|Velvet Bunny|bunny.png|\n|gen|9\n|tier|[Gen 9] RP Battle\n|clearpoke\n|poke|p1|Charizard, L50|\n|poke|p1|Snorlax, L50|\n|poke|p2|Ursaluna-Bloodmoon|\n|poke|p2|Raging Bolt|\n|poke|p2|Slowking-Galar|\n|poke|p2|Kyurem|\n|poke|p2|Gholdengo|\n|poke|p2|Blaziken|\n|teampreview\n|c|☆Velvet Bunny|Good luck! Playing on **hard**. (PM me to change it.)\n|\n|t:|1789609585\n|teamsize|p1|2\n|teamsize|p2|6\n|start\n|switch|p1a: Charizard|Charizard, L50|100/100\n|switch|p2a: Kyurem|Kyurem|100/100\n|-ability|p2a: Kyurem|Pressure\n|turn|1\n|-message|DynaProbe7368 forfeited.\n|\n|win|Velvet Bunny\n",
+	"inputlog": ">start {\"formatid\":\"gen9rpbattle\",\"seed\":\"sodium,6a90d46fd820d7d116d5b5982be27d5a\"}\n>player p1 {\"name\":\"DynaProbe7368\",\"avatar\":\"2\",\"team\":\"Charizard||FiriumZ|Blaze|Flamethrower,AirSlash,DragonPulse,Roost|Timid|4,,,252,,252|N|||50|,,,,,Fire]Snorlax||Leftovers|ThickFat|BodySlam,Curse,Rest,SleepTalk|Careful|252,,,,252,|N|||50|,,,,,Normal\",\"rating\":0}\n>player p2 {\"name\":\"Velvet Bunny\",\"avatar\":\"bunny.png\",\"team\":\"Ursaluna|UrsalunaBloodmoon|FlameOrb|MindsEye|Facade,HeadlongRush,FirePunch,SwordsDance|Adamant|248,252,8,,,|N||||,,,,,Ghost]Raging Bolt||BoosterEnergy|Protosynthesis|Thunderclap,DragonPulse,WeatherBall,Thunder|Modest|,,4,252,,252|N|,20,,,,|||,,,,,Fairy]Slowking|SlowkingGalar|HeavyDutyBoots|Regenerator|ChillyReception,SludgeBomb,Psyshock,ThunderWave|Sassy|252,,4,,252,|N|,,,,,0|||,,,,,Water]Kyurem||NeverMeltIce|Pressure|DragonDance,IcicleSpear,EarthPower,ScaleShot|Hasty|,168,,88,,252|N||||,,,,,Ground]Gholdengo||HeavyDutyBoots|GoodasGold|NastyPlot,MakeItRain,DazzlingGleam,Psyshock|Timid|,,,252,4,252|N|,0,,,,|||,,,,,Fighting]Blaziken||LifeOrb|SpeedBoost|SwordsDance,CloseCombat,FlareBlitz,Protect|Adamant|,252,4,,,252|N||||,,,,,Fire\",\"rating\":0}\n>chat ☆Velvet Bunny|Good luck! Playing on **hard**. (PM me to change it.)\n>p1 team 1, 2\n>p2 team 4, 5, 6, 2, 1, 3\n>forcelose p1",
+	"uploadtime": 1789609691
+}
