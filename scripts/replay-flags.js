@@ -57,7 +57,8 @@ function flagsFor(replay) {
 	let turn = 0;
 	let lastMove = null;              // the bot's last move, and when
 	const dmax = { on: false, turn: 0, attacks: 0, guards: 0, mon: '' };
-	const cameIn = new Map();         // bot mon -> turn it came in
+	const cameIn = new Map();         // bot mon -> turn it came in; "foe:<name>" -> the line it arrived on
+	let turnStart = -1;               // where the current turn began, for "was it already out?"
 	const dealt = [];                 // per turn, per cent the bot's attack took
 	let smallHits = 0, smallFrom = 0;
 	const active = { [side]: '', [foeSide]: '' };
@@ -69,10 +70,11 @@ function flagsFor(replay) {
 		const cmd = parts[0];
 		const identSide = (parts[1] || '').slice(0, 2);
 		const name = String(parts[1] || '').replace(/^p[12][a-c]?: /, '');
-		if (cmd === 'turn') { turn = Number(parts[1]) || turn; continue; }
+		if (cmd === 'turn') { turn = Number(parts[1]) || turn; turnStart = i; continue; }
 		if (cmd === 'switch' || cmd === 'drag' || cmd === 'replace') {
 			active[identSide] = name;
 			if (identSide === side) cameIn.set(name, turn);
+			else cameIn.set(`foe:${name}`, i);
 			const cond = /(\d+)\/(\d+)/.exec(parts[3] || '');
 			hpNow[identSide][name] = cond ? (+cond[1] / +cond[2]) * 100 : 100;
 			continue;
@@ -118,8 +120,15 @@ function flagsFor(replay) {
 		// What the next few lines say about this move.
 		const after = lines.slice(i + 1, i + 6);
 		const target = active[foeSide];
-		const targetIn = after.some(l => /^\|(switch|drag)\|/.test(l));
-		if (after.some(l => l.startsWith(`|-immune|${foeSide}`)) && !targetIn) add(turn, 'immune', `${name} used ${moveName} on ${target}, which is immune`);
+		/*
+		 * Immune only counts when the target was already standing there. Clicking a
+		 * Dragon move at a Garchomp that is swapped for a Togekiss as the turn
+		 * resolves is a read the player won, not a mistake the bot made.
+		 */
+		const arrivedThisTurn = (cameIn.get(`foe:${target}`) || -1) > turnStart;
+		if (after.some(l => l.startsWith(`|-immune|${foeSide}`)) && !arrivedThisTurn) {
+			add(turn, 'immune', `${name} used ${moveName} on ${target}, which is immune`);
+		}
 		if (after.some(l => l.startsWith(`|-fail|${side}`) || l.startsWith(`|-fail|${foeSide}`))) add(turn, 'failed', `${name}'s ${moveName} failed`);
 		if (after.some(l => /\|-ability\|/.test(l) && /Keystone Legion/.test(l))) add(turn, 'keystone', `${name}'s ${moveName} hit the keystone: ${target} lived at 1 HP and cursed it`);
 		// Three turns of chip in a row.
