@@ -1,0 +1,12 @@
+{
+	"id": "gen9rpbattle-3-tlhjc9",
+	"format": "[Gen 9] RP Battle",
+	"players": [
+		"DynaProbe7368",
+		"Velvet Bunny"
+	],
+	"rating": null,
+	"log": "|j|☆DynaProbe7368\n|j|☆Velvet Bunny\n|t:|1789609491\n|gametype|singles\n|player|p1|DynaProbe7368|2|\n|player|p2|Velvet Bunny|bunny.png|\n|gen|9\n|tier|[Gen 9] RP Battle\n|clearpoke\n|poke|p1|Charizard, L50|\n|poke|p1|Snorlax, L50|\n|poke|p2|Glimmora|\n|poke|p2|Hawlucha|\n|poke|p2|Cinderace|\n|poke|p2|Iron Valiant|\n|poke|p2|Araquanid|\n|poke|p2|Kyurem-White|\n|teampreview\n|c|☆Velvet Bunny|Good luck! Playing on **hard**. (PM me to change it.)\n|\n|t:|1789609500\n|teamsize|p1|2\n|teamsize|p2|6\n|start\n|switch|p1a: Charizard|Charizard, L50|100/100\n|switch|p2a: Cinderace|Cinderace|100/100\n|turn|1\n|-message|DynaProbe7368 forfeited.\n|\n|win|Velvet Bunny\n",
+	"inputlog": ">start {\"formatid\":\"gen9rpbattle\",\"seed\":\"sodium,58608b604743179b5c62c2b70b90e9db\"}\n>player p1 {\"name\":\"DynaProbe7368\",\"avatar\":\"2\",\"team\":\"Charizard||HeavyDutyBoots|Blaze|Flamethrower,AirSlash,DragonPulse,Roost|Timid|4,,,252,,252|N|||50|,,,,,Fire]Snorlax||Leftovers|ThickFat|BodySlam,Curse,Rest,SleepTalk|Careful|252,,,,252,|N|||50|,,,,,Normal\",\"rating\":0}\n>player p2 {\"name\":\"Velvet Bunny\",\"avatar\":\"bunny.png\",\"team\":\"Glimmora||Glimmoranite|Corrosion|MeteorBeam,EarthPower,MortalSpin,Spikes|Timid|,,,252,4,252|N||||,,,,,Ghost]Hawlucha||GrassySeed|Unburden|SwordsDance,Acrobatics,LowKick,Roost|Adamant|72,252,,,60,124|N||||,,,,,Steel]Cinderace||HeavyDutyBoots|Blaze|PyroBall,Uturn,CourtChange,WillOWisp|Jolly|224,32,,,,252|N||||,,,,,Flying]Iron Valiant||ChoiceSpecs|QuarkDrive|Moonblast,ShadowBall,FocusBlast,VacuumWave|Timid|,,,252,4,252|N||||,,,,,Fairy]Araquanid||MentalHerb|WaterBubble|StickyWeb,Surf,Endeavor,Endure|Modest|252,,40,216,,|N||||,,,,,Ghost]Kyurem|KyuremWhite|AssaultVest|Turboblaze|IceBeam,FreezeDry,EarthPower,DragonTail|Modest|120,,,216,76,96|N||||,,,,,Fairy\",\"rating\":0}\n>chat ☆Velvet Bunny|Good luck! Playing on **hard**. (PM me to change it.)\n>p1 team 1, 2\n>p2 team 3, 4, 2, 1, 6, 5\n>forcelose p1",
+	"uploadtime": 1789609574
+}
