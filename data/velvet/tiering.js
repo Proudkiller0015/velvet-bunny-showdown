@@ -171,7 +171,9 @@ const TIERS = {
 
 	// 154 Attack at 151 Speed behind Magic Bounce, so the hazards and status
 	// that would otherwise wear it down bounce back at whoever tried.
-	absolmegaz: 'Uber',
+	// ...which it no longer has: released with Sharpness (unnerfs.js), and unbanned by
+	// the owner's call (Patch 1.5).
+	absolmegaz: 'OU',
 
 	/*
 	 * And two that are our fault rather than Game Freak's.

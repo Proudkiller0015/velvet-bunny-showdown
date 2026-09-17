@@ -98,6 +98,14 @@
 		tatsugiridroopymega: 'tatsugiri-droopymega',
 		tatsugiristretchymega: 'tatsugiri-stretchymega',
 		zygardemega: 'zygarde-mega',
+		// These have a static front on Showdown but no animated sprite and no back
+		// sprite at all, so they came up broken in battle. Front and back both from
+		// PokeAPI, so the pair matches.
+		lucariomegaz: 'lucario-megaz',
+		absolmegaz: 'absol-megaz',
+		garchompmegaz: 'garchomp-megaz',
+		golisopodmega: 'golisopod-mega',
+		baxcaliburmega: 'baxcalibur-mega',
 	};
 	Object.keys(MEGA_SPRITES).forEach(function (id) {
 		var file = MEGA_SPRITES[id];

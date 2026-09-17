@@ -709,7 +709,7 @@ check(learns('luxray', 'gleamstalk') && !learns('luxio', 'gleamstalk') && !learn
 	const client = require('fs').readFileSync(require('path').join(__dirname, '..', 'client', 'js', 'velvet-data.js'), 'utf8');
 	check(/installDescriptions\(\)/.test(client) && /BattleText/.test(client), 'and the client writes them into its language table');
 }
-check(['walkingwake', 'dragapult', 'dragonitemega', 'lucariomegaz', 'deoxysspeed', 'greninjabond', 'magearna', 'magearnaoriginal', 'roaringmoon', 'ursalunabloodmoon', 'zeraoramega', 'heatranmega', 'blazikenmega', 'gliscor', 'pheromosa', 'genesect', 'genesectdouse', 'genesectshock', 'genesectburn', 'genesectchill', 'zygarde', 'garchompmegaz'].every(id => Dex.species.get(id).natDexTier === 'OU'), 'Walking Wake, Dragapult, Mega Dragonite, Mega Lucario Z, Deoxys-Speed, Ash-Greninja, Magearna, Roaring Moon, Bloodmoon Ursaluna, Mega Zeraora, Mega Heatran, Mega Blaziken, Gliscor, Pheromosa, Genesect, Zygarde-50% and Mega Garchomp Z are unbanned (OU)');
+check(['walkingwake', 'dragapult', 'dragonitemega', 'lucariomegaz', 'deoxysspeed', 'greninjabond', 'magearna', 'magearnaoriginal', 'roaringmoon', 'ursalunabloodmoon', 'zeraoramega', 'heatranmega', 'blazikenmega', 'gliscor', 'pheromosa', 'genesect', 'genesectdouse', 'genesectshock', 'genesectburn', 'genesectchill', 'zygarde', 'garchompmegaz', 'absolmegaz'].every(id => Dex.species.get(id).natDexTier === 'OU'), 'Walking Wake, Dragapult, Mega Dragonite, Mega Lucario Z, Deoxys-Speed, Ash-Greninja, Magearna, Roaring Moon, Bloodmoon Ursaluna, Mega Zeraora, Mega Heatran, Mega Blaziken, Gliscor, Pheromosa, Genesect, Zygarde-50%, Mega Garchomp Z and Mega Absol Z are unbanned (OU)');
 {
 	const vm = require('vm');
 	const ctx = { window: {} };
@@ -871,7 +871,7 @@ check(['walkingwake', 'dragapult', 'dragonitemega', 'lucariomegaz', 'deoxysspeed
 // Every Mega has a sprite: Showdown's own, or one we ship (client/js/velvet-data.js MEGA_SPRITES).
 {
 	const src = require('fs').readFileSync(require('path').join(__dirname, '..', 'client', 'js', 'velvet-data.js'), 'utf8');
-	const files = ['raichu-megax', 'heatran-mega', 'zeraora-mega', 'zygarde-mega'];
+	const files = ['raichu-megax', 'heatran-mega', 'zeraora-mega', 'zygarde-mega', 'lucario-megaz', 'absol-megaz', 'garchomp-megaz', 'golisopod-mega', 'baxcalibur-mega'];
 	const present = files.every(f => src.includes(`'${f}'`) && require('fs').existsSync(require('path').join(__dirname, '..', 'client', 'sprites', `${f}.png`)) && require('fs').existsSync(require('path').join(__dirname, '..', 'client', 'sprites', `${f}-back.png`)));
 	check(present, 'Megas Showdown has no sprite for ship with ours (front and back)');
 }
