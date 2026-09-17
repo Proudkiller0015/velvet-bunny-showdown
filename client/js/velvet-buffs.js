@@ -2873,6 +2873,7 @@ window.VelvetBuffs = {
 				"highhorsepower",
 				"closecombat",
 				"knockoff",
+				"swordsdance",
 				"recover",
 				"teleport",
 				"healingwish",

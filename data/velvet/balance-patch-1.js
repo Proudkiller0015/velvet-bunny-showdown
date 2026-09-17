@@ -1477,7 +1477,9 @@ const EEVEELUTIONS = {
 	leafeon: { ability: 'Solstice', moves: ['stoneedge', 'earthquake'] },
 	// Facade (native) is the burn's other half. Ground for the Fire and Rock
 	// types, Fighting and Dark for the rest.
-	flareon: { ability: 'Kindled Fury', moves: ['highhorsepower', 'closecombat', 'knockoff'] },
+	// Swords Dance, which it never learned in any game: 130 Attack with nothing to
+	// set up with but Curse, which takes its Speed away to get there (owner's call).
+	flareon: { ability: 'Kindled Fury', moves: ['highhorsepower', 'closecombat', 'knockoff', 'swordsdance'] },
 	// Ground for the Steel and Fire types that wall Ice; Psyshock for Fighting.
 	glaceon: { ability: 'Diamond Dust', moves: ['earthpower', 'psyshock'] },
 	// The other five: a signature each, two existing abilities fused on theme.

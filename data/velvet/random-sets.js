@@ -88,6 +88,32 @@ const SETS = {
 	// builders (src/role-sets.js); Random Battle ignores them.
 	// Glaceon sets its own snow with Diamond Dust and doubles its Speed in it: the sweeper
 	// that ability was written for. Showdown only remembers the Wish/Protect Glaceon of 2010.
+	// Flareon burns itself on entry with Kindled Fury (Speed Boost + Guts in one), so its
+	// Attack and Speed climb on their own. Swords Dance, which Patch 1.5b handed it, is what
+	// that was missing: Showdown only remembers a Flareon with nothing to set up with.
+	flareon: {
+		level: 84,
+		sets: [
+			{
+				role: 'Setup Sweeper',
+				movepool: ['Swords Dance', 'Flare Blitz', 'Facade', 'Close Combat'],
+				abilities: ['Kindled Fury'],
+				teraTypes: ['Fire'],
+				item: 'Heavy-Duty Boots',
+				nature: 'Adamant',
+				evs: { atk: 252, def: 4, spe: 252 },
+			},
+			{
+				role: 'Wallbreaker',
+				movepool: ['Flare Blitz', 'Facade', 'Close Combat', 'Knock Off'],
+				abilities: ['Kindled Fury'],
+				teraTypes: ['Normal'],
+				item: 'Choice Band',
+				nature: 'Adamant',
+				evs: { atk: 252, def: 4, spe: 252 },
+			},
+		],
+	},
 	glaceon: {
 		level: 80,
 		sets: [
