@@ -83,6 +83,23 @@ const SETS = {
 			},
 		],
 	},
+	// The owner's own set (Patch 1.5): the Calm special wall that curses what it
+	// survives, then drains it. The nature and spread are read by the bots' team
+	// builders (src/role-sets.js); Random Battle ignores them.
+	spiritomb: {
+		level: 88,
+		sets: [
+			{
+				role: 'Bulky Support',
+				movepool: ['Soul Toll', 'Strength Sap', 'Parting Shot', 'Will-O-Wisp'],
+				abilities: ['Keystone Legion'],
+				teraTypes: ['Fairy'],
+				item: 'Leftovers',
+				nature: 'Calm',
+				evs: { hp: 252, def: 4, spd: 252 },
+			},
+		],
+	},
 };
 
 /** Held by the family whenever they turn up here - it is their item. */
@@ -151,7 +168,7 @@ function installRandomSets() {
 	// 2. The item, which the generator would otherwise pick for them.
 	const item = RandomTeams.prototype.getItem;
 	RandomTeams.prototype.getItem = function (ability, types, moves, counter, teamDetails, species) {
-		if (isRp(this) && ours(species)) return ITEMS[species.id];
+		if (isRp(this) && ours(species) && ITEMS[species.id]) return ITEMS[species.id];
 		return item.apply(this, arguments);
 	};
 

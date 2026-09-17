@@ -81,6 +81,9 @@ const ABILITY_IMMUNITY = {
 };
 
 /** Move targets that must be given an explicit slot number in doubles. */
+const PHAZES = new Set(['roar', 'whirlwind', 'dragontail', 'circlethrow', 'royaldecree', 'yawn', 'encore']);
+const PROTECTS = new Set(['protect', 'detect', 'kingsshield', 'spikyshield', 'banefulbunker', 'silktrap', 'burningbulwark', 'obstruct', 'maxguard', 'endure']);
+const SCREENS = { reflect: 'Reflect', lightscreen: 'Light Screen', auroraveil: 'Aurora Veil' };
 const NEEDS_TARGET = new Set(['normal', 'any', 'adjacentFoe', 'adjacentAlly', 'adjacentAllyOrSelf']);
 
 /**
@@ -756,7 +759,20 @@ class BattleAI {
 			for (const move of seen) {
 				const id = String(move).toLowerCase().replace(/[^a-z0-9]/g, '');
 				if (id === 'haze' || id === 'clearsmog') return true;
+				if (this.cfg.setupRisk === false) continue;
+				// Shown a way to throw us out (the Stockfish reviews: Swords Dance into Roar).
+				if (PHAZES.has(id)) return true;
+				// Strength Sap takes the Attack we bought and heals them with it.
+				if (id === 'strengthsap' && (boostsUp.atk || 0) > 0 && !defensive) return true;
 			}
+		}
+		if (this.cfg.setupRisk !== false && ctx && ctx.me) {
+			// Burned, Attack boosts are half of nothing (Kingambit: Swords Dance three times while burned).
+			const burned = ctx.me.status === 'brn' && !/^(guts|flareboost)$/.test(String(ctx.me.ability || '').toLowerCase().replace(/[^a-z]/g, ''));
+			if (burned && (boostsUp.atk || 0) > 0 && !['spa', 'spe', 'def', 'spd'].some(stat => (boostsUp[stat] || 0) > 0)) return true;
+			// Already at the ceiling in everything this move raises.
+			const boosts = ctx.me.boosts || {};
+			if (Object.entries(boostsUp).every(([stat, v]) => v <= 0 || (boosts[stat] || 0) >= 6)) return true;
 		}
 		void foe;
 		return false;
@@ -809,6 +825,29 @@ class BattleAI {
 			if (['voltabsorb', 'lightningrod', 'motordrive', 'mudflatambush', 'staticneedles'].includes(foeAbility)) return -20;
 			return (canPar ? 40 : 26) - (fast ? 14 : 0);
 		}
+		/*
+		 * Moves that fail, which the Stockfish reviews caught the bot clicking again
+		 * and again: a screen that is already up, a second Protect in a row (Max
+		 * Guard twice while Dynamaxed), Thunder Wave into a Ground type, a powder
+		 * into a Grass type, any status into a Pokemon that already has one.
+		 */
+		if (this.cfg.sanity !== false && !this.cfg.naive) {
+			const ours = state.hazards[state.myPlayer] || {};
+			if (SCREENS[move.id]) {
+				if (ours[SCREENS[move.id]]) return -30;
+				if (move.id === 'auroraveil' && !/snow|hail/i.test(String(state.weather || ''))) return -30;
+			}
+			const live = ctx.live;
+			if (PROTECTS.has(move.id) && live && live.lastMoveTurn === state.turn - 1 &&
+				PROTECTS.has(String(live.lastMove || '').toLowerCase().replace(/[^a-z0-9]/g, ''))) return -30;
+			if (move.status && move.target !== 'self' && foe) {
+				const types = foe.types || [];
+				if (foe.status) return -25;
+				if (move.type === 'Electric' && move.id === 'thunderwave' && types.includes('Ground')) return -25;
+				if (move.flags && move.flags.powder && (types.includes('Grass') || foeAbility === 'overcoat')) return -25;
+			}
+			if (move.id === 'yawn' && foe && foe.status) return -25;
+		}
 		if (move.status && move.target !== 'self') {
 			if (STATUS_PROOF.has(foeAbility)) return -25;
 			const types = (foe && foe.types) || [];
@@ -842,7 +881,7 @@ class BattleAI {
 			 * shown the move: assuming every Pokemon might have Haze would stop
 			 * the bot setting up at all.
 			 */
-			const deadSetup = this.setupIsWasted(gen, foe, boostsUp, ctx);
+			const deadSetup = this.setupIsWasted(gen, foe, boostsUp, { ...ctx, me });
 			if (deadSetup) return -35;
 
 			const sweep = ctx.foes ? this.sweepPotential(gen, ctx.entry, state, ctx.foes, ctx.field, boostsUp) : 0;
@@ -852,6 +891,19 @@ class BattleAI {
 			if (safety < 0.25) return -40;
 			let score = 18 + safety * 34 + sweep * 45;
 			if (myHpPct < 45 && pressure < 0.6) score -= 25;
+			if (this.cfg.setupRisk !== false) {
+				// Good players set up from high HP (below 70% it happened a third as often in
+				// the replays), and stop once the boost already wins: a third Swords Dance is a
+				// free turn for them.
+				if (myHpPct >= 45 && myHpPct < 70 && pressure < 0.6) score -= 10;
+				const raised = Object.entries(boostsUp).filter(([, v]) => v > 0).map(([stat]) => (me.boosts && me.boosts[stat]) || 0);
+				const stacked = raised.length ? Math.min(...raised) : 0;
+				if (stacked >= 4) score -= 30;
+				else if (stacked >= 2) score -= 10;
+				// A foe that has shown Will-O-Wisp answers an Attack boost with a burn.
+				const wisp = (ctx.foes || []).some(o => o.moves && [...o.moves].some(m => /will-o-wisp/i.test(m)));
+				if (wisp && (boostsUp.atk || 0) > 0 && !me.status && !(me.types || []).includes('Fire')) score -= 15;
+			}
 			return score;
 		}
 		if (move.status) {
@@ -912,12 +964,37 @@ class BattleAI {
 	}
 
 	teamOrder(request, state) {
-		// No opponent information at preview, so lead with the fastest healthy mon.
 		const gen = this.gen(state.gen);
 		const mons = request.side.pokemon.map((p, i) => {
 			const mon = this.myPokemon(gen, p, state);
-			return { i: i + 1, spe: mon.stats ? mon.stats.spe : 0 };
+			return { i: i + 1, p, mon, spe: mon.stats ? mon.stats.spe : 0, lead: 0 };
 		});
+		/*
+		 * With their six on show, lead with what does best into them on average:
+		 * what it deals minus what it takes, plus a hazard setter's worth - the lead
+		 * is where Stealth Rock goes up. Without a preview, the fastest leads.
+		 */
+		const theirs = state.preview && state.preview[state.theirPlayer];
+		if (!this.cfg.naive && this.cfg.preview !== false && theirs && theirs.length && request.side.pokemon.length > 1) {
+			const field = new calc.Field({});
+			const dex = PkmnDex.forGen(gen.num);
+			for (const m of mons) {
+				let total = 0;
+				for (const t of theirs) {
+					const foe = { species: t.species, level: t.level, hp: 100, maxhp: 100, status: '', boosts: {}, moves: new Set(), immuneTo: new Set(), notImmuneTo: new Set() };
+					const them = this.foePokemon(gen, foe);
+					const out = Math.max(0, ...(m.p.moves || []).map(id => this.damageToFoe(gen, m.mon, foe, toName(id, 'moves'), field)));
+					const back = this.roughIncoming(gen, them, m.mon, field);
+					total += Math.min(100, out) - Math.min(100, back);
+				}
+				m.lead = total / theirs.length;
+				const moves = (m.p.moves || []).map(id => dex.moves.get(toName(id, 'moves'))).filter(Boolean);
+				if (moves.some(mv => /^(stealthrock|spikes|stickyweb|tectonicshell)$/.test(mv.id))) m.lead += 20;
+			}
+			const lead = mons.slice().sort((a, b) => b.lead - a.lead || b.spe - a.spe)[0];
+			const rest = mons.filter(m => m !== lead).sort((a, b) => b.spe - a.spe);
+			return `team ${[lead, ...rest].map(m => m.i).join('')}`;
+		}
 		mons.sort((a, b) => b.spe - a.spe);
 		return `team ${mons.map(m => m.i).join('')}`;
 	}
@@ -1211,12 +1288,14 @@ class BattleAI {
 		if (plainIn >= hpPct && teraIn < hpPct) return true;
 		// Offensive: it turns something that was not a kill into one. Worth the
 		// Tera on its own, but not worth throwing a Mega away for.
-		if (teraOut >= 100 && plainOut < 100) return !carryingAGimmick;
+		// (Unless the Tera leaves us dying before it lands.)
+		if (teraOut >= 100 && plainOut < 100 && teraIn < hpPct) return !carryingAGimmick;
 		// Beyond that, do not spend it on a turn we are knocked out anyway.
 		if (plainIn >= hpPct) return false;
-		// A worthwhile margin in either direction - and never on the Mega.
+		// A worthwhile margin in either direction - and never on the Mega. More damage
+		// is not worth a typing that takes much more back (the review's Tera Normal).
 		if (carryingAGimmick) return false;
-		return teraOut > plainOut * 1.25 || teraIn < plainIn * 0.6;
+		return (teraOut > plainOut * 1.25 && teraIn <= Math.max(plainIn * 1.15, plainIn + 8)) || teraIn < plainIn * 0.6;
 	}
 
 	/**
@@ -1253,10 +1332,68 @@ class BattleAI {
 	dynamaxWorthIt(hpPct, incoming, best) {
 		if (incoming >= hpPct && incoming < hpPct * 2) return true;   // survives it
 		if (incoming >= hpPct) return false;                          // dies regardless
+		if (this.cfg.sanity !== false) {
+			// Three turns is the whole value: not on a Pokemon half gone, and not on a
+			// status move or a priority attack, which a Max Move turns into Max Guard
+			// or strips of its priority.
+			if (hpPct < 60 || !best) return false;
+			const data = best.name ? PkmnDex.forGen(8).moves.get(best.name) : null;
+			if (data && (data.category === 'Status' || data.priority > 0)) return false;
+		}
 		return best ? best.score >= 40 : false;
 	}
 
+	/**
+	 * A Choice Scarf gives itself away by moving first when it should not.
+	 *
+	 * Last turn's order, against the fastest the foe could be without one: 252
+	 * Speed EVs and a boosting nature, at the Speed stage and status it began the
+	 * turn with. Moving first through that, with neither move having priority
+	 * (nor any ability that grants it), and by less than the Scarf's 1.5x, is a
+	 * Scarf - the replay study's strict rule was right 11 times in 11. Recorded as
+	 * its item, so every later calculation uses it.
+	 */
+	inferScarf(gen, state, request) {
+		if (this.cfg.naive || this.cfg.scarf === false || !state.lastTurnMoves || !state.lastTurnStart) return;
+		if (state.pseudo && state.pseudo['Trick Room']) return;
+		const moves = state.lastTurnMoves;
+		const mineAt = moves.findIndex(m => m.side === state.myPlayer);
+		const foeAt = moves.findIndex(m => m.side !== state.myPlayer);
+		if (mineAt < 0 || foeAt < 0 || foeAt > mineAt) return;
+		const dex = PkmnDex.forGen(gen.num);
+		const theirs = dex.moves.get(moves[foeAt].name);
+		const ours = dex.moves.get(moves[mineAt].name);
+		if (!theirs || !ours || theirs.priority || ours.priority) return;
+		// Prankster, Gale Wings, Triage and our own priority-changing moves move first without a Scarf.
+		if (theirs.category === 'Status' || theirs.type === 'Flying' || (theirs.flags && theirs.flags.heal)) return;
+		if (/^(soultoll|grassyglide|royaldecree)$/.test(ours.id) || /^(soultoll|grassyglide)$/.test(theirs.id)) return;
+		const foe = state.opponent[moves[foeAt].slot];
+		const startFoe = state.lastTurnStart[`${moves[foeAt].side}${moves[foeAt].slot}`];
+		const startMine = state.lastTurnStart[`${moves[mineAt].side}${moves[mineAt].slot}`];
+		if (!foe || foe.fainted || foe.item || foe.species !== moves[foeAt].species || !startFoe || !startMine) return;
+		if (/quickdraw|stall/.test(String(foe.ability || '').toLowerCase().replace(/[^a-z]/g, ''))) return;
+		const entry = request.side.pokemon.find(p => String(p.details || '').split(',')[0] === moves[mineAt].species);
+		if (!entry || entry.item && /laggingtail|fullincense/.test(String(entry.item))) return;
+		const stage = (n, v) => (v >= 0 ? n * (2 + v) / 2 : n * 2 / (2 - v));
+		const me = this.myPokemon(gen, entry, null);
+		let mySpe = stage(this.speedOf(me, {}, undefined, state.weather), startMine.spe);
+		if (startMine.status === 'par') mySpe *= 0.5;
+		const species = dex.species.get(foe.transformed || foe.species);
+		if (!species || !species.baseStats) return;
+		const level = foe.level || 100;
+		let theirMax = Math.floor(Math.floor((2 * species.baseStats.spe + 31 + 63) * level / 100 + 5) * 1.1);
+		theirMax = stage(theirMax, startFoe.spe);
+		if (startFoe.status === 'par') theirMax *= 0.5;
+		// Speed-doubling weather abilities, Unburden and Booster Energy would also explain it.
+		if (state.weather || /unburden|protosynthesis|quarkdrive|speedboost/.test(String(foe.ability || '').toLowerCase().replace(/[^a-z]/g, ''))) return;
+		if (mySpe > theirMax && mySpe <= theirMax * 1.5) {
+			foe.item = 'Choice Scarf';
+			foe.itemInferred = true;
+		}
+	}
+
 	chooseForSlot(gen, active, entry, index, request, state, field) {
+		if (index === 0) this.inferScarf(gen, state, request);
 		const me = this.myPokemon(gen, entry, state);
 		const foes = state.foes();
 		// switchPressure/sweepPotential need to know what we can actually click.
@@ -1316,7 +1453,7 @@ class BattleAI {
 				// A greedy player sees status moves as "the ones that do no damage".
 				if (this.cfg.greedy) score = 2;
 				else score = foe
-					? this.statusScore(gen, name, me, this.foePokemon(gen, foe), state, incoming, { foes, field, entry })
+					? this.statusScore(gen, name, me, this.foePokemon(gen, foe), state, incoming, { foes, field, entry, live: state.mine && state.mine['abc'[index]] })
 					: 5;
 				// Nothing set up on the turn we are knocked out ever gets used.
 				if (outsped && score > 0) score *= 0.2;
@@ -1344,6 +1481,9 @@ class BattleAI {
 					if (outsped && pct < 100 && !(data && data.priority > 0)) s *= 0.35;
 					if (s > score) { score = s; target = foe.slot === 'b' ? 2 : 1; }
 				}
+				// A second Future Sight before the first lands fails (the Stockfish reviews).
+				if (this.cfg.sanity !== false && data && /^(futuresight|doomdesire)$/.test(data.id) && state.futureSight &&
+					state.turn <= (state.futureSight[state.myPlayer] || -9) + 2) score = -30;
 			}
 			score += this.jitter();
 			if (!best || score > best.score) best = { score, n: move.n, target, name };
@@ -1387,7 +1527,17 @@ class BattleAI {
 			const topData = topHit ? PkmnDex.forGen(gen.num).moves.get(topHit.name) : null;
 			const usedStat = topData && topData.category === 'Special' ? 'spa' : 'atk';
 			const crippled = !this.cfg.naive && this.cfg.cripple !== false && !!topData && ((me.boosts && me.boosts[usedStat]) || 0) <= -2 && best.score < 70;
-			const losing = drained || crippled || (incoming >= myHpPct * 0.5 && best.score < 55) ||
+			/*
+			 * Walled: nothing we click does real damage and nothing we do is worth a
+			 * turn, while we are not under pressure either - the Stockfish reviews'
+			 * "no progress" games, where a Pokemon traded nothing with a Spiritomb for
+			 * turns while the Clefable that beats it sat on the bench. Only once it has
+			 * been in for a turn, so two walls do not swap back and forth.
+			 */
+			const inFor = state.turn - (state.mineCameIn || 0);
+			const walled = !this.cfg.naive && this.cfg.stall !== false && inFor >= 2 && best.score < 25 &&
+				(!topHit || topHit.damage < 15) && incoming < myHpPct * 0.5;
+			const losing = drained || crippled || walled || (incoming >= myHpPct * 0.5 && best.score < 55) ||
 				// Outsped and dying, with nothing lethal of our own to fire back:
 				// staying is a free knockout for them.
 				(outsped && best.score < 100);
@@ -1468,6 +1618,7 @@ class BattleAI {
 				// A crippled attacker gets its stat back by leaving, so the bench needs to
 				// look only a little better than a hit it cannot land.
 				if (crippled || drained) margin = Math.min(margin, 8);
+				if (walled) margin = Math.min(margin, 15);
 				if (alt && alt.score > best.score + margin) return `switch ${alt.i}`;
 			}
 		}

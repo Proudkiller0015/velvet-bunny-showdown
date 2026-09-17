@@ -41,6 +41,12 @@ class BattleState {
 		this.opponent = {};        // slot -> {species, details, level, hp, maxhp, status, boosts, moves:Set, item, ability, tera}
 		this.mine = {};            // slot -> {species, hp, maxhp, status, boosts, tera}
 		this.hazards = { p1: {}, p2: {} };
+		// The moves of the turn being played and of the one before, in order: who
+		// moved first is how a Choice Scarf gives itself away.
+		this.turnMoves = [];
+		this.lastTurnMoves = [];
+		// The turn each side last used Future Sight or Doom Desire; a second one fails until it lands.
+		this.futureSight = { p1: -9, p2: -9 };
 		this.rated = false;
 		this.ended = false;
 	}
@@ -78,8 +84,28 @@ class BattleState {
 		}
 		case 'gametype': this.gameType = args[0]; break;
 		case 'gen': this.gen = +args[0] || 9; break;
+		// Team preview: |poke|p1|Garchomp, M|item
+		case 'poke': {
+			this.preview = this.preview || { p1: [], p2: [] };
+			const species = String(args[1] || '').split(',')[0].trim();
+			const level = (/, L(d+)/.exec(args[1] || '') || [])[1];
+			if (this.preview[args[0]] && species) this.preview[args[0]].push({ species, level: level ? +level : 100 });
+			break;
+		}
 		case 'rated': this.rated = true; break;
-		case 'turn': this.turn = +args[0] || 0; break;
+		case 'turn':
+			this.turn = +args[0] || 0;
+			this.lastTurnMoves = this.turnMoves;
+			this.turnMoves = [];
+			// Speed stages and paralysis as the turn began: what decided who moved first.
+			this.lastTurnStart = this.turnStart || null;
+			this.turnStart = {};
+			for (const [side, store] of [[this.myPlayer, this.mine], [this.theirPlayer, this.opponent]]) {
+				for (const [slot, mon] of Object.entries(store)) {
+					if (mon && !mon.fainted) this.turnStart[`${side}${slot}`] = { species: mon.species, spe: (mon.boosts && mon.boosts.spe) || 0, status: mon.status };
+				}
+			}
+			break;
 		case 'switch': case 'drag': case 'replace': {
 			const id = this.slotOf(args[0]);
 			if (!id) break;
@@ -209,6 +235,20 @@ class BattleState {
 			const id = this.slotOf(args[0]);
 			if (!id) break;
 			if (id.side !== this.myPlayer && this.opponent[id.slot]) this.opponent[id.slot].moves.add(args[1]);
+			{
+				const store = id.side === this.myPlayer ? this.mine : this.opponent;
+				const mon = store[id.slot];
+				// [from] lines (Magic Bounce, Dancer) and called moves are not the Pokemon's own choice.
+				const own = !parts.some(p => /^[from]/.test(p));
+				if (mon && own) {
+					mon.lastMove = args[1];
+					mon.repeat = mon.lastMoveTurn === this.turn - 1 && mon.previousMove === args[1] ? (mon.repeat || 1) + 1 : 1;
+					mon.previousMove = args[1];
+					mon.lastMoveTurn = this.turn;
+				}
+				if (own) this.turnMoves.push({ side: id.side, slot: id.slot, name: args[1], species: mon ? mon.species : '' });
+				if (/^(Future Sight|Doom Desire)$/.test(args[1])) this.futureSight[id.side] = this.turn;
+			}
 			// Remember what was just used, so the result line that follows can be
 			// attributed to it.
 			this.lastMove = { side: id.side, name: args[1], target: args[2] || '' };

@@ -124,7 +124,8 @@ function roleSets(dex, name, legal = null) {
 		const role = set.role === 'Tera Blast user' ? 'Setup Sweeper' : set.role;
 		// Hidden Power's type is set by IVs these sets never pick, so it is left out.
 		let pool = (set.movepool || []).filter(n => toID(n) !== 'terablast' && !toID(n).startsWith('hiddenpower')).map(n => dex.moves.get(n)).filter(m => m.exists && moves.has(m.id));
-		for (const m of oursMoves) {
+		// A hand-written set of ours is already what it should be.
+		for (const m of Object.values(VELVET).includes(found) ? [] : oursMoves) {
 			if (pool.some(p => p.id === m.id)) continue;
 			if (m.category !== 'Status') {
 				// An attack of ours joins every role that attacks with that side, or shares its type.
@@ -150,7 +151,8 @@ function roleSets(dex, name, legal = null) {
 		let abilities = (set.abilities || []).filter(a => own.includes(a));
 		if (!abilities.length) abilities = own.slice();
 		if (oursAbility) abilities = [oursAbility, ...abilities.filter(a => a !== oursAbility)];
-		return { role, movepool: pool.map(m => m.name), abilities, teraTypes: set.teraTypes || species.types };
+		// A hand-written set (data/velvet/random-sets.js) may fix its nature, spread and item too.
+		return { role, movepool: pool.map(m => m.name), abilities, teraTypes: set.teraTypes || species.types, nature: set.nature, evs: set.evs, item: set.item };
 	});
 }
 
@@ -260,7 +262,7 @@ function itemFor(dex, species, set, moves, stat, allowed = null) {
 function spreadFor(species, set, stat) {
 	const b = species.baseStats;
 	if (set.role === 'Bulky Support') {
-		const physicalWall = b.def >= b.spd;
+		const physicalWall = b.def > b.spd;
 		const nature = physicalWall ? (stat === 'Physical' ? 'Impish' : 'Bold') : (stat === 'Physical' ? 'Careful' : 'Calm');
 		return { nature, evs: physicalWall ? { hp: 252, def: 252, spd: 4 } : { hp: 252, def: 4, spd: 252 } };
 	}
@@ -284,12 +286,14 @@ function buildSet(dex, name, { role = null, rng = Math.random, level = 100, allo
 	if (!sets.length) return null;
 	const set = (role && sets.find(s => s.role === role)) || sets[Math.floor(rng() * sets.length)];
 	const { moves, stat } = pickMoves(dex, species, set, rng);
-	const { nature, evs } = spreadFor(species, set, stat);
+	const spread = spreadFor(species, set, stat);
+	const nature = set.nature || spread.nature;
+	const evs = set.evs || spread.evs;
 	return {
 		species: species.name,
 		role: set.role,
 		ability: set.abilities[0] || Object.values(species.abilities)[0] || '',
-		item: items ? itemFor(dex, species, set, moves, stat, allowedItems) : '',
+		item: !items ? '' : set.item && (!allowedItems || allowedItems.has(toID(set.item))) ? set.item : itemFor(dex, species, set, moves, stat, allowedItems),
 		moves,
 		nature,
 		evs,

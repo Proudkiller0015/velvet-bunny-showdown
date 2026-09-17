@@ -369,5 +369,45 @@ console.log('\n--- the AI knows our moves ---');
 	check('its move data knows Royal Decree goes last', pd.moves.get('royaldecree').priority, -6);
 }
 
+console.log('\n--- the Stockfish reviews: moves that fail, setup into its answers, Scarf ---');
+{
+	const pickWith = (opts, difficulty, tweak) => {
+		const { request, state } = scenario(opts);
+		if (tweak) tweak(request, state);
+		const ai = new BattleAI({ difficulty });
+		ai.setFormat('gen9ou');
+		const n = /^move (\d)/.exec(ai.decide(request, state));
+		return n ? opts.myMoves[+n[1] - 1] : 'switch';
+	};
+	for (const difficulty of ['champion', 'stockfish']) {
+		check(`${difficulty}: no Reflect while Reflect is up`, pickWith({ me: 'Grimmsnarl', myMoves: ['Reflect', 'Spirit Break', 'Thunder Wave', 'Light Screen'], foe: 'Great Tusk', foeMoves: ['Headlong Rush'] },
+			difficulty, (r, s) => { s.hazards.p2 = { Reflect: 1 }; }), c => c !== 'Reflect');
+		check(`${difficulty}: no Thunder Wave into a Ground type`, pickWith({ me: 'Clefable', myMoves: ['Thunder Wave', 'Calm Mind', 'Moonlight'], foe: 'Garchomp', foeMoves: ['Stealth Rock'] },
+			difficulty), c => c !== 'Thunder Wave');
+		check(`${difficulty}: no second Protect in a row`, pickWith({ me: 'Toxapex', myMoves: ['Protect', 'Scald', 'Recover'], foe: 'Great Tusk', foeMoves: ['Rapid Spin'] },
+			difficulty, (r, s) => { s.turn = 5; s.mine.a.lastMove = 'Protect'; s.mine.a.lastMoveTurn = 4; }), c => c !== 'Protect');
+		check(`${difficulty}: no Swords Dance while burned`, pickWith({ me: 'Kingambit', myMoves: ['Swords Dance', 'Kowtow Cleave', 'Iron Head', 'Sucker Punch'], foe: 'Toxapex', foeMoves: ['Toxic'], myStatus: 'brn' },
+			difficulty), c => c !== 'Swords Dance');
+		check(`${difficulty}: no Swords Dance into a shown Roar`, pickWith({ me: 'Kingambit', myMoves: ['Swords Dance', 'Kowtow Cleave', 'Iron Head'], foe: 'Skarmory', foeMoves: ['Roar'] },
+			difficulty), c => c !== 'Swords Dance');
+		check(`${difficulty}: no second Future Sight while one is pending`, pickWith({ me: 'Slowking', myMoves: ['Future Sight', 'Psyshock', 'Slack Off'], foe: 'Toxapex', foeMoves: ['Toxic'] },
+			difficulty, (r, s) => { s.turn = 6; s.futureSight = { p1: -9, p2: 5 }; }), c => c !== 'Future Sight');
+	}
+	// Scarf: a base 85 Speed foe moved before our 300 Speed Pokemon with no priority.
+	const { request, state } = scenario({ me: 'Garchomp', myMoves: ['Earthquake'], foe: 'Heracross', foeMoves: ['Close Combat'] });
+	request.side.pokemon[0].stats.spe = 300;
+	state.turn = 3;
+	state.lastTurnMoves = [{ side: 'p1', slot: 'a', name: 'Close Combat', species: 'Heracross' }, { side: 'p2', slot: 'a', name: 'Earthquake', species: 'Garchomp' }];
+	state.lastTurnStart = { p1a: { species: 'Heracross', spe: 0, status: '' }, p2a: { species: 'Garchomp', spe: 0, status: '' } };
+	const ai = new BattleAI({ difficulty: 'champion' });
+	ai.setFormat('gen9ou');
+	ai.inferScarf(ai.gen(9), state, request);
+	check('a foe that outran what it could reach is taken to hold a Choice Scarf', state.opponent.a.item, 'Choice Scarf');
+	state.opponent.a.item = null;
+	request.side.pokemon[0].stats.spe = 200;
+	ai.inferScarf(ai.gen(9), state, request);
+	check('and one that could simply be faster is not', state.opponent.a.item, null);
+}
+
 console.log(`\n=== ${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);
