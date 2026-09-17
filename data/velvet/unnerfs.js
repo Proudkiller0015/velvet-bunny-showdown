@@ -184,6 +184,15 @@ const SPECIES_TYPES = {
  * weakness it walks around with becomes a heal.
  */
 const SPECIES_ABILITIES = {
+	// The Z-A Megas whose abilities this package guessed before the games were out.
+	// These are the released ones, as current Showdown has them - and as the
+	// teambuilder (which reads Showdown's current data) already shows them, so the
+	// battle and the builder finally agree.
+	lucariomegaz: { 0: 'Aura Guard' },
+	garchompmegaz: { 0: 'Levitate' },
+	absolmegaz: { 0: 'Sharpness' },
+	golisopodmega: { 0: 'Tough Claws' },
+	baxcaliburmega: { 0: 'Thermal Exchange' },
 	heatranmega: { 0: 'Earth Eater' },
 	// Mega Zeraora (Patch 1.5, the owner's call): Speed Boost.
 	zeraoramega: { 0: 'Speed Boost' },

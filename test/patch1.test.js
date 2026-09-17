@@ -846,6 +846,21 @@ check(['walkingwake', 'dragapult', 'dragonitemega', 'lucariomegaz', 'deoxysspeed
 	b.makeChoices('move 1', 'move 1');
 	check(Dex.moves.get('thornedbouquet').basePower === 90 && foe.status === 'psn' && rose.hp > 50, `and it drains (${50} -> ${rose.hp}) and always poisons (${foe.status})`);
 }
+// The Z-A Megas have their released abilities (what the teambuilder shows), and Aura Guard works.
+{
+	const want = { lucariomegaz: 'Aura Guard', garchompmegaz: 'Levitate', absolmegaz: 'Sharpness', golisopodmega: 'Tough Claws', baxcaliburmega: 'Thermal Exchange' };
+	const wrong = Object.entries(want).filter(([id, a]) => JSON.stringify(Object.values(Dex.species.get(id).abilities)) !== JSON.stringify([a])).map(([id]) => id);
+	check(!wrong.length, `Z-A Megas have their released abilities${wrong.length ? ` (wrong: ${wrong.join(', ')})` : ''}`);
+	const hit = ability => {
+		const b = battle([{ species: 'Garchomp', ability: 'Rough Skin', moves: ['dragonclaw'] }], [{ species: 'Lucario', ability, moves: ['splash'] }], [4, 4, 4, 4]);
+		const foe = b.p2.active[0];
+		foe.maxhp = 9999; foe.hp = 9999;
+		b.makeChoices('move 1', 'move 1');
+		return 9999 - foe.hp;
+	};
+	const plain = hit('Inner Focus'), guarded = hit('Aura Guard');
+	check(guarded / plain > 0.45 && guarded / plain < 0.55, `Aura Guard halves contact damage (${plain} -> ${guarded})`);
+}
 // Mega Zeraora: Speed Boost.
 {
 	const b = battle([{ species: 'Zeraora', item: 'Zeraorite', ability: 'Volt Absorb', moves: ['splash'] }], [{ species: 'Blissey', ability: 'Natural Cure', moves: ['splash'] }]);

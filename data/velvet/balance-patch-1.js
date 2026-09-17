@@ -1196,6 +1196,23 @@ exports.ABILITIES = {
 	 * put up are torn down before the dance starts. Walls that would sit on it with
 	 * Recover and set-up, and the screens they hide behind, both go.
 	 */
+	/*
+	 * Aura Guard - Mega Lucario Z's, from current Showdown. This package predates it,
+	 * so the teambuilder offered it and the battle used Adaptability instead. Copied
+	 * as Showdown has it, without the Future flag so it is legal here.
+	 */
+	auraguard: {
+		name: "Aura Guard",
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.flags['contact']) return this.chainModify(0.5);
+		},
+		flags: { breakable: 1 },
+		rating: 3.5,
+		num: 319,
+		gen: 9,
+		shortDesc: "This Pokemon receives 1/2 damage from contact moves.",
+		desc: "This Pokemon receives 1/2 damage from contact moves.",
+	},
 	masquerade: {
 		name: "Masquerade",
 		onStart(pokemon) {
