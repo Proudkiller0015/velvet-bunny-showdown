@@ -1,0 +1,12 @@
+{
+	"id": "gen9rpou-3-tliry4",
+	"format": "[Gen 9] RP OU",
+	"players": [
+		"Bunny Stockfish",
+		"SlimeQueenSamantha"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Stockfish\n|j|☆SlimeQueenSamantha\n|t:|1789667931\n|gametype|singles\n|player|p1|Bunny Stockfish|bunny.png|1332\n|player|p2|SlimeQueenSamantha|queen.png|1456\n|gen|9\n|tier|[Gen 9] RP OU\n|rated|\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Endless Battle Clause: Forcing endless battles is banned\n|rule|Species Clause: Limit one of each Pokémon\n|rule|OHKO Clause: OHKO moves are banned\n|rule|Evasion Clause: Evasion abilities, items, and moves are banned\n|rule|Evasion Abilities Clause: Evasion abilities are banned\n|rule|Evasion Items Clause: Evasion items are banned\n|rule|Evasion Moves Clause: Evasion moves are banned\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|clearpoke\n|poke|p1|Garganacl|\n|poke|p1|Great Tusk|\n|poke|p1|Kyurem|\n|poke|p1|Slowking-Galar|\n|poke|p1|Sinistcha|\n|poke|p1|Heatran|\n|poke|p2|Spiritomb|\n|poke|p2|Glaceon|\n|poke|p2|Garchomp|\n|poke|p2|Roserade|\n|poke|p2|Togekiss|\n|poke|p2|Lucario|\n|teampreview\n|c|☆Bunny Stockfish|Good luck! Playing on **stockfish**.\n|\n|t:|1789667937\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Heatran|Heatran|100/100\n|switch|p2a: Garchomp|Garchomp|100/100\n|-item|p1a: Heatran|Air Balloon\n|turn|1\n|\n|t:|1789667940\n|move|p1a: Heatran|Stealth Rock|p2a: Garchomp\n|-sidestart|p2: SlimeQueenSamantha|move: Stealth Rock\n|move|p2a: Garchomp|Dragon Tail|p1a: Heatran\n|-resisted|p1a: Heatran\n|-damage|p1a: Heatran|89/100\n|-enditem|p1a: Heatran|Air Balloon\n|drag|p1a: Garganacl|Garganacl|100/100\n|\n|upkeep\n|turn|2\n|\n|t:|1789667942\n|-terastallize|p1a: Garganacl|Fairy\n|move|p2a: Garchomp|Stealth Rock|p1a: Garganacl\n|-sidestart|p1: Bunny Stockfish|move: Stealth Rock\n|move|p1a: Garganacl|Earthquake|p2a: Garchomp\n|-damage|p2a: Garchomp|87/100\n|\n|upkeep\n|turn|3\n|\n|t:|1789667947\n|move|p2a: Garchomp|Spikes|p1a: Garganacl\n|-sidestart|p1: Bunny Stockfish|Spikes\n|move|p1a: Garganacl|Earthquake|p2a: Garchomp\n|-damage|p2a: Garchomp|72/100\n|\n|upkeep\n|turn|4\n|\n|t:|1789667948\n|move|p2a: Garchomp|Spikes|p1a: Garganacl\n|-sidestart|p1: Bunny Stockfish|Spikes\n|move|p1a: Garganacl|Earthquake|p2a: Garchomp\n|-damage|p2a: Garchomp|58/100\n|\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1789667949
+}
