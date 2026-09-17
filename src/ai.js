@@ -191,7 +191,7 @@ function changedSpecies() {
 		const dir = path.join(path.dirname(require.resolve('pokemon-showdown')), '..', 'data', 'velvet', 'unnerfs.js');
 		for (const id of require(dir).CHANGED.species || []) {
 			const s = Dex.species.get(id);
-			if (s.exists) CHANGED_SPECIES[id] = { types: s.types.slice(), baseStats: { ...s.baseStats } };
+			if (s.exists) CHANGED_SPECIES[id] = { types: s.types.slice(), baseStats: { ...s.baseStats }, abilities: { ...s.abilities } };
 		}
 	} catch (e) { /* no simulator data: Smogon's sheets are all there is */ }
 	return CHANGED_SPECIES;
@@ -256,7 +256,19 @@ class BattleAI {
 
 	/** The speed of an opponent as the battle has actually left it. */
 	foeSpeed(gen, foe, weather) {
-		return this.speedOf(this.foePokemon(gen, foe), foe.boosts, foe.status, weather);
+		const mon = this.foePokemon(gen, foe);
+		/*
+		 * In a built format, assume the foe's Speed is fully invested (252 EVs and a
+		 * Speed nature) unless the battle says otherwise: a revenge killer that only
+		 * outruns a slow-built Roserade is sent in to die. Great Tusk was, in replay
+		 * gen9rpou-1-tlirc4. Random Battles publish their spreads, so those stay as they are.
+		 */
+		if (!this.cfg.naive && this.cfg.maxSpeed !== false && !/random/.test(this.format || '') && mon && mon.species && mon.species.baseStats) {
+			const level = mon.level || 100;
+			const top = Math.floor(Math.floor((2 * mon.species.baseStats.spe + 31 + 63) * level / 100 + 5) * 1.1);
+			if (mon.stats && top > mon.stats.spe) return this.speedOf({ stats: { spe: top }, ability: mon.ability, item: mon.item }, foe.boosts, foe.status, weather);
+		}
+		return this.speedOf(mon, foe.boosts, foe.status, weather);
 	}
 
 	gen(n) { return GENS.get(Math.max(1, Math.min(9, n || 9))); }
@@ -410,8 +422,11 @@ class BattleAI {
 			return changed ? { ...changed, ...(overrides || {}) } : overrides;
 		}
 		const past = this.pastSpecies(name);
-		if (!past) return overrides;
-		return { ...(overrides || {}), ...past };
+		// This server's changes win over the old sheet too: Roserade, Spiritomb and Togekiss are
+		// all past-generation species, and without this the AI played against their old stats.
+		const changedPast = changedSpecies()[String(name).toLowerCase().replace(/[^a-z0-9]/g, '')];
+		if (!past) return changedPast ? { ...changedPast, ...(overrides || {}) } : overrides;
+		return { ...(overrides || {}), ...past, ...(changedPast || {}) };
 	}
 
 	/** Build a calc Pokemon for an opponent we can only partially see. */
@@ -1050,7 +1065,7 @@ class BattleAI {
 			best = Math.max(best, ...(mine.length ? mine : [0]));
 			const seen = [...foe.moves];
 			const back = seen.length
-				? seen.map(m => this.damagePct(gen, them, me, m, field))
+				? [...seen, ...this.hiddenAttacks(gen, foe)].map(m => this.damagePct(gen, them, me, m, field))
 				: [this.roughIncoming(gen, them, me, field)];
 			worst = Math.max(worst, ...back);
 		}
@@ -1156,6 +1171,34 @@ class BattleAI {
 		return pct;
 	}
 
+	/**
+	 * This server's own attacks a foe's species carries that it has not shown yet.
+	 *
+	 * The probes below assume a typical move of each of its types, which a custom
+	 * kit breaks: Roserade's Oxidize is super effective on Steel, and a Kingambit
+	 * set up in front of it as if it were safe (replay gen9rpou-1-tlirc4). The
+	 * species' role sets (src/role-sets.js) list the customs it really runs.
+	 */
+	hiddenAttacks(gen, foe) {
+		if (this.cfg.naive || this.cfg.hidden === false || !foe) return [];
+		const species = String(foe.transformed || foe.species || '').split(',')[0];
+		this.hiddenCache = this.hiddenCache || new Map();
+		if (!this.hiddenCache.has(species)) {
+			let found = [];
+			try {
+				const { Dex } = require('pokemon-showdown');
+				const RS = require('./role-sets');
+				const names = new Set();
+				for (const set of RS.roleSets(Dex, species)) for (const n of set.movepool) names.add(n);
+				found = [...names].filter(n => { const m = Dex.moves.get(n); return m.exists && m.num < 0 && m.category !== 'Status'; });
+			} catch (e) { found = []; }
+			this.hiddenCache.set(species, found);
+		}
+		const seen = foe.moves ? [...foe.moves] : [];
+		if (seen.length >= 4) return [];
+		return this.hiddenCache.get(species).filter(n => !seen.includes(n));
+	}
+
 	/** Worst-case estimate when the opponent has revealed nothing. */
 	roughIncoming(gen, them, me, field) {
 		// If the format generated this Pokemon from a known list, guessing is
@@ -1179,6 +1222,10 @@ class BattleAI {
 		for (const type of species.types) {
 			const probe = PROBES[type];
 			if (probe) worst = Math.max(worst, this.damagePct(gen, them, me, probe, field));
+		}
+		// And the custom attacks its species carries (Oxidize on Roserade).
+		for (const name of this.hiddenAttacks(gen, { species: species.name, moves: new Set() })) {
+			worst = Math.max(worst, this.damagePct(gen, them, me, name, field));
 		}
 		return worst;
 	}
@@ -1235,7 +1282,7 @@ class BattleAI {
 			const them = this.foePokemon(gen, foe);
 			const seen = [...foe.moves];
 			const back = seen.length ?
-				seen.map(m => this.damagePct(gen, them, me, m, field)) :
+				[...seen, ...this.hiddenAttacks(gen, foe)].map(m => this.damagePct(gen, them, me, m, field)) :
 				[this.roughIncoming(gen, them, me, field)];
 			worst = Math.max(worst, ...back);
 		}
@@ -1471,7 +1518,7 @@ class BattleAI {
 		for (const foe of foes) {
 			const them = this.foePokemon(gen, foe);
 			const seen = [...foe.moves];
-			const back = seen.length ? seen.map(m => this.damagePct(gen, them, me, m, field))
+			const back = seen.length ? [...seen, ...this.hiddenAttacks(gen, foe)].map(m => this.damagePct(gen, them, me, m, field))
 				: [this.roughIncoming(gen, them, me, field)];
 			incoming = Math.max(incoming, ...back);
 		}
@@ -1640,7 +1687,10 @@ class BattleAI {
 			const inFor = state.turn - (state.mineCameIn || 0);
 			const walled = !this.cfg.naive && this.cfg.stall !== false && inFor >= 2 && best.score < 25 &&
 				(!topHit || topHit.damage < 15) && incoming < myHpPct * 0.5;
-			const losing = drained || crippled || walled || (incoming >= myHpPct * 0.5 && best.score < 55) ||
+			// Choice-locked into a move that does little (Enamorus kept firing a resisted Mystical Fire into Garchomp).
+			const choiceLocked = !this.cfg.naive && this.cfg.sanity !== false && legal.length === 1 && (active.moves || []).length > 1 &&
+				/choice/i.test(String(entry.item || '')) && (!topHit || topHit.damage < 30) && best.score < 60;
+			const losing = drained || crippled || walled || choiceLocked || (incoming >= myHpPct * 0.5 && best.score < 55) ||
 				// Outsped and dying, with nothing lethal of our own to fire back:
 				// staying is a free knockout for them.
 				(outsped && best.score < 100);
@@ -1722,6 +1772,7 @@ class BattleAI {
 				// look only a little better than a hit it cannot land.
 				if (crippled || drained) margin = Math.min(margin, 8);
 				if (walled) margin = Math.min(margin, 15);
+				if (choiceLocked) margin = Math.min(margin, 10);
 				// A spent Dynamax is thrown away by switching (the replay's Heatran left on
 				// its second turn of three): stay unless this turn kills it.
 				const liveMe = state.mine && state.mine['abc'[index]];

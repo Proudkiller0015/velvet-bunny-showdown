@@ -456,6 +456,24 @@ console.log('\n--- the Stockfish reviews: moves that fail, setup into its answer
 		check('entry hazards are counted for a switch-in (Rock neutral + two Spikes)', Math.round(ai.entryHazards(gen, bolt, request.side.pokemon[0], state)), 29);
 		check('and nothing with Heavy-Duty Boots', ai.entryHazards(gen, bolt, { ...request.side.pokemon[0], item: 'heavydutyboots' }, state), 0);
 	}
+	{
+		// Replay gen9rpou-1-tlirc4.
+		const ai = new BattleAI({ difficulty: 'champion' });
+		ai.setFormat('gen9rpou');
+		const gen = ai.gen(9);
+		const foe = (species, moves = []) => ({ species, level: 100, hp: 100, maxhp: 100, status: '', boosts: {}, moves: new Set(moves), immuneTo: new Set(), notImmuneTo: new Set() });
+		check('a past-generation species we changed has our stats in the calc (Roserade 101 Speed)', ai.foePokemon(gen, foe('Roserade')).species.baseStats.spe, 101);
+		check('an unrevealed custom attack counts (Roserade may have Oxidize)', ai.hiddenAttacks(gen, foe('Roserade', ['Thorned Bouquet'])).includes('Oxidize'), true);
+		check('in a built format a foe is assumed to have full Speed investment', ai.foeSpeed(gen, foe('Roserade'), '') >= 331, true);
+		// Choice-locked into a resisted move, with a switch available: leave.
+		const { request, state } = scenario({ me: 'Enamorus', myMoves: ['Mystical Fire', 'Moonblast', 'Earth Power', 'Superpower'], myItem: 'Choice Scarf', foe: 'Garchomp', foeMoves: ['Stealth Rock'],
+			bench: [benchMon('Cresselia', ['Moonblast', 'Ice Beam', 'Moonlight', 'Calm Mind'])] });
+		request.active[0].moves.forEach((m, i) => { if (i > 0) m.disabled = true; });
+		state.turn = 9; state.mineCameIn = 6;
+		const choice = new BattleAI({ difficulty: 'champion' });
+		choice.setFormat('gen9rpou');
+		check('Choice-locked into a resisted move, it switches', /^switch/.test(choice.decide(request, state)), true);
+	}
 	// Scarf: a base 85 Speed foe moved before our 300 Speed Pokemon with no priority.
 	const { request, state } = scenario({ me: 'Garchomp', myMoves: ['Earthquake'], foe: 'Heracross', foeMoves: ['Close Combat'] });
 	request.side.pokemon[0].stats.spe = 300;
