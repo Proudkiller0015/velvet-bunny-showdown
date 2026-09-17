@@ -98,7 +98,7 @@ const TIERS = {
 	// was being measured against.
 	infernape: 'OU',
 	// And the rest of its trio, rebuilt the same way (Patch 1.5).
-	torterra: 'OU',
+	torterra: 'UU',
 	empoleon: 'OU',
 
 	// Walking Wake, unbanned by the owner's call (Patch 1.5) "for the funny".
@@ -136,7 +136,8 @@ const TIERS = {
 	garchompmegaz: 'OU',
 
 	// Spiritomb, rebuilt with Keystone Legion, Strength Sap and Parting Shot (Patch 1.5).
-	spiritomb: 'UU',
+	// Raised to OU by the owner's call once it had shown what the keystone does.
+	spiritomb: 'OU',
 	// Roserade, rebuilt with Venom Garden and Thorned Bouquet (Patch 1.5).
 	roserade: 'UU',
 
@@ -233,7 +234,9 @@ const TIERS = {
 	 * To be revisited with real usage.
 	 */
 	leafeon: 'UU',
-	glaceon: 'UU',
+	// Glaceon sets its own snow with Diamond Dust and doubles its Speed in it: an OU sweeper
+	// in practice, raised by the owner's call.
+	glaceon: 'OU',
 	flareon: 'UU',
 	umbreon: 'UU',
 	vaporeon: 'UU',
@@ -248,9 +251,9 @@ const TIERS = {
 	// (partner stats plus Eviolite are strong there; one to watch).
 	pikachu: 'PU',
 
-	// Espeon with Prescience (Magic Guard + Magic Bounce + Regenerator): OU, the
-	// owner's decision.
-	espeon: 'OU',
+	// Espeon with Prescience (Magic Guard + Magic Bounce + Regenerator). Tried in OU,
+	// dropped to UU by the owner's call.
+	espeon: 'UU',
 
 	/*
 	 * UUBL Pokemon strong enough for OU, moved up at the owner's call: Weavile,
@@ -262,11 +265,24 @@ const TIERS = {
 	blaziken: 'OU',
 	hoopaunbound: 'OU',
 	kartana: 'OU',
-	latios: 'OU',
-	zapdosgalar: 'OU',
 	meowscarada: 'OU',
 	kommoo: 'OU',
-	hawlucha: 'OU',
+
+	/*
+	 * And back down again, by the owner's call, after they had been played with:
+	 * Latios, Galarian Zapdos and Hawlucha (its Mega with it - a Mega belongs in
+	 * the same tier as what it Mega Evolves from, or the tier below it is the
+	 * tier the Mega really plays in).
+	 */
+	latios: 'UU',
+	ceruledge: 'UU',
+	// Archaludon: Uber in the ninth generation's own tiers, brought back to UU by the owner's call.
+	archaludon: 'UU',
+	// Regieleki: Uber for its Speed and Transistor; the owner brought it straight to OU.
+	regieleki: 'OU',
+	zapdosgalar: 'UU',
+	hawlucha: 'UU',
+	hawluchamega: 'UU',
 
 	// Melmetal: banned to Ubers at the owner's call.
 	melmetal: 'Uber',

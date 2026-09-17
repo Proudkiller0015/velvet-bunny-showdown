@@ -404,7 +404,7 @@ check(!Dex.moves.get('undertow').flags.nosketch, 'the other ten can be Sketched'
 check(learns('glaceon', 'earthpower') && learns('flareon', 'closecombat') && learns('leafeon', 'stoneedge') && learns('leafeon', 'solarblade') && learns('flareon', 'facade'), 'Eeveelution coverage: Glaceon Earth Power, Flareon Close Combat, Leafeon Stone Edge');
 check(!learns('eevee', 'closecombat') && !Object.values(Dex.species.get('eevee').abilities).includes('Kindled Fury'), 'Eevee is not given any of it');
 check(['Leafeon:Solstice', 'Flareon:Kindled Fury', 'Glaceon:Diamond Dust'].every(x => Object.values(Dex.species.get(x.split(':')[0]).abilities).includes(x.split(':')[1])), 'each keeps its old abilities and gains its signature');
-check(['leafeon', 'glaceon', 'flareon', 'umbreon', 'vaporeon'].every(id => Dex.species.get(id).natDexTier === 'UU') && Dex.species.get('espeon').natDexTier === 'OU' && Dex.species.get('melmetal').natDexTier === 'Uber' && Dex.species.get('weavile').natDexTier === 'OU' && Dex.species.get('luxray').natDexTier === 'OU' && Dex.species.get('urshifu').natDexTier === 'Uber' && Dex.species.get('urshifurapidstrike').natDexTier === 'Uber', 'Tier review: five eeveelutions UU, Espeon, Luxray and Weavile OU, both Urshifu and Melmetal Uber');
+check(['leafeon', 'flareon', 'umbreon', 'vaporeon'].every(id => Dex.species.get(id).natDexTier === 'UU') && Dex.species.get('glaceon').natDexTier === 'OU' && Dex.species.get('espeon').natDexTier === 'UU' && Dex.species.get('melmetal').natDexTier === 'Uber' && Dex.species.get('weavile').natDexTier === 'OU' && Dex.species.get('luxray').natDexTier === 'OU' && Dex.species.get('urshifu').natDexTier === 'Uber' && Dex.species.get('urshifurapidstrike').natDexTier === 'Uber', 'Tier review: four eeveelutions UU, Glaceon (snow sweeper), Luxray and Weavile OU, Espeon down to UU, both Urshifu and Melmetal Uber');
 
 // Umbreon: Moonlit Venom.
 {
@@ -615,7 +615,7 @@ check(['megahorn', 'shoreup', 'rapidspin'].every(m => learns('golisopod', m)) &&
 		['chimchar', 'monferno'].every(id => has(id, 'Kindling Crown')) && ['turtwig', 'grotle'].every(id => has(id, 'Sapling Shell')) &&
 		['piplup', 'prinplup'].every(id => has(id, 'Proud Chick')) && !has('grotle', 'World Turtle') && !has('monferno', 'Crown of Flame'),
 		'the trio has its abilities; the first two stages get the lesser ones');
-	check(['infernape', 'torterra', 'empoleon'].every(id => Dex.species.get(id).natDexTier === 'OU'), 'Infernape, Torterra and Empoleon are OU');
+	check(Dex.species.get('infernape').natDexTier === 'OU' && Dex.species.get('empoleon').natDexTier === 'OU' && Dex.species.get('torterra').natDexTier === 'UU', 'Infernape and Empoleon are OU, Torterra UU');
 	const kitT = ['eldertimber', 'tectonicshell', 'explosion', 'rapidspin', 'headsmash', 'yawn', 'flail', 'rollout', 'ancientpower', 'shellsmash'];
 	const kitE = ['imperialtorrent', 'royaldecree', 'explosion', 'roost', 'defog', 'tailwind', 'wingattack', 'freezedry', 'iceshard', 'iciclecrash', 'frostbreath', 'auroraveil'];
 	const gapsTE = [...kitT.filter(m => !learns('torterra', m)), ...kitE.filter(m => !learns('empoleon', m))];
@@ -736,8 +736,8 @@ check(['walkingwake', 'dragapult', 'dragonitemega', 'lucariomegaz', 'deoxysspeed
 	check(!!foe.volatiles['curse'] && foe.hp < foeHp, `and the attacker is cursed and loses HP (${foeHp} -> ${foe.hp})`);
 	b.makeChoices('move 1', 'move 1');
 	check(tomb.fainted || tomb.hp === 0, 'spent: the next KO hit lands while nothing has fainted');
-	check(['strengthsap', 'partingshot', 'knockoff'].every(m => learns('spiritomb', m)) && !['ragefist', 'bittermalice', 'infernalparade', 'lastrespects'].some(m => learns('spiritomb', m)) && Dex.species.get('spiritomb').natDexTier === 'UU' && Dex.species.get('spiritomb').baseStats.hp === 85 && Dex.species.get('spiritomb').baseStats.def === 118 && Dex.species.get('spiritomb').baseStats.spd === 118,
-		'Spiritomb: 85 HP, 118/118 defences, learns Strength Sap, Parting Shot and Knock Off (no other Pokemon signature moves), and is UU');
+	check(['strengthsap', 'partingshot', 'knockoff'].every(m => learns('spiritomb', m)) && !['ragefist', 'bittermalice', 'infernalparade', 'lastrespects'].some(m => learns('spiritomb', m)) && Dex.species.get('spiritomb').natDexTier === 'OU' && Dex.species.get('spiritomb').baseStats.hp === 85 && Dex.species.get('spiritomb').baseStats.def === 118 && Dex.species.get('spiritomb').baseStats.spd === 118,
+		'Spiritomb: 85 HP, 118/118 defences, learns Strength Sap, Parting Shot and Knock Off (no other Pokemon signature moves), and is OU');
 }
 // Soul Toll: doubled and draining against a cursed target; physical or special by the higher stat.
 {
