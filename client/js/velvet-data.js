@@ -277,8 +277,68 @@
 		var dmaxIn = installDynamaxBuilder();
 		var awakenedIn = installAwakenedSearch();
 		var textIn = installDescriptions();
+		var zMaxIn = installZAndMax();
 		return tableIn && orderIn && spritesIn && iconIn && builderIn && tipsIn && rpIn &&
-			cutIn && listIn && buffsIn && abilitiesIn && itemIn && sigItemIn && powerIn && dmaxIn && awakenedIn && textIn;
+			cutIn && listIn && buffsIn && abilitiesIn && itemIn && sigItemIn && powerIn && dmaxIn && awakenedIn && textIn && zMaxIn;
+	}
+
+	/*
+	 * Z-Move and Dynamax on the same Pokemon.
+	 *
+	 * The RP formats allow both at once, which no real format does, and the battle
+	 * UI (Showdown's old client, from their CDN) builds only one set of special move
+	 * buttons: Z if the Pokemon can Z-Move, otherwise Max. So a Pokemon holding a
+	 * Z-Crystal ticked Dynamax and nothing changed - no Max Move names, no power.
+	 *
+	 * The move menu is built once more with the Z-Move hidden to get the Max Move
+	 * buttons, then as normal, and the Max buttons are added beside the Z ones. The
+	 * two checkboxes untick each other, since only one can be used.
+	 */
+	function installZAndMax() {
+		var R = window.BattleRoom;
+		if (!R || !R.prototype || !R.prototype.updateMoveControls) return false;
+		if (R.prototype.__velvetZMax) return true;
+		R.prototype.__velvetZMax = true;
+		var original = R.prototype.updateMoveControls;
+		R.prototype.updateMoveControls = function () {
+			var args = arguments;
+			var result = original.apply(this, args);
+			try {
+				var req = this.request;
+				var pos = this.choice && this.choice.choices ? this.choice.choices.length : 0;
+				var cur = req && req.active && req.active[pos];
+				if (!cur || !cur.canZMove || !cur.canDynamax || !cur.maxMoves || this.$('.movebuttons-max').length) return result;
+				var savedZ = cur.canZMove;
+				var maxHtml = '';
+				delete cur.canZMove;
+				try {
+					original.apply(this, args);
+					maxHtml = this.$('.movebuttons-max').prop('outerHTML') || '';
+				} finally {
+					cur.canZMove = savedZ;
+				}
+				result = original.apply(this, args);
+				if (maxHtml) {
+					this.$('.movebuttons-z').after(maxHtml);
+					// The normal buttons answer to both checkboxes.
+					this.$('.movebuttons-noz').addClass('movebuttons-nomax');
+				}
+			} catch (e) { /* leave the menu as Showdown built it */ }
+			return result;
+		};
+		var z = R.prototype.updateZMove;
+		var max = R.prototype.updateMaxMove;
+		R.prototype.updateZMove = function () {
+			var d = this.$('input[name=dynamax]')[0], zb = this.$('input[name=zmove]')[0];
+			if (d && zb && d.checked && zb.checked) { d.checked = false; max.call(this); }
+			return z.apply(this, arguments);
+		};
+		R.prototype.updateMaxMove = function () {
+			var d = this.$('input[name=dynamax]')[0], zb = this.$('input[name=zmove]')[0];
+			if (d && zb && d.checked && zb.checked) { zb.checked = false; z.call(this); }
+			return max.apply(this, arguments);
+		};
+		return true;
 	}
 
 	/*

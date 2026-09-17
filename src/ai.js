@@ -861,7 +861,26 @@ class BattleAI {
 			}
 			return theirBoosts >= 2 ? 55 + theirBoosts * 8 : theirBoosts ? 24 : -8;
 		}
-		if (/taunt|encore|disable|defog|rapidspin|trick|knockoff/i.test(move.id)) return 22;
+		/*
+		 * Hazard removal is worth what is on our side of the field, and nothing when
+		 * nothing is. It scored a flat 22 like Taunt, so the bot cleared hazards that
+		 * were not there. Defog also clears theirs (a loss when we set them) and their
+		 * screens (a gain). The tracked side conditions include screens and Tailwind,
+		 * so only real hazards are counted.
+		 */
+		if (/^(defog|rapidspin|mortalspin|tidyup)$/.test(move.id)) {
+			const count = side => HAZARDS.reduce((n, h) => n + (Number((state.hazards[side] || {})[h]) || 0), 0);
+			const ours = count(state.myPlayer);
+			if (!ours) return -15;
+			let score = 20 + ours * 10;
+			if (move.id === 'defog') {
+				score -= count(state.theirPlayer) * 8;
+				const theirs = state.hazards[state.theirPlayer] || {};
+				if (theirs['Reflect'] || theirs['Light Screen'] || theirs['Aurora Veil']) score += 10;
+			}
+			return score;
+		}
+		if (/taunt|encore|disable|trick|knockoff/i.test(move.id)) return 22;
 		if (move.id === 'protect' || move.id === 'detect') return 8;
 		return 6;
 	}

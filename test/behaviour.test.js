@@ -325,5 +325,25 @@ console.log('\n--- an attacking stat dropped by someone else ---');
 	}
 }
 
+console.log('\n--- hazard removal only when there are hazards ---');
+{
+	const defog = (hazards, difficulty) => {
+		const moves = ['Defog', 'Body Press', 'Roost', 'Iron Defense'];
+		const { request, state } = scenario({ me: 'Corviknight', myMoves: moves, foe: 'Toxapex', foeMoves: ['Toxic', 'Recover', 'Haze'] });
+		request.side.pokemon[0].condition = '399/399';
+		state.mine.a.hp = 399; state.mine.a.maxhp = 399;
+		state.hazards[state.myPlayer] = hazards;
+		const ai = new BattleAI({ difficulty });
+		ai.setFormat('gen9ou');
+		const n = /^move (\d)/.exec(ai.decide(request, state));
+		return n ? moves[+n[1] - 1] : 'switch';
+	};
+	for (const difficulty of ['champion', 'stockfish']) {
+		check(`${difficulty}: no Defog with no hazards up`, defog({}, difficulty), c => c !== 'Defog');
+		check(`${difficulty}: no Defog when only Tailwind is up`, defog({ Tailwind: 1 }, difficulty), c => c !== 'Defog');
+		check(`${difficulty}: Defog with Stealth Rock and two Spikes on its side`, defog({ 'Stealth Rock': 1, Spikes: 2 }, difficulty), 'Defog');
+	}
+}
+
 console.log(`\n=== ${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);
