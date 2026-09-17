@@ -29,6 +29,7 @@
 
 const PS = require('pokemon-showdown');
 const { Dex, TeamValidator, Teams } = PS;
+const TeamLogic = require('./team-logic');
 
 /**
  * The cut-Pokemon machine moves, read once from the installed copy.
@@ -1155,6 +1156,54 @@ class TeamBuilder {
 	}
 
 	/**
+	 * Whether this format drafts a team rather than taking the first six sets.
+	 *
+	 * The checklist (src/team-logic.js) is written for six-Pokemon singles:
+	 * doubles, little cups of three and the formats with their own team rules
+	 * (same type, same colour, Cross Evolution, level sums) keep the plain draw.
+	 */
+	drafts(ctx, constraints) {
+		return ctx.size === 6 && ctx.gameType === 'singles' && !constraints.shareType && !constraints.shareColor &&
+			!constraints.crossEvo && !constraints.level;
+	}
+
+	/**
+	 * Six sets that make a team, out of the draft.
+	 *
+	 * Sets come in usage order, so earlier ones are what the format actually
+	 * plays; a local search swaps members for the team that scores best on the
+	 * teambuilding checklist - one Stealth Rock, hazard removal, no pile of
+	 * shared weaknesses, both attacking sides, answers to setup - with usage
+	 * still counting, so a team is not built out of fringe picks to tick boxes.
+	 */
+	chooseTeam(ctx, drafted, rng) {
+		if (drafted.length <= ctx.size) return drafted;
+		const stage = ctx.gen >= 4 ? 'full' : 'basics';
+		const rankOf = new Map(drafted.map((set, i) => [set, 1 - i / drafted.length]));
+		const value = team => {
+			let logic = 0;
+			try { logic = TeamLogic.score(ctx.dex, team, { stage }).score; } catch (e) { logic = 0; }
+			const usage = team.reduce((n, set) => n + rankOf.get(set), 0) / team.length;
+			return logic + 20 * usage + rng() * 0.01;
+		};
+		let team = drafted.slice(0, ctx.size);
+		let best = value(team);
+		for (let pass = 0, improved = true; improved && pass < 4; pass++) {
+			improved = false;
+			for (let slot = 0; slot < team.length; slot++) {
+				for (const incoming of drafted) {
+					if (team.includes(incoming)) continue;
+					const trial = team.slice();
+					trial[slot] = incoming;
+					const v = value(trial);
+					if (v > best + 0.5) { best = v; team = trial; improved = true; }
+				}
+			}
+		}
+		return team;
+	}
+
+	/**
 	 * @param {string} formatId
 	 * @returns {string|null} packed team, or null when the server generates it
 	 */
@@ -1172,11 +1221,17 @@ class TeamBuilder {
 			const usedItems = new Set();
 			// 'mega' and 'z', at most once each - see gimmickOf.
 			const gimmicksUsed = new Set();
+			// A draft of more sets than fit, when the format is one the teambuilding
+			// checklist applies to; the best six of them are the team.
+			const draft = this.drafts(ctx, constraints) ? ctx.size * 2 : ctx.size;
+			const drafted = [];
 			for (const species of this.candidates(ctx, constraints, rng)) {
-				if (team.length >= ctx.size) break;
-				if (team.some(t => ctx.dex.species.get(t.species).baseSpecies === species.baseSpecies)) continue;
+				if (drafted.length >= draft) break;
+				if (drafted.some(t => ctx.dex.species.get(t.species).baseSpecies === species.baseSpecies)) continue;
 				const set = this.buildSet(ctx, species, teamHas, rng, constraints);
-				if (!set) continue;
+				if (set) drafted.push(set);
+			}
+			for (const set of this.chooseTeam(ctx, drafted, rng)) {
 				if (constraints.uniqueItems && set.item) {
 					if (usedItems.has(set.item)) set.item = ctx.items.find(i => !usedItems.has(i)) || '';
 					if (set.item) usedItems.add(set.item);

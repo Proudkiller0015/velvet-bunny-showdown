@@ -22,6 +22,9 @@
 
 const { Dex } = require('pokemon-showdown');
 const Rarity = require('./rarity');
+const RS = require('./role-sets');
+const TL = require('./team-logic');
+const TeamAssembler = require('./team-assembler');
 
 const toID = s => String(s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
 
@@ -785,16 +788,38 @@ function rollTrainer({ place, badges, levelCap = null, rng = Math.random, classI
 		return { item, w };
 	}).filter(e => e.w > 0);
 
-	const team = [];
+	/*
+	 * Patch 1.5: a trainer brings a *team*. More Pokemon are rolled than fit,
+	 * the same way as before, and the team assembler picks the ones and the
+	 * roles that fit together, as strictly as the badges call for: sensible
+	 * movesets from the start, the basics (no pile of shared weaknesses, both
+	 * attacking sides) from three badges, the whole checklist from six. A type
+	 * specialist keeps its types, so shared weaknesses are its theme, not a flaw.
+	 */
+	const rolled = [];
 	const taken = new Set();
-	for (let i = 0; i < size; i++) {
+	for (let i = 0; i < Math.min(12, size * 2); i++) {
 		const root = weightedPick(entries.filter(e => !taken.has(e.item.id)), rng);
 		if (!root) break;
 		taken.add(root.id);
-		// The ace sits on the cap, the rest a little under it.
-		const level = i === size - 1 ? hi : randInt(Math.max(lo, hi - 5), Math.max(lo, hi - 1), rng);
-		// Trainers evolve what they can: never one stage behind.
-		team.push(trainerSet(stageFor(root, level, rng, { behind: 0.1 }), level, badges, rng));
+		rolled.push(root);
+	}
+	const levels = [];
+	for (let i = 0; i < size; i++) levels.push(i === size - 1 ? hi : randInt(Math.max(lo, hi - 5), Math.max(lo, hi - 1), rng));
+	levels.sort((a, b) => a - b);
+	let team = null;
+	try {
+		team = trainerTeam(rolled, levels, badges, rng, { themed: !!(cls.types && cls.types.length) });
+	} catch (e) {
+		team = null;
+	}
+	if (!team || team.length < Math.min(size, rolled.length)) {
+		team = [];
+		for (let i = 0; i < size && i < rolled.length; i++) {
+			const level = levels[i];
+			// Trainers evolve what they can: never one stage behind.
+			team.push(trainerSet(stageFor(rolled[i], level, rng, { behind: 0.1 }), level, badges, rng));
+		}
 	}
 	return {
 		kind: 'trainer',
@@ -808,6 +833,84 @@ function rollTrainer({ place, badges, levelCap = null, rng = Math.random, classI
 		format: isDouble ? TRAINER_DOUBLE_FORMAT : TRAINER_FORMAT,
 		badges,
 	};
+}
+
+/**
+ * The moves a trainer's Pokemon may know: everything it has learned by level
+ * up to now, then with badges what a trainer would have taught it - attacks
+ * up to a power cap and the support moves at four, anything it learns at six.
+ */
+function trainerMoves(species, level, badges) {
+	// A forme's own list is often just its signature (Rotom-Fan: Air Slash): the base forme's counts too.
+	const learnset = {};
+	for (let s = species, i = 0; s && s.exists && i < 4; i++) {
+		const data = Dex.species.getLearnsetData(s.id);
+		for (const [id, sources] of Object.entries((data && data.learnset) || {})) learnset[id] = (learnset[id] || []).concat(sources);
+		const next = s.changesFrom || (s.baseSpecies !== s.name ? s.baseSpecies : null);
+		s = next ? Dex.species.get(next) : null;
+	}
+	let gen = 0;
+	for (const sources of Object.values(learnset)) {
+		for (const src of sources) { const m = /^(\d+)L/.exec(src); if (m) gen = Math.max(gen, Number(m[1])); }
+	}
+	const legal = new Set();
+	for (const [id, sources] of Object.entries(learnset)) {
+		const move = Dex.moves.get(id);
+		if (!move.exists || move.isNonstandard || move.isZ || move.isMax) continue;
+		const byLevel = sources.some(src => { const m = /^(\d+)L(\d+)$/.exec(src); return m && Number(m[1]) === gen && Number(m[2]) <= level; });
+		if (byLevel || badges >= 6) { legal.add(id); continue; }
+		if (badges >= 4) {
+			const cap = badges >= 5 ? 90 : 75;
+			if (move.category === 'Status' ? RS.UTILITY.concat(RS.RECOVERY, RS.HAZARDS, RS.STATUS, RS.PIVOTS, RS.SETUP).includes(id)
+				: move.basePower <= cap && (move.accuracy === true || move.accuracy >= 85)) legal.add(id);
+		}
+	}
+	return legal;
+}
+
+/** A trainer's team from its rolled lines, by the team assembler. Null when it cannot build one. */
+function trainerTeam(roots, levels, badges, rng, { themed = false } = {}) {
+	const stage = TL.stageFor(badges);
+	const ace = levels[levels.length - 1];
+	const candidates = roots.map((root, i) => {
+		// Candidates are levelled as the ace would be at worst; the real levels are dealt below.
+		const level = levels[Math.min(i, levels.length - 1)] || ace;
+		const species = stageFor(root, level, rng, { behind: 0.1 });
+		const legal = trainerMoves(species, level, badges);
+		const bst = Object.values(species.baseStats).reduce((a, b) => a + b, 0);
+		return { species: species.name, level, legal: legal.size ? legal : null, strength: bst, ref: species };
+	});
+	const built = TeamAssembler.assemble(Dex, candidates, {
+		size: levels.length, stage, themed, rng,
+		items: badges >= 6 ? true : false,
+		// Low badges: raw strength matters less, so an early team is not just its biggest Pokemon.
+		strengthWeight: badges >= 6 ? 25 : 15,
+		roles: badges >= 3 ? 3 : 1,
+		maxEvaluations: 1500,
+	});
+	if (!built.length) return null;
+	// The strongest is the ace, on the cap.
+	built.sort((a, b) => Object.values(Dex.species.get(a.species).baseStats).reduce((x, y) => x + y, 0) -
+		Object.values(Dex.species.get(b.species).baseStats).reduce((x, y) => x + y, 0));
+	const iv = Math.min(31, 8 + badges * 3);
+	const ev = badges * 10;
+	return built.map((set, i) => {
+		const species = Dex.species.get(set.species);
+		let item = set.item || '';
+		if (badges >= 3 && badges < 6 && rng() < 0.5) item = 'Oran Berry';
+		return {
+			name: species.name,
+			species: species.name,
+			level: levels[i],
+			moves: set.moves,
+			// Early trainers have not thought about abilities or natures yet.
+			ability: badges >= 3 ? set.ability : abilityFor(species, rng, 0.05),
+			nature: badges >= 3 ? set.nature : pick(NATURES, rng),
+			item,
+			ivs: { hp: iv, atk: iv, def: iv, spa: iv, spd: iv, spe: iv },
+			evs: { hp: ev, atk: ev, def: ev, spa: ev, spd: ev, spe: ev },
+		};
+	});
 }
 
 function trainerSet(species, level, badges, rng) {
