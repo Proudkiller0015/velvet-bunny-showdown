@@ -536,9 +536,9 @@ exports.MOVES = {
 	 */
 	thornedbouquet: {
 		num: -36, gen: 9, name: "Thorned Bouquet", type: "Grass", category: "Special",
-		// Giga Drain's shape, by the owner's call: 75 power, half the damage back, and the
-		// thorns always poison.
-		basePower: 75, accuracy: 100, pp: 10, priority: 0,
+		// Drains like Giga Drain, by the owner's call, at its own 90 power; the thorns
+		// always poison.
+		basePower: 90, accuracy: 100, pp: 10, priority: 0,
 		flags: { protect: 1, mirror: 1, heal: 1, metronome: 1, nosketch: 1 },
 		drain: [1, 2],
 		onEffectiveness(typeMod, target, type, move) {
@@ -547,8 +547,8 @@ exports.MOVES = {
 		secondary: { chance: 100, status: 'psn' },
 		target: "normal", contestType: "Beautiful",
 		flavor: "One bouquet is flowers. The other is thorns, and they are poisoned.",
-		shortDesc: "Heals 50% of damage dealt. Always poisons. Vs a poisoned target, also Poison-type.",
-		desc: "The user recovers 1/2 of the HP lost by the target, rounded half up, and the target is poisoned. If the target is already poisoned or badly poisoned, this move's type effectiveness combines Grass and Poison against it, as Flying Press combines Fighting and Flying.",
+		shortDesc: "Heals 50% of damage dealt. Poisons the target. Already poisoned? Hits as Grass and Poison.",
+		desc: "The user heals by half the damage it deals, and the target is poisoned. If the target was already poisoned before the hit, the attack counts as both Grass and Poison type for how effective it is - so Fairy and Grass types, which resist Grass, take it neutrally or worse, while Poison and Steel types resist it more.",
 	},
 	soultoll: {
 		num: -35, gen: 9, name: "Soul Toll", type: "Ghost", category: "Physical",

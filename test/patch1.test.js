@@ -844,7 +844,7 @@ check(['walkingwake', 'dragapult', 'dragonitemega', 'lucariomegaz', 'deoxysspeed
 	const rose = b.p1.active[0], foe = b.p2.active[0];
 	rose.hp = 50;
 	b.makeChoices('move 1', 'move 1');
-	check(Dex.moves.get('thornedbouquet').basePower === 75 && foe.status === 'psn' && rose.hp > 50, `and it drains (${50} -> ${rose.hp}) and always poisons (${foe.status})`);
+	check(Dex.moves.get('thornedbouquet').basePower === 90 && foe.status === 'psn' && rose.hp > 50, `and it drains (${50} -> ${rose.hp}) and always poisons (${foe.status})`);
 }
 // Mega Zeraora: Speed Boost.
 {
