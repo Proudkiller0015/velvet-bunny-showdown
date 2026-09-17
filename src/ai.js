@@ -1048,6 +1048,29 @@ class BattleAI {
 			}
 			return score;
 		}
+		/*
+		 * Phazing is Haze plus the hazards, and it was scoring 6 - one point above
+		 * a filler move - because it fell through every branch to the bottom.
+		 *
+		 * A Magearna at +2 Speed, +3 Special Attack and a Weakness Policy already
+		 * spent swept four Pokemon one at a time while the bot held a Whirlwind
+		 * (replay gen9rpou-3-tlj07m, turns 10 to 14). Blowing it out costs it every
+		 * boost and every turn it spent getting them, and drags something else
+		 * through our Spikes on the way in.
+		 */
+		if (/^(roar|whirlwind)$/.test(move.id)) {
+			const blocked = (ctx.foes || []).some(f =>
+				/^(suctioncups|guarddog)$/.test(String(f.ability || '').toLowerCase().replace(/[^a-z0-9]/g, '')));
+			if (blocked) return -12;
+			let theirBoosts = 0;
+			for (const other of (ctx.foes || [])) {
+				const boosts = other.boosts || {};
+				theirBoosts = Math.max(theirBoosts, Object.values(boosts).reduce((n, v) => n + Math.max(0, v), 0));
+			}
+			const theirHazards = HAZARDS.reduce((n, h) => n + (Number((state.hazards[state.theirPlayer] || {})[h]) || 0), 0);
+			if (theirBoosts >= 2) return 52 + theirBoosts * 8 + theirHazards * 6;
+			return theirBoosts ? 22 + theirHazards * 4 : theirHazards ? 12 : -6;
+		}
 		if (/taunt|encore|disable|trick|knockoff/i.test(move.id)) return 22;
 		if (move.id === 'protect' || move.id === 'detect') return 8;
 		return 6;

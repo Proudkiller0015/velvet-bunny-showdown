@@ -29,7 +29,19 @@ const STARTERS = new Set(['bulbasaur', 'charmander', 'squirtle', 'chikorita', 'c
 	'torchic', 'mudkip', 'turtwig', 'chimchar', 'piplup', 'snivy', 'tepig', 'oshawott', 'chespin', 'fennekin',
 	'froakie', 'rowlet', 'litten', 'popplio', 'grookey', 'scorbunny', 'sobble', 'sprigatito', 'fuecoco', 'quaxly',
 	'pikachu', 'pichu', 'eevee']);
-const PSEUDOS = new Set(['dratini', 'larvitar', 'bagon', 'beldum', 'gible', 'deino', 'goomy', 'jangmoo', 'dreepy', 'frigibax']);
+/** The real pseudo-legendaries. Anything that calls itself one in words uses this. */
+const PSEUDO_LINES = new Set(['dratini', 'larvitar', 'bagon', 'beldum', 'gible', 'deino', 'goomy', 'jangmoo', 'dreepy', 'frigibax']);
+/*
+ * Who is PRICED like one, which is a different question.
+ *
+ * Spiritomb is not a pseudo-legendary and is never called one - it is a
+ * 108-spirit oddity with a 485 stat total. It is here because of how hard it is
+ * to get: in its own games it appears at all only after thirty-two people trade
+ * through the same Odd Keystone. So it is rated, priced, weighted in the grass
+ * and sorted on the boards at that rung, while the Pseudo Vault and every line
+ * of text that says "pseudo-legendary" goes on reading PSEUDO_LINES.
+ */
+const PSEUDOS = new Set([...PSEUDO_LINES, 'spiritomb']);
 /*
  * Every Paradox form by name, because the Dex's tags miss the later DLC ones -
  * Raging Bolt, Gouging Fire, Iron Crown and Iron Boulder carry no tag at all
@@ -112,6 +124,13 @@ function classOf(name) {
 	return c;
 }
 
+/** Whether this Pokemon really is a pseudo-legendary, rather than merely priced as one. */
+function isPseudoLine(name) {
+	const s = Dex.species.get(String(name || ''));
+	if (!s || !s.exists) return false;
+	return PSEUDO_LINES.has(rootOf(Dex.species.get(s.baseSpecies)).id);
+}
+
 const usageCache = new Map();
 /**
  * How good the line is in battle, 0 (ZU and below) to 6 (Uber), judged on its
@@ -162,6 +181,6 @@ function wildWeight(name, badges = 8) {
 }
 
 module.exports = {
-	STARTERS, PSEUDOS, PARADOXES, CLASSES, RANK, NEVER_WILD, HEADLINERS, BADGE_HOME, WILD_WEIGHT, RARE_FROM, MEDIUM_FROM,
+	STARTERS, PSEUDOS, PSEUDO_LINES, isPseudoLine, PARADOXES, CLASSES, RANK, NEVER_WILD, HEADLINERS, BADGE_HOME, WILD_WEIGHT, RARE_FROM, MEDIUM_FROM,
 	tierValue, classOf, usageOf, score, compare, wildWeight,
 };

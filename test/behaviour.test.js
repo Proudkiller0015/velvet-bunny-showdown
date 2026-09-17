@@ -593,5 +593,34 @@ console.log('\n--- the Stockfish reviews: moves that fail, setup into its answer
 	check('and one that could simply be faster is not', state.opponent.a.item, null);
 }
 
+console.log('\n--- phazing a sweeper ---');
+{
+	/*
+	 * A Magearna at +2 Speed and +3 Special Attack swept four Pokemon one at a
+	 * time while the bot held a Whirlwind (replay gen9rpou-3-tlj07m). Blowing a
+	 * sweeper out costs it every boost and every turn it spent getting them, so
+	 * it has to beat the filler score phazing used to share.
+	 */
+	const ai = new BattleAI({ difficulty: 'champion' });
+	const gen = ai.gen(9);
+	const field = new (require('@smogon/calc').Field)({});
+	const s = scenario({ me: 'Skarmory', myMoves: ['Whirlwind', 'Body Press'], foe: 'Magearna', foeMoves: ['Stored Power'] });
+	const me = ai.myPokemon(gen, s.request.side.pokemon[0], s.state);
+	ai.myMoveNames = ['Whirlwind', 'Body Press'];
+
+	const calm = [{ species: 'Magearna', level: 100, hp: 100, maxhp: 100, status: '', boosts: {}, moves: new Set(['Stored Power']) }];
+	const boosted = [{ species: 'Magearna', level: 100, hp: 100, maxhp: 100, status: '', boosts: { spa: 3, spe: 2 }, moves: new Set(['Stored Power']) }];
+	const ctxFor = foes => ({ foes, field, entry: s.request.side.pokemon[0] });
+	const score = foes => ai.statusScore(gen, 'Whirlwind', me, ai.foePokemon(gen, foes[0]), s.state, 60, ctxFor(foes));
+
+	check('phazing a five-boost sweeper scores like a real move', score(boosted) > 60, true);
+	check('and phazing something that has not set up does not', score(calm) < 0, true);
+	check('a boosted foe is worth phazing more than an unboosted one', score(boosted) > score(calm), true);
+
+	// Suction Cups and Guard Dog do not move, so the turn would be thrown away.
+	const rooted = [{ species: 'Cradily', level: 100, hp: 100, maxhp: 100, status: '', boosts: { spa: 3 }, ability: 'Suction Cups', moves: new Set() }];
+	check('nothing is gained by phazing what cannot be phazed', score(rooted) < 0, true);
+}
+
 console.log(`\n=== ${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);
