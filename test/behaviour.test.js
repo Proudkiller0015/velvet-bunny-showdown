@@ -504,6 +504,33 @@ console.log('\n--- the Stockfish reviews: moves that fail, setup into its answer
 			foe: 'Spiritomb', foeMoves: ['Parting Shot', 'Will-O-Wisp'], foeHp: 95, myHp: 60,
 		}, difficulty, (r, s) => { s.mine.a.boosts = { spa: 1, spd: 1 }; s.turn = 30; s.mineCameIn = 20; }), c => c !== 'Calm Mind');
 	}
+	{
+		// Replay gen9rpou-4-tliyi7: Tera spent on turn one for a typing it did not need yet.
+		const ai = new BattleAI({ difficulty: 'champion' });
+		ai.setFormat('gen9rpou');
+		const gen = ai.gen(9);
+		const { request, state } = scenario({ me: 'Landorus-Therian', myMoves: ['Earthquake', 'U-turn', 'Stealth Rock', 'Stone Edge'], foe: 'Simisear' });
+		request.active[0].canTerastallize = 'Water';
+		request.side.pokemon[0].teraType = 'Water';
+		// Its real numbers: the default scenario gives 100 HP behind wall defences, and then
+		// every hit reads as lethal.
+		request.side.pokemon[0].condition = '319/319';
+		request.side.pokemon[0].stats = { atk: 328, def: 256, spa: 200, spd: 196, spe: 278 };
+		state.mine.a.hp = 319;
+		state.mine.a.maxhp = 319;
+		const field = new (require('@smogon/calc').Field)({});
+		const entry = request.side.pokemon[0];
+		const best = { name: 'Earthquake', score: 40 };
+		check('no Tera at full health against a hit worth a third of it',
+			ai.teraWorthIt(gen, request.active[0], entry, state, state.foes(), field, best, 35), false);
+		// Hurt, with a hit it has seen that kills it as it stands and does not once it is Water.
+		request.side.pokemon[0].condition = '200/319';
+		state.mine.a.hp = 200;
+		state.mine.a.maxhp = 319;
+		state.opponent.a.moves = new Set(['Cinder Rush']);
+		check('but Tera when the hit coming would knock it out and Tera survives it',
+			ai.teraWorthIt(gen, request.active[0], entry, state, state.foes(), field, best, 60), true);
+	}
 	// Scarf: a base 85 Speed foe moved before our 300 Speed Pokemon with no priority.
 	const { request, state } = scenario({ me: 'Garchomp', myMoves: ['Earthquake'], foe: 'Heracross', foeMoves: ['Close Combat'] });
 	request.side.pokemon[0].stats.spe = 300;

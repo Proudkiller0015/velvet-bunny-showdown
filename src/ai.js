@@ -1425,7 +1425,15 @@ class BattleAI {
 		// A worthwhile margin in either direction - and never on the Mega. More damage
 		// is not worth a typing that takes much more back (the review's Tera Normal).
 		if (carryingAGimmick) return false;
-		return (teraOut > plainOut * 1.25 && teraIn <= Math.max(plainIn * 1.15, plainIn + 8)) || teraIn < plainIn * 0.6;
+		/*
+		 * A better typing is not a reason on its own. Landorus Terastallized into Water on
+		 * turn one of replay gen9rpou-4-tliyi7, at full health, against a hit worth a third
+		 * of it - and had nothing left for the sweep that finished the game. The defensive
+		 * half only pays when the hit coming is actually worth blunting.
+		 */
+		const pressured = plainIn >= hpPct * 0.7 || (hpPct < 70 && plainIn >= hpPct * 0.5);
+		return (teraOut > plainOut * 1.25 && teraIn <= Math.max(plainIn * 1.15, plainIn + 8)) ||
+			(pressured && teraIn < plainIn * 0.6);
 	}
 
 	/**
