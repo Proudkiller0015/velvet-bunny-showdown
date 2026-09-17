@@ -497,7 +497,7 @@ exports.commands = {
 	useitem(target, room, user) {
 		room = this.requireRoom();
 		const game = room.battle;
-		if (!game || !/^gen\d+rp/.test(game.format)) throw new Chat.ErrorMessage('Items can only be used in RP battles.');
+		if (!game || !RP_STORY_FORMATS.has(game.format)) throw new Chat.ErrorMessage('Items can only be used in RP battles.');
 		if (!game.playerTable[user.id]) throw new Chat.ErrorMessage("You're watching this battle, not in it.");
 		const E = require('../../../src/encounters');
 		const rp = require('../../../src/rp-server');
@@ -1791,11 +1791,10 @@ const RP_BOT = process.env.PS_RP_BOT_NAME || 'RP Guide';
  * other bot, but are never remembered - the next "Hiker Bob" could be a person.
  */
 let isRpBot = () => false;
-const RP_FORMATS = new Set(['gen9rpbattlewildencounter', 'gen9rpbattlewilddoubles', 'gen9rptutorial']);
+// The roleplay's own formats, and the tiers that are only named after it.
+const { RP_FORMATS, RP_PVP_FORMATS, RP_STORY_FORMATS } = require('../../../src/rp-formats');
 // Set once the roleplay hooks are up: what /tutorial needs to start a battle.
 let tutorialDeps = null;
-// Battles between players where bag items work (not RP Custom Game).
-const RP_PVP_FORMATS = new Set(['gen9rpbattle', 'gen9rpbattledoubles']);
 
 function roleplayIntro() {
 	const discord = '<b>Discord</b>';
@@ -2122,7 +2121,7 @@ function roleplay() {
 		try {
 			// Every RP battle keeps a replay, so it can be posted on Discord - PvP
 			// ones included. The name is known before the upload finishes.
-			if (!wasEnded && /^gen\d+rp/.test(this.format) && !this.rpInvalid) {
+			if (!wasEnded && RP_STORY_FORMATS.has(this.format) && !this.rpInvalid) {
 				const boot = typeof LoginServer !== 'undefined' && LoginServer.velvetReplayBoot;
 				const { id } = this.room.getReplayData();
 				if (boot && id) replay = `/replay/${id}-${boot}`;
