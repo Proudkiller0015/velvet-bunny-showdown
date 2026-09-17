@@ -344,6 +344,9 @@ const BOT_DIFFICULTIES = [...new Set(BOT_QUEUES.map(queue => queue.difficulty))]
 
 const BOT_IDS = botAccountIds(BOT_BASE, BOT_QUEUES);
 const BOT_RUNG = botDifficulties(BOT_BASE, BOT_QUEUES);
+
+/* The top three of a ladder wear it: in the ladder tab, on /rank and beside their name. */
+const MEDALS = ['🥇 ', '🥈 ', '🥉 '];
 /** userid -> the rung they want to be matched against, or PVP for no bots. */
 const wantedRung = new Map();
 
@@ -821,6 +824,66 @@ exports.commands = {
 	 * Owner and administrators only, on the same check the rank command uses.
 	 * It is a small private server and the list of who visits is theirs.
 	 */
+	/*
+	 * `/rank`, with the numbers a local ladder can actually stand behind.
+	 *
+	 * Showdown's own /rank prints GXE and a Glicko-1 rating because the official
+	 * ladder keeps them; this server's ladder is local and keeps Elo, wins and
+	 * losses, so those columns came out empty and the table said less than the
+	 * client's own ladder tab. This one adds what the numbers here do support:
+	 * GXE (the share of games that Elo expects against an average 1500 player),
+	 * the position on each ladder, and a bot's rating floor, which is why beating
+	 * one is worth full points while its own rating does not move.
+	 */
+	rating: 'rank',
+	async rank(target, room, user) {
+		const name = String(target || user.name).trim();
+		const id = toID(name);
+		if (!id) return this.parse('/help rank');
+		const { BOT_FLOORS } = require('../../../src/ladder-seed.js');
+		// A bot's floor belongs to the rung it plays, not to its name.
+		const floorOf = who => BOT_FLOORS[BOT_RUNG.get(who)];
+		const rows = [];
+		for (const format of Dex.formats.all()) {
+			if (!format.searchShow) continue;
+			let ladder = null;
+			try { ladder = await new Ladders.LadderStore(format.id).getLadder(); } catch (e) { continue; }
+			if (!ladder || !ladder.length) continue;
+			const index = ladder.findIndex(row => toID(row[0]) === id);
+			if (index < 0) continue;
+			const row = ladder[index];
+			const elo = Math.round(row[1]);
+			// The share of games this Elo expects to win against an average player.
+			const gxe = Math.round(100 / (1 + Math.pow(10, (1500 - elo) / 400)));
+			const [w, l, t] = [row[3] || 0, row[4] || 0, row[5] || 0];
+			const played = w + l + t;
+			const floor = floorOf(id);
+			rows.push(
+				`<tr><td>${MEDALS[index] || ''}${Chat.escapeHTML(format.name)}</td>` +
+				`<td><strong>${elo}</strong>${floor ? ` <small>(floor ${Math.round(floor)})</small>` : ''}</td>` +
+				`<td>${gxe}%</td>` +
+				`<td>#${index + 1}<small>/${ladder.length}</small></td>` +
+				`<td>${w}</td><td>${l}</td><td>${played}</td></tr>`
+			);
+		}
+		if (!rows.length) {
+			return this.sendReplyBox(`<strong>${Chat.escapeHTML(name)}</strong> has not played a ladder game here yet.`);
+		}
+		this.sendReplyBox(
+			`<div>User: <strong>${Chat.escapeHTML(name)}</strong></div>` +
+			'<div style="overflow-x:auto"><table><tr>' +
+			['Format', '<abbr title="Elo rating">Elo</abbr>', '<abbr title="Expected share of games won against an average 1500 player">GXE</abbr>', 'Rank', 'W', 'L', 'Total']
+				.map(h => `<th>${h}</th>`).join('') + '</tr>' +
+			rows.join('') + '</table></div>' +
+			'<small>Elo is what the ladder pairs on. GXE here is what that Elo expects against a 1500 player - ' +
+			'this server keeps its own ladder, so there is no Glicko deviation behind it. A bot never drops below its floor.</small>'
+		);
+	},
+	rankhelp: [
+		`/rank - your Elo, GXE, ladder position and record in every format you have played here.`,
+		`/rank [user] - the same for somebody else.`,
+	],
+
 	visitors(target, room, user) {
 		this.checkCan('bypassall');   // owner and administrator only
 		const html = velvetVisitorTable(target, 100);
@@ -1494,6 +1557,68 @@ function botLadderPlateaus() {
 	const store = typeof Ladders !== 'undefined' && Ladders && Ladders.LadderStore;
 	const on = require('../../../src/ladder-plateau').installPlateaus(store && store.prototype, userid => BOT_RUNG.get(userid), { escape: Chat.escapeHTML });
 	console.log(on ? '[config] bot ladder plateaus on' : '[config] could not find the ladder to put plateaus on');
+	ladderMedals(store && store.prototype);
+}
+
+/**
+ * The medal beside the avatar, for the top three of the ladder being played.
+ *
+ * The client already draws badges next to a player's avatar in a battle - it is
+ * how the official server shows ladder trophies - and reads them off a `|badge|`
+ * line: type, format, and a "top N" number for the tooltip. Nothing on this
+ * server ever sent one, so first place looked like everybody else. Sent for the
+ * battle's own format, on both rated and unrated games, so a challenge between
+ * two people shows who is top of that ladder.
+ */
+async function ladderBadges(game) {
+	try {
+		if (!game || !game.room || !game.players || !game.format) return;
+		if (typeof Ladders === 'undefined' || !Ladders || !Ladders.LadderStore) return;
+		const format = Dex.formats.get(game.format);
+		if (!format || !format.searchShow) return;
+		const ladder = await new Ladders.LadderStore(format.id).getLadder();
+		if (!ladder || !ladder.length) return;
+		const types = ['gold', 'silver', 'bronze'];
+		let sent = false;
+		for (const player of game.players) {
+			const index = ladder.findIndex(row => toID(row[0]) === toID(player.id));
+			if (index < 0 || index > 2) continue;
+			// type|format|threshold-place: the client turns it into the trophy and its tooltip.
+			game.room.add(`|badge|${player.slot}|${types[index]}|${format.id}|${index + 1}-${index + 1}`);
+			sent = true;
+		}
+		if (sent) game.room.update();
+	} catch (e) { /* a battle must never fail over a decoration */ }
+}
+
+/**
+ * A medal on the top three of every ladder.
+ *
+ * The ladder tab is a plain table of numbers, and first place looks like
+ * fourteenth place with a bigger number. Showdown's own boards mark the top of
+ * the list, so this does too: the medal goes in the ladder tab, on /rank, and
+ * beside the name in a battle's player list.
+ */
+function ladderMedals(proto) {
+	if (!proto || proto.velvetMedals) return;
+	proto.velvetMedals = true;
+	const original = proto.getTop;
+	if (!original) return;
+	proto.getTop = async function (...args) {
+		const out = await original.apply(this, args);
+		try {
+			// out is [formatid, html]; the first three data rows get their medal.
+			if (!Array.isArray(out) || typeof out[1] !== 'string') return out;
+			let seen = 0;
+			out[1] = out[1].replace(/<tr><td>(\d+)<\/td>/g, (whole, place) => {
+				const medal = MEDALS[Number(place) - 1];
+				seen++;
+				return medal ? `<tr><td>${medal}</td>` : whole;
+			});
+			void seen;
+		} catch (e) { /* the plain table is fine */ }
+		return out;
+	};
 }
 
 function helpRoom() {
@@ -1899,6 +2024,7 @@ function roleplay() {
 	const start = battle.start;
 	battle.start = function (...args) {
 		const out = start.apply(this, args);
+		void ladderBadges(this);
 		try {
 			const enc = encounterFor(this);
 			if (enc) {
