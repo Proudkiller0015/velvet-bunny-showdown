@@ -1,0 +1,12 @@
+{
+	"id": "gen9rpou-12-tliry4",
+	"format": "[Gen 9] RP OU",
+	"players": [
+		"Bunny Stockfish",
+		"SlimeQueenSamantha"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Stockfish\n|j|☆SlimeQueenSamantha\n|t:|1789668832\n|gametype|singles\n|player|p1|Bunny Stockfish|bunny.png|1332\n|player|p2|SlimeQueenSamantha|queen.png|1554\n|gen|9\n|tier|[Gen 9] RP OU\n|rated|\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Endless Battle Clause: Forcing endless battles is banned\n|rule|Species Clause: Limit one of each Pokémon\n|rule|OHKO Clause: OHKO moves are banned\n|rule|Evasion Clause: Evasion abilities, items, and moves are banned\n|rule|Evasion Abilities Clause: Evasion abilities are banned\n|rule|Evasion Items Clause: Evasion items are banned\n|rule|Evasion Moves Clause: Evasion moves are banned\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|clearpoke\n|poke|p1|Clodsire|\n|poke|p1|Zapdos|\n|poke|p1|Glimmora|\n|poke|p1|Kingambit|\n|poke|p1|Samurott-Hisui|\n|poke|p1|Lokix|\n|poke|p2|Spiritomb|\n|poke|p2|Glaceon|\n|poke|p2|Garchomp|\n|poke|p2|Roserade|\n|poke|p2|Togekiss|\n|poke|p2|Lucario|\n|teampreview\n|c|☆Bunny Stockfish|Good luck! Playing on **stockfish**.\n|\n|t:|1789668837\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Glimmora|Glimmora|100/100\n|switch|p2a: Garchomp|Garchomp|100/100\n|turn|1\n|\n|t:|1789668839\n|switch|p1a: Kingambit|Kingambit|100/100\n|-item|p1a: Kingambit|Air Balloon\n|move|p2a: Garchomp|Stealth Rock|p1a: Kingambit\n|-sidestart|p1: Bunny Stockfish|move: Stealth Rock\n|\n|upkeep\n|turn|2\n|\n|t:|1789668842\n|move|p1a: Kingambit|Swords Dance|p1a: Kingambit\n|-boost|p1a: Kingambit|atk|2\n|move|p2a: Garchomp|Dragon Tail|p1a: Kingambit\n|-resisted|p1a: Kingambit\n|-crit|p1a: Kingambit\n|-damage|p1a: Kingambit|84/100\n|-enditem|p1a: Kingambit|Air Balloon\n|-end|p1a: Kingambit|fallenundefined|[silent]\n|drag|p1a: Clodsire|Clodsire|100/100\n|\n|upkeep\n|turn|3\n|\n|t:|1789668845\n|move|p2a: Garchomp|Earthquake|p1a: Clodsire\n|-supereffective|p1a: Clodsire\n|-damage|p1a: Clodsire|13/100\n|move|p1a: Clodsire|Stealth Rock|p2a: Garchomp\n|-sidestart|p2: SlimeQueenSamantha|move: Stealth Rock\n|\n|upkeep\n|turn|4\n|\n|t:|1789668847\n|switch|p1a: Zapdos|Zapdos|100/100\n|move|p2a: Garchomp|Earthquake|p1a: Zapdos\n|-immune|p1a: Zapdos\n|\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1789668849
+}
