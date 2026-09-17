@@ -135,6 +135,9 @@ const TIERS = {
 	// Mega Garchomp Z, unbanned by the owner's call (Patch 1.5).
 	garchompmegaz: 'OU',
 
+	// Spiritomb, rebuilt with Keystone Legion, Strength Sap and Parting Shot (Patch 1.5).
+	spiritomb: 'UU',
+
 	// Its only ability is Shadow Tag. Base Chandelure can pick Flash Fire and go
 	// on being an RU Pokemon, and the ability ban in the tiers below Ubers
 	// already stops the trapping set there - but a Mega has one ability slot and

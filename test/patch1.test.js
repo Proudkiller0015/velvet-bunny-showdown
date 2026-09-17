@@ -718,6 +718,47 @@ check(['walkingwake', 'dragapult', 'dragonitemega', 'lucariomegaz', 'deoxysspeed
 	check(['terapagos', 'terapagosterastal', 'terapagosstellar'].every(id => nd[id] === 'Uber'), 'the client labels every Terapagos forme Uber in National Dex, as the server does');
 }
 
+// Spiritomb: Keystone Legion survives one KO hit per battle and curses the attacker.
+{
+	const b = battle(
+		[{ species: 'Spiritomb', ability: 'Keystone Legion', moves: ['splash', 'strengthsap', 'partingshot'] }, { species: 'Blissey', ability: 'Natural Cure', moves: ['splash'] }],
+		[{ species: 'Rhyperior', ability: 'Solid Rock', moves: ['closecombat', 'splash'] }],
+	);
+	const tomb = b.p1.active[0];
+	tomb.hp = 20;
+	b.makeChoices('move 1', 'move 1');   // Close Combat would KO... but Dark/Ghost is immune to Fighting
+	b.p2.active[0].moveSlots[0].id = 'megahorn';
+	b.p2.active[0].moveSlots[0].move = 'Megahorn';
+	const foe = b.p2.active[0];
+	const foeHp = foe.hp;
+	b.makeChoices('move 1', 'move 1');
+	check(tomb.hp === 1 && /Keystone Legion/.test(log(b)), `Keystone Legion: a KO hit leaves Spiritomb at 1 HP (${tomb.hp})`);
+	check(!!foe.volatiles['curse'] && foe.hp < foeHp, `and the attacker is cursed and loses HP (${foeHp} -> ${foe.hp})`);
+	b.makeChoices('move 1', 'move 1');
+	check(tomb.fainted || tomb.hp === 0, 'spent: the next KO hit lands while nothing has fainted');
+	check(['strengthsap', 'partingshot', 'knockoff', 'infernalparade'].every(m => learns('spiritomb', m)) && Dex.species.get('spiritomb').natDexTier === 'UU' && Dex.species.get('spiritomb').baseStats.hp === 85,
+		'Spiritomb: 85 HP, learns Strength Sap, Parting Shot, Knock Off and Infernal Parade, and is UU');
+}
+// The keystone mends when another Pokemon faints.
+{
+	const b = battle(
+		[{ species: 'Spiritomb', ability: 'Keystone Legion', moves: ['splash', 'nightshade'] }],
+		[{ species: 'Rhyperior', ability: 'Solid Rock', moves: ['megahorn', 'splash'] }, { species: 'Shedinja', ability: 'Wonder Guard', moves: ['splash'] }],
+	);
+	const tomb = b.p1.active[0];
+	tomb.hp = 10;
+	b.makeChoices('move 1', 'move 1');          // cracks, Rhyperior cursed
+	check(tomb.hp === 1 && tomb.m.keystoneCracked, 'the keystone cracks');
+	b.p2.active[0].hp = 1;                       // the curse finishes Rhyperior at the end of the turn
+	b.makeChoices('move 1', 'move 2');
+	check(!tomb.m.keystoneCracked && /keystone mends/.test(log(b)), 'and mends when the cursed attacker faints');
+}
+{
+	const b = battle([{ species: 'Spiritomb', ability: 'Keystone Legion', moves: ['splash'] }], [{ species: 'Excadrill', ability: 'Mold Breaker', moves: ['xscissor'] }]);
+	b.p1.active[0].hp = 5;
+	b.makeChoices('move 1', 'move 1');
+	check(b.p1.active[0].fainted || b.p1.active[0].hp === 0, 'Mold Breaker goes through Keystone Legion');
+}
 // Mega Zeraora: Speed Boost.
 {
 	const b = battle([{ species: 'Zeraora', item: 'Zeraorite', ability: 'Volt Absorb', moves: ['splash'] }], [{ species: 'Blissey', ability: 'Natural Cure', moves: ['splash'] }]);

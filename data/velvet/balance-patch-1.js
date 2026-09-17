@@ -1137,6 +1137,45 @@ exports.ABILITIES = {
 		shortDesc: "Water and Steel moves 1.2x power. Competitive.",
 		desc: "This Pokemon's Water- and Steel-type moves have 1.2x power, and when an opponent lowers any of its stats, its Special Attack rises by 2 stages.",
 	},
+	/*
+	 * Keystone Legion - Spiritomb's (Patch 1.5), by the owner's request: something
+	 * new rather than two abilities glued together. Spiritomb is 108 spirits bound
+	 * to the Odd Keystone. The first blow that would break it, the legion takes
+	 * instead: Spiritomb holds on at 1 HP, and the spirits knocked loose cling to
+	 * whoever struck, cursed as by Curse, until it leaves the field. The cracked
+	 * keystone mends when any Pokemon faints, on either side: a new soul joins the
+	 * legion, and it can hold on again.
+	 */
+	keystonelegion: {
+		name: "Keystone Legion",
+		// A new soul for the legion: any faint, either side, mends the keystone.
+		onAnyFaint(target) {
+			const holder = this.effectState.target;
+			if (holder && target !== holder && holder.m.keystoneCracked) {
+				holder.m.keystoneCracked = false;
+				this.add('-message', `A soul joins the legion. ${holder.name}'s keystone mends!`);
+			}
+		},
+		onDamagePriority: -30,
+		onDamage(damage, target, source, effect) {
+			if (!effect || effect.effectType !== 'Move' || damage < target.hp) return;
+			if (target.m.keystoneCracked) return;
+			target.m.keystoneCracked = true;
+			this.add('-ability', target, 'Keystone Legion');
+			this.add('-message', `The spirits of the keystone shield ${target.name}!`);
+			if (source && source !== target && source.hp && !source.volatiles['curse']) {
+				source.addVolatile('curse', target);
+			}
+			return target.hp - 1;
+		},
+		flags: { breakable: 1 },
+		rating: 3.5,
+		num: -28,
+		gen: 9,
+		flavor: "108 spirits bound to one stone. Break it, and they break free - onto you.",
+		shortDesc: "Survives a KO hit at 1 HP and curses the attacker. Recharges when any Pokemon faints.",
+		desc: "When an attack would knock this Pokemon out, it survives with 1 HP instead, and the attacker is cursed (it loses 1/4 of its maximum HP at the end of each turn until it switches out), as if by Curse. Works at any HP. After it triggers it cannot trigger again, even across switches, until any other Pokemon on either side faints. Mold Breaker and similar abilities ignore it.",
+	},
 };
 
 /*
@@ -1303,6 +1342,14 @@ const TRIO_BABIES = {
 	turtwig: 'Sapling Shell', grotle: 'Sapling Shell',
 	piplup: 'Proud Chick', prinplup: 'Proud Chick',
 };
+
+/*
+ * Spiritomb (Patch 1.5): Keystone Legion (above), and what a slow Ghost with 50 HP
+ * needs to use it - Strength Sap for recovery that also blunts physical attackers,
+ * Parting Shot to leave on its own terms, Knock Off, and Infernal Parade to cash in
+ * its Will-O-Wisps. Its HP goes from 50 to 85 in unnerfs.js. Aimed at UU.
+ */
+const SPIRITOMB = { ability: 'Keystone Legion', moves: ['strengthsap', 'partingshot', 'knockoff', 'infernalparade'] };
 
 const INFERNAPE = {
 	ability: 'Crown of Flame',
@@ -1827,6 +1874,7 @@ exports.buildBuffs = (Pokedex) => {
 
 	// Infernape only: after the pre-evolution pass.
 	if (Pokedex.infernape) add('infernape', INFERNAPE.moves, [INFERNAPE.ability]);
+	if (Pokedex.spiritomb) add('spiritomb', SPIRITOMB.moves, [SPIRITOMB.ability]);
 	if (Pokedex.torterra) add('torterra', TORTERRA.moves, [TORTERRA.ability]);
 	if (Pokedex.empoleon) add('empoleon', EMPOLEON.moves, [EMPOLEON.ability]);
 	for (const [id, ability] of Object.entries(TRIO_BABIES)) if (Pokedex[id]) add(id, [], [ability]);
@@ -1876,6 +1924,7 @@ exports.LUXRAY = LUXRAY;
 exports.GOLISOPOD = GOLISOPOD;
 exports.EEVEE = EEVEE;
 exports.INFERNAPE = INFERNAPE;
+exports.SPIRITOMB = SPIRITOMB;
 exports.TORTERRA = TORTERRA;
 exports.EMPOLEON = EMPOLEON;
 exports.TRIO_BABIES = TRIO_BABIES;
