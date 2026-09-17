@@ -344,7 +344,15 @@ function setBags(payload) {
 			const item = E.findBattleItem(itemId);
 			if (item && Number(n) > 0) items[item.id] = Math.floor(Number(n));
 		}
-		next.set(id, { character: String(p.character || '').slice(0, 60), npc: !!p.npc, items });
+		const entry = { character: String(p.character || '').slice(0, 60), npc: !!p.npc, items };
+		// Patch 1.5: what a PvP or NPC battle checks - the box, badges and story items (not sent for NPCs).
+		if (Array.isArray(p.box)) {
+			entry.box = normaliseBox(p.box.map(m => (Array.isArray(m) ? { species: m[0], level: m[1], fainted: !!m[2], daycare: !!m[3] } : m)));
+			entry.badges = Math.max(0, Math.min(8, Number(p.badges) || 0));
+			const g = p.gimmicks || {};
+			entry.gimmicks = { mega: !!g.mega, zmove: !!g.zmove, dynamax: !!g.dynamax, tera: !!g.tera };
+		}
+		next.set(id, entry);
 	}
 	bags = next;
 	return { ok: true, players: bags.size };
@@ -361,6 +369,50 @@ function pvpItemsFor(userid) {
 	for (const item of E.BATTLE_ITEMS) out[item.id] = NPC_ITEMS_EACH;
 	return out;
 }
+/**
+ * An RP battle between players (or against an NPC), checked the way an encounter
+ * is: each player's team against their character's box, for the players the
+ * bot has a box for. NPCs battle with any team. Returns { problems, notes }:
+ * problems call the battle off; notes tell each player what applies to them.
+ */
+function pvpCheck(players, teamOf) {
+	const problems = [];
+	const notes = new Map();
+	for (const player of players) {
+		const bag = bagFor(player.id);
+		if (!bag) {
+			problems.push(`**${player.name}** has no character linked: set your Showdown name with !showdown on Discord and select a character (or play RP Custom Game)`);
+			continue;
+		}
+		if (bag.npc) {
+			notes.set(player.id, `You're battling as the NPC **${bag.character}**: any team, 5 of each healing item, and you earn nothing.`);
+			continue;
+		}
+		if (bag.box) {
+			const check = checkTeam({ box: bag.box, badges: bag.badges, character: bag.character }, teamOf(player.id));
+			for (const p of check.problems) problems.push(`${player.name}: ${p}`);
+		}
+		notes.set(player.id, pvpNotice(bag));
+	}
+	return { problems, notes };
+}
+
+/** What applies to a player in this battle: their character, items, locks and badges. */
+function pvpNotice(bag) {
+	const lines = [`You're battling as **${bag.character}**.`];
+	const items = Object.entries(bag.items || {}).filter(([, n]) => n > 0).map(([id, n]) => `${n}× ${(E.findBattleItem(id) || { name: id }).name}`);
+	lines.push(items.length ? `🧴 Items in your bag: ${items.join(', ')} (use them from the panel; they come off your bag).` : '🧴 No healing items in your bag.');
+	if (bag.gimmicks) {
+		const locked = Object.keys(GIMMICK_ITEM).filter(k => !bag.gimmicks[k]).map(k => GIMMICK_NAME[k].replace(/^use /, ''));
+		const open = Object.keys(GIMMICK_ITEM).filter(k => bag.gimmicks[k]).map(k => GIMMICK_NAME[k].replace(/^use /, ''));
+		if (open.length) lines.push(`✅ You can ${open.join(', ')}.`);
+		if (locked.length) lines.push(`🔒 Locked until the story gives you the item: ${locked.join(', ')}. The battle won't allow ${locked.length === 1 ? 'it' : 'them'}.`);
+	}
+	if (bag.badges !== undefined && bag.badges < 1) lines.push('⚠️ Held items unlock with your first badge (not blocked, so just do not).');
+	if (bag.box) lines.push('📦 Your team was checked against your box: only Pokémon you own, at or below their box level, none fainted or at the daycare.');
+	return lines.join(String.fromCharCode(10));
+}
+
 function canUsePvpItem(userid, itemId, usedSoFar) {
 	const bag = bagFor(userid);
 	if (!bag) return { ok: false, message: 'Link a character first: set your Showdown name with !showdown on Discord and select a character, then items from its bag work in RP battles.' };
@@ -716,7 +768,7 @@ function httpRoute(deps, log) {
 }
 
 module.exports = {
-	verify, placeFor, requestEncounter, requestTutorial, completeEncounter, canUseItem, usedInLog, setBags, bagFor, pvpItemsFor, canUsePvpItem, NPC_ITEMS_EACH, publicView, canThrow, thrownInLog, resultFromLog, openFor,
+	pvpCheck, pvpNotice, verify, placeFor, requestEncounter, requestTutorial, completeEncounter, canUseItem, usedInLog, setBags, bagFor, pvpItemsFor, canUsePvpItem, NPC_ITEMS_EACH, publicView, canThrow, thrownInLog, resultFromLog, openFor,
 	checkTeam, gimmickIn, GIMMICK_ITEM, GIMMICK_NAME, sidesInLog,
 	httpRoute, encounters, RP_ROOM, CHALLENGE_MS, recordFinished, finishedSince,
 };

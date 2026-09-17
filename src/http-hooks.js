@@ -47,7 +47,8 @@ const UPSTREAM_HOST = 'play.pokemonshowdown.com';
 // the id inside the assertion is not checked unless `legalhosts` says to.
 const UPSTREAM_PATH = '/~~showdown/action.php';
 // A login request is a few hundred bytes; anything larger is not one.
-const MAX_BODY = 64 * 1024;
+// Room for the RP bag table, which carries every linked character's box (Patch 1.5).
+const MAX_BODY = 512 * 1024;
 
 /** The one path the login server answers, however the client spells the id. */
 function isLoginRequest(url) {

@@ -1859,6 +1859,11 @@ function roleplay() {
 	battle.receive = function (lines) {
 		const out = receive.call(this, lines);
 		try {
+			// What applies to this player in a PvP or NPC battle, once, right behind their first request.
+			if (lines[0] === 'sideupdate' && this.rpNotes && this.rpNotes[lines[1]] && String(lines[2]).startsWith('|request|') && this[lines[1]]) {
+				this[lines[1]].sendRoom(this.rpNotes[lines[1]]);
+				delete this.rpNotes[lines[1]];
+			}
 			if (lines[0] === 'sideupdate' && this.rpPanels && this.rpPanels[lines[1]] && String(lines[2]).startsWith('|request|')) {
 				const player = this[lines[1]];
 				const request = JSON.parse(String(lines[2]).slice(9) || 'null');
@@ -1919,6 +1924,32 @@ function roleplay() {
 				const bag = enc.items ? Object.entries(enc.items).filter(([, n]) => n > 0) : [];
 				if (player && bag.length) sendPanel(player, bag);
 			} else if (RP_PVP_FORMATS.has(this.format)) {
+				/*
+				 * Players battling each other, or a player and an NPC (Patch 1.5): each
+				 * team is checked against its character's box like an encounter, and a
+				 * battle that doesn't pass is called off before a turn. Each player is
+				 * told what applies to them: their character, items and locks.
+				 */
+				const teamOf = (userid) => {
+					const raw = this.rpTeams && this.rpTeams[userid];
+					try { return typeof raw === 'string' ? (raw.trim().startsWith('[') ? JSON.parse(raw) : Teams.unpack(raw)) : raw; } catch (e) { return null; }
+				};
+				const { problems, notes } = rp.pvpCheck(this.players, teamOf);
+				const esc = (text) => String(text).replace(/[&<>"']/g, ch => `&#${ch.charCodeAt(0)};`).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>').split('\n').join('<br />');
+				if (problems.length) {
+					this.rpInvalid = true;
+					this.room.add(`|raw|<div class="broadcast-red"><b>This RP battle is called off.</b><br />${problems.slice(0, 8).map(esc).join('<br />')}<br />` +
+						`Fix the team in the Teambuilder (only Pok&eacute;mon your character owns, at or below their box level), then challenge again. For anything-goes battles use <b>[Gen 9] RP Custom Game</b>.</div>`);
+					this.room.update();
+					void this.stream.write('>forcetie');
+					return out;
+				}
+				// Delivered with each player's first request (see sendPanel: the room is empty at the start).
+				this.rpNotes = {};
+				for (const player of this.players) {
+					const note = notes.get(player.id);
+					if (note && player.slot) this.rpNotes[player.slot] = `|raw|<div class="infobox"><small>${esc(note)}</small></div>`;
+				}
 				// Players battling each other: each sees a panel of their own character's items.
 				for (const player of this.players) {
 					const items = rp.pvpItemsFor(player.id);
@@ -1999,6 +2030,16 @@ function roleplay() {
 			return;
 		}
 		// Gimmicks need the story item: no Key Stone, no Mega Evolution, and so on.
+		// In PvP and NPC battles too (Patch 1.5), from the bag table; NPCs are free.
+		if (RP_PVP_FORMATS.has(this.format) && !this.rpEncounter) {
+			const bag = rp.bagFor(user.id);
+			const used = bag && bag.gimmicks && !bag.npc && rp.gimmickIn(data);
+			if (used && !bag.gimmicks[used]) {
+				const player = this.playerTable[user.id];
+				if (player) player.sendRoom(`|error|[Invalid choice] ${bag.character} can't ${rp.GIMMICK_NAME[used]} without ${rp.GIMMICK_ITEM[used]}. The story hands it out; choose again without it.`);
+				return;
+			}
+		}
 		const enc = this.rpEncounter && rp.encounters.get(this.rpEncounter);
 		if (enc && enc.gimmicks && user.id === enc.userid) {
 			const used = rp.gimmickIn(data);
