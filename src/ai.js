@@ -92,6 +92,8 @@ const FIXED_DAMAGE = {
 	'Sonic Boom': () => 20,
 	'Endeavor': (a, d, hp) => Math.max(0, hp - (a.originalCurHP || a.maxHP())),
 };
+// Stat drops the move data does not list, because the move does them in its own code.
+const UNLISTED_DROPS = { partingshot: { atk: -1, spa: -1 }, strengthsap: { atk: -1 }, spicyextract: { def: -2 } };
 const PHAZES = new Set(['roar', 'whirlwind', 'dragontail', 'circlethrow', 'royaldecree', 'yawn', 'encore']);
 const PROTECTS = new Set(['protect', 'detect', 'kingsshield', 'spikyshield', 'banefulbunker', 'silktrap', 'burningbulwark', 'obstruct', 'maxguard', 'endure']);
 const SCREENS = { reflect: 'Reflect', lightscreen: 'Light Screen', auroraveil: 'Aurora Veil' };
@@ -825,6 +827,15 @@ class BattleAI {
 				if (PHAZES.has(id)) return true;
 				// Strength Sap takes the Attack we bought and heals them with it.
 				if (id === 'strengthsap' && (boostsUp.atk || 0) > 0 && !defensive) return true;
+				/*
+				 * A move of theirs that lowers the very stat we are raising undoes the turn:
+				 * Blissey spent forty turns using Calm Mind into a Spiritomb's Parting Shot,
+				 * which took the Special Attack back every time.
+				 */
+				const data = PkmnDex.forGen(gen.num).moves.get(id);
+				// A few write their drops in their own code rather than in the data, so they are named here.
+				const drops = (data && data.boosts && data.target !== 'self' ? data.boosts : null) || UNLISTED_DROPS[id] || null;
+				if (drops && Object.entries(drops).some(([stat, v]) => v < 0 && (boostsUp[stat] || 0) > 0)) return true;
 			}
 		}
 		if (this.cfg.setupRisk !== false && ctx && ctx.me) {

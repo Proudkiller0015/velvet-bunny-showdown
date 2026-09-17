@@ -129,7 +129,14 @@ function flagsFor(replay) {
 		if (after.some(l => l.startsWith(`|-immune|${foeSide}`)) && !arrivedThisTurn) {
 			add(turn, 'immune', `${name} used ${moveName} on ${target}, which is immune`);
 		}
-		if (after.some(l => l.startsWith(`|-fail|${side}`) || l.startsWith(`|-fail|${foeSide}`))) add(turn, 'failed', `${name}'s ${moveName} failed`);
+		/*
+		 * Only our own move failing counts. The lines after a move include whatever the
+		 * opponent did next, and a Will-O-Wisp of theirs failing was being written down
+		 * as our Flamethrower failing - thirteen times in one game.
+		 */
+		const ourFail = after.findIndex(l => l.startsWith(`|-fail|${side}`));
+		const theirMove = after.findIndex(l => l.startsWith('|move|') && !l.startsWith(`|move|${side}`));
+		if (ourFail >= 0 && (theirMove < 0 || ourFail < theirMove)) add(turn, 'failed', `${name}'s ${moveName} failed`);
 		if (after.some(l => /\|-ability\|/.test(l) && /Keystone Legion/.test(l))) add(turn, 'keystone', `${name}'s ${moveName} hit the keystone: ${target} lived at 1 HP and cursed it`);
 		// Three turns of chip in a row.
 		const took = dealt[turn] || 0;

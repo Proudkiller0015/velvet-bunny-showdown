@@ -497,6 +497,13 @@ console.log('\n--- the Stockfish reviews: moves that fail, setup into its answer
 		// Dynamaxed, a Max Move hits harder than the move it came from.
 		check('a Max Move is scored as the Max Move', ai.maxRatio(gen, 'Iron Head', true) > 1.5, true);
 	}
+	for (const difficulty of ['champion', 'stockfish']) {
+		// Replay gen9rpou-5-tlix9t: forty turns of Calm Mind into a Parting Shot that took it straight back.
+		check(`${difficulty}: no boosting into a move that has been lowering that stat`, pickWith({
+			me: 'Blissey', myMoves: ['Calm Mind', 'Flamethrower', 'Soft-Boiled', 'Seismic Toss'],
+			foe: 'Spiritomb', foeMoves: ['Parting Shot', 'Will-O-Wisp'], foeHp: 95, myHp: 60,
+		}, difficulty, (r, s) => { s.mine.a.boosts = { spa: 1, spd: 1 }; s.turn = 30; s.mineCameIn = 20; }), c => c !== 'Calm Mind');
+	}
 	// Scarf: a base 85 Speed foe moved before our 300 Speed Pokemon with no priority.
 	const { request, state } = scenario({ me: 'Garchomp', myMoves: ['Earthquake'], foe: 'Heracross', foeMoves: ['Close Combat'] });
 	request.side.pokemon[0].stats.spe = 300;
