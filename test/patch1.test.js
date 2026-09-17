@@ -755,6 +755,23 @@ check(['walkingwake', 'dragapult', 'dragonitemega', 'lucariomegaz', 'deoxysspeed
 	const cursed = toll(true, 'Adamant', { atk: 252 });
 	check(cursed.dealt / plain.dealt > 1.8 && cursed.dealt / plain.dealt < 2.2, `Soul Toll doubles against a cursed target (${plain.dealt} -> ${cursed.dealt})`);
 	check(plain.healed <= 0 && cursed.healed > 0, `and heals only then (${plain.healed} vs ${cursed.healed})`);
+	{
+		// Like Hex: a statused foe takes double too, without the drain; cursed + statused does not stack.
+		const hit = (status, curse) => {
+			const bb = battle([{ species: 'Spiritomb', ability: 'Pressure', moves: ['soultoll'], nature: 'Adamant', evs: { atk: 252 } }], [{ species: 'Mudsdale', ability: 'Own Tempo', moves: ['splash'] }], [5, 5, 5, 5]);
+			const foe = bb.p2.active[0], tomb = bb.p1.active[0];
+			foe.maxhp = 9999; foe.hp = 9999;
+			if (status) foe.setStatus(status);
+			if (curse) foe.addVolatile('curse', tomb);
+			tomb.hp = 100;
+			bb.makeChoices('move 1', 'move 1');
+			const residual = (curse ? Math.floor(foe.baseMaxhp / 4) : 0) + (status === 'tox' || status === 'psn' ? Math.floor(foe.baseMaxhp / 8) : 0);
+			return { dealt: 9999 - foe.hp - residual, healed: tomb.hp - 100 };
+		};
+		const par = hit('par', false), both = hit('par', true);
+		check(par.dealt / plain.dealt > 1.7 && par.dealt / plain.dealt < 2.5 && par.healed <= 0, `and like Hex, a paralysed foe takes double without the drain (${par.dealt}, healed ${par.healed})`);
+		check(both.dealt / plain.dealt > 1.7 && both.dealt / plain.dealt < 2.5 && Math.abs(both.dealt - par.dealt) <= par.dealt * 0.15, `cursed and statused does not stack (${both.dealt})`);
+	}
 	const move = Dex.moves.get('soultoll');
 	const b = battle([{ species: 'Spiritomb', ability: 'Pressure', moves: ['soultoll'], nature: 'Modest', evs: { spa: 252 } }], [{ species: 'Snorlax', ability: 'Thick Fat', moves: ['splash'] }]);
 	const m = Object.assign({}, move);
