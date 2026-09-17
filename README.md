@@ -254,6 +254,12 @@ introduction is the whole beginner tutorial. The lobby is untouched.
   RP Battle / RP Doubles between players use the bag table the Discord bot pushes
   to `POST /rp/bags` (NPC characters get 5 of each), and RP Custom Game is
   unlimited. The replay feed carries each side's `itemsUsed` so Discord takes them off.
+- **Friendlies are left alone**: an RP Battle between two players is only checked
+  and locked when both agreed to it on Discord with `!pvp`. The bot pushes those
+  agreed pairs as `matches` with the bag table, and `isAgreed` in `src/rp-server.js`
+  decides. Without one the battle is a friendly: no box check, no gimmick lock, a
+  note saying it counts for nothing, and no EXP on the Discord side either. NPC
+  battles are sanctioned the same way, by `!trainerbattle`.
 - **The tutorial**: `/tutorial` (anyone, even guests) or `!tutorial` on Discord starts
   `[Gen 9] RP Tutorial`, which hands out both teams (Lv. 5 Pikachu vs a wild Rattata)
   with 1 Potion and 1 Poke Ball. Nothing is recorded and no replay reaches the feed.

@@ -355,10 +355,27 @@ function setBags(payload) {
 		next.set(id, entry);
 	}
 	bags = next;
-	return { ok: true, players: bags.size };
+	agreed = new Set((Array.isArray(payload.matches) ? payload.matches.slice(0, 500) : [])
+		.map(m => String(m).toLowerCase()).filter(m => /^[a-z0-9]+-[a-z0-9]+$/.test(m)));
+	return { ok: true, players: bags.size, matches: agreed.size };
 }
 function bagFor(userid) {
 	return bags.get(toID(userid)) || null;
+}
+
+/*
+ * The PvP matches both players agreed to on Discord with `!pvp`, pushed with
+ * the bags. Only these are checked the way the story is, and only these are
+ * settled for EXP; any other battle between two players is a friendly, so
+ * nothing is checked, nothing is locked, and nothing counts. Keys are the two
+ * Showdown ids, sorted and joined - the same id the bot keeps them under.
+ */
+let agreed = new Set();
+/** Did both players agree to this battle on Discord? */
+function isAgreed(ids) {
+	const pair = (Array.isArray(ids) ? ids : []).map(toID).filter(Boolean);
+	if (pair.length !== 2) return false;
+	return agreed.has(pair.sort().join('-'));
 }
 /** What a player in an RP PvP battle may use: their bag, or 5 of each for an NPC. */
 function pvpItemsFor(userid) {
@@ -375,11 +392,16 @@ function pvpItemsFor(userid) {
  * bot has a box for. NPCs battle with any team. Returns { problems, notes }:
  * problems call the battle off; notes tell each player what applies to them.
  */
-function pvpCheck(players, teamOf) {
+function pvpCheck(players, teamOf, agreedMatch = true) {
 	const problems = [];
 	const notes = new Map();
 	for (const player of players) {
 		const bag = bagFor(player.id);
+		// A friendly: nothing is checked, because nothing is recorded.
+		if (!agreedMatch) {
+			notes.set(player.id, friendlyNotice(bag));
+			continue;
+		}
 		if (!bag) {
 			problems.push(`**${player.name}** has no character linked: set your Showdown name with !showdown on Discord and select a character (or play RP Custom Game)`);
 			continue;
@@ -395,6 +417,15 @@ function pvpCheck(players, teamOf) {
 		notes.set(player.id, pvpNotice(bag));
 	}
 	return { problems, notes };
+}
+
+/** What applies in a friendly: nothing does, and here is how to make it count. */
+function friendlyNotice(bag) {
+	return [
+		`🤝 **Friendly battle**${bag && !bag.npc && bag.character ? ` as **${bag.character}**` : ''}: nothing here counts.`,
+		'Any team is fine and every gimmick is allowed. No EXP, no win or loss, and nothing comes off your bag.',
+		'To play one that counts, both of you run `!pvp` at each other on Discord first, then challenge again.',
+	].join(String.fromCharCode(10));
 }
 
 /** What applies to a player in this battle: their character, items, locks and badges. */
@@ -768,7 +799,7 @@ function httpRoute(deps, log) {
 }
 
 module.exports = {
-	pvpCheck, pvpNotice, verify, placeFor, requestEncounter, requestTutorial, completeEncounter, canUseItem, usedInLog, setBags, bagFor, pvpItemsFor, canUsePvpItem, NPC_ITEMS_EACH, publicView, canThrow, thrownInLog, resultFromLog, openFor,
+	pvpCheck, pvpNotice, friendlyNotice, isAgreed, verify, placeFor, requestEncounter, requestTutorial, completeEncounter, canUseItem, usedInLog, setBags, bagFor, pvpItemsFor, canUsePvpItem, NPC_ITEMS_EACH, publicView, canThrow, thrownInLog, resultFromLog, openFor,
 	checkTeam, gimmickIn, GIMMICK_ITEM, GIMMICK_NAME, sidesInLog,
 	httpRoute, encounters, RP_ROOM, CHALLENGE_MS, recordFinished, finishedSince,
 };

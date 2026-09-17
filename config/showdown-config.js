@@ -2067,7 +2067,10 @@ function roleplay() {
 					const raw = this.rpTeams && this.rpTeams[userid];
 					try { return typeof raw === 'string' ? (raw.trim().startsWith('[') ? JSON.parse(raw) : Teams.unpack(raw)) : raw; } catch (e) { return null; }
 				};
-				const { problems, notes } = rp.pvpCheck(this.players, teamOf);
+				// Agreed on Discord with `!pvp`? Then it is checked and it counts. If not
+				// it is a friendly: any team, every gimmick, and nothing recorded either side.
+				this.rpFriendly = !rp.isAgreed(this.players.map(p => p.id));
+				const { problems, notes } = rp.pvpCheck(this.players, teamOf, !this.rpFriendly);
 				const esc = (text) => String(text).replace(/[&<>"']/g, ch => `&#${ch.charCodeAt(0)};`).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>').split('\n').join('<br />');
 				if (problems.length) {
 					this.rpInvalid = true;
@@ -2164,7 +2167,7 @@ function roleplay() {
 		}
 		// Gimmicks need the story item: no Key Stone, no Mega Evolution, and so on.
 		// In PvP and NPC battles too (Patch 1.5), from the bag table; NPCs are free.
-		if (RP_PVP_FORMATS.has(this.format) && !this.rpEncounter) {
+		if (RP_PVP_FORMATS.has(this.format) && !this.rpEncounter && !this.rpFriendly) {
 			const bag = rp.bagFor(user.id);
 			const used = bag && bag.gimmicks && !bag.npc && rp.gimmickIn(data);
 			if (used && !bag.gimmicks[used]) {

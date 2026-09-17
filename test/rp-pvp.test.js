@@ -26,6 +26,9 @@ const CACHE = fs.mkdtempSync(path.join(os.tmpdir(), 'velvet-pvp-'));
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 let passed = 0, failed = 0;
 const check = (ok, what) => { console.log(`${ok ? 'ok  ' : 'FAIL'} ${what}`); ok ? passed++ : failed++; };
+// How both sides key a battle that counts: the two Showdown ids, sorted.
+const id = x => String(x || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+const pair = (a, b) => [id(a), id(b)].sort().join('-');
 
 const { publicKey, privateKey } = crypto.generateKeyPairSync('ed25519');
 const signed = payload => {
@@ -113,10 +116,10 @@ async function battle(a, b, teamA, teamB) {
 		body: JSON.stringify(signed({ players: [
 			{ showdown: ann.name, character: 'Ann', npc: false, items: { potion: 2 }, badges: 0, gimmicks: { mega: false, zmove: false, dynamax: false, tera: false }, box: [['Pikachu', 30, 0, 0], ['Chansey', 30, 0, 0]] },
 			{ showdown: bob.name, character: 'Cynthia', npc: true, items: {} },
-		] })),
+		], matches: [pair(ann.name, bob.name)] })),
 	});
 	const pushed = await res.json().catch(() => ({}));
-	check(pushed.ok && pushed.players === 2, `the bag table with boxes is accepted (${JSON.stringify(pushed)})`);
+	check(pushed.ok && pushed.players === 2 && pushed.matches === 1, `the bag table with boxes and the agreed match is accepted (${JSON.stringify(pushed)})`);
 
 	// Ann brings a Garchomp she doesn't own: called off.
 	await battle(ann, bob, [mon('Pikachu', 30, ['Thunderbolt']), mon('Garchomp', 30, ['Earthquake'])], [mon('Mewtwo', 100, ['Psystrike'])]);
@@ -137,6 +140,30 @@ async function battle(a, b, teamA, teamB) {
 		check(ann.said(/can't Terastallize without a Tera Orb/), 'a locked gimmick is refused with the reason');
 	} else {
 		check(false, 'the battle asked Ann for a move');
+	}
+
+	// Nobody agreed to this one on Discord: a friendly, so the same illegal team is fine.
+	const again = await fetch(`${BASE}/rp/bags`, {
+		method: 'POST', headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify(signed({ players: [
+			{ showdown: ann.name, character: 'Ann', npc: false, items: { potion: 2 }, badges: 0, gimmicks: { mega: false, zmove: false, dynamax: false, tera: false }, box: [['Pikachu', 30, 0, 0], ['Chansey', 30, 0, 0]] },
+			{ showdown: bob.name, character: 'Cynthia', npc: true, items: {} },
+		], matches: [] })),
+	});
+	check((await again.json().catch(() => ({}))).matches === 0, 'the agreed match can be taken away again');
+	await battle(ann, bob, [mon('Pikachu', 30, ['Thunderbolt']), mon('Garchomp', 30, ['Earthquake'])], [mon('Mewtwo', 100, ['Psystrike'])]);
+	check(!ann.said(/called off/), 'a friendly is not called off for a team outside the box');
+	check(ann.said(/Friendly battle/), 'and both players are told it counts for nothing');
+
+	// A gimmick nobody has is allowed in a friendly, because none of it is recorded.
+	for (let i = 0; i < 20 && !ann.requests.some(r => r.active); i++) await sleep(250);
+	const free = ann.requests.filter(r => r.active).pop();
+	if (free && ann.room) {
+		ann.send(`${ann.room}|/choose move 1 terastallize|${free.rqid}`);
+		await sleep(1500);
+		check(!ann.said(/can't Terastallize without a Tera Orb/), 'and a locked gimmick is not refused in a friendly');
+	} else {
+		check(false, 'the friendly asked Ann for a move');
 	}
 
 	if (failed && process.env.DEBUG_PVP) console.log(ann.lines.filter(l => !/\|(t:|j|l|c|n|init|title|gametype|gen|tier|rule|clearpoke|poke|teampreview|player|teamsize|raw\|<div class="infobox infobox-roomintro)\|/.test(l)).slice(-50).join('\n'));
