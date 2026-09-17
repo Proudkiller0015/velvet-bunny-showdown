@@ -257,6 +257,13 @@ class LadderBot {
 			battle.ai.setFormat(format);
 			const usage = this.builder.usage.get(format);
 			if (usage) battle.ai.setUsage(usage);
+			else {
+				// Not cached (the bots process restarted, or a team came from elsewhere):
+				// fetch it, as the lobby bot does, rather than play the battle blind to sets.
+				this.builder.prefetch(format)
+					.then(() => { const u = this.builder.usage.get(format); if (u) battle.ai.setUsage(u); })
+					.catch(() => {});
+			}
 			this.battles.set(roomid, battle);
 		}
 		const { state, ai } = battle;

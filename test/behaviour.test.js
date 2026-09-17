@@ -297,5 +297,33 @@ console.log('\n--- learning abilities during the battle ---');
 	check('the tracker records a move that landed', st2.opponent.a.notImmuneTo.has('Surf'), true);
 }
 
+console.log('\n--- an attacking stat dropped by someone else ---');
+{
+	// Garchomp at -4 Attack (Intimidate, Charm, Parting Shot...) against a Skarmory
+	// its bench resists: it used to go on clicking Earthquake, because only drops
+	// from its own moves were counted. Realistic HP, so nothing looks like a one-shot.
+	const drop = (atk, moves, difficulty) => {
+		const { request, state } = scenario({
+			me: 'Garchomp', myMoves: moves, foe: 'Skarmory', foeMoves: ['Brave Bird', 'Roost', 'Spikes'],
+			bench: [benchMon('Heatran', ['Magma Storm', 'Earth Power'], { condition: '341/341' }), benchMon('Kingambit', ['Kowtow Cleave', 'Sucker Punch'], { condition: '341/341' })],
+		});
+		request.side.pokemon[0].condition = '357/357';
+		state.mine.a.hp = 357; state.mine.a.maxhp = 357;
+		state.mine.a.boosts = { atk };
+		const ai = new BattleAI({ difficulty });
+		ai.setFormat('gen9ou');
+		const choice = ai.decide(request, state);
+		const n = /^move (\d)/.exec(choice);
+		return n ? moves[+n[1] - 1] : choice;
+	};
+	const physical = ['Earthquake', 'Dragon Claw', 'Stone Edge', 'Swords Dance'];
+	const mixed = ['Earthquake', 'Dragon Claw', 'Fire Blast', 'Swords Dance'];
+	for (const difficulty of ['champion', 'stockfish']) {
+		check(`${difficulty}: at 0 Attack it stays in`, drop(0, physical, difficulty), c => !/^switch/.test(c));
+		check(`${difficulty}: at -4 Attack with only physical moves it switches out`, drop(-4, physical, difficulty), c => /^switch/.test(c));
+		check(`${difficulty}: at -4 Attack with a special move it uses that`, drop(-4, mixed, difficulty), 'Fire Blast');
+	}
+}
+
 console.log(`\n=== ${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

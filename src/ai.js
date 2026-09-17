@@ -1343,7 +1343,19 @@ class BattleAI {
 			// Stuck with a self-dropped attacking stat and nothing that kills: switching resets it.
 			const bestData = PkmnDex.forGen(gen.num).moves.get(best.name);
 			const drained = bestData && bestData.category !== 'Status' && this.droppedFor(bestData, me) <= -2 && best.score < 70;
-			const losing = drained || (incoming >= myHpPct * 0.5 && best.score < 55) ||
+			/*
+			 * Crippled from outside: -2 or worse in the stat its best attack uses,
+			 * whoever did it - Intimidate, Charm, Parting Shot, a Sticky Web'd Speed
+			 * does not count. It went on clicking Earthquake at -4 Attack because only
+			 * its own Draco Meteor-style drops were counted. Switching resets it.
+			 */
+			// Judged on its best attack, not on the chosen move: at -4 Attack a Swords
+			// Dance only climbs back to -2, and leaving gets all four back at once.
+			const topHit = ranked.filter(r => r.kind === 'move' && r.damage > 0).sort((a, b) => b.score - a.score)[0];
+			const topData = topHit ? PkmnDex.forGen(gen.num).moves.get(topHit.name) : null;
+			const usedStat = topData && topData.category === 'Special' ? 'spa' : 'atk';
+			const crippled = !this.cfg.naive && this.cfg.cripple !== false && !!topData && ((me.boosts && me.boosts[usedStat]) || 0) <= -2 && best.score < 70;
+			const losing = drained || crippled || (incoming >= myHpPct * 0.5 && best.score < 55) ||
 				// Outsped and dying, with nothing lethal of our own to fire back:
 				// staying is a free knockout for them.
 				(outsped && best.score < 100);
@@ -1421,6 +1433,9 @@ class BattleAI {
 					const hp = cond ? +cond[1] / +cond[2] : 1;
 					if (hp < 0.75) margin = Math.max(0, margin - 20);
 				}
+				// A crippled attacker gets its stat back by leaving, so the bench needs to
+				// look only a little better than a hit it cannot land.
+				if (crippled || drained) margin = Math.min(margin, 8);
 				if (alt && alt.score > best.score + margin) return `switch ${alt.i}`;
 			}
 		}
