@@ -2514,7 +2514,8 @@ window.VelvetBuffs = {
 				"oxidize",
 				"thornedbouquet",
 				"strengthsap",
-				"mortalspin"
+				"mortalspin",
+				"nastyplot"
 			],
 			"abilities": [
 				"Masquerade"

@@ -1439,7 +1439,7 @@ const TRIO_BABIES = {
  * Strength Sap is recovery that needs no weather, Mortal Spin clears hazards and
  * spreads poison. HP 60 to 75 in unnerfs.js. Aimed at UU.
  */
-const ROSERADE = { ability: 'Masquerade', moves: ['thornedbouquet', 'strengthsap', 'mortalspin'] };
+const ROSERADE = { ability: 'Masquerade', moves: ['thornedbouquet', 'strengthsap', 'mortalspin', 'nastyplot'] };
 
 // Togekiss (Patch 1.5, the owner's call): a pivot.
 const TOGEKISS = ['uturn'];
