@@ -530,7 +530,7 @@ exports.MOVES = {
 	 */
 	soultoll: {
 		num: -35, gen: 9, name: "Soul Toll", type: "Ghost", category: "Physical",
-		basePower: 70, accuracy: 100, pp: 10, priority: 0,
+		basePower: 90, accuracy: 100, pp: 10, priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1, nosketch: 1 },
 		basePowerCallback(pokemon, target, move) {
 			return target && target.volatiles['curse'] ? move.basePower * 2 : move.basePower;
@@ -548,7 +548,7 @@ exports.MOVES = {
 		target: "normal", contestType: "Tough",
 		flavor: "The 108 spirits collect what they are owed.",
 		shortDesc: "Higher attacking stat. Vs a cursed foe: +1 priority, 2x power, heals 50% of damage.",
-		desc: "This move is special if the user's Special Attack is higher than its Attack (boosts included), physical otherwise. If the target is cursed, as by Curse or Keystone Legion, this move's power doubles to 140 and the user recovers 1/2 of the HP lost by the target, rounded half up. While an opposing Pokemon is cursed, this move has +1 priority.",
+		desc: "This move is special if the user's Special Attack is higher than its Attack (boosts included), physical otherwise. If the target is cursed, as by Curse or Keystone Legion, this move's power doubles to 180 and the user recovers 1/2 of the HP lost by the target, rounded half up. While an opposing Pokemon is cursed, this move has +1 priority.",
 	},
 	continentalheave: {
 		num: -20, gen: 9, name: "Continental Heave", type: "Normal", category: "Physical",
