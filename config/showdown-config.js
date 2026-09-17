@@ -2137,7 +2137,8 @@ function roleplay() {
 		const out = end.call(this, winnerName, ...rest);
 		if (replay && !wasEnded) {
 			try {
-				if (!(enc && enc.tutorial)) rp.recordFinished({
+				// Only the story's own battles: the ladder's RP tiers keep a replay, but Discord pays for what this feed calls a PvP battle.
+				if (rp.partOfTheStory(this.format) && !(enc && enc.tutorial)) rp.recordFinished({
 					kind: enc ? enc.kind : 'pvp',
 					format: this.format,
 					players: this.players.map(p => p.name),

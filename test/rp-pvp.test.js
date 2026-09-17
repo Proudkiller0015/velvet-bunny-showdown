@@ -6,7 +6,8 @@
  * players the way the Discord bot does, and plays [Gen 9] RP Battle between
  * them: a team with a Pokémon the character doesn't own is called off; a team
  * from the box starts, each player is told what applies to them, and a locked
- * gimmick is refused.
+ * gimmick is refused. It also checks which formats reach Discord's feed at all:
+ * the story's, and not the ladder tiers that share RP's name.
  *
  *   node test/rp-pvp.test.js
  */
@@ -87,6 +88,18 @@ async function battle(a, b, teamA, teamB) {
 
 (async () => {
 	const root = path.join(__dirname, '..');
+
+	// Discord pays EXP for what the feed hands it as a PvP battle, so only the
+	// story's own formats may reach it. gen9rpou and friends are ladder tiers
+	// played on RP's dex, and a win there is not a scene.
+	const rp = require(path.join(root, 'src', 'rp-server.js'));
+	for (const format of ['gen9rpbattle', 'gen9rpbattledoubles', 'gen9rpbattlewildencounter', 'gen9rpbattlewilddoubles', 'gen9rptutorial', 'gen9rpcustomgame']) {
+		check(rp.partOfTheStory(format), `${format} reaches the feed`);
+	}
+	for (const format of ['gen9rpou', 'gen9rpubers', 'gen9rpag', 'gen9rpuu', 'gen9rpru', 'gen9rprandombattle', 'gen9ou']) {
+		check(!rp.partOfTheStory(format), `${format} is a ladder tier and stays out of the feed`);
+	}
+
 	let log = '';
 	const server = spawn(process.execPath, [path.join(root, 'src', 'index.js')], {
 		cwd: root,

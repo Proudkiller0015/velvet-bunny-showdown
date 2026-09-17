@@ -680,6 +680,27 @@ function sideInLog(lines, slot, userid) {
 // ------------------------------------------------------------ replay feed
 
 /**
+ * The formats the story is played in: the encounters, the battles between
+ * players, and RP Custom Game, whose replay is posted but which settles
+ * nothing. Only these belong in the feed.
+ *
+ * The ladder's own tiers are named for the same RP - gen9rpou, gen9rpubers,
+ * gen9rprandombattle - because they are played on RP's dex. They are not part
+ * of the story, and Discord pays EXP for everything the feed hands it as a PvP
+ * battle, so a ladder game between two players paid out like a scene. Named
+ * one by one rather than matched on "rp": the tier list grows (NU, PU and ZU
+ * are coming), and a new rung must not quietly start paying.
+ */
+const STORY_FORMATS = new Set([
+	E.WILD_FORMAT, E.WILD_DOUBLE_FORMAT, E.TUTORIAL_FORMAT, E.TRAINER_FORMAT, E.TRAINER_DOUBLE_FORMAT, 'gen9rpcustomgame',
+]);
+
+/** Whether a finished battle in this format is the RP's business at all. */
+function partOfTheStory(format) {
+	return STORY_FORMATS.has(String(format || ''));
+}
+
+/**
  * Recently finished RP battles, newest last, for Discord's replay channels.
  *
  * In memory, so a restart forgets the last few - which only means a replay or
@@ -770,5 +791,5 @@ function httpRoute(deps, log) {
 module.exports = {
 	pvpCheck, pvpNotice, verify, placeFor, requestEncounter, requestTutorial, completeEncounter, canUseItem, usedInLog, setBags, bagFor, pvpItemsFor, canUsePvpItem, NPC_ITEMS_EACH, publicView, canThrow, thrownInLog, resultFromLog, openFor,
 	checkTeam, gimmickIn, GIMMICK_ITEM, GIMMICK_NAME, sidesInLog,
-	httpRoute, encounters, RP_ROOM, CHALLENGE_MS, recordFinished, finishedSince,
+	httpRoute, encounters, RP_ROOM, CHALLENGE_MS, recordFinished, finishedSince, partOfTheStory, STORY_FORMATS,
 };
