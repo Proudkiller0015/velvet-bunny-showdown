@@ -130,6 +130,8 @@ const TIERS = {
 	genesectshock: 'OU',
 	genesectburn: 'OU',
 	genesectchill: 'OU',
+	// Zygarde (50%), unbanned by the owner's call (Patch 1.5). Its Mega stays Uber.
+	zygarde: 'OU',
 
 	// Its only ability is Shadow Tag. Base Chandelure can pick Flash Fire and go
 	// on being an RU Pokemon, and the ability ban in the tiers below Ubers
