@@ -98,7 +98,13 @@ function attackValue(species, move, stat) {
 	const acc = move.accuracy === true ? 1 : (move.accuracy || 100) / 100;
 	const stab = species.types.includes(move.type) ? 1.5 : 1;
 	const fits = !stat || move.category === stat ? 1 : 0.5;
-	const ours = move.num < 0 ? 1.3 : 1;
+	/*
+	 * This server's own attacks are built to be used, so they are worth a little more
+	 * than their base power reads - but a *signature* is the point of its owner, while
+	 * a shared move (Wave Charge, Oxidize) is just another option. Alomomola replaced
+	 * Scald with Wave Charge because both counted the same.
+	 */
+	const ours = move.num < 0 ? (move.velvetShared ? 1.08 : 1.3) : 1;
 	// Foul Play hits with the target's Attack: a poor attack for anything that has its own.
 	const drawback = AWKWARD.includes(move.id) ? 0.4 : move.id === 'foulplay' ? 0.6 : move.recoil ? 0.85 : 1;
 	return power * (0.5 + 0.5 * acc) * stab * fits * ours * drawback;
@@ -184,14 +190,38 @@ function pickMoves(dex, species, set, rng = Math.random) {
 		if (!options.length) return null;
 		// Mostly the best, sometimes the next: variety without nonsense.
 		options.sort((x, y) => weight(y) - weight(x));
-		return weighted(rng, options.slice(0, 3).map((m, i) => [m, weight(m) * [1, 0.35, 0.15][i]]));
+		// A wall has one right answer more often than an attacker does, so it wanders less.
+		const spread = defensive ? [1, 0.12, 0.04] : [1, 0.35, 0.15];
+		return weighted(rng, options.slice(0, 3).map((m, i) => [m, weight(m) * spread[i]]));
 	};
 	const attack = m => m.category !== 'Status' && !AWKWARD.includes(m.id);
 
-	// Our signature attack first, if it has one: the Pokemon was rebuilt around it.
-	take(best(m => attack(m) && m.num < 0 && m.flags.nosketch));
+	/*
+	 * What a defensive Pokemon wants out of an attack is not damage.
+	 *
+	 * Alomomola kept taking a 50 base power Water move that raises its Speed over
+	 * Scald, because raw power is all attackValue reads. A wall's attack earns its
+	 * slot by burning, poisoning or knocking an item off, so those count for more
+	 * here - and only here, where the Pokemon is not in the team to hit things.
+	 */
+	const defensive = BULKY_ROLES.includes(set.role) || SUPPORT_ROLES.includes(set.role);
+	const wallValue = m => {
+		let value = attackValue(species, m, stat);
+		if (!defensive) return value;
+		if (m.secondary && m.secondary.status) value *= 1.7;
+		if (m.id === 'knockoff' || m.id === 'scald' || m.id === 'lavaplume') value *= 1.3;
+		// A pivot is how a wall does its job: it comes in, does something, and leaves.
+		if (PIVOTS.includes(m.id)) value *= 1.6;
+		// A move handed round the server is not what a wall is here for.
+		if (m.velvetShared) value *= 0.8;
+		return value;
+	};
+	// Its own signature first, if it has one: the Pokemon was rebuilt around it. A move
+	// this server shares out is not a signature and takes its chances with the rest.
+	take(best(m => attack(m) && m.num < 0 && !m.velvetShared));
 	// STAB.
-	take(best(m => attack(m) && species.types.includes(m.type) && !chosen.some(c => c.type === m.type)) || (chosen.length ? null : best(m => attack(m) && species.types.includes(m.type))));
+	take(best(m => attack(m) && species.types.includes(m.type) && !chosen.some(c => c.type === m.type), wallValue) ||
+		(chosen.length ? null : best(m => attack(m) && species.types.includes(m.type), wallValue)));
 	// The role's job.
 	if (SETUP_ROLES.includes(set.role)) {
 		take(best(m => (stat === 'Physical' ? PHYSICAL_SETUP : SPECIAL_SETUP).includes(m.id) || (m.id === 'shellsmash'), m => (m.num < 0 ? 2 : 1)));
@@ -205,12 +235,12 @@ function pickMoves(dex, species, set, rng = Math.random) {
 	}
 	if (set.role === 'AV Pivot' || set.role === 'Fast Attacker') take(best(m => PIVOTS.includes(m.id)));
 	// A second STAB, then coverage of new types, then anything useful.
-	take(best(m => attack(m) && species.types.includes(m.type) && !chosen.some(c => c.type === m.type)));
+	take(best(m => attack(m) && species.types.includes(m.type) && !chosen.some(c => c.type === m.type), wallValue));
 	while (chosen.length < 4) {
-		const next = best(m => attack(m) && !chosen.some(c => c.category !== 'Status' && c.type === m.type)) ||
+		const next = best(m => attack(m) && !chosen.some(c => c.category !== 'Status' && c.type === m.type), wallValue) ||
 			best(m => m.category === 'Status' && !(SETUP.includes(m.id) && chosen.some(c => SETUP.includes(c.id))) &&
 				!(PHYSICAL_SETUP.includes(m.id) && stat === 'Special') && !(SPECIAL_SETUP.includes(m.id) && stat === 'Physical'), m => (m.num < 0 ? 2 : 1)) ||
-			best(m => attack(m));
+			best(m => attack(m), wallValue);
 		if (!next) break;
 		take(next);
 	}

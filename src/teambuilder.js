@@ -433,9 +433,15 @@ class TeamBuilder {
 			const roles = RS.roleSets(ctx.dex, species.name);
 			if (!roles.length) return null;
 			const changed = this.changedSpecies();
+			/*
+			 * Only for a Pokemon this server actually rebuilt: its sheet changed, it has an
+			 * ability of ours, or it owns a signature move. Being able to learn a move we
+			 * handed round (Wave Charge, Oxidize) is not the same thing - that took Smogon's
+			 * Alomomola set away and gave a defensive Pokemon a Speed-boosting attack.
+			 */
 			const ours = changed[species.id] || changed[ctx.dex.species.get(species.baseSpecies).id] ||
 				roles.some(r => r.abilities.some(a => ctx.dex.abilities.get(a).num < 0) ||
-					r.movepool.some(m => ctx.dex.moves.get(m).num < 0));
+					r.movepool.some(m => { const move = ctx.dex.moves.get(m); return move.num < 0 && !move.velvetShared; }));
 			if (!ours) return null;
 			// One set per role, and the one that makes the most of this Pokemon wins: what
 			// its attacks are worth, with its own moves and ability counting for more.
@@ -760,6 +766,31 @@ class TeamBuilder {
 	 */
 	moveWorth(ctx, species, move, set) {
 		if (move.category === 'Status') {
+			/*
+			 * What a status move is actually for.
+			 *
+			 * Every one of them scored 15, so the cheapest attack outbid a wall's whole
+			 * job: Alomomola swapped Wish for a 50 base power Water move that raises its
+			 * Speed, which is nothing it wants. Recovery, hazards, hazard control and a
+			 * pivot are the moves those Pokemon are in the team for, and on something
+			 * bulky they are worth more than a mediocre attack.
+			 */
+			const bulk = species.baseStats ? species.baseStats.hp + species.baseStats.def + species.baseStats.spd : 0;
+			const tanky = bulk >= 300;
+			const id = move.id;
+			const RECOVERY = ['recover', 'roost', 'softboiled', 'slackoff', 'synthesis', 'moonlight', 'morningsun',
+				'milkdrink', 'shoreup', 'strengthsap', 'wish', 'rest', 'healorder', 'junglehealing', 'lunarblessing', 'chrysalisveil'];
+			const CONTROL = ['stealthrock', 'spikes', 'toxicspikes', 'stickyweb', 'defog', 'rapidspin', 'mortalspin', 'tidyup', 'courtchange'];
+			const PIVOT = ['teleport', 'partingshot', 'chillyreception', 'shedtail', 'batonpass'];
+			const STATUS = ['willowisp', 'thunderwave', 'toxic', 'spore', 'sleeppowder', 'glare', 'nuzzle', 'yawn', 'gleamstalk'];
+			const SHIELD = ['protect', 'detect', 'substitute', 'kingsshield', 'banefulbunker', 'silktrap', 'burningbulwark'];
+			const PHAZE = ['whirlwind', 'roar', 'dragontail', 'circlethrow', 'haze', 'clearsmog', 'encore', 'taunt', 'healbell', 'aromatherapy'];
+			if (RECOVERY.includes(id)) return tanky ? 110 : 60;
+			if (CONTROL.includes(id)) return 85;
+			if (PIVOT.includes(id)) return 70;
+			if (STATUS.includes(id)) return tanky ? 75 : 55;
+			if (SHIELD.includes(id)) return tanky ? 65 : 40;
+			if (PHAZE.includes(id)) return tanky ? 70 : 50;
 			// A setup move is worth having; a second one usually is not - and the
 			// move being scored is not its own second one. Comparing against the
 			// whole set meant Shell Smash scored as a redundant setup move because
