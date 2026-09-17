@@ -86,6 +86,22 @@ const SETS = {
 	// The owner's own set (Patch 1.5): the Calm special wall that curses what it
 	// survives, then drains it. The nature and spread are read by the bots' team
 	// builders (src/role-sets.js); Random Battle ignores them.
+	// Glaceon sets its own snow with Diamond Dust and doubles its Speed in it: the sweeper
+	// that ability was written for. Showdown only remembers the Wish/Protect Glaceon of 2010.
+	glaceon: {
+		level: 80,
+		sets: [
+			{
+				role: 'Setup Sweeper',
+				movepool: ['Blizzard', 'Freeze-Dry', 'Earth Power', 'Aurora Veil'],
+				abilities: ['Diamond Dust'],
+				teraTypes: ['Ice'],
+				item: 'Life Orb',
+				nature: 'Timid',
+				evs: { spa: 252, spd: 4, spe: 252 },
+			},
+		],
+	},
 	spiritomb: {
 		level: 88,
 		sets: [

@@ -408,9 +408,65 @@ class TeamBuilder {
 		return set;
 	}
 
+	/** The species whose sheets this server changed (data/velvet/unnerfs.js). */
+	changedSpecies() {
+		if (this._changed) return this._changed;
+		this._changed = {};
+		try {
+			for (const id of require('pokemon-showdown/dist/data/velvet/unnerfs.js').CHANGED.species || []) this._changed[id] = true;
+		} catch (e) { /* no custom data installed */ }
+		return this._changed;
+	}
+
+	/**
+	 * A set for a Pokemon this server rebuilt, from its role sets (src/role-sets.js).
+	 *
+	 * Smogon's analyses and Showdown's Random Battle data describe the Pokemon we
+	 * changed, not the one we have: they gave Spiritomb Infiltrator and no Soul
+	 * Toll, Glaceon a Calm Mind Wish set rather than the snow sweeper, and Togekiss
+	 * three moves and an Eviolite. Where a species carries an ability or a move of
+	 * ours, its own kit comes first.
+	 */
+	velvetSet(ctx, species, rng) {
+		try {
+			const RS = require('./role-sets');
+			const roles = RS.roleSets(ctx.dex, species.name);
+			if (!roles.length) return null;
+			const changed = this.changedSpecies();
+			const ours = changed[species.id] || changed[ctx.dex.species.get(species.baseSpecies).id] ||
+				roles.some(r => r.abilities.some(a => ctx.dex.abilities.get(a).num < 0) ||
+					r.movepool.some(m => ctx.dex.moves.get(m).num < 0));
+			if (!ours) return null;
+			// One set per role, and the one that makes the most of this Pokemon wins: what
+			// its attacks are worth, with its own moves and ability counting for more.
+			let set = null, best = -Infinity;
+			for (const role of roles) {
+				const candidate = RS.buildSet(ctx.dex, species.name, { role: role.role, rng, level: ctx.level });
+				if (!candidate || candidate.moves.length < 3) continue;
+				let value = 0;
+				for (const name of candidate.moves) {
+					const move = ctx.dex.moves.get(name);
+					if (move.category !== 'Status') value += RS.attackValue(species, move);
+					if (move.num < 0) value += 40;
+				}
+				if (ctx.dex.abilities.get(candidate.ability).num < 0) value += 60;
+				if (value > best) { best = value; set = candidate; }
+			}
+			if (!set || set.moves.length < 3) return null;
+			return {
+				moves: set.moves, ability: set.ability, item: set.item,
+				nature: set.nature, evs: { ...set.evs }, teraType: set.teraType,
+				source: 'velvet',
+			};
+		} catch (e) { return null; }
+	}
+
 	curatedSet(ctx, species, rng) {
 		const id = species.id, gen = ctx.gen;
 
+		// What this server made of it comes before what the outside world remembers.
+		const ours = this.velvetSet(ctx, species, rng);
+		if (ours && ours.moves.length) return ours;
 		const smogon = this.smogonSet(ctx, species, rng);
 		if (smogon && smogon.moves.length) return smogon;
 		const usage = this.usageSet(ctx, species, rng);
@@ -1109,9 +1165,12 @@ class TeamBuilder {
 		 * and being ignored.
 		 */
 		const buffed = this.buffed();
+		// Anything that has earned its place in this server's own games is drafted like a staple.
+		const here = this.local(ctx.id);
+		const localOf = s => { const row = here && (here[s.name] || here[s.baseSpecies]); return row ? row.score : 0; };
 		const analysed = [], used = [], rest = [];
 		for (const s of pool) {
-			if (has(sets, s)) analysed.push(s);
+			if (has(sets, s) || localOf(s) > 0) analysed.push(s);
 			else if (usageOf(s) > 0 || buffed[s.id]) used.push(s);
 			else rest.push(s);
 		}
@@ -1121,7 +1180,7 @@ class TeamBuilder {
 			const remaining = list.slice();
 			const out = [];
 			while (remaining.length) {
-				const weights = remaining.map(s => usageOf(s) + 0.001);
+				const weights = remaining.map(s => usageOf(s) + 3 * localOf(s) + 0.001);
 				const total = weights.reduce((a, b) => a + b, 0);
 				let r = rng() * total, i = 0;
 				for (; i < remaining.length; i++) { r -= weights[i]; if (r <= 0) break; }
@@ -1168,6 +1227,90 @@ class TeamBuilder {
 	}
 
 	/**
+	 * The Pokemon a team in this format has to be ready for.
+	 *
+	 * The format's most used, and everything this server buffed - a buffed Pokemon
+	 * is a threat its usage numbers know nothing about, and on this server they are
+	 * what people actually bring. Cheap and cached: species and their STAB types.
+	 */
+	/**
+	 * What this server's own battles say, for a format Smogon has never seen.
+	 *
+	 * Written by scripts/rp-usage.js out of the saved replays: how often each
+	 * Pokemon turned up here and how many knockouts it scored. For [Gen 9] RP OU
+	 * this is the only real usage data there is.
+	 */
+	local(formatId) {
+		if (this._local === undefined) {
+			try { this._local = require('pokemon-showdown/dist/data/velvet/rp-usage.json'); } catch (e) {
+				try { this._local = require('../data/velvet/rp-usage.json'); } catch (e2) { this._local = null; }
+			}
+		}
+		return (this._local && this._local.formats && this._local.formats[formatId]) || null;
+	}
+
+	threats(ctx) {
+		if (this.threatCache && this.threatCache.id === ctx.id) return this.threatCache.list;
+		const stats = this.usage.get(ctx.id);
+		const here = this.local(ctx.id);
+		const usageOf = name => {
+			const e = stats && stats[name];
+			return e && e.usage ? (e.usage.weighted || e.usage.raw || 0) : 0;
+		};
+		// What has actually knocked things out here counts for more than what Smogon's ladder plays.
+		const localOf = name => {
+			const row = here && (here[name] || here[String(name).split('-')[0]]);
+			return row ? row.score : 0;
+		};
+		const scored = ctx.pool.map(s => ({ s, use: usageOf(s.name) + 3 * localOf(s.name) }))
+			.filter(x => x.use > 0)
+			.sort((a, b) => b.use - a.use)
+			.slice(0, 16);
+		const list = scored.map(({ s }) => ({
+			name: s.name,
+			types: s.types.slice(),
+			speed: s.baseStats.spe,
+			physical: s.baseStats.atk >= s.baseStats.spa,
+		}));
+		this.threatCache = { id: ctx.id, list };
+		return list;
+	}
+
+	/**
+	 * How much of the threat list a team has an answer to.
+	 *
+	 * An answer is a member that resists (or is immune to) one of the threat's own
+	 * types and is not weak to the other, or one that outruns it and hits it super
+	 * effectively. Type-level and rough on purpose: it is a draft filter, not a
+	 * damage calculation. The ladder bot's teams passed every structural rule and
+	 * still had nothing that could stand in front of a snow sweeper.
+	 */
+	threatCover(ctx, team) {
+		const dex = ctx.dex;
+		const mult = (type, types) => {
+			if (!dex.getImmunity(type, types)) return 0;
+			return Math.pow(2, dex.getEffectiveness(type, types));
+		};
+		const list = this.threats(ctx);
+		if (!list.length) return 1;
+		let answered = 0;
+		for (const threat of list) {
+			const ok = team.some(set => {
+				const species = dex.species.get(set.species);
+				if (!species.exists) return false;
+				const resists = threat.types.some(t => mult(t, species.types) <= 0.5);
+				const frail = threat.types.some(t => mult(t, species.types) >= 2);
+				if (resists && !frail) return true;
+				const faster = species.baseStats.spe > threat.speed;
+				const hits = species.types.some(t => mult(t, threat.types) >= 2);
+				return faster && hits;
+			});
+			if (ok) answered++;
+		}
+		return answered / list.length;
+	}
+
+	/**
 	 * Six sets that make a team, out of the draft.
 	 *
 	 * Sets come in usage order, so earlier ones are what the format actually
@@ -1184,7 +1327,10 @@ class TeamBuilder {
 			let logic = 0;
 			try { logic = TeamLogic.score(ctx.dex, team, { stage }).score; } catch (e) { logic = 0; }
 			const usage = team.reduce((n, set) => n + rankOf.get(set), 0) / team.length;
-			return logic + 20 * usage + rng() * 0.01;
+			let cover = 1;
+			try { cover = this.threatCover(ctx, team); } catch (e) { cover = 1; }
+			// Answering the format's threats is worth about as much as the checklist itself.
+			return logic + 20 * usage + 30 * cover + rng() * 0.01;
 		};
 		let team = drafted.slice(0, ctx.size);
 		let best = value(team);

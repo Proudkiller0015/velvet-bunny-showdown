@@ -284,7 +284,7 @@ function buildSet(dex, name, { role = null, rng = Math.random, level = 100, allo
 	const species = dex.species.get(name);
 	const sets = roleSets(dex, name, legal);
 	if (!sets.length) return null;
-	const set = (role && sets.find(s => s.role === role)) || sets[Math.floor(rng() * sets.length)];
+	const set = (role && sets.find(s => s.role === role)) || sets[Math.min(sets.length - 1, Math.floor(rng() * sets.length))];
 	const { moves, stat } = pickMoves(dex, species, set, rng);
 	const spread = spreadFor(species, set, stat);
 	const nature = set.nature || spread.nature;

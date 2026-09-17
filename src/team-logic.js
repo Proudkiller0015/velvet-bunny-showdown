@@ -137,6 +137,12 @@ function analyze(dex, sets) {
 		setupAnswers: who(s => has(s, MOVES.phaze) || has(s, MOVES.haze) || has(s, ['willowisp', 'thunderwave', 'glare', 'nuzzle']) || ABILITIES.setupAnswer.includes(ability(s)) || priority(s)),
 		stallbreak: who(s => has(s, MOVES.stallbreak) || ABILITIES.stallbreak.includes(ability(s)) || ['choiceband', 'choicespecs'].includes(item(s))),
 		setup: who(s => has(s, MOVES.setup)),
+		// Something that actually wins a game: a sweeper that boosts, or a breaker holding
+		// a Choice item or a Life Orb with real attacks. A team of six walls has none.
+		winCondition: who(s => {
+			const attacks = (s.moves || []).filter(m => dex.moves.get(m).category !== 'Status').length;
+			return (has(s, MOVES.setup) && attacks >= 2) || (['choiceband', 'choicespecs', 'choicescarf', 'lifeorb'].includes(item(s)) && attacks >= 2);
+		}),
 		physical: sets.filter((s, i) => sides[i] === 'physical').map(s => s.species),
 		special: sets.filter((s, i) => sides[i] === 'special').map(s => s.species),
 		defensive: who(defensive),
@@ -183,10 +189,14 @@ function issues(report, { stage = 'full', themed = false } = {}) {
 	for (const [name, w] of weathers) {
 		if (!w.setters.length && w.abusers.length) add(stage === 'full' ? 'hard' : 'soft', `${w.abusers.join(', ')} ${w.abusers.length === 1 ? 'needs' : 'need'} ${name} and nothing sets it`);
 	}
+	for (const [name, w] of weathers) {
+		if (w.setters.length && !w.abusers.length && stage === 'full') add('soft', `${w.setters.join(', ')} sets ${name} and nothing on the team uses it`);
+	}
 	const setterWeathers = weathers.filter(([, w]) => w.setters.length).map(([name]) => name);
 	if (setterWeathers.length > 1) add('soft', `the team sets ${setterWeathers.join(' and ')}, which undo each other`);
 	if (stage === 'basics') return out;
 
+	if (!report.winCondition.length) add(report.style === 'stall' ? 'soft' : 'hard', 'nothing that wins a game on its own (a setup sweeper, or a breaker with a Choice item or Life Orb)');
 	if (!report.stealthRock.length) add('hard', 'no Stealth Rock');
 	if (report.stealthRock.length > 1) add('soft', `${report.stealthRock.length} Stealth Rock setters (${report.stealthRock.join(', ')}); one is enough`);
 	if (report.rockWeak.length >= 2 && !report.removal.length) add(report.style === 'hyper offense' ? 'soft' : 'hard', `no hazard removal, and ${report.rockWeak.join(', ')} take big Stealth Rock damage`);

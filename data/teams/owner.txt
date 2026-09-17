@@ -1,0 +1,55 @@
+Spiritomb @ Leftovers
+Ability: Keystone Legion
+EVs: 252 HP / 4 Def / 252 SpD
+Calm Nature
+- Soul Toll
+- Strength Sap
+- Will-O-Wisp
+- Parting Shot
+
+Glaceon @ Life Orb
+Ability: Diamond Dust
+Tera Type: Ice
+EVs: 252 SpA / 4 SpD / 252 Spe
+Timid Nature
+- Blizzard
+- Freeze-Dry
+- Earth Power
+- Aurora Veil
+
+Garchomp @ Rocky Helmet
+Ability: Rough Skin
+EVs: 252 HP / 252 Def / 4 Spe
+Impish Nature
+- Stealth Rock
+- Spikes
+- Dragon Tail
+- Earthquake
+
+Roserade @ Black Sludge
+Ability: Masquerade
+EVs: 252 SpA / 4 SpD / 252 Spe
+Timid Nature
+- Thorned Bouquet
+- Oxidize
+- Nasty Plot
+- Mortal Spin
+
+Togekiss @ Leftovers
+Ability: Serene Grace
+Tera Type: Fairy
+EVs: 252 HP / 252 SpA / 4 SpD
+Modest Nature
+- Air Slash
+- Alluring Voice
+- Flamethrower
+- U-turn
+
+Lucario @ Lucarionite Z
+Ability: Inner Focus
+EVs: 252 SpA / 4 SpD / 252 Spe
+Timid Nature
+- Aura Sphere
+- Flash Cannon
+- Nasty Plot
+- Dark Pulse
