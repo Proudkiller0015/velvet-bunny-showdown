@@ -736,8 +736,8 @@ check(['walkingwake', 'dragapult', 'dragonitemega', 'lucariomegaz', 'deoxysspeed
 	check(!!foe.volatiles['curse'] && foe.hp < foeHp, `and the attacker is cursed and loses HP (${foeHp} -> ${foe.hp})`);
 	b.makeChoices('move 1', 'move 1');
 	check(tomb.fainted || tomb.hp === 0, 'spent: the next KO hit lands while nothing has fainted');
-	check(['strengthsap', 'partingshot', 'knockoff'].every(m => learns('spiritomb', m)) && !['ragefist', 'bittermalice', 'infernalparade', 'lastrespects'].some(m => learns('spiritomb', m)) && Dex.species.get('spiritomb').natDexTier === 'UU' && Dex.species.get('spiritomb').baseStats.hp === 85,
-		'Spiritomb: 85 HP, learns Strength Sap, Parting Shot and Knock Off (no other Pokemon signature moves), and is UU');
+	check(['strengthsap', 'partingshot', 'knockoff'].every(m => learns('spiritomb', m)) && !['ragefist', 'bittermalice', 'infernalparade', 'lastrespects'].some(m => learns('spiritomb', m)) && Dex.species.get('spiritomb').natDexTier === 'UU' && Dex.species.get('spiritomb').baseStats.hp === 85 && Dex.species.get('spiritomb').baseStats.def === 118 && Dex.species.get('spiritomb').baseStats.spd === 118,
+		'Spiritomb: 85 HP, 118/118 defences, learns Strength Sap, Parting Shot and Knock Off (no other Pokemon signature moves), and is UU');
 }
 // Soul Toll: doubled and draining against a cursed target; physical or special by the higher stat.
 {

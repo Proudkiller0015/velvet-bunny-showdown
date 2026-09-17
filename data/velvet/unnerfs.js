@@ -162,7 +162,7 @@ const SPECIES_STATS = {
 	pikachu: { hp: 45, atk: 80, def: 50, spa: 75, spd: 60, spe: 120 },
 	eevee: { hp: 65, atk: 75, def: 70, spa: 65, spd: 85, spe: 75 },
 	// Patch 1.5: Spiritomb's 50 HP undercut the bulk it is built on.
-	spiritomb: { hp: 85 },
+	spiritomb: { hp: 85, def: 118, spd: 118 },
 };
 
 /*
