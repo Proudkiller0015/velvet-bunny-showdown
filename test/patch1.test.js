@@ -831,7 +831,7 @@ check(['walkingwake', 'dragapult', 'dragonitemega', 'lucariomegaz', 'deoxysspeed
 	check(Object.values(Dex.species.get('roserade').abilities).includes('Venom Garden') && Dex.species.get('roserade').baseStats.hp === 75 && Dex.species.get('roserade').baseStats.spe === 101 && Dex.species.get('roserade').natDexTier === 'UU' &&
 		['thornedbouquet', 'strengthsap', 'mortalspin'].every(x => learns('roserade', x)) && !learns('roselia', 'thornedbouquet') && move.flags.nosketch,
 		'Roserade: Venom Garden, 75 HP, 101 Speed, Thorned Bouquet (its own), Strength Sap, Mortal Spin, UU');
-	check(learns('togekiss', 'uturn'), 'Togekiss learns U-turn');
+	check(learns('togekiss', 'uturn') && Dex.species.get('togekiss').baseStats.spe === 101, 'Togekiss learns U-turn and has 101 Speed');
 }
 // Thorned Bouquet: Grass, and also Poison against a poisoned target.
 {

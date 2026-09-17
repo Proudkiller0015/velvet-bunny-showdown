@@ -165,6 +165,8 @@ const SPECIES_STATS = {
 	spiritomb: { hp: 85, def: 118, spd: 118 },
 	// Patch 1.5: Roserade, 60 to 75 HP and 90 to 101 Speed.
 	roserade: { hp: 75, spe: 101 },
+	// Patch 1.5: Togekiss, 80 to 101 Speed.
+	togekiss: { spe: 101 },
 };
 
 /*
