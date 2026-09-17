@@ -10,6 +10,24 @@
 
 const IDENT = /^(p[12])([a-c]?): (.*)$/;
 
+// The server's own dex, so our own species and abilities are in it.
+let DEX = null;
+function dex() {
+	if (!DEX) { try { DEX = require('pokemon-showdown').Dex; } catch (e) { DEX = false; } }
+	return DEX || null;
+}
+const toId = s => String(s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+
+/** Whether a species is allowed this ability at all - including the ones we added. */
+function canHave(species, ability) {
+	const d = dex();
+	if (!d || !species) return false;
+	const sheet = d.species.get(species);
+	if (!sheet || !sheet.exists) return false;
+	const want = toId(ability);
+	return Object.values(sheet.abilities || {}).some(a => toId(a) === want);
+}
+
 function parseIdent(raw) {
 	const m = IDENT.exec(raw || '');
 	if (!m) return null;
@@ -87,7 +105,29 @@ class BattleState {
 		const of = parts.find(p => /^\[of\] p[12][a-c]?: /.test(p));
 		if (from) {
 			const ability = from.slice('[from] ability: '.length).trim();
-			const owner = of ? this.slotOf(of.slice('[of] '.length)) : this.slotOf(args[0]);
+			/*
+			 * [of] is not the ability's owner, it is the other Pokemon involved, and
+			 * which one that is depends on the ability: Earth Eater heals the one the
+			 * line names and blames the attacker, while Rough Skin damages the one the
+			 * line names and belongs to the attacker. Reading [of] as the owner taught
+			 * the bot that its own Glaceon had Earth Eater, so it fired Earth Power
+			 * into a Mega Heatran, healed it, and fired again the turn after.
+			 *
+			 * So ask which of the two can actually have it, and only fall back to the
+			 * old reading when the dex cannot say.
+			 */
+			const named = this.slotOf(args[0]);
+			const other = of ? this.slotOf(of.slice('[of] '.length)) : null;
+			const speciesOf = slot => {
+				if (!slot) return null;
+				const store = slot.side === this.myPlayer ? this.mine : this.opponent;
+				return (store[slot.slot] && store[slot.slot].species) || slot.name;
+			};
+			let owner = null;
+			const namedFits = named && canHave(speciesOf(named), ability);
+			const otherFits = other && canHave(speciesOf(other), ability);
+			if (namedFits !== otherFits) owner = namedFits ? named : other;
+			else owner = other || named;
 			if (owner && ability) {
 				const store = owner.side === this.myPlayer ? this.mine : this.opponent;
 				if (store[owner.slot]) store[owner.slot].ability = ability;
