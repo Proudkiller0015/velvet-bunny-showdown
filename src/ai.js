@@ -1055,6 +1055,8 @@ class BattleAI {
 			worst = Math.max(worst, ...back);
 		}
 
+		// What the hazards on our side take on the way in (Raging Bolt came in on Stealth Rock and poison).
+		worst += this.entryHazards(gen, me, entry, state);
 		let score = best - worst;
 
 		// A boosted foe is exactly what Ditto answers: it arrives with the same
@@ -1128,6 +1130,30 @@ class BattleAI {
 			return copy;
 		}
 		return this.myPokemon(gen, entry, state);
+	}
+
+	/** Per cent of its HP a Pokemon loses to our side's Stealth Rock and Spikes coming in. */
+	entryHazards(gen, mon, entry, state) {
+		if (this.cfg.naive || this.cfg.hazards === false || !state || !state.hazards) return 0;
+		const side = state.hazards[state.myPlayer] || {};
+		const item = String((entry && entry.item) || '').toLowerCase().replace(/[^a-z]/g, '');
+		const ability = String((entry && (entry.ability || entry.baseAbility)) || '').toLowerCase().replace(/[^a-z]/g, '');
+		if (item === 'heavydutyboots' || ability === 'magicguard') return 0;
+		const types = (mon && mon.types) || [];
+		const dex = PkmnDex.forGen(gen.num);
+		let pct = 0;
+		if (side['Stealth Rock']) {
+			let mult = 1;
+			for (const t of types) {
+				const taken = ((dex.types.get(t) || {}).damageTaken || {}).Rock;
+				mult *= taken === 1 ? 2 : taken === 2 ? 0.5 : taken === 3 ? 0 : 1;
+			}
+			pct += 12.5 * mult;
+		}
+		const layers = Math.min(3, Number(side.Spikes) || 0);
+		const grounded = !types.includes('Flying') && ability !== 'levitate' && item !== 'airballoon';
+		if (layers && grounded) pct += [0, 12.5, 16.67, 25][layers];
+		return pct;
 	}
 
 	/** Worst-case estimate when the opponent has revealed nothing. */
@@ -1518,6 +1544,24 @@ class BattleAI {
 					// A KO we land first costs us nothing, so it beats retreating.
 					if (pct >= 100 && (movesFirst || (data && data.priority > 0))) s += 40;
 					if (data && data.recoil && pct < 100) s -= 6;
+					/*
+					 * Keystone Legion (Spiritomb, Balance Patch 1): a hit that would knock it out
+					 * leaves it at 1 HP and curses the attacker, once until any Pokemon faints.
+					 * Replay gen9rpou-7: Gholdengo and then Iron Valiant each went for the kill on
+					 * a Spiritomb at a few per cent, and both were cursed for it. A multi-hit move
+					 * gets through (the next hit finds the keystone spent), and Mold Breaker ignores it.
+					 */
+					if (!this.cfg.naive && this.cfg.legion !== false && pct >= 100 && data && !data.multihit) {
+						const foeAbility = String(foe.ability || '').toLowerCase().replace(/[^a-z]/g, '');
+						const holder = foeAbility === 'keystonelegion' || (!foe.ability && /^spiritomb$/i.test(String(foe.species || '')));
+						const spent = state.legionCracked && state.legionCracked[`${state.theirPlayer}|${String(foe.species || '').split(',')[0]}`];
+						const breaker = /^(moldbreaker|teravolt|turboblaze)$/.test(String(me.ability || '').toLowerCase().replace(/[^a-z]/g, ''));
+						if (holder && !spent && !breaker) {
+							const myHp = (me.originalCurHP / me.maxHP()) * 100;
+							// It lives at 1 HP; the curse costs a quarter of our HP a turn until we leave.
+							s = 60 - (incoming >= myHp ? 0 : 30);
+						}
+					}
 					/*
 					 * Sucker Punch (and Thunderclap) fail unless the target attacks. Kingambit
 					 * clicked it into Roserade's Nasty Plot. The more a foe has shown status

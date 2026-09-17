@@ -134,6 +134,8 @@ class BattleState {
 			if (!id) break;
 			const store = id.side === this.myPlayer ? this.mine : this.opponent;
 			if (store[id.slot]) { store[id.slot].fainted = true; store[id.slot].hp = 0; }
+			// Keystone Legion (Spiritomb) mends whenever any other Pokemon faints.
+			this.legionCracked = {};
 			break;
 		}
 		case '-damage': case '-heal': case '-sethp': {
@@ -233,6 +235,8 @@ class BattleState {
 		case '-ability': {
 			const id = this.slotOf(args[0]);
 			if (id && this.opponent[id.slot] && id.side !== this.myPlayer) this.opponent[id.slot].ability = args[1];
+			// Keystone Legion announces itself only when it saves its holder: spent until a faint, even across switches.
+			if (id && args[1] === 'Keystone Legion') (this.legionCracked || (this.legionCracked = {}))[`${id.side}|${(id.side === this.myPlayer ? this.mine : this.opponent)[id.slot]?.species || id.name}`] = true;
 			break;
 		}
 		case 'move': {

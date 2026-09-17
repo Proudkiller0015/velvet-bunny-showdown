@@ -302,6 +302,21 @@
 		var original = R.prototype.updateMoveControls;
 		R.prototype.updateMoveControls = function () {
 			var args = arguments;
+			/*
+			 * Already Dynamaxed (the turns after): the request still says it can Z-Move,
+			 * and the client then draws the Z-moves - names and "1/1" - over the Max Moves.
+			 * A Dynamaxed Pokemon can't use one, so the menu is drawn without it.
+			 */
+			try {
+				var r0 = this.request;
+				var p0 = this.choice && this.choice.choices ? this.choice.choices.length : 0;
+				var c0 = r0 && r0.active && r0.active[p0];
+				if (c0 && c0.maxMoves && !c0.canDynamax && c0.canZMove) {
+					var heldZ = c0.canZMove;
+					delete c0.canZMove;
+					try { return original.apply(this, args); } finally { c0.canZMove = heldZ; }
+				}
+			} catch (e) { /* fall through to the usual menu */ }
 			var result = original.apply(this, args);
 			try {
 				var req = this.request;

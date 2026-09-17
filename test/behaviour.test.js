@@ -438,6 +438,24 @@ console.log('\n--- the Stockfish reviews: moves that fail, setup into its answer
 		const n = /^move (\d)/.exec(ai.decide(request, state));
 		check('Dynamaxed, no second Max Guard (status move) in a row', n && ['Flamethrower', 'Hurricane'].includes(['Roost', 'Will-O-Wisp', 'Flamethrower', 'Hurricane'][+n[1] - 1]), true);
 	}
+	for (const difficulty of ['champion', 'stockfish']) {
+		// Replay gen9rpou-7: finishing a Keystone Legion Spiritomb with one hit only curses the attacker.
+		const weavile = { me: 'Weavile', myMoves: ['Knock Off', 'Triple Axel', 'Ice Shard'], foe: 'Spiritomb', foeHp: 5 };
+		check(`${difficulty}: a multi-hit move gets through Keystone Legion`, pickWith(weavile, difficulty, (r, s) => { s.opponent.a.ability = 'Keystone Legion'; }), 'Triple Axel');
+		check(`${difficulty}: once the keystone is spent, any hit will do`, pickWith(weavile, difficulty, (r, s) => {
+			s.opponent.a.ability = 'Keystone Legion';
+			s.legionCracked = { p1: true, 'p1|Spiritomb': true };
+		}), c => c !== 'switch');
+	}
+	{
+		const ai = new BattleAI({ difficulty: 'champion' });
+		const gen = ai.gen(9);
+		const { request, state } = scenario({ me: 'Raging Bolt', myMoves: ['Thunderbolt'], foe: 'Garchomp' });
+		const bolt = ai.myPokemon(gen, request.side.pokemon[0], state);
+		state.hazards.p2 = { 'Stealth Rock': 1, Spikes: 2 };
+		check('entry hazards are counted for a switch-in (Rock neutral + two Spikes)', Math.round(ai.entryHazards(gen, bolt, request.side.pokemon[0], state)), 29);
+		check('and nothing with Heavy-Duty Boots', ai.entryHazards(gen, bolt, { ...request.side.pokemon[0], item: 'heavydutyboots' }, state), 0);
+	}
 	// Scarf: a base 85 Speed foe moved before our 300 Speed Pokemon with no priority.
 	const { request, state } = scenario({ me: 'Garchomp', myMoves: ['Earthquake'], foe: 'Heracross', foeMoves: ['Close Combat'] });
 	request.side.pokemon[0].stats.spe = 300;
