@@ -53,6 +53,21 @@ const ABILITIES = {
 };
 const STATUS_ABSORB_TYPES = ['Poison', 'Steel', 'Fire', 'Electric'];
 
+/*
+ * Weather cores. An abuser without its setter is a Pokemon playing at half
+ * strength - a Swift Swim Barraskewda on a team with no rain, next to a snow
+ * setter, is what a usage-based draft produced - and two setters of different
+ * weathers undo each other.
+ */
+const WEATHER = {
+	rain: { setters: ['drizzle', 'primordialsea'], setMoves: ['raindance'], abusers: ['swiftswim', 'raindish', 'hydration'] },
+	sun: { setters: ['drought', 'desolateland', 'orichalcumpulse'], setMoves: ['sunnyday'], abusers: ['chlorophyll', 'solarpower', 'flowergift', 'harvest'] },
+	sand: { setters: ['sandstream'], setMoves: ['sandstorm'], abusers: ['sandrush', 'sandforce'] },
+	snow: { setters: ['snowwarning'], setMoves: ['snowscape', 'chillyreception'], abusers: ['slushrush', 'icebody'] },
+};
+/** Moves that only work in a weather (Aurora Veil in snow, Solar Beam in sun without the charge). */
+const WEATHER_MOVES = { snow: ['auroraveil'], sun: ['solarbeam', 'solarblade'] };
+
 /** How hard a type hits a set: 0 immune, 0.25, 0.5, 1, 2, 4. */
 function effectiveness(dex, attackType, set) {
 	const species = dex.species.get(set.species);
@@ -126,6 +141,12 @@ function analyze(dex, sets) {
 		special: sets.filter((s, i) => sides[i] === 'special').map(s => s.species),
 		defensive: who(defensive),
 	};
+	report.weather = {};
+	for (const [name, w] of Object.entries(WEATHER)) {
+		const setters = who(s => w.setters.includes(ability(s)) || has(s, w.setMoves));
+		const abusers = who(s => w.abusers.includes(ability(s)) || has(s, WEATHER_MOVES[name] || []));
+		if (setters.length || abusers.length) report.weather[name] = { setters, abusers };
+	}
 	const walls = report.defensive.length;
 	report.style = walls >= 4 ? 'stall' : walls >= 2 ? 'balance' : walls === 1 || report.setup.length < 2 ? 'bulky offense' : 'hyper offense';
 	return report;
@@ -158,6 +179,12 @@ function issues(report, { stage = 'full', themed = false } = {}) {
 	} else if (report.size >= 5 && report.style !== 'stall' && (report.physical.length < 2 || report.special.length < 2)) {
 		add('soft', `only ${Math.min(report.physical.length, report.special.length)} ${report.physical.length < 2 ? 'physical' : 'special'} attacker`);
 	}
+	const weathers = Object.entries(report.weather || {});
+	for (const [name, w] of weathers) {
+		if (!w.setters.length && w.abusers.length) add(stage === 'full' ? 'hard' : 'soft', `${w.abusers.join(', ')} ${w.abusers.length === 1 ? 'needs' : 'need'} ${name} and nothing sets it`);
+	}
+	const setterWeathers = weathers.filter(([, w]) => w.setters.length).map(([name]) => name);
+	if (setterWeathers.length > 1) add('soft', `the team sets ${setterWeathers.join(' and ')}, which undo each other`);
 	if (stage === 'basics') return out;
 
 	if (!report.stealthRock.length) add('hard', 'no Stealth Rock');

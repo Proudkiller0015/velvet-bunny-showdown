@@ -88,7 +88,7 @@ class BattleState {
 		case 'poke': {
 			this.preview = this.preview || { p1: [], p2: [] };
 			const species = String(args[1] || '').split(',')[0].trim();
-			const level = (/, L(d+)/.exec(args[1] || '') || [])[1];
+			const level = (/, L(\d+)/.exec(args[1] || '') || [])[1];
 			if (this.preview[args[0]] && species) this.preview[args[0]].push({ species, level: level ? +level : 100 });
 			break;
 		}
@@ -215,6 +215,10 @@ class BattleState {
 			// Knock Off that fails to take the item is Sticky Hold, near enough.
 			const id = this.slotOf(args[0]);
 			const lm = this.lastMove;
+			// Our own move failing (a Sucker Punch into a status move): remembered for next turn.
+			if (id && id.side === this.myPlayer && this.mine[id.slot] && lm && lm.side === this.myPlayer) {
+				this.mine[id.slot].lastFailed = lm.name;
+			}
 			if (id && id.side !== this.myPlayer && this.opponent[id.slot] &&
 				lm && lm.side === this.myPlayer && /knock off/i.test(lm.name || '')) {
 				this.opponent[id.slot].keptItem = true;
@@ -239,9 +243,10 @@ class BattleState {
 				const store = id.side === this.myPlayer ? this.mine : this.opponent;
 				const mon = store[id.slot];
 				// [from] lines (Magic Bounce, Dancer) and called moves are not the Pokemon's own choice.
-				const own = !parts.some(p => /^[from]/.test(p));
+				const own = !parts.some(p => /^\[from\]/.test(p));
 				if (mon && own) {
 					mon.lastMove = args[1];
+					mon.lastFailed = null;
 					mon.repeat = mon.lastMoveTurn === this.turn - 1 && mon.previousMove === args[1] ? (mon.repeat || 1) + 1 : 1;
 					mon.previousMove = args[1];
 					mon.lastMoveTurn = this.turn;

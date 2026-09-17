@@ -411,6 +411,33 @@ console.log('\n--- the Stockfish reviews: moves that fail, setup into its answer
 		check('and nothing into a Ghost', ai.damagePct(gen, blissey, foe('Gengar'), 'Seismic Toss'), 0);
 		check('Ruination takes half', Math.round(ai.damagePct(gen, blissey, foe('Garchomp'), 'Ruination')), 50);
 	}
+	{
+		// The protocol feeds these; a broken parser once left all of them empty.
+		const st = new BattleState('t');
+		st.myPlayer = 'p1';
+		const feed = line => st.line(line.slice(1).split('|'));
+		feed('|poke|p2|Garchomp, L84, F|');
+		feed('|switch|p1a: Moltres|Moltres|100/100');
+		feed('|turn|2');
+		feed('|-start|p1a: Moltres|Dynamax|');
+		feed('|move|p1a: Moltres|Max Guard|p1a: Moltres');
+		feed('|move|p1a: Moltres|Sucker Punch||[still]');
+		feed('|-fail|p1a: Moltres');
+		check('the state records our last move from the log', st.mine.a.lastMove, 'Sucker Punch');
+		check('and that it failed', st.mine.a.lastFailed, 'Sucker Punch');
+		check('and that we are Dynamaxed', st.mine.a.dynamaxed, true);
+		check('and the order moves came in this turn', st.turnMoves.length, 2);
+		check('team preview reads levels', st.preview.p2[0].level, 84);
+	}
+	{
+		// Dynamaxed, a status move is Max Guard: never twice in a row.
+		const { request, state } = scenario({ me: 'Moltres', myMoves: ['Roost', 'Will-O-Wisp', 'Flamethrower', 'Hurricane'], foe: 'Garchomp', foeMoves: ['Stealth Rock'] });
+		state.turn = 3; state.mine.a.dynamaxed = true; state.mine.a.lastMove = 'Max Guard'; state.mine.a.lastMoveTurn = 2;
+		const ai = new BattleAI({ difficulty: 'champion' });
+		ai.setFormat('gen8ou');
+		const n = /^move (\d)/.exec(ai.decide(request, state));
+		check('Dynamaxed, no second Max Guard (status move) in a row', n && ['Flamethrower', 'Hurricane'].includes(['Roost', 'Will-O-Wisp', 'Flamethrower', 'Hurricane'][+n[1] - 1]), true);
+	}
 	// Scarf: a base 85 Speed foe moved before our 300 Speed Pokemon with no priority.
 	const { request, state } = scenario({ me: 'Garchomp', myMoves: ['Earthquake'], foe: 'Heracross', foeMoves: ['Close Combat'] });
 	request.side.pokemon[0].stats.spe = 300;

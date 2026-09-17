@@ -1356,7 +1356,7 @@ class BattleAI {
 	 * defensive use: a hit that would knock us out may not once the HP bar is
 	 * twice the size.
 	 */
-	dynamaxWorthIt(hpPct, incoming, best) {
+	dynamaxWorthIt(hpPct, incoming, best, { attacks = 4, damage = 100 } = {}) {
 		if (incoming >= hpPct && incoming < hpPct * 2) return true;   // survives it
 		if (incoming >= hpPct) return false;                          // dies regardless
 		if (this.cfg.sanity !== false) {
@@ -1366,6 +1366,9 @@ class BattleAI {
 			if (hpPct < 60 || !best) return false;
 			const data = best.name ? PkmnDex.forGen(8).moves.get(best.name) : null;
 			if (data && (data.category === 'Status' || data.priority > 0)) return false;
+			// Its three turns are three Max Moves: a Pokemon with one or two attacks spends the
+			// rest on Max Guard, and one whose best hit is resisted gains nothing from the boost.
+			if (attacks < 2 || damage < 35) return false;
 		}
 		return best ? best.score >= 40 : false;
 	}
@@ -1484,6 +1487,16 @@ class BattleAI {
 					: 5;
 				// Nothing set up on the turn we are knocked out ever gets used.
 				if (outsped && score > 0) score *= 0.2;
+				/*
+				 * Dynamaxed, every status move is Max Guard. The bot clicked Roost and
+				 * Will-O-Wisp as Moltres and got two Max Guards (the second failed) while
+				 * Garchomp laid Stealth Rock and Spikes for free.
+				 */
+				const liveMon = state.mine && state.mine['abc'[index]];
+				if (!this.cfg.naive && this.cfg.sanity !== false && liveMon && liveMon.dynamaxed) {
+					const guardedLast = liveMon.lastMoveTurn === state.turn - 1 && /^(max guard|protect|detect)$/i.test(String(liveMon.lastMove || ''));
+					score = guardedLast ? -30 : Math.min(score, 6);
+				}
 				if (foes.length > 1 && foe) target = foe.slot === 'b' ? 2 : 1;
 			} else {
 				score = -Infinity;
@@ -1505,6 +1518,21 @@ class BattleAI {
 					// A KO we land first costs us nothing, so it beats retreating.
 					if (pct >= 100 && (movesFirst || (data && data.priority > 0))) s += 40;
 					if (data && data.recoil && pct < 100) s -= 6;
+					/*
+					 * Sucker Punch (and Thunderclap) fail unless the target attacks. Kingambit
+					 * clicked it into Roserade's Nasty Plot. The more a foe has shown status
+					 * and setup moves - or it has just come in - the less it is worth.
+					 */
+					if (!this.cfg.naive && this.cfg.sanity !== false && data && /^(suckerpunch|thunderclap)$/.test(data.id)) {
+						const shown = [...(foe.moves || [])].map(m => PkmnDex.forGen(gen.num).moves.get(m)).filter(Boolean);
+						const statusShown = shown.some(m => m.category === 'Status');
+						const attackShown = shown.some(m => m.category !== 'Status');
+						let works = attackShown && !statusShown ? 0.85 : statusShown && !attackShown ? 0.3 : 0.65;
+						if (state.foeCameIn && state.foeCameIn >= state.turn - 1) works = Math.min(works, 0.65);
+						const liveMe = state.mine && state.mine['abc'[index]];
+						if (liveMe && liveMe.lastMoveTurn === state.turn - 1 && liveMe.lastFailed === liveMe.lastMove && /sucker punch|thunderclap/i.test(String(liveMe.lastMove))) works = Math.min(works, 0.3);
+						if (works < 0.8) s = pct * works + (pct >= 100 ? 40 * works : 0);
+					}
 					// Draco Meteor, Overheat, Leaf Storm...: fired again from -2 or lower
 					// they hit like wet paper. Anyone past Easy notices and looks elsewhere.
 					if (!this.cfg.naive && pct < 100 && this.droppedFor(data, me) <= -2) s -= 12 + 4 * Math.abs(this.droppedFor(data, me));
@@ -1677,7 +1705,10 @@ class BattleAI {
 		}
 		else if (active.canMegaEvo) choice += ' mega';
 		else if (active.canUltraBurst) choice += ' ultra';
-		else if (active.canDynamax && this.dynamaxWorthIt((me.originalCurHP / me.maxHP()) * 100, incoming, best)) {
+		else if (active.canDynamax && this.dynamaxWorthIt((me.originalCurHP / me.maxHP()) * 100, incoming, best, {
+			attacks: ranked.filter(r => r.kind === 'move' && r.damage > 0).length,
+			damage: (ranked.find(r => r.name === best.name) || {}).damage || 0,
+		})) {
 			choice += ' dynamax';
 		}
 		return choice;
