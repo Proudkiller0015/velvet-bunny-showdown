@@ -666,7 +666,14 @@ exports.commands = {
 		// have set it themselves.
 		this.parse(`/msg ${BOT_BASE}, difficulty ${choice}`);
 	},
-	rank: 'setrank',
+	/*
+	 * `/rank` is deliberately NOT an alias for this.
+	 *
+	 * It was, and it took the one command a player has for "how am I doing on the
+	 * ladder" and gave it to a staff command nobody needs an alias for - there is
+	 * a command per rank already. Showdown's own /rank (its Elo, wins and losses
+	 * per format) is left alone; staff type /setrank, which is what it is called.
+	 */
 	/**
 	 * Give somebody a rank, and remember it.
 	 *
