@@ -828,9 +828,9 @@ check(['walkingwake', 'dragapult', 'dragonitemega', 'lucariomegaz', 'deoxysspeed
 	const m = Object.assign({}, Dex.moves.get('focusblast'));
 	Dex.abilities.get('venomgarden').onModifyMove.call(b, m, b.p1.active[0], bliss);
 	check(m.accuracy === true, "and Roserade's attacks never miss a poisoned foe (Focus Blast)");
-	check(Object.values(Dex.species.get('roserade').abilities).includes('Venom Garden') && Dex.species.get('roserade').baseStats.hp === 75 && Dex.species.get('roserade').natDexTier === 'UU' &&
+	check(Object.values(Dex.species.get('roserade').abilities).includes('Venom Garden') && Dex.species.get('roserade').baseStats.hp === 75 && Dex.species.get('roserade').baseStats.spe === 101 && Dex.species.get('roserade').natDexTier === 'UU' &&
 		['thornedbouquet', 'strengthsap', 'mortalspin'].every(x => learns('roserade', x)) && !learns('roselia', 'thornedbouquet') && move.flags.nosketch,
-		'Roserade: Venom Garden, 75 HP, Thorned Bouquet (its own), Strength Sap, Mortal Spin, UU');
+		'Roserade: Venom Garden, 75 HP, 101 Speed, Thorned Bouquet (its own), Strength Sap, Mortal Spin, UU');
 	check(learns('togekiss', 'uturn'), 'Togekiss learns U-turn');
 }
 // Thorned Bouquet: Grass, and also Poison against a poisoned target.

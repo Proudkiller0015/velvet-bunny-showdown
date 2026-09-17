@@ -163,8 +163,8 @@ const SPECIES_STATS = {
 	eevee: { hp: 65, atk: 75, def: 70, spa: 65, spd: 85, spe: 75 },
 	// Patch 1.5: Spiritomb's 50 HP undercut the bulk it is built on.
 	spiritomb: { hp: 85, def: 118, spd: 118 },
-	// Patch 1.5: Roserade, 60 to 75 HP.
-	roserade: { hp: 75 },
+	// Patch 1.5: Roserade, 60 to 75 HP and 90 to 101 Speed.
+	roserade: { hp: 75, spe: 101 },
 };
 
 /*
