@@ -92,7 +92,18 @@ function allGimmicks() {
 			if (hasDynamax) {
 				const dynamaxRequest = pokemon.getDynamaxRequest.bind(pokemon);
 				pokemon.getDynamaxRequest = function (skipChecks) {
-					if (this.m.rpGimmickUsed) return undefined;
+					/*
+					 * Two questions share this method, and only one of them is ours.
+					 *
+					 * Without skipChecks it means "may this Pokemon Dynamax now",
+					 * which a spent gimmick refuses. With skipChecks it means "what
+					 * are its Max moves called" - and that is what the engine asks to
+					 * fill in the buttons on every turn a Pokemon is *already*
+					 * Dynamaxed. Refusing that one is why the menu went back to
+					 * showing Imperial Torrent and Roost on turns two and three,
+					 * while the Pokemon was really using Max Geyser and Max Guard.
+					 */
+					if (this.m.rpGimmickUsed && !skipChecks) return undefined;
 					// The engine refuses Dynamax to anyone holding a Mega Stone or a
 					// Z-crystal - two rules about not mixing generations rather than
 					// about balance, which is the one thing this format is for. Both
