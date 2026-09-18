@@ -1,0 +1,12 @@
+{
+	"id": "gen9rpou-5-tlj90j",
+	"format": "[Gen 9] RP OU",
+	"players": [
+		"Bunny Stockfish",
+		"TheRealWhimsicott"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Stockfish\n|j|☆TheRealWhimsicott\n|t:|1789761562\n|gametype|singles\n|badge|p1|bronze|gen9rpou|3-3\n|badge|p2|silver|gen9rpou|2-2\n|player|p1|Bunny Stockfish|bunny.png|1333\n|player|p2|TheRealWhimsicott|266|1396\n|gen|9\n|tier|[Gen 9] RP OU\n|rated|\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Endless Battle Clause: Forcing endless battles is banned\n|rule|Species Clause: Limit one of each Pokémon\n|rule|OHKO Clause: OHKO moves are banned\n|rule|Evasion Clause: Evasion abilities, items, and moves are banned\n|rule|Evasion Abilities Clause: Evasion abilities are banned\n|rule|Evasion Items Clause: Evasion items are banned\n|rule|Evasion Moves Clause: Evasion moves are banned\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|clearpoke\n|poke|p1|Clodsire|\n|poke|p1|Roserade|\n|poke|p1|Enamorus-Therian|\n|poke|p1|Empoleon|\n|poke|p1|Spiritomb|\n|poke|p1|Moltres|\n|poke|p2|Kingambit|\n|poke|p2|Haxorus|\n|poke|p2|Pawmot|\n|poke|p2|Glaceon|\n|poke|p2|Tinkaton, F|\n|poke|p2|Corviknight|\n|teampreview\n|c|☆Bunny Stockfish|Good luck! Playing on **stockfish**.\n|\n|t:|1789761566\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Empoleon|Empoleon|100/100\n|switch|p2a: Tinkaton|Tinkaton, F|100/100\n|-ability|p2a: Tinkaton|Mold Breaker\n|-item|p2a: Tinkaton|Air Balloon\n|turn|1\n|\n|t:|1789761571\n|move|p2a: Tinkaton|Stealth Rock|p1a: Empoleon\n|-sidestart|p1: Bunny Stockfish|move: Stealth Rock\n|move|p1a: Empoleon|Imperial Torrent|p2a: Tinkaton\n|-damage|p2a: Tinkaton|47/100\n|-enditem|p2a: Tinkaton|Air Balloon\n|\n|upkeep\n|turn|2\n|\n|t:|1789761576\n|move|p2a: Tinkaton|Encore|p1a: Empoleon\n|-start|p1a: Empoleon|Encore\n|move|p1a: Empoleon|Imperial Torrent|p2a: Tinkaton\n|-damage|p2a: Tinkaton|0 fnt\n|faint|p2a: Tinkaton\n|\n|upkeep\n|\n|t:|1789761581\n|switch|p2a: Pawmot|Pawmot|100/100\n|turn|3\n|\n|t:|1789761583\n|switch|p1a: Clodsire|Clodsire|100/100\n|move|p2a: Pawmot|Double Shock|p1a: Clodsire\n|-immune|p1a: Clodsire\n|\n|upkeep\n|turn|4\n|\n|t:|1789761585\n|switch|p2a: Glaceon|Glaceon|100/100\n|-weather|Snowscape|[from] ability: Diamond Dust|[of] p2a: Glaceon\n|move|p1a: Clodsire|Earthquake|p2a: Glaceon\n|-damage|p2a: Glaceon|79/100\n|\n|-weather|Snowscape|[upkeep]\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1789761589
+}
