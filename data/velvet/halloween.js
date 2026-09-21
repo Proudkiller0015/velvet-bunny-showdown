@@ -68,7 +68,7 @@ exports.items = (data) => {
 		// and this one has none, so it was refused as "does not exist in Gen 9" on the
 		// RP ladders. Cleared the way the Z-A stones are (za-megas.js).
 		isNonstandard: null,
-		desc: "Halloween 2026 event item, from the Witching Hour board only. If held by a Banette, it Mega Evolves into the witch Mega Banette: Ghost, Mega Banette's stats (64/165/75/93/83/75), ability Witching Hour (Prankster, and its Ghost moves have 1.2x power). On Mega Evolving, its Poltergeist becomes Witch's Snatch (Ghost, physical, 110 power, 100% accuracy, hits Normal types, removes the target's held item and adds the Ghost type to it).",
+		desc: "Halloween 2026 event item, from the Witching Hour board only. If held by a Banette, it Mega Evolves into the witch Mega Banette: Ghost, Mega Banette's stats (64/165/75/93/83/75), ability Witching Hour (Prankster, and its Ghost moves have 1.2x power). On Mega Evolving, its Poltergeist becomes Witch's Snatch (Ghost, physical, 110 power or 150 when it knocks off an item, 100% accuracy, hits Normal types, removes the target's held item and adds the Ghost type to it).",
 		shortDesc: "Halloween 2026 event. Banette: Mega Evolves; Prankster + 1.2x Ghost; Poltergeist becomes Witch's Snatch.",
 	};
 	return data;
@@ -127,6 +127,13 @@ exports.moves = (data) => {
 		pp: 10,
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		// 150 when there is an item to knock off, the way Knock Off checks it: an item
+		// that refuses to be taken (a Mega Stone on its owner) does not count.
+		basePowerCallback(pokemon, target, move) {
+			const item = target.getItem();
+			if (item.id && this.singleEvent('TakeItem', item, target.itemState, target, target, move, item)) return 150;
+			return move.basePower;
+		},
 		// Mind's Eye the other way round: a Ghost move Normal types are not immune to.
 		ignoreImmunity: { Ghost: true },
 		// Knock Off's own removal: the item is taken after the hit, and whatever
@@ -144,8 +151,8 @@ exports.moves = (data) => {
 		secondary: null,
 		target: 'normal',
 		type: 'Ghost',
-		shortDesc: "Hits Normal types. Removes the target's item and adds Ghost to its types.",
-		desc: "Normal-type Pokemon are not immune to this move. If the target is holding an item that can be removed, it is taken away after the hit, and the target gains the Ghost type in addition to its own, as Trick-or-Treat does. Poltergeist becomes this move when Banette Mega Evolves into its Halloween 2026 form.",
+		shortDesc: "150 power if it removes the target's item. Hits Normal types; adds Ghost type.",
+		desc: "Power is 150 instead of 110 if the target is holding an item that can be removed. Normal-type Pokemon are not immune to this move. If the target is holding an item that can be removed, it is taken away after the hit, and the target gains the Ghost type in addition to its own, as Trick-or-Treat does. Poltergeist becomes this move when Banette Mega Evolves into its Halloween 2026 form.",
 	};
 	return data;
 };
