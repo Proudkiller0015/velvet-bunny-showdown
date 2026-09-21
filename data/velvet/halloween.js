@@ -55,8 +55,8 @@ exports.items = (data) => {
 		gen: 9,
 		megaStone: { Banette: FORME },
 		itemUser: ['Banette'],
-		desc: 'If held by a Banette, this item allows it to Mega Evolve into its Halloween form in battle.',
-		shortDesc: 'If held by a Banette, this item allows it to Mega Evolve (Halloween).',
+		desc: 'Halloween 2026 event item, from the Witching Hour board only. If held by a Banette, this item allows it to Mega Evolve into its limited-time Halloween form in battle.',
+		shortDesc: 'Halloween 2026 event: Banette Mega Evolves into its Halloween form.',
 	};
 	return data;
 };
@@ -75,7 +75,7 @@ exports.abilities = (data) => {
 			if (move.type === 'Ghost') return this.chainModify([4915, 4096]);
 		},
 		flags: {},
-		shortDesc: "Prankster; this Pokemon's Ghost-type moves have 1.2x power.",
+		shortDesc: "Prankster; Ghost-type moves have 1.2x power. Halloween 2026 event form.",
 		desc: "This Pokemon's non-damaging moves have their priority increased by 1; opposing Dark-type Pokemon are immune to these moves. This Pokemon's Ghost-type attacks have their power multiplied by 1.2.",
 	};
 	return data;
@@ -103,7 +103,7 @@ exports.moves = (data) => {
 		target: 'normal',
 		type: 'Ghost',
 		shortDesc: "Removes the target's held item.",
-		desc: "If the target is holding an item that can be removed, it is taken away after the hit. Banette's signature, Halloween 2026.",
+		desc: "If the target is holding an item that can be removed, it is taken away after the hit. Banette's signature from the Halloween 2026 event.",
 	};
 	return data;
 };
