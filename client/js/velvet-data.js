@@ -430,7 +430,13 @@
 		var over = buffs.overrides || {};
 		fill('Moves', window.BattleMovedex, over.moves);
 		fill('Abilities', window.BattleAbilities, over.abilities);
-		fill('Items', window.BattleItems, over.items);
+		// Every item this server ships, whatever its number: the Banettite-Halloween has a
+		// positive one (National Dex refuses negative items), so the num < 0 test above
+		// skipped it and its description vanished from the builder.
+		var ourItems = {};
+		for (var it in (buffs.items || {})) ourItems[it] = buffs.items[it];
+		for (var ov in (over.items || {})) ourItems[ov] = over.items[ov];
+		fill('Items', window.BattleItems, ourItems);
 		en.__velvetDescriptions = true;
 		return true;
 	}
