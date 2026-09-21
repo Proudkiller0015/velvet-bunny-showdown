@@ -67,9 +67,16 @@ function untrain(dex, set, moveIds, legal) {
 	const roles = RS.roleSets(dex, set.species, legal);
 	const pool = ((roles.find(r => r.role === set.role) || roles[0] || {}).movepool || [])
 		.map(n => dex.moves.get(n))
-		.filter(m => !moveIds.includes(m.id) && !set.moves.some(x => toID(x) === m.id))
+		// Never a hazard in its place: taking Spikes off Ferrothorn used to hand it a second Stealth Rock.
+		.filter(m => !moveIds.includes(m.id) && !RS.HAZARDS.includes(m.id) && !set.moves.some(x => toID(x) === m.id))
 		.sort((a, b) => RS.attackValue(species, b) - RS.attackValue(species, a));
-	if (pool.length) set.moves[index] = pool[0].name; else set.moves.splice(index, 1);
+	if (pool.length) { set.moves[index] = pool[0].name; return; }
+	// Nothing in the role's pool: anything else it may use, but a trainer with a short
+	// list keeps the duplicate hazard rather than going into battle with three moves.
+	const rest = [...(legal ? new Set([...legal].map(toID)) : RS.learnable(dex, species))].map(id => dex.moves.get(id))
+		.filter(m => m.exists && !m.isNonstandard && !moveIds.includes(m.id) && !RS.HAZARDS.includes(m.id) && !set.moves.some(x => toID(x) === m.id))
+		.sort((a, b) => (b.category !== 'Status') - (a.category !== 'Status') || RS.attackValue(species, b) - RS.attackValue(species, a));
+	if (rest.length) set.moves[index] = rest[0].name;
 }
 
 /**
@@ -153,6 +160,7 @@ function assemble(dex, candidates, options = {}) {
 	if (stage !== 'movesets') {
 		const report = TL.analyze(dex, team);
 		for (const set of team.filter(s => report.stealthRock.includes(s.species)).slice(1)) untrain(dex, set, TL.MOVES.stealthRock, set.legal);
+		oneSetterEach(dex, team);
 	}
 	if (stage === 'full' && team.length >= 3) {
 		let report = TL.analyze(dex, team);
@@ -168,10 +176,28 @@ function assemble(dex, candidates, options = {}) {
 			const helpers = team.filter(s => !report.stealthRock.includes(s.species)).sort((a, b) => supportRank(b) - supportRank(a));
 			for (const set of helpers) if (teach(dex, set, TL.MOVES.removal, set.legal)) break;
 		}
+		// Again: a second Stealth Rock taken off above may have been replaced by Spikes.
+		oneSetterEach(dex, team);
 	}
 
 	if (items) assignItems(dex, team, items === true ? null : items.bag || {});
 	return team.map(({ legal, ...set }) => set);
+}
+
+/*
+ * The other hazards work like Stealth Rock: a team has a Spikes setter, not
+ * three Pokemon each spending a slot on Spikes. Each kind gets one setter, and
+ * where there is a choice it is not the rocker - rocks and Spikes can sit on two
+ * different Pokemon, which leaves the rocker a slot for something else.
+ */
+const OTHER_HAZARDS = [['spikes'], ['toxicspikes'], ['stickyweb']];
+function oneSetterEach(dex, team) {
+	const rocker = set => set.moves.some(m => TL.MOVES.stealthRock.includes(toID(m)));
+	for (const kind of OTHER_HAZARDS) {
+		const setters = team.filter(s => s.moves.some(m => kind.includes(toID(m))))
+			.sort((a, b) => rocker(a) - rocker(b) || supportRank(b) - supportRank(a));
+		for (const set of setters.slice(1)) untrain(dex, set, kind, set.legal);
+	}
 }
 
 function supportRank(set) {

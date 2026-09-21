@@ -170,8 +170,28 @@ function roleSets(dex, name, legal = null) {
 		if (!abilities.length) abilities = own.slice();
 		if (oursAbility) abilities = [oursAbility, ...abilities.filter(a => a !== oursAbility)];
 		// A hand-written set (data/velvet/random-sets.js) may fix its nature, spread and item too.
-		return { role, movepool: pool.map(m => m.name), abilities, teraTypes: set.teraTypes || species.types, nature: set.nature, evs: set.evs, item: set.item };
+		return { role, movepool: pool.map(m => m.name), abilities, teraTypes: set.teraTypes || species.types, nature: set.nature, evs: set.evs, item: set.item, synthetic: !found };
 	});
+}
+
+/**
+ * How much a move adds to the attacks already chosen: over the eighteen types,
+ * the sum of how much better it hits each than the best chosen attack does
+ * (immune 0, resisted 0.5, neutral 1, super effective 2). Status moves add nothing.
+ */
+/** A move that lowers one of the user's own stats by two or more (Overheat, Draco Meteor, Leaf Storm). */
+const hardDrop = m => !!(m.self && m.self.boosts && Object.values(m.self.boosts).some(v => v <= -2));
+
+function coverageGain(dex, chosen, move) {
+	if (move.category === 'Status') return 0;
+	const hit = (type, target) => (!dex.getImmunity(type, target) ? 0 : 2 ** dex.getEffectiveness(type, target));
+	const attacks = chosen.filter(c => c.category !== 'Status');
+	let gain = 0;
+	for (const target of dex.types.names().filter(t => t !== 'Stellar')) {
+		const best = attacks.reduce((n, c) => Math.max(n, hit(c.type, target)), 0);
+		gain += Math.max(0, hit(move.type, target) - Math.max(best, attacks.length ? 0 : 1));
+	}
+	return gain;
 }
 
 /** Pick one entry of a list, weighted. */
@@ -218,7 +238,9 @@ function pickMoves(dex, species, set, rng = Math.random) {
 	 */
 	const defensive = BULKY_ROLES.includes(set.role) || SUPPORT_ROLES.includes(set.role);
 	const wallValue = m => {
-		let value = attackValue(species, m, stat);
+		// Overheat, Draco Meteor: a real set (Smogon's, ours) that lists one means it; a set
+		// built from the learnset has no one's judgement behind it, so the drop counts against it.
+		let value = attackValue(species, m, stat) * (set.synthetic && hardDrop(m) ? 0.75 : 1);
 		if (!defensive) return value;
 		if (m.secondary && m.secondary.status) value *= 1.7;
 		if (m.id === 'knockoff' || m.id === 'scald' || m.id === 'lavaplume') value *= 1.3;
@@ -234,7 +256,7 @@ function pickMoves(dex, species, set, rng = Math.random) {
 	// STAB - a real attack, not a pivot: Volt Switch taking this slot pushed Thunderbolt
 	// out as "a second Electric move". Pivots have a slot of their own below.
 	const stabAttack = m => attack(m) && species.types.includes(m.type) && !PIVOTS.includes(m.id);
-	take(best(m => stabAttack(m) && !chosen.some(c => c.type === m.type), wallValue) ||
+	take(best(m => stabAttack(m) && !chosen.some(c => c.category !== 'Status' && c.type === m.type), wallValue) ||
 		(chosen.length ? null : best(stabAttack, wallValue)) ||
 		(chosen.length ? null : best(m => attack(m) && species.types.includes(m.type), wallValue)));
 	// The role's job.
@@ -250,9 +272,18 @@ function pickMoves(dex, species, set, rng = Math.random) {
 	}
 	if (set.role === 'AV Pivot' || set.role === 'Fast Attacker') take(best(m => PIVOTS.includes(m.id)));
 	// A second STAB, then coverage of new types, then anything useful.
-	take(best(m => attack(m) && species.types.includes(m.type) && !chosen.some(c => c.type === m.type), wallValue));
+	// Only attacks count: Stealth Rock is Rock-type, and it was keeping Stone Edge out of Tyranitar's STAB slot.
+	take(best(m => attack(m) && species.types.includes(m.type) && !chosen.some(c => c.category !== 'Status' && c.type === m.type), wallValue));
+	/*
+	 * Coverage is judged by what it adds, not by power alone. Focus Blast misses
+	 * three times in ten, but on a Psychic type it is the one move that touches
+	 * Steel and Dark - which is why Smogon runs it on Alakazam and Gengar. So a
+	 * coverage move earns credit for every type the moves already chosen hit
+	 * badly and it hits well, and the accuracy it pays is weighed against that.
+	 */
+	const coverageValue = m => wallValue(m) * (1 + 0.15 * coverageGain(dex, chosen, m));
 	while (chosen.length < 4) {
-		const next = best(m => attack(m) && !chosen.some(c => c.category !== 'Status' && c.type === m.type), wallValue) ||
+		const next = best(m => attack(m) && !chosen.some(c => c.category !== 'Status' && c.type === m.type), coverageValue) ||
 			best(m => m.category === 'Status' && !(SETUP.includes(m.id) && chosen.some(c => SETUP.includes(c.id))) &&
 				!(PHYSICAL_SETUP.includes(m.id) && stat === 'Special') && !(SPECIAL_SETUP.includes(m.id) && stat === 'Physical'), m => (m.num < 0 ? 2 : 1)) ||
 			best(m => attack(m), wallValue);
@@ -348,6 +379,6 @@ function buildSet(dex, name, { role = null, rng = Math.random, level = 100, allo
 }
 
 module.exports = {
-	roleSets, buildSet, pickMoves, itemFor, spreadFor, learnable, attackValue,
+	roleSets, buildSet, pickMoves, itemFor, spreadFor, learnable, attackValue, coverageGain,
 	SETUP, RECOVERY, HAZARDS, PIVOTS, STATUS, UTILITY, BULKY_ROLES, SETUP_ROLES, SUPPORT_ROLES,
 };

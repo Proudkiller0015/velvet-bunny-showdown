@@ -102,20 +102,28 @@ exports.EVOLUTIONS = {
 
 	/*
 	 * Baby Pokemon. A baby is the one you find at the start, and Elekid at 30
-	 * spent most of an RP as Elekid. They grow up at 20, Tyrogue's level. The
-	 * three that the games tie to a move or a party member (Bonsly and Mime Jr.
-	 * knowing Mimic, Mantyke with a Remoraid) have no evoLevel here, so the
-	 * battle server never checked theirs; the `from` just names the old rule and
-	 * the RP bot reads the new level.
+	 * spent most of an RP as Elekid. Every baby grows up at 16, the level the
+	 * friendship babies (Pichu, Cleffa, Togepi...) already used. The ones the games
+	 * tie to a move, a party member or friendship at a time of day have no
+	 * evoLevel, so the battle server never checked theirs; `from` names the old
+	 * rule and the RP bot reads the new level. Happiny keeps its Oval Stone too.
 	 */
-	electabuzz: { from: 30, to: 20, why: 'Baby: grows up at 20' },
-	magmar: { from: 30, to: 20, why: 'Baby: grows up at 20' },
-	jynx: { from: 30, to: 20, why: 'Baby: grows up at 20' },
-	toxtricity: { from: 30, to: 20, why: 'Baby: grows up at 20' },
-	toxtricitylowkey: { from: 30, to: 20, why: 'Baby: grows up at 20' },
-	sudowoodo: { from: 'levelMove', to: 20, why: 'Baby: grows up at 20 (was knowing Mimic)' },
-	mrmime: { from: 'levelMove', to: 20, why: 'Baby: grows up at 20 (was knowing Mimic)' },
-	mantine: { from: 'levelExtra', to: 20, why: 'Baby: grows up at 20 (was a Remoraid in the party)' },
+	electabuzz: { from: 30, to: 16, why: 'Baby: grows up at 16' },
+	magmar: { from: 30, to: 16, why: 'Baby: grows up at 16' },
+	jynx: { from: 30, to: 16, why: 'Baby: grows up at 16' },
+	toxtricity: { from: 30, to: 16, why: 'Baby: grows up at 16' },
+	toxtricitylowkey: { from: 30, to: 16, why: 'Baby: grows up at 16' },
+	hitmonlee: { from: 20, to: 16, why: 'Baby: grows up at 16' },
+	hitmonchan: { from: 20, to: 16, why: 'Baby: grows up at 16' },
+	hitmontop: { from: 20, to: 16, why: 'Baby: grows up at 16' },
+	wobbuffet: { from: 15, to: 16, why: 'Baby: grows up at 16, with the rest' },
+	sudowoodo: { from: 'levelMove', to: 16, why: 'Baby: grows up at 16 (was knowing Mimic)' },
+	mrmime: { from: 'levelMove', to: 16, why: 'Baby: grows up at 16 (was knowing Mimic)' },
+	mantine: { from: 'levelExtra', to: 16, why: 'Baby: grows up at 16 (was a Remoraid in the party)' },
+	chansey: { from: 'Oval Stone', to: 16, why: 'Baby: also grows up at 16; the Oval Stone still works' },
+	roselia: { from: 'levelFriendship', to: 16, why: 'Baby: also grows up at 16; a Sun Stone still works' },
+	lucario: { from: 'levelFriendship', to: 16, why: 'Baby: also grows up at 16; a Sun Stone still works' },
+	chimecho: { from: 'levelFriendship', to: 16, why: 'Baby: also grows up at 16; a Moon Stone still works' },
 
 	/*
 	 * The caps. No evolution into a final stage after level 50 - pseudo-
