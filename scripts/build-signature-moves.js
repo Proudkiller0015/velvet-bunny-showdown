@@ -213,6 +213,20 @@ function build() {
 		if (own) bySpecies[species.id] = own;
 	}
 
+	// A forme's own signature, on its page only: the Halloween Mega Banette shows
+	// Witch's Snatch (what its Poltergeist becomes), regular Banette does not.
+	const FORME_ONLY = { banettemegahalloween: ['witchssnatch'] };
+	for (const [id, moves] of Object.entries(FORME_ONLY)) {
+		bySpecies[id] = [...new Set([...(bySpecies[id] || []), ...moves])].sort((a, b) => Dex.moves.get(a).name.localeCompare(Dex.moves.get(b).name));
+	}
+
+	// A forme's own signature, on its page only: the Halloween Mega Banette shows
+	// Witch's Snatch (what its Poltergeist becomes), regular Banette does not.
+	const FORME_ONLY = { banettemegahalloween: ['witchssnatch'] };
+	for (const [id, moves] of Object.entries(FORME_ONLY)) {
+		bySpecies[id] = [...new Set([...(bySpecies[id] || []), ...moves])].sort((a, b) => Dex.moves.get(a).name.localeCompare(Dex.moves.get(b).name));
+	}
+
 	return { signatures, bySpecies };
 }
 

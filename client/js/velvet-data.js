@@ -111,7 +111,9 @@
 	// grid a little larger than 96, so it carries its own size.
 	ART.banettemegahalloween = {
 		still: { front: ['banette-megahalloween.png', 106, 101], back: ['banette-megahalloween-back.png', 108, 104] },
-		builder: 'background-image:url(#SPRITES#banette-megahalloween.png);background-size:48px 46px;background-position:8px 0;background-repeat:no-repeat;',
+		// Drawn like the regular Megas' builder sprites (96px at 10px 5px), fitted to 96 wide
+		// and kept pixel-sharp; squeezing it to half size made it unreadable.
+		builder: 'background-image:url(#SPRITES#banette-megahalloween.png);background-size:96px 91px;background-position:10px 8px;background-repeat:no-repeat;image-rendering:pixelated;',
 	};
 	Object.keys(MEGA_SPRITES).forEach(function (id) {
 		var file = MEGA_SPRITES[id];
@@ -146,7 +148,7 @@
 			name: "Banette-Mega-Halloween",
 			baseSpecies: "Banette",
 			forme: "Mega-Halloween",
-			types: ["Ghost"],
+			types: ["Ghost", "Dark"],
 			baseStats: { hp: 64, atk: 165, def: 75, spa: 93, spd: 83, spe: 75 },
 			abilities: { 0: "Witching Hour" },
 			heightm: 1.2,
@@ -262,6 +264,11 @@
 		if (typeof window.BattlePokedex === 'undefined') return false;
 
 		for (var id in SPECIES) if (!window.BattlePokedex[id]) window.BattlePokedex[id] = SPECIES[id];
+		// Mini icons: a forme with no icon of its own borrows the one it is a skin of
+		// (the witch Mega Banette shows Mega Banette's, not plain Banette's).
+		var ICON_OF = { banettemegahalloween: 'banettemega' };
+		var icons = window.BattlePokemonIconIndexes;
+		if (icons) for (var ic in ICON_OF) if (icons[ic] === undefined && icons[ICON_OF[ic]] !== undefined) icons[ic] = icons[ICON_OF[ic]];
 		if (window.BattleMovedex) {
 			for (var m in MOVES) if (!window.BattleMovedex[m]) window.BattleMovedex[m] = MOVES[m];
 		}
@@ -830,6 +837,32 @@
 				var entry = index[i];
 				if (entry.length > 2 && typeof entry[2] === 'number' && entry[2] >= low) entry[2]++;
 			}
+		}
+
+		/*
+		 * Alias rows, the way Showdown's own index has them: "valiant" is a row of its
+		 * own that points at Iron Valiant's row and says where in the name the match
+		 * starts. Ours ("halloween" for the witch Mega Banette) go in after the rows
+		 * they point at, found by id, and shift every other alias like any insert.
+		 */
+		var aliases = (buffs && buffs.searchAliases) || [];
+		var rowOf = function (id) {
+			var lo = 0, hi = index.length;
+			while (lo < hi) { var m = (lo + hi) >> 1; if (index[m][0] < id) lo = m + 1; else hi = m; }
+			return lo;
+		};
+		for (var a = 0; a < aliases.length; a++) {
+			var target = rowOf(aliases[a][2]);
+			if (!index[target] || index[target][0] !== aliases[a][2]) continue;
+			var spot = rowOf(aliases[a][0]);
+			if (index[spot] && index[spot][0] === aliases[a][0] && index[spot].length > 2) continue;
+			for (var k = 0; k < index.length; k++) {
+				var row = index[k];
+				if (row.length > 2 && typeof row[2] === 'number' && row[2] >= spot) row[2]++;
+			}
+			if (target >= spot) target++;
+			index.splice(spot, 0, [aliases[a][0], aliases[a][1], target, aliases[a][3]]);
+			if (offsets) offsets.splice(spot, 0, '');
 		}
 	}
 
@@ -1620,6 +1653,17 @@
 			var species = this.species;
 			if (species && typeof species !== 'string') species = species.species || species.name || '';
 			var record = buffs.get(window.toID(species || ''));
+			/*
+			 * A Mega (or any battle-only form) is picked with its BASE Pokemon's abilities -
+			 * that is what it holds before it transforms - so it takes the base's Awakened
+			 * abilities too. Without this, picking Mega Banette lost Banette's Prankster.
+			 */
+			if ((!record || !record.abilities.length) && window.Dex && window.Dex.species) {
+				var form = window.Dex.species.get(species || '');
+				var base = form && (form.battleOnly || (form.isMega || /-Mega/.test(form.name || '') || form.isPrimal ? form.baseSpecies : ''));
+				if (base && typeof base !== 'string') base = base[0];
+				if (base) record = buffs.get(window.toID(base));
+			}
 			if (!record || !record.abilities.length) return results;
 
 			// By id, because the rows carry ids and the record carries names.

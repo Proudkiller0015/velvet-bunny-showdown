@@ -1151,6 +1151,10 @@ exports.Formats = [
  * shiny Banette may hold it. Chained after any set check a format already has.
  */
 function witchStoneRule(set) {
+	// Shown on the Mega's builder page, never picked: Poltergeist becomes it on Mega Evolution.
+	if ((set.moves || []).some(m => this.dex.moves.get(m).id === 'witchssnatch')) {
+		return [`${set.name || set.species} can't pick Witch's Snatch: give it Poltergeist, which becomes Witch's Snatch when it Mega Evolves (Halloween 2026 event).`];
+	}
 	if (this.dex.items.get(set.item).id !== 'banettitehalloween') return [];
 	if (set.shiny) return [];
 	return [`${set.name || set.species} must be shiny to hold the Banettite-Halloween (Halloween 2026 event rule).`];

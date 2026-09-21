@@ -304,6 +304,10 @@ for (const name of ['Awakened', 'Signature', 'Event']) search.push([name.toLower
 // Our own Megas as search rows, so typing their name finds them (Samantha's old bug).
 for (const id of Object.keys(OUR_MEGAS)) search.push([id, 'pokemon', offsetsFor(Dex.species.get(id).name)]);
 
+// Alias rows for our Megas ("halloween", "mega banette halloween"...): [alias, type, target, at].
+const searchAliases = [];
+for (const [alias, at] of halloween.SEARCH_ALIASES || []) searchAliases.push([alias, 'pokemon', Dex.species.get(halloween.FORME).id, at]);
+
 // Event Pokemon, for "event" in the search: every event file lists its own.
 const EVENT_FILES = ['halloween.js'];
 const events = [];
@@ -335,7 +339,13 @@ for (const [id, record] of Object.entries(applied)) {
 	bySpecies[id] = entry;
 }
 // Halloween 2026: Witch's Snatch is not learned (Poltergeist becomes it on the Mega),
-// so nothing is added to the Banette line here; the move still ships for tooltips.
+// but the Mega's own page lists it, like Behemoth Blade on Zacian-Crowned.
+bySpecies.banettemegahalloween = { moves: ['witchssnatch'], abilities: [] };
+// And the Dark moves Banette was given for Halloween (halloween.js DARK_MOVES).
+{
+	const entry = bySpecies.banette || (bySpecies.banette = { moves: [], abilities: [] });
+	for (const id of halloween.DARK_MOVES || []) if (!entry.moves.includes(id)) entry.moves.push(id);
+}
 
 const file = `/**
  * The buffs, for the client.
@@ -366,6 +376,7 @@ window.VelvetBuffs = {
 \tevoAlso: ${JSON.stringify(evoAlso)},
 \tawakened: ${JSON.stringify(awakened)},
 \tevents: ${JSON.stringify(events)},
+\tsearchAliases: ${JSON.stringify(searchAliases)},
 
 \t/** What this Pokemon gained, or an empty record. */
 \tget: function (speciesid) {
