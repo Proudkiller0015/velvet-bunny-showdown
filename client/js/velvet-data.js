@@ -311,8 +311,9 @@
 		var awakenedIn = installAwakenedSearch();
 		var textIn = installDescriptions();
 		var zMaxIn = installZAndMax();
+		var defaultIn = installDefaultFormat();
 		return tableIn && orderIn && spritesIn && iconIn && builderIn && tipsIn && rpIn &&
-			cutIn && listIn && buffsIn && abilitiesIn && itemIn && sigItemIn && powerIn && dmaxIn && awakenedIn && textIn && zMaxIn;
+			cutIn && listIn && buffsIn && abilitiesIn && itemIn && sigItemIn && powerIn && dmaxIn && awakenedIn && textIn && zMaxIn && defaultIn;
 	}
 
 	/*
@@ -327,6 +328,36 @@
 	 * buttons, then as normal, and the Max buttons are added beside the Z ones. The
 	 * two checkboxes untick each other, since only one can be used.
 	 */
+	/*
+	 * The home screen's pre-selected format: RP Random Battle, this server's own,
+	 * rather than Showdown's Gen 9 Random Battle. The client picks its default
+	 * whenever it draws the button with no format (the same moments Showdown's
+	 * own default applies); a format a player picks is passed in and kept.
+	 */
+	function installDefaultFormat() {
+		var menu = window.MainMenuRoom;
+		if (!menu || !menu.prototype || !menu.prototype.renderFormats) return false;
+		if (menu.__velvetDefaultFormat) return true;
+		menu.__velvetDefaultFormat = true;
+		var original = menu.prototype.renderFormats;
+		menu.prototype.renderFormats = function (formatid, noChoice) {
+			if (!formatid && !noChoice && window.BattleFormats && window.BattleFormats.gen9rprandombattle) {
+				formatid = 'gen9rprandombattle';
+			}
+			return original.call(this, formatid, noChoice);
+		};
+		// Already drawn with Showdown's default before this ran: draw it again.
+		try {
+			var room = window.app && window.app.rooms && window.app.rooms[''];
+			if (room && room.curFormat === 'gen9randombattle' && window.BattleFormats && window.BattleFormats.gen9rprandombattle) {
+				room.curFormat = '';
+				var btn = room.$('button.formatselect[name=format]').first();
+				if (btn.length && !btn.hasClass('preselected')) btn.replaceWith(room.renderFormats());
+			}
+		} catch (e) { /* the menu redraws on its own soon enough */ }
+		return true;
+	}
+
 	function installZAndMax() {
 		var R = window.BattleRoom;
 		if (!R || !R.prototype || !R.prototype.updateMoveControls) return false;

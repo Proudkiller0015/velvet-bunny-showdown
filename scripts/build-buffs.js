@@ -232,8 +232,12 @@ const natdexTiers = {};
 // Halloween 2026: the witch Mega Banette is ours, not a Z-A Mega, so it is added by hand.
 const halloween = require(path.join(PACKAGE, 'dist', 'data', 'velvet', 'halloween.js'));
 const OUR_MEGAS = { [require(path.join(PACKAGE, 'dist', 'sim', 'dex.js')).Dex.species.get(halloween.FORME).id]: Dex.species.get(halloween.FORME).tier };
-for (const [id, tier] of Object.entries(Object.assign({}, za.assigned, OUR_MEGAS, TIERS))) {
-	if (isMegaForme(id)) megaTiers[id] = tier;
+// Species this server made legal and tiered in its own formats-data (Eternamax: AG).
+const OUR_FORMATS = require(path.join(PACKAGE, 'dist', 'data', 'velvet', 'formats-data.js')).FormatsData;
+const OUR_TIERS = {};
+for (const [id, row] of Object.entries(OUR_FORMATS)) if (row.tier && row.tier !== 'Illegal' && row.isNonstandard === null) OUR_TIERS[id] = row.natDexTier || row.tier;
+for (const [id, tier] of Object.entries(Object.assign({}, za.assigned, OUR_MEGAS, OUR_TIERS, TIERS))) {
+	if (isMegaForme(id) || id in OUR_TIERS) megaTiers[id] = tier;
 	else if (!inThisGen(id)) natdexTiers[id] = tier;
 	else tiers[id] = tier;
 }
@@ -255,7 +259,7 @@ for (const id of Object.keys(TIERS)) {
 	}
 }
 const unlocked = {
-	species: Object.keys(za.assigned),
+	species: [...Object.keys(za.assigned), ...Object.keys(OUR_TIERS)],
 	items: za.ZA_STONES.slice(),
 };
 /*

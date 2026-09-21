@@ -169,6 +169,97 @@ let installed = false;
  * Everything is scoped to this one format by checking the format id on the
  * generator, so the ordinary Random Battle ladder sees none of it.
  */
+/*
+ * The whole stock table, brought up to date with this server's buffs - for RP
+ * Random Battle. Showdown's sets were written for Showdown's Pokemon: Banette
+ * without its Prankster or its Dark moves, Gengar without Twilight Exit,
+ * Regigigas with a Slow Start it no longer has. Built once per dex, from the
+ * same buff records the teambuilder reads (buffs.js `applied`).
+ *
+ *   - abilities: only ones the species really has, plus its Awakened ones;
+ *   - moves: its Awakened moves, each only where the role would use it -
+ *     attacks on the side the set attacks from (or STAB), setup on setup roles,
+ *     pivots on support and fast roles, recovery/hazards/status on support and
+ *     bulky roles. At most four added per set, best first.
+ */
+const EXTRA_MOVES = { banette: () => { try { return require('./halloween.js').DARK_MOVES; } catch (e) { return []; } } };
+const SUPPORTISH = ['Bulky Support', 'Fast Support', 'Bulky Attacker', 'Bulky Setup'];
+const SETUPISH = ['Setup Sweeper', 'Bulky Setup', 'Fast Bulky Setup', 'Tera Blast user'];
+const FASTISH = ['Fast Attacker', 'Fast Support', 'Wallbreaker'];
+let buffedCache = null;
+function buffedTable(dex, base) {
+	if (buffedCache && buffedCache.base === base) return buffedCache.table;
+	let applied = {};
+	let RS = null;
+	try { applied = require('./buffs.js').applied || {}; } catch (e) {}
+	try { RS = require('../../../../../src/role-sets.js'); } catch (e) {
+		try { RS = require(require('path').join(process.cwd(), 'src', 'role-sets.js')); } catch (e2) {}
+	}
+	const lists = RS || { RECOVERY: [], HAZARDS: [], STATUS: [], UTILITY: [], PIVOTS: [] };
+	const table = {};
+	for (const [id, entry] of Object.entries(base)) {
+		const species = dex.species.get(id);
+		if (!species.exists || !entry || !entry.sets) { table[id] = entry; continue; }
+		const own = Object.values(species.abilities).filter(Boolean);
+		const record = applied[id] || { moves: [], abilities: [] };
+		const extra = [...(record.moves || []), ...((EXTRA_MOVES[id] && EXTRA_MOVES[id]()) || [])]
+			.map(m => dex.moves.get(m)).filter((m, i, all) => m.exists && !m.isNonstandard && all.findIndex(o => o.id === m.id) === i);
+		const awakened = (record.abilities || []).filter(a => own.includes(a));
+		table[id] = Object.assign({}, entry, { sets: entry.sets.map(set => {
+			let abilities = (set.abilities || []).filter(a => own.includes(a));
+			for (const a of awakened) if (!abilities.includes(a)) abilities.push(a);
+			if (!abilities.length) abilities = own.slice(0, 1);
+			const pool = set.movepool.map(n => dex.moves.get(n));
+			const attacks = pool.filter(m => m.category !== 'Status');
+			const physical = attacks.filter(m => m.category === 'Physical').length >= attacks.length / 2;
+			const side = physical ? 'Physical' : 'Special';
+			const fits = m => {
+				if (pool.some(p => p.id === m.id)) return false;
+				// No filler: an attack only if it would actually be picked - real power, or
+				// priority, a switch, or Knock Off. (Adding every learnable move is how weak
+				// moves like Bite or Flame Charge end up crowding out good ones.)
+				if (m.category !== 'Status') {
+					const worth = m.basePower >= 75 || m.priority > 0 || m.selfSwitch || m.id === 'knockoff';
+					return worth && (m.category === side || species.types.includes(m.type));
+				}
+				if (set.role === 'AV Pivot') return false;
+				const setup = (m.boosts && m.target === 'self') || (m.self && m.self.boosts);
+				if (setup) return SETUPISH.includes(set.role);
+				// Trick Room pivots belong on slow Pokemon or support; on a fast attacker the
+				// room works against it. Ordinary pivots suit support and fast roles.
+				if (m.selfSwitch && m.pseudoWeather === 'trickroom') return species.baseStats.spe <= 70 || set.role === 'Bulky Support' || set.role === 'Fast Support';
+				if (m.selfSwitch) return SUPPORTISH.includes(set.role) || FASTISH.includes(set.role);
+				if ([...lists.RECOVERY, ...lists.HAZARDS, ...lists.STATUS, ...lists.UTILITY].includes(m.id)) return SUPPORTISH.includes(set.role) || set.role === 'Fast Support';
+				return false;
+			};
+			const value = m => (m.category === 'Status' ? 50 : (RS ? RS.attackValue(species, m, side) : m.basePower));
+			const added = extra.filter(fits).sort((a, b) => value(b) - value(a)).slice(0, 4).map(m => m.name);
+			return Object.assign({}, set, { abilities, movepool: [...set.movepool, ...added] });
+		}) });
+	}
+	buffedCache = { base, table };
+	return table;
+}
+
+/* Abilities a Pokemon no longer has on this server (Regigigas's Slow Start),
+ * replaced in every Gen 9 random format, RP or not: the stock sets would
+ * otherwise hand out an ability the dex says it cannot have. */
+function withRealAbilities(dex, base) {
+	let out = null;
+	for (const [id, entry] of Object.entries(base)) {
+		const species = dex.species.get(id);
+		if (!species.exists || !entry || !entry.sets) continue;
+		const own = Object.values(species.abilities).filter(Boolean);
+		if (entry.sets.every(set => (set.abilities || []).every(a => own.includes(a)))) continue;
+		out = out || Object.assign({}, base);
+		out[id] = Object.assign({}, entry, { sets: entry.sets.map(set => {
+			const abilities = (set.abilities || []).filter(a => own.includes(a));
+			return Object.assign({}, set, { abilities: abilities.length ? abilities : own.slice(0, 1) });
+		}) });
+	}
+	return out || base;
+}
+
 function installRandomSets() {
 	if (installed) return true;
 
@@ -201,10 +292,22 @@ function installRandomSets() {
 	//    as long as the process lived.
 	const original = RandomTeams.prototype.randomTeam;
 	RandomTeams.prototype.randomTeam = function () {
-		if (isRp(this) && this.randomSets) {
-			this.randomSets = Object.assign({}, this.randomSets, SETS);
+		if (this.randomSets && this.dex) {
+			if (isRp(this)) this.randomSets = Object.assign({}, buffedTable(this.dex, this.randomSets), SETS);
+			else this.randomSets = withRealAbilities(this.dex, this.randomSets);
 		}
 		return original.apply(this, arguments);
+	};
+
+	// 1b. A guard for Showdown's own generator. Its MOVE_PAIRS list pairs Leech
+	//     Seed with both Protect and Substitute, so a set holding all three pops
+	//     Leech Seed twice and the second pop (index -1) throws. Stock sets are
+	//     four moves long and never reach that step; ours, with Solar Nectar or
+	//     another Awakened move added, do. Popping nothing is the right answer.
+	const pop = RandomTeams.prototype.fastPop;
+	RandomTeams.prototype.fastPop = function (list, index) {
+		if (index < 0 && isRp(this)) return undefined;
+		return pop.apply(this, arguments);
 	};
 
 	// 2. The item, which the generator would otherwise pick for them.
