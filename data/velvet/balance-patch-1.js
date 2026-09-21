@@ -1537,7 +1537,7 @@ const EEVEELUTIONS = {
 const TM_DISTRIBUTION = {
 	// The Trick Room pivot: Banette first, the Ghosts with a dark streak, and the
 	// Dark types that had no niche - many of them slow enough to love the room.
-	twilightexit: ['banette', 'gengar', 'sableye', 'spiritomb', 'dusknoir', 'mismagius', 'houndstone', 'mightyena', 'liepard', 'thievul', 'cacturne', 'skuntank', 'mandibuzz', 'crawdaunt', 'scrafty', 'pangoro', 'malamar', 'mabosstiff', 'honchkrow', 'grimmsnarl', 'persianalola', 'raticatealola'],
+	twilightexit: ['banette', 'gengar', 'sableye', 'spiritomb', 'dusknoir', 'mismagius', 'houndstone', 'mightyena', 'liepard', 'thievul', 'cacturne', 'skuntank', 'mandibuzz', 'crawdaunt', 'scrafty', 'pangoro', 'malamar', 'mabosstiff', 'honchkrow', 'grimmsnarl', 'persianalola', 'raticatealola', 'hoopa', 'luxray'],
 	// Stinging, swarming and pincered bugs. Not Scolipede: Speed Boost plus a 50% Attack raise is a sweeper it doesn't need to be.
 	hivefrenzy: ['beedrill', 'ariados', 'ledian', 'volbeat', 'vespiquen', 'parasect', 'scyther', 'scizor', 'kleavor', 'pinsir', 'heracross', 'drapion', 'gligar', 'gliscor', 'escavalier', 'durant', 'leavanny', 'lokix', 'spidops', 'kricketune', 'mothim', 'ribombee', 'golisopod', 'yanmega', 'ninjask', 'crustle'],
 	// Cocoons, moths and silk-spinners. Not Volcarona: reliable recovery beside Quiver Dance pushes an OU sweeper too far.

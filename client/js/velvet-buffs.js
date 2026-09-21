@@ -3451,6 +3451,36 @@ window.VelvetBuffs = {
 			],
 			"abilities": []
 		},
+		"hoopa": {
+			"moves": [
+				"twilightexit"
+			],
+			"abilities": []
+		},
+		"luxray": {
+			"moves": [
+				"twilightexit",
+				"sparkscamper",
+				"voltaiclance",
+				"gleamstalk",
+				"knockoff",
+				"suckerpunch",
+				"taunt",
+				"partingshot",
+				"encore",
+				"yawn",
+				"swordsdance"
+			],
+			"abilities": [
+				"Prankster"
+			],
+			"slots": {
+				"0": "Rivalry",
+				"1": "Intimidate",
+				"H": "Guts",
+				"V0": "Prankster"
+			}
+		},
 		"scizor": {
 			"moves": [],
 			"abilities": []
@@ -3656,29 +3686,6 @@ window.VelvetBuffs = {
 				"shufflejab"
 			],
 			"abilities": []
-		},
-		"luxray": {
-			"moves": [
-				"sparkscamper",
-				"voltaiclance",
-				"gleamstalk",
-				"knockoff",
-				"suckerpunch",
-				"taunt",
-				"partingshot",
-				"encore",
-				"yawn",
-				"swordsdance"
-			],
-			"abilities": [
-				"Prankster"
-			],
-			"slots": {
-				"0": "Rivalry",
-				"1": "Intimidate",
-				"H": "Guts",
-				"V0": "Prankster"
-			}
 		},
 		"zebstrika": {
 			"moves": [
@@ -4840,6 +4847,22 @@ window.VelvetBuffs = {
 			],
 			"abilities": []
 		},
+		"luxio": {
+			"moves": [
+				"twilightexit",
+				"sparkscamper",
+				"voltaiclance"
+			],
+			"abilities": []
+		},
+		"shinx": {
+			"moves": [
+				"twilightexit",
+				"sparkscamper",
+				"voltaiclance"
+			],
+			"abilities": []
+		},
 		"skorupi": {
 			"moves": [
 				"hivefrenzy",
@@ -4984,20 +5007,6 @@ window.VelvetBuffs = {
 				"sparkscamper",
 				"voltaiclance",
 				"shufflejab"
-			],
-			"abilities": []
-		},
-		"luxio": {
-			"moves": [
-				"sparkscamper",
-				"voltaiclance"
-			],
-			"abilities": []
-		},
-		"shinx": {
-			"moves": [
-				"sparkscamper",
-				"voltaiclance"
 			],
 			"abilities": []
 		},
