@@ -83,8 +83,12 @@ function synthesize(dex, species, moves) {
 	const bulky = b.hp + b.def + b.spd > b.atk + b.spa + b.spe;
 	const pool = [...moves].map(id => dex.moves.get(id)).filter(m => m.exists && !m.isNonstandard);
 	const stat = b.atk >= b.spa ? 'Physical' : 'Special';
+	// Two of a type at most: Elekid's best eight were six Electric moves and Psychic, so
+	// its fourth slot went to a second Electric attack instead of coverage.
+	const perType = {};
 	const attacks = pool.filter(m => m.category === stat && m.basePower >= 50 && !AWKWARD.includes(m.id))
-		.sort((x, y) => attackValue(species, y, stat) - attackValue(species, x, stat)).slice(0, 8);
+		.sort((x, y) => attackValue(species, y, stat) - attackValue(species, x, stat))
+		.filter(m => (perType[m.type] = (perType[m.type] || 0) + 1) <= 2).slice(0, 8);
 	const extras = pool.filter(m => (bulky ? [...RECOVERY, ...STATUS, ...HAZARDS] : [...(stat === 'Physical' ? PHYSICAL_SETUP : SPECIAL_SETUP), ...PIVOTS]).includes(m.id));
 	return [{
 		role: bulky ? 'Bulky Attacker' : 'Fast Attacker',
@@ -95,7 +99,12 @@ function synthesize(dex, species, moves) {
 
 function attackValue(species, move, stat) {
 	const power = move.basePower || (['seismictoss', 'nightshade'].includes(move.id) ? 75 : 0);
-	const acc = move.accuracy === true ? 1 : (move.accuracy || 100) / 100;
+	/*
+	 * Accuracy counts more than its share: a miss loses the turn as well as the damage.
+	 * Scored as (0.5 + 0.5 * acc), Zap Cannon (120, 50%) tied Thunderbolt (90, 100%) and
+	 * the RP's Build my team handed Elekid the one that misses half the time.
+	 */
+	const acc = Math.pow(move.accuracy === true ? 1 : (move.accuracy || 100) / 100, 1.5);
 	const stab = species.types.includes(move.type) ? 1.5 : 1;
 	const fits = !stat || move.category === stat ? 1 : 0.5;
 	/*
@@ -106,8 +115,11 @@ function attackValue(species, move, stat) {
 	 */
 	const ours = move.num < 0 ? (move.velvetShared ? 1.08 : 1.3) : 1;
 	// Foul Play hits with the target's Attack: a poor attack for anything that has its own.
-	const drawback = AWKWARD.includes(move.id) ? 0.4 : move.id === 'foulplay' ? 0.6 : move.recoil ? 0.85 : 1;
-	return power * (0.5 + 0.5 * acc) * stab * fits * ours * drawback;
+	// Half your HP (Steel Beam, Mind Blown) costs more than Flare Blitz's recoil; a
+	// recharge turn (Rock Wrecker, Giga Impact) gives the opponent a free one.
+	const drawback = AWKWARD.includes(move.id) ? 0.4 : move.id === 'foulplay' ? 0.6
+		: move.mindBlownRecoil ? 0.6 : move.self && move.self.volatileStatus === 'mustrecharge' ? 0.5 : move.recoil ? 0.85 : 1;
+	return power * acc * stab * fits * ours * drawback;
 }
 
 /**
@@ -219,8 +231,11 @@ function pickMoves(dex, species, set, rng = Math.random) {
 	// Its own signature first, if it has one: the Pokemon was rebuilt around it. A move
 	// this server shares out is not a signature and takes its chances with the rest.
 	take(best(m => attack(m) && m.num < 0 && !m.velvetShared));
-	// STAB.
-	take(best(m => attack(m) && species.types.includes(m.type) && !chosen.some(c => c.type === m.type), wallValue) ||
+	// STAB - a real attack, not a pivot: Volt Switch taking this slot pushed Thunderbolt
+	// out as "a second Electric move". Pivots have a slot of their own below.
+	const stabAttack = m => attack(m) && species.types.includes(m.type) && !PIVOTS.includes(m.id);
+	take(best(m => stabAttack(m) && !chosen.some(c => c.type === m.type), wallValue) ||
+		(chosen.length ? null : best(stabAttack, wallValue)) ||
 		(chosen.length ? null : best(m => attack(m) && species.types.includes(m.type), wallValue)));
 	// The role's job.
 	if (SETUP_ROLES.includes(set.role)) {
