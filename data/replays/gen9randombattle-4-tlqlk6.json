@@ -1,0 +1,12 @@
+{
+	"id": "gen9randombattle-4-tlqlk6",
+	"format": "[Gen 9] Random Battle",
+	"players": [
+		"Bunny Easy",
+		"Keiko_Sama"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆Keiko_Sama\n|t:|1790033859\n|gametype|singles\n|player|p1|Bunny Easy|bunny.png|1066\n|player|p2|Keiko_Sama|keiko-yume.png|1055\n|gen|9\n|tier|[Gen 9] Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1790033859\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Lanturn|Lanturn, L89, F|100/100\n|switch|p2a: Ampharos|Ampharos, L88, M|100/100\n|turn|1\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|j|&SlimeQueenSamantha\n|\n|t:|1790033921\n|switch|p2a: Regigigas|Regigigas, L84|100/100\n|-start|p2a: Regigigas|ability: Slow Start\n|move|p1a: Lanturn|Thunderbolt|p2a: Regigigas\n|-damage|p2a: Regigigas|78/100\n|\n|-heal|p2a: Regigigas|84/100|[from] item: Leftovers\n|upkeep\n|turn|2\n|\n|t:|1790033940\n|move|p1a: Lanturn|Thunder Wave|p2a: Regigigas\n|-status|p2a: Regigigas|par\n|move|p2a: Regigigas|Rest|p2a: Regigigas\n|-status|p2a: Regigigas|slp|[from] move: Rest\n|-heal|p2a: Regigigas|100/100 slp|[silent]\n|\n|upkeep\n|turn|3\n|\n|t:|1790033957\n|move|p1a: Lanturn|Thunderbolt|p2a: Regigigas\n|-damage|p2a: Regigigas|76/100 slp\n|cant|p2a: Regigigas|slp\n|\n|-heal|p2a: Regigigas|82/100 slp|[from] item: Leftovers\n|upkeep\n|turn|4\n|\n|t:|1790033965\n|move|p1a: Lanturn|Thunderbolt|p2a: Regigigas\n|-damage|p2a: Regigigas|59/100 slp\n|cant|p2a: Regigigas|slp\n|\n|-heal|p2a: Regigigas|65/100 slp|[from] item: Leftovers\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1790033979
+}
