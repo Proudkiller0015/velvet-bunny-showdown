@@ -110,7 +110,6 @@
 	// Halloween 2026: the witch skin of Mega Banette, drawn for this server on a
 	// grid a little larger than 96, so it carries its own size.
 	ART.banettemegahalloween = {
-		standard: true,
 		still: { front: ['banette-megahalloween.png', 106, 101], back: ['banette-megahalloween-back.png', 108, 104] },
 		builder: 'background-image:url(#SPRITES#banette-megahalloween.png);background-size:48px 46px;background-position:8px 0;background-repeat:no-repeat;',
 	};
