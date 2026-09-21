@@ -168,7 +168,8 @@ exports.moves = (data) => {
 // The classic Dark moves and utilities the Banette line was missing (the owner's
 // call, with the Halloween form going Ghost/Dark). Regular Banette gets them too,
 // and the Mega learns through Banette. Pursuit is Past: National Dex formats only.
-const DARK_MOVES = ['nightslash', 'bite', 'snarl', 'assurance', 'pursuit', 'partingshot', 'faketears', 'quash', 'memento', 'topsyturvy', 'switcheroo'];
+// Trick-or-Treat too: not Dark, but the Halloween move, and the owner's call.
+const DARK_MOVES = ['nightslash', 'bite', 'snarl', 'assurance', 'pursuit', 'partingshot', 'faketears', 'quash', 'memento', 'topsyturvy', 'switcheroo', 'trickortreat'];
 exports.DARK_MOVES = DARK_MOVES;
 
 exports.learnsets = (data) => {

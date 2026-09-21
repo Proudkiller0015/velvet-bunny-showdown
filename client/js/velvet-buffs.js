@@ -1969,7 +1969,8 @@ window.VelvetBuffs = {
 				"quash",
 				"memento",
 				"topsyturvy",
-				"switcheroo"
+				"switcheroo",
+				"trickortreat"
 			],
 			"abilities": [
 				"Prankster"

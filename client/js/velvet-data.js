@@ -1620,8 +1620,28 @@
 	/** The buffed moves this Pokemon got, if any. */
 	function buffedMovesFor(speciesid) {
 		var buffs = window.VelvetBuffs;
-		var record = buffs && buffs.get ? buffs.get(speciesid) : null;
-		return record ? record.moves : [];
+		if (!buffs || !buffs.get) return [];
+		var record = buffs.get(speciesid);
+		var moves = record ? record.moves.slice() : [];
+		/*
+		 * A Mega (or any battle-only form) learns through its BASE Pokemon, so it has
+		 * the base's Awakened moves too - the same gap the abilities had (Mega Banette
+		 * showed none of Banette's). Merged with anything the form has of its own.
+		 */
+		var base = baseFormOf(speciesid);
+		var baseRecord = base ? buffs.get(base) : null;
+		if (baseRecord) for (var i = 0; i < baseRecord.moves.length; i++) if (moves.indexOf(baseRecord.moves[i]) < 0) moves.push(baseRecord.moves[i]);
+		return moves;
+	}
+
+	/** The Pokemon a Mega, Primal or battle-only form is picked as, or '' for anything else. */
+	function baseFormOf(speciesid) {
+		if (!window.Dex || !window.Dex.species) return '';
+		var form = window.Dex.species.get(speciesid || '');
+		if (!form || !form.exists) return '';
+		var base = form.battleOnly || (form.isMega || /-Mega/.test(form.name || '') || form.isPrimal ? form.baseSpecies : '');
+		if (base && typeof base !== 'string') base = base[0];
+		return base ? window.toID(base) : '';
 	}
 
 	/**
