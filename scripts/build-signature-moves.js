@@ -195,6 +195,15 @@ function build() {
 		if (own.length) signatures[family] = own;
 	}
 
+	// Signatures by decision rather than by learnset. Poltergeist is Banette's
+	// here: on the Halloween 2026 Mega it becomes Witch's Snatch
+	// (data/velvet/halloween.js), so the builder files it under Banette's own.
+	const CHOSEN = { shuppet: ['poltergeist'] };
+	for (const [family, moves] of Object.entries(CHOSEN)) {
+		signatures[family] = [...new Set([...(signatures[family] || []), ...moves])]
+			.sort((a, b) => Dex.moves.get(a).name.localeCompare(Dex.moves.get(b).name));
+	}
+
 	// Every member of a family answers for the family: the builder asks about
 	// the Pokemon in front of it, which is usually not the first stage.
 	const bySpecies = {};

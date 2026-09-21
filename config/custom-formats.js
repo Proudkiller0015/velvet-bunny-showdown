@@ -1142,3 +1142,22 @@ exports.Formats = [
 	rpTier('Ubers', '[Gen 1] Ubers', { gen: 1 }),
 	rpTier('OU', '[Gen 1] OU', { gen: 1 }),
 ];
+
+/*
+ * Halloween 2026 event rule, in every format above: the Banettite-Halloween
+ * belongs to the shiny Banette the Witching Hour board hands out, so only a
+ * shiny Banette may hold it. Chained after any set check a format already has.
+ */
+function witchStoneRule(set) {
+	if (this.dex.items.get(set.item).id !== 'banettitehalloween') return [];
+	if (set.shiny) return [];
+	return [`${set.name || set.species} must be shiny to hold the Banettite-Halloween (Halloween 2026 event rule).`];
+}
+for (const format of exports.Formats) {
+	if (!format.name) continue;
+	const own = format.onValidateSet;
+	format.onValidateSet = function (set, fmt, setHas, teamHas) {
+		const problems = [...((own && own.call(this, set, fmt, setHas, teamHas)) || []), ...witchStoneRule.call(this, set)];
+		return problems.length ? problems : undefined;
+	};
+}

@@ -321,11 +321,8 @@ for (const [id, record] of Object.entries(applied)) {
 	if (record.abilities.length) entry.slots = Object.assign({}, species.abilities);
 	bySpecies[id] = entry;
 }
-// Halloween 2026: Witch's Snatch is the Banette line's, and not a buff, so it is added here.
-for (const id of ['banette', 'shuppet']) {
-	const entry = bySpecies[id] || (bySpecies[id] = { moves: [], abilities: [] });
-	if (!entry.moves.includes('witchssnatch')) entry.moves.push('witchssnatch');
-}
+// Halloween 2026: Witch's Snatch is not learned (Poltergeist becomes it on the Mega),
+// so nothing is added to the Banette line here; the move still ships for tooltips.
 
 const file = `/**
  * The buffs, for the client.

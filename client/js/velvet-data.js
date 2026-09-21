@@ -140,14 +140,14 @@
 
 	var SPECIES = {
 		// Halloween 2026 (data/velvet/halloween.js): a skin of Mega Banette from the
-		// Banettite-Halloween. Same Pokemon, +10 Atk and Spe, its own ability.
+		// Banettite-Halloween. Mega Banette's stats, its own ability and move.
 		banettemegahalloween: {
 			num: 354,
 			name: "Banette-Mega-Halloween",
 			baseSpecies: "Banette",
 			forme: "Mega-Halloween",
 			types: ["Ghost"],
-			baseStats: { hp: 64, atk: 175, def: 75, spa: 93, spd: 83, spe: 85 },
+			baseStats: { hp: 64, atk: 165, def: 75, spa: 93, spd: 83, spe: 75 },
 			abilities: { 0: "Witching Hour" },
 			heightm: 1.2,
 			weightkg: 13,
@@ -156,7 +156,7 @@
 			requiredItem: "Banettite-Halloween",
 			isMega: true,
 			battleOnly: "Banette",
-			tier: "RU",
+			tier: "UU",
 		},
 
 		// Reachable only by a Nuzleaf fainting with a Broken Pact, so the

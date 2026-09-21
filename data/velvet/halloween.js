@@ -7,9 +7,12 @@
  * little on top so owning it feels like something. The ordinary Banettite and
  * the ordinary Mega Banette are untouched.
  *
- *   Banette-Mega-Halloween   64 / 175 / 75 / 93 / 83 / 85 (Mega Banette +10 Atk, +10 Spe)
+ *   Banette-Mega-Halloween   Mega Banette's own stats, 64 / 165 / 75 / 93 / 83 / 75
  *   Witching Hour            Prankster, and its Ghost moves hit 1.2x
- *   Witch's Snatch           Ghost, physical, 110, 100% - takes the target's item
+ *   Witch's Snatch           Ghost, physical, 110, 100% - takes the target's item.
+ *                            Not learned: Poltergeist BECOMES it when Banette Mega
+ *                            Evolves into this form (the way Iron Head becomes
+ *                            Behemoth Blade on a crowned Zacian).
  *
  * It rides the base dex the way Samantha does (see index.js), keeps Banette's
  * national number so the builder files it beside Banette, and borrows Mega
@@ -26,7 +29,8 @@ exports.pokedex = (data) => {
 		...mega,
 		name: FORME,
 		forme: 'Mega-Halloween',
-		baseStats: { ...mega.baseStats, atk: mega.baseStats.atk + 10, spe: mega.baseStats.spe + 10 },
+		// A skin: the stats are Mega Banette's, unchanged. What it gains is the ability and the move.
+		baseStats: { ...mega.baseStats },
 		abilities: { 0: 'Witching Hour' },
 		color: 'Purple',
 		requiredItem: STONE,
@@ -40,8 +44,8 @@ exports.pokedex = (data) => {
 };
 
 exports.formatsData = (data) => {
-	// Legal wherever Mega Banette is, at Mega Banette's tier.
-	if (data.banettemega) data.banettemegahalloween = { ...data.banettemega };
+	// Legal wherever Mega Banette is; tiered UU by the owner's call.
+	if (data.banettemega) data.banettemegahalloween = { ...data.banettemega, tier: 'UU', natDexTier: 'UU' };
 	return data;
 };
 
@@ -55,8 +59,8 @@ exports.items = (data) => {
 		gen: 9,
 		megaStone: { Banette: FORME },
 		itemUser: ['Banette'],
-		desc: 'Halloween 2026 event item, from the Witching Hour board only. If held by a Banette, this item allows it to Mega Evolve into its limited-time Halloween form in battle.',
-		shortDesc: 'Halloween 2026 event: Banette Mega Evolves into its Halloween form.',
+		desc: "Halloween 2026 event item, from the Witching Hour board only. If held by a Banette, it Mega Evolves into the witch Mega Banette: Ghost, Mega Banette's stats (64/165/75/93/83/75), ability Witching Hour (Prankster, and its Ghost moves have 1.2x power). On Mega Evolving, its Poltergeist becomes Witch's Snatch (Ghost, physical, 110 power, 100% accuracy, hits Normal types, removes the target's held item and adds the Ghost type to it).",
+		shortDesc: "Halloween 2026 event. Banette: Mega Evolves; Prankster + 1.2x Ghost; Poltergeist becomes Witch's Snatch.",
 	};
 	return data;
 };
@@ -70,6 +74,29 @@ exports.abilities = (data) => {
 		rating: 4,
 		// Prankster, exactly as the game writes it - Dark types still ignore the boosted move.
 		onModifyPriority: prankster && prankster.onModifyPriority,
+		// Poltergeist becomes Witch's Snatch the moment this form arrives - Mega
+		// Evolution sets the ability and runs this - and stays that way for the
+		// battle, base slots included, so a switch out and back in keeps it.
+		onStart(pokemon) {
+			const snatch = this.dex.moves.get("Witch's Snatch");
+			let changed = false;
+			for (const slots of [pokemon.moveSlots, pokemon.baseMoveSlots]) {
+				for (const slot of slots || []) {
+					if (slot.id !== 'poltergeist') continue;
+					slot.id = snatch.id;
+					slot.move = snatch.name;
+					changed = true;
+				}
+			}
+			// The Mega Evolution turn: the Poltergeist it was about to use is already
+			// queued, and would find no such move left - so the queued action changes too.
+			const queued = this.queue.willMove(pokemon);
+			if (queued && queued.move && queued.move.id === 'poltergeist') {
+				queued.move = this.dex.getActiveMove(snatch.id);
+				queued.moveid = snatch.id;
+			}
+			if (changed) this.add('-message', `${pokemon.name}'s Poltergeist became Witch's Snatch!`);
+		},
 		onBasePowerPriority: 21,
 		onBasePower(basePower, attacker, defender, move) {
 			if (move.type === 'Ghost') return this.chainModify([4915, 4096]);
@@ -91,6 +118,8 @@ exports.moves = (data) => {
 		pp: 10,
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		// Mind's Eye the other way round: a Ghost move Normal types are not immune to.
+		ignoreImmunity: { Ghost: true },
 		// Knock Off's own removal: the item is taken after the hit, and whatever
 		// refuses to be taken (a Mega Stone on its owner, a Z-Crystal) stays.
 		onAfterHit(target, source) {
@@ -98,20 +127,26 @@ exports.moves = (data) => {
 				const item = target.takeItem();
 				if (item) this.add('-enditem', target, item.name, "[from] move: Witch's Snatch", `[of] ${source}`);
 			}
+			// And the curse: Trick-or-Treat's added Ghost type, so the next one lands harder.
+			if (target.hp && !target.hasType('Ghost') && target.addType('Ghost')) {
+				this.add('-start', target, 'typeadd', 'Ghost', "[from] move: Witch's Snatch");
+			}
 		},
 		secondary: null,
 		target: 'normal',
 		type: 'Ghost',
-		shortDesc: "Removes the target's held item.",
-		desc: "If the target is holding an item that can be removed, it is taken away after the hit. Banette's signature from the Halloween 2026 event.",
+		shortDesc: "Hits Normal types. Removes the target's item and adds Ghost to its types.",
+		desc: "Normal-type Pokemon are not immune to this move. If the target is holding an item that can be removed, it is taken away after the hit, and the target gains the Ghost type in addition to its own, as Trick-or-Treat does. Poltergeist becomes this move when Banette Mega Evolves into its Halloween 2026 form.",
 	};
 	return data;
 };
 
 exports.learnsets = (data) => {
 	// Banette's own, so the Mega learns it through its base form.
+	// Witch's Snatch is never learned - Poltergeist turns into it (see the
+	// ability). The Banette line has Poltergeist already; make sure it stays.
 	for (const id of ['banette', 'shuppet']) {
-		if (data[id] && data[id].learnset) data[id].learnset.witchssnatch = ['9L1'];
+		if (data[id] && data[id].learnset && !data[id].learnset.poltergeist) data[id].learnset.poltergeist = ['9M'];
 	}
 	return data;
 };
