@@ -32,11 +32,11 @@ module.exports = {
     },
     'station': {
       name: 'Kagura Station',
-      channels: ['train-station', 'platform-two', 'ticket-hall', 'station-market', 'freight-yard', 'lost-property'],
+      channels: ['train-station', 'platform-two', 'ticket-hall', 'poke-center-station', 'station-market', 'freight-yard', 'lost-property'],
       types: ['Normal', 'Flying', 'Steel', 'Electric'],
       wild: ['platform-two', 'freight-yard', 'lost-property'],
       trainers: ['worker', 'gentleman', 'pokefan', 'policeman', 'schoolkid', 'guitarist'],
-      noTrainers: ['ticket-hall', 'lost-property'],
+      noTrainers: ['ticket-hall', 'poke-center-station', 'lost-property'],
       common: ['Rattata', 'Pidove', 'Meowth', 'Magnemite', 'Voltorb', 'Klink', 'Plusle', 'Minun', 'Pawmi', 'Tadbulb', 'Zigzagoon', 'Trubbish', 'Elekid'],
       rare: ['Rotom', 'Porygon', 'Meowth-Galar', 'Varoom'],
     },
