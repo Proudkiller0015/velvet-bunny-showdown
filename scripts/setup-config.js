@@ -223,7 +223,8 @@ const avatarRights = {
 	slimequeensamantha: ['queen.png'],
 	// Offered rather than applied, at her own request, so she picks it herself.
 	dana3166: [null, 'dana.png'],
-	keikosama: ['keiko-coral.png', 'keiko-silverwolf.png', 'keiko-silverwolf-2.png', 'keiko-coral-disguise.png', 'keiko-milim.png'],
+	// Yume, her OC (with her Dream Ball and Banette), is first: her new avatar.
+	keikosama: ['keiko-yume.png', 'keiko-coral.png', 'keiko-silverwolf.png', 'keiko-silverwolf-2.png', 'keiko-coral-disguise.png', 'keiko-milim.png'],
 	ladymilim: ['milim.png'],
 	simiaignis: ['simia-ignis.png'],
 	lavit: ['lavit.png'],
@@ -241,7 +242,7 @@ const avatarsPath = path.join(pkgRoot, 'config', 'avatars.json');
 // Applied once on the next boot even if the account already has a different avatar in the applied slot
 // (the merge below otherwise never changes what someone wears). Recorded as forcedApplied so a later
 // /avatar choice sticks.
-const FORCE_APPLIED = { keikosama: 'keiko-coral.png' };
+const FORCE_APPLIED = { keikosama: 'keiko-yume.png' };
 // What actually exists to be worn. An avatar that has been renamed or removed
 // lingers in everyone's list otherwise, and a stale name in the applied slot
 // means logging in asks the server for a file that is not there.
