@@ -188,6 +188,20 @@ function drainIn(sunDrain, normalDrain) {
 }
 
 exports.MOVES = {
+	// Chilly Reception with Trick Room instead of snow: a pivot that sets the room
+	// (or ends it, as Trick Room does) and brings in the slow Pokemon behind it.
+	// Priority 0 by the owner's call - it is not -7 like Trick Room itself.
+	twilightexit: {
+		num: -41, gen: 9, name: "Twilight Exit", type: "Dark", category: "Status",
+		basePower: 0, accuracy: true, pp: 5, priority: 0,
+		flags: { mirror: 1, metronome: 1 },
+		pseudoWeather: 'trickroom',
+		selfSwitch: true,
+		secondary: null, target: "all", contestType: "Clever", velvetShared: true,
+		flavor: "The user twists the dusk inside out and slips away through the gap it leaves.",
+		shortDesc: "Sets Trick Room (or ends it), then the user switches out.",
+		desc: "For 5 turns, the Pokemon on the field move in reverse speed order within their priority bracket, as Trick Room does; if Trick Room is already active, it ends instead. Then the user switches out.",
+	},
 	hivefrenzy: {
 		num: -10, gen: 9, name: "Hive Frenzy", type: "Bug", category: "Physical",
 		basePower: 75, accuracy: 100, pp: 15, priority: 0,
@@ -1521,6 +1535,9 @@ const EEVEELUTIONS = {
  * Mew gets all ten; Smeargle can Sketch them.
  */
 const TM_DISTRIBUTION = {
+	// The Trick Room pivot: Banette first, the Ghosts with a dark streak, and the
+	// Dark types that had no niche - many of them slow enough to love the room.
+	twilightexit: ['banette', 'gengar', 'sableye', 'spiritomb', 'dusknoir', 'mismagius', 'houndstone', 'mightyena', 'liepard', 'thievul', 'cacturne', 'skuntank', 'mandibuzz', 'crawdaunt', 'scrafty', 'pangoro', 'malamar', 'mabosstiff', 'honchkrow', 'grimmsnarl', 'persianalola', 'raticatealola'],
 	// Stinging, swarming and pincered bugs. Not Scolipede: Speed Boost plus a 50% Attack raise is a sweeper it doesn't need to be.
 	hivefrenzy: ['beedrill', 'ariados', 'ledian', 'volbeat', 'vespiquen', 'parasect', 'scyther', 'scizor', 'kleavor', 'pinsir', 'heracross', 'drapion', 'gligar', 'gliscor', 'escavalier', 'durant', 'leavanny', 'lokix', 'spidops', 'kricketune', 'mothim', 'ribombee', 'golisopod', 'yanmega', 'ninjask', 'crustle'],
 	// Cocoons, moths and silk-spinners. Not Volcarona: reliable recovery beside Quiver Dance pushes an OU sweeper too far.
