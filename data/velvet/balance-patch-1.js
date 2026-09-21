@@ -101,6 +101,23 @@ exports.EVOLUTIONS = {
 	sandaconda: { from: 36, to: 32, why: '510 BST two-stage line' },
 
 	/*
+	 * Baby Pokemon. A baby is the one you find at the start, and Elekid at 30
+	 * spent most of an RP as Elekid. They grow up at 20, Tyrogue's level. The
+	 * three that the games tie to a move or a party member (Bonsly and Mime Jr.
+	 * knowing Mimic, Mantyke with a Remoraid) have no evoLevel here, so the
+	 * battle server never checked theirs; the `from` just names the old rule and
+	 * the RP bot reads the new level.
+	 */
+	electabuzz: { from: 30, to: 20, why: 'Baby: grows up at 20' },
+	magmar: { from: 30, to: 20, why: 'Baby: grows up at 20' },
+	jynx: { from: 30, to: 20, why: 'Baby: grows up at 20' },
+	toxtricity: { from: 30, to: 20, why: 'Baby: grows up at 20' },
+	toxtricitylowkey: { from: 30, to: 20, why: 'Baby: grows up at 20' },
+	sudowoodo: { from: 'levelMove', to: 20, why: 'Baby: grows up at 20 (was knowing Mimic)' },
+	mrmime: { from: 'levelMove', to: 20, why: 'Baby: grows up at 20 (was knowing Mimic)' },
+	mantine: { from: 'levelExtra', to: 20, why: 'Baby: grows up at 20 (was a Remoraid in the party)' },
+
+	/*
 	 * The caps. No evolution into a final stage after level 50 - pseudo-
 	 * legendaries included - and no middle stage after 40, so nobody spends the
 	 * back half of the game waiting on a Pokemon that has not become itself.
