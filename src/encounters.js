@@ -327,6 +327,7 @@ const TRAINER_CLASSES = [
 	{ id: 'nurse', title: 'Nurse', avatar: 'nurse', types: ['Normal', 'Fairy', 'Psychic'], sex: 'f' },
 	{ id: 'policeman', title: 'Officer', avatar: 'policeman-gen4', types: ['Fire', 'Normal', 'Dark'], sex: 'm', aliases: ['police', 'officer'] },
 	{ id: 'abyssalgrunt', title: 'Abyssal Grunt', avatar: 'aquagrunt', types: ['Water', 'Dark', 'Poison', 'Steel'], sex: 'm', short: 'Grunt', aliases: ['grunt', 'teamabyssal'] },
+	{ id: 'galacticgrunt', title: 'Galactic Grunt', avatar: 'galacticgrunt', types: ['Poison', 'Dark', 'Steel', 'Psychic'], sex: 'm', short: 'Grunt', aliases: ['galactic', 'teamgalactic'] },
 	{ id: 'twins', title: 'Twins', avatar: 'twins-gen4', types: ['Normal', 'Fairy', 'Electric', 'Bug'], sex: 'pair', pair: true },
 	{ id: 'youngcouple', title: 'Young Couple', avatar: 'youngcouple-gen4dp', types: ['Normal', 'Fairy', 'Psychic', 'Water'], sex: 'pair', pair: true, short: 'Couple' },
 ];

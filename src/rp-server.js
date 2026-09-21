@@ -30,7 +30,10 @@ const fs = require('fs');
 const path = require('path');
 const E = require('./encounters');
 
-const REGIONS = { kagura: () => require('./encounter-tables/kagura') };
+const REGIONS = {
+	kagura: () => require('./encounter-tables/kagura'),
+	sinnoh: () => require('./encounter-tables/sinnoh'),
+};
 const PUBLIC_KEY_FILE = path.join(__dirname, '..', 'config', 'rp-encounter-key.pub.pem');
 const RP_ROOM = 'roleplay';
 const MAX_SKEW_MS = 5 * 60 * 1000;
