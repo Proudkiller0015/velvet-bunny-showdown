@@ -107,6 +107,13 @@
 		golisopodmega: 'golisopod-mega',
 		baxcaliburmega: 'baxcalibur-mega',
 	};
+	// Halloween 2026: the witch skin of Mega Banette, drawn for this server on a
+	// grid a little larger than 96, so it carries its own size.
+	ART.banettemegahalloween = {
+		standard: true,
+		still: { front: ['banette-megahalloween.png', 106, 101], back: ['banette-megahalloween-back.png', 108, 104] },
+		builder: 'background-image:url(#SPRITES#banette-megahalloween.png);background-size:48px 46px;background-position:8px 0;background-repeat:no-repeat;',
+	};
 	Object.keys(MEGA_SPRITES).forEach(function (id) {
 		var file = MEGA_SPRITES[id];
 		ART[id] = {
@@ -133,6 +140,26 @@
 	}
 
 	var SPECIES = {
+		// Halloween 2026 (data/velvet/halloween.js): a skin of Mega Banette from the
+		// Banettite-Halloween. Same Pokemon, +10 Atk and Spe, its own ability.
+		banettemegahalloween: {
+			num: 354,
+			name: "Banette-Mega-Halloween",
+			baseSpecies: "Banette",
+			forme: "Mega-Halloween",
+			types: ["Ghost"],
+			baseStats: { hp: 64, atk: 175, def: 75, spa: 93, spd: 83, spe: 85 },
+			abilities: { 0: "Witching Hour" },
+			heightm: 1.2,
+			weightkg: 13,
+			color: "Purple",
+			eggGroups: ["Amorphous"],
+			requiredItem: "Banettite-Halloween",
+			isMega: true,
+			battleOnly: "Banette",
+			tier: "RU",
+		},
+
 		// Reachable only by a Nuzleaf fainting with a Broken Pact, so the
 		// teambuilder should never offer it: Custom keeps it out of every legal
 		// list, exactly as it does for Samantha. It is here at all because the

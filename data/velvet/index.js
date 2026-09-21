@@ -30,6 +30,8 @@ const { applyBuffs } = require('./buffs.js');
 const { applyZaMegas, applyZaStones } = require('./za-megas.js');
 const { applyTiers } = require('./tiering.js');
 const { unnerfMoves, unnerfAbilities, unnerfSpecies } = require('./unnerfs.js');
+// Halloween 2026: the Witching Hour Mega Banette skin, its stone, ability and signature.
+const Halloween = require('./halloween.js');
 
 // The buffed Pokemon are Showdown's own, so they are changed in place rather
 // than added - and the learnsets they need are added when that file is loaded,
@@ -52,23 +54,26 @@ function buffWhatWeHave() {
 exports.pokedex = data => {
 	Object.assign(data, Pokedex);
 	unnerfSpecies(data);
+	Halloween.pokedex(data);
 	buffedPokedex = data;
 	buffWhatWeHave();
 };
-exports.abilities = data => require('./balance-patch-1.js').patchAbsorbers(patchAbilities(unnerfAbilities(Object.assign(data, Abilities))));
+exports.abilities = data => Halloween.abilities(require('./balance-patch-1.js').patchAbsorbers(patchAbilities(unnerfAbilities(Object.assign(data, Abilities)))));
 let moveTable = null;
 exports.moves = data => {
-	moveTable = patchMoves(unnerfMoves(Object.assign(data, Moves)));
+	moveTable = Halloween.moves(patchMoves(unnerfMoves(Object.assign(data, Moves))));
 	teachHerEverything();
 	return moveTable;
 };
 exports.formatsData = data => {
 	Object.assign(data, FormatsData);
+	Halloween.formatsData(data);
 	tierTable = data;
 	buffWhatWeHave();
 };
 exports.learnsets = data => {
 	Object.assign(data, Learnsets);
+	Halloween.learnsets(data);
 	buffedLearnsets = data;
 	teachHerEverything();
 	buffWhatWeHave();
@@ -111,5 +116,6 @@ exports.items = data => {
 	// National Dex reads an item's nonstandard flag directly, so a stone left
 	// marked 'Future' is refused however legal the Mega holding it is.
 	applyZaStones(data, msg => console.log('[velvet] ' + msg));
+	Halloween.items(data);
 	return data;
 };

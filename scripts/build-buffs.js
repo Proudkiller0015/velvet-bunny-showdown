@@ -55,9 +55,10 @@ const LABEL = 'Awakened';
  * Surge shipped to the server and not to the client, leaving two of the three
  * monkeys with an ability the builder could not draw.
  */
-const OUR_ITEMS = ['elementalbanana', 'brokenpact'];
-const OUR_MOVES = [];
-const OUR_ABILITIES = [];
+// Halloween 2026 (data/velvet/halloween.js) adds a stone, a move and an ability of its own.
+const OUR_ITEMS = ['elementalbanana', 'brokenpact', 'banettitehalloween'];
+const OUR_MOVES = ['witchssnatch'];
+const OUR_ABILITIES = ['witchinghour'];
 for (const buff of Object.values(Buffs)) {
 	for (const name of buff.moves || []) {
 		const move = Dex.moves.get(name);
@@ -319,6 +320,11 @@ for (const [id, record] of Object.entries(applied)) {
 	 */
 	if (record.abilities.length) entry.slots = Object.assign({}, species.abilities);
 	bySpecies[id] = entry;
+}
+// Halloween 2026: Witch's Snatch is the Banette line's, and not a buff, so it is added here.
+for (const id of ['banette', 'shuppet']) {
+	const entry = bySpecies[id] || (bySpecies[id] = { moves: [], abilities: [] });
+	if (!entry.moves.includes('witchssnatch')) entry.moves.push('witchssnatch');
 }
 
 const file = `/**
