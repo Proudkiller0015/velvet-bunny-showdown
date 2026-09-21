@@ -1761,8 +1761,10 @@
 		if (search.__velvetAwakened) return true;
 		search.__velvetAwakened = true;
 
-		var NAMES = { awakened: 'Awakened', signature: 'Signature' };
-		var sets = { awakened: {}, signature: {} };
+		var NAMES = { awakened: 'Awakened', signature: 'Signature', event: 'Event' };
+		var LABELS = { awakened: '(Awakened Pokémon)', signature: '(has a signature move)', event: '(event Pokémon)' };
+		var sets = { awakened: {}, signature: {}, event: {} };
+		for (var e = 0; e < (buffs.events || []).length; e++) sets.event[buffs.events[e]] = true;
 		var table = window.VelvetSignatureMoves;
 		if (table && table.bySpecies) for (var sp in table.bySpecies) if (table.get(sp).length) sets.signature[sp] = true;
 		for (var m = 0; m < (buffs.awakened.move || []).length; m++) sets.signature[buffs.awakened.move[m]] = true;
@@ -1788,7 +1790,7 @@
 			Old.prototype.renderEggGroupRow = function (egggroup, matchStart, matchLength, errorMessage) {
 				var name = NAMES[window.toID(egggroup && egggroup.name)];
 				if (!name) return row.apply(this, arguments);
-				return row.call(this, { name: name }, matchStart, matchLength, errorMessage).replace('(egg group)', name === 'Signature' ? '(has a signature move)' : '(Awakened Pokémon)');
+				return row.call(this, { name: name }, matchStart, matchLength, errorMessage).replace('(egg group)', LABELS[window.toID(name)]);
 			};
 		}
 		var Results = window.PSSearchResults;
@@ -1796,7 +1798,7 @@
 			var rowHTML = Results.prototype.renderEggGroupRowHTML;
 			Results.prototype.renderEggGroupRowHTML = function (index, id) {
 				var html = rowHTML.apply(this, arguments);
-				return NAMES[id] ? html.replace('(egg group)', id === 'signature' ? '(has a signature move)' : '(Awakened Pokémon)') : html;
+				return NAMES[id] ? html.replace('(egg group)', LABELS[id]) : html;
 			};
 		}
 		return true;

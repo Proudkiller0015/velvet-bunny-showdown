@@ -289,7 +289,9 @@ function levelFreeMoves(move, species, setSources, set) {
  * ban; and there is no way to ask from here. allGimmicks() hands Terastal back
  * at the start of the battle instead, where the question can actually be asked.
  */
-const RP_RULES = ['!Obtainable Misc'];
+// Eternal Floette is what Mega Floette (a Z-A Mega this server unlocked) evolves from;
+// National Dex calls it nonexistent and refused every Floettite team on the RP ladders.
+const RP_RULES = ['!Obtainable Misc', '+Floette-Eternal'];
 
 /**
  * One RP tier, standing on the Smogon tier of the same shape.

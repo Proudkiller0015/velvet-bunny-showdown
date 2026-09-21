@@ -229,7 +229,10 @@ const inThisGen = id => Dex.species.get(id).tier !== 'Illegal';
 const tiers = {};
 const megaTiers = {};
 const natdexTiers = {};
-for (const [id, tier] of Object.entries(Object.assign({}, za.assigned, TIERS))) {
+// Halloween 2026: the witch Mega Banette is ours, not a Z-A Mega, so it is added by hand.
+const halloween = require(path.join(PACKAGE, 'dist', 'data', 'velvet', 'halloween.js'));
+const OUR_MEGAS = { [require(path.join(PACKAGE, 'dist', 'sim', 'dex.js')).Dex.species.get(halloween.FORME).id]: Dex.species.get(halloween.FORME).tier };
+for (const [id, tier] of Object.entries(Object.assign({}, za.assigned, OUR_MEGAS, TIERS))) {
 	if (isMegaForme(id)) megaTiers[id] = tier;
 	else if (!inThisGen(id)) natdexTiers[id] = tier;
 	else tiers[id] = tier;
@@ -297,7 +300,17 @@ for (const s of Dex.species.all()) {
 const search = [];
 // Filed as egg groups: the only filter kind the builder offers that names a set
 // of Pokemon rather than a property of one. velvet-data.js answers them.
-for (const name of ['Awakened', 'Signature']) search.push([name.toLowerCase(), 'egggroup', offsetsFor(name)]);
+for (const name of ['Awakened', 'Signature', 'Event']) search.push([name.toLowerCase(), 'egggroup', offsetsFor(name)]);
+// Our own Megas as search rows, so typing their name finds them (Samantha's old bug).
+for (const id of Object.keys(OUR_MEGAS)) search.push([id, 'pokemon', offsetsFor(Dex.species.get(id).name)]);
+
+// Event Pokemon, for "event" in the search: every event file lists its own.
+const EVENT_FILES = ['halloween.js'];
+const events = [];
+for (const file of EVENT_FILES) {
+	const mod = require(path.join(PACKAGE, 'dist', 'data', 'velvet', file));
+	for (const id of mod.EVENT_SPECIES || []) if (!events.includes(id)) events.push(id);
+}
 for (const [id, row] of Object.entries(moves)) search.push([id, 'move', offsetsFor(row.name)]);
 for (const [id, row] of Object.entries(abilities)) search.push([id, 'ability', offsetsFor(row.name)]);
 for (const [id, row] of Object.entries(items)) search.push([id, 'item', offsetsFor(row.name)]);
@@ -352,6 +365,7 @@ window.VelvetBuffs = {
 \tevoLevels: ${JSON.stringify(evoLevels)},
 \tevoAlso: ${JSON.stringify(evoAlso)},
 \tawakened: ${JSON.stringify(awakened)},
+\tevents: ${JSON.stringify(events)},
 
 \t/** What this Pokemon gained, or an empty record. */
 \tget: function (speciesid) {

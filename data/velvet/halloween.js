@@ -29,6 +29,8 @@ exports.pokedex = (data) => {
 		...mega,
 		name: FORME,
 		forme: 'Mega-Halloween',
+		// Mega Banette's own generation, so it is legal wherever Mega Banette is (Gen 6 on).
+		gen: 6,
 		// A skin: the stats are Mega Banette's, unchanged. What it gains is the ability and the move.
 		baseStats: { ...mega.baseStats },
 		abilities: { 0: 'Witching Hour' },
@@ -55,10 +57,17 @@ exports.items = (data) => {
 	data.banettitehalloween = {
 		...stone,
 		name: STONE,
-		num: -20,
-		gen: 9,
+		// A real positive number, like the Z-A stones: National Dex treats a negative
+		// item number as not existing ("does not exist in Gen 9").
+		num: 2026,
+		// The regular Banettite's generation: legal wherever it is, Gen 6 on.
+		gen: 6,
 		megaStone: { Banette: FORME },
 		itemUser: ['Banette'],
+		// Not 'Past': National Dex looks for a generation where the item is standard
+		// and this one has none, so it was refused as "does not exist in Gen 9" on the
+		// RP ladders. Cleared the way the Z-A stones are (za-megas.js).
+		isNonstandard: null,
 		desc: "Halloween 2026 event item, from the Witching Hour board only. If held by a Banette, it Mega Evolves into the witch Mega Banette: Ghost, Mega Banette's stats (64/165/75/93/83/75), ability Witching Hour (Prankster, and its Ghost moves have 1.2x power). On Mega Evolving, its Poltergeist becomes Witch's Snatch (Ghost, physical, 110 power, 100% accuracy, hits Normal types, removes the target's held item and adds the Ghost type to it).",
 		shortDesc: "Halloween 2026 event. Banette: Mega Evolves; Prankster + 1.2x Ghost; Poltergeist becomes Witch's Snatch.",
 	};
@@ -150,6 +159,10 @@ exports.learnsets = (data) => {
 	}
 	return data;
 };
+
+// Found by typing "event" in the teambuilder's Pokemon search (scripts/build-buffs.js
+// collects EVENT_SPECIES from every event file). Banette too: it is the one that holds the stone.
+exports.EVENT_SPECIES = ['banette', 'banettemegahalloween'];
 
 exports.FORME = FORME;
 exports.STONE = STONE;
