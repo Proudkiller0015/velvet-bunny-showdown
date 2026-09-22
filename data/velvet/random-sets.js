@@ -37,13 +37,14 @@ const SETS = {
 		sets: [
 			{
 				role: 'Fast Attacker',
-				movepool: ['Jungle Rush', 'Grassy Glide', 'Knock Off', 'Swords Dance', 'U-turn'],
+				// Jungle Rush is Grassy Glide and better (80 power, same priority on its own terrain), so not both.
+				movepool: ['Jungle Rush', 'Knock Off', 'Swords Dance', 'U-turn', 'Close Combat'],
 				abilities: ['Verdant Surge'],
 				teraTypes: ['Grass'],
 			},
 			{
 				role: 'Setup Sweeper',
-				movepool: ['Jungle Rush', 'Swords Dance', 'Grassy Glide', 'Close Combat', 'Ice Punch'],
+				movepool: ['Jungle Rush', 'Swords Dance', 'Close Combat', 'Ice Punch', 'Knock Off'],
 				abilities: ['Verdant Surge'],
 				teraTypes: ['Grass'],
 			},
@@ -54,7 +55,8 @@ const SETS = {
 		sets: [
 			{
 				role: 'Fast Attacker',
-				movepool: ['Cinder Rush', 'Temper Flare', 'Flame Charge', 'Knock Off', 'U-turn'],
+				// Cinder Rush outdoes Temper Flare in the sun it makes; Flame Charge stays for its Speed.
+				movepool: ['Cinder Rush', 'Flame Charge', 'Knock Off', 'U-turn', 'Thunder Punch'],
 				abilities: ['Solar Surge'],
 				teraTypes: ['Fire'],
 			},
@@ -236,8 +238,25 @@ function buffedTable(dex, base) {
 				return false;
 			};
 			const value = m => (m.category === 'Status' ? 50 : (RS ? RS.attackValue(species, m, side) : m.basePower));
-			const added = extra.filter(fits).sort((a, b) => value(b) - value(a)).slice(0, 4).map(m => m.name);
-			return Object.assign({}, set, { abilities, movepool: [...set.movepool, ...added] });
+			const added = extra.filter(fits).sort((a, b) => value(b) - value(a)).slice(0, 4);
+			/*
+			 * An attack we add is an upgrade, so it takes the place of what it
+			 * upgrades: a weaker attack of the same type and side leaves the pool.
+			 * Appended beside it instead, Golem ran Crag Hammer *and* Stone Edge and
+			 * the generator dropped Explosion to make room, and Simisage kept Grassy
+			 * Glide next to Jungle Rush. A pivot stays - it is there to switch.
+			 */
+			let movepool = set.movepool.slice();
+			for (const m of added) {
+				if (m.category !== 'Status') {
+					movepool = movepool.filter(name => {
+						const o = dex.moves.get(name);
+						return !(o.exists && o.category === m.category && o.type === m.type && !o.selfSwitch && value(o) < value(m));
+					});
+				}
+				movepool.push(m.name);
+			}
+			return Object.assign({}, set, { abilities, movepool });
 		}) });
 	}
 	buffedCache = { base, table };
