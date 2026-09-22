@@ -128,8 +128,40 @@ function unnerfBattleBond(ability) {
 		"after knocking out a Pokemon. As Ash-Greninja, its Water Shuriken has 20 base power and always hits 3 times.";
 }
 
+/**
+ * Normalize, made worth the slot (the owner's call).
+ *
+ * Every move turns Normal, which on its own is a downgrade: Ghosts are immune
+ * and Rock and Steel resist. Only the Skitty line has it, so it carries the fix
+ * inside it: Scrappy's reach (Normal moves hit Ghosts) and Tinted Lens (a
+ * resisted hit does double). The boost goes from 1.2x to 1.3x.
+ */
+function buffNormalize(ability) {
+	if (!ability) return;
+	ability.onBasePower = function (basePower, pokemon, target, move) {
+		if (move.typeChangerBoosted === this.effect) return this.chainModify([5325, 4096]);
+	};
+	ability.onModifyMovePriority = -5;
+	ability.onModifyMove = function (move) {
+		if (!move.ignoreImmunity) move.ignoreImmunity = {};
+		if (move.ignoreImmunity !== true) move.ignoreImmunity['Normal'] = true;
+	};
+	ability.onModifyDamage = function (damage, source, target, move) {
+		if (target.getMoveHitData(move).typeMod < 0) {
+			this.debug('Normalize (Tinted Lens) boost');
+			return this.chainModify(2);
+		}
+	};
+	ability.rating = 3.5;
+	ability.shortDesc = "Moves become Normal, 1.3x power, hit Ghosts; resisted hits do double.";
+	ability.desc = "This Pokemon's moves are changed to be Normal type and have their power multiplied by 1.3. " +
+		"Its Normal-type moves can hit Ghost types, and its attacks that are not very effective deal double damage. " +
+		"This effect comes after other effects that change a move's type, but before Ion Deluge and Electrify's effects.";
+}
+
 function unnerfAbilities(Abilities) {
 	if (!Abilities) return Abilities;
+	buffNormalize(Abilities.normalize);
 	unnerfProtean(Abilities.protean, 'Protean');
 	unnerfProtean(Abilities.libero, 'Libero');
 	unnerfBattleBond(Abilities.battlebond);
@@ -214,7 +246,7 @@ function unnerfSpecies(Pokedex) {
 
 exports.CHANGED = {
 	moves: ['darkvoid', ...Object.keys(RECOVERY_PP)],
-	abilities: ['protean', 'libero', 'battlebond'],
+	abilities: ['protean', 'libero', 'battlebond', 'normalize'],
 	species: [...new Set([...Object.keys(SPECIES_STATS), ...Object.keys(SPECIES_TYPES), ...Object.keys(SPECIES_ABILITIES)])],
 };
 exports.unnerfSpecies = unnerfSpecies;
