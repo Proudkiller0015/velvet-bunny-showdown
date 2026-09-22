@@ -1,0 +1,12 @@
+{
+	"id": "gen9rpbattle-82-tlqqc6",
+	"format": "[Gen 9] RP Battle",
+	"players": [
+		"Breeder Fay",
+		"simia ignis"
+	],
+	"rating": null,
+	"log": "|j|☆Breeder Fay\n|j|☆simia ignis\n|t:|1790045213\n|gametype|singles\n|player|p1|Breeder Fay|pokemonbreederf-gen4|\n|player|p2|simia ignis|simia-ignis.png|\n|gen|9\n|tier|[Gen 9] RP Battle\n|clearpoke\n|poke|p1|Ferroseed, L12|\n|poke|p1|Drifloon, L14|\n|poke|p2|Monferno, L14|\n|poke|p2|Kecleon, L14|\n|poke|p2|Togepi, L14|\n|poke|p2|Staravia, L14|\n|poke|p2|Butterfree, L14|\n|poke|p2|Smeargle, L14|\n|teampreview\n|inactive|Battle timer is ON: inactive players will automatically lose when time's up. (requested by Breeder Fay)\n|c|☆Breeder Fay|⚠️ TTR can't use held items (they unlock with your first badge) yet (not blocked, so just don't).\n|c|☆Breeder Fay|🔒 Z-Moves, Dynamax, Terastallization are locked until the story gives TTR the item; the battle won't allow them.\n|c|☆Breeder Fay|Your Showdown team must match your box: only Pokémon you own, at or below their box leve\n|c|☆Breeder Fay|You look like a trainer. Let's battle!\n|\n|t:|1790045218\n|teamsize|p1|2\n|teamsize|p2|6\n|start\n|switch|p1a: Drifloon|Drifloon, L14|100/100\n|switch|p2a: Smeargle|Smeargle, L14|100/100\n|turn|1\n|\n|t:|1790045221\n|move|p2a: Smeargle|Spore|p1a: Drifloon\n|-status|p1a: Drifloon|slp|[from] move: Spore\n|cant|p1a: Drifloon|slp\n|\n|upkeep\n|turn|2\n|\n|t:|1790045223\n|move|p2a: Smeargle|Substitute|p2a: Smeargle\n|-start|p2a: Smeargle|Substitute\n|-damage|p2a: Smeargle|76/100\n|cant|p1a: Drifloon|slp\n|\n|upkeep\n|turn|3\n|\n|t:|1790045225\n|move|p2a: Smeargle|Shell Smash|p2a: Smeargle\n|-unboost|p2a: Smeargle|def|1\n|-unboost|p2a: Smeargle|spd|1\n|-boost|p2a: Smeargle|atk|2\n|-boost|p2a: Smeargle|spa|2\n|-boost|p2a: Smeargle|spe|2\n|-curestatus|p1a: Drifloon|slp|[msg]\n|move|p1a: Drifloon|Gust|p2a: Smeargle\n|-end|p2a: Smeargle|Substitute\n|\n|upkeep\n|turn|4\n|\n|t:|1790045227\n|move|p2a: Smeargle|Spore|p1a: Drifloon\n|-status|p1a: Drifloon|slp|[from] move: Spore\n|cant|p1a: Drifloon|slp\n|\n|upkeep\n|turn|5\n|\n|t:|1790045228\n|move|p2a: Smeargle|Substitute|p2a: Smeargle\n|-start|p2a: Smeargle|Substitute\n|-damage|p2a: Smeargle|52/100\n|cant|p1a: Drifloon|slp\n|\n|upkeep\n|turn|6\n|\n|t:|1790045230\n|move|p2a: Smeargle|Baton Pass|p2a: Smeargle\n",
+	"inputlog": null,
+	"uploadtime": 1790045232
+}
