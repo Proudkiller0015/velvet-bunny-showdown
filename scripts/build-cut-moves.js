@@ -145,6 +145,28 @@ for (const species of cut) {
 	}
 }
 
+/*
+ * And the other way round: Hidden Power for everything that came after it.
+ *
+ * Hidden Power was a TM from the second generation to the seventh and was cut
+ * in the eighth, so every Pokemon introduced in Sword and Shield or later -
+ * Hisuian and Paldean forms included - never had the chance to learn it, the
+ * same way a cut Pokemon never had the chance at Tera Blast. RP plays National
+ * Dex, where Hidden Power is legal, so they get it: anything from generation 8
+ * on that does not learn it already, above the same no-attack line as above.
+ */
+let hiddenPower = 0;
+for (const species of Dex.species.all()) {
+	if (!species.exists || species.num <= 0 || species.gen < 8) continue;
+	if (species.isNonstandard && species.isNonstandard !== 'Past') continue;
+	if (species.battleOnly || species.isMega || species.isPrimal || species.name.endsWith('-Gmax')) continue;
+	if (!Learnsets[species.id] || alreadyLearns(species, 'hiddenpower')) continue;
+	if (damagingMoves(species.id) < ATTACKS) continue;
+	(grants[species.id] || (grants[species.id] = [])).push('hiddenpower');
+	hiddenPower++;
+	total++;
+}
+
 fs.writeFileSync(OUT, JSON.stringify(grants, null, 0) + '\n');
 
 const counts = {};
@@ -152,6 +174,7 @@ for (const gained of Object.values(grants)) {
 	for (const move of gained) counts[move] = (counts[move] || 0) + 1;
 }
 console.log(`${candidates.length} machine moves from generations 8 and 9 considered`);
+console.log(`${hiddenPower} Pokemon from generation 8 on given Hidden Power`);
 console.log(`${cut.length} cut Pokemon, ${Object.keys(grants).length} given something, ${total} grants in all`);
 console.log(`${skipped.length} left alone for having fewer than ${ATTACKS} damaging moves: ${skipped.join(', ')}`);
 console.log(`${Math.round(fs.statSync(OUT).size / 1024)}KB -> ${OUT}`);
