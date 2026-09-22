@@ -252,6 +252,12 @@ const avatarsPath = path.join(pkgRoot, 'config', 'avatars.json');
 // (the merge below otherwise never changes what someone wears). Recorded as forcedApplied so a later
 // /avatar choice sticks.
 const FORCE_APPLIED = { keikosama: 'keiko-yume.png' };
+/*
+ * Rights written by mistake. This host keeps config/avatars.json between deploys,
+ * so an entry added by an earlier boot stays until it is taken out by name:
+ * 'jolt' was a guess at an account that turns out to be a character's name.
+ */
+const REVOKED = ['jolt'];
 // What actually exists to be worn. An avatar that has been renamed or removed
 // lingers in everyone's list otherwise, and a stale name in the applied slot
 // means logging in asks the server for a file that is not there.
@@ -293,6 +299,11 @@ for (const [userid, allowed] of Object.entries(avatarRights)) {
 	}
 	// A default pointing at a file that no longer ships would apply nothing.
 	if (existing.default && !onDisk.has(existing.default)) delete existing.default;
+}
+for (const userid of REVOKED) {
+	if (!avatarsJson[userid]) continue;
+	delete avatarsJson[userid];
+	console.log(`avatar rights -> revoked ${userid}`);
 }
 // Drop rights belonging to a bot account that no longer exists. Only entries
 // whose entire entitlement is the bot's own avatar and which nobody has chosen
