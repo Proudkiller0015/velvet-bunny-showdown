@@ -122,7 +122,7 @@ exports.EVOLUTIONS = {
 	mantine: { from: 'levelExtra', to: 16, why: 'Baby: grows up at 16 (was a Remoraid in the party)' },
 	chansey: { from: 'Oval Stone', to: 16, why: 'Baby: also grows up at 16; the Oval Stone still works' },
 	roselia: { from: 'levelFriendship', to: 16, why: 'Baby: also grows up at 16; a Sun Stone still works' },
-	lucario: { from: 'levelFriendship', to: 16, why: 'Baby: also grows up at 16; a Sun Stone still works' },
+	// Lucario (Patch 1.7, the owner's call): no level - Riolu evolves with a Sun Stone (or a Soothe Bell) only.
 	chimecho: { from: 'levelFriendship', to: 16, why: 'Baby: also grows up at 16; a Moon Stone still works' },
 
 	/*
