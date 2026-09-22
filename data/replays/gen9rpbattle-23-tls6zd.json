@@ -1,0 +1,12 @@
+{
+	"id": "gen9rpbattle-23-tls6zd",
+	"format": "[Gen 9] RP Battle",
+	"players": [
+		"School Kid Kai",
+		"StaleThunder126"
+	],
+	"rating": null,
+	"log": "|j|☆School Kid Kai\n|j|☆StaleThunder126\n|t:|1790120756\n|gametype|singles\n|player|p1|School Kid Kai|schoolkid-gen4|\n|player|p2|StaleThunder126|jolt.png|\n|gen|9\n|tier|[Gen 9] RP Battle\n|clearpoke\n|poke|p1|Swablu, L11|\n|poke|p1|Dunsparce, L13|\n|poke|p2|Froakie, L13|\n|poke|p2|Gumshoos, L13|\n|poke|p2|Fletchling, L13|\n|poke|p2|Skwovet, L13|\n|poke|p2|Pidgey, L13|\n|poke|p2|Rattata, L13|\n|teampreview\n|inactive|Battle timer is ON: inactive players will automatically lose when time's up. (requested by School Kid Kai)\n|c|☆School Kid Kai|⚠️ Jolt can't use held items (they unlock with your first badge) yet (not blocked, so just don't).\n|c|☆School Kid Kai|🔒 Mega Evolution, Z-Moves, Dynamax, Terastallization are locked until the story gives Jolt the item; the battle won't allow them.\n|c|☆School Kid Kai|Your Showdown team must match your box: only Pokémon you own, at or be\n|c|☆School Kid Kai|You look like a trainer. Let's battle!\n|\n|t:|1790120775\n|teamsize|p1|2\n|teamsize|p2|6\n|start\n|switch|p1a: Dunsparce|Dunsparce, L13|100/100\n|switch|p2a: Skwovet|Skwovet, L13|100/100\n|turn|1\n|\n|t:|1790120787\n|move|p1a: Dunsparce|Rollout|p2a: Skwovet\n|-damage|p2a: Skwovet|89/100\n|move|p2a: Skwovet|Body Slam|p1a: Dunsparce\n|-damage|p1a: Dunsparce|69/100\n|\n|upkeep\n|turn|2\n|\n|t:|1790120795\n|move|p1a: Dunsparce|Rollout|p2a: Skwovet|[from] lockedmove\n|-damage|p2a: Skwovet|67/100\n|move|p2a: Skwovet|Crunch|p1a: Dunsparce\n|-damage|p1a: Dunsparce|50/100\n|\n|upkeep\n|turn|3\n|\n|t:|1790120811\n|switch|p2a: Pidgey|Pidgey, L13|100/100\n|move|p1a: Dunsparce|Rollout|p2a: Pidgey|[from] lockedmove\n|-supereffective|p2a: Pidgey\n|-damage|p2a: Pidgey|0 fnt\n|faint|p2a: Pidgey\n|\n|upkeep\n|\n|t:|1790120824\n|switch|p2a: Rattata|Rattata, L13|100/100\n|turn|4\n|\n|t:|1790120829\n|move|p2a: Rattata|Wild Charge|p1a: Dunsparce\n|-damage|p1a: Dunsparce|28/100\n|-damage|p2a: Rattata|92/100|[from] Recoil\n|move|p1a: Dunsparce|Rollout|p2a: Rattata|[from] lockedmove\n|-damage|p2a: Rattata|0 fnt\n|faint|p2a: Rattata\n|\n|upkeep\n|\n|t:|1790120837\n|switch|p2a: Skwovet|Skwovet, L13|67/100\n|turn|5\n|\n|t:|1790120842\n|move|p1a: Dunsparce|Rollout|p2a: Skwovet|[from] lockedmove\n|-damage|p2a: Skwovet|0 fnt\n|faint|p2a: Skwovet\n|\n|upkeep\n|\n|t:|1790120847\n|switch|p2a: Fletchling|Fletchling, L13|100/100\n|turn|6\n",
+	"inputlog": null,
+	"uploadtime": 1790120851
+}
