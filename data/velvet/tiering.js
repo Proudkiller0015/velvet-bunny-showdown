@@ -201,6 +201,10 @@ const TIERS = {
 	// with all of that is not a ZU Pokemon any more; it is an Ubers one.
 	regigigas: 'Uber',
 
+	// Patch 1.7: Extreme Speed on a Guts Obstagoon with Obstruct and Knock Off is a
+	// priority wallbreaker - UU, the owner's call.
+	obstagoon: 'UU',
+
 	// Balance Patch 1's second legend, aimed low on purpose: Polar Mantle halves
 	// the Rock damage that kept Articuno out of every tier and sets snow, and
 	// Aurora Squall gives it a spread Ice attack. A solid RU pick, no more.

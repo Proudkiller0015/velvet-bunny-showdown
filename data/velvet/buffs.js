@@ -199,11 +199,22 @@ const NUZLEAF = {
 	nuzleaf: { moves: ['merchantscall'] },
 };
 
+/**
+ * The Galarian Zigzagoon line, and the dash it always looked built for (the
+ * owner's call, Patch 1.7). The whole line, so Obstagoon keeps it from a baby.
+ */
+const OBSTAGOON = {
+	zigzagoongalar: { moves: ['extremespeed'] },
+	linoonegalar: { moves: ['extremespeed'] },
+	obstagoon: { moves: ['extremespeed'] },
+};
+
 exports.Buffs = {
 	...MONKEYS,
 	...PAN,
 	...CHANDELURE,
 	...NUZLEAF,
+	...OBSTAGOON,
 };
 
 /*
@@ -400,7 +411,16 @@ exports.applyBuffs = (Pokedex, Learnsets) => {
 	 */
 	if (!exports.Buffs.__patch1) {
 		Object.defineProperty(exports.Buffs, '__patch1', { value: true, enumerable: false });
-		Object.assign(exports.Buffs, PATCH1.buildBuffs(Pokedex));
+		// Merged, not assigned: a Pokemon in both tables keeps both (Obstagoon's Hustle
+		// Up from the patch and its Extreme Speed from here).
+		for (const [id, patch] of Object.entries(PATCH1.buildBuffs(Pokedex))) {
+			const had = exports.Buffs[id];
+			if (!had) { exports.Buffs[id] = patch; continue; }
+			exports.Buffs[id] = Object.assign({}, had, patch, {
+				moves: [...new Set([...(had.moves || []), ...(patch.moves || [])])],
+				abilities: [...new Set([...(had.abilities || []), ...(patch.abilities || [])])],
+			});
+		}
 	}
 	for (const [id, change] of Object.entries(PATCH1.EVOLUTIONS)) {
 		const species = Pokedex[id];
