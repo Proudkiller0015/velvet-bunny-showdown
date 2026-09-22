@@ -234,9 +234,9 @@ const avatarRights = {
 	ladymilim: ['milim.png'],
 	simiaignis: ['simia-ignis.png'],
 	lavit: ['lavit.png'],
-	// Sam's brother. The account name is a guess until he registers one; the file is
-	// here either way, so moving it is one line.
-	jolt: ['jolt.png'],
+	// jolt.png is Sam's brother's character Jolt. Nobody is entitled to it yet: his
+	// Showdown account isn't known, and the file is named for the character, so add
+	// <hisaccountid>: ['jolt.png'] here once he has one.
 	thegloriousfemboy: ['thegloriousfemboy.png'],
 };
 // Every rung of the ladder wears the same face - they are all the same bot.
