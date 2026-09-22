@@ -56,9 +56,35 @@ const BULKY_ROLES = ['Bulky Support', 'Bulky Attacker', 'Bulky Setup', 'AV Pivot
 const SETUP_ROLES = ['Setup Sweeper', 'Bulky Setup', 'Fast Bulky Setup', 'Tera Blast user'];
 const SUPPORT_ROLES = ['Bulky Support', 'Fast Support'];
 
+/**
+ * Hand-written sets for the Pokemon the learnset cannot steer.
+ *
+ * Smeargle sketches: every move in the game (ours included) is legal for it, so
+ * scoring its movepool picked Boomburst next to Spore and Hustle Up. It has one
+ * job worth doing - a fast lead that sets the field and puts something to sleep -
+ * so that is the set. `core` is always taken; the last slot comes from the rest.
+ */
+const FIXED = {
+	smeargle: [{
+		role: 'Fast Support',
+		core: ['Spore', 'Sticky Web', 'Stealth Rock'],
+		movepool: ['Spore', 'Sticky Web', 'Stealth Rock', 'Whirlwind', 'Rapid Spin', 'Taunt', 'Ceaseless Edge'],
+		abilities: ['Own Tempo'],
+		item: 'Focus Sash',
+		nature: 'Jolly',
+		evs: { hp: 252, atk: 0, def: 4, spa: 0, spd: 0, spe: 252 },
+	}],
+};
+
 /** Every move a species can learn, prevolutions and base forme included. */
 function learnable(dex, species) {
 	const out = new Set();
+	// Sketch copies anything that is not flagged against it, this server's moves included.
+	if (sketches(dex, species)) {
+		for (const m of dex.moves.all()) {
+			if (m.exists && !m.isNonstandard && !m.isZ && !m.isMax && !m.flags.nosketch) out.add(m.id);
+		}
+	}
 	let s = species;
 	for (let i = 0; i < 5 && s && s.exists; i++) {
 		const data = dex.data.Learnsets[s.id];
@@ -70,8 +96,18 @@ function learnable(dex, species) {
 	return out;
 }
 
+function sketches(dex, species) {
+	for (let s = species, i = 0; i < 5 && s && s.exists; i++) {
+		const data = dex.data.Learnsets[s.id];
+		if (data && data.learnset && data.learnset.sketch) return true;
+		s = s.prevo ? dex.species.get(s.prevo) : null;
+	}
+	return false;
+}
+
 function lookup(species) {
 	const ids = [species.id, toID(species.baseSpecies), species.changesFrom && toID(species.changesFrom)].filter(Boolean);
+	for (const id of ids) if (FIXED[id]) return { sets: FIXED[id], fixed: true };
 	for (const id of ids) if (VELVET[id]) return VELVET[id];
 	for (const table of GEN_SETS) for (const id of ids) if (table[id] && table[id].sets) return table[id];
 	return null;
@@ -142,17 +178,34 @@ function roleSets(dex, name, legal = null) {
 		const role = set.role === 'Tera Blast user' ? 'Setup Sweeper' : set.role;
 		// Hidden Power's type is set by IVs these sets never pick, so it is left out.
 		let pool = (set.movepool || []).filter(n => toID(n) !== 'terablast' && !toID(n).startsWith('hiddenpower')).map(n => dex.moves.get(n)).filter(m => m.exists && moves.has(m.id));
-		// A hand-written set of ours is already what it should be.
-		for (const m of Object.values(VELVET).includes(found) ? [] : oursMoves) {
+		// A hand-written set of ours is already what it should be, and a sketcher owns none of them.
+		const handWritten = (found && found.fixed) || Object.values(VELVET).includes(found);
+		/*
+		 * The side this role attacks with: its own movepool's, not the species'. Mew's
+		 * physical and special sets both drew every shared move it learns, so a Swords
+		 * Dance set ran Hypno Whirl and a Leftovers wall ran Rime Cleaver.
+		 */
+		const count = { Physical: 0, Special: 0 };
+		for (const m of pool) if (m.category !== 'Status') count[m.category]++;
+		const stat = count.Physical === count.Special ? (species.baseStats.atk >= species.baseStats.spa ? 'Physical' : 'Special')
+			: count.Physical > count.Special ? 'Physical' : 'Special';
+		const fits = m => {
+			if (m.category !== 'Status') return m.category === stat && species.types.includes(m.type);
+			if (RECOVERY.includes(m.id)) return BULKY_ROLES.includes(role) || SUPPORT_ROLES.includes(role);
+			if ([...HAZARDS, ...STATUS, ...UTILITY].includes(m.id)) return SUPPORT_ROLES.includes(role);
+			if (SETUP.includes(m.id)) return SETUP_ROLES.includes(role);
+			return false;
+		};
+		const shared = [];
+		for (const m of handWritten || sketches(dex, species) ? [] : oursMoves) {
 			if (pool.some(p => p.id === m.id)) continue;
-			if (m.category !== 'Status') {
-				// An attack of ours joins every role that attacks with that side, or shares its type.
-				const stat = species.baseStats.atk >= species.baseStats.spa ? 'Physical' : 'Special';
-				if (m.category === stat || species.types.includes(m.type) || m.flags.nosketch) pool.push(m);
-			} else if ([...RECOVERY, ...HAZARDS, ...STATUS, ...UTILITY].includes(m.id) || m.flags.nosketch) {
-				pool.push(m);
-			}
+			// Its own signature always joins; a move handed round the server joins where it fits.
+			if (!m.velvetShared || m.flags.nosketch) pool.push(m);
+			else if (fits(m)) shared.push(m);
 		}
+		// Two at most: a Pokemon that learns ten of them is still itself first.
+		shared.sort((x, y) => attackValue(species, y, stat) - attackValue(species, x, stat));
+		pool.push(...shared.slice(0, 2));
 		if (pool.length < 4) {
 			// Thin after the cut (an unevolved Pokemon, say): top up from the learnset.
 			for (const m of synthesize(dex, species, moves)[0].movepool.map(n => dex.moves.get(n))) {
@@ -170,7 +223,7 @@ function roleSets(dex, name, legal = null) {
 		if (!abilities.length) abilities = own.slice();
 		if (oursAbility) abilities = [oursAbility, ...abilities.filter(a => a !== oursAbility)];
 		// A hand-written set (data/velvet/random-sets.js) may fix its nature, spread and item too.
-		return { role, movepool: pool.map(m => m.name), abilities, teraTypes: set.teraTypes || species.types, nature: set.nature, evs: set.evs, item: set.item, synthetic: !found };
+		return { role, movepool: pool.map(m => m.name), abilities, teraTypes: set.teraTypes || species.types, nature: set.nature, evs: set.evs, item: set.item, core: set.core, synthetic: !found };
 	});
 }
 
@@ -252,6 +305,16 @@ function pickMoves(dex, species, set, rng = Math.random) {
 	};
 	// Its own signature first, if it has one: the Pokemon was rebuilt around it. A move
 	// this server shares out is not a signature and takes its chances with the rest.
+	// A fixed set's core is the set (Smeargle): take it, then one more from the rest.
+	if (set.core) {
+		for (const n of set.core) take(pool.find(m => m.id === toID(n)));
+		while (chosen.length < 4) {
+			const rest = pool.filter(m => !chosen.some(c => c.id === m.id));
+			if (!rest.length) break;
+			take(rest[Math.floor(rng() * rest.length)]);
+		}
+		if (chosen.length) return { moves: chosen.map(m => m.name), stat };
+	}
 	take(best(m => attack(m) && m.num < 0 && !m.velvetShared));
 	// STAB - a real attack, not a pivot: Volt Switch taking this slot pushed Thunderbolt
 	// out as "a second Electric move". Pivots have a slot of their own below.
