@@ -131,7 +131,7 @@ class EncounterOpponent extends ShowdownBot {
 			// Medicine too, so a Potion in the bag isn't a surprise.
 			const items = s.items ? Object.entries(s.items).filter(([, n]) => n > 0)
 				.map(([id, n]) => `${n} ${E.findBattleItem(id) ? E.findBattleItem(id).name : id}`).join(', ') : '';
-			lines.push(`${s.character ? `${s.character}'s` : 'Your'} bag: ${list || 'no balls at all!'}${items ? ` · ${items} (item panel in the chat)` : ''}`);
+			lines.push(`${s.character ? `${s.character}'s` : 'Your'} bag: ${list || 'no balls at all!'}${items ? ` · ${items} (in the Bag under your moves)` : ''}`);
 		}
 		// Reminders the Discord bot sent along: things this character can't use yet.
 		if (s.warning) lines.push(s.warning);

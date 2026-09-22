@@ -504,7 +504,7 @@ exports.commands = {
 		const [itemName, ...who] = String(target || '').split(',');
 		const item = E.findBattleItem(itemName);
 		const pokemon = who.join(',').trim();
-		if (!item) throw new Chat.ErrorMessage(`There's no battle item called "${itemName}". Use the buttons in the item panel: they only show items in your bag that would help.`);
+		if (!item) throw new Chat.ErrorMessage(`There's no battle item called "${itemName}". Use the Bag under your moves: it only shows items that would help.`);
 		if (!pokemon) throw new Chat.ErrorMessage('Which Pokémon? Type its name in the box.');
 		const enc = game.rpEncounter && rp.encounters.get(game.rpEncounter);
 		const used = rp.usedInLog(room.log.log, user.name, item.name);
@@ -542,9 +542,9 @@ exports.commands = {
 		const rp = require('../../../src/rp-server');
 		const answer = rp.requestTutorial({ showdown: user.name }, tutorialDeps);
 		if (!answer.ok) throw new Chat.ErrorMessage(String(answer.message || 'The tutorial could not start.').replace(/\*\*/g, ''));
-		this.sendReply('A wild Rattata is about to challenge you. Click Accept (no team needed): you battle with a Lv. 5 Pikachu, 1 Potion and 1 Poké Ball. Nothing counts, so try everything.');
+		this.sendReply('A wild Rattata is about to challenge you. Click Accept (no team needed): you battle with a Lv. 5 Pikachu, 1 Potion and 1 Pokéball. Throw it and use the Potion from the Bag under your moves. Nothing counts, so try everything.');
 	},
-	tutorialhelp: ['/tutorial - A practice wild battle: a Lv. 5 Pikachu with 1 Potion and 1 Poké Ball against a Lv. 5 Rattata. Nothing is recorded.'],
+	tutorialhelp: ['/tutorial - A practice wild battle: a Lv. 5 Pikachu with 1 Potion and 1 Pokéball against a Lv. 5 Rattata. Nothing is recorded.'],
 
 	useitemhelp: ["/useitem [item], [pokemon] - In any RP battle, use an item from your character's bag instead of attacking: Potions, status heals, Revives (on a benched Pokémon), Ethers, X items... The item panel's buttons do this for you. NPCs have 5 of each; RP Custom Game is unlimited."],
 
@@ -1510,7 +1510,7 @@ function serverHelpBox(user) {
 			`${btn('roleplay', 'Roleplay room')} ${cmd('/roleplay')}: the full guide (team, encounters, catching).`,
 			`Use <b>[Gen 9] RP Battle</b> for your RP team, built from your box in the <a href="https://docs.google.com/spreadsheets/d/1-XoCX0qkrshpiVvY4Sw1sBNAfiEnJYX67ZXZUkDDGrs/edit">RP doc</a>: ` +
 			`any move it can learn whatever its level (TMs free), held items from your first gym badge. Wild Pok&eacute;mon and trainers come from ${cmd('!encounter')} on the Discord.`,
-			`In a wild battle, the <b>Throw</b> buttons or ${cmd('/throwball [ball]')} catch; ${cmd('/useitem [item], [pokemon]')} uses a Potion or Revive from your bag, in any RP battle (unlimited in RP Custom Game).`,
+			`In a wild battle, the <b>Bag</b> button under your moves (Pokéballs, Medicine) and <b>Run</b>, or ${cmd('/throwball [ball]')} catch; ${cmd('/useitem [item], [pokemon]')} uses a Potion or Revive from your bag, in any RP battle (unlimited in RP Custom Game).`,
 			`Your team is checked against your character's box, and Mega / Z / Dynamax / Tera need the story item.`,
 			`<b>[Gen 9] RP Custom Game</b> is for hackmons, illegal and fun battles: anything goes (items unlimited), challenge only, and no EXP or RP progress.`,
 		]) +
@@ -1845,10 +1845,10 @@ function roleplayIntro() {
 		step('4. In the battle',
 			`<ul style="margin:0;padding-left:18px">` +
 			`<li>Click a move to attack, or a Pok&eacute;mon to switch. That's all a battle is.</li>` +
-			`<li><b>Catching:</b> against a wild Pok&eacute;mon, <b>Throw</b> buttons appear in the battle chat. Throwing uses your whole turn.</li>` +
+			`<li><b>Catching:</b> against a wild Pok&eacute;mon, open the <b>Bag</b> under your moves and pick a ball from Pokéballs; <b>Run</b> sits beside it. Throwing uses your whole turn.</li>` +
 			`<li>Lower its HP and give it a status (sleep is best) to make catching easier. Every miss makes the next ball likelier.</li>` +
 			`<li>Two wild Pok&eacute;mon? Knock one out first, then throw at the other.</li>` +
-			`<li><b>Healing items:</b> the item panel in the battle chat (or <code>/useitem [item], [pokemon]</code>) uses a Potion, Revive and so on. It works in every RP battle: encounters and battles with players or NPC trainers use your character's bag (taken off afterwards; NPCs have 5 of each), and RP Custom Game is unlimited.</li>` +
+			`<li><b>Healing items:</b> the <b>Bag</b> under your moves, Medicine pocket (or <code>/useitem [item], [pokemon]</code>) uses a Potion, Revive and so on. It works in every RP battle: encounters and battles with players or NPC trainers use your character's bag (taken off afterwards; NPCs have 5 of each), and RP Custom Game is unlimited.</li>` +
 			`<li>You can only throw balls your character has. Legendary and Mythical Pok&eacute;mon never appear here; those happen in the RP.</li>` +
 			`<li><b>Mega Evolution, Z-Moves, Dynamax and Terastallization</b> stay locked until the story gives your character the Key Stone, Z-Ring, Dynamax Band or Tera Orb.</li>` +
 			`</ul>`) +
@@ -1991,6 +1991,31 @@ function roleplay() {
 	battle.receive = function (lines) {
 		const out = receive.call(this, lines);
 		try {
+			/*
+			 * The Poké Balls pocket of the battle Bag (client/js/velvet-data.js
+			 * installBagMenu): what this character has left, every turn, for the
+			 * player only. The client moves it out of the chat into the Bag menu,
+			 * next to Fight, where a button can't scroll away.
+			 */
+			if (lines[0] === 'sideupdate' && this.rpEncounter && String(lines[2]).startsWith('|request|') && this[lines[1]]) {
+				const player = this[lines[1]];
+				const enc = rp.encounters.get(this.rpEncounter);
+				const request = JSON.parse(String(lines[2]).slice(9) || 'null');
+				if (enc && toID(player.id) === enc.userid && request && !request.wait && !request.teamPreview && !request.forceSwitch) {
+					const E = require('../../../src/encounters');
+					const log = this.room.log.log;
+					const balls = E.BALLS.map(b => {
+						const have = enc.balls ? (enc.balls[b.id] || 0) - rp.thrownInLog(log, player.name, b.name) : null;
+						return have === null || have > 0 ? `<button class="button" name="send" value="/throwball ${b.id}"${b.note ? ` title="${String(b.note).replace(/"/g, '&quot;')}"` : ''}>${b.name}${have === null ? '' : ` ×${have}`}</button>` : '';
+					}).filter(Boolean).join(' ');
+					const escapes = E.BATTLE_ITEMS.filter(it => it.escape).map(it => {
+						const n = enc.items ? (enc.items[it.id] || 0) - rp.usedInLog(log, player.name, it.name) : 0;
+						return n > 0 ? `<button class="button" name="send" value="/run ${it.id}">${it.name} ×${n}</button>` : '';
+					}).filter(Boolean).join(' ');
+					player.sendRoom(`|uhtml|rpballs|<div class="infobox rp-balls" style="margin:4px 0"><b>Pokéballs:</b> ${balls || '<small>none left - buy some with !buy on Discord</small>'}` +
+						(escapes ? `<div><b>Getting away:</b> ${escapes}</div>` : '') + '</div>');
+				}
+			}
 			// What applies to this player in a PvP or NPC battle, once, right behind their first request.
 			if (lines[0] === 'sideupdate' && this.rpNotes && this.rpNotes[lines[1]] && String(lines[2]).startsWith('|request|') && this[lines[1]]) {
 				this[lines[1]].sendRoom(this.rpNotes[lines[1]]);
@@ -2162,7 +2187,7 @@ function roleplay() {
 	battle.choose = function (user, data) {
 		if (RP_FORMATS.has(this.format) && /(^|,)\s*ball\b/i.test(String(data)) && this.rpBallFrom !== user.id) {
 			const player = this.playerTable[user.id];
-			if (player) player.sendRoom(`|error|[Invalid choice] Use the Throw buttons in the chat to throw a ball`);
+			if (player) player.sendRoom(`|error|[Invalid choice] Open the Bag under your moves to throw a ball`);
 			return;
 		}
 		// Gimmicks need the story item: no Key Stone, no Mega Evolution, and so on.
@@ -2188,7 +2213,7 @@ function roleplay() {
 		// Same for items: only /useitem, which checks the bag, may send one.
 		if (/^\s*item\s/i.test(String(data)) && this.rpItemFrom !== user.id) {
 			const player = this.playerTable[user.id];
-			if (player) player.sendRoom(`|error|[Invalid choice] Use the item panel in the chat to use an item`);
+			if (player) player.sendRoom(`|error|[Invalid choice] Open the Bag under your moves to use an item`);
 			return;
 		}
 		return choose.call(this, user, data);

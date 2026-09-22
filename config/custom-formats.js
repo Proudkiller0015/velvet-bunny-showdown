@@ -891,7 +891,7 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 9] RP Tutorial",
-		desc: "A practice wild battle: a Lv. 5 Pikachu, 1 Potion and 1 Poké Ball against a Lv. 5 Rattata. Start it with /tutorial.",
+		desc: "A practice wild battle: a Lv. 5 Pikachu, 1 Potion and 1 Pokéball against a Lv. 5 Rattata. Start it with /tutorial.",
 
 		/**
 		 * No team needed, and none used: `team` makes the server skip asking for
@@ -914,11 +914,11 @@ exports.Formats = [
 			installItems(this);
 			this.add('-message', 'This is a practice battle. Normally a wild Pokémon or a trainer challenges you here when you type !encounter on Discord, in your character\'s channel, and you battle with your own RP team from your box.');
 			this.add('-message', 'Step 1: pick Thunder Shock to attack.');
-			this.add('-message', 'Hurt? Use your 1 Potion from the item panel in the chat (it uses your turn).');
+			this.add('-message', 'Hurt? Open the Bag (under your moves) > Medicine and use your 1 Potion (it uses your turn).');
 		},
 		// The Throw buttons, as in a wild encounter (which posts them from its own onBattleStart).
 		onBattleStart() {
-			this.add('uhtml', 'rpball0', ballPanel(encounters(), 'You have 1 Poké Ball and 1 Potion. The Potion buttons appear in the item panel once Pikachu is hurt.'));
+			this.add('uhtml', 'rpball0', ballPanel(encounters(), 'You have 1 Pokéball and 1 Potion, both in the Bag under your moves. The Potion shows up in Medicine once Pikachu is hurt.'));
 		},
 		onFaint(pokemon) {
 			if (pokemon.side.pokemonLeft > 1) return;
@@ -932,7 +932,7 @@ exports.Formats = [
 			if (!mon || mon.fainted || this.rpTutorialHinted) return;
 			if (mon.hp <= mon.maxhp / 2) {
 				this.rpTutorialHinted = true;
-				this.add('-message', "Step 2: Rattata is weak! Press Throw in the chat to throw your Poké Ball and catch it (or finish it off).");
+				this.add('-message', "Step 2: Rattata is weak! Open the Bag (under your moves) > Pokéballs and throw your Pokéball to catch it (or finish it off).");
 			}
 		},
 		...RP_TURN_ACTIONS,

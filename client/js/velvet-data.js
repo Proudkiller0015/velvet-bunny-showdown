@@ -312,8 +312,9 @@
 		var textIn = installDescriptions();
 		var zMaxIn = installZAndMax();
 		var defaultIn = installDefaultFormat();
+		var bagIn = installBagMenu();
 		return tableIn && orderIn && spritesIn && iconIn && builderIn && tipsIn && rpIn &&
-			cutIn && listIn && buffsIn && abilitiesIn && itemIn && sigItemIn && powerIn && dmaxIn && awakenedIn && textIn && zMaxIn && defaultIn;
+			cutIn && listIn && buffsIn && abilitiesIn && itemIn && sigItemIn && powerIn && dmaxIn && awakenedIn && textIn && zMaxIn && defaultIn && bagIn;
 	}
 
 	/*
@@ -355,6 +356,240 @@
 				if (btn.length && !btn.hasClass('preselected')) btn.replaceWith(room.renderFormats());
 			}
 		} catch (e) { /* the menu redraws on its own soon enough */ }
+		return true;
+	}
+
+	/*
+	 * The battle Bag, laid out like the games: Fight (the move buttons), then a
+	 * Bag and a Run button under them, and the Pokemon (switch) menu as it was.
+	 *
+	 * The server still sends the ball pocket (uhtml rpballs, or the older rpball
+	 * panels the tutorial or a staff encounter posts), the medicine panel (rpitems)
+	 * and Run as chat panels. Those scrolled away, and on a phone the chat is a whole
+	 * screen away from the moves. So they are hidden in the chat and their buttons
+	 * rebuilt here, in the controls, every time the controls are drawn or a panel
+	 * changes. A button sends the panel's own command, so the server checks exactly
+	 * what it checked before.
+	 */
+	function installBagMenu() {
+		var R = window.BattleRoom;
+		if (!R || !R.prototype || !R.prototype.updateMoveControls || !window.jQuery) return false;
+		if (R.prototype.__velvetBag) return true;
+		R.prototype.__velvetBag = true;
+		var $ = window.jQuery;
+
+		if (!document.getElementById('velvet-bag-css')) {
+			var css = document.createElement('style');
+			css.id = 'velvet-bag-css';
+			css.textContent =
+				'.battle-log .uhtml-rpballs,.battle-log .uhtml-rpitems,.battle-log [class*="uhtml-rpball"]{display:none!important}' +
+				'.velvet-cmd{display:flex;gap:6px;margin:6px 0 4px;clear:both}' +
+				'.velvet-cmd button{flex:1;min-height:40px;font-size:14px;font-weight:bold;border-radius:6px;cursor:pointer}' +
+				'.velvet-cmd .velvet-bagbtn{background:#f0b429;border:1px solid #b7791f;color:#3a2600}' +
+				'.velvet-cmd .velvet-runbtn{background:#4a90d9;border:1px solid #2c6aa8;color:#fff}' +
+				'.velvet-bag{margin:4px 0;padding:6px;border:1px solid #b7791f;border-radius:8px;background:rgba(240,180,41,.12);clear:both}' +
+				'.velvet-tabs{display:flex;gap:4px;margin-bottom:6px;flex-wrap:wrap}' +
+				'.velvet-tabs button{flex:1;min-height:36px;min-width:80px;border-radius:6px;cursor:pointer;font-size:13px}' +
+				'.velvet-tabs button.cur{background:#f0b429;color:#3a2600;font-weight:bold;border:1px solid #b7791f}' +
+				'.velvet-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:6px}' +
+				'.velvet-grid button{min-height:44px;font-size:14px;border-radius:6px;cursor:pointer;padding:4px 6px;white-space:normal}' +
+				'.velvet-grid button small{display:block;opacity:.75;font-size:11px}' +
+				'.velvet-bag .velvet-note{font-size:12px;margin:4px 0;opacity:.85}' +
+				'.velvet-bag h4{margin:6px 0 4px;font-size:13px}';
+			document.head.appendChild(css);
+		}
+
+		function esc(t) { return String(t).replace(/[&<>"']/g, function (c) { return '&#' + c.charCodeAt(0) + ';'; }); }
+		function clean(t) { return String(t || '').replace(/\s+/g, ' ').trim(); }
+
+		// What the chat panels offer this room right now.
+		function readBag(room) {
+			var log = room.$('.battle-log');
+			var pocket = log.find('.uhtml-rpballs').last();
+			var oldPanels = log.find('[class*="uhtml-rpball"]').not('.uhtml-rpballs');
+			var latestOld = oldPanels.last();
+			var source = pocket.length ? pocket : latestOld;
+			var bag = { wild: !!(pocket.length || oldPanels.length), balls: [], escapes: [], run: null, note: '', medicine: [], idle: '' };
+			source.find('button[value]').each(function () {
+				var v = this.getAttribute('value') || '';
+				var item = { value: v, label: clean($(this).text()), title: this.getAttribute('title') || '' };
+				if (/^\/throwball /.test(v)) bag.balls.push(item);
+				else if (/^\/run\s*$/.test(v)) bag.run = item;
+				else if (/^\/run /.test(v)) bag.escapes.push(item);
+			});
+			// "Throw a Poke Ball" on the old panels reads better as the ball's name.
+			for (var b = 0; b < bag.balls.length; b++) bag.balls[b].label = bag.balls[b].label.replace(/^Throw an? /, '');
+			if (bag.wild && !bag.run) bag.run = { value: '/run', label: 'Run' };
+			// "Missed. The next ball is 20% likelier to hold." - the note on the newest panel.
+			var first = latestOld.find('.infobox').children().first();
+			if (first.is('div') && !first.find('button').length) bag.note = clean(first.text());
+			// Medicine: one row per item, "Potion (3): [Pikachu] [Eevee]".
+			var items = log.find('.uhtml-rpitems').last();
+			items.find('.infobox > div').each(function () {
+				var row = $(this);
+				var targets = [];
+				row.find('button[value]').each(function () { targets.push({ value: this.getAttribute('value'), label: clean($(this).text()) }); });
+				if (targets.length) {
+					var name = clean(row.clone().children('button').remove().end().text()).replace(/:\s*$/, '');
+					bag.medicine.push({ name: name, targets: targets });
+				} else if (!bag.idle && !/^Nothing in your bag/.test(clean(row.text()))) {
+					bag.idle = clean(row.text());
+				}
+			});
+			bag.hasItems = !!items.length;
+			return bag;
+		}
+
+		function pocketTabs(bag, tab) {
+			var tabs = [];
+			if (bag.wild) tabs.push(['balls', 'Pokéballs']);
+			if (bag.hasItems) tabs.push(['medicine', 'Medicine']);
+			var buf = '<div class="velvet-tabs">';
+			for (var i = 0; i < tabs.length; i++) {
+				buf += '<button type="button" data-velvet-tab="' + tabs[i][0] + '"' + (tabs[i][0] === tab ? ' class="cur"' : '') + '>' + tabs[i][1] + '</button>';
+			}
+			return buf + '<button type="button" data-velvet="close">&larr; Back</button></div>';
+		}
+
+		function actionButton(item, sub) {
+			return '<button type="button" data-velvet-send="' + esc(item.value) + '"' + (item.title ? ' title="' + esc(item.title) + '"' : '') + '>' +
+				esc(item.label) + (sub ? '<small>' + esc(sub) + '</small>' : '') + '</button>';
+		}
+
+		function pocketHTML(room, bag, tab) {
+			var buf = pocketTabs(bag, tab);
+			if (tab === 'balls') {
+				if (bag.note) buf += '<div class="velvet-note">' + esc(bag.note) + '</div>';
+				buf += '<div class="velvet-grid">';
+				for (var i = 0; i < bag.balls.length; i++) buf += actionButton(bag.balls[i]);
+				buf += '</div>';
+				if (!bag.balls.length) buf += '<div class="velvet-note">No Pokéballs left. Buy some with !buy on Discord.</div>';
+				if (bag.escapes.length) {
+					buf += '<h4>Getting away</h4><div class="velvet-grid">';
+					for (var e = 0; e < bag.escapes.length; e++) buf += actionButton(bag.escapes[e], 'always works');
+					buf += '</div>';
+				}
+				buf += '<div class="velvet-note">Throwing uses your turn. Weaken it and give it a status first.</div>';
+			} else if (tab === 'medicine') {
+				var chosen = null;
+				for (var m = 0; m < bag.medicine.length; m++) if (bag.medicine[m].name === room.velvetBagItem) chosen = bag.medicine[m];
+				if (chosen) {
+					buf += '<h4>Use ' + esc(chosen.name) + ' on…</h4><div class="velvet-grid">';
+					for (var t = 0; t < chosen.targets.length; t++) buf += actionButton(chosen.targets[t]);
+					buf += '<button type="button" data-velvet-item="">Cancel</button></div>';
+				} else {
+					buf += '<div class="velvet-grid">';
+					for (var k = 0; k < bag.medicine.length; k++) {
+						buf += '<button type="button" data-velvet-item="' + esc(bag.medicine[k].name) + '">' + esc(bag.medicine[k].name) + '</button>';
+					}
+					buf += '</div>';
+					if (!bag.medicine.length) buf += '<div class="velvet-note">Nothing in your bag would help right now.</div>';
+					if (bag.idle) buf += '<div class="velvet-note">' + esc(bag.idle) + '</div>';
+				}
+				buf += '<div class="velvet-note">Using an item takes your whole turn.</div>';
+			}
+			return buf;
+		}
+
+		// Draw (or redraw) the Bag and Run row under the moves.
+		function drawBag(room) {
+			try {
+				var controls = room.$controls && room.$controls.find('.movecontrols');
+				if (!controls || !controls.length) return;
+				var bag = readBag(room);
+				controls.find('.velvet-cmd, .velvet-bag').remove();
+				if (!bag.wild && !bag.hasItems) { controls.find('.moveselect, .movemenu').show(); return; }
+				var row = '<div class="velvet-cmd">' +
+					'<button type="button" class="velvet-bagbtn" data-velvet="bag">🎒 Bag</button>' +
+					(bag.wild && bag.run ? '<button type="button" class="velvet-runbtn" data-velvet-send="' + esc(bag.run.value) + '">🏃 Run</button>' : '') +
+					'</div>';
+				controls.find('.movemenu').after(row);
+				var tab = room.velvetBagTab;
+				if (tab === 'balls' && !bag.wild) tab = 'medicine';
+				if (tab === 'medicine' && !bag.hasItems) tab = bag.wild ? 'balls' : null;
+				if (tab) {
+					controls.find('.moveselect, .movemenu, .velvet-cmd').hide();
+					controls.append('<div class="velvet-bag">' + pocketHTML(room, bag, tab) + '</div>');
+				} else {
+					controls.find('.moveselect, .movemenu').show();
+				}
+			} catch (e) { /* the moves stay as Showdown drew them */ }
+		}
+
+		function hook(room) {
+			if (room.__velvetBagHooked || !room.$controls) return;
+			room.__velvetBagHooked = true;
+			room.$controls.on('click', '[data-velvet], [data-velvet-tab], [data-velvet-item], [data-velvet-send]', function (e) {
+				e.preventDefault();
+				e.stopPropagation();
+				var el = this;
+				var send = el.getAttribute('data-velvet-send');
+				if (send) {
+					var label = clean($(el).clone().children('small').remove().end().text());
+					room.velvetBagTab = null;
+					room.velvetBagItem = null;
+					room.send(send);
+					var what = /^\/run/.test(send) ? 'Trying to get away' : /^\/throwball/.test(send) ? 'Throwing a ' + label : 'Using an item on ' + label;
+					room.$controls.html('<div class="controls"><p><em>' + esc(what) + '… waiting for the turn.</em> ' +
+						'<button type="button" class="button" data-velvet="undo">Back</button></p></div>');
+					return;
+				}
+				var act = el.getAttribute('data-velvet');
+				if (act === 'undo') { room.updateControls(); return; }
+				if (act === 'bag') {
+					room.velvetBagTab = readBag(room).wild ? 'balls' : 'medicine';
+					room.velvetBagItem = null;
+				} else if (act === 'close') {
+					room.velvetBagTab = null;
+					room.velvetBagItem = null;
+				} else if (el.hasAttribute('data-velvet-tab')) {
+					room.velvetBagTab = el.getAttribute('data-velvet-tab');
+					room.velvetBagItem = null;
+				} else if (el.hasAttribute('data-velvet-item')) {
+					room.velvetBagItem = el.getAttribute('data-velvet-item') || null;
+				}
+				drawBag(room);
+			});
+			// The panels arrive right behind the request, often after the controls are
+			// drawn, and change each turn - so the row is redrawn when they do.
+			var logEl = room.$('.battle-log')[0];
+			if (logEl && window.MutationObserver) {
+				var pending = false;
+				var isOurs = function (n) {
+					if (!n || n.nodeType !== 1) return false;
+					if (/uhtml-rp/.test(n.className || '')) return true;
+					return !!(n.closest && n.closest('[class*="uhtml-rp"]'));
+				};
+				new MutationObserver(function (list) {
+					var ours = false;
+					for (var i = 0; i < list.length && !ours; i++) {
+						if (isOurs(list[i].target)) { ours = true; break; }
+						var added = list[i].addedNodes || [];
+						for (var j = 0; j < added.length; j++) if (isOurs(added[j])) { ours = true; break; }
+					}
+					if (!ours || pending) return;
+					pending = true;
+					setTimeout(function () { pending = false; drawBag(room); }, 0);
+				}).observe(logEl, { childList: true, subtree: true });
+			}
+		}
+
+		var original = R.prototype.updateMoveControls;
+		R.prototype.updateMoveControls = function () {
+			var result = original.apply(this, arguments);
+			hook(this);
+			drawBag(this);
+			return result;
+		};
+		// A new turn starts on the moves, the way the games do.
+		var receiveRequest = R.prototype.receiveRequest;
+		if (receiveRequest) {
+			R.prototype.receiveRequest = function () {
+				this.velvetBagTab = null;
+				this.velvetBagItem = null;
+				return receiveRequest.apply(this, arguments);
+			};
+		}
 		return true;
 	}
 

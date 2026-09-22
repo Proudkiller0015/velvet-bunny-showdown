@@ -48,7 +48,7 @@ const wait = ms => new Promise(r => setTimeout(r, ms));
 			if (button && seen.awaitPanel && !potion) { potion = true; ws.send(`${seen.awaitPanel}|${button[1]}`); seen.awaitPanel = null; }
 			if (line.startsWith('|error|')) seen.errors.push(line);
 			// Another ball once that one is thrown: there was only one.
-			if (/threw a Poké Ball!/.test(line) && !seen.second) { seen.second = true; ws.send(`${room}|/throwball poke`); }
+			if (/threw an? Pok[ée] ?[Bb]all!/.test(line) && !seen.second) { seen.second = true; ws.send(`${room}|/throwball poke`); }
 			if (process.env.DEBUG && /error|rpitems|threw|win/.test(line)) console.log('  >', line.slice(0, 120));
 			if (line.startsWith('|win|') || line === '|tie' || line.startsWith('|tie|')) seen.ended = true;   // not '|tier|'
 			if (!line.startsWith('|request|')) continue;
@@ -87,7 +87,7 @@ const wait = ms => new Promise(r => setTimeout(r, ms));
 	check(/\|uhtml\|rpball0\|.*\/throwball poke/.test(log), 'the Throw buttons are in the battle');
 	check(/\|uhtml\|rpitems\|/.test(log), 'the item panel is in the battle');
 	check(!!seen.potionButton, 'the item panel offers a Potion button once Pikachu is hurt');
-	check(/threw a Poké Ball!/.test(log), '/throwball throws the Poké Ball');
+	check(/threw an? Pok[ée] ?[Bb]all!/.test(log), '/throwball throws the Poké Ball');
 	check(seen.errors.some(e => /last Poké Ball/.test(e)) || /Gotcha!/.test(log), `a second ball is refused, or the first one caught it (${seen.errors.join(' ; ')})`);
 	check(potion && /used a Potion on Pikachu!/.test(log), 'pressing the Potion button uses the Potion');
 	check(seen.ended, 'the battle ends');
