@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-1-tls6zd",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Easy",
+		"StaleThunder126"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆StaleThunder126\n|t:|1790106559\n|gametype|singles\n|player|p1|Bunny Easy|bunny.png|1047\n|player|p2|StaleThunder126|jolt.png|1000\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1790106559\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Raging Bolt|Raging Bolt, L78|100/100\n|switch|p2a: Hydrapple|Hydrapple, L83, M|100/100\n|turn|1\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1790106591\n|-terastallize|p1a: Raging Bolt|Electric\n|move|p1a: Raging Bolt|Draco Meteor|p2a: Hydrapple\n|-supereffective|p2a: Hydrapple\n|-damage|p2a: Hydrapple|22/100\n|-unboost|p1a: Raging Bolt|spa|2\n|move|p2a: Hydrapple|Fickle Beam|p1a: Raging Bolt\n|-damage|p1a: Raging Bolt|79/100\n|\n|upkeep\n|turn|2\n|\n|t:|1790106606\n|move|p1a: Raging Bolt|Draco Meteor|p2a: Hydrapple\n|-supereffective|p2a: Hydrapple\n|-damage|p2a: Hydrapple|0 fnt\n|-unboost|p1a: Raging Bolt|spa|2\n|faint|p2a: Hydrapple\n|\n|upkeep\n|\n|t:|1790106636\n|switch|p2a: Vigoroth|Vigoroth, L85, M|100/100\n|turn|3\n|\n|t:|1790106643\n|move|p2a: Vigoroth|Earthquake|p1a: Raging Bolt\n|-supereffective|p1a: Raging Bolt\n|-damage|p1a: Raging Bolt|37/100\n|move|p1a: Raging Bolt|Draco Meteor|p2a: Vigoroth\n|-damage|p2a: Vigoroth|84/100\n|-unboost|p1a: Raging Bolt|spa|2\n|\n|upkeep\n|turn|4\n|\n|t:|1790106651\n|move|p2a: Vigoroth|Earthquake|p1a: Raging Bolt\n|-supereffective|p1a: Raging Bolt\n|-damage|p1a: Raging Bolt|0 fnt\n|faint|p1a: Raging Bolt\n|-end|p1a: Raging Bolt|Protosynthesis|[silent]\n|\n|upkeep\n|\n|t:|1790106651\n|switch|p1a: Yanmega|Yanmega, L82, F|100/100\n|turn|5\n|\n|t:|1790106662\n|move|p1a: Yanmega|Bug Buzz|p2a: Vigoroth\n|-damage|p2a: Vigoroth|47/100\n|-unboost|p2a: Vigoroth|spd|1\n|move|p2a: Vigoroth|Body Slam|p1a: Yanmega\n|-damage|p1a: Yanmega|70/100\n|-status|p1a: Yanmega|par\n|\n|-ability|p1a: Yanmega|Speed Boost|boost\n|-boost|p1a: Yanmega|spe|1\n|upkeep\n|turn|6\n",
+	"inputlog": null,
+	"uploadtime": 1790106670
+}
