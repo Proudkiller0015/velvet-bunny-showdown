@@ -237,14 +237,16 @@ function findBall(input) {
  * The games' formula at full strength makes a strong Pokemon a thirty-turn
  * slog of chip damage and status, and nobody wants that in an RP session. So
  * the formula is the real one - lower HP, a status and a better ball all help,
- * in the same proportions - and the result is doubled, and every ball that
+ * in the same proportions - and the result is multiplied by 1.5 (it was doubled
+ * until 22 Sep 2026, which the owner found too easy), and every ball that
  * misses makes the next one 5% likelier.
  *
- *   Pidgey at full HP, Pokéball              ~67%
- *   Garchomp at full HP, Ultra Ball           ~24%
+ *   Pidgey at full HP, Pokéball              ~50%
+ *   Garchomp at full HP, Ultra Ball           ~18%
  *   Garchomp in the red, asleep, Ultra Ball   ~100%
  */
-const CATCH_BOOST = 2;
+// 2 until 22 Sep 2026; the owner found catching too easy ("a lil harder").
+const CATCH_BOOST = 1.5;
 const PITY_PER_MISS = 0.05;
 
 function catchChance(c) {

@@ -123,6 +123,14 @@ function requestEncounter(payload, deps) {
 		return { ok: false, code: 'noplace', message: `#${payload.channel} isn't a place on the map, so nothing can be met here. Use it in the channel your character is in.` };
 	}
 	const { place } = found;
+	/*
+	 * A spot inside a place: a channel with Pokémon of its own (Sakura's old well,
+	 * the lamp room at Beacon Rock). It replaces the place's types, common and rare
+	 * for wild Pokémon met in that channel; everything else - which channels have
+	 * wild Pokémon or trainers, the levels - is still the place's.
+	 */
+	const spot = place.spots && place.spots[found.channel];
+	const wildPlace = spot ? { ...place, types: spot.types || place.types, common: spot.common || place.common, rare: spot.rare || place.rare } : place;
 	const wildHere = (place.wild || []).includes(found.channel);
 	const trainersHere = (place.trainers || []).length && !(place.noTrainers || []).includes(found.channel);
 
@@ -173,7 +181,7 @@ function requestEncounter(payload, deps) {
 		if (rolled.error) return { ok: false, code: 'summon', message: rolled.error };
 	} else {
 		rolled = kind === 'wild'
-			? E.rollWild({ place, badges, levelCap, shiny: payload.shiny || {}, ace: E.aceLevel(payload.box) })
+			? E.rollWild({ place: wildPlace, badges, levelCap, shiny: payload.shiny || {}, ace: E.aceLevel(payload.box) })
 			: E.rollTrainer({ place, badges, levelCap });
 	}
 	if (!rolled.team.length) return { ok: false, code: 'empty', message: 'Nothing turned up. Try again.' };

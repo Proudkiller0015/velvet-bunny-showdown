@@ -27,8 +27,15 @@ module.exports = {
       wild: ['blossom-road', 'shrine-steps', 'the-old-well', 'sakura-beach'],
       trainers: ['youngster', 'lass', 'schoolkid', 'bugcatcher'],
       noTrainers: ['poke-center', 'sakura-lab', 'sakura-mart', 'sakura-houses', 'cynthias-house'],
-      common: ['Pidgey', 'Sentret', 'Hoppip', 'Caterpie', 'Weedle', 'Oddish', 'Bidoof', 'Starly', 'Sewaddle', 'Wurmple', 'Petilil', 'Cottonee', 'Sunkern', 'Skwovet', 'Wingull', 'Shellder', 'Krabby'],
+      common: ['Pidgey', 'Sentret', 'Hoppip', 'Caterpie', 'Weedle', 'Oddish', 'Bidoof', 'Starly', 'Sewaddle', 'Wurmple', 'Petilil', 'Cottonee', 'Sunkern', 'Skwovet'],
       rare: ['Eevee', 'Mimikyu', 'Smeargle', 'Munchlax'],
+      // Channels with Pokémon of their own (src/rp-server.js requestEncounter).
+      spots: {
+        // sweet water down a stone shaft
+        'the-old-well': { types: ['Water', 'Ghost'], common: ['Poliwag', 'Wooper', 'Azurill', 'Tympole', 'Lotad', 'Barboach', 'Surskit', 'Zubat', 'Woobat'], rare: ['Misdreavus', 'Shuppet', 'Feebas'] },
+        // the town beach
+        'sakura-beach': { types: ['Water', 'Flying'], common: ['Wingull', 'Shellder', 'Krabby', 'Tentacool', 'Staryu', 'Wiglett', 'Shellos', 'Pyukumuku'], rare: ['Corsola', 'Mantyke', 'Clamperl'] },
+      },
     },
     'station': {
       name: 'Kagura Station',
@@ -39,6 +46,11 @@ module.exports = {
       noTrainers: ['ticket-hall', 'poke-center-station', 'lost-property'],
       common: ['Rattata', 'Pidove', 'Meowth', 'Magnemite', 'Voltorb', 'Klink', 'Plusle', 'Minun', 'Pawmi', 'Tadbulb', 'Zigzagoon', 'Trubbish', 'Elekid'],
       rare: ['Rotom', 'Porygon', 'Meowth-Galar', 'Varoom'],
+      // Channels with Pokémon of their own (src/rp-server.js requestEncounter).
+      spots: {
+        // things people left behind
+        'lost-property': { types: ['Ghost', 'Steel', 'Fairy'], common: ['Klefki', 'Shuppet', 'Sinistea', 'Litwick', 'Magnemite', 'Trubbish'], rare: ['Rotom', 'Mimikyu', 'Gimmighoul'] },
+      },
     },
     'amber': {
       name: 'Amber Fields',
@@ -49,6 +61,11 @@ module.exports = {
       noTrainers: ['farm-shop'],
       common: ['Diglett', 'Sunkern', 'Paras', 'Ledyba', 'Nincada', 'Kricketot', 'Bellsprout', 'Seedot', 'Lechonk', 'Nymble', 'Smoliv', 'Bounsweet', 'Miltank', 'Mudbray', 'Rellor'],
       rare: ['Tepig', 'Torchic', 'Tauros-Paldea-Combat', 'Cacnea'],
+      // Channels with Pokémon of their own (src/rp-server.js requestEncounter).
+      spots: {
+        // the pond by the mill
+        'mill-pond': { types: ['Water', 'Bug', 'Grass'], common: ['Magikarp', 'Goldeen', 'Poliwag', 'Lotad', 'Surskit', 'Wooper', 'Ducklett', 'Tympole', 'Chewtle'], rare: ['Feebas', 'Dewpider'] },
+      },
     },
     'minato': {
       name: 'Minato Harbour',
@@ -71,9 +88,9 @@ module.exports = {
     },
     'millpond': {
       name: 'The Mill Pond',
-      channels: ['the-mill-pond', 'the-jetty'],
+      channels: ['the-mill-pond'],
       types: ['Water', 'Bug', 'Grass', 'Normal'],
-      wild: ['the-mill-pond', 'the-jetty'],
+      wild: ['the-mill-pond'],
       trainers: ['fisherman', 'youngster', 'lass', 'bugcatcher', 'picnicker', 'tuber'],
       common: ['Magikarp', 'Goldeen', 'Poliwag', 'Lotad', 'Surskit', 'Wooper', 'Bidoof', 'Ducklett', 'Tympole', 'Chewtle', 'Budew', 'Combee'],
       rare: ['Froakie', 'Sobble', 'Feebas'],
@@ -173,6 +190,11 @@ module.exports = {
       trainers: ['hiker', 'worker', 'ruinmaniac', 'punk', 'backpacker'],
       common: ['Zubat', 'Geodude', 'Roggenrola', 'Aron', 'Nosepass', 'Woobat', 'Nacli', 'Pawniard', 'Rolycoly', 'Diglett-Alola', 'Tinkatink', 'Barboach', 'Litwick'],
       rare: ['Sableye', 'Larvitar', 'Gimmighoul'],
+      // Channels with Pokémon of their own (src/rp-server.js requestEncounter).
+      spots: {
+        // the flooded level
+        'the-water-line': { types: ['Water', 'Rock', 'Dark'], common: ['Barboach', 'Wooper', 'Poliwag', 'Tympole', 'Chewtle', 'Zubat', 'Woobat', 'Shellos'], rare: ['Relicanth', 'Sableye'] },
+      },
     },
     'ruins': {
       name: 'The Standing Stones',
@@ -251,6 +273,11 @@ module.exports = {
       trainers: ['bugcatcher', 'ranger', 'rangerf', 'backpacker', 'picnicker'],
       common: ['Tangela', 'Venonat', 'Yanma', 'Surskit', 'Carnivine', 'Croagunk', 'Foongus', 'Dewpider', 'Morelull', 'Fomantis', 'Ekans', 'Lotad', 'Grubbin', 'Toedscool', 'Tropius'],
       rare: ['Bulbasaur', 'Goomy', 'Heracross', 'Comfey'],
+      // Channels with Pokémon of their own (src/rp-server.js requestEncounter).
+      spots: {
+        // the dry side of the ridge
+        'the-rain-shadow': { types: ['Grass', 'Ground', 'Bug'], common: ['Cacnea', 'Sandshrew', 'Trapinch', 'Maractus', 'Hippopotas', 'Sandile', 'Nincada', 'Bramblin', 'Silicobra'], rare: ['Larvesta', 'Skorupi'] },
+      },
     },
     'kuroihama': {
       name: 'Kuroihama',
@@ -317,6 +344,11 @@ module.exports = {
       noTrainers: ['poke-center-ember', 'ember-mart', 'hot-springs'],
       common: ['Slugma', 'Numel', 'Magby', 'Torkoal', 'Rolycoly', 'Sizzlipede', 'Salandit', 'Houndour', 'Litleo', 'Heatmor', 'Geodude-Alola', 'Koffing'],
       rare: ['Chimchar', 'Gible', 'Growlithe-Hisui'],
+      // Channels with Pokémon of their own (src/rp-server.js requestEncounter).
+      spots: {
+        // warm pools
+        'hot-springs': { types: ['Water', 'Fire'], common: ['Slowpoke', 'Psyduck', 'Torkoal', 'Numel', 'Buizel', 'Azurill', 'Magby'], rare: ['Growlithe-Hisui'] },
+      },
     },
     'shelf': {
       name: 'Thunder Shelf',
@@ -453,6 +485,11 @@ module.exports = {
       noTrainers: ['keepers-room'],
       common: ['Wingull', 'Tentacool', 'Wailmer', 'Spheal', 'Seel', 'Delibird', 'Wattrel', 'Cramorant', 'Chinchou', 'Staryu', 'Horsea'],
       rare: ['Piplup', 'Lapras', 'Mantine'],
+      // Channels with Pokémon of their own (src/rp-server.js requestEncounter).
+      spots: {
+        // the lamp room
+        'the-light': { types: ['Electric', 'Ghost', 'Flying'], common: ['Chinchou', 'Litwick', 'Wingull', 'Wattrel', 'Magnemite'], rare: ['Rotom'] },
+      },
     },
     'aether': {
       name: 'Aether Paradise',

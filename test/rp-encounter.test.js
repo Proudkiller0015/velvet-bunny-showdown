@@ -93,6 +93,7 @@ const TEAM = Teams.pack([
 		at: Date.now(), showdown: NAME, character: 'Mira', channel: 'the-long-grass', kind: 'wild', badges: 0, levelCap: 8,
 		balls: { poke: 2 }, box: [{ species: 'Pikachu', level: 5 }], gimmicks: { mega: false, zmove: false, dynamax: false, tera: false },
 	}));
+	if (!answer.body.ok) console.log("  answer:", answer.status, JSON.stringify(answer.body).slice(0, 400));
 	check(answer.body.ok, `a wild encounter is rolled: ${answer.body.encounter && answer.body.encounter.text}`);
 	const id = answer.body.encounter && answer.body.encounter.id;
 	for (let i = 0; i < 40 && !seen.challenge; i++) await wait(500);
