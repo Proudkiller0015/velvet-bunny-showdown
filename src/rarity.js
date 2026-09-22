@@ -23,7 +23,7 @@
  * agree.
  */
 
-const { Dex } = require('pokemon-showdown');
+const Dex = require('./rp-dex')();
 
 const STARTERS = new Set(['bulbasaur', 'charmander', 'squirtle', 'chikorita', 'cyndaquil', 'totodile', 'treecko',
 	'torchic', 'mudkip', 'turtwig', 'chimchar', 'piplup', 'snivy', 'tepig', 'oshawott', 'chespin', 'fennekin',

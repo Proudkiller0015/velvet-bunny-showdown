@@ -5,7 +5,8 @@
  *   node test/team-builders.test.js
  */
 
-const { Dex } = require('pokemon-showdown');
+// The RP dex: these are RP's sets (Keystone Legion, Soul Toll...), which the official formats do not have.
+const Dex = require('../src/rp-dex')();
 const RS = require('../src/role-sets');
 const A = require('../src/team-assembler');
 const TL = require('../src/team-logic');

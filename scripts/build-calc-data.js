@@ -32,7 +32,8 @@ const ROOT = path.join(__dirname, '..');
 const PACKAGE = path.join(ROOT, 'node_modules', 'pokemon-showdown');
 const OUT = path.join(ROOT, 'client', 'js', 'velvet-calc-data.js');
 
-const { Dex } = require(path.join(PACKAGE, 'dist', 'sim', 'dex.js'));
+// RP's data (the gen9rp mod): the base dex is Showdown's own and has none of ours.
+const Dex = require(path.join(PACKAGE, 'dist', 'sim', 'dex.js')).Dex.mod('gen9rp');
 
 /** Everything this server invented, as opposed to everything it changed. */
 const SPECIES = ['samantha', 'nuzleafsold'];

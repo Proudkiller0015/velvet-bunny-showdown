@@ -614,7 +614,7 @@ exports.MOVES = {
 	},
 	continentalheave: {
 		num: -20, gen: 9, name: "Continental Heave", type: "Normal", category: "Physical",
-		basePower: 110, accuracy: 95, pp: 5, priority: 0,
+		basePower: 110, accuracy: 100, pp: 5, priority: 0,
 		breaksProtect: true,
 		onTryHit(target) {
 			if (!target.runImmunity('Normal')) return;
@@ -2040,7 +2040,8 @@ exports.buildBuffs = (Pokedex) => {
 	// Mew learns every machine move there is, and these are handed out like machines.
 	add('mew', Object.keys(exports.MOVES).filter(newMove), []);
 
-	out.regigigas = { moves: ['continentalheave'], abilities: ['Colossus Unbound'], sole: true };
+	// Colossus Unbound first, so it is what a new set starts with; Slow Start stays pickable.
+	out.regigigas = { moves: ['continentalheave'], abilities: ['Colossus Unbound'], first: true };
 	// A Second Legend: Articuno keeps Pressure and Snow Cloak and gains its own.
 	out.articuno = { moves: ['aurorasquall', 'freezedry', 'hurricane', 'calmmind', 'roost', 'uturn'], abilities: ['Polar Mantle'] };
 	// The Legends Rise: each keeps what it had and gains its own. Uxie and Mesprit get

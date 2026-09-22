@@ -208,6 +208,9 @@ function buffedTable(dex, base) {
 		table[id] = Object.assign({}, entry, { sets: entry.sets.map(set => {
 			let abilities = (set.abilities || []).filter(a => own.includes(a));
 			for (const a of awakened) if (!abilities.includes(a)) abilities.push(a);
+			// An Awakened ability that is the species' default (Regigigas: Colossus Unbound
+			// ahead of Slow Start) is the set's ability, not one of two it might roll.
+			if (awakened.includes(species.abilities[0])) abilities = [species.abilities[0]];
 			if (!abilities.length) abilities = own.slice(0, 1);
 			const pool = set.movepool.map(n => dex.moves.get(n));
 			const attacks = pool.filter(m => m.category !== 'Status');

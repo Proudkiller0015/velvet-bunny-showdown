@@ -33,7 +33,8 @@ const PACKAGE = path.join(ROOT, 'node_modules', 'pokemon-showdown');
 const OUT = path.join(ROOT, 'client', 'js', 'velvet-buffs.js');
 
 // Loading the dex is what runs our hooks, which is what fills in `applied`.
-const { Dex } = require(path.join(PACKAGE, 'dist', 'sim', 'dex.js'));
+// RP's data (the gen9rp mod): the base dex is Showdown's own and has none of ours.
+const Dex = require(path.join(PACKAGE, 'dist', 'sim', 'dex.js')).Dex.mod('gen9rp');
 Dex.species.get('simisage');
 const { applied, Buffs } = require(path.join(PACKAGE, 'dist', 'data', 'velvet', 'buffs.js'));
 
@@ -231,7 +232,7 @@ const megaTiers = {};
 const natdexTiers = {};
 // Halloween 2026: the witch Mega Banette is ours, not a Z-A Mega, so it is added by hand.
 const halloween = require(path.join(PACKAGE, 'dist', 'data', 'velvet', 'halloween.js'));
-const OUR_MEGAS = { [require(path.join(PACKAGE, 'dist', 'sim', 'dex.js')).Dex.species.get(halloween.FORME).id]: Dex.species.get(halloween.FORME).tier };
+const OUR_MEGAS = { [Dex.species.get(halloween.FORME).id]: Dex.species.get(halloween.FORME).tier };
 // Species this server made legal and tiered in its own formats-data (Eternamax: AG).
 const OUR_FORMATS = require(path.join(PACKAGE, 'dist', 'data', 'velvet', 'formats-data.js')).FormatsData;
 const OUR_TIERS = {};

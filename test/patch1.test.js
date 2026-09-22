@@ -6,13 +6,15 @@
  *   node test/patch1.test.js
  */
 
-const { Battle, Dex } = require('pokemon-showdown');
+const { Battle } = require('pokemon-showdown');
+// Balance Patch 1 is RP's: its data is the RP dex, its battles RP Custom Game.
+const Dex = require('../src/rp-dex')();
 
 let failed = 0;
 const check = (ok, what) => { console.log(`${ok ? 'ok  ' : 'FAIL'} ${what}`); if (!ok) failed++; };
 
 function battle(p1, p2, seed = [1, 2, 3, 4]) {
-	const b = new Battle({ formatid: 'gen9customgame', seed });
+	const b = new Battle({ formatid: 'gen9rpcustomgame', seed });
 	b.setPlayer('p1', { team: p1.map(s => ({ level: 100, evs: { hp: 252, atk: 252, def: 4 }, ivs: {}, nature: 'Hardy', item: '', ...s })) });
 	b.setPlayer('p2', { team: p2.map(s => ({ level: 100, evs: { hp: 252, def: 252, spd: 4 }, ivs: {}, nature: 'Hardy', item: '', ...s })) });
 	if (b.requestState === 'teampreview') b.makeChoices('team 1', 'team 1');
@@ -58,8 +60,9 @@ const log = b => b.log.join('\n');
 	check(b.p2.active[0].fainted || b.p2.active[0].hp === 0 || /faint\|p2a/.test(log(b)) || b.p2.active[0].hp < b.p2.active[0].maxhp, 'Mold Breaker: Sturdy does not hold (or the hit landed)');
 }
 
-// Slow Start is gone.
-check(!Object.values(Dex.species.get('regigigas').abilities).includes('Slow Start'), 'Regigigas no longer has Slow Start');
+// Colossus Unbound is the default; Slow Start is kept, behind it.
+check(Dex.species.get('regigigas').abilities[0] === 'Colossus Unbound', 'Regigigas starts on Colossus Unbound');
+check(Object.values(Dex.species.get('regigigas').abilities).includes('Slow Start'), 'and can still pick Slow Start');
 check(Dex.species.get('regigigas').natDexTier === 'Uber', 'Regigigas is Uber');
 
 // Spark Scamper goes first; Shuffle Jab and Hustle Up raise Speed.

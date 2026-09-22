@@ -31,7 +31,7 @@ function patchPkmnData() {
 	patched = true;
 	let Showdown;
 	try {
-		Showdown = require('pokemon-showdown').Dex;
+		Showdown = require('./rp-dex')();
 	} catch (e) {
 		return;   // no server data here (a stripped-down test): nothing to copy
 	}

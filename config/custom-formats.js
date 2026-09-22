@@ -1200,6 +1200,20 @@ function witchStoneRule(set) {
 	if (set.shiny) return [];
 	return [`${set.name || set.species} must be shiny to hold the Banettite-Halloween (Halloween 2026 event rule).`];
 }
+/*
+ * Every RP format plays on RP's data: the generation's mod with data/velvet laid
+ * over it (gen9rp ... gen1rp, see data/velvet/rp-mod.js). Nothing else does, so
+ * the official formats keep Showdown's own dex.
+ */
+{
+	let section = '';
+	for (const format of exports.Formats) {
+		if (format.section) { section = format.section; continue; }
+		if (!format.name || !section.startsWith('RP')) continue;
+		format.mod = `${format.mod || 'gen9'}rp`;
+	}
+}
+
 for (const format of exports.Formats) {
 	if (!format.name) continue;
 	const own = format.onValidateSet;

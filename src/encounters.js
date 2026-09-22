@@ -20,7 +20,8 @@
  *     a function of how many badges the player has, never which ones.
  */
 
-const { Dex } = require('pokemon-showdown');
+// RP's dex: wild Pokemon and trainers are RP's, buffs and our own Pokemon included.
+const Dex = require('./rp-dex')();
 const Rarity = require('./rarity');
 const RS = require('./role-sets');
 const TL = require('./team-logic');

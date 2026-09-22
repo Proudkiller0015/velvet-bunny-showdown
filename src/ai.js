@@ -189,7 +189,7 @@ function changedSpecies() {
 	CHANGED_SPECIES = {};
 	try {
 		const path = require('path');
-		const { Dex } = require('pokemon-showdown');
+		const Dex = require('./rp-dex')();
 		const dir = path.join(path.dirname(require.resolve('pokemon-showdown')), '..', 'data', 'velvet', 'unnerfs.js');
 		for (const id of require(dir).CHANGED.species || []) {
 			const s = Dex.species.get(id);
@@ -394,7 +394,7 @@ class BattleAI {
 		 */
 		if (!found) {
 			try {
-				const { Dex } = require('pokemon-showdown');
+				const Dex = require('./rp-dex')();
 				const real = Dex.species.get(key);
 				if (real && real.exists && real.baseStats) {
 					found = {
@@ -1270,7 +1270,7 @@ class BattleAI {
 		if (!this.hiddenCache.has(species)) {
 			let found = [];
 			try {
-				const { Dex } = require('pokemon-showdown');
+				const Dex = require('./rp-dex')();
 				const RS = require('./role-sets');
 				const names = new Set();
 				for (const set of RS.roleSets(Dex, species)) for (const n of set.movepool) names.add(n);

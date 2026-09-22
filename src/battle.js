@@ -10,10 +10,10 @@
 
 const IDENT = /^(p[12])([a-c]?): (.*)$/;
 
-// The server's own dex, so our own species and abilities are in it.
+// The RP dex, so our own species and abilities are in it.
 let DEX = null;
 function dex() {
-	if (!DEX) { try { DEX = require('pokemon-showdown').Dex; } catch (e) { DEX = false; } }
+	if (!DEX) { try { DEX = require('./rp-dex')(); } catch (e) { DEX = false; } }
 	return DEX || null;
 }
 const toId = s => String(s || '').toLowerCase().replace(/[^a-z0-9]/g, '');

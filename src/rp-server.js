@@ -263,7 +263,7 @@ function summoned(summon, { place, badges, levelCap }) {
 		if (summon.classId && !cls) return { error: `No trainer class called "${summon.classId}".` };
 		return E.rollTrainer({ place, badges, levelCap, classId: cls && cls.id, double: summon.double === undefined ? null : !!summon.double });
 	}
-	const { Dex } = require('pokemon-showdown');
+	const Dex = require('./rp-dex')();
 	const species = Dex.species.get(summon.species);
 	if (!species.exists || !E.encounterable(species)) return { error: `No Pokémon called "${summon.species}".` };
 	const level = E.clampLevel(summon.level || levelCap || 5);

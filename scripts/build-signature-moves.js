@@ -21,7 +21,8 @@
 const fs = require('fs');
 const path = require('path');
 
-const { Dex } = require(require.resolve('pokemon-showdown/dist/sim/dex.js'));
+// RP's data (the gen9rp mod): the base dex is Showdown's own and has none of ours.
+const Dex = require(require.resolve('pokemon-showdown/dist/sim/dex.js')).Dex.mod('gen9rp');
 // Moves this server handed out (Banette's Dark moves, the Halloween Mega's Witch's
 // Snatch). They are not what the species is known for, and counting them made
 // Pursuit and Trick-or-Treat read as Banette's signatures - and took

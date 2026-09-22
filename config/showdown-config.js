@@ -1552,6 +1552,33 @@ function serverHelpBox(user) {
 		`</div>`;
 }
 
+/**
+ * RP is this server's main format, so the data commands answer with RP's data.
+ *
+ * /dt, /learn, /weakness, /ds, /ms and the rest pick their dex through one
+ * function: a format or generation you name (`/dt9`, `/dt normalize, gen8`),
+ * else the room's own format (a battle's, or a room's default), else the base
+ * dex. That last fallback is Showdown's own data, which is what the official
+ * formats run on - so a plain `/dt normalize` in the lobby showed Game Freak's
+ * Normalize, not the one RP plays. The fallback becomes the RP dex; naming a
+ * generation, or asking in an official format's battle, still gets that
+ * generation's official data.
+ */
+function rpDataByDefault() {
+	const CC = typeof Chat !== 'undefined' && Chat.CommandContext;
+	if (!CC || !CC.prototype.extractFormat) return false;
+	if (CC.prototype.extractFormat.velvet) return true;
+	const original = CC.prototype.extractFormat;
+	const extractFormat = function (formatOrMod, allowRules) {
+		const found = original.call(this, formatOrMod, allowRules);
+		if (found && !found.isMatch && !found.format) found.dex = Dex.mod('gen9rp');
+		return found;
+	};
+	extractFormat.velvet = true;
+	CC.prototype.extractFormat = extractFormat;
+	return true;
+}
+
 /** Put the server's box in front of Showdown's own `/help`. */
 function serverHelp() {
 	const original = Chat.commands && Chat.commands.help;
@@ -2323,6 +2350,7 @@ exports.startuphook = function () {
 	helpRoom();
 	// Chat's commands may not all be loaded yet at startup; try again shortly if not.
 	if (!serverHelp()) setTimeout(serverHelp, 3000).unref();
+	if (!rpDataByDefault()) setTimeout(rpDataByDefault, 3000).unref();
 	roleplay();
 	rpBattlesToRoleplay();
 	replaySnapshots();

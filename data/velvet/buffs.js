@@ -223,8 +223,20 @@ const PATCH1 = require('./balance-patch-1.js');
  * client reads the four it knows), so an extra key is invisible to everything
  * that should not see it and available to everything that should.
  */
-function addAbilities(species, abilities, sole) {
+function addAbilities(species, abilities, sole, first) {
 	if (!abilities.length) return;
+
+	/*
+	 * `first`: the new ability becomes slot 0 - the one the builder and the random
+	 * sets reach for - and what the Pokemon had moves up behind it, still there to
+	 * pick. Regigigas: Colossus Unbound by default, Slow Start kept.
+	 */
+	if (first) {
+		const had = Object.values(species.abilities || {});
+		species.abilities = { 0: abilities[0] };
+		addAbilities(species, [...had, ...abilities.slice(1)].filter(a => a !== abilities[0]));
+		return;
+	}
 
 	/*
 	 * A Mega Evolution has exactly one ability, and the engine reads it from
@@ -442,7 +454,7 @@ exports.applyBuffs = (Pokedex, Learnsets) => {
 		const record = exports.applied[id] || (exports.applied[id] = { moves: [], abilities: [] });
 		const hadAbilities = new Set(Object.values(species.abilities || {}));
 
-		if (buff.abilities?.length) addAbilities(species, buff.abilities, buff.sole);
+		if (buff.abilities?.length) addAbilities(species, buff.abilities, buff.sole, buff.first);
 		for (const ability of Object.values(species.abilities || {})) {
 			if (!hadAbilities.has(ability) && !record.abilities.includes(ability)) {
 				record.abilities.push(ability);

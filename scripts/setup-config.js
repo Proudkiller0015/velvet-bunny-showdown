@@ -99,28 +99,20 @@ if (!stock && fs.existsSync(clientSrc)) {
 }
 
 // ------------------------------------------------------------- custom data
-// Samantha, her abilities, her move and her learnset.
+// Everything data/velvet adds or changes - the buffs, our own Pokemon, moves and
+// abilities, the re-tiers, Halloween - is RP's, and RP's alone. It lives in a mod
+// per generation RP is played in (gen9rp ... gen1rp, see data/velvet/rp-mod.js),
+// which the RP formats use; the base dex, and with it every official format and
+// `/dt9`, stays exactly as Showdown ships it.
 //
-// Showdown compiles its dex into its own package and offers no hook for adding
-// a species. A mod would be tidier, but a Pokemon inside a mod does not exist
-// anywhere else at all - not searchable, not in the builder, not lookupable -
-// and what is wanted is the opposite: findable everywhere, legal only in Custom
-// Game, which is how Showdown already treats MissingNo.
-//
-// So each data file gets one line appended, calling into ours. The package's own
-// contents are never rewritten, only added to, and the marker makes it safe to
-// run on every boot and again after a reinstall restores the originals.
+// It used to be the other way round: one line appended to each base data file,
+// patching the base dex in place. Those lines are taken back out here, because
+// this host caches node_modules between deploys and a patched file would
+// otherwise stay patched.
 const dataSrc = path.join(__dirname, '..', 'data', 'velvet');
 const dataDest = path.join(pkgRoot, 'dist', 'data');
 const MARKER = '/* velvet-bunny */';
-const EXTENSIONS = [
-	['pokedex.js', 'Pokedex', 'pokedex'],
-	['abilities.js', 'Abilities', 'abilities'],
-	['moves.js', 'Moves', 'moves'],
-	['items.js', 'Items', 'items'],
-	['formats-data.js', 'FormatsData', 'formatsData'],
-	['learnsets.js', 'Learnsets', 'learnsets'],
-];
+const PATCHED = ['pokedex.js', 'abilities.js', 'moves.js', 'items.js', 'formats-data.js', 'learnsets.js'];
 if (fs.existsSync(dataSrc)) {
 	const velvetDir = path.join(dataDest, 'velvet');
 	fs.mkdirSync(velvetDir, { recursive: true });
@@ -128,25 +120,39 @@ if (fs.existsSync(dataSrc)) {
 		fs.copyFileSync(path.join(dataSrc, file), path.join(velvetDir, file));
 	}
 
-	let added = 0;
-	for (const [file, key, fn] of EXTENSIONS) {
+	let unhooked = 0;
+	for (const file of PATCHED) {
 		const target = path.join(dataDest, file);
 		if (!fs.existsSync(target)) continue;
 		const body = fs.readFileSync(target, 'utf8');
-		if (body.includes(MARKER)) continue;
-		fs.appendFileSync(target, [
-			'',
-			MARKER,
-			'try {',
-			`\trequire('./velvet/index.js').${fn}(module.exports.${key});`,
-			'} catch (e) {',
-			`\tconsole.log('[velvet] could not extend ${key}: ' + e.message);`,
-			'}',
+		const at = body.indexOf(MARKER);
+		if (at < 0) continue;
+		fs.writeFileSync(target, body.slice(0, at).trimEnd() + '\n');
+		unhooked++;
+	}
+	if (unhooked) console.log(`custom data -> took the old hook out of ${unhooked} base dex file(s)`);
+
+	const { MODS } = require(path.join(dataSrc, 'rp-mod.js'));
+	for (const mod of MODS) {
+		const dir = path.join(dataDest, 'mods', mod.id);
+		fs.mkdirSync(dir, { recursive: true });
+		fs.writeFileSync(path.join(dir, 'scripts.js'), [
+			"'use strict';",
+			`// Written by scripts/setup-config.js: RP's data over Gen ${mod.gen}. See data/velvet/rp-mod.js.`,
+			'exports.Scripts = {',
+			`	gen: ${mod.gen},`,
+			`	inherit: '${mod.inherit}',`,
+			"	init() { require('../../velvet/rp-mod.js').apply(this); },",
+			'};',
 			'',
 		].join('\n'));
-		added++;
 	}
-	console.log(`custom data -> ${added ? `hooked into ${added} dex file(s)` : 'already hooked'}`);
+	// RP Random Battle is the one generated format: Showdown finds a format's team
+	// generator by its mod's name, so gen9rp points at the ninth generation's.
+	const rbDir = path.join(dataDest, 'random-battles', 'gen9rp');
+	fs.mkdirSync(rbDir, { recursive: true });
+	fs.writeFileSync(path.join(rbDir, 'teams.js'), "'use strict';\n// Written by scripts/setup-config.js.\nmodule.exports = require('../gen9/teams');\n");
+	console.log(`custom data -> RP mods ${MODS.map(m => m.id).join(', ')}`);
 }
 
 // The formats this server adds. dist/config, not config: dex-formats.js resolves

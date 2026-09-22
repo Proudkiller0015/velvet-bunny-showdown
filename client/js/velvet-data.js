@@ -21,6 +21,72 @@
 	// replay while being perfectly fine in the client.
 	var SPRITES = '/sprites/';
 
+	/*
+	 * RP's data, switched on only where RP is played.
+	 *
+	 * Everything this server changes about a Pokemon, move or ability that
+	 * Showdown already has (Normalize, Luxray's Dark type, Cresselia's stats, the
+	 * extra ability slots, the Awakened moves in the learnsets) is RP's alone: the
+	 * server plays the official formats on Showdown's own data. The client keeps
+	 * one set of tables, so every one of those changes goes through rpSet, which
+	 * remembers what the field held before. RP mode puts ours in; anything else
+	 * puts Showdown's back - the teambuilder switches by the team's format, a
+	 * battle's tooltips and move buttons by the battle's.
+	 *
+	 * Things that are simply new (our own Pokemon, moves, abilities, items) stay
+	 * in the tables either way: nothing official uses them, and a replay or a
+	 * chat link still needs to draw them.
+	 */
+	var RP = { on: true, patches: [], rows: [] };
+	var patchIndex = typeof WeakMap === 'function' ? new WeakMap() : null;
+	function rpSet(obj, key, value, del) {
+		if (!obj) return;
+		var byKey = patchIndex && patchIndex.get(obj);
+		if (!byKey && patchIndex) { byKey = {}; patchIndex.set(obj, byKey); }
+		var p = byKey && byKey[key];
+		if (!p) {
+			p = { o: obj, k: key, had: Object.prototype.hasOwnProperty.call(obj, key), old: obj[key] };
+			if (byKey) byKey[key] = p;
+			RP.patches.push(p);
+		}
+		p.val = value;
+		p.del = !!del;
+		if (RP.on) {
+			if (p.del) delete obj[key]; else obj[key] = value;
+		}
+	}
+	/** The row a table held when we changed it, so a cached copy can be thrown away on a switch. */
+	function rpRow(tableName, id, row) {
+		if (row) RP.rows.push([tableName, id, row]);
+	}
+	function isRpFormat(format) {
+		return /gen\d+rp/.test(String(format || '').toLowerCase());
+	}
+	function setRpMode(on) {
+		on = !!on;
+		if (RP.on === on) return;
+		RP.on = on;
+		for (var i = 0; i < RP.patches.length; i++) {
+			var p = RP.patches[i];
+			if (on) {
+				if (p.del) delete p.o[p.k]; else p.o[p.k] = p.val;
+			} else if (p.had) {
+				p.o[p.k] = p.old;
+			} else {
+				delete p.o[p.k];
+			}
+		}
+		// The client caches a built Species, Move or Ability in place of the row it
+		// came from; put the rows back so the next lookup builds from the switched data.
+		for (var r = 0; r < RP.rows.length; r++) {
+			var table = window[RP.rows[r][0]];
+			if (table && table[RP.rows[r][1]] !== RP.rows[r][2]) table[RP.rows[r][1]] = RP.rows[r][2];
+		}
+		window.BattlePokedexAltForms = {};
+		if (window.Dex && window.Dex.moddedDexes) window.Dex.moddedDexes = {};
+	}
+	window.VelvetRp = { isOn: function () { return RP.on; }, set: setRpMode, isRpFormat: isRpFormat };
+
 	// Who the Elemental Banana works for - the same six the item itself checks.
 	var BANANA_FAMILY = {
 		pansage: 1, simisage: 1, pansear: 1, simisear: 1, panpour: 1, simipour: 1,
@@ -260,6 +326,45 @@
 		},
 	};
 
+	/*
+	 * The teambuilder switches with the team in front of you; a battle's tooltips
+	 * and move buttons with that battle. Anywhere else stays RP, the main format.
+	 */
+	function installRpSwitch() {
+		var tb = window.TeambuilderRoom;
+		var tips = window.BattleTooltips;
+		var R = window.BattleRoom;
+		if (!tb || !tips || !R) return false;
+		if (tb.__velvetRp) return true;
+		tb.__velvetRp = true;
+		var byTeam = function (name) {
+			var original = tb.prototype[name];
+			if (typeof original !== 'function') return;
+			tb.prototype[name] = function () {
+				var out = original.apply(this, arguments);
+				setRpMode(!this.curTeam || isRpFormat(this.curTeam.format));
+				return out;
+			};
+		};
+		byTeam('focus');
+		byTeam('edit');
+		byTeam('changeFormat');
+		byTeam('back');
+		var byBattle = function (proto, name, battleOf) {
+			var original = proto[name];
+			if (typeof original !== 'function') return;
+			proto[name] = function () {
+				var battle = battleOf(this);
+				if (battle) setRpMode(isRpFormat(battle.id || battle.roomid || battle.tier));
+				return original.apply(this, arguments);
+			};
+		};
+		var ofTips = function (t) { return t.battle; };
+		for (var n in { showTooltip: 1, showMoveTooltip: 1, showPokemonTooltip: 1, showFieldTooltip: 1 }) byBattle(tips.prototype, n, ofTips);
+		byBattle(R.prototype, 'updateMoveControls', function (room) { return room.battle || { id: room.id }; });
+		return true;
+	}
+
 	function install() {
 		if (typeof window.BattlePokedex === 'undefined') return false;
 
@@ -313,7 +418,8 @@
 		var zMaxIn = installZAndMax();
 		var defaultIn = installDefaultFormat();
 		var bagIn = installBagMenu();
-		return tableIn && orderIn && spritesIn && iconIn && builderIn && tipsIn && rpIn &&
+		var switchIn = installRpSwitch();
+		return switchIn && tableIn && orderIn && spritesIn && iconIn && builderIn && tipsIn && rpIn &&
 			cutIn && listIn && buffsIn && abilitiesIn && itemIn && sigItemIn && powerIn && dmaxIn && awakenedIn && textIn && zMaxIn && defaultIn && bagIn;
 	}
 
@@ -673,16 +779,18 @@
 		if (en.__velvetDescriptions) return true;
 		var fill = function (tableName, dexTable, overrides) {
 			var table = en[tableName];
-			var put = function (id, row) {
+			var put = function (id, row, changed) {
 				if (!row || (!row.desc && !row.shortDesc)) return;
 				var entry = table[id] || (table[id] = { name: row.name });
 				if (row.name && !entry.name) entry.name = row.name;
-				if (row.desc) entry.desc = row.desc;
-				if (row.shortDesc) entry.shortDesc = row.shortDesc;
+				var set = changed ? rpSet : function (o, k, v) { o[k] = v; };
+				if (row.desc) set(entry, 'desc', row.desc);
+				if (row.shortDesc) set(entry, 'shortDesc', row.shortDesc);
 				// A generation-specific line would otherwise win in older formats.
 				for (var g = 1; g <= 8; g++) {
 					var gen = entry['gen' + g];
-					if (gen && typeof gen === 'object') { delete gen.desc; delete gen.shortDesc; }
+					if (!gen || typeof gen !== 'object') continue;
+					if (changed) { rpSet(gen, 'desc', undefined, true); rpSet(gen, 'shortDesc', undefined, true); } else { delete gen.desc; delete gen.shortDesc; }
 				}
 			};
 			// Ours: negative numbers, whether they came with the buffs or with Samantha.
@@ -690,7 +798,7 @@
 				var row = dexTable[id];
 				if (row && typeof row.num === 'number' && row.num < 0) put(id, row);
 			}
-			for (var changed in overrides || {}) put(changed, overrides[changed]);
+			for (var changed in overrides || {}) put(changed, overrides[changed], true);
 		};
 		var buffs = window.VelvetBuffs || {};
 		var over = buffs.overrides || {};
@@ -744,7 +852,7 @@
 		var original = search.prototype.getBaseResults;
 		search.prototype.getBaseResults = function () {
 			var results = original.apply(this, arguments);
-			if (!results || !results.length) return results;
+			if (!results || !results.length || !RP.on) return results;
 
 			var already = false;
 			for (var i = 0; i < results.length; i++) {
@@ -789,7 +897,7 @@
 		var original = search.prototype.getBaseResults;
 		search.prototype.getBaseResults = function () {
 			var results = original.apply(this, arguments);
-			if (!results) return results;
+			if (!results || !RP.on) return results;
 
 			var species = this.species;
 			if (species && typeof species !== 'string') species = species.species || species.name || '';
@@ -870,6 +978,7 @@
 
 		var original = search.prototype.getBaseResults;
 		search.prototype.getBaseResults = function () {
+			if (!RP.on) return original.apply(this, arguments);
 			var give_back = lendCutMoves(this);
 			try {
 				return original.apply(this, arguments);
@@ -998,6 +1107,8 @@
 		var original = search.prototype.getTypedSearch;
 		search.prototype.getTypedSearch = function (searchType, format, speciesOrSet) {
 			var asked = window.toID(format || '');
+			// Search is where the builder asks for a format's data, so this is where RP switches on or off.
+			if (asked) setRpMode(isRpFormat(asked));
 			var mapped = RP_TIERS[asked];
 			var typed = original.call(this, searchType, mapped || format, speciesOrSet);
 			/*
@@ -1634,7 +1745,7 @@
 		tips.prototype.calculateModifiedStats = function (clientPokemon, serverPokemon, statStagesOnly) {
 			var stats = original.apply(this, arguments);
 			var mon = serverPokemon || clientPokemon;
-			if (!stats || !mon) return stats;
+			if (!stats || !mon || !RP.on) return stats;
 
 			var species = mon.speciesForme || mon.species || (mon.getSpeciesForme && mon.getSpeciesForme()) || '';
 			var speciesid = window.toID(species);
@@ -1796,18 +1907,18 @@
 		// The rows the CDN has no idea about.
 		if (window.BattleMovedex) {
 			for (var m in buffs.moves) if (!window.BattleMovedex[m]) window.BattleMovedex[m] = buffs.moves[m];
-			correct(window.BattleMovedex, buffs.overrides && buffs.overrides.moves);
+			correct(window.BattleMovedex, buffs.overrides && buffs.overrides.moves, 'BattleMovedex');
 		} else ready = false;
 		if (window.BattleAbilities) {
 			for (var a in buffs.abilities) if (!window.BattleAbilities[a]) window.BattleAbilities[a] = buffs.abilities[a];
-			correct(window.BattleAbilities, buffs.overrides && buffs.overrides.abilities);
+			correct(window.BattleAbilities, buffs.overrides && buffs.overrides.abilities, 'BattleAbilities');
 		} else ready = false;
 		if (window.BattleItems) {
 			for (var i in buffs.items) if (!window.BattleItems[i]) window.BattleItems[i] = buffs.items[i];
 		} else ready = false;
 
 		// Base stats this server restored (Cresselia's Generation 8 defences).
-		correct(window.BattlePokedex, buffs.overrides && buffs.overrides.species);
+		correct(window.BattlePokedex, buffs.overrides && buffs.overrides.species, 'BattlePokedex');
 
 		// Balance Patch 1's evolution levels: the CDN's rows still carry Game Freak's.
 		if (window.BattlePokedex && buffs.evoLevels) {
@@ -1815,8 +1926,9 @@
 				var row = window.BattlePokedex[evo];
 				if (!row) continue;
 				// A stone evolution that can now also happen by level keeps its stone here.
-				if (buffs.evoAlso && buffs.evoAlso[evo]) row.velvetLevelToo = buffs.evoAlso[evo];
-				else row.evoLevel = buffs.evoLevels[evo];
+				rpRow('BattlePokedex', evo, row);
+				if (buffs.evoAlso && buffs.evoAlso[evo]) rpSet(row, 'velvetLevelToo', buffs.evoAlso[evo]);
+				else rpSet(row, 'evoLevel', buffs.evoLevels[evo]);
 			}
 		}
 
@@ -1829,7 +1941,7 @@
 				// Only the Pokemon whose abilities actually changed carry a slot
 				// table; everyone else keeps the one the client already has.
 				var slots = buffs.bySpecies[id].slots;
-				if (entry && slots) entry.abilities = slots;
+				if (entry && slots) { rpRow('BattlePokedex', id, entry); rpSet(entry, 'abilities', slots); }
 			}
 		} else ready = false;
 
@@ -1848,7 +1960,7 @@
 					// format. These Pokemon were never in Scarlet and Violet, so
 					// their real entries stop at '...9pq' and a buff written without
 					// the 'a' is listed in National Dex and invisible everywhere else.
-					if (!learnset[added[k]]) learnset[added[k]] = '9a';
+					if (!learnset[added[k]] || learnset[added[k]] === '9a') rpSet(learnset, added[k], '9a');
 				}
 			}
 		} else ready = false;
@@ -1861,7 +1973,7 @@
 		if (!table || !ids) return;
 		for (var i = 0; i < ids.length; i++) {
 			var entry = table[ids[i]];
-			if (entry && entry.isNonstandard) entry.isNonstandard = null;
+			if (entry && entry.isNonstandard) rpSet(entry, 'isNonstandard', null);
 		}
 	}
 
@@ -1879,14 +1991,15 @@
 	 * client keeps things on these objects that the server has never heard of,
 	 * and a wholesale swap would quietly drop them.
 	 */
-	function correct(table, rows) {
+	function correct(table, rows, tableName) {
 		if (!table || !rows) return;
 		for (var id in rows) {
 			var target = table[id];
 			if (!target) continue;
+			rpRow(tableName, id, target);
 			var row = rows[id];
 			for (var key in row) {
-				if (row[key] !== undefined && row[key] !== null) target[key] = row[key];
+				if (row[key] !== undefined && row[key] !== null) rpSet(target, key, row[key]);
 			}
 		}
 	}
@@ -1942,7 +2055,7 @@
 		search.prototype.getBaseResults = function () {
 			var results = original.apply(this, arguments);
 			var buffs = window.VelvetBuffs;
-			if (!results || !buffs) return results;
+			if (!results || !buffs || !RP.on) return results;
 
 			var species = this.species;
 			if (species && typeof species !== 'string') species = species.species || species.name || '';
@@ -2014,6 +2127,7 @@
 		var original = room.prototype.updateDetailsForm;
 		room.prototype.updateDetailsForm = function () {
 			var out = original.apply(this, arguments);
+			if (!RP.on) return out;
 			try {
 				addDynamaxRows(this);
 			} catch (e) {
@@ -2111,7 +2225,7 @@
 
 		var filter = search.prototype.filter;
 		search.prototype.filter = function (row, filters) {
-			if (!filters || !row || row[0] !== 'pokemon') return filter.apply(this, arguments);
+			if (!filters || !row || row[0] !== 'pokemon' || !RP.on) return filter.apply(this, arguments);
 			var rest = [];
 			for (var i = 0; i < filters.length; i++) {
 				var set = filters[i][0] === 'egggroup' && sets[window.toID(filters[i][1])];
@@ -2166,6 +2280,7 @@
 		var original = tips.prototype.getMoveBasePower;
 		tips.prototype.getMoveBasePower = function (move, moveType, value, target) {
 			var out = original.apply(this, arguments);
+			if (!RP.on) return out;
 			try {
 				var pokemon = value && value.pokemon;
 				var serverPokemon = value && value.serverPokemon;
@@ -2218,7 +2333,7 @@
 		search.prototype.getBaseResults = function () {
 			var results = original.apply(this, arguments);
 			var buffs = window.VelvetBuffs;
-			if (!results || !buffs || !buffs.items) return results;
+			if (!results || !buffs || !buffs.items || !RP.on) return results;
 
 			var speciesName = this.species;
 			if (speciesName && typeof speciesName !== 'string') {
