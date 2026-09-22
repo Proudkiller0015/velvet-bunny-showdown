@@ -1105,7 +1105,9 @@
 		table.tiers.__velvetMegas = true;
 
 		for (var id in megaTiers) {
-			if (table.tiers.indexOf(id) >= 0) continue;      // already listed
+			// Listed already is not listed right: Mega Gengar sat under AG after this
+			// server made it Uber, labelled Uber in the AG block (the Gliscor mistake
+			// again). placeSpecies moves it if it is there and adds it if it is not.
 			placeSpecies(table, id, megaTiers[id]);
 		}
 	}
