@@ -155,6 +155,41 @@ if (fs.existsSync(dataSrc)) {
 	console.log(`custom data -> RP mods ${MODS.map(m => m.id).join(', ')}`);
 }
 
+/*
+ * Global ranks granted by name, rather than by somebody typing /setrank.
+ *
+ * Ranks live in the package's config/velvet-ranks.json (showdown-config.js), which
+ * survives restarts on this host. Each id here is given its rank once: the seed is
+ * written down beside the file, so a rank later changed or taken away with
+ * /setrank stays changed instead of coming back on the next deploy.
+ */
+const SEED_RANKS = {
+	// Sam's brother (his character is Jolt, whose avatar he wears).
+	stalethunder126: '+',
+};
+const ranksPath = path.join(pkgRoot, 'config', 'velvet-ranks.json');
+const seededPath = path.join(pkgRoot, 'config', 'velvet-ranks-seeded.json');
+{
+	let ranks = {};
+	let seeded = [];
+	try { ranks = JSON.parse(fs.readFileSync(ranksPath, 'utf8')) || {}; } catch (e) { ranks = {}; }
+	try { seeded = JSON.parse(fs.readFileSync(seededPath, 'utf8')) || []; } catch (e) { seeded = []; }
+	let added = 0;
+	for (const [id, symbol] of Object.entries(SEED_RANKS)) {
+		if (seeded.includes(id)) continue;
+		ranks[id] = symbol;
+		seeded.push(id);
+		added++;
+		console.log(`ranks -> ${id} is now '${symbol}'`);
+	}
+	if (added) {
+		fs.mkdirSync(path.dirname(ranksPath), { recursive: true });
+		fs.writeFileSync(ranksPath, JSON.stringify(ranks, null, '	'));
+		fs.writeFileSync(seededPath, JSON.stringify(seeded, null, '	'));
+	}
+	console.log(`ranks -> ${Object.keys(ranks).length} saved rank(s)`);
+}
+
 // The formats this server adds. dist/config, not config: dex-formats.js resolves
 // the path relative to dist/sim, which is a different directory to the one the
 // server config lives in.
@@ -234,9 +269,9 @@ const avatarRights = {
 	ladymilim: ['milim.png'],
 	simiaignis: ['simia-ignis.png'],
 	lavit: ['lavit.png'],
-	// jolt.png is Sam's brother's character Jolt. Nobody is entitled to it yet: his
-	// Showdown account isn't known, and the file is named for the character, so add
-	// <hisaccountid>: ['jolt.png'] here once he has one.
+	// Jolt, Sam's brother's character. The file is named for the character; the
+	// account wearing it is his.
+	stalethunder126: ['jolt.png'],
 	thegloriousfemboy: ['thegloriousfemboy.png'],
 };
 // Every rung of the ladder wears the same face - they are all the same bot.
