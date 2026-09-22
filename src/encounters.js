@@ -772,7 +772,7 @@ const TYPE_ITEMS = {
  * Pokemon are - so low badges mean mostly low-tier Pokemon, with the odd
  * surprise - and a trainer who could have evolved something has.
  */
-function rollTrainer({ place, badges, levelCap = null, rng = Math.random, classId = null, double = null }) {
+function rollTrainer({ place, badges, levelCap = null, rng = Math.random, classId = null, double = null, ace = null }) {
 	badges = clampBadges(badges);
 	const classes = (place && place.trainers && place.trainers.length ? place.trainers : ['youngster', 'lass', 'hiker', 'backpacker'])
 		.map(findClass).filter(Boolean);
@@ -781,7 +781,9 @@ function rollTrainer({ place, badges, levelCap = null, rng = Math.random, classI
 	const isDouble = cls.pair || (double === null ? badges >= 1 && rng() < 0.15 : !!double);
 	const size = Math.max(isDouble ? 2 : 1, tier.size);
 
-	const [lo, hi] = levelRange(badges, levelCap);
+	// The ace pulls a trainer down the same way it pulls the wild: somebody whose best
+	// Pokemon is far under their cap is not handed a full-cap team to lose to.
+	const [lo, hi] = levelRange(badges, levelCap, ace);
 	const ctx = { badges, types: cls.types, maxLevel: hi };
 	// The place still counts: a Backpacker on a volcano brings fire types more
 	// often than one at the harbour.

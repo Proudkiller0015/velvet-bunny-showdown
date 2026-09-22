@@ -174,15 +174,17 @@ function requestEncounter(payload, deps) {
 
 	const badges = E.clampBadges(payload.badges);
 	const levelCap = payload.levelCap ? E.clampLevel(payload.levelCap) : null;
+	// The trainer's strongest Pokemon, which both a wild encounter and a trainer are measured against.
+	const ace = E.aceLevel(payload.box);
 	let rolled;
 	if (payload.summon) {
 		// Staff choosing what appears. The Discord bot only signs this for admins.
-		rolled = summoned(payload.summon, { place, badges, levelCap });
+		rolled = summoned(payload.summon, { place, badges, levelCap, ace });
 		if (rolled.error) return { ok: false, code: 'summon', message: rolled.error };
 	} else {
 		rolled = kind === 'wild'
-			? E.rollWild({ place: wildPlace, badges, levelCap, shiny: payload.shiny || {}, ace: E.aceLevel(payload.box) })
-			: E.rollTrainer({ place, badges, levelCap });
+			? E.rollWild({ place: wildPlace, badges, levelCap, shiny: payload.shiny || {}, ace })
+			: E.rollTrainer({ place, badges, levelCap, ace });
 	}
 	if (!rolled.team.length) return { ok: false, code: 'empty', message: 'Nothing turned up. Try again.' };
 
@@ -257,11 +259,11 @@ function requestTutorial(payload, deps) {
  * class. Legendaries can be summoned - an event might want one to battle - but
  * the battle still refuses to let anyone catch one.
  */
-function summoned(summon, { place, badges, levelCap }) {
+function summoned(summon, { place, badges, levelCap, ace = null }) {
 	if (summon.kind === 'trainer') {
 		const cls = summon.classId ? E.findClass(summon.classId) : null;
 		if (summon.classId && !cls) return { error: `No trainer class called "${summon.classId}".` };
-		return E.rollTrainer({ place, badges, levelCap, classId: cls && cls.id, double: summon.double === undefined ? null : !!summon.double });
+		return E.rollTrainer({ place, badges, levelCap, ace, classId: cls && cls.id, double: summon.double === undefined ? null : !!summon.double });
 	}
 	const Dex = require('./rp-dex')();
 	const species = Dex.species.get(summon.species);
