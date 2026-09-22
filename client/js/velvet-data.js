@@ -962,11 +962,11 @@
 		// Little Cup has a National Dex list of its own, which is the one this
 		// server's buffed pre-evolutions belong in.
 		gen9rplc: 'gen9nationaldexlc',
-		// Below RU there is no National Dex list, so these stand on the ninth
-		// generation's own - which is also what the builder should show for them.
-		gen9rpnu: 'gen9nu',
-		gen9rppu: 'gen9pu',
-		gen9rpzu: 'gen9zu',
+		// Below RU: the National Dex list, split into NU, PU and ZU headings by
+		// sectionLowerTiers - the same ranking the server checks (lowTierOf).
+		gen9rpnu: 'gen9nationaldexnu',
+		gen9rppu: 'gen9nationaldexpu',
+		gen9rpzu: 'gen9nationaldexzu',
 
 		// The past generations, each pointed at whatever it actually stands on.
 		// The eighth has a National Dex and uses it; nothing older has one, so

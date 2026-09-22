@@ -294,6 +294,54 @@ function levelFreeMoves(move, species, setSources, set) {
 const RP_RULES = ['!Obtainable Misc', '+Floette-Eternal'];
 
 /**
+ * The tiers below RU, National Dex style.
+ *
+ * RP NU, PU and ZU used to stand on Scarlet and Violet's own NU, PU and ZU, so
+ * anything cut from those games - Delcatty, Spinda, the monkeys - "does not
+ * exist in Gen 9" there, and nowhere else in RP. Every RP tier is meant to hold
+ * every Pokemon, so these now stand on National Dex RU like the tier above, and
+ * a Pokemon's place below RU is Smogon's own ranking: its Scarlet and Violet
+ * tier, or the newest generation's that has one (Delcatty: ZU in Gen 7).
+ * Anything National Dex ranks above RU stays there. This is the same rule the
+ * teambuilder uses to split National Dex RU into NU, PU and ZU headings, so the
+ * list you scroll and the check you pass agree.
+ */
+const LOW_LADDER = ['AG', 'Uber', 'OU', 'UUBL', 'UU', 'RUBL', 'RU', 'NUBL', 'NU', 'PUBL', 'PU', 'ZUBL', 'ZU', 'NFE', 'LC'];
+function lowTierOf(dex, species) {
+	const nd = LOW_LADDER.indexOf(species.natDexTier);
+	if (nd >= 0 && nd < LOW_LADDER.indexOf('RU')) return species.natDexTier;
+	for (let g = 9; g >= 1; g--) {
+		const s = g === dex.gen ? species : dex.mod(`gen${g}`).species.get(species.id);
+		if (!s || !s.exists) continue;
+		let tier = s.tier || '';
+		// "(PU)": ranked below PU, so the rung under it.
+		if (tier.startsWith('(') && tier.endsWith(')')) {
+			const i = LOW_LADDER.indexOf(tier.slice(1, -1));
+			tier = i >= 0 ? LOW_LADDER[Math.min(i + 2, LOW_LADDER.indexOf('ZU'))] : '';
+		}
+		if (LOW_LADDER.includes(tier)) return tier;
+	}
+	return 'RU';
+}
+function lowTierRule(tier) {
+	return function (set) {
+		const species = this.dex.species.get(set.species);
+		const item = this.dex.items.get(set.item);
+		const forms = [species];
+		if (item.megaStone) {
+			const mega = this.dex.species.get(typeof item.megaStone === 'string' ? item.megaStone : Object.values(item.megaStone)[0]);
+			if (mega.exists) forms.push(mega);
+		}
+		for (const s of forms) {
+			const at = lowTierOf(this.dex, s);
+			if (LOW_LADDER.indexOf(at) < LOW_LADDER.indexOf(tier)) {
+				return [`${s.name} is ${at}, which is above RP ${tier}.`];
+			}
+		}
+	};
+}
+
+/**
  * One RP tier, standing on the Smogon tier of the same shape.
  *
  * `gen` picks which generation it is played in, and with it which list it
@@ -1068,17 +1116,10 @@ exports.Formats = [
 	/**
 	 * Below RU, where National Dex stops.
 	 *
-	 * National Dex tiers everything weaker than RU *as* RU - one pool of nearly
-	 * six hundred Pokemon - so there is no ND list to stand on down here. These
-	 * three stand on the ninth generation's own NU, PU and ZU instead, which are
-	 * real lists maintained from real usage.
-	 *
-	 * The trade is that a Pokemon with no ninth-generation tier - anything that
-	 * did not make it into Scarlet and Violet - is not in them, so these are the
-	 * three RP tiers that are not full National Dex. Fixing that means tiering
-	 * several hundred Pokemon from usage statistics, which is a job of its own
-	 * and a list that has to be maintained; until then, being narrower than
-	 * promised beats being wrong about who belongs.
+	 * National Dex tiers everything weaker than RU *as* RU, so these three stand
+	 * on National Dex RU and take each Pokemon's place below it from Smogon's own
+	 * ranking - see lowTierOf. They used to stand on Scarlet and Violet's NU, PU
+	 * and ZU, which refused every Pokemon those games cut.
 	 */
 	/*
 	 * Little Cup, which is where this server's own Pokemon are actually played.
@@ -1100,9 +1141,9 @@ exports.Formats = [
 	 */
 	rpTier('LC', '[Gen 9] National Dex LC', UBERS_ONLY_ITEM),
 
-	rpTier('NU', '[Gen 9] NU', UBERS_ONLY_ITEM),
-	rpTier('PU', '[Gen 9] PU', UBERS_ONLY_ITEM),
-	rpTier('ZU', '[Gen 9] ZU', UBERS_ONLY_ITEM),
+	rpTier('NU', '[Gen 9] National Dex RU', { rules: UNBAN_TERA, ...UBERS_ONLY_ITEM, onValidateSet: lowTierRule('NU') }),
+	rpTier('PU', '[Gen 9] National Dex RU', { rules: UNBAN_TERA, ...UBERS_ONLY_ITEM, onValidateSet: lowTierRule('PU') }),
+	rpTier('ZU', '[Gen 9] National Dex RU', { rules: UNBAN_TERA, ...UBERS_ONLY_ITEM, onValidateSet: lowTierRule('ZU') }),
 
 	/**
 	 * The same idea, in the generations that came before.
