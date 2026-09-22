@@ -1,0 +1,12 @@
+{
+	"id": "gen9rpbattle-2-tlrxob",
+	"format": "[Gen 9] RP Battle",
+	"players": [
+		"ignis simia",
+		"simia ignis"
+	],
+	"rating": null,
+	"log": "|j|☆ignis simia\n|j|☆simia ignis\n|t:|1790095257\n|gametype|singles\n|player|p1|ignis simia|169|\n|player|p2|simia ignis|simia-ignis.png|\n|gen|9\n|tier|[Gen 9] RP Battle\n|clearpoke\n|poke|p1|Charmander, L5|\n|poke|p2|Monferno, L18|\n|teampreview\n|\n|t:|1790095264\n|teamsize|p1|1\n|teamsize|p2|1\n|start\n|switch|p1a: Charmander|Charmander, L5|100/100\n|switch|p2a: Monferno|Monferno, L18|100/100\n|turn|1\n|\n|t:|1790095269\n|move|p2a: Monferno|Close Combat|p1a: Charmander\n|-damage|p1a: Charmander|0 fnt\n|-unboost|p2a: Monferno|def|1\n|-unboost|p2a: Monferno|spd|1\n|faint|p1a: Charmander\n|\n|win|simia ignis\n",
+	"inputlog": ">start {\"formatid\":\"gen9rpbattle\",\"seed\":\"sodium,0bebd9c107fd3ba809c3921397fccc50\"}\n>player p1 {\"name\":\"ignis simia\",\"avatar\":\"169\",\"team\":\"Charmander|||Blaze|Acrobatics|Serious|,,,1,,|N|||5|,,,,,Fire\",\"rating\":0}\n>player p2 {\"name\":\"simia ignis\",\"avatar\":\"simia-ignis.png\",\"team\":\"Monferno|||Blaze|CloseCombat|Serious|1,,,,,|N|||18|,,,,,Fire\",\"rating\":0}\n>p1 team 1\n>p2 team 1\n>p1 move acrobatics\n>p2 move closecombat",
+	"uploadtime": 1790095269
+}
