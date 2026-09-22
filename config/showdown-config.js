@@ -1411,6 +1411,30 @@ function rpSectionFirst() {
  * Nobody plays Gen 5 NU; now it can be played at all. The RP sections keep their
  * own settings - the tutorial and encounter formats are challenge-only on purpose.
  */
+/*
+ * RP battles are announced in the Roleplay room, not the lobby (22 Sep 2026: the
+ * owner saw every encounter and RP fight "shoved inside lobby"). Anything else -
+ * random battles, ladder games - is still reported in the lobby, and every
+ * battle still goes to the logs room.
+ */
+function rpBattlesToRoleplay() {
+	const G = Rooms.global;
+	if (!G || G.__velvetRpReport || typeof G.onCreateBattleRoom !== 'function') return;
+	G.__velvetRpReport = true;
+	const original = G.onCreateBattleRoom;
+	G.onCreateBattleRoom = function (players, room, options) {
+		const format = String((room && room.battle && room.battle.format) || (options && options.format) || '');
+		if (!/^gen\d+rp/.test(format)) return original.call(this, players, room, options);
+		const saved = Config.reportbattles;
+		Config.reportbattles = ['roleplay', 'logs'];
+		try {
+			return original.call(this, players, room, options);
+		} finally {
+			Config.reportbattles = saved;
+		}
+	};
+}
+
 function everyTierLadderable() {
 	const RP_SECTIONS = ['RP', 'RP Past Gens'];
 	let section = '';
@@ -2300,6 +2324,7 @@ exports.startuphook = function () {
 	// Chat's commands may not all be loaded yet at startup; try again shortly if not.
 	if (!serverHelp()) setTimeout(serverHelp, 3000).unref();
 	roleplay();
+	rpBattlesToRoleplay();
 	replaySnapshots();
 	goodbye();
 
