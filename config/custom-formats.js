@@ -633,7 +633,7 @@ const RP_TURN_ACTIONS = {
 		if (!ball || ball.turn !== this.turn) return;
 		if (!ball.thrown) {
 			ball.thrown = true;
-			throwBall(this, pokemon, ball.id);
+			throwBall(this, pokemon, ball.id, ball.sure);
 		}
 		return false;
 	},
@@ -715,7 +715,10 @@ function installCatching(battle) {
 			if (E.isLegendary(wild.species)) {
 				return this.emitChoiceError(`${wild.species.name} can't be caught on Showdown: legendaries happen in the RP`);
 			}
-			const ball = E.findBall(m[1]);
+			// "sure" is added by /throwball, never typed: see freeCatch in src/rp-server.js.
+			const words = String(m[1] || '').trim().split(/\s+/);
+			const sure = words.length > 1 && words[words.length - 1].toLowerCase() === 'sure';
+			const ball = E.findBall(sure ? words.slice(0, -1).join(' ') : m[1]);
 			if (!ball) return this.emitChoiceError(`There's no ball called "${m[1]}"`);
 			// Throwing is the whole turn. In a double battle both of your
 			// Pokemon wait for it, so neither can knock out what you're catching.
@@ -724,7 +727,7 @@ function installCatching(battle) {
 				return this.emitChoiceError(`Can't throw a ball this turn`);
 			}
 			if (!choose.call(this, fillers.join(', '))) return false;
-			this.rpPendingBall = { id: ball.id, turn: battle.turn, thrown: false };
+			this.rpPendingBall = { id: ball.id, turn: battle.turn, thrown: false, sure };
 			return true;
 		};
 	}
@@ -772,7 +775,7 @@ function tryRun(battle, pokemon) {
 	battle.tie();
 }
 
-function throwBall(battle, pokemon, ballId) {
+function throwBall(battle, pokemon, ballId, sure = false) {
 	const E = encounters();
 	const side = pokemon.side;
 	const wild = side.foe.active.find(p => p && !p.fainted);
@@ -799,7 +802,7 @@ function throwBall(battle, pokemon, ballId) {
 	});
 
 	const rng = () => battle.random();
-	const caught = rng() < chance;
+	const caught = sure || rng() < chance;
 	const shakes = caught ? 3 : E.shakesFor(chance, rng);
 
 	battle.add('-message', `${side.name} threw ${aOrAn(ball.name)}!`);

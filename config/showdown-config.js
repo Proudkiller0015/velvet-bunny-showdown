@@ -570,8 +570,11 @@ exports.commands = {
 		if (!allowed.ok) throw new Chat.ErrorMessage(allowed.message);
 
 		game.rpBallFrom = user.id;
+		// A trainer's first few catches land (src/rp-server.js freeCatch). Nothing is said.
+		const wildSpecies = enc && Array.isArray(enc.team) && enc.team.length ? enc.team[0].species : null;
+		const sure = rp.freeCatch(enc, wildSpecies) ? ' sure' : '';
 		try {
-			game.choose(user, `ball ${ball.id}`);
+			game.choose(user, `ball ${ball.id}${sure}`);
 		} finally {
 			game.rpBallFrom = null;
 		}

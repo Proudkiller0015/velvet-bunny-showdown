@@ -203,6 +203,7 @@ function requestEncounter(payload, deps) {
 		badges,
 		warning: String(payload.warning || '').slice(0, 300),
 		box: normaliseBox(payload.box),
+		caught: Math.max(0, Math.floor(Number(payload.caught) || 0)),
 		gimmicks: payload.gimmicks && typeof payload.gimmicks === 'object'
 			? { mega: !!payload.gimmicks.mega, zmove: !!payload.gimmicks.zmove, dynamax: !!payload.gimmicks.dynamax, tera: !!payload.gimmicks.tera }
 			: null,
@@ -600,6 +601,27 @@ function thrownInLog(lines, side, ballName) {
  * Without a bag (a staff-made encounter) any ball goes. With one, a ball of
  * that kind has to be left after the ones already thrown this battle.
  */
+/*
+ * A trainer's first few catches.
+ *
+ * Somebody who has caught nothing yet is one broken ball away from deciding this
+ * game is not for them, and the first Pokemon after the starter is the one that
+ * makes a team feel like a team. So the first FREE_CATCHES throws of a career
+ * land, as long as what is in front of them is an ordinary Pokemon - a
+ * legendary, a mythical, a Paradox, an Ultra Beast or a pseudo-legendary is
+ * caught the hard way like everybody else's.
+ *
+ * Deliberately invisible: the ball wobbles three times and holds, which is what
+ * a lucky throw looks like anyway. Nothing says it, in the battle or out of it.
+ */
+const FREE_CATCHES = 5;
+const NOT_FREE = new Set(['boxart', 'legendary', 'mythical', 'paradox', 'ub', 'pseudo']);
+function freeCatch(enc, species) {
+	if (!enc || !species) return false;
+	if ((enc.caught || 0) >= FREE_CATCHES) return false;
+	try { return !NOT_FREE.has(require('./rarity').classOf(species)); } catch (e) { return false; }
+}
+
 function canThrow(enc, ballId, thrownSoFar) {
 	if (!enc || !enc.balls) return { ok: true };
 	const have = enc.balls[ballId] || 0;
@@ -812,6 +834,7 @@ function httpRoute(deps, log) {
 }
 
 module.exports = {
+	freeCatch, FREE_CATCHES,
 	pvpCheck, pvpNotice, friendlyNotice, isAgreed, verify, placeFor, requestEncounter, requestTutorial, completeEncounter, canUseItem, usedInLog, setBags, bagFor, pvpItemsFor, canUsePvpItem, NPC_ITEMS_EACH, publicView, canThrow, thrownInLog, resultFromLog, openFor,
 	checkTeam, gimmickIn, GIMMICK_ITEM, GIMMICK_NAME, sidesInLog,
 	httpRoute, encounters, RP_ROOM, CHALLENGE_MS, recordFinished, finishedSince,

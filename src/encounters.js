@@ -242,12 +242,13 @@ function findBall(input) {
  * until 22 Sep 2026, which the owner found too easy), and every ball that
  * misses makes the next one 5% likelier.
  *
- *   Pidgey at full HP, Pokéball              ~50%
- *   Garchomp at full HP, Ultra Ball           ~18%
+ *   Pidgey at full HP, Pokéball              ~42%
+ *   Garchomp at full HP, Ultra Ball           ~15%
  *   Garchomp in the red, asleep, Ultra Ball   ~100%
  */
-// 2 until 22 Sep 2026; the owner found catching too easy ("a lil harder").
-const CATCH_BOOST = 1.5;
+// 2 until 22 Sep 2026, then 1.5, then 1.25 the same evening: still too generous
+// across the board, said the owner. Weakening and statusing matter more at 1.25.
+const CATCH_BOOST = 1.25;
 const PITY_PER_MISS = 0.05;
 
 function catchChance(c) {

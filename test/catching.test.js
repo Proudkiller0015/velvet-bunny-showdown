@@ -165,8 +165,9 @@ async function play({ wild, wilds = null, format = E.WILD_FORMAT, wildName = nul
 		const pidgey = E.catchChance({ ball: 'poke', hpFraction: 1, rate: E.catchRate(Dex.species.get('Pidgey')), status: '' });
 		const chomp = E.catchChance({ ball: 'ultra', hpFraction: 1, rate: E.catchRate(Dex.species.get('Garchomp')), status: '' });
 		const chompLow = E.catchChance({ ball: 'ultra', hpFraction: 0.1, rate: E.catchRate(Dex.species.get('Garchomp')), status: 'slp' });
-		check(pidgey >= 0.45 && pidgey <= 0.55, `a full HP Pidgey in a Poké Ball is a coin flip (${Math.round(pidgey * 100)}%)`);
-		check(chomp > 0.15 && chomp < 0.4, `a full HP Garchomp is a real but fair chance (${Math.round(chomp * 100)}%)`);
+		// 22 Sep 2026: the owner found catching too generous across the board, so 1.5 became 1.25.
+		check(pidgey >= 0.38 && pidgey <= 0.46, `a full HP Pidgey in a Poké Ball is a bit under a coin flip (${Math.round(pidgey * 100)}%)`);
+		check(chomp > 0.1 && chomp < 0.25, `a full HP Garchomp is a real but slim chance (${Math.round(chomp * 100)}%)`);
 		check(chompLow > 0.85, `a weakened, sleeping Garchomp is nearly certain (${Math.round(chompLow * 100)}%)`);
 		check(E.catchChance({ ball: 'poke', hpFraction: 1, rate: 25, status: '', misses: 4 }) >
 			E.catchChance({ ball: 'poke', hpFraction: 1, rate: 25, status: '' }), 'misses make the next ball likelier');
