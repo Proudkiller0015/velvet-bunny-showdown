@@ -17,7 +17,9 @@ const WebSocket = require('ws');
 const { Teams } = require('pokemon-showdown');
 
 const BASE = process.env.RP_TEST_URL || 'http://localhost:8123';
-const NAME = `RpTester${Math.floor(Math.random() * 1000)}`;
+// The name asked for; the server may keep us a guest (an unsigned /trn is refused here),
+// so NAME becomes whatever |updateuser| says we are - that is the name it checks online.
+let NAME = `RpTester${Math.floor(Math.random() * 1000)}`;
 const KEY = crypto.createPrivateKey(Buffer.from(process.env.RP_ENCOUNTER_KEY || '', 'base64').toString('utf8'));
 
 let failed = 0;
@@ -50,6 +52,7 @@ const TEAM = Teams.pack([
 		if (lines[0].startsWith('>')) room = lines.shift().slice(1);
 		for (const line of lines) {
 			if (line.startsWith('|challstr|')) ws.send(`|/trn ${NAME},0,`);
+			if (line.startsWith('|updateuser|')) NAME = line.split('|')[2].trim().replace(/^[^A-Za-z0-9]/, '').replace(/@!?$/, '');
 			if (line.startsWith('|pm|') && line.includes('|/challenge gen9rpbattle')) {
 				const from = line.split('|')[2].trim().replace(/^[^A-Za-z0-9]/, '');
 				seen.challenge = { from, rank: line.split('|')[2][0], format: /\/challenge (\w+)/.exec(line)[1] };
@@ -106,7 +109,7 @@ const TEAM = Teams.pack([
 	check(invalid && invalid.status === 'waiting' && /Chansey/.test(invalid.invalid.message) && /Pikachu\*\* is Lv\. 30/.test(invalid.invalid.message),
 		`a team that doesn't match the box calls the battle off (${invalid && invalid.invalid.message})`);
 	check(/called off/.test(seen.log.join('\n')), 'the player is told why in the battle');
-	check(!/threw a Poké Ball/.test(seen.log.join('\n')), 'nothing happened in the called-off battle');
+	check(!/threw an? Pok[ée] ?[Bb]all/.test(seen.log.join('\n')), 'nothing happened in the called-off battle');
 	await wait(3000);   // the opponent logs off after the called-off battle
 	seen.challenge = null;
 	seen.log = [];
@@ -128,10 +131,10 @@ const TEAM = Teams.pack([
 	}
 	check(!!result, `the result is reported: ${JSON.stringify(result)}`);
 	const log = seen.log.join('\n');
-	check(/threw a Poké Ball/.test(log), 'a ball was thrown');
+	check(/threw an? Pok[ée] ?[Bb]all/.test(log), 'a ball was thrown');
 	// The test player only ever chooses "default", so any gimmick in the log is the wild Pokémon's.
 	check(!/^\|-(terastallize|mega|burst|zpower)\||^\|-start\|[^|]*\|Dynamax/m.test(log),'the wild Pokémon used no Mega, Tera, Dynamax or Z-move');
-	const thrown = (log.match(/threw a Poké Ball/g) || []).length;
+	const thrown = (log.match(/threw an? Pok[ée] ?[Bb]all/g) || []).length;
 	check(thrown <= 2, `no more balls than the character had (${thrown} of 2)`);
 	check(seen.errors.some(e => /last Poké Ball|doesn't have/.test(e)) || thrown < 2 || (result && result.outcome === 'caught'),
 		'the bag stopped a third ball (or it was caught first)');
