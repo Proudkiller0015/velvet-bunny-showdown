@@ -235,7 +235,7 @@ const OUR_MEGAS = { [require(path.join(PACKAGE, 'dist', 'sim', 'dex.js')).Dex.sp
 // Species this server made legal and tiered in its own formats-data (Eternamax: AG).
 const OUR_FORMATS = require(path.join(PACKAGE, 'dist', 'data', 'velvet', 'formats-data.js')).FormatsData;
 const OUR_TIERS = {};
-for (const [id, row] of Object.entries(OUR_FORMATS)) if (row.tier && row.tier !== 'Illegal' && row.isNonstandard === null) OUR_TIERS[id] = row.natDexTier || row.tier;
+for (const [id, row] of Object.entries(OUR_FORMATS)) if ((row.tier && row.tier !== 'Illegal' && row.isNonstandard === null) || (isMegaForme(id) && row.natDexTier && row.natDexTier !== 'Illegal')) OUR_TIERS[id] = row.natDexTier || row.tier;
 for (const [id, tier] of Object.entries(Object.assign({}, za.assigned, OUR_MEGAS, OUR_TIERS, TIERS))) {
 	if (isMegaForme(id) || id in OUR_TIERS) megaTiers[id] = tier;
 	else if (!inThisGen(id)) natdexTiers[id] = tier;

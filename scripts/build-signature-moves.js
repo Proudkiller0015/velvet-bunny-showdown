@@ -22,6 +22,12 @@ const fs = require('fs');
 const path = require('path');
 
 const { Dex } = require(require.resolve('pokemon-showdown/dist/sim/dex.js'));
+// Moves this server handed out (Banette's Dark moves, the Halloween Mega's Witch's
+// Snatch). They are not what the species is known for, and counting them made
+// Pursuit and Trick-or-Treat read as Banette's signatures - and took
+// Trick-or-Treat off Gourgeist, since Pumpkaboo is not in Scarlet and Violet.
+const halloween = require(require.resolve('pokemon-showdown/dist/data/velvet/halloween.js'));
+const ADDED_BY_US = { banette: new Set(halloween.DARK_MOVES), banettemegahalloween: new Set(['witchssnatch']) };
 const OUT = path.join(__dirname, '..', 'client', 'js', 'velvet-signatures.js');
 
 /** The root of an evolution family, which is what "belongs to" means here. */
@@ -59,7 +65,7 @@ function familyOf(species) {
 function movesOf(species) {
 	const data = Dex.species.getLearnsetData(species.id);
 	if (!data || !data.learnset) return { all: [], gens: new Map() };
-	const all = Object.keys(data.learnset);
+	const all = Object.keys(data.learnset).filter(moveid => !(ADDED_BY_US[species.id] && ADDED_BY_US[species.id].has(moveid)));
 	const gens = new Map();
 	for (const moveid of all) {
 		const learned = data.learnset[moveid]
@@ -211,13 +217,6 @@ function build() {
 		if (species.isNonstandard === 'CAP' || species.isNonstandard === 'Custom') continue;
 		const own = signatures[familyOf(species)];
 		if (own) bySpecies[species.id] = own;
-	}
-
-	// A forme's own signature, on its page only: the Halloween Mega Banette shows
-	// Witch's Snatch (what its Poltergeist becomes), regular Banette does not.
-	const FORME_ONLY = { banettemegahalloween: ['witchssnatch'] };
-	for (const [id, moves] of Object.entries(FORME_ONLY)) {
-		bySpecies[id] = [...new Set([...(bySpecies[id] || []), ...moves])].sort((a, b) => Dex.moves.get(a).name.localeCompare(Dex.moves.get(b).name));
 	}
 
 	// A forme's own signature, on its page only: the Halloween Mega Banette shows

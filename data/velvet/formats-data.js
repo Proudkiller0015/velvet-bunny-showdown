@@ -19,6 +19,14 @@ exports.FormatsData = {
 		doublesTier: "DUber",
 		natDexTier: "AG",
 	},
+	// Mega Gengar, unbanned from AG to Ubers (the owner's call): legal in RP Ubers,
+	// still refused in RP OU and below. A Mega keeps its Past flag - National Dex
+	// reads the Gengarite as standard there already.
+	gengarmega: {
+		isNonstandard: "Past",
+		tier: "Illegal",
+		natDexTier: "Uber",
+	},
 	samantha: {
 		isNonstandard: "Custom",
 		tier: "Illegal",
