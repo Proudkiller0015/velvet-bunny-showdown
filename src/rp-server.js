@@ -306,7 +306,24 @@ function summoned(summon, { place, badges, levelCap, ace = null }) {
 	if (summon.kind === 'trainer') {
 		const cls = summon.classId ? E.findClass(summon.classId) : null;
 		if (summon.classId && !cls) return { error: `No trainer class called "${summon.classId}".` };
-		return E.rollTrainer({ place, badges, levelCap, ace, classId: cls && cls.id, double: summon.double === undefined ? null : !!summon.double });
+		const rolled = E.rollTrainer({ place, badges, levelCap, ace, classId: cls && cls.id, double: summon.double === undefined ? null : !!summon.double });
+		/*
+		 * A trainer the story has decided about: their name, and a Pokémon they
+		 * must be carrying. The rest of the team is rolled as usual, so they still
+		 * fit the place and the badge count.
+		 */
+		if (summon.name) rolled.name = String(summon.name).slice(0, 40);
+		const Dex2 = require('./rp-dex')();
+		for (const want of (Array.isArray(summon.with) ? summon.with : []).slice(0, 6)) {
+			const species = Dex2.species.get(want);
+			if (!species.exists) return { error: `No Pokémon called "${want}".` };
+			if (rolled.team.some(m => toID(m.species) === species.id)) continue;
+			const level = rolled.team.length ? Math.max(...rolled.team.map(m => m.level)) : E.clampLevel(levelCap || 5);
+			const set = E.trainerSet(species, level, badges, Math.random);
+			if (rolled.team.length >= 6) rolled.team[rolled.team.length - 1] = set;
+			else rolled.team.push(set);
+		}
+		return rolled;
 	}
 	const Dex = require('./rp-dex')();
 	const species = Dex.species.get(summon.species);
