@@ -116,6 +116,30 @@ const fainted = rp.resultFromLog({ userid: 'rptester', showdown: 'RpTester' }, l
 check(fainted.length === 1 && fainted[0].species === 'Pikachu' && fainted[0].level === 12, `fainted Pokémon are reported, revived ones aren't (${JSON.stringify(fainted)})`);
 const sides = rp.sidesInLog(log);
 check(sides.rptester.team.length === 2 && sides.wildrattata.fainted.length === 1, 'both sides of a battle: team sent out and fainted');
+/*
+ * A Nuzleaf with a Broken Pact never writes a `faint` line - it comes back as
+ * Nuzleaf-SOLD at full HP instead (data/velvet/items.js). The battle treats
+ * that as "it did not faint"; the RP still has to treat it as a Pokemon that
+ * was knocked out, or it walks out of the fight with no need of a Centre.
+ */
+const soldLog = [
+	'|player|p1|RpTester|1|', '|player|p2|Wild Rattata|1|',
+	'|switch|p1a: Nuzleaf|Nuzleaf, L20, M|60/60', '|switch|p2a: Rattata|Rattata, L5|100/100',
+	'|-enditem|p1a: Nuzleaf|Broken Pact',
+	'|detailschange|p1a: Nuzleaf|Nuzleaf-SOLD, L20, M',
+	'|-message|Nuzleaf was sold. It came back anyway.',
+	'|faint|p2a: Rattata',
+];
+const sold = rp.resultFromLog({ userid: 'rptester', showdown: 'RpTester' }, soldLog, 'rptester').fainted;
+check(sold.length === 1 && sold[0].species === 'Nuzleaf',
+	`a Nuzleaf sold by a Broken Pact counts as fainted (${JSON.stringify(sold)})`);
+// And a Revive still heals properly: that one is on its feet, not on the list.
+const revived = rp.resultFromLog({ userid: 'rptester', showdown: 'RpTester' }, [
+	'|player|p1|RpTester|1|', '|switch|p1a: Chiko|Chikorita, L5, F|20/20', '|faint|p1a: Chiko',
+	'|-message|RpTester used a Revive on Chiko!',
+], 'rptester').fainted;
+check(revived.length === 0, 'a Pokémon revived in the battle is not fainted afterwards');
+
 const withPreview = rp.sidesInLog(['|player|p1|Ace|1|', '|player|p2|Leader|1|', '|poke|p1|Garchomp, L50, F|', '|poke|p1|Lucario, L48, M|', '|poke|p2|Onix, L40|', '|switch|p1a: Chompy|Garchomp, L50, F|100/100']);
 check(withPreview.ace.team.map(p => p.species).join() === 'Garchomp,Lucario', 'Team Preview gives the whole team, not just who came out');
 

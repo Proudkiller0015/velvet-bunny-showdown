@@ -885,7 +885,26 @@ function sideInLog(lines, slot, userid) {
 		} else if (parts[1] === 'faint' && parts[2] && parts[2].startsWith(slot)) {
 			const nick = parts[2].replace(/^p\d[a-z]?: /, '');
 			if (who.has(nick)) down.set(nick, who.get(nick));
+		} else if (parts[1] === '-enditem' && parts[2] && parts[2].startsWith(slot) && toID(parts[3]) === 'brokenpact') {
+			/*
+			 * A Nuzleaf with a Broken Pact does not faint - it comes back as
+			 * Nuzleaf-SOLD at full HP, and the battle never writes a `faint` line
+			 * for it (data/velvet/items.js). In the battle that is the whole point.
+			 * Out here it is still a Pokemon that was knocked out: it goes into the
+			 * box fainted like any other, and needs a Pokemon Centre before it can
+			 * be brought again. The item is what it spent to stay on the field, not
+			 * a way to walk out of the fight unhurt.
+			 */
+			const nick = parts[2].replace(/^p\d[a-z]?: /, '');
+			if (who.has(nick)) down.set(nick, who.get(nick));
 		} else if (parts[1] === '-message') {
+			/*
+			 * A Revive used in the battle heals it properly: it is back on its
+			 * feet, and if it does not go down again it walks out of the fight
+			 * fine and needs no Centre. That is the difference from a Broken
+			 * Pact above, which keeps a Nuzleaf on the field without ever
+			 * healing what happened to it.
+			 */
 			const m = /used an? (?:Max )?Revive on (.+)!$/.exec(parts.slice(2).join('|'));
 			if (m && toID(parts.slice(2).join('|').split(' used ')[0]) === userid) down.delete(m[1]);
 		}
