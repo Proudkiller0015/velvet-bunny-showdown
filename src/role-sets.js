@@ -41,6 +41,12 @@ const STATUS = ['willowisp', 'thunderwave', 'toxic', 'spore', 'sleeppowder', 'gl
 const UTILITY = ['defog', 'rapidspin', 'mortalspin', 'knockoff', 'taunt', 'encore', 'haze', 'healbell', 'roar', 'whirlwind',
 	'dragontail', 'trick', 'protect', 'substitute', 'destinybond', 'royaldecree', 'courtchange'];
 // Attacks whose base power lies: no charge turn, no recharge, no conditions.
+/*
+ * Moves that simply fail unless something else set them up, which an RP team
+ * built one Pokemon at a time never does: Steel Roller with no terrain on the
+ * field is a lost turn, not a Steel STAB (it was Bronzor's "attack").
+ */
+const FAILS_ALONE = ['steelroller'];
 const AWKWARD = ['lastresort', 'focuspunch', 'dreameater', 'snore', 'naturalgift', 'beatup', 'synchronoise', 'bide',
 	'razorwind', 'skyattack', 'selfdestruct', 'explosion', 'memento', 'healingwish', 'finalgambit', 'mefirst', 'thrash',
 	'uproar', 'petaldance', 'hyperbeam', 'gigaimpact', 'blastburn', 'hydrocannon', 'frenzyplant', 'solarbeam', 'solarblade',
@@ -198,7 +204,7 @@ function roleSets(dex, name, legal = null) {
 	return base.map(set => {
 		const role = set.role === 'Tera Blast user' ? 'Setup Sweeper' : set.role;
 		// Hidden Power's type is set by IVs these sets never pick, so it is left out.
-		let pool = (set.movepool || []).filter(n => toID(n) !== 'terablast' && !toID(n).startsWith('hiddenpower')).map(n => dex.moves.get(n)).filter(m => m.exists && moves.has(m.id));
+		let pool = (set.movepool || []).filter(n => toID(n) !== 'terablast' && !toID(n).startsWith('hiddenpower') && !FAILS_ALONE.includes(toID(n))).map(n => dex.moves.get(n)).filter(m => m.exists && moves.has(m.id));
 		// A hand-written set of ours is already what it should be, and a sketcher owns none of them.
 		const handWritten = (found && found.fixed) || Object.values(VELVET).includes(found);
 		/*
@@ -240,6 +246,8 @@ function roleSets(dex, name, legal = null) {
 				.sort((a, b) => b[1] - a[1]);
 			for (const [m] of rest) { if (pool.length >= 6) break; pool.push(m); }
 		}
+		// Whatever filled the pool above, a move that fails on its own stays out.
+		pool = pool.filter(m => !FAILS_ALONE.includes(m.id));
 		let abilities = (set.abilities || []).filter(a => own.includes(a));
 		if (!abilities.length) abilities = own.slice();
 		if (oursAbility) abilities = [oursAbility, ...abilities.filter(a => a !== oursAbility)];
