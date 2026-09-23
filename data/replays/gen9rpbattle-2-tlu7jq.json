@@ -1,0 +1,12 @@
+{
+	"id": "gen9rpbattle-2-tlu7jq",
+	"format": "[Gen 9] RP Battle",
+	"players": [
+		"Nurse Gwen",
+		"SlimeQueenSamantha"
+	],
+	"rating": null,
+	"log": "|j|☆Nurse Gwen\n|j|☆SlimeQueenSamantha\n|t:|1790200930\n|gametype|singles\n|player|p1|Nurse Gwen|nurse|\n|player|p2|SlimeQueenSamantha|queen.png|\n|gen|9\n|tier|[Gen 9] RP Battle\n|clearpoke\n|poke|p1|Fearow, L22|\n|poke|p1|Oricorio-Pa'u, L23|\n|poke|p2|Chikorita, L14|\n|poke|p2|Kecleon, L14|\n|poke|p2|Elekid, L14|\n|poke|p2|Beautifly, L14|\n|poke|p2|Beedrill, L14|\n|poke|p2|Hattrem, L14|\n|teampreview\n|inactive|Battle timer is ON: inactive players will automatically lose when time's up. (requested by Nurse Gwen)\n|c|☆Nurse Gwen|🔒 Z-Moves, Dynamax, Terastallization are locked until the story gives Slime Queen Samantha the item; the battle won't allow them.\n|c|☆Nurse Gwen|Your Showdown team must match your box: only Pokémon you own, at or below their box level, or the battle is called off.\n|c|☆Nurse Gwen|You look like a trainer. Let's battle!\n|\n|t:|1790200937\n|teamsize|p1|2\n|teamsize|p2|6\n|start\n|switch|p1a: Fearow|Fearow, L22|100/100\n|switch|p2a: Hattrem|Hattrem, L14|100/100\n|turn|1\n|\n|t:|1790200941\n|move|p1a: Fearow|Drill Run|p2a: Hattrem\n|-damage|p2a: Hattrem|48/100\n|move|p2a: Hattrem|Future Sight|p1a: Fearow\n|-start|p2a: Hattrem|move: Future Sight\n|\n|upkeep\n|turn|2\n|\n|t:|1790200951\n|switch|p2a: Kecleon|Kecleon, L14|100/100\n|move|p1a: Fearow|Assurance|p2a: Kecleon\n|-damage|p2a: Kecleon|60/100\n|\n|upkeep\n|turn|3\n|\n|t:|1790200958\n|move|p2a: Kecleon|Fake Out|p1a: Fearow\n|-damage|p1a: Fearow|80/100\n|cant|p1a: Fearow|flinch\n|\n|-end|p1a: Fearow|move: Future Sight\n|-damage|p1a: Fearow|31/100\n|upkeep\n|turn|4\n|\n|t:|1790200964\n|move|p1a: Fearow|Assurance|p2a: Kecleon\n|-damage|p2a: Kecleon|16/100\n|move|p2a: Kecleon|Knock Off|p1a: Fearow\n|-start|p2a: Kecleon|typechange|Dark|[from] ability: Protean\n|-damage|p1a: Fearow|0 fnt\n|faint|p1a: Fearow\n|\n|upkeep\n|\n|t:|1790200964\n|switch|p1a: Oricorio|Oricorio-Pa'u, L23|100/100\n|turn|5\n|\n|t:|1790200969\n|move|p1a: Oricorio|Acrobatics|p2a: Kecleon\n|-damage|p2a: Kecleon|0 fnt\n|faint|p2a: Kecleon\n|\n|upkeep\n|\n|t:|1790200973\n|switch|p2a: Elekid|Elekid, L14|100/100\n|turn|6\n|\n|t:|1790200975\n|move|p1a: Oricorio|Pound|p2a: Elekid\n|-damage|p2a: Elekid|50/100\n|move|p2a: Elekid|Thunderbolt|p1a: Oricorio\n|-supereffective|p1a: Oricorio\n|-damage|p1a: Oricorio|49/100\n|\n|upkeep\n|turn|7\n",
+	"inputlog": null,
+	"uploadtime": 1790200975
+}
