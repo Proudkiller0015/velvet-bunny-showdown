@@ -1,0 +1,12 @@
+{
+	"id": "gen9rpbattle-12-tlsybn",
+	"format": "[Gen 9] RP Battle",
+	"players": [
+		"Picnicker Liz",
+		"StaleThunder126"
+	],
+	"rating": null,
+	"log": "|j|☆Picnicker Liz\n|j|☆StaleThunder126\n|t:|1790159372\n|gametype|singles\n|player|p1|Picnicker Liz|picnicker-gen6|\n|player|p2|StaleThunder126|jolt.png|\n|gen|9\n|tier|[Gen 9] RP Battle\n|clearpoke\n|poke|p1|Finizen, L10|\n|poke|p1|Snover, L13|\n|poke|p2|Froakie, L13|\n|poke|p2|Helioptile, L13|\n|poke|p2|Fletchling, L13|\n|poke|p2|Wingull, L13|\n|poke|p2|Zigzagoon-Galar, L13|\n|poke|p2|Happiny, L13|\n|teampreview\n|inactive|Battle timer is ON: inactive players will automatically lose when time's up. (requested by Picnicker Liz)\n|c|☆Picnicker Liz|⚠️ Jolt can't use held items (they unlock with your first badge) yet (not blocked, so just don't).\n|c|☆Picnicker Liz|🔒 Mega Evolution, Z-Moves, Dynamax, Terastallization are locked until the story gives Jolt the item; the battle won't allow them.\n|c|☆Picnicker Liz|Your Showdown team must match your box: only Pokémon you own, at or be\n|c|☆Picnicker Liz|You look like a trainer. Let's battle!\n|\n|t:|1790159390\n|teamsize|p1|2\n|teamsize|p2|6\n|start\n|switch|p1a: Finizen|Finizen, L10|100/100\n|switch|p2a: Fletchling|Fletchling, L13|100/100\n|turn|1\n|\n|t:|1790159399\n|move|p1a: Finizen|Aqua Jet|p2a: Fletchling\n|-damage|p2a: Fletchling|77/100\n|move|p2a: Fletchling|Flare Blitz|p1a: Finizen\n|-resisted|p1a: Finizen\n|-damage|p1a: Finizen|71/100\n|-damage|p2a: Fletchling|66/100|[from] Recoil\n|\n|upkeep\n|turn|2\n|\n|t:|1790159410\n|switch|p2a: Helioptile|Helioptile, L13|100/100\n|move|p1a: Finizen|Aqua Jet|p2a: Helioptile\n|-immune|p2a: Helioptile|[from] ability: Dry Skin\n|\n|upkeep\n|turn|3\n|\n|t:|1790159420\n|move|p1a: Finizen|Aqua Jet|p2a: Helioptile\n|-immune|p2a: Helioptile|[from] ability: Dry Skin\n|move|p2a: Helioptile|Thunderbolt|p1a: Finizen\n|-supereffective|p1a: Finizen\n|-damage|p1a: Finizen|0 fnt\n|faint|p1a: Finizen\n|\n|upkeep\n|\n|t:|1790159420\n|switch|p1a: Snover|Snover, L13|100/100\n|-weather|Snowscape|[from] ability: Snow Warning|[of] p1a: Snover\n|turn|4\n|\n|t:|1790159434\n|move|p2a: Helioptile|Thunderbolt|p1a: Snover\n|-resisted|p1a: Snover\n|-damage|p1a: Snover|77/100\n|move|p1a: Snover|Powder Snow|p2a: Helioptile\n|-damage|p2a: Helioptile|69/100\n|\n|-weather|Snowscape|[upkeep]\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1790159446
+}
