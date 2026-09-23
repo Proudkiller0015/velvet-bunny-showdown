@@ -1,0 +1,12 @@
+{
+	"id": "gen9rpbattle-11-tlsybn",
+	"format": "[Gen 9] RP Battle",
+	"players": [
+		"Worker Sam",
+		"StaleThunder126"
+	],
+	"rating": null,
+	"log": "|j|☆Worker Sam\n|j|☆StaleThunder126\n|t:|1790159147\n|gametype|singles\n|player|p1|Worker Sam|worker-gen6|\n|player|p2|StaleThunder126|jolt.png|\n|gen|9\n|tier|[Gen 9] RP Battle\n|clearpoke\n|poke|p1|Crabrawler, L11|\n|poke|p1|Growlithe-Hisui, L13|\n|poke|p2|Ariados, L13|\n|poke|p2|Froakie, L13|\n|poke|p2|Helioptile, L13|\n|poke|p2|Fletchling, L13|\n|poke|p2|Skwovet, L13|\n|poke|p2|Zigzagoon-Galar, L13|\n|teampreview\n|inactive|Battle timer is ON: inactive players will automatically lose when time's up. (requested by Worker Sam)\n|c|☆Worker Sam|⚠️ Jolt can't use held items (they unlock with your first badge) yet (not blocked, so just don't).\n|c|☆Worker Sam|🔒 Mega Evolution, Z-Moves, Dynamax, Terastallization are locked until the story gives Jolt the item; the battle won't allow them.\n|c|☆Worker Sam|Your Showdown team must match your box: only Pokémon you own, at or be\n|c|☆Worker Sam|I've been waiting for someone like you!\n|\n|t:|1790159153\n|teamsize|p1|2\n|teamsize|p2|6\n|start\n|switch|p1a: Growlithe|Growlithe-Hisui, L13|100/100\n|switch|p2a: Fletchling|Fletchling, L13|100/100\n|-ability|p1a: Growlithe|Intimidate|boost\n|-unboost|p2a: Fletchling|atk|1\n|turn|1\n|\n|t:|1790159170\n|switch|p2a: Froakie|Froakie, L13|100/100\n|move|p1a: Growlithe|Bite|p2a: Froakie\n|-damage|p2a: Froakie|60/100\n|\n|upkeep\n|turn|2\n|\n|t:|1790159177\n|move|p2a: Froakie|Surf|p1a: Growlithe\n|-supereffective|p1a: Growlithe\n|-damage|p1a: Growlithe|0 fnt\n|faint|p1a: Growlithe\n|\n|upkeep\n|\n|t:|1790159177\n|switch|p1a: Crabrawler|Crabrawler, L11|100/100\n|turn|3\n|\n|t:|1790159190\n|switch|p2a: Fletchling|Fletchling, L13|100/100\n|move|p1a: Crabrawler|Rock Smash|p2a: Fletchling\n|-damage|p2a: Fletchling|74/100\n|\n|upkeep\n|turn|4\n|\n|t:|1790159199\n|move|p2a: Fletchling|Flare Blitz|p1a: Crabrawler\n|-damage|p1a: Crabrawler|52/100\n|-status|p1a: Crabrawler|brn\n|-damage|p2a: Fletchling|58/100|[from] Recoil\n|move|p1a: Crabrawler|Rock Smash|p2a: Fletchling\n|-damage|p2a: Fletchling|43/100\n|-unboost|p2a: Fletchling|def|1\n|\n|-damage|p1a: Crabrawler|47/100 brn|[from] brn\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1790159206
+}
