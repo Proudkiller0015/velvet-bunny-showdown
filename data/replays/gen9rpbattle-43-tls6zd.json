@@ -1,0 +1,12 @@
+{
+	"id": "gen9rpbattle-43-tls6zd",
+	"format": "[Gen 9] RP Battle",
+	"players": [
+		"simia ignis",
+		"StaleThunder126"
+	],
+	"rating": null,
+	"log": "|j|☆simia ignis\n|j|☆StaleThunder126\n|t:|1790126546\n|gametype|singles\n|player|p1|simia ignis|simia-ignis.png|\n|player|p2|StaleThunder126|jolt.png|\n|gen|9\n|tier|[Gen 9] RP Battle\n|clearpoke\n|poke|p1|Smeargle, L18|\n|poke|p1|Monferno, L18|\n|poke|p2|Froakie, L13|\n|poke|p2|Gumshoos, L13|\n|poke|p2|Zigzagoon, L13|\n|poke|p2|Skwovet, L13|\n|poke|p2|Burmy, L13|\n|poke|p2|Rattata, L13|\n|teampreview\n|j|&SlimeQueenSamantha\n|inactive|Battle timer is ON: inactive players will automatically lose when time's up. (requested by simia ignis)\n|\n|t:|1790126599\n|teamsize|p1|2\n|teamsize|p2|6\n|start\n|switch|p1a: Smeargle|Smeargle, L18|100/100\n|switch|p2a: Skwovet|Skwovet, L13|100/100\n|turn|1\n|\n|t:|1790126606\n|move|p1a: Smeargle|Spore|p2a: Skwovet\n|-status|p2a: Skwovet|slp|[from] move: Spore\n|cant|p2a: Skwovet|slp\n|\n|-ability|p1a: Smeargle|Moody|boost\n|-boost|p1a: Smeargle|spa|2\n|-unboost|p1a: Smeargle|spe|1\n|upkeep\n|turn|2\n|\n|t:|1790126615\n|move|p1a: Smeargle|Substitute|p1a: Smeargle\n|-start|p1a: Smeargle|Substitute\n|-damage|p1a: Smeargle|76/100\n|-curestatus|p2a: Skwovet|slp|[msg]\n|move|p2a: Skwovet|Dig||[still]\n|-prepare|p2a: Skwovet|Dig\n|\n|-ability|p1a: Smeargle|Moody|boost\n|-boost|p1a: Smeargle|atk|2\n|-unboost|p1a: Smeargle|spe|1\n|upkeep\n|turn|3\n|\n|t:|1790126627\n|move|p1a: Smeargle|Shell Smash|p1a: Smeargle\n|-unboost|p1a: Smeargle|def|1\n|-unboost|p1a: Smeargle|spd|1\n|-boost|p1a: Smeargle|atk|2\n|-boost|p1a: Smeargle|spa|2\n|-boost|p1a: Smeargle|spe|2\n|move|p2a: Skwovet|Dig|p1a: Smeargle|[from] lockedmove\n|-end|p1a: Smeargle|Substitute\n|\n|-ability|p1a: Smeargle|Moody|boost\n|-boost|p1a: Smeargle|spd|2\n|-unboost|p1a: Smeargle|spa|1\n|upkeep\n|turn|4\n|\n|t:|1790126645\n|move|p1a: Smeargle|Spore|p2a: Skwovet\n|-status|p2a: Skwovet|slp|[from] move: Spore\n|cant|p2a: Skwovet|slp\n|\n|-ability|p1a: Smeargle|Moody|boost\n|-boost|p1a: Smeargle|atk|2\n|-unboost|p1a: Smeargle|spd|1\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1790126651
+}
