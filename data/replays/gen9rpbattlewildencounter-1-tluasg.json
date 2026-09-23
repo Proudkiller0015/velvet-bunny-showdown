@@ -1,0 +1,12 @@
+{
+	"id": "gen9rpbattlewildencounter-1-tluasg",
+	"format": "[Gen 9] RP Battle (Wild Encounter)",
+	"players": [
+		"Wild Cufant",
+		"SlimeQueenSamantha"
+	],
+	"rating": null,
+	"log": "|j|☆Wild Cufant\n|j|☆SlimeQueenSamantha\n|t:|1790204784\n|gametype|singles\n|player|p1|Wild Cufant|169|\n|player|p2|SlimeQueenSamantha|queen.png|\n|gen|9\n|tier|[Gen 9] RP Battle (Wild Encounter)\n|clearpoke\n|poke|p1|Cufant, L22, M|\n|poke|p2|Bayleef, L23, F|\n|poke|p2|Electabuzz, L23, F|\n|poke|p2|Kecleon, L23, M|\n|poke|p2|Beautifly, L23, F|\n|poke|p2|Beedrill, L23, F|\n|poke|p2|Hattrem, L23, F|\n|teampreview\n|inactive|Battle timer is ON: inactive players will automatically lose when time's up. (requested by Wild Cufant)\n|n|☆Wild Cufant|wildcufant\n|inactive|SlimeQueenSamantha has 270 seconds left.\n|inactive|SlimeQueenSamantha has 240 seconds left.\n|inactive|SlimeQueenSamantha has 210 seconds left.\n|inactive|SlimeQueenSamantha has 180 seconds left.\n|inactive|SlimeQueenSamantha has 150 seconds left.\n|inactive|SlimeQueenSamantha has 120 seconds left.\n|inactive|SlimeQueenSamantha has 90 seconds left.\n|inactive|SlimeQueenSamantha has 60 seconds left.\n|inactive|SlimeQueenSamantha has 30 seconds left.\n|inactive|SlimeQueenSamantha has 20 seconds left.\n|inactive|SlimeQueenSamantha has 15 seconds left.\n|inactive|SlimeQueenSamantha has 10 seconds left.\n|inactive|SlimeQueenSamantha has 5 seconds left.\n|-message|SlimeQueenSamantha lost due to inactivity.\n|\n|win|Wild Cufant\n",
+	"inputlog": ">start {\"formatid\":\"gen9rpbattlewildencounter\",\"seed\":\"sodium,26add19b71fbeae5da031b80baa15b01\"}\n>player p1 {\"name\":\"Wild Cufant\",\"avatar\":\"169\",\"team\":\"Cufant|||SheerForce|Stomp,Bulldoze,RockSmash,Rollout|Lax|||26,12,15,6,18,16||22|\",\"rating\":0}\n>player p2 {\"name\":\"SlimeQueenSamantha\",\"avatar\":\"queen.png\",\"team\":\"Bayleef|||Overgrow|EnergyBall,Synthesis,AncientPower,Round|Modest|||||23|]Electabuzz|||Static|VoltaicLance,IcePunch,FirePunch,Substitute|Jolly|||||23|]Kecleon|||Protean|FakeOut,Recover,StealthRock,KnockOff|Adamant|||||23|]Beautifly|||Swarm|AirCutter,QuiverDance,BugBuzz,EnergyBall|Modest|||||23|]Beedrill|||Swarm|PoisonJab,ToxicSpikes,Defog,Uturn|Adamant|||||23|]Hattrem|||MagicBounce|FutureSight,Rest,MysticalFire,GigaDrain|Modest|||||23|\",\"rating\":0}\n>forcelose p2",
+	"uploadtime": 1790205084
+}
