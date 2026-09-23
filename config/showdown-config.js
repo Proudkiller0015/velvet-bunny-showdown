@@ -1994,17 +1994,23 @@ function roleplay() {
 					if (room) {
 						enc.roomid = room.roomid;
 						player.popup(`|html|<b>Your encounter is ready.</b><br />It is open in front of you - nothing to accept.`);
-						return;
+						return room.roomid;
 					}
 				} catch (e) {
 					console.log(`[roleplay] open encounter: ${e.message}`);
 				}
-				return;
+				return null;
 			}
 			await new Promise(done => setTimeout(done, 400));
 		}
-		console.log('[roleplay] open encounter: the opponent never came online; it will challenge instead');
+		console.log('[roleplay] open encounter: the opponent never came online');
+		return null;
 	}
+	/*
+	 * Encounters being opened, by id, so the /rp/encounter answer can wait for
+	 * the room and hand Discord its link (rp-server.js httpRoute, deps.opening).
+	 */
+	const openings = new Map();
 
 	const deps = {
 		isOnline: userid => {
@@ -2034,11 +2040,20 @@ function roleplay() {
 			/*
 			 * With a team from Discord, the encounter is opened here rather than
 			 * challenged. The opponent logs in as its own account first, which
-			 * takes a moment, so this waits for it - and if it never turns up,
-			 * the bot's own challenge path is still there as it was.
+			 * takes a moment, so this waits for it; the answer to Discord waits
+			 * too, so it can post the room's link (deps.opening).
 			 */
-			if (enc.playerTeam) void openEncounter(enc, spawn);
+			if (enc.playerTeam) openings.set(enc.id, openEncounter(enc, spawn));
 			return true;
+		},
+		/*
+		 * The room an opened encounter landed in: its id, null if it could not be
+		 * opened, or undefined when this encounter was a challenge all along.
+		 */
+		opening: id => {
+			const pending = openings.get(id);
+			openings.delete(id);
+			return pending;
 		},
 	};
 	tutorialDeps = deps;

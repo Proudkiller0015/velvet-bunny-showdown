@@ -1023,7 +1023,14 @@ function httpRoute(deps, log) {
 					log(`encounter failed: ${e.stack || e.message}`);
 					answer = { ok: false, code: 'error', message: 'Something went wrong rolling that encounter.' };
 				}
-				send(res, 200, answer);
+				/*
+				 * An encounter opened with the player's Discord team: wait for the
+				 * room (at most ~20 s, openEncounter) so Discord can post its link.
+				 * roomid null means it could not be opened.
+				 */
+				const opening = answer.ok && answer.encounter && deps.opening ? deps.opening(answer.encounter.id) : undefined;
+				if (!opening) return send(res, 200, answer);
+				return Promise.resolve(opening).then(roomid => send(res, 200, { ...answer, opened: true, roomid: roomid || null }));
 			}).catch(() => send(res, 400, { ok: false, code: 'bad', message: 'Bad request.' }));
 			return true;
 		}
