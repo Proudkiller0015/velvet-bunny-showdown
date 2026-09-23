@@ -203,6 +203,15 @@ function requestEncounter(payload, deps) {
 		badges,
 		warning: String(payload.warning || '').slice(0, 300),
 		box: normaliseBox(payload.box),
+		/*
+		 * The team the player picked on Discord (Patch 2.1).
+		 *
+		 * With it, the encounter does not arrive as a challenge to accept: the
+		 * server opens the battle itself, the same as a battle between two
+		 * players. Without it, the bot challenges as it always has - so an
+		 * encounter still works for somebody who has not picked a team.
+		 */
+		playerTeam: Array.isArray(payload.playerTeam) && payload.playerTeam.length ? payload.playerTeam.slice(0, 6) : null,
 		caught: Math.max(0, Math.floor(Number(payload.caught) || 0)),
 		gimmicks: payload.gimmicks && typeof payload.gimmicks === 'object'
 			? { mega: !!payload.gimmicks.mega, zmove: !!payload.gimmicks.zmove, dynamax: !!payload.gimmicks.dynamax, tera: !!payload.gimmicks.tera }

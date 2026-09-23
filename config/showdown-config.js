@@ -1970,6 +1970,42 @@ function roleplay() {
 	isRpBot = user => rolled(user.id) && user.connections.length > 0 &&
 		user.connections.every(c => ['127.0.0.1', '::1', '::ffff:127.0.0.1'].includes(c.ip));
 
+	/*
+	 * Put the player and the encounter's own account into a battle, once that
+	 * account has finished logging in. Nobody accepts anything: the room simply
+	 * opens, the same as a battle between two players.
+	 */
+	async function openEncounter(enc, spawn) {
+		const until = Date.now() + 20000;
+		let bot = null;
+		while (Date.now() < until) {
+			bot = Users.get(toID(spawn.name));
+			const player = Users.get(toID(enc.showdown));
+			if (bot && bot.connected && player && player.connected) {
+				try {
+					const room = Rooms.createBattle({
+						format: enc.format,
+						players: [
+							{ user: bot, team: spawn.team },
+							{ user: player, team: Teams.pack(enc.playerTeam) },
+						],
+						rated: 0,
+					});
+					if (room) {
+						enc.roomid = room.roomid;
+						player.popup(`|html|<b>Your encounter is ready.</b><br />It is open in front of you - nothing to accept.`);
+						return;
+					}
+				} catch (e) {
+					console.log(`[roleplay] open encounter: ${e.message}`);
+				}
+				return;
+			}
+			await new Promise(done => setTimeout(done, 400));
+		}
+		console.log('[roleplay] open encounter: the opponent never came online; it will challenge instead');
+	}
+
 	const deps = {
 		isOnline: userid => {
 			const user = Users.get(userid);
@@ -1987,11 +2023,21 @@ function roleplay() {
 				id: enc.id, target: enc.showdown, name: enc.name, avatar: enc.avatar, format: enc.format,
 				team: Teams.pack(enc.team), ai: enc.ai, kind: enc.kind, character: enc.character, balls: enc.balls, items: enc.items || null,
 				className: enc.className || null, classId: enc.classId || null, warning: enc.warning || '',
+				// The player picked a team on Discord, so this one is opened rather
+				// than challenged: the bot waits to be put in a room (src/rp-bot.js).
+				open: !!enc.playerTeam,
 			};
 			// Straight down the bot's socket, as a PM from the server itself. A
 			// player can't send one of these: a PM they type starting with "/" is
 			// run as a command, and the bot only listens to "~".
 			guide.send(`|pm|~|${guide.getIdentity()}|/rpspawn ${JSON.stringify(spawn)}`);
+			/*
+			 * With a team from Discord, the encounter is opened here rather than
+			 * challenged. The opponent logs in as its own account first, which
+			 * takes a moment, so this waits for it - and if it never turns up,
+			 * the bot's own challenge path is still there as it was.
+			 */
+			if (enc.playerTeam) void openEncounter(enc, spawn);
 			return true;
 		},
 	};

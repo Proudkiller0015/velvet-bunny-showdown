@@ -86,6 +86,19 @@ class EncounterOpponent extends ShowdownBot {
 	}
 
 	onReady() {
+		/*
+		 * The player picked a team on Discord, so the server is opening this
+		 * battle itself (config/showdown-config.js openEncounter). There is
+		 * nothing to challenge and nothing for them to accept: this account
+		 * just waits to be put in the room, and onLine picks it up from there.
+		 */
+		if (this.spawn.open) {
+			this.log(`waiting to be put in a battle with ${this.spawn.target}`);
+			this.later(() => {
+				if (!this.battleRoom) this.finish('the battle was never opened');
+			}, CHALLENGE_MS);
+			return;
+		}
 		// Guests are made autoconfirmed on a two-second sweep, and a challenge from
 		// somebody who isn't is refused - so wait out one sweep first.
 		this.later(() => {
