@@ -1,0 +1,12 @@
+{
+	"id": "gen9rpbattle-33-tlsybn",
+	"format": "[Gen 9] RP Battle",
+	"players": [
+		"Lass Emi",
+		"StaleThunder126"
+	],
+	"rating": null,
+	"log": "|j|☆Lass Emi\n|j|☆StaleThunder126\n|t:|1790164728\n|gametype|singles\n|player|p1|Lass Emi|lass-gen4|\n|player|p2|StaleThunder126|jolt.png|\n|gen|9\n|tier|[Gen 9] RP Battle\n|clearpoke\n|poke|p1|Lickitung, L10|\n|poke|p1|Indeedee-F, L13|\n|poke|p2|Tentacool, L13|\n|poke|p2|Froakie, L13|\n|poke|p2|Helioptile, L13|\n|poke|p2|Budew, L13|\n|poke|p2|Fletchling, L13|\n|poke|p2|Diglett, L13|\n|teampreview\n|inactive|Battle timer is ON: inactive players will automatically lose when time's up. (requested by Lass Emi)\n|c|☆Lass Emi|⚠️ Jolt can't use held items (they unlock with your first badge) yet (not blocked, so just don't).\n|c|☆Lass Emi|🔒 Mega Evolution, Z-Moves, Dynamax, Terastallization are locked until the story gives Jolt the item; the battle won't allow them.\n|c|☆Lass Emi|Your Showdown team must match your box: only Pokémon you own, at or be\n|c|☆Lass Emi|Don't go easy on me!\n|\n|t:|1790164752\n|teamsize|p1|2\n|teamsize|p2|6\n|start\n|switch|p1a: Indeedee|Indeedee-F, L13|100/100\n|switch|p2a: Budew|Budew, L13|100/100\n|-fieldstart|move: Psychic Terrain|[from] ability: Psychic Surge|[of] p1a: Indeedee\n|turn|1\n|\n|t:|1790164766\n|move|p1a: Indeedee|Play Nice|p2a: Budew\n|-unboost|p2a: Budew|atk|1\n|move|p2a: Budew|Leaf Storm|p1a: Indeedee\n|-damage|p1a: Indeedee|56/100\n|-unboost|p2a: Budew|spa|2\n|\n|upkeep\n|turn|2\n|\n|t:|1790164780\n|move|p1a: Indeedee|Disarming Voice|p2a: Budew\n|-resisted|p2a: Budew\n|-damage|p2a: Budew|92/100\n|move|p2a: Budew|Dazzling Gleam|p1a: Indeedee\n|-damage|p1a: Indeedee|46/100\n|\n|upkeep\n|turn|3\n|\n|t:|1790164788\n|move|p1a: Indeedee|Disarming Voice|p2a: Budew\n|-resisted|p2a: Budew\n|-damage|p2a: Budew|85/100\n|move|p2a: Budew|Leaf Storm|p1a: Indeedee\n|-damage|p1a: Indeedee|22/100\n|-unboost|p2a: Budew|spa|2\n|\n|upkeep\n|turn|4\n|\n|t:|1790164797\n|move|p1a: Indeedee|Disarming Voice|p2a: Budew\n|-resisted|p2a: Budew\n|-damage|p2a: Budew|76/100\n|move|p2a: Budew|Leaf Storm|p1a: Indeedee|[miss]\n|-miss|p2a: Budew|p1a: Indeedee\n|\n|upkeep\n|turn|5\n|\n|t:|1790164805\n|move|p1a: Indeedee|Disarming Voice|p2a: Budew\n|-resisted|p2a: Budew\n|-crit|p2a: Budew\n|-damage|p2a: Budew|65/100\n|move|p2a: Budew|Leaf Storm|p1a: Indeedee\n|-damage|p1a: Indeedee|8/100\n|-unboost|p2a: Budew|spa|2\n|\n|-fieldend|move: Psychic Terrain\n|upkeep\n|turn|6\n",
+	"inputlog": null,
+	"uploadtime": 1790164806
+}
