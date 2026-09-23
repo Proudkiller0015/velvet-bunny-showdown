@@ -1,0 +1,12 @@
+{
+	"id": "gen9rpbattle-1-tlsybn",
+	"format": "[Gen 9] RP Battle",
+	"players": [
+		"Lass Tess",
+		"StaleThunder126"
+	],
+	"rating": null,
+	"log": "|j|☆Lass Tess\n|j|☆StaleThunder126\n|t:|1790154167\n|gametype|singles\n|player|p1|Lass Tess|lass-gen4|\n|player|p2|StaleThunder126|jolt.png|\n|gen|9\n|tier|[Gen 9] RP Battle\n|clearpoke\n|poke|p1|Rufflet, L12|\n|poke|p1|Aipom, L13|\n|poke|p2|Gumshoos, L13|\n|poke|p2|Froakie, L13|\n|poke|p2|Fletchling, L13|\n|poke|p2|Wingull, L13|\n|poke|p2|Zigzagoon-Galar, L12|\n|poke|p2|Budew, L9|\n|teampreview\n|inactive|Battle timer is ON: inactive players will automatically lose when time's up. (requested by Lass Tess)\n|c|☆Lass Tess|⚠️ Jolt can't use held items (they unlock with your first badge) yet (not blocked, so just don't).\n|c|☆Lass Tess|🔒 Mega Evolution, Z-Moves, Dynamax, Terastallization are locked until the story gives Jolt the item; the battle won't allow them.\n|c|☆Lass Tess|Your Showdown team must match your box: only Pokémon you own, at or be\n|c|☆Lass Tess|Don't go easy on me!\n|\n|t:|1790154190\n|teamsize|p1|2\n|teamsize|p2|6\n|start\n|switch|p1a: Aipom|Aipom, L13|100/100\n|switch|p2a: Fletchling|Fletchling, L13|100/100\n|turn|1\n|\n|t:|1790154209\n|move|p2a: Fletchling|Brave Bird|p1a: Aipom\n|-damage|p1a: Aipom|27/100\n|-damage|p2a: Fletchling|72/100|[from] Recoil\n|move|p1a: Aipom|Scratch|p2a: Fletchling\n|-damage|p2a: Fletchling|37/100\n|\n|upkeep\n|turn|2\n|\n|t:|1790154222\n|move|p1a: Aipom|Scratch|p2a: Fletchling\n|-crit|p2a: Fletchling\n|-damage|p2a: Fletchling|0 fnt\n|faint|p2a: Fletchling\n|\n|upkeep\n|\n|t:|1790154230\n|switch|p2a: Zigzagoon|Zigzagoon-Galar, L12|100/100\n|turn|3\n|\n|t:|1790154249\n|move|p1a: Aipom|Scratch|p2a: Zigzagoon\n|-damage|p2a: Zigzagoon|53/100\n|move|p2a: Zigzagoon|Lash Out|p1a: Aipom\n|-damage|p1a: Aipom|0 fnt\n|faint|p1a: Aipom\n|\n|upkeep\n|\n|t:|1790154249\n|switch|p1a: Rufflet|Rufflet, L12|100/100\n|turn|4\n|\n|t:|1790154264\n|move|p2a: Zigzagoon|Gunk Shot|p1a: Rufflet\n|-damage|p1a: Rufflet|69/100\n|move|p1a: Rufflet|Wing Attack|p2a: Zigzagoon\n|-crit|p2a: Zigzagoon\n|-damage|p2a: Zigzagoon|0 fnt\n|faint|p2a: Zigzagoon\n|\n|upkeep\n|\n|t:|1790154275\n|switch|p2a: Froakie|Froakie, L13|100/100\n|turn|5\n|\n|t:|1790154283\n|move|p2a: Froakie|Blizzard|p1a: Rufflet|[miss]\n|-start|p2a: Froakie|typechange|Ice|[from] ability: Protean\n|-miss|p2a: Froakie|p1a: Rufflet\n|move|p1a: Rufflet|Wing Attack|p2a: Froakie\n|-damage|p2a: Froakie|57/100\n|\n|upkeep\n|turn|6\n",
+	"inputlog": null,
+	"uploadtime": 1790154285
+}
