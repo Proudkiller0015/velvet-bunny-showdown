@@ -965,6 +965,41 @@ function send(res, status, body) {
 }
 
 /** An HTTP route for src/http-hooks.js. Returns true when it answered. */
+/*
+ * A battle the bot sets up for two people (Patch 2.1).
+ *
+ * Until now every battle between players had to be arranged on Showdown by the
+ * players themselves: find each other, get the format right, accept. That is
+ * three chances to get it wrong for something they already agreed to on
+ * Discord - so the bot can now ask the server to make the battle itself.
+ *
+ * Both sides pick their team on Discord first (that is the `!preset` panel),
+ * and once both have, this puts the two of them in a room with those teams.
+ * Nobody accepts anything on Showdown: the battle is simply there.
+ *
+ * Both have to be logged in, and it says plainly who is not.
+ */
+function startMatch(payload, deps) {
+	const sides = Array.isArray(payload.players) ? payload.players : [];
+	if (sides.length !== 2) return { ok: false, code: 'bad', message: 'A battle takes two players.' };
+	const format = String(payload.format || 'gen9rpbattle');
+	for (const side of sides) {
+		if (!side || !side.showdown) return { ok: false, code: 'bad', message: 'Both players need a Showdown name.' };
+		if (!Array.isArray(side.team) || !side.team.length) {
+			return { ok: false, code: 'noteam', message: `${side.character || side.showdown} has not picked a team yet.` };
+		}
+	}
+	if (!deps.match) return { ok: false, code: 'error', message: 'This server cannot start battles for people.' };
+	let out;
+	try {
+		out = deps.match({ players: sides, format });
+	} catch (e) {
+		log(`match failed: ${e.stack || e.message}`);
+		return { ok: false, code: 'error', message: 'Something went wrong starting that battle.' };
+	}
+	return out;
+}
+
 function httpRoute(deps, log) {
 	return (req, res) => {
 		const url = String(req.url || '');
@@ -988,6 +1023,14 @@ function httpRoute(deps, log) {
 				const checked = verify(body);
 				if (checked.error) return send(res, 403, { ok: false, code: 'forbidden', message: checked.error });
 				send(res, 200, allowCatch(checked.payload));
+			}).catch(() => send(res, 400, { ok: false, code: 'bad', message: 'Bad request.' }));
+			return true;
+		}
+		if (url === '/rp/match' && req.method === 'POST') {
+			readJson(req).then(body => {
+				const checked = verify(body);
+				if (checked.error) return send(res, 403, { ok: false, code: 'forbidden', message: checked.error });
+				send(res, 200, startMatch(checked.payload, deps));
 			}).catch(() => send(res, 400, { ok: false, code: 'bad', message: 'Bad request.' }));
 			return true;
 		}
@@ -1022,6 +1065,6 @@ function httpRoute(deps, log) {
 module.exports = {
 	freeCatch, FREE_CATCHES, allowCatch, summoned, chosenSet,
 	pvpCheck, pvpNotice, friendlyNotice, isAgreed, verify, placeFor, requestEncounter, requestTutorial, completeEncounter, canUseItem, usedInLog, setBags, bagFor, pvpItemsFor, canUsePvpItem, NPC_ITEMS_EACH, publicView, canThrow, thrownInLog, resultFromLog, openFor,
-	checkTeam, gimmickIn, GIMMICK_ITEM, GIMMICK_NAME, sidesInLog,
+	checkTeam, gimmickIn, GIMMICK_ITEM, GIMMICK_NAME, sidesInLog, startMatch,
 	httpRoute, encounters, RP_ROOM, CHALLENGE_MS, recordFinished, finishedSince,
 };

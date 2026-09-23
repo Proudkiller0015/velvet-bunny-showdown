@@ -757,7 +757,16 @@ function installCatching(battle) {
 					return this.emitChoiceError(`Can't run right now: send a Pokémon out first`);
 				}
 				if (!isWildSide(foe)) {
-					return this.emitChoiceError(`You can't run from a trainer - that battle is settled in the RP`);
+					/*
+					 * And put their menu back. A refused choice leaves this client
+					 * sitting on "waiting for opponent" with Fight shut, which a
+					 * player reported as the battle freezing for five minutes - so
+					 * the request is sent again behind the error and the turn is
+					 * theirs to play again straight away.
+					 */
+					const no = this.emitChoiceError(`You can't run from a trainer - that battle is settled in the RP`);
+					if (this.activeRequest) this.emitRequest(this.activeRequest);
+					return no;
 				}
 				const wild = foe.active.find(p => p && !p.fainted);
 				if (!wild) return this.emitChoiceError(`There's nothing to run from`);

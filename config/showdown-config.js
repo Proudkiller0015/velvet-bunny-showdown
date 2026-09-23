@@ -1996,6 +1996,43 @@ function roleplay() {
 		},
 	};
 	tutorialDeps = deps;
+	/*
+	 * Put two people in a battle they already agreed to on Discord.
+	 *
+	 * The bot has both teams (each player picked one there) and both names, so
+	 * there is nothing left to negotiate: Rooms.createBattle joins both of them
+	 * into the room itself, which is why nobody has to accept anything here.
+	 * Both must be online - a battle cannot open in front of somebody who is not
+	 * looking - and whoever is missing is named rather than guessed at.
+	 */
+	deps.match = ({ players, format }) => {
+		const seats = [];
+		const missing = [];
+		for (const side of players) {
+			const user = Users.get(toID(side.showdown));
+			if (!user || !user.connected) { missing.push(side.showdown); continue; }
+			seats.push({ side, user });
+		}
+		if (missing.length) {
+			return { ok: false, code: 'offline', message: `${missing.join(' and ')} ${missing.length > 1 ? 'are' : 'is'} not on Showdown right now.`, missing };
+		}
+		if (seats[0].user === seats[1].user) {
+			return { ok: false, code: 'same', message: 'Both sides are the same Showdown account, and an account cannot battle itself.' };
+		}
+		const packed = seats.map(({ side, user }) => {
+			let team;
+			try { team = Teams.pack(side.team); } catch (e) { team = null; }
+			return team ? { user, team } : { user };
+		});
+		if (packed.some(p => !p.team)) return { ok: false, code: 'bad', message: "I couldn't read one of those teams." };
+		const room = Rooms.createBattle({ format, players: packed, rated: 0 });
+		if (!room) return { ok: false, code: 'error', message: 'The server would not open a battle just now (it may be restarting).' };
+		for (const { user } of seats) {
+			user.popup(`|html|<b>Your RP battle is ready.</b><br />It is open in front of you - no challenge to accept.`);
+		}
+		// The bot puts its own host in front of the room id when it posts the link.
+		return { ok: true, roomid: room.roomid };
+	};
 	deps.cancel = enc => {
 		const guide = Users.get(toID(RP_BOT));
 		if (guide && guide.connected) guide.send(`|pm|~|${guide.getIdentity()}|/rpcancel ${enc.id}`);
@@ -2068,8 +2105,28 @@ function roleplay() {
 						const n = enc.items ? (enc.items[it.id] || 0) - rp.usedInLog(log, player.name, it.name) : 0;
 						return n > 0 ? `<button class="button" name="send" value="/run ${it.id}">${it.name} ×${n}</button>` : '';
 					}).filter(Boolean).join(' ');
-					player.sendRoom(`|uhtml|rpballs|<div class="infobox rp-balls" style="margin:4px 0"><b>Pokéballs:</b> ${balls || '<small>none left - buy some with !buy on Discord</small>'}` +
-						(escapes ? `<div><b>Getting away:</b> ${escapes}</div>` : '') + '</div>');
+					/*
+					 * A trainer is not a wild Pokemon, and the panel says so instead of
+					 * offering two things that will be refused (23 Sep 2026: a player
+					 * pressed Run in a trainer battle and sat on "waiting for opponent"
+					 * for five minutes). The balls stay on show - it is still their bag,
+					 * and knowing what is in it matters - but with no `name="send"` they
+					 * do nothing, and the only way out of a person's battle is the one
+					 * the RP actually honours: forfeit.
+					 */
+					if (enc.kind !== 'wild') {
+						const shown = E.BALLS.map(ball => {
+							const have = enc.balls ? (enc.balls[ball.id] || 0) - rp.thrownInLog(log, player.name, ball.name) : null;
+							return have === null || have > 0 ? `<button class="button disabled" title="A trainer's Pokémon can't be caught">${ball.name}${have === null ? '' : ` ×${have}`}</button>` : '';
+						}).filter(Boolean).join(' ');
+						player.sendRoom(`|uhtml|rpballs|<div class="infobox rp-balls" style="margin:4px 0"><b>Pokéballs:</b> ${shown || '<small>none</small>'}` +
+							`<div><small>These do nothing here: <b>a trainer's Pokémon can't be caught</b>, and you can't run from a person.</small></div>` +
+							`<div style="margin-top:4px"><b>Had enough?</b> <button class="button" name="send" value="/forfeit">Forfeit</button> ` +
+							`<small>the RP settles it as a loss.</small></div></div>`);
+					} else {
+						player.sendRoom(`|uhtml|rpballs|<div class="infobox rp-balls" style="margin:4px 0"><b>Pokéballs:</b> ${balls || '<small>none left - buy some with !buy on Discord</small>'}` +
+							(escapes ? `<div><b>Getting away:</b> ${escapes}</div>` : '') + '</div>');
+					}
 				}
 			}
 			// What applies to this player in a PvP or NPC battle, once, right behind their first request.
@@ -2165,7 +2222,10 @@ function roleplay() {
 				this.rpNotes = {};
 				for (const player of this.players) {
 					const note = notes.get(player.id);
-					if (note && player.slot) this.rpNotes[player.slot] = `|raw|<div class="infobox"><small>${esc(note)}</small></div>`;
+					// The only way out of a battle with a person, said once, where they can see it.
+					const out = '<div style="margin-top:4px"><b>Had enough?</b> <button class="button" name="send" value="/forfeit">Forfeit</button> ' +
+						'<small>you cannot run from a trainer; the RP settles a forfeit as a loss.</small></div>';
+					if (note && player.slot) this.rpNotes[player.slot] = `|raw|<div class="infobox"><small>${esc(note)}</small>${out}</div>`;
 				}
 				// Players battling each other: each sees a panel of their own character's items.
 				for (const player of this.players) {
