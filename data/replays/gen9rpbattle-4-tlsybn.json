@@ -1,0 +1,12 @@
+{
+	"id": "gen9rpbattle-4-tlsybn",
+	"format": "[Gen 9] RP Battle",
+	"players": [
+		"Bug Catcher Ken",
+		"StaleThunder126"
+	],
+	"rating": null,
+	"log": "|j|☆Bug Catcher Ken\n|j|☆StaleThunder126\n|t:|1790156492\n|gametype|singles\n|player|p1|Bug Catcher Ken|bugcatcher-gen4dp|\n|player|p2|StaleThunder126|jolt.png|\n|gen|9\n|tier|[Gen 9] RP Battle\n|clearpoke\n|poke|p1|Joltik, L9|\n|poke|p1|Dwebble, L13|\n|poke|p2|Ariados, L13|\n|poke|p2|Froakie, L13|\n|poke|p2|Fletchling, L13|\n|poke|p2|Skwovet, L13|\n|poke|p2|Zigzagoon-Galar, L13|\n|poke|p2|Happiny, L12|\n|teampreview\n|inactive|Battle timer is ON: inactive players will automatically lose when time's up. (requested by Bug Catcher Ken)\n|c|☆Bug Catcher Ken|⚠️ Jolt can't use held items (they unlock with your first badge) yet (not blocked, so just don't).\n|c|☆Bug Catcher Ken|🔒 Mega Evolution, Z-Moves, Dynamax, Terastallization are locked until the story gives Jolt the item; the battle won't allow them.\n|c|☆Bug Catcher Ken|Your Showdown team must match your box: only Pokémon you own, at or be\n|c|☆Bug Catcher Ken|My bugs are the best bugs!\n|\n|t:|1790156517\n|teamsize|p1|2\n|teamsize|p2|6\n|start\n|switch|p1a: Dwebble|Dwebble, L13|100/100\n|switch|p2a: Happiny|Happiny, L12|100/100\n|turn|1\n|\n|t:|1790156532\n|move|p1a: Dwebble|Bug Bite|p2a: Happiny\n|-damage|p2a: Happiny|36/100\n|move|p2a: Happiny|Flamethrower|p1a: Dwebble\n|-damage|p1a: Dwebble|80/100\n|\n|upkeep\n|turn|2\n|\n|t:|1790156548\n|switch|p2a: Froakie|Froakie, L13|100/100\n|move|p1a: Dwebble|Bug Bite|p2a: Froakie\n|-damage|p2a: Froakie|49/100\n|\n|upkeep\n|turn|3\n|\n|t:|1790156557\n|move|p2a: Froakie|Ice Beam|p1a: Dwebble\n|-start|p2a: Froakie|typechange|Ice|[from] ability: Protean\n|-damage|p1a: Dwebble|25/100\n|move|p1a: Dwebble|Bug Bite|p2a: Froakie\n|-damage|p2a: Froakie|6/100\n|\n|upkeep\n|turn|4\n|\n|t:|1790156567\n|move|p2a: Froakie|Ice Beam|p1a: Dwebble\n|-damage|p1a: Dwebble|0 fnt\n|faint|p1a: Dwebble\n|\n|upkeep\n|\n|t:|1790156567\n|switch|p1a: Joltik|Joltik, L9|100/100\n|-ability|p1a: Joltik|Unnerve\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1790156586
+}
