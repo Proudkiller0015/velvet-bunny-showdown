@@ -634,11 +634,15 @@ function allowCatch(payload) {
 	sweep();
 	const enc = encounters.get(String(payload.id || ''));
 	if (!enc) return { ok: false, code: 'gone', message: 'That encounter is over.' };
-	enc.catchable = true;
-	return { ok: true, encounter: publicView(enc) };
+	// Three states: nothing said (the ordinary rules), yes (a legendary may be
+	// caught this once), no (this one is here to be battled and not kept).
+	enc.catchable = payload.allow === false ? false : true;
+	return { ok: true, catchable: enc.catchable, encounter: publicView(enc) };
 }
 
 function canThrow(enc, ballId, thrownSoFar) {
+	// Staff can send something that is not for keeping (the summon panel's Catchable: no).
+	if (enc && enc.catchable === false) return { ok: false, message: 'This one is not for catching.' };
 	if (!enc || !enc.balls) return { ok: true };
 	const have = enc.balls[ballId] || 0;
 	if (have - thrownSoFar > 0) return { ok: true, left: have - thrownSoFar - 1 };
