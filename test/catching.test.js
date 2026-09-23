@@ -124,6 +124,13 @@ async function play({ wild, wilds = null, format = E.WILD_FORMAT, wildName = nul
 		const wild = { ...E.wildSet(Dex.species.get('Pidgey'), 5), species: 'Mewtwo', name: 'Mewtwo', moves: ['Confusion'] };
 		const { errors } = await play({ wild, wildName: 'Wild Mewtwo', plan: t => (t === 1 ? 'ball master' : 'move 1'), turns: 1 });
 		check(errors.some(e => /legendaries happen in the RP/.test(e)), 'a legendary cannot be caught');
+
+		// ...unless the owner unlocks that one encounter. /throwball adds "allow" then,
+		// and nothing a player can type reaches this (battle.choose refuses ball choices
+		// that did not come from the command).
+		const allowed = await play({ wild, wildName: 'Wild Mewtwo', plan: t => (t === 1 ? 'ball master allow' : 'move 1'), turns: 2 });
+		check(!allowed.errors.some(e => /legendaries happen in the RP/.test(e)), 'an unlocked legendary takes the ball');
+		check(/threw a Master Ball|Gotcha/.test(allowed.log), 'and the throw happens');
 	}
 
 	// 6. Doubles: no ball while two are standing; knock one out, catch the other.

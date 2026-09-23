@@ -573,8 +573,10 @@ exports.commands = {
 		// A trainer's first few catches land (src/rp-server.js freeCatch). Nothing is said.
 		const wildSpecies = enc && Array.isArray(enc.team) && enc.team.length ? enc.team[0].species : null;
 		const sure = rp.freeCatch(enc, wildSpecies) ? ' sure' : '';
+		// A legendary the owner has unlocked for this one encounter (rp-server allowCatch).
+		const allow = enc && enc.catchable ? ' allow' : '';
 		try {
-			game.choose(user, `ball ${ball.id}${sure}`);
+			game.choose(user, `ball ${ball.id}${sure}${allow}`);
 		} finally {
 			game.rpBallFrom = null;
 		}

@@ -622,6 +622,22 @@ function freeCatch(enc, species) {
 	try { return !NOT_FREE.has(require('./rarity').classOf(species)); } catch (e) { return false; }
 }
 
+/*
+ * One legendary, allowed.
+ *
+ * A legendary is the story's to give, so the battle refuses every ball at one -
+ * unless the owner says otherwise about this one encounter, which is a button in
+ * a DM (the bot's ownerwatch.js). Nothing else can set it: the request is signed
+ * with the bot's key like every other.
+ */
+function allowCatch(payload) {
+	sweep();
+	const enc = encounters.get(String(payload.id || ''));
+	if (!enc) return { ok: false, code: 'gone', message: 'That encounter is over.' };
+	enc.catchable = true;
+	return { ok: true, encounter: publicView(enc) };
+}
+
 function canThrow(enc, ballId, thrownSoFar) {
 	if (!enc || !enc.balls) return { ok: true };
 	const have = enc.balls[ballId] || 0;
@@ -805,6 +821,14 @@ function httpRoute(deps, log) {
 			}).catch(() => send(res, 400, { ok: false, code: 'bad', message: 'Bad request.' }));
 			return true;
 		}
+		if (url === '/rp/allow' && req.method === 'POST') {
+			readJson(req).then(body => {
+				const checked = verify(body);
+				if (checked.error) return send(res, 403, { ok: false, code: 'forbidden', message: checked.error });
+				send(res, 200, allowCatch(checked.payload));
+			}).catch(() => send(res, 400, { ok: false, code: 'bad', message: 'Bad request.' }));
+			return true;
+		}
 		if (url === '/rp/bags' && req.method === 'POST') {
 			readJson(req).then(body => {
 				const checked = verify(body);
@@ -834,7 +858,7 @@ function httpRoute(deps, log) {
 }
 
 module.exports = {
-	freeCatch, FREE_CATCHES,
+	freeCatch, FREE_CATCHES, allowCatch,
 	pvpCheck, pvpNotice, friendlyNotice, isAgreed, verify, placeFor, requestEncounter, requestTutorial, completeEncounter, canUseItem, usedInLog, setBags, bagFor, pvpItemsFor, canUsePvpItem, NPC_ITEMS_EACH, publicView, canThrow, thrownInLog, resultFromLog, openFor,
 	checkTeam, gimmickIn, GIMMICK_ITEM, GIMMICK_NAME, sidesInLog,
 	httpRoute, encounters, RP_ROOM, CHALLENGE_MS, recordFinished, finishedSince,

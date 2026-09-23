@@ -446,6 +446,70 @@ function ballPanel(E, note) {
 		`Only use balls your character actually has.</small></div>`;
 }
 
+/*
+ * Max Raids (Patch 1.8).
+ *
+ * Three trainers against one Dynamaxed boss, in a free-for-all: Showdown holds
+ * four sides and no more, so that is three people and the raid.
+ *
+ *   - The boss is the side the RP bot logs in under a "Raid ..." name.
+ *   - It is Dynamaxed for the whole battle. Not "may Dynamax": the volatile is
+ *     put on at the start and kept on, because a raid boss that shrinks back
+ *     after three turns is just a Pokemon with a lot of HP.
+ *   - Its HP is multiplied, so three trainers have something to chew through.
+ *   - Trainers cannot hit each other. It is a raid, not a brawl: a move aimed at
+ *     another trainer is refused, and any damage that leaks through a spread
+ *     move is dropped.
+ *   - A ball may only be thrown once the boss is worn down (RAID_CATCH_HP), and
+ *     a Dynamaxed Pokemon is hard to catch - Gigantamax hardest of all. Several
+ *     trainers throwing on the same turn throw in Speed order, because every
+ *     throw takes the same priority and the engine sorts the rest.
+ */
+const RAID_HP = 4;              // the boss's HP, multiplied (Dynamax doubles it again on top)
+const RAID_CATCH_HP = 0.25;     // no ball until it is this worn down
+const RAID_CATCH_DMAX = 0.35;   // Dynamax makes it hard to catch
+const RAID_CATCH_GMAX = 0.2;    // Gigantamax harder still - it is the prize
+
+/** The raid boss's side: one Pokemon, under a "Raid ..." name only the RP bot uses. */
+function isRaidSide(side) {
+	return !!side && /^Raid /.test(side.name) && side.pokemon.length === 1;
+}
+const raidBossSide = battle => battle.sides.find(isRaidSide) || null;
+const raidBoss = (battle) => {
+	const side = raidBossSide(battle);
+	return side ? side.active.find(p => p && !p.fainted) || null : null;
+};
+const isGmax = pokemon => !!pokemon && /-Gmax$/i.test(pokemon.species.name);
+
+function installRaid(battle) {
+	const side = raidBossSide(battle);
+	if (!side) return;
+	side.rpRaidBoss = true;
+	for (const pokemon of side.pokemon) {
+		// A raid boss's health is the whole fight. maxhp is set before the volatile,
+		// so Dynamax doubles the number people actually have to get through.
+		pokemon.maxhp = Math.floor(pokemon.maxhp * RAID_HP);
+		pokemon.hp = pokemon.maxhp;
+		pokemon.m.rpRaidBoss = true;
+	}
+	battle.add('raw', `<div class="broadcast-red"><b>${side.name.replace(/^Raid /, '')} has Dynamaxed!</b> ` +
+		`Work together - it only fights one of you at a time, but it hits hard.<br/>` +
+		`<b>Balls bounce off a healthy raid boss.</b> Wear it down past a quarter of its health, then throw. ` +
+		`Only one trainer can catch it, and everybody who was there gets the spoils.</div>`);
+}
+
+/** Keep the boss Dynamaxed: the volatile runs out after three turns otherwise. */
+function keepDynamaxed(battle) {
+	const boss = raidBoss(battle);
+	if (!boss) return;
+	if (!boss.volatiles['dynamax']) {
+		boss.addVolatile('dynamax');
+		if (boss.volatiles['dynamax']) boss.volatiles['dynamax'].duration = 999;
+	} else {
+		boss.volatiles['dynamax'].duration = 999;
+	}
+}
+
 /** A side is wild when it is one or two Pokemon under a "Wild ..." name - which only the RP bot plays as. */
 function isWildSide(side) {
 	return !!side && /^Wild /.test(side.name) && side.pokemon.length <= 2;
@@ -697,12 +761,46 @@ function installCatching(battle) {
 			}
 			const m = /^\s*ball\b\s*(.*)$/i.exec(String(input));
 			if (!m) return choose.call(this, input);
-			const foe = this.foe;
+			/*
+			 * "sure" and "allow" are added by /throwball and can never be typed: the
+			 * first is a new trainer's free catch (freeCatch), the second is the owner
+			 * letting this one legendary be caught (allowCatch). Both live in
+			 * src/rp-server.js, and battle.choose refuses any ball choice that did
+			 * not come through /throwball.
+			 */
+			let words = String(m[1] || '').trim().split(/\s+/);
+			let sure = false;
+			let allow = false;
+			while (words.length > 1) {
+				const last = words[words.length - 1].toLowerCase();
+				if (last === 'sure') { sure = true; words.pop(); continue; }
+				if (last === 'allow') { allow = true; words.pop(); continue; }
+				break;
+			}
+			const ball = E.findBall(words.join(' '));
+			const raid = raidBossSide(battle);
+			const foe = raid || this.foe;
 			if (this.requestState !== 'move' || !this.active[0] || this.active[0].fainted) {
 				return this.emitChoiceError(`Can't throw a ball right now: pick a Pokémon to send out first`);
 			}
-			if (!isWildSide(foe)) {
+			if (raid && this.rpRaidBoss) {
+				return this.emitChoiceError(`The raid boss doesn't throw balls`);
+			}
+			if (!raid && !isWildSide(foe)) {
 				return this.emitChoiceError(`Can't throw a ball: that Pokémon belongs to somebody`);
+			}
+			/*
+			 * A raid boss shrugs off a ball until it is worn down. The games say the
+			 * same thing by only offering the ball at the end; here it would be a
+			 * wasted turn, so it is refused with the number.
+			 */
+			if (raid) {
+				const boss = raidBoss(battle);
+				if (!boss) return this.emitChoiceError(`There's nothing to throw at`);
+				const left = boss.hp / boss.maxhp;
+				if (left > RAID_CATCH_HP) {
+					return this.emitChoiceError(`${boss.name} is at ${Math.ceil(left * 100)}% - a ball bounces off a raid boss until it is under ${Math.round(RAID_CATCH_HP * 100)}%`);
+				}
 			}
 			// Two wild Pokemon at once can't be caught: the ball wouldn't know which.
 			// Same as the games - knock one out, then throw at the other.
@@ -712,13 +810,9 @@ function installCatching(battle) {
 			}
 			const wild = standing[0];
 			if (!wild) return this.emitChoiceError(`There's nothing to throw at`);
-			if (E.isLegendary(wild.species)) {
+			if (E.isLegendary(wild.species) && !allow) {
 				return this.emitChoiceError(`${wild.species.name} can't be caught on Showdown: legendaries happen in the RP`);
 			}
-			// "sure" is added by /throwball, never typed: see freeCatch in src/rp-server.js.
-			const words = String(m[1] || '').trim().split(/\s+/);
-			const sure = words.length > 1 && words[words.length - 1].toLowerCase() === 'sure';
-			const ball = E.findBall(sure ? words.slice(0, -1).join(' ') : m[1]);
 			if (!ball) return this.emitChoiceError(`There's no ball called "${m[1]}"`);
 			// Throwing is the whole turn. In a double battle both of your
 			// Pokemon wait for it, so neither can knock out what you're catching.
@@ -778,7 +872,8 @@ function tryRun(battle, pokemon) {
 function throwBall(battle, pokemon, ballId, sure = false) {
 	const E = encounters();
 	const side = pokemon.side;
-	const wild = side.foe.active.find(p => p && !p.fainted);
+	const raid = raidBossSide(battle);
+	const wild = raid ? raidBoss(battle) : side.foe.active.find(p => p && !p.fainted);
 	const ball = E.findBall(ballId);
 	if (!wild || wild.fainted || !ball) return;
 
@@ -801,9 +896,16 @@ function throwBall(battle, pokemon, ballId, sure = false) {
 		ultraBeast: (species.tags || []).includes('Ultra Beast'),
 	});
 
+	/*
+	 * A Dynamaxed Pokemon does not fit in a ball. It is caught at the end of a
+	 * raid because everyone has spent ten turns wearing it down, not because it
+	 * was ever likely - and a Gigantamax one, the thing people came for, less so.
+	 */
+	const raidChance = raid ? chance * (isGmax(wild) ? RAID_CATCH_GMAX : RAID_CATCH_DMAX) : chance;
+
 	const rng = () => battle.random();
-	const caught = sure || rng() < chance;
-	const shakes = caught ? 3 : E.shakesFor(chance, rng);
+	const caught = sure || rng() < raidChance;
+	const shakes = caught ? 3 : E.shakesFor(raidChance, rng);
 
 	battle.add('-message', `${side.name} threw ${aOrAn(ball.name)}!`);
 	// A ball arcing onto the target: Weather Ball's animation, which is a ball thrown up and down onto it.
@@ -813,6 +915,14 @@ function throwBall(battle, pokemon, ballId, sure = false) {
 		battle.add('-message', `Gotcha! ${wild.name} was caught!`);
 		battle.add('-message', "In a real encounter, what you catch goes into your character's box (on the bot and in the doc), and the ball comes out of your bag. Here nothing is kept.");
 		tutorialNextSteps(battle);
+		battle.win(side);
+		return;
+	}
+	if (caught && raid) {
+		battle.add('-message', `Gotcha! ${wild.name} was caught!`);
+		battle.add('raw', `<div class="broadcast-green"><b>${side.name} caught ${species.name}!</b> ` +
+			`The raid is over - everybody who fought gets the spoils, and the catcher keeps the Pok&eacute;mon.<br/>` +
+			`<code>((Caught ${species.name}, Lv. ${wild.level}, with ${aOrAn(ball.name)}, in a raid))</code></div>`);
 		battle.win(side);
 		return;
 	}
@@ -1055,6 +1165,78 @@ exports.Formats = [
 		challengeShow: true,
 		rated: false,
 	},
+	{
+		name: "[Gen 9] RP Raid",
+		desc: "Three trainers against one Dynamaxed raid boss. Wear it down, then throw.",
+		/*
+		 * Free-for-all, which is four sides: the boss and three trainers. The rules
+		 * are RP Battle's - your own team, at your own levels, nothing banned -
+		 * with the raid on top (see installRaid).
+		 */
+		gameType: 'freeforall',
+		ruleset: ['Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
+		battle: { trunc: Math.trunc },
+
+		onBegin() {
+			allGimmicks.call(this);
+			installCatching(this);
+			installItems(this);
+			installRaid(this);
+		},
+		onBattleStart() {
+			if (raidBossSide(this)) this.add('uhtml', 'rpball0', ballPanel(encounters(), 'A raid boss is caught at the end, not the start: wear it down first.'));
+		},
+		// The boss Dynamaxes as it comes out, and stays that way: the volatile would
+		// otherwise run out after three turns, which is not a raid boss any more.
+		onSwitchIn(pokemon) { if (pokemon.side.rpRaidBoss) keepDynamaxed(this); },
+		onResidualOrder: 100,
+		onResidual() { keepDynamaxed(this); },
+
+		/*
+		 * Trainers do not hit each other in a raid. The move is refused outright
+		 * (so nobody wastes a turn finding out), and any damage that still arrives
+		 * from a spread move is dropped.
+		 */
+		onModifyPriority(priority, pokemon) { return RP_TURN_ACTIONS.onModifyPriority.call(this, priority, pokemon); },
+		onBeforeMovePriority: 100,
+		onBeforeMove(pokemon, target, move) { return RP_TURN_ACTIONS.onBeforeMove.call(this, pokemon, target, move); },
+		/*
+		 * Everything a trainer throws goes at the boss.
+		 *
+		 * A free-for-all with no target named picks a foe at random, which in a raid
+		 * means three trainers hitting each other by accident. Aiming at another
+		 * trainer on purpose lands on the boss too: this is a raid, and the boss is
+		 * what everybody is here for.
+		 */
+		onRedirectTarget(target, source, source2, move) {
+			const boss = raidBoss(this);
+			if (!boss || source.side.rpRaidBoss) return target;
+			if (target && target.side && target.side.rpRaidBoss) return target;
+			if (move && move.target === 'self') return target;
+			return boss;
+		},
+		onDamage(damage, target, source, effect) {
+			if (!raidBossSide(this)) return damage;
+			if (effect && effect.effectType === 'Move' && source && source.side !== target.side &&
+				!source.side.rpRaidBoss && !target.side.rpRaidBoss) return false;
+			return damage;
+		},
+		/*
+		 * The raid ends with the boss. Knocked out, it is over for everybody: an
+		 * ordinary free-for-all would carry on until one trainer was left standing,
+		 * which is not what anybody came for.
+		 */
+		onFaint(pokemon) {
+			if (!pokemon.side.rpRaidBoss) return;
+			this.add('raw', `<div class="broadcast-blue"><b>The raid boss went down!</b> Nobody caught it, but the spoils are shared.</div>`);
+			this.tie();
+		},
+
+		searchShow: false,
+		challengeShow: false,
+		rated: false,
+	},
+
 	{
 		name: "[Gen 9] RP Battle (Doubles)",
 		desc: "RP Battle as a double battle: no rules, two Pokémon out a side.",
