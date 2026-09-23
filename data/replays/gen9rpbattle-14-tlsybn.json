@@ -1,0 +1,12 @@
+{
+	"id": "gen9rpbattle-14-tlsybn",
+	"format": "[Gen 9] RP Battle",
+	"players": [
+		"Picnicker Zoe",
+		"StaleThunder126"
+	],
+	"rating": null,
+	"log": "|j|☆Picnicker Zoe\n|j|☆StaleThunder126\n|t:|1790160045\n|gametype|singles\n|player|p1|Picnicker Zoe|picnicker-gen6|\n|player|p2|StaleThunder126|jolt.png|\n|gen|9\n|tier|[Gen 9] RP Battle\n|clearpoke\n|poke|p1|Shellos, L10|\n|poke|p1|Dunsparce, L13|\n|poke|p2|Helioptile, L13|\n|poke|p2|Fletchling, L13|\n|poke|p2|Wingull, L13|\n|poke|p2|Happiny, L13|\n|teampreview\n|inactive|Battle timer is ON: inactive players will automatically lose when time's up. (requested by Picnicker Zoe)\n|c|☆Picnicker Zoe|⚠️ Jolt can't use held items (they unlock with your first badge) yet (not blocked, so just don't).\n|c|☆Picnicker Zoe|🔒 Mega Evolution, Z-Moves, Dynamax, Terastallization are locked until the story gives Jolt the item; the battle won't allow them.\n|c|☆Picnicker Zoe|Your Showdown team must match your box: only Pokémon you own, at or be\n|c|☆Picnicker Zoe|Let's see what you've got!\n|\n|t:|1790160056\n|teamsize|p1|2\n|teamsize|p2|4\n|start\n|switch|p1a: Dunsparce|Dunsparce, L13|100/100\n|switch|p2a: Happiny|Happiny, L13|100/100\n|turn|1\n|\n|t:|1790160067\n|move|p1a: Dunsparce|Mud-Slap|p2a: Happiny\n|-damage|p2a: Happiny|94/100\n|-unboost|p2a: Happiny|accuracy|1\n|move|p2a: Happiny|Hyper Voice|p1a: Dunsparce|[miss]\n|-miss|p2a: Happiny|p1a: Dunsparce\n|\n|upkeep\n|turn|2\n|\n|t:|1790160075\n|move|p1a: Dunsparce|Mud-Slap|p2a: Happiny\n|-damage|p2a: Happiny|87/100\n|-unboost|p2a: Happiny|accuracy|1\n|move|p2a: Happiny|Flamethrower|p1a: Dunsparce\n|-damage|p1a: Dunsparce|83/100\n|\n|upkeep\n|turn|3\n|\n|t:|1790160084\n|move|p1a: Dunsparce|Flail|p2a: Happiny\n|-damage|p2a: Happiny|66/100\n|move|p2a: Happiny|Psychic|p1a: Dunsparce\n|-damage|p1a: Dunsparce|68/100\n|\n|upkeep\n|turn|4\n|\n|t:|1790160093\n|move|p1a: Dunsparce|Mud-Slap|p2a: Happiny\n|-damage|p2a: Happiny|58/100\n|-unboost|p2a: Happiny|accuracy|1\n|move|p2a: Happiny|Hyper Voice|p1a: Dunsparce|[miss]\n|-miss|p2a: Happiny|p1a: Dunsparce\n|\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1790160106
+}
