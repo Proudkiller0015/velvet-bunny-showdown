@@ -260,6 +260,48 @@ function requestTutorial(payload, deps) {
  * class. Legendaries can be summoned - an event might want one to battle - but
  * the battle still refuses to let anyone catch one.
  */
+/** What a cut Pokemon is forgiven for not knowing, the same table the RP formats read. */
+let cutMoves = null;
+function cutFor(species) {
+	if (!cutMoves) { try { cutMoves = require('../data/velvet/cut-moves.json'); } catch (e) { cutMoves = {}; } }
+	const base = species.baseSpecies && species.baseSpecies !== species.name ? toID(species.baseSpecies) : species.id;
+	return new Set([...(cutMoves[base] || []), ...(cutMoves[species.id] || [])]);
+}
+
+/**
+ * The moves and ability staff asked for, checked.
+ *
+ * "Legal" here is RP's idea of it: anything in the learnset of the Pokemon or
+ * anything before it in its line, whatever the level, plus the machine moves a
+ * cut Pokemon never had the chance at. The ability has to be one of its own.
+ */
+function chosenSet(Dex, species, summon) {
+	const out = {};
+	const wanted = Array.isArray(summon.moves) ? summon.moves : String(summon.moves || '').split(',');
+	const names = wanted.map(m => String(m).trim()).filter(Boolean).slice(0, 4);
+	if (names.length) {
+		const RS = require('./role-sets');
+		const pool = RS.learnable(Dex, species);
+		const cut = cutFor(species);
+		const moves = [];
+		for (const name of names) {
+			const move = Dex.moves.get(name);
+			if (!move.exists) return { error: `There's no move called "${name}".` };
+			if (!pool.has(move.id) && !cut.has(move.id)) return { error: `${species.name} can't learn ${move.name}.` };
+			if (!moves.includes(move.name)) moves.push(move.name);
+		}
+		out.moves = moves;
+	}
+	if (summon.ability) {
+		const want = toID(summon.ability);
+		const own = Object.values(species.abilities || {}).filter(Boolean);
+		const found = own.find(a => toID(a) === want);
+		if (!found) return { error: `${species.name} can't have ${Dex.abilities.get(summon.ability).name || summon.ability}. It can have: ${own.join(', ')}.` };
+		out.ability = found;
+	}
+	return { set: out };
+}
+
 function summoned(summon, { place, badges, levelCap, ace = null }) {
 	if (summon.kind === 'trainer') {
 		const cls = summon.classId ? E.findClass(summon.classId) : null;
@@ -272,6 +314,15 @@ function summoned(summon, { place, badges, levelCap, ace = null }) {
 	const level = E.clampLevel(summon.level || levelCap || 5);
 	const set = E.wildSet(species, level);
 	if (summon.shiny) set.shiny = true;
+	/*
+	 * A set staff chose: moves and an ability, for when the scene wants a
+	 * particular joke or a particular threat. Legal only - a move the Pokemon can
+	 * learn (RP's rules, so level and the TMs a cut Pokemon never got are
+	 * forgiven) and an ability it can actually have.
+	 */
+	const custom = chosenSet(Dex, species, summon);
+	if (custom.error) return custom;
+	Object.assign(set, custom.set);
 	// Staff can summon two at once: a wild double battle (a second species, or two of the same).
 	if (summon.double) {
 		const second = Dex.species.get(summon.species2 || summon.species);
