@@ -164,6 +164,8 @@ function requestEncounter(payload, deps) {
 		if (payload.balls && typeof payload.balls === 'object') existing.balls = normaliseBalls(payload.balls);
 		if (payload.items && typeof payload.items === 'object') existing.items = normaliseItems(payload.items);
 		if (payload.badges !== undefined) existing.badges = E.clampBadges(payload.badges);
+		// A team picked since it was first sent: this time it opens rather than challenges.
+		if (Array.isArray(payload.playerTeam) && payload.playerTeam.length) existing.playerTeam = payload.playerTeam.slice(0, 6);
 		if (existing.status === 'waiting') deps.spawn(existing);
 		return { ok: true, again: true, encounter: publicView(existing) };
 	}
