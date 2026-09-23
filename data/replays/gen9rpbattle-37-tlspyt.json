@@ -1,0 +1,12 @@
+{
+	"id": "gen9rpbattle-37-tlspyt",
+	"format": "[Gen 9] RP Battle",
+	"players": [
+		"Scientist Gus",
+		"simia ignis"
+	],
+	"rating": null,
+	"log": "|j|☆Scientist Gus\n|j|☆simia ignis\n|t:|1790133076\n|gametype|singles\n|player|p1|Scientist Gus|scientist-gen4|\n|player|p2|simia ignis|simia-ignis.png|\n|gen|9\n|tier|[Gen 9] RP Battle\n|clearpoke\n|poke|p1|Aron, L13|\n|poke|p1|Skarmory, L18|\n|poke|p2|Flutter Mane, L18|\n|poke|p2|Snorlax, L18|\n|poke|p2|Azumarill, L18|\n|poke|p2|Monferno, L18|\n|poke|p2|Staravia, L18|\n|poke|p2|Smeargle, L18|\n|teampreview\n|inactive|Battle timer is ON: inactive players will automatically lose when time's up. (requested by Scientist Gus)\n|c|☆Scientist Gus|⚠️ TTR can't use held items (they unlock with your first badge) yet (not blocked, so just don't).\n|c|☆Scientist Gus|🔒 Z-Moves, Dynamax, Terastallization are locked until the story gives TTR the item; the battle won't allow them.\n|c|☆Scientist Gus|Your Showdown team must match your box: only Pokémon you own, at or below their box leve\n|c|☆Scientist Gus|You look like a trainer. Let's battle!\n|\n|t:|1790133081\n|teamsize|p1|2\n|teamsize|p2|6\n|start\n|switch|p1a: Skarmory|Skarmory, L18|100/100\n|switch|p2a: Smeargle|Smeargle, L18|100/100\n|turn|1\n|\n|t:|1790133083\n|move|p2a: Smeargle|Spore|p1a: Skarmory\n|-status|p1a: Skarmory|slp|[from] move: Spore\n|cant|p1a: Skarmory|slp\n|\n|-ability|p2a: Smeargle|Moody|boost\n|-boost|p2a: Smeargle|def|2\n|-unboost|p2a: Smeargle|atk|1\n|upkeep\n|turn|2\n|\n|t:|1790133085\n|move|p2a: Smeargle|Substitute|p2a: Smeargle\n|-start|p2a: Smeargle|Substitute\n|-damage|p2a: Smeargle|75/100\n|cant|p1a: Skarmory|slp\n|\n|-ability|p2a: Smeargle|Moody|boost\n|-boost|p2a: Smeargle|atk|2\n|-unboost|p2a: Smeargle|def|1\n|upkeep\n|turn|3\n|\n|t:|1790133087\n|move|p2a: Smeargle|Shell Smash|p2a: Smeargle\n|-unboost|p2a: Smeargle|def|1\n|-unboost|p2a: Smeargle|spd|1\n|-boost|p2a: Smeargle|atk|2\n|-boost|p2a: Smeargle|spa|2\n|-boost|p2a: Smeargle|spe|2\n|cant|p1a: Skarmory|slp\n|\n|-ability|p2a: Smeargle|Moody|boost\n|-boost|p2a: Smeargle|spe|2\n|-unboost|p2a: Smeargle|def|1\n|upkeep\n|turn|4\n|\n|t:|1790133088\n|move|p2a: Smeargle|Baton Pass|p2a: Smeargle\n|\n|t:|1790133091\n|switch|p2a: Flutter Mane|Flutter Mane, L18, shiny|100/100|[from] Baton Pass\n|-curestatus|p1a: Skarmory|slp|[msg]\n|move|p1a: Skarmory|Metal Claw|p2a: Flutter Mane\n|-supereffective|p2a: Flutter Mane\n|-end|p2a: Flutter Mane|Substitute\n|\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1790133093
+}
