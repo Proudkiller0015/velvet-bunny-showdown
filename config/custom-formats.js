@@ -1140,10 +1140,12 @@ exports.Formats = [
 		 * as free as RP Battle is, because the level cap and what you own are
 		 * the RP's business and not this server's.
 		 *
-		 * No team preview: you don't get to see what's in the grass before it
-		 * jumps out.
+		 * Team preview, so you choose your lead. What's in the grass is no
+		 * secret by then - Discord has already said what jumped out - and an
+		 * encounter opened with your Discord team has no other place to pick it.
 		 */
 		ruleset: [
+			'Team Preview',
 			'Cancel Mod',
 			'Max Team Size = 24',
 			'Max Move Count = 24',
@@ -1179,7 +1181,7 @@ exports.Formats = [
 		 * keeping a second copy of them that could drift.
 		 */
 		gameType: 'doubles',
-		ruleset: ['Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
+		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
 		battle: { trunc: Math.trunc },
 		onBegin() { WILD.onBegin.call(this); },
 		onBattleStart() { WILD.onBattleStart.call(this); },

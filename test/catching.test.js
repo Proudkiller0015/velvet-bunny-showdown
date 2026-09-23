@@ -44,7 +44,9 @@ async function play({ wild, wilds = null, format = E.WILD_FORMAT, wildName = nul
 				}
 				if (!line.startsWith('|request|')) continue;
 				const request = JSON.parse(line.slice(9));
-				if (request.wait || request.teamPreview) continue;
+				if (request.wait) continue;
+				// Wild encounters have team preview now (the lead is picked there).
+				if (request.teamPreview) { void streams.p1.write('default'); continue; }
 				if (request.forceSwitch) { void streams.p1.write('default'); continue; }
 				turn++;
 				void streams.p1.write(turn > turns ? 'move 1' : plan(turn, request));
@@ -57,6 +59,7 @@ async function play({ wild, wilds = null, format = E.WILD_FORMAT, wildName = nul
 				if (!line.startsWith('|request|')) continue;
 				const request = JSON.parse(line.slice(9));
 				if (request.wait) continue;
+				if (request.teamPreview) { void streams.p2.write('default'); continue; }
 				const n = (request.active || [1]).length;
 				void streams.p2.write(Array.from({ length: n }, (_, i) =>
 					request.side.pokemon[i] && !request.side.pokemon[i].condition.endsWith(' fnt') ? 'move 1' : 'pass').join(', '));
