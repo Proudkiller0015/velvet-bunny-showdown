@@ -515,7 +515,15 @@
 			var oldPanels = log.find('[class*="uhtml-rpball"]').not('.uhtml-rpballs');
 			var latestOld = oldPanels.last();
 			var source = pocket.length ? pocket : latestOld;
-			var bag = { wild: !!(pocket.length || oldPanels.length), balls: [], escapes: [], run: null, note: '', medicine: [], idle: '' };
+			/*
+			 * A trainer (or another player) is not wild, though its panel has balls
+			 * on show: the server gives it a Forfeit button instead of throws, and
+			 * that is how it is told apart. Treating it as wild offered a Run the
+			 * server refuses, and the menu sat on "waiting for the turn".
+			 */
+			var trainer = !!log.find('button[value="/forfeit"]').length;
+			var bag = { wild: !trainer && !!(pocket.length || oldPanels.length), trainer: trainer, balls: [], escapes: [], run: null, note: '', medicine: [], idle: '' };
+			if (trainer) source = $();
 			source.find('button[value]').each(function () {
 				var v = this.getAttribute('value') || '';
 				var item = { value: v, label: clean($(this).text()), title: this.getAttribute('title') || '' };
@@ -604,10 +612,13 @@
 				if (!controls || !controls.length) return;
 				var bag = readBag(room);
 				controls.find('.velvet-cmd, .velvet-bag').remove();
-				if (!bag.wild && !bag.hasItems) { controls.find('.moveselect, .movemenu').show(); return; }
+				if (!bag.wild && !bag.hasItems && !bag.trainer) { controls.find('.moveselect, .movemenu').show(); return; }
 				var row = '<div class="velvet-cmd">' +
-					'<button type="button" class="velvet-bagbtn" data-velvet="bag">🎒 Bag</button>' +
+					(bag.wild || bag.hasItems ? '<button type="button" class="velvet-bagbtn" data-velvet="bag">🎒 Bag</button>' : '') +
 					(bag.wild && bag.run ? '<button type="button" class="velvet-runbtn" data-velvet-send="' + esc(bag.run.value) + '">🏃 Run</button>' : '') +
+					// Where Run would be: you can't run from a person, only give up.
+					(bag.trainer ? '<button type="button" class="velvet-runbtn" data-velvet="forfeit">' +
+						(room.velvetForfeit ? 'Sure? Tap again to forfeit' : '🏳️ Forfeit') + '</button>' : '') +
 					'</div>';
 				controls.find('.movemenu').after(row);
 				var tab = room.velvetBagTab;
@@ -620,6 +631,17 @@
 					controls.find('.moveselect, .movemenu').show();
 				}
 			} catch (e) { /* the moves stay as Showdown drew them */ }
+		}
+
+		/*
+		 * Put the moves back. updateControls alone only redraws controls it thinks
+		 * are hidden - once one Pokemon of a double has picked, it only ticks the
+		 * timer - which is why Back did nothing and the battle looked frozen.
+		 */
+		function backToMoves(room) {
+			room.velvetWaiting = false;
+			room.controlsShown = false;
+			room.updateControls();
 		}
 
 		function hook(room) {
@@ -635,13 +657,22 @@
 					room.velvetBagTab = null;
 					room.velvetBagItem = null;
 					room.send(send);
+					room.velvetWaiting = true;
 					var what = /^\/run/.test(send) ? 'Trying to get away' : /^\/throwball/.test(send) ? 'Throwing a ' + label : 'Using an item on ' + label;
 					room.$controls.html('<div class="controls"><p><em>' + esc(what) + '… waiting for the turn.</em> ' +
 						'<button type="button" class="button" data-velvet="undo">Back</button></p></div>');
 					return;
 				}
 				var act = el.getAttribute('data-velvet');
-				if (act === 'undo') { room.updateControls(); return; }
+				if (act === 'undo') { backToMoves(room); return; }
+				// Two taps: a forfeit is a loss, and one stray tap should not be.
+				if (act === 'forfeit') {
+					if (room.velvetForfeit) { room.velvetForfeit = false; room.send('/forfeit'); return; }
+					room.velvetForfeit = true;
+					setTimeout(function () { room.velvetForfeit = false; drawBag(room); }, 4000);
+					drawBag(room);
+					return;
+				}
 				if (act === 'bag') {
 					room.velvetBagTab = readBag(room).wild ? 'balls' : 'medicine';
 					room.velvetBagItem = null;
@@ -667,6 +698,23 @@
 					return !!(n.closest && n.closest('[class*="uhtml-rp"]'));
 				};
 				new MutationObserver(function (list) {
+					/*
+					 * A throw or a run the server refused (a legendary that won't let
+					 * you leave, no balls left...) arrives as an error line and no new
+					 * request, so "waiting for the turn" would wait for good. The moves
+					 * come back instead, and the error says why.
+					 */
+					if (room.velvetWaiting) {
+						for (var e = 0; e < list.length; e++) {
+							var nodes = list[e].addedNodes || [];
+							for (var n = 0; n < nodes.length; n++) {
+								if (nodes[n].nodeType === 1 && /message-error/.test(nodes[n].className || '')) {
+									backToMoves(room);
+									return;
+								}
+							}
+						}
+					}
 					var ours = false;
 					for (var i = 0; i < list.length && !ours; i++) {
 						if (isOurs(list[i].target)) { ours = true; break; }
@@ -693,6 +741,7 @@
 			R.prototype.receiveRequest = function () {
 				this.velvetBagTab = null;
 				this.velvetBagItem = null;
+				this.velvetWaiting = false;
 				return receiveRequest.apply(this, arguments);
 			};
 		}
