@@ -1,0 +1,12 @@
+{
+	"id": "gen9rpbattle-29-tls6zd",
+	"format": "[Gen 9] RP Battle",
+	"players": [
+		"Camper Jay",
+		"simia ignis"
+	],
+	"rating": null,
+	"log": "|j|☆Camper Jay\n|j|☆simia ignis\n|t:|1790125266\n|gametype|singles\n|player|p1|Camper Jay|camper-gen6|\n|player|p2|simia ignis|simia-ignis.png|\n|gen|9\n|tier|[Gen 9] RP Battle\n|clearpoke\n|poke|p1|Pumpkaboo-*, L13|\n|poke|p1|Kangaskhan, L18|\n|poke|p2|Flutter Mane, L18|\n|poke|p2|Snorlax, L18|\n|poke|p2|Monferno, L18|\n|poke|p2|Staravia, L18|\n|poke|p2|Magnemite, L18|\n|poke|p2|Krabby, L18|\n|teampreview\n|inactive|Battle timer is ON: inactive players will automatically lose when time's up. (requested by Camper Jay)\n|c|☆Camper Jay|⚠️ TTR can't use held items (they unlock with your first badge) yet (not blocked, so just don't).\n|c|☆Camper Jay|🔒 Z-Moves, Dynamax, Terastallization are locked until the story gives TTR the item; the battle won't allow them.\n|c|☆Camper Jay|Your Showdown team must match your box: only Pokémon you own, at or below their box leve\n|c|☆Camper Jay|Let's see what you've got!\n|\n|t:|1790125280\n|teamsize|p1|2\n|teamsize|p2|6\n|start\n|switch|p1a: Kangaskhan|Kangaskhan, L18|100/100\n|switch|p2a: Snorlax|Snorlax, L18|100/100\n|turn|1\n|\n|t:|1790125282\n|move|p1a: Kangaskhan|Bite|p2a: Snorlax\n|-damage|p2a: Snorlax|83/100\n|move|p2a: Snorlax|Body Slam|p1a: Kangaskhan\n|-damage|p1a: Kangaskhan|57/100\n|\n|upkeep\n|turn|2\n|\n|t:|1790125285\n|move|p1a: Kangaskhan|Bite|p2a: Snorlax\n|-damage|p2a: Snorlax|66/100\n|move|p2a: Snorlax|Body Slam|p1a: Kangaskhan\n|-damage|p1a: Kangaskhan|17/100\n|\n|upkeep\n|turn|3\n|\n|t:|1790125287\n|move|p1a: Kangaskhan|Tail Whip|p2a: Snorlax\n|-unboost|p2a: Snorlax|def|1\n|move|p2a: Snorlax|Body Slam|p1a: Kangaskhan\n|-damage|p1a: Kangaskhan|0 fnt\n|faint|p1a: Kangaskhan\n|\n|upkeep\n|\n|t:|1790125287\n|switch|p1a: Pumpkaboo|Pumpkaboo-Large, L13|100/100\n|turn|4\n|\n|t:|1790125290\n|switch|p2a: Monferno|Monferno, L18|100/100\n|move|p1a: Pumpkaboo|Razor Leaf|p2a: Monferno\n|-resisted|p2a: Monferno\n|-damage|p2a: Monferno|90/100\n|\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1790125291
+}
