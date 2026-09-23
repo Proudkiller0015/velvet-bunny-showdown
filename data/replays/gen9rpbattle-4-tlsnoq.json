@@ -1,0 +1,12 @@
+{
+	"id": "gen9rpbattle-4-tlsnoq",
+	"format": "[Gen 9] RP Battle",
+	"players": [
+		"Youngster Joey",
+		"SlimeQueenSamantha"
+	],
+	"rating": null,
+	"log": "|j|☆Youngster Joey\n|j|☆SlimeQueenSamantha\n|t:|1790128999\n|gametype|singles\n|player|p1|Youngster Joey|youngster-gen4|\n|player|p2|SlimeQueenSamantha|queen.png|\n|gen|9\n|tier|[Gen 9] RP Battle\n|clearpoke\n|poke|p1|Sizzlipede, L11|\n|poke|p1|Buneary, L14|\n|poke|p2|Pumpkaboo-*, L10|\n|poke|p2|Sandshrew, L11|\n|poke|p2|Seedot, L12|\n|poke|p2|Smeargle, L10|\n|poke|p2|Bidoof, L9|\n|poke|p2|Buizel, L5|\n|teampreview\n|inactive|Battle timer is ON: inactive players will automatically lose when time's up. (requested by Youngster Joey)\n|c|☆Youngster Joey|⚠️ Slime Queen Samantha can't use held items (they unlock with your first badge) yet (not blocked, so just don't).\n|c|☆Youngster Joey|🔒 Z-Moves, Dynamax, Terastallization are locked until the story gives Slime Queen Samantha the item; the battle won't allow them.\n|c|☆Youngster Joey|Your Showdown team must match your box: only Pokémon y\n|c|☆Youngster Joey|Hey! Our eyes met! That means we battle!\n|\n|t:|1790129005\n|teamsize|p1|2\n|teamsize|p2|6\n|start\n|switch|p1a: Buneary|Buneary, L14|100/100\n|switch|p2a: Smeargle|Smeargle, L10|100/100\n|turn|1\n|\n|t:|1790129008\n|move|p1a: Buneary|Pound|p2a: Smeargle\n|-damage|p2a: Smeargle|55/100\n|move|p2a: Smeargle|Spore|p1a: Buneary\n|-status|p1a: Buneary|slp|[from] move: Spore\n|\n|upkeep\n|turn|2\n|\n|t:|1790129010\n|cant|p1a: Buneary|slp\n|move|p2a: Smeargle|Sticky Web|p1a: Buneary\n|-sidestart|p1: Youngster Joey|move: Sticky Web\n|\n|upkeep\n|turn|3\n|\n|t:|1790129012\n|-curestatus|p1a: Buneary|slp|[msg]\n|move|p1a: Buneary|Pound|p2a: Smeargle\n|-damage|p2a: Smeargle|8/100\n|move|p2a: Smeargle|Stealth Rock|p1a: Buneary\n|-sidestart|p1: Youngster Joey|move: Stealth Rock\n|\n|upkeep\n|turn|4\n|\n|t:|1790129016\n|switch|p2a: Pumpkaboo|Pumpkaboo, L10|100/100\n|move|p1a: Buneary|Pound|p2a: Pumpkaboo\n|-immune|p2a: Pumpkaboo\n|\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1790129018
+}
