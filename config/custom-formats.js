@@ -1201,7 +1201,7 @@ exports.Formats = [
 		 * with the raid on top (see installRaid).
 		 */
 		gameType: 'freeforall',
-		ruleset: ['Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
+		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
 		battle: { trunc: Math.trunc },
 
 		onBegin() {
@@ -1310,7 +1310,8 @@ exports.Formats = [
 		 */
 		mod: 'gen9',
 		team: 'random',
-		ruleset: ['Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Illusion Level Mod'],
+		// Team Preview everywhere (owner, 23 Sep 2026): the lead is always the player's pick.
+		ruleset: ['Team Preview', 'Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Illusion Level Mod'],
 
 		searchShow: true,
 		challengeShow: true,

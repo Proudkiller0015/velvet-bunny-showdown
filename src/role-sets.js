@@ -113,6 +113,27 @@ function lookup(species) {
 	return null;
 }
 
+/*
+ * A little Pokemon with no sets of its own borrows its evolution's roles, kept
+ * to the moves it can learn itself. Built from the learnset instead, a Shellder
+ * came out a Rest "Bulky Attacker" with Skill Link and no multi-hit move, when
+ * what it is for is Cloyster's Shell Smash, Icicle Spear and Rock Blast.
+ */
+function evolvedSets(dex, species, moves) {
+	let step = (species.evos || []).map(n => dex.species.get(n));
+	for (let depth = 0; depth < 2 && step.length; depth++) {
+		for (const evo of step) {
+			const found = evo.exists && lookup(evo);
+			if (!found || !found.sets) continue;
+			// Only the roles it can mostly play: three of the moves at least.
+			const sets = found.sets.filter(set => (set.movepool || []).filter(n => moves.has(toID(n))).length >= 3);
+			if (sets.length) return { sets };
+		}
+		step = step.flatMap(evo => (evo.evos || []).map(n => dex.species.get(n)));
+	}
+	return null;
+}
+
 /** A set built from the learnset, for a Pokemon no data has a set for. */
 function synthesize(dex, species, moves) {
 	const b = species.baseStats;
@@ -167,7 +188,7 @@ function roleSets(dex, name, legal = null) {
 	if (!species.exists) return [];
 	// `legal`: the moves this Pokemon may use here (a trainer's level-up moves, say), when not all of them.
 	const moves = legal ? new Set([...legal].map(toID)) : learnable(dex, species);
-	const found = lookup(species);
+	const found = lookup(species) || evolvedSets(dex, species, moves);
 	const base = found ? found.sets : synthesize(dex, species, moves);
 	const own = Object.values(species.abilities).filter(Boolean);
 	const oursAbility = own.find(a => dex.abilities.get(a).num < 0);
