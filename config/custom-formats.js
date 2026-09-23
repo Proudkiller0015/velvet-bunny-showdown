@@ -576,6 +576,20 @@ function installItems(battle) {
 			const named = this.pokemon.filter(p => E.toID(p.name) === wanted || E.toID(p.species.name) === wanted || E.toID(p.species.baseSpecies) === wanted);
 			if (!named.length) return this.emitChoiceError(`None of your Pokémon is called "${m[2]}"`);
 			const state = p => ({ fainted: p.fainted, hurt: p.hp < p.maxhp, status: p.status, active: p.isActive, ppUsed: p.moveSlots.some(s => s.pp < s.maxpp) });
+			/*
+			 * No refunds.
+			 *
+			 * A Nuzleaf that spent a Broken Pact came back as Nuzleaf-SOLD, and
+			 * when THAT is knocked out there is nothing left to bring back: it
+			 * was sold, and the sale was final. Refused at the choice so the
+			 * Revive is not spent on it - the joke costs a press, not an item.
+			 */
+			if (item.revive) {
+				const sold = named.find(p => p.species.id === 'nuzleafsold' || (p.set && E.toID(p.set.species) === 'nuzleafsold'));
+				if (sold && !named.some(p => p.species.id !== 'nuzleafsold' && E.itemHelps(item, state(p)))) {
+					return this.emitChoiceError(`${sold.name} was sold, not lost. No refunds.`);
+				}
+			}
 			const target = named.find(p => E.itemHelps(item, state(p)));
 			if (!target) {
 				const p = named[0];
@@ -621,6 +635,8 @@ function useItem(battle, side, itemId, target) {
 		if (!who.some(p => p.fainted && !p.isActive)) return noEffect();
 		for (const p of who) {
 			if (!p.fainted || p.isActive) continue;
+			// Sold is sold, even when a Sacred Ash sweeps up everything else.
+			if (p.species.id === 'nuzleafsold') { battle.add('-message', `${p.name} was sold. No refunds.`); continue; }
 			p.fainted = false;
 			p.faintQueued = false;
 			p.status = '';
