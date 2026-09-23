@@ -353,7 +353,14 @@ function summoned(summon, { place, badges, levelCap, ace = null }) {
 			const wish = typeof want === 'string' ? { species: want } : (want || {});
 			const species = Dex2.species.get(wish.species);
 			if (!species.exists) return { error: `No Pokémon called "${wish.species || want}".` };
-			const level = wish.level ? E.clampLevel(wish.level) :
+			/*
+			 * A written level is the level, whatever the badges say - an arranged
+			 * scene is allowed a Lv. 100 Champion in front of a two-badge trainer,
+			 * and a Lv. 1 joke. "cap" asks for the player's own cap instead, and
+			 * nothing written at all takes whatever the route rolled.
+			 */
+			const level = wish.level === 'cap' ? E.clampLevel(levelCap || 5) :
+				wish.level ? E.clampLevel(wish.level) :
 				rolled.team.length ? Math.max(...rolled.team.map(m => m.level)) : E.clampLevel(levelCap || 5);
 			const set = E.trainerSet(species, level, badges, Math.random);
 			const custom = chosenSet(Dex2, species, wish);
@@ -385,7 +392,8 @@ function summoned(summon, { place, badges, levelCap, ace = null }) {
 	const Dex = require('./rp-dex')();
 	const species = Dex.species.get(summon.species);
 	if (!species.exists || !E.encounterable(species)) return { error: `No Pokémon called "${summon.species}".` };
-	const level = E.clampLevel(summon.level || levelCap || 5);
+	// A written level ignores the badge cap on purpose; "cap" asks for it.
+	const level = E.clampLevel(summon.level === 'cap' ? (levelCap || 5) : (summon.level || levelCap || 5));
 	const set = E.wildSet(species, level);
 	if (summon.shiny) set.shiny = true;
 	/*
