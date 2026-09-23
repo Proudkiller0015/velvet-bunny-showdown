@@ -1,0 +1,12 @@
+{
+	"id": "gen9rpbattle-97-tlspyt",
+	"format": "[Gen 9] RP Battle",
+	"players": [
+		"Picnicker Aya",
+		"simia ignis"
+	],
+	"rating": null,
+	"log": "|j|☆Picnicker Aya\n|j|☆simia ignis\n|t:|1790136563\n|gametype|singles\n|player|p1|Picnicker Aya|picnicker-gen6|\n|player|p2|simia ignis|simia-ignis.png|\n|gen|9\n|tier|[Gen 9] RP Battle\n|clearpoke\n|poke|p1|Squawkabilly, L14|\n|poke|p1|Indeedee, L18|\n|poke|p2|Flutter Mane, L18|\n|poke|p2|Snorlax, L18|\n|poke|p2|Azumarill, L18|\n|poke|p2|Monferno, L18|\n|poke|p2|Noibat, L17|\n|poke|p2|Smeargle, L18|\n|teampreview\n|inactive|Battle timer is ON: inactive players will automatically lose when time's up. (requested by Picnicker Aya)\n|c|☆Picnicker Aya|⚠️ TTR can't use held items (they unlock with your first badge) yet (not blocked, so just don't).\n|c|☆Picnicker Aya|🔒 Z-Moves, Dynamax, Terastallization are locked until the story gives TTR the item; the battle won't allow them.\n|c|☆Picnicker Aya|Your Showdown team must match your box: only Pokémon you own, at or below their box leve\n|c|☆Picnicker Aya|You look like a trainer. Let's battle!\n|\n|t:|1790136566\n|teamsize|p1|2\n|teamsize|p2|6\n|start\n|switch|p1a: Indeedee|Indeedee, L18|100/100\n|switch|p2a: Flutter Mane|Flutter Mane, L18, shiny|100/100\n|turn|1\n|\n|t:|1790136567\n|move|p2a: Flutter Mane|Calm Mind|p2a: Flutter Mane\n|-boost|p2a: Flutter Mane|spa|1\n|-boost|p2a: Flutter Mane|spd|1\n|move|p1a: Indeedee|Disarming Voice|p2a: Flutter Mane\n|-damage|p2a: Flutter Mane|91/100\n|\n|upkeep\n|turn|2\n|\n|t:|1790136569\n|move|p2a: Flutter Mane|Calm Mind|p2a: Flutter Mane\n|-boost|p2a: Flutter Mane|spa|1\n|-boost|p2a: Flutter Mane|spd|1\n|move|p1a: Indeedee|Psybeam|p2a: Flutter Mane\n|-damage|p2a: Flutter Mane|74/100\n|\n|upkeep\n|turn|3\n|\n|t:|1790136570\n|move|p2a: Flutter Mane|Calm Mind|p2a: Flutter Mane\n|-boost|p2a: Flutter Mane|spa|1\n|-boost|p2a: Flutter Mane|spd|1\n|move|p1a: Indeedee|Encore|p2a: Flutter Mane\n|-start|p2a: Flutter Mane|Encore\n|\n|upkeep\n|turn|4\n|\n|t:|1790136571\n|move|p2a: Flutter Mane|Calm Mind|p2a: Flutter Mane\n|-boost|p2a: Flutter Mane|spa|1\n|-boost|p2a: Flutter Mane|spd|1\n|move|p1a: Indeedee|Psybeam|p2a: Flutter Mane\n|-damage|p2a: Flutter Mane|63/100\n|\n|upkeep\n|turn|5\n|\n|t:|1790136573\n|move|p2a: Flutter Mane|Calm Mind|p2a: Flutter Mane\n|-boost|p2a: Flutter Mane|spa|1\n|-boost|p2a: Flutter Mane|spd|1\n|move|p1a: Indeedee|Psybeam|p2a: Flutter Mane\n|-damage|p2a: Flutter Mane|51/100\n|\n|upkeep\n|turn|6\n",
+	"inputlog": null,
+	"uploadtime": 1790136573
+}
