@@ -43,6 +43,40 @@ function retype(mon, types) {
 	return copy;
 }
 
+/**
+ * A defender the calculator will not let a move bounce off.
+ *
+ * `ignoreImmunity` is how the battle marks a move that lands on a type that
+ * should be immune to it - `true` for all of them, or `{ Ghost: true }` for a
+ * Ghost move that hits Normal types, which is Witch's Snatch (the Halloween
+ * Mega Banette) and Scrappy's trick. @smogon/calc knows none of that and returns
+ * zero damage, so the immune types are taken off a copy of the defender and the
+ * estimate comes back as the neutral hit the battle will actually deal.
+ *
+ * Unchanged when nothing applies, so it is safe to call on every attack.
+ */
+function seeingPastImmunity(gen, move, defender) {
+	const dex = PkmnDex.forGen(gen.num);
+	const data = dex.moves.get(move.name);
+	const flag = data && data.ignoreImmunity;
+	const moveType = (data && data.type) || move.type;
+	if (!flag || (flag !== true && !flag[moveType])) return defender;
+	const blocks = type => {
+		const td = dex.types.get(type);
+		return !!(td && td.damageTaken && td.damageTaken[moveType] === 3);
+	};
+	const types = defender.types || [];
+	const tera = defender.teraType && blocks(defender.teraType) ? defender.teraType : null;
+	if (!tera && !types.some(blocks)) return defender;
+	// Something neutral to stand in for the type that is being ignored, so only
+	// the immunity goes and the rest of the chart still counts.
+	const neutral = (dex.types.all().find(t => t.damageTaken && t.damageTaken[moveType] === 0) || { name: 'Dragon' }).name;
+	const rest = types.filter(t => !blocks(t));
+	const copy = retype(defender, rest.length ? rest : [neutral]);
+	if (tera) copy.teraType = neutral;
+	return copy;
+}
+
 const HAZARDS = ['Stealth Rock', 'Spikes', 'Toxic Spikes', 'Sticky Web'];
 const RECOVERY = ['Recover', 'Roost', 'Soft-Boiled', 'Slack Off', 'Synthesis', 'Moonlight',
 	'Morning Sun', 'Rest', 'Shore Up', 'Milk Drink', 'Heal Order', 'Strength Sap'];
@@ -653,6 +687,15 @@ class BattleAI {
 			if (moveName === 'Oxidize' && defender.types && defender.types.includes('Steel')) {
 				defender = retype(defender, defender.types.map(t => (t === 'Steel' ? 'Grass' : t)));
 			}
+			/*
+			 * A move that refuses to be shrugged off - Witch's Snatch landing on
+			 * Normal types the way Scrappy does. The battle reads that off the
+			 * move's own `ignoreImmunity`; the calculator has never looked at it
+			 * and answers 0, so the bot would leave a Snorlax alone forever while
+			 * holding the move written to kill it. The immune type comes off a
+			 * copy of the defender, which is exactly what the battle will do.
+			 */
+			defender = seeingPastImmunity(gen, move, defender);
 			const result = calc.calculate(gen, attacker, defender, move, field);
 			const dmg = result.damage;
 			const rolls = Array.isArray(dmg) ? dmg.flat().filter(n => typeof n === 'number') : [dmg];

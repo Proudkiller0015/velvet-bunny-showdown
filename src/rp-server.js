@@ -296,8 +296,22 @@ function chosenSet(Dex, species, summon) {
 		const want = toID(summon.ability);
 		const own = Object.values(species.abilities || {}).filter(Boolean);
 		const found = own.find(a => toID(a) === want);
-		if (!found) return { error: `${species.name} can't have ${Dex.abilities.get(summon.ability).name || summon.ability}. It can have: ${own.join(', ')}.` };
-		out.ability = found;
+		/*
+		 * A Mega's ability is not up for discussion, and a set copied out of the
+		 * teambuilder carries the ability it had BEFORE it mega evolved - "Ability:
+		 * Frisk" on a Mega Banette. Refusing that would mean every pasted Mega set
+		 * is rejected over a line that was right when it was written, so if the
+		 * ability belongs to the form it changes from, the form's own is used.
+		 */
+		const base = species.changesFrom || (species.requiredItem && species.baseSpecies);
+		const beforeMega = base ? Object.values(Dex.species.get(base).abilities || {}).filter(Boolean) : [];
+		if (!found && beforeMega.some(a => toID(a) === want)) {
+			out.ability = own[0];
+		} else if (!found) {
+			return { error: `${species.name} can't have ${Dex.abilities.get(summon.ability).name || summon.ability}. It can have: ${own.join(', ')}.` };
+		} else {
+			out.ability = found;
+		}
 	}
 	return { set: out };
 }
@@ -312,16 +326,59 @@ function summoned(summon, { place, badges, levelCap, ace = null }) {
 		 * must be carrying. The rest of the team is rolled as usual, so they still
 		 * fit the place and the badge count.
 		 */
-		if (summon.name) rolled.name = String(summon.name).slice(0, 40);
+		/*
+		 * A name the story chose, under the class's title: "Champion Ballsack",
+		 * the way every rolled trainer reads. The title is left off when the name
+		 * already carries it, or when the two together would not fit.
+		 *
+		 * 18 characters, because that is what a Showdown name may be - a longer
+		 * one is refused at login and the battle never starts (E.trainerName
+		 * trims the rolled ones to the same limit for the same reason).
+		 */
+		if (summon.name) {
+			const name = String(summon.name).trim().slice(0, 18);
+			const titles = cls ? [cls.title, cls.short].filter(Boolean) : [];
+			const already = titles.some(t => name.toLowerCase().startsWith(`${t.toLowerCase()} `));
+			const titled = already ? null : titles.map(t => `${t} ${name}`).find(full => full.length <= 18);
+			rolled.name = titled || name;
+		}
+		// How well they play, when the scene wants a pushover or a wall. Left out,
+		// the badge count decides it, as it does for any trainer on the route.
+		if (['easy', 'normal', 'hard'].includes(summon.ai)) rolled.ai = summon.ai;
 		const Dex2 = require('./rp-dex')();
+		const written = [];
 		for (const want of (Array.isArray(summon.with) ? summon.with : []).slice(0, 6)) {
-			const species = Dex2.species.get(want);
-			if (!species.exists) return { error: `No Pokémon called "${want}".` };
-			if (rolled.team.some(m => toID(m.species) === species.id)) continue;
-			const level = rolled.team.length ? Math.max(...rolled.team.map(m => m.level)) : E.clampLevel(levelCap || 5);
+			// A name on its own, or a whole Pokémon: nickname, level, shiny, an
+			// item, a set. Whatever is left out is rolled to suit the route.
+			const wish = typeof want === 'string' ? { species: want } : (want || {});
+			const species = Dex2.species.get(wish.species);
+			if (!species.exists) return { error: `No Pokémon called "${wish.species || want}".` };
+			const level = wish.level ? E.clampLevel(wish.level) :
+				rolled.team.length ? Math.max(...rolled.team.map(m => m.level)) : E.clampLevel(levelCap || 5);
 			const set = E.trainerSet(species, level, badges, Math.random);
-			if (rolled.team.length >= 6) rolled.team[rolled.team.length - 1] = set;
-			else rolled.team.push(set);
+			const custom = chosenSet(Dex2, species, wish);
+			if (custom.error) return custom;
+			Object.assign(set, custom.set);
+			if (wish.shiny) set.shiny = true;
+			if (wish.nickname) set.name = String(wish.nickname).slice(0, 18);
+			if (wish.item) {
+				const item = Dex2.items.get(wish.item);
+				if (!item.exists) return { error: `There's no item called "${wish.item}".` };
+				set.item = item.name;
+			}
+			if (!written.some(m => toID(m.species) === species.id)) written.push(set);
+		}
+		/*
+		 * The written ones lead the team, in the order they were written, and the
+		 * route fills whatever is left - so a trainer written out to the last slot
+		 * is exactly that trainer, and one given a single Pokémon still brings
+		 * friends. (They used to be appended, which meant a full rolled team took
+		 * them one at a time into its last slot and only the last one survived.)
+		 */
+		if (written.length) {
+			const size = Math.max(written.length, rolled.team.length);
+			const rest = rolled.team.filter(m => !written.some(w => toID(w.species) === toID(m.species)));
+			rolled.team = [...written, ...rest].slice(0, Math.min(6, size));
 		}
 		return rolled;
 	}
@@ -340,6 +397,12 @@ function summoned(summon, { place, badges, levelCap, ace = null }) {
 	const custom = chosenSet(Dex, species, summon);
 	if (custom.error) return custom;
 	Object.assign(set, custom.set);
+	if (summon.nickname) set.name = String(summon.nickname).slice(0, 18);
+	if (summon.item) {
+		const item = Dex.items.get(summon.item);
+		if (!item.exists) return { error: `There's no item called "${summon.item}".` };
+		set.item = item.name;
+	}
 	// Staff can summon two at once: a wild double battle (a second species, or two of the same).
 	if (summon.double) {
 		const second = Dex.species.get(summon.species2 || summon.species);
@@ -930,7 +993,7 @@ function httpRoute(deps, log) {
 }
 
 module.exports = {
-	freeCatch, FREE_CATCHES, allowCatch,
+	freeCatch, FREE_CATCHES, allowCatch, summoned, chosenSet,
 	pvpCheck, pvpNotice, friendlyNotice, isAgreed, verify, placeFor, requestEncounter, requestTutorial, completeEncounter, canUseItem, usedInLog, setBags, bagFor, pvpItemsFor, canUsePvpItem, NPC_ITEMS_EACH, publicView, canThrow, thrownInLog, resultFromLog, openFor,
 	checkTeam, gimmickIn, GIMMICK_ITEM, GIMMICK_NAME, sidesInLog,
 	httpRoute, encounters, RP_ROOM, CHALLENGE_MS, recordFinished, finishedSince,

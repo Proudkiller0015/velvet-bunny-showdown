@@ -332,6 +332,16 @@ const TRAINER_CLASSES = [
 	{ id: 'policeman', title: 'Officer', avatar: 'policeman-gen4', types: ['Fire', 'Normal', 'Dark'], sex: 'm', aliases: ['police', 'officer'] },
 	{ id: 'abyssalgrunt', title: 'Abyssal Grunt', avatar: 'aquagrunt', types: ['Water', 'Dark', 'Poison', 'Steel'], sex: 'm', short: 'Grunt', aliases: ['grunt', 'teamabyssal'] },
 	{ id: 'galacticgrunt', title: 'Galactic Grunt', avatar: 'galacticgrunt', types: ['Poison', 'Dark', 'Steel', 'Psychic'], sex: 'm', short: 'Grunt', aliases: ['galactic', 'teamgalactic'] },
+	/*
+	 * The ones a story sends rather than a route: a Champion, the four under
+	 * them, a gym leader, a rival. They are never rolled into an ordinary
+	 * encounter (story: true) - the grass has no Champions in it - but staff can
+	 * summon one by name, and an arranged scene usually wants exactly this.
+	 */
+	{ id: 'champion', title: 'Champion', avatar: 'cynthia', types: [], sex: 'f', story: true, aliases: ['champ'] },
+	{ id: 'elitefour', title: 'Elite Four', avatar: 'lance-gen3', types: [], sex: 'm', story: true, short: 'E4', aliases: ['e4', 'elite'] },
+	{ id: 'gymleader', title: 'Leader', avatar: 'brock-gen4', types: [], sex: 'm', story: true, aliases: ['gym', 'leader', 'gymleader'] },
+	{ id: 'rival', title: 'Rival', avatar: 'blue-gen3', types: [], sex: 'm', story: true },
 	{ id: 'twins', title: 'Twins', avatar: 'twins-gen4', types: ['Normal', 'Fairy', 'Electric', 'Bug'], sex: 'pair', pair: true },
 	{ id: 'youngcouple', title: 'Young Couple', avatar: 'youngcouple-gen4dp', types: ['Normal', 'Fairy', 'Psychic', 'Water'], sex: 'pair', pair: true, short: 'Couple' },
 ];
@@ -776,7 +786,7 @@ const TYPE_ITEMS = {
 function rollTrainer({ place, badges, levelCap = null, rng = Math.random, classId = null, double = null, ace = null }) {
 	badges = clampBadges(badges);
 	const classes = (place && place.trainers && place.trainers.length ? place.trainers : ['youngster', 'lass', 'hiker', 'backpacker'])
-		.map(findClass).filter(Boolean);
+		.map(findClass).filter(c => c && !c.story);   // a route never sends a Champion at random
 	const cls = (classId && findClass(classId)) || pick(classes, rng);
 	const tier = BADGE_TIERS[badges];
 	const isDouble = cls.pair || (double === null ? badges >= 1 && rng() < 0.15 : !!double);

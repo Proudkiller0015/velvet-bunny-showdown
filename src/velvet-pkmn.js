@@ -24,6 +24,20 @@ const MOVE_FIELDS = [
 	'breaksProtect', 'selfSwitch', 'willCrit', 'critRatio', 'desc', 'shortDesc',
 ];
 
+/*
+ * The same for Pokemon. A form this server added - the Witching Hour Mega
+ * Banette and whatever comes after it - is not in @pkmn/dex either, and the
+ * calculator cannot even build a Pokemon it has no base stats for: it threw on
+ * `baseStats.hp` and the AI fell back to "this move does nothing", for every
+ * move, on both sides. So our species are copied in the same way.
+ */
+const SPECIES_FIELDS = [
+	'num', 'name', 'types', 'baseStats', 'abilities', 'weightkg', 'heightm', 'baseSpecies', 'forme',
+	'prevo', 'evos', 'evoLevel', 'evoType', 'evoItem', 'evoCondition', 'eggGroups', 'gender', 'genderRatio',
+	'requiredItem', 'requiredMove', 'requiredAbility', 'changesFrom', 'otherFormes', 'formeOrder',
+	'canGigantamax', 'baseForme', 'cosmeticFormes', 'maxHP',
+];
+
 let patched = false;
 
 function patchPkmnData() {
@@ -38,6 +52,7 @@ function patchPkmnData() {
 	const Pkmn = require('@pkmn/dex').Dex;
 	const moves = Pkmn.data.Moves;
 	const abilities = Pkmn.data.Abilities;
+	const species = Pkmn.data.Species;
 
 	let changedMoves = [];
 	try {
@@ -56,6 +71,25 @@ function patchPkmnData() {
 	for (const ability of Showdown.abilities.all()) {
 		if (!ability.exists || abilities[ability.id]) continue;
 		abilities[ability.id] = { num: ability.num, name: ability.name, rating: ability.rating || 0, shortDesc: ability.shortDesc, gen: 9 };
+	}
+	/*
+	 * Only the forms @pkmn/dex has never heard of. A Pokemon it already knows is
+	 * left alone even when this server changed its stats or types, because those
+	 * changes belong to the RP formats and the AI plays official ones too; a form
+	 * that exists nowhere else is ours by definition.
+	 */
+	for (const mon of Showdown.species.all()) {
+		if (!mon.exists || species[mon.id]) continue;
+		const row = { gen: 9 };
+		for (const field of SPECIES_FIELDS) if (mon[field] !== undefined) row[field] = mon[field];
+		species[mon.id] = row;
+		// The base form has to own it, or the calculator cannot reach the form at all.
+		const base = mon.baseSpecies && mon.baseSpecies !== mon.name ? Pkmn.species.get(mon.baseSpecies) : null;
+		const baseRow = base && base.exists ? species[base.id] : null;
+		if (baseRow) {
+			if (!(baseRow.otherFormes || []).includes(mon.name)) baseRow.otherFormes = [...(baseRow.otherFormes || []), mon.name];
+			if (!(baseRow.formeOrder || []).includes(mon.name)) baseRow.formeOrder = [...(baseRow.formeOrder || [base.name]), mon.name];
+		}
 	}
 }
 

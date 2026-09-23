@@ -640,5 +640,38 @@ console.log('\n--- phazing a sweeper ---');
 	check('nothing is gained by phazing what cannot be phazed', score(rooted) < 0, true);
 }
 
+console.log('\n--- a move that ignores an immunity ---');
+{
+	/*
+	 * Witch's Snatch (the Halloween Mega Banette) is a Ghost move that lands on
+	 * Normal types. The battle reads that off `ignoreImmunity`; @smogon/calc does
+	 * not, and answered zero - so the bot held the move written to kill a Snorlax
+	 * and clicked something else forever. Both halves are checked: that the AI's
+	 * own dex has the form at all, and that the estimate is a real hit.
+	 */
+	const ai = new BattleAI({ difficulty: 'champion' });
+	const gen = ai.gen(9);
+	const field = new (require('@smogon/calc').Field)({});
+	const s = scenario({
+		me: 'Banette-Mega-Halloween', myItem: 'banettitehalloween',
+		myMoves: ["Witch's Snatch", 'Shadow Sneak'], foe: 'Snorlax', foeMoves: ['Body Slam'],
+	});
+	const me = ai.myPokemon(gen, s.request.side.pokemon[0], s.state);
+	const lax = ai.foePokemon(gen, s.state.opponent.a);
+	ai.myMoveNames = ["Witch's Snatch", 'Shadow Sneak'];
+
+	check('the AI knows this RP\'s own forms exist', me && me.species && me.species.baseStats.atk, 165);
+	const snatch = ai.damagePct(gen, me, lax, "Witch's Snatch", field);
+	const sneak = ai.damagePct(gen, me, lax, 'Shadow Sneak', field);
+	check('a Ghost move that hits Normal types is not read as zero', snatch > 0, true);
+	check('and it is the better of the two against a Normal type', snatch > sneak, true);
+
+	// Nothing else changes: an ordinary Ghost move still bounces off a Normal type.
+	const plain = scenario({ me: 'Gengar', myMoves: ['Shadow Ball'], foe: 'Snorlax' });
+	const gengar = ai.myPokemon(gen, plain.request.side.pokemon[0], plain.state);
+	check('an ordinary Ghost move still does nothing to one',
+		ai.damagePct(gen, gengar, ai.foePokemon(gen, plain.state.opponent.a), 'Shadow Ball', field), 0);
+}
+
 console.log(`\n=== ${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);
