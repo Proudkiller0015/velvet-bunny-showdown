@@ -30,6 +30,8 @@
 const PS = require('pokemon-showdown');
 const { Dex, TeamValidator, Teams } = PS;
 const TeamLogic = require('./team-logic');
+// How often a format's bot teams are dedicated stall (see stallTeam).
+const { stallShare } = require('./ladder-defaults');
 
 /**
  * The cut-Pokemon machine moves, read once from the installed copy.
@@ -110,8 +112,15 @@ const ARCHETYPE_WEIGHTS = {
 	balance: { setup: 0.8, choice: 1.8, oneUse: 0.3, pivot: 2, wall: 2 },
 	stall: { setup: 0.7, choice: 0.3, oneUse: 0.2, pivot: 1, wall: 4 },
 };
-/* How often a draft aims at each: the offense-to-balance middle is what the ladder plays most. */
-const ARCHETYPE_ODDS = [['hyper offense', 0.25], ['bulky offense', 0.3], ['balance', 0.35], ['stall', 0.1]];
+/*
+ * How often a draft aims at each: the offense-to-balance middle is what the
+ * ladder plays most. Stall is not drawn here any more (24 Sep 2026): a usage
+ * draft aimed at stall came out as an offense-usage team with bulkier sets,
+ * because stall's Pokemon are exactly the ones usage ranks low. Stall has its
+ * own path, by role (src/stall-builder.js), at the share stallShare() gives
+ * each format (src/ladder-defaults.js).
+ */
+const ARCHETYPE_ODDS = [['hyper offense', 0.28], ['bulky offense', 0.33], ['balance', 0.39]];
 
 const toID = s => String(s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
 
@@ -1758,6 +1767,130 @@ class TeamBuilder {
 		return team;
 	}
 
+	/*
+	 * A dedicated stall team (24 Sep 2026), or null when this format cannot
+	 * make one. The owner wants the bots to "build dedicated stall sometimes...
+	 * since it goes against usage": stall is rare on the ladder, which is what
+	 * makes it a test for players. The six are picked for stall's jobs by
+	 * src/stall-builder.js from the whole legal pool - usage, this server's own
+	 * results and its buffs only tip a choice between similar walls - and each
+	 * try is validated; a species the validator refuses is left out of the next.
+	 *
+	 * [Gen 9] National Dex has three real Smogon stall teams in
+	 * data/teams/natdex/stall-*.txt; half the time two or three members of one
+	 * of them are the core and the builder fills the rest, the way a player
+	 * starts from a sample team and makes it their own.
+	 */
+	stallTeam(ctx, constraints, rng) {
+		const SB = require('./stall-builder');
+		/*
+		 * Our own formats take nothing from Smogon here: their "usage" is gen9ou's
+		 * (remoteAliases), a metagame without this server's Pokemon, buffs, Megas
+		 * or bans (the owner: "a lot is different in RP, and that matters"). What
+		 * tips a choice there is what wins here (data/velvet/rp-usage.json) and
+		 * what the Balance Patch buffed.
+		 */
+		const stats = /^gen\d+rp/.test(ctx.id) ? null : this.usage.get(ctx.id);
+		const here = this.local(ctx.id);
+		const buffed = this.buffed();
+		const prior = s => {
+			const e = stats && (stats[s.name] || stats[s.baseSpecies]);
+			const usage = e && e.usage ? (e.usage.weighted || e.usage.raw || 0) : 0;
+			const row = here && (here[s.name] || here[s.baseSpecies]);
+			return Math.min(1, usage / 0.08 + (row && row.score > 0 ? 0.6 : 0) + (buffed[s.id] ? 0.4 : 0));
+		};
+		if (!ctx.stallProfiles) ctx.stallProfiles = new Map();
+		const banned = new Set(constraints.banned || []);
+		for (let attempt = 0; attempt < 4; attempt++) {
+			// Read each try: a refusal below may teach Item Clause or no Tera (learn()).
+			const tera = ctx.gen >= 9 && !constraints.noTera && !ctx.ruleTable.has('terastalclause');
+			const items = constraints.noItems || ctx.gen < 2 ? false : this.itemIds(ctx);
+			const pool = ctx.pool.filter(s => !banned.has(s.id) && this.stallSpeciesOk(ctx, s)).map(s => ({ species: s, prior: prior(s) }));
+			const fixed = ctx.id === 'gen9nationaldex' && rng() < 0.5 ? this.stallSeed(ctx, rng, banned) : [];
+			let team = null;
+			try {
+				team = SB.build(ctx.dex, pool, {
+					rng, level: ctx.level, items, uniqueItems: !!constraints.uniqueItems, tera, fixed,
+					learn: (species, id) => this.canLearn(ctx, species, id),
+					megas: mega => !ctx.ruleTable.isBannedSpecies(mega) && !ctx.ruleTable.isBanned(`item:${toID(mega.requiredItem)}`),
+					profiles: ctx.stallProfiles,
+				});
+			} catch (e) { team = null; }
+			if (!team || team.length < ctx.size || !SB.stallReport(ctx.dex, team).ok) continue;
+			let problems;
+			try { problems = ctx.validator.validateTeam(team); } catch (e) { problems = [String(e.message || e)]; }
+			if (!problems || !problems.length) return team;
+			// The same lessons as the draft (Item Clause, no Tera, a species this format refuses); nothing learned, give up.
+			if (!this.learn(ctx, team, problems, constraints)) return null;
+			for (const id of constraints.banned || []) banned.add(id);
+		}
+		return null;
+	}
+
+	/*
+	 * Whether the format allows the species at all, by the validator (cached per
+	 * format). The pool's own filter misses tier bans and Past Pokemon: a
+	 * National Dex UU stall team came out with Toxapex ("tagged ND OU, which is
+	 * banned") and Floette-Eternal ("does not exist in the National Dex"), and
+	 * the draft only learns that one refusal at a time. Only bulky Pokemon that
+	 * heal reach the stall search, so this runs a few hundred times per format.
+	 */
+	stallSpeciesOk(ctx, species) {
+		if (!ctx.stallSpecies) ctx.stallSpecies = new Map();
+		if (ctx.stallSpecies.has(species.id)) return ctx.stallSpecies.get(species.id);
+		const b = species.baseStats;
+		// Too frail to be a wall anyway (see stallWorthy in src/stall-builder.js): no need to ask.
+		if (Math.max(b.hp * b.def, b.hp * b.spd) * (species.nfe ? 1.5 : 1) < 6000) { ctx.stallSpecies.set(species.id, false); return false; }
+		let problems;
+		try {
+			problems = ctx.validator.validateSet({ species: species.name, ability: Object.values(species.abilities)[0], moves: [], item: '', level: ctx.level, evs: { hp: 4 } }, {}) || [];
+		} catch (e) { problems = ['error']; }
+		// "which is above RP NU": the RP low tiers' own rule (config/custom-formats.js lowTierRule).
+		const ok = !problems.some(p => /exist|banned|obtainable|tagged|not allowed|illegal|above|error/i.test(p) && !/learn|move|ability/i.test(p));
+		ctx.stallSpecies.set(species.id, ok);
+		return ok;
+	}
+
+	/*
+	 * Whether this build is a dedicated stall team: see build(). Not before Gen 4
+	 * (no Roost and no Stealth Rock: Skarmory and Forretress cannot both set
+	 * hazards and heal, and the search found no stall team in gen3ou or gen2ou),
+	 * not in Monotype (one type is not a stall core) and not in Little Cup
+	 * (level 5 Pokemon learn next to no recovery); those keep the usual draft.
+	 */
+	wantsStall(ctx, constraints, rng, options = {}) {
+		const share = options.archetype === undefined ? stallShare(ctx.id) : options.archetype === 'stall' ? 1 : 0;
+		if (share <= 0 || !this.drafts(ctx, constraints) || ctx.gen < 4) return false;
+		if (ctx.ruleTable.has('sametypeclause') || ctx.ruleTable.has('littlecup')) return false;
+		return rng() < share;
+	}
+
+	/** Two or three members of one of the Smogon National Dex stall teams, as fixed sets for the stall builder. */
+	stallSeed(ctx, rng, banned) {
+		const dir = path.join(__dirname, '..', 'data', 'teams', 'natdex');
+		let files = [];
+		try { files = fs.readdirSync(dir).filter(f => /^stall-.*\.txt$/.test(f)); } catch (e) { return []; }
+		if (!files.length) return [];
+		let sets = null;
+		try { sets = Teams.import(fs.readFileSync(path.join(dir, pick(rng, files)), 'utf8')); } catch (e) { sets = null; }
+		if (!sets) return [];
+		const RS = require('./role-sets');
+		const out = [];
+		for (const set of shuffled(rng, sets)) {
+			if (out.length >= 2 + Math.floor(rng() * 2)) break;
+			const species = ctx.dex.species.get(set.species);
+			if (!species.exists || banned.has(species.id)) continue;
+			// Payapa Berry Toxapex: a one-use item, which a stall team here does not carry (see stallReport).
+			const item = TeamLogic.ONE_USE_ITEMS.includes(toID(set.item)) || RS.CHOICE_ITEMS.includes(toID(set.item)) ? 'Leftovers' : set.item;
+			const copy = { ...set, name: species.name, item, level: ctx.level };
+			if (ctx.ruleTable.has('terastalclause')) delete copy.teraType;
+			let problems;
+			try { problems = ctx.validator.validateSet({ ...copy }, {}); } catch (e) { problems = ['error']; }
+			if (!problems || !problems.length) out.push(copy);
+		}
+		return out;
+	}
+
 	/** An archetype to aim a draft at, by ARCHETYPE_ODDS. */
 	pickArchetype(rng) {
 		let r = rng();
@@ -1828,14 +1961,26 @@ class TeamBuilder {
 	 * @param {string} formatId
 	 * @returns {string|null} packed team, or null when the server generates it
 	 */
-	build(formatId, seed) {
+	build(formatId, seed, options = {}) {
 		if (!this.needsTeam(formatId)) return null;
 		const ctx = this.context(formatId);
-		let s = (seed === undefined ? (Date.now() ^ (Math.random() * 0xffffffff)) : seed) >>> 0;
+		let s = (seed === undefined || seed === null ? (Date.now() ^ (Math.random() * 0xffffffff)) : seed) >>> 0;
 		const rng = () => { s ^= s << 13; s >>>= 0; s ^= s >> 17; s ^= s << 5; s >>>= 0; return s / 0x100000000; };
 
 		const constraints = {};
 		let last = null;
+		/*
+		 * Dedicated stall, some of the time (24 Sep 2026): `options.archetype`
+		 * 'stall' asks for it, anything else rules it out, and with neither the
+		 * format's share decides (stallShare in src/ladder-defaults.js, about one
+		 * team in eight). Drawn once per build, not per pass: a pass that fails
+		 * falls back to the usual draft rather than drawing again. Only where the
+		 * checklist applies (six-Pokemon singles, see drafts()).
+		 */
+		if (this.wantsStall(ctx, constraints, rng, options)) {
+			const team = this.stallTeam(ctx, constraints, rng);
+			if (team) return Teams.pack(team);
+		}
 		for (let pass = 0; pass < 8; pass++) {
 			// The assembler first where it applies; anything it cannot make legal
 			// falls through to the draw below rather than failing the build.
@@ -1858,7 +2003,9 @@ class TeamBuilder {
 			 * and step 1 of the checklist's build procedure. Drawn per pass, so the
 			 * ladder sees every kind of team.
 			 */
-			constraints.archetype = this.drafts(ctx, constraints) ? this.pickArchetype(rng) : null;
+			// `options.archetype` may name one (a study pitting stall against offense); else the draw decides.
+			const asked = ARCHETYPE_ODDS.some(([name]) => name === options.archetype) ? options.archetype : null;
+			constraints.archetype = this.drafts(ctx, constraints) ? asked || this.pickArchetype(rng) : null;
 			const team = [];
 			const teamHas = {};
 			const usedItems = new Set();

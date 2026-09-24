@@ -341,6 +341,8 @@ function analyze(dex, sets, options = {}) {
 		superEffectiveMissing: SE_WANTED.filter(t => !hitsSE(t)),
 		stallbreak: who(s => has(s, MOVES.stallbreak) || ABILITIES.stallbreak.includes(ability(s)) || ['choiceband', 'choicespecs'].includes(item(s))),
 		setup: who(s => has(s, MOVES.setup)),
+		// Stall's damage (research-stall B1): Toxic, burns, Toxic Spikes.
+		statusSpread: who(s => has(s, ['toxic', 'willowisp', 'toxicspikes'])),
 		// Something that actually wins a game: a sweeper that boosts, or a breaker holding
 		// a Choice item or a Life Orb with real attacks. A team of six walls has none.
 		winCondition: who(s => {
@@ -397,6 +399,14 @@ function analyze(dex, sets, options = {}) {
 	}
 	const walls = report.defensive.length;
 	report.style = walls >= 4 ? 'stall' : walls >= 2 ? 'balance' : walls === 1 || report.setup.length < 2 ? 'bulky offense' : 'hyper offense';
+	/*
+	 * A team built as stall is judged as stall (24 Sep 2026; src/stall-builder.js)
+	 * once three of it are walls: a Calm Mind Blissey or an Iron Defense Body
+	 * Press Corviknight has three non-attacking moves and still reads as a wall,
+	 * but a Poison Heal Gliscor with Earthquake and Knock Off does not, and the
+	 * team was then judged as balance - "no immediate power", "too passive".
+	 */
+	if (options.archetype === 'stall' && walls >= 3) report.style = 'stall';
 	moreFacts(dex, sets, report, threats);
 	return report;
 }
@@ -546,9 +556,11 @@ function issues(report, { stage = 'full', themed = false } = {}) {
 		const thin = ['Water', 'Ground', 'Fighting', 'Dragon'].filter(t => report.resist[t] && report.resist[t].length === 1);
 		if (thin.length && !offense && stage === 'full') add('soft', `only one answer to ${thin.join(', ')}`);
 	}
+	const stall = report.style === 'stall';
 	// Rule 6: two attackers on each side, and not five of one (a stall team attacks little and is exempt).
 	if (report.size >= 4 && (report.physical.length < 1 || report.special.length < 1)) {
-		add('hard', `every attacker is ${report.physical.length ? 'physical' : 'special'}: one wall for that side stops the whole team`);
+		// Soft on stall: its damage is Toxic, burns and hazards, which no wall of either side stops.
+		add(stall ? 'soft' : 'hard', `every attacker is ${report.physical.length ? 'physical' : 'special'}: one wall for that side stops the whole team`);
 	} else if (report.size >= 5 && report.style !== 'stall' && (report.physical.length < 2 || report.special.length < 2)) {
 		add('hard', `only ${Math.min(report.physical.length, report.special.length)} ${report.physical.length < 2 ? 'physical' : 'special'} attacker`);
 	} else if (Math.max(report.physical.length, report.special.length) > 4) {
@@ -565,7 +577,13 @@ function issues(report, { stage = 'full', themed = false } = {}) {
 	if (setterWeathers.length > 1) add('soft', `the team sets ${setterWeathers.join(' and ')}, which undo each other`);
 	if (stage === 'basics') return out;
 
-	if (!report.winCondition.length) add(report.style === 'stall' ? 'soft' : 'hard', 'nothing that wins a game on its own (a setup sweeper, or a breaker with a Choice item or Life Orb)');
+	/*
+	 * Stall's win condition can be residual (research-stall I1, I3): Toxic with
+	 * hazards up wins the long game without a sweeper, so a stall team with both
+	 * has one.
+	 */
+	const residual = stall && report.statusSpread && report.statusSpread.length && (report.stealthRock.length || report.otherHazards.length);
+	if (!report.winCondition.length && !residual) add(stall ? 'soft' : 'hard', 'nothing that wins a game on its own (a setup sweeper, or a breaker with a Choice item or Life Orb)');
 	/*
 	 * Immediate power (24 Sep 2026; B2): a balance or bulky offense team needs a
 	 * breaker that hits hard on the turn it comes in, not only setup sweepers -
@@ -580,7 +598,14 @@ function issues(report, { stage = 'full', themed = false } = {}) {
 	if (report.stealthRock.length > 1) add('soft', `${report.stealthRock.length} Stealth Rock setters (${report.stealthRock.join(', ')}); one is enough`);
 	// Rule 2: hazard control. Heavy rock damage needs a remover; a balance or stall team wants one anyway,
 	// and a second is a wasted slot everywhere but stall (rule 13).
-	if (report.rockWeak.length >= 2 && !report.removal.length) add(report.style === 'hyper offense' ? 'soft' : 'hard', `no hazard removal, and ${report.rockWeak.join(', ')} take big Stealth Rock damage`);
+	/*
+	 * Stall's hazard control (24 Sep 2026): removal, or a Ghost that keeps the
+	 * foe's spinner from clearing ours - "deny removal" and "protect our side"
+	 * are both stall's job (research-stall C2, C3). Hard: every member of a stall
+	 * team switches in again and again, so hazards left up decide the game.
+	 */
+	if (stall && !report.removal.length && !report.spinblockers.length) add('hard', 'a stall team with no hazard control (removal, Magic Bounce or a Ghost spinblocker)');
+	else if (report.rockWeak.length >= 2 && !report.removal.length) add(report.style === 'hyper offense' ? 'soft' : 'hard', `no hazard removal, and ${report.rockWeak.join(', ')} take big Stealth Rock damage`);
 	else if (!report.removal.length && ['balance', 'stall'].includes(report.style)) add('soft', `a ${report.style} team with no hazard removal`);
 	if (report.removal.length > 1 && report.style !== 'stall') add('soft', `${report.removal.length} hazard removers (${report.removal.join(', ')}); one is enough`);
 	/*
@@ -590,7 +615,8 @@ function issues(report, { stage = 'full', themed = false } = {}) {
 	 * purpose and only needs not to have nothing at all.
 	 */
 	const needSpeed = { 'hyper offense': 3, 'bulky offense': 2, balance: 1 }[report.style] || 0;
-	if (!report.speedControl.length) add('hard', 'nothing fast and no priority');
+	// Soft on stall (24 Sep 2026): none of the three Smogon NatDex stall teams (data/teams/natdex) has a fast member or priority.
+	if (!report.speedControl.length) add(stall ? 'soft' : 'hard', 'nothing fast and no priority');
 	else if (report.speedControl.length < needSpeed) add('hard', `only ${report.speedControl.length} of the ${needSpeed} speed control a ${report.style} team needs (${report.speedControl.join(', ')})`);
 	/*
 	 * "Priority matters more than speed control": boosts and type changes let a
@@ -612,11 +638,19 @@ function issues(report, { stage = 'full', themed = false } = {}) {
 	if (mechanisms.length < 2) add('hard', `fewer than two ways to stop a setup sweeper (${mechanisms.join(', ') || 'none'}; phazing, Haze, Encore, paralysis, burn, Unaware, priority, a Scarf)`);
 	else if (report.specialSetupAnswer === false) add('hard', 'nothing that stops a special setup sweeper (burn only halves Attack)');
 	/*
+	 * Stall cannot out-damage a sweeper that has boosted, so it needs one that
+	 * undoes the boosts: Unaware, a phazer or Haze (research-stall D1, D2).
+	 * Paralysis, a burn or priority slow a sweeper down; they do not stop one
+	 * that already has +2 against a team that barely attacks.
+	 */
+	if (stall && !mechanisms.some(k => ['unaware', 'phazing', 'haze'].includes(k))) add('hard', 'a stall team with nothing that undoes boosts (Unaware, a phazer, Haze)');
+	/*
 	 * Rule 5: the format's threats, when the caller knows them (src/teambuilder.js
 	 * does). Each should be hit at least neutrally by two members; and something
 	 * should hit each of the walling types super effectively.
 	 */
-	if (report.threatsUnhit && report.threatsUnhit.length) add('hard', `fewer than two members hit ${report.threatsUnhit.join(', ')} for neutral damage`);
+	// Soft on stall: one attack per wall is its design, and Toxic hits what its attacks do not.
+	if (report.threatsUnhit && report.threatsUnhit.length) add(stall ? 'soft' : 'hard', `fewer than two members hit ${report.threatsUnhit.join(', ')} for neutral damage`);
 	if (report.superEffectiveMissing && report.superEffectiveMissing.length >= 2) add('soft', `nothing hits ${report.superEffectiveMissing.join(', ')} super effectively`);
 	// Rule 12: offense has to get past walls; stall is the wall.
 	if (!report.stallbreak.length && report.style !== 'stall') add(['hyper offense', 'bulky offense'].includes(report.style) ? 'hard' : 'soft', 'no way to break a wall (Taunt, Knock Off, Trick, a Choice Band/Specs attacker)');
@@ -625,6 +659,8 @@ function issues(report, { stage = 'full', themed = false } = {}) {
 	const unhealed = report.defensive.filter(n => !report.recovery.includes(n));
 	if (report.style === 'stall' && unhealed.length) add('hard', `a stall team's ${unhealed.join(', ')} ${unhealed.length === 1 ? 'has' : 'have'} no recovery`);
 	else if (report.defensive.length && !report.recovery.length) add('soft', 'the defensive Pokémon have no recovery');
+	// And most of a stall team heals at will, not only its walls (24 Sep 2026): the Smogon samples heal on five or six of six.
+	if (stall && report.recovery.length < Math.ceil(report.size * 2 / 3)) add('hard', `a stall team with only ${report.recovery.length} of ${report.size} able to heal`);
 	if (report.breakers) eighteenThings(report, { themed, add });
 	return out;
 }
