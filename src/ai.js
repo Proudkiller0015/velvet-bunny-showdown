@@ -747,8 +747,146 @@ class BattleAI {
 	 * slow one with nothing left to do is cheap, and spending it to keep the win
 	 * condition alive is the correct play.
 	 */
+	/**
+	 * Cache for one decision. The sacking and lead rules ask the same damage
+	 * questions of the same pairs many times over (valueRank calls monValue for
+	 * every teammate, per bench option); decide() opens this and closes it, so
+	 * nothing survives into the next turn's position. (24 Sep 2026)
+	 */
+	memo(key, fn) {
+		if (!this._memo) return fn();
+		if (this._memo.has(key)) return this._memo.get(key);
+		const value = fn();
+		this._memo.set(key, value);
+		return value;
+	}
+
+	/**
+	 * What a species usually brings, as shares of its sets (0..1 each): setup,
+	 * hazards, pivot, Knock Off, status, and whether every set is a setup
+	 * sweeper. From the Random Battle sets when we may read them, otherwise from
+	 * this server's role sets (src/role-sets.js, read only). Used to guess their
+	 * leads (Pinkacross, How to Choose Your Lead) and to see setup fodder coming
+	 * (The Art of Sacking). (24 Sep 2026)
+	 */
+	speciesKit(species) {
+		this.kitCache = this.kitCache || new Map();
+		const key = String(species || '');
+		if (this.kitCache.has(key)) return this.kitCache.get(key);
+		const RS = require('./role-sets');
+		const idOf = s => String(s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+		const traits = ids => ({
+			setup: ids.some(m => RS.SETUP.includes(m)),
+			hazards: ids.some(m => RS.HAZARDS.includes(m)),
+			pivot: ids.some(m => RS.PIVOTS.includes(m)),
+			knock: ids.includes('knockoff'),
+			status: ids.some(m => RS.STATUS.includes(m)),
+		});
+		let kit = { setup: 0, hazards: 0, pivot: 0, knock: 0, status: 0, sweeperOnly: false };
+		try {
+			const preset = this.cfg.readsSets && this.presets ? this.presets.moves(key) : null;
+			if (preset) {
+				const t = traits(preset.map(idOf));
+				kit = { setup: +t.setup, hazards: +t.hazards, pivot: +t.pivot, knock: +t.knock, status: +t.status, sweeperOnly: false };
+			} else {
+				const sets = RS.roleSets(require('./rp-dex')(), key);
+				if (sets.length) {
+					const each = sets.map(s => traits((s.movepool || []).map(idOf)));
+					const share = k => each.filter(t => t[k]).length / each.length;
+					kit = { setup: share('setup'), hazards: share('hazards'), pivot: share('pivot'), knock: share('knock'), status: share('status'),
+						sweeperOnly: sets.every(s => RS.SETUP_ROLES.includes(s.role)) };
+				}
+			}
+		} catch (e) { /* no data: a blank kit */ }
+		this.kitCache.set(key, kit);
+		return kit;
+	}
+
+	/** Has this foe shown, or does it usually carry, a way to set up? */
+	foeCanSetUp(gen, foe) {
+		if (!foe) return false;
+		if (Object.values(foe.boosts || {}).some(v => v > 0)) return true;
+		const dex = PkmnDex.forGen(gen.num);
+		for (const m of foe.moves || []) {
+			const d = dex.moves.get(m);
+			const up = d && (d.target === 'self' || !d.target) && d.category === 'Status' && (d.boosts || (d.self && d.self.boosts));
+			if (up && Object.values(up).some(v => v > 0)) return true;
+		}
+		if (foe.moves && foe.moves.size >= 4) return false;
+		return this.speciesKit(foe.transformed || foe.species).setup >= 0.5;
+	}
+
+	/** A stable name for one of our Pokemon within a decision. */
+	entryKey(entry) { return `${entry.ident || ''}|${entry.details || ''}`; }
+
+	/**
+	 * The team-wide picture the sacking rules need, once per decision: for each
+	 * of our living Pokemon, what it does to each foe that is left, which of them
+	 * it is the only answer to, and whether a foe hard-walls it with nothing else
+	 * of ours able to wear that foe down.
+	 *
+	 * The Art of Sacking (Pinkacross; 24 Sep 2026): a Pokemon is worth its health
+	 * AND what it can still do against what they have left - "good into five but
+	 * hard-walled by the sixth" is not valuable - AND whether it is the only
+	 * thing standing between a live threat and the rest of the team. HP alone
+	 * is the classic mistake: he sacked a full-health Gholdengo that had become
+	 * setup fodder and kept a 15% Moltres that was the only check to a sweeper.
+	 *
+	 * An answer: outspeeds and KOs it, or takes under 45% from it while taking
+	 * 30% or more back. A live threat: it hits half our living team for 50% or
+	 * more, or it sets up and hits any of them that hard. A hard wall: our best
+	 * hit does under 12% to it.
+	 */
+	teamPlan(gen, state, request) {
+		return this.memo('teamPlan', () => {
+			const field = new calc.Field({ weather: state.weather || undefined, terrain: state.terrain || undefined });
+			const ours = (request.side.pokemon || []).filter(p => !/fnt/.test(p.condition || ''));
+			const { list: theirs } = this.foeRemaining(state);
+			const rows = new Map();
+			for (const p of ours) rows.set(this.entryKey(p), { out: [], sole: 0, walled: false, avgOut: 0 });
+			const answers = theirs.map(() => []);
+			const threatens = theirs.map(() => 0);
+			ours.forEach(p => {
+				const me = this.myPokemon(gen, p, state);
+				const mySpe = this.speedOf(me, me.boosts, me.status, state.weather);
+				const moves = (p.moves || []).map(m => toName(m, 'moves'));
+				const row = rows.get(this.entryKey(p));
+				theirs.forEach((foe, j) => {
+					const them = this.foePokemon(gen, foe);
+					const out = Math.max(0, ...moves.map(m => this.damageToFoe(gen, me, foe, m, field)));
+					const seen = [...(foe.moves || [])];
+					const back = seen.length
+						? Math.max(0, ...[...seen, ...this.hiddenAttacks(gen, foe)].map(m => this.damagePct(gen, them, me, m, field)))
+						: this.roughIncoming(gen, them, me, field);
+					const theirSpe = this.foeSpeed(gen, foe, state.weather);
+					const faster = state.trickRoom ? mySpe < theirSpe : mySpe > theirSpe;
+					row.out.push(out);
+					if ((faster && out >= 100) || (back < 45 && out >= 30)) answers[j].push(row);
+					if (back >= 50) threatens[j]++;
+				});
+				row.avgOut = row.out.length ? row.out.reduce((a, b) => a + Math.min(100, b), 0) / row.out.length : 0;
+			});
+			theirs.forEach((foe, j) => {
+				// A setup sweeper is a live threat as soon as it hurts anything: the
+				// boosts are what make it hit the rest.
+				const live = threatens[j] >= Math.max(1, ours.length / 2) || (threatens[j] >= 1 && this.foeCanSetUp(gen, foe));
+				if (answers[j].length === 1 && live) answers[j][0].sole++;
+				const wornDown = [...rows.values()].some(r => r.out[j] >= 35);
+				for (const r of rows.values()) if (r.out[j] < 12 && !wornDown) r.walled = true;
+			});
+			return { rows, foes: theirs.length };
+		});
+	}
+
 	monValue(gen, entry, state, request) {
 		if (/fnt/.test(entry.condition || '')) return 0;   // dead is worth nothing
+		if (this.cfg.sacking && request && request.side) {
+			return this.memo(`value|${this.entryKey(entry)}|${entry.condition}`, () => this.monValueOf(gen, entry, state, request));
+		}
+		return this.monValueOf(gen, entry, state, request);
+	}
+
+	monValueOf(gen, entry, state, request) {
 
 		const cond = /^(\d+)\/(\d+)/.exec(entry.condition || '');
 		const hpPct = cond ? (+cond[1] / +cond[2]) * 100 : 100;
@@ -776,10 +914,24 @@ class BattleAI {
 			const field = new calc.Field({ weather: state.weather || undefined, terrain: state.terrain || undefined });
 			let best = 0;
 			for (const foe of foes) {
-				const them = this.foePokemon(gen, foe);
 				for (const m of entry.moves || []) best = Math.max(best, this.damageToFoe(gen, me, foe, toName(m, 'moves'), field));
 			}
-			value += Math.min(45, best * 0.45);
+			let offense = Math.min(45, best * 0.45);
+			/*
+			 * Offensive utility now, against everything they have left rather than
+			 * only the one in front, and next to nothing when a living foe hard-walls
+			 * it and none of our team can wear that foe down (The Art of Sacking,
+			 * 24 Sep 2026).
+			 */
+			const row = this.cfg.sacking && request && request.side ? this.teamPlan(gen, state, request).rows.get(this.entryKey(entry)) : null;
+			if (row && row.out.length) {
+				offense = 0.5 * offense + 0.5 * Math.min(45, row.avgOut * 0.45);
+				if (row.walled) offense *= 0.3;
+			}
+			value += offense;
+			// The only answer to a live threat is worth keeping for it, whatever it
+			// does to the rest (his Moltres at 15%).
+			if (row && row.sole) value += 14 + 6 * Math.min(2, row.sole);
 		}
 
 		// Status eats most of what makes a sweeper a sweeper.
@@ -792,6 +944,14 @@ class BattleAI {
 		// HP matters, but a Focus Sash / 1 HP cleaner still cleans - so this is a
 		// gentle curve rather than a straight multiplier.
 		value *= 0.55 + 0.45 * (hpPct / 100);
+		/*
+		 * Dead on entry: a benched Pokemon our own side's hazards would finish is
+		 * no longer a fighter, but it is not worthless either. It is a free switch
+		 * that can never become setup fodder, so it is worth keeping at a small,
+		 * fixed price rather than ranked as the cheapest thing to throw in (The Art
+		 * of Sacking, 24 Sep 2026).
+		 */
+		if (this.cfg.sacking && !entry.active && this.entryHazards(gen, me, entry, state) >= hpPct) value = 15;
 		return Math.max(0, Math.min(100, value));
 	}
 
@@ -1269,10 +1429,16 @@ class BattleAI {
 	 */
 	decide(request, state) {
 		if (request.wait) return null;
-		if (request.teamPreview) return this.teamOrder(request, state);
-		if (request.forceSwitch) return this.forceSwitch(request, state);
-		if (request.active) return this.turnChoice(request, state);
-		return 'default';
+		// One decision's cache (see memo()); closed again whatever happens.
+		this._memo = new Map();
+		try {
+			if (request.teamPreview) return this.teamOrder(request, state);
+			if (request.forceSwitch) return this.forceSwitch(request, state);
+			if (request.active) return this.turnChoice(request, state);
+			return 'default';
+		} finally {
+			this._memo = null;
+		}
 	}
 
 	teamOrder(request, state) {
@@ -1343,6 +1509,19 @@ class BattleAI {
 		// What the hazards on our side take on the way in (Raging Bolt came in on Stealth Rock and poison).
 		worst += this.entryHazards(gen, me, entry, state);
 		let score = best - worst;
+
+		/*
+		 * Setup fodder. A Pokemon that cannot hurt the thing in front of it, sent
+		 * in against something that sets up, hands it the free turn that ends the
+		 * game - "never sack onto a setup turn" (Pinkacross, The Art of Sacking:
+		 * he stays in with the more valuable Pokemon rather than switch to the
+		 * cheap sack a sweeper would boost on). A phazer, Haze, Encore or Taunt
+		 * user is the answer to the setup, not fodder for it. (24 Sep 2026)
+		 */
+		if (this.cfg.sacking && !imposter && foes[0] && best < 30 && this.foeCanSetUp(gen, foes[0])) {
+			const answersSetup = (entry.moves || []).some(m => /^(roar|whirlwind|dragontail|circlethrow|haze|clearsmog|encore|taunt|yawn|royaldecree)$/.test(String(m).toLowerCase().replace(/[^a-z0-9]/g, '')));
+			if (!answersSetup) score -= 25;
+		}
 
 		// A boosted foe is exactly what Ditto answers: it arrives with the same
 		// boosts, and a revenge kill on a setup sweeper swings the whole game.

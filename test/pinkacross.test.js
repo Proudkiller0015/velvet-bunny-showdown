@@ -63,8 +63,8 @@ function position({ me, myMoves, bench = [], foe, foeBench = [], foeDown = [], t
 		immuneTo: new Set(), notImmuneTo: new Set(),
 	};
 	const mySpecies = me.details.split(',')[0];
-	const cond = /^(\d+)\/(\d+)/.exec(me.condition);
-	state.mine.a = { species: mySpecies, level: 100, hp: +cond[1], maxhp: +cond[2], status: '', fainted: false, boosts: me.boosts || {}, moves: new Set(), tera: null };
+	const cond = /^(\d+)\/(\d+)/.exec(me.condition) || [0, 0, 1];
+	state.mine.a = { species: mySpecies, level: 100, hp: +cond[1], maxhp: +cond[2], status: '', fainted: !+cond[1], boosts: me.boosts || {}, moves: new Set(), tera: null };
 	if (foeBench.length || foeDown.length) {
 		state.preview = { p1: [foe.species, ...foeBench, ...foeDown].map(species => ({ species, level: 100 })), p2: [] };
 		state.theirDown = foeDown.slice();
@@ -156,6 +156,81 @@ if (MAIN) {
 	// (Champion only: Stockfish's search already prefers the Earthquake here with the rule off.)
 	onRungs(['champion'], 3, board(['Heatran', 'Dondozo']),
 		(c, r) => moveName(c, r) === 'Swords Dance', 'still sets up when a foe behind survives the unboosted hit');
+}
+
+// ------------------------------------------------------------------ sacking
+if (MAIN) console.log('\n--- A14: the Art of Sacking ---');
+if (MAIN) {
+	const calc = require('@smogon/calc');
+	// Scizor has just fainted to a Volcarona that has shown Quiver Dance. Chansey
+	// takes almost nothing and does nothing: the boosting turn it hands over ends
+	// the game. Lopunny at 70% chips it and lives a hit.
+	const fodder = () => {
+		const p = position({
+			me: mon('Scizor', ['Bullet Punch'], { fainted: true }), myMoves: ['Bullet Punch'],
+			bench: [mon('Chansey', ['Soft-Boiled', 'Heal Bell']), mon('Lopunny', ['Double-Edge'], { hp: 70 })],
+			foe: { species: 'Volcarona', hp: 100, moves: ['Quiver Dance', 'Fiery Dance'] },
+		});
+		p.request.forceSwitch = [true];
+		delete p.request.active;
+		return p;
+	};
+	onRungs(['champion', 'stockfish'], 2, fodder, c => c === 'switch 3', 'does not send setup fodder in front of a Quiver Dancer');
+
+	// Same position, but the Chansey carries Seismic Toss: now it is not fodder.
+	const tosser = () => {
+		const p = fodder();
+		p.request.side.pokemon[1].moves = ['softboiled', 'seismictoss'];
+		return p;
+	};
+	onRungs(['champion'], 1, tosser, c => /^switch/.test(c), 'still switches normally when the Chansey can hit back');
+
+	// Value: the only answer to a live threat is worth more for it (his 15% Moltres).
+	for (const rung of ['champion', 'stockfish']) {
+		const on = new BattleAI({ difficulty: rung });
+		const off = new BattleAI({ difficulty: rung, cfg: { sacking: false } });
+		const p = position({
+			me: mon('Chansey', ['Soft-Boiled']), myMoves: ['Soft-Boiled'],
+			bench: [mon('Coalossal', ['Stone Edge'], { hp: 70 }), mon('Lopunny', ['Double-Edge'])],
+			foe: { species: 'Volcarona', hp: 100, moves: ['Quiver Dance', 'Fiery Dance', 'Bug Buzz'] },
+			foeBench: ['Blissey'], foeDown: ['Pikachu', 'Raichu', 'Eevee', 'Jolteon'],
+		});
+		const gen = on.gen(9);
+		on._memo = new Map();
+		const plan = on.teamPlan(gen, p.state, p.request);
+		const coal = p.request.side.pokemon[1];
+		check(`${rung}: Coalossal is the sole answer to Volcarona`, plan.rows.get(on.entryKey(coal)).sole, n => n >= 1);
+		const vOn = on.monValue(gen, coal, p.state, p.request), vOff = off.monValue(gen, coal, p.state, p.request);
+		check(`${rung}: the sole answer is valued up (${vOff.toFixed(0)} -> ${vOn.toFixed(0)})`, vOn > vOff + 8, true);
+		on._memo = null;
+	}
+
+	// Value: hard-walled by a living foe nothing of ours can wear down.
+	for (const rung of ['champion']) {
+		const ai = new BattleAI({ difficulty: rung });
+		const gen = ai.gen(9);
+		const team = foeBench => position({
+			me: mon('Chansey', ['Soft-Boiled']), myMoves: ['Soft-Boiled'],
+			bench: [mon('Jolteon', ['Thunderbolt'])],
+			foe: { species: 'Gyarados', hp: 100, moves: ['Waterfall'] }, foeBench, foeDown: ['Pikachu', 'Raichu', 'Eevee', 'Vaporeon'],
+		});
+		const walled = team(['Garchomp']), open = team(['Pelipper']);
+		const v = p => { ai._memo = new Map(); const out = ai.monValue(gen, p.request.side.pokemon[1], p.state, p.request); ai._memo = null; return out; };
+		check(`${rung}: a Jolteon with a living Garchomp and no answer to it is worth less`, v(walled) < v(open) - 5, true);
+	}
+
+	// Value: a bench Pokemon our own Stealth Rock would finish is a fixed-price free switch.
+	{
+		const ai = new BattleAI({ difficulty: 'champion' });
+		const gen = ai.gen(9);
+		const p = position({
+			me: mon('Chansey', ['Soft-Boiled']), myMoves: ['Soft-Boiled'],
+			bench: [mon('Charizard', ['Flamethrower'], { hp: 20 }), mon('Lopunny', ['Double-Edge'])],
+			foe: { species: 'Gyarados', hp: 100, moves: ['Waterfall'] }, hazards: { 'Stealth Rock': 1 },
+		});
+		check('champion: dead-on-entry Charizard is kept at the token price', ai.monValue(gen, p.request.side.pokemon[1], p.state, p.request), 15);
+	}
+	void calc;
 }
 
 module.exports = { position, mon, onRungs, moveName, check, realStats };
