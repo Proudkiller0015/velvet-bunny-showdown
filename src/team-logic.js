@@ -54,6 +54,50 @@ const ABILITIES = {
 const STATUS_ABSORB_TYPES = ['Poison', 'Steel', 'Fire', 'Electric'];
 
 /*
+ * Immediate power (24 Sep 2026). "The team needs something that hits hard on
+ * the turn it comes in, without setting up first" (Pinkacross, 18 Things Every
+ * Team Needs; B2 in docs/research-pinkacross.md). A Choice Band/Specs or Life
+ * Orb attacker is the usual one; an ability that multiplies every hit (Huge
+ * Power, Sheer Force, Adaptability...) makes a raw breaker of a set with any
+ * item. A setup sweeper never counts: it needs a free turn to threaten, and a
+ * balance team rarely hands it one.
+ */
+const BREAKER_ITEMS = ['choiceband', 'choicespecs', 'lifeorb'];
+const BREAKER_ABILITIES = ['hugepower', 'purepower', 'sheerforce', 'adaptability', 'toughclaws', 'gorillatactics',
+	'sharpness', 'strongjaw', 'ironfist', 'punkrock', 'waterbubble', 'transistor', 'dragonsmaw', 'rockypayload', 'supremeoverlord'];
+
+/*
+ * The rest of his "18 things every team needs" (24 Sep 2026; B4, B6 in the
+ * research). Toxic Spikes poison whatever touches the ground and is not
+ * Poison or Steel; a grounded Poison type absorbs the layers on entry, and
+ * Heavy-Duty Boots stop both the poison and the absorbing.
+ */
+const POISON_PROOF = ['immunity', 'pastelveil', 'purifyingsalt', 'comatose', 'magicguard', 'poisonheal', 'toxicboost', 'naturalcure', 'levitate'];
+/* Something that hurts whatever makes contact with it: Rocky Helmet, Rough Skin, Flame Body Moltres, Static Zapdos. */
+const CONTACT_PUNISH = ['roughskin', 'ironbarbs', 'flamebody', 'static', 'poisonpoint', 'effectspore', 'gooey', 'tanglinghair', 'cursedbody'];
+const GROUND_IMMUNE_ABILITIES = ['levitate', 'eartheater'];
+const ELECTRIC_IMMUNE_ABILITIES = ['voltabsorb', 'lightningrod', 'motordrive'];
+/*
+ * A Knock Off absorber is "a member that doesn't mind losing its item": no
+ * item to lose, one that has already done its job, or an ability that keeps it
+ * or gains from losing it. Checked only when items are known - a set with no
+ * item (the RP bot before the first badge) has nothing Knock Off can take.
+ */
+const KNOCK_PROOF_ABILITIES = ['stickyhold', 'unburden', 'klutz', 'magician', 'pickpocket'];
+
+/*
+ * Pacing (24 Sep 2026): how long a set needs to do its job. "Focus Sash leads,
+ * Booster Energy sweepers and Weakness Policy all win or fail fast"
+ * (Pinkacross, The #1 Team Building Mistake). One-use items and moves that
+ * spend the user belong on hyper offense, where the game is short; on a
+ * balance team, which plays a long game, they leave it "playing with five".
+ */
+const ONE_USE_ITEMS = ['focussash', 'boosterenergy', 'weaknesspolicy', 'whiteherb', 'airballoon', 'sitrusberry', 'lumberry',
+	'oranberry', 'mentalherb', 'powerherb', 'throatspray', 'redcard', 'ejectbutton', 'ejectpack', 'blunderpolicy', 'roomservice',
+	'electricseed', 'grassyseed', 'mistyseed', 'psychicseed', 'adrenalineorb', 'custapberry', 'salacberry', 'petayaberry', 'liechiberry', 'ganlonberry'];
+const ONE_SHOT_MOVES = ['explosion', 'selfdestruct', 'memento', 'healingwish', 'lunardance', 'finalgambit', 'mistyexplosion'];
+
+/*
  * Weather cores. An abuser without its setter is a Pokemon playing at half
  * strength - a Swift Swim Barraskewda on a team with no rain, next to a snow
  * setter, is what a usage-based draft produced - and two setters of different
@@ -97,6 +141,76 @@ function attackSide(dex, set) {
 }
 
 const has = (set, list) => (set.moves || []).some(m => list.includes(toID(m)));
+const attackCount = (dex, set) => (set.moves || []).filter(m => { const mv = dex.moves.get(m); return mv.exists && mv.category !== 'Status'; }).length;
+
+/**
+ * Whether a set is a wall: recovery (or a healing ability) and at most two
+ * attacks, or big bulk and at most two attacks. The same test the checklist
+ * classifies a team's style by.
+ */
+function isDefensive(dex, set) {
+	const b = dex.species.get(set.species).baseStats;
+	const attacks = attackCount(dex, set);
+	return (has(set, MOVES.recovery) || ABILITIES.recovery.includes(toID(set.ability))) && attacks <= 2 ||
+		(b.hp + b.def + b.spd >= 300 && attacks <= 2);
+}
+
+/**
+ * Immediate power (see BREAKER_ITEMS): no setup move, real attacks, and either
+ * a breaking item or ability, or - when the set has no item yet (the
+ * assembler searches before items; the RP bot builds without them before the
+ * first badge) - an all-out attacking set on a strong attacking stat, which is
+ * what itemFor() turns into a Band/Specs or Life Orb set.
+ */
+function isBreaker(dex, set) {
+	if (has(set, MOVES.setup)) return false;
+	const attacks = attackCount(dex, set);
+	if (attacks < 2) return false;
+	const item = toID(set.item);
+	if (BREAKER_ITEMS.includes(item)) return true;
+	if (attacks >= 3 && BREAKER_ABILITIES.includes(toID(set.ability))) return true;
+	if (item) return false;
+	if (set.role === 'Wallbreaker') return true;
+	const b = dex.species.get(set.species).baseStats;
+	return attacks >= 3 && Math.max(b.atk, b.spa) >= 100 && !isDefensive(dex, set);
+}
+
+/*
+ * Passivity (24 Sep 2026): "how many threatening Pokemon can switch into it
+ * freely" (Pinkacross, The #1 Team Building Mistake). Rest/Sleep Talk Dondozo
+ * and Blissey are his passive examples; Specs Kyurem and Salt Cure Garganacl
+ * are not. A set is passive when it cannot pivot out, does not set up, and
+ * either sleeps to heal (Rest) or has no attack that threatens anything - a
+ * STAB-adjusted 90 base power from a real attacking stat (Seismic Toss and
+ * Night Shade are read as 75).
+ */
+function isPassive(dex, set) {
+	if (has(set, MOVES.pivot) || has(set, MOVES.setup)) return false;
+	const species = dex.species.get(set.species);
+	if (has(set, ['rest'])) return true;
+	let best = 0;
+	for (const name of set.moves || []) {
+		const mv = dex.moves.get(name);
+		if (!mv.exists || mv.category === 'Status') continue;
+		if (['seismictoss', 'nightshade', 'saltcure'].includes(mv.id)) { best = Math.max(best, mv.id === 'saltcure' ? 120 : 75); continue; }
+		const stat = mv.id === 'bodypress' ? species.baseStats.def : mv.category === 'Physical' ? species.baseStats.atk : species.baseStats.spa;
+		best = Math.max(best, (mv.basePower || 0) * (species.types.includes(mv.type) ? 1.5 : 1) * Math.min(1.3, stat / 100));
+	}
+	return best < 90;
+}
+
+/**
+ * Pacing, per set: 'fast' (a one-use item or a move that spends the user -
+ * win or fail fast), 'slow' (it heals and comes back many times: recovery,
+ * Regenerator, Leftovers or Black Sludge on a wall), or 'mid'.
+ */
+function paceOf(dex, set) {
+	const item = toID(set.item);
+	if (ONE_USE_ITEMS.includes(item) || has(set, ONE_SHOT_MOVES)) return 'fast';
+	if (has(set, MOVES.recovery) || ABILITIES.recovery.includes(toID(set.ability)) ||
+		(['leftovers', 'blacksludge'].includes(item) && isDefensive(dex, set))) return 'slow';
+	return 'mid';
+}
 
 /*
  * A set's Speed as the game computes it (31 IVs), from its EVs, nature and
@@ -112,6 +226,10 @@ function speedStat(dex, set) {
 	const ev = set.evs ? (set.evs.spe || 0) : 252;
 	const nature = !set.evs && !set.nature ? 1.1 : SPEED_UP.includes(set.nature) ? 1.1 : SPEED_DOWN.includes(set.nature) ? 0.9 : 1;
 	return Math.floor((Math.floor((2 * base + 31 + Math.floor(ev / 4)) * level / 100) + 5) * nature);
+}
+/** Not touched by Ground moves or Toxic Spikes: a Flying type, Levitate, an Air Balloon. */
+function grounded(dex, set) {
+	return !dex.species.get(set.species).types.includes('Flying') && toID(set.ability) !== 'levitate' && toID(set.item) !== 'airballoon';
 }
 /** Final Speed that counts as fast on its own (checklist rule 7): 336 at level 100, in proportion below. */
 const FAST = 336;
@@ -164,12 +282,7 @@ function analyze(dex, sets, options = {}) {
 	const ability = s => toID(s.ability);
 	const item = s => toID(s.item);
 	const priority = s => (s.moves || []).some(m => { const mv = dex.moves.get(m); return mv.exists && mv.category !== 'Status' && mv.priority > 0; });
-	const defensive = s => {
-		const b = dex.species.get(s.species).baseStats;
-		const attacks = (s.moves || []).filter(m => dex.moves.get(m).category !== 'Status').length;
-		return (has(s, MOVES.recovery) || ABILITIES.recovery.includes(ability(s))) && attacks <= 2 ||
-			(b.hp + b.def + b.spd >= 300 && attacks <= 2);
-	};
+	const defensive = s => isDefensive(dex, s);
 	const sides = sets.map(s => attackSide(dex, s));
 	// Fast enough on its own (rule 7), at the set's level.
 	const fast = s => speedStat(dex, s) >= Math.floor(FAST * (s.level || 100) / 100);
@@ -194,7 +307,11 @@ function analyze(dex, sets, options = {}) {
 	})).length;
 	const threats = (options.threats || []).map(t => {
 		const sp = dex.species.get(t.name || t.species || '');
-		return { name: t.name || sp.name || (t.types || []).join('/'), types: t.types || (sp.exists ? sp.types : []), ability: t.ability || '' };
+		return {
+			name: t.name || sp.name || (t.types || []).join('/'), types: t.types || (sp.exists ? sp.types : []), ability: t.ability || '',
+			// Its top Speed (252 EVs, a boosting nature) at the team's level, when the species is known.
+			speed: sp.exists ? speedStat(dex, { species: sp.name, level: (sets[0] && sets[0].level) || 100 }) : 0,
+		};
 	}).filter(t => t.types.length);
 	const hitsSE = type => sets.some(s => (s.moves || []).some(m => {
 		const mv = dex.moves.get(m);
@@ -233,7 +350,45 @@ function analyze(dex, sets, options = {}) {
 		physical: sets.filter((s, i) => sides[i] === 'physical').map(s => s.species),
 		special: sets.filter((s, i) => sides[i] === 'special').map(s => s.species),
 		defensive: who(defensive),
+		// Immediate power (see BREAKER_ITEMS): hits hard on entry without setting up.
+		breakers: who(s => isBreaker(dex, s)),
+		/*
+		 * The rest of Pinkacross's 18 things (24 Sep 2026). Toxic Spikes: who a
+		 * layer would poison, and who absorbs it (a grounded Poison type without
+		 * Boots). Knock Off users, and members that do not mind losing their item.
+		 */
+		toxicSpikesVictims: who(s => grounded(dex, s) && item(s) !== 'heavydutyboots' && !POISON_PROOF.includes(ability(s)) &&
+			!dex.species.get(s.species).types.some(t => t === 'Poison' || t === 'Steel')),
+		toxicSpikesAbsorbers: who(s => grounded(dex, s) && item(s) !== 'heavydutyboots' && dex.species.get(s.species).types.includes('Poison')),
+		steel: who(s => dex.species.get(s.species).types.includes('Steel')),
+		knockOff: who(s => has(s, ['knockoff'])),
+		knockOffAbsorbers: who(s => !item(s) || ONE_USE_ITEMS.includes(item(s)) || KNOCK_PROOF_ABILITIES.includes(ability(s))),
+		itemsKnown: sets.some(s => item(s)),
+		contactPunishers: who(s => item(s) === 'rockyhelmet' || CONTACT_PUNISH.includes(ability(s))),
+		// Ground and Electric immunities, counted apart from resists (Air Balloon counted separately: HO only).
+		groundImmune: who(s => dex.species.get(s.species).types.includes('Flying') || GROUND_IMMUNE_ABILITIES.includes(ability(s))),
+		balloon: who(s => item(s) === 'airballoon'),
+		electricImmune: who(s => dex.species.get(s.species).types.includes('Ground') || ELECTRIC_IMMUNE_ABILITIES.includes(ability(s))),
+		// Passivity and pacing per set (see isPassive, paceOf).
+		passive: who(s => isPassive(dex, s)),
+		fastPace: who(s => paceOf(dex, s) === 'fast'),
+		slowPace: who(s => paceOf(dex, s) === 'slow'),
 	};
+	/*
+	 * "A fast Pokemon: faster than the fastest threat the team otherwise has no
+	 * answer to; a Scarf counts" (Pinkacross, 18 Things). A threat is answered
+	 * when a member resists one of its types and is weak to none of them (the
+	 * draft test in TeamBuilder.threatCover()); for the rest, something has to
+	 * outrun them. Only with a threat list whose species (so Speed) are known.
+	 */
+	const answered = t => sets.some(s => {
+		const mine = dex.species.get(s.species).types;
+		const mult = type => (!dex.getImmunity(type, mine) ? 0 : Math.pow(2, dex.getEffectiveness(type, mine)));
+		return t.types.some(type => mult(type) <= 0.5) && !t.types.some(type => mult(type) >= 2);
+	});
+	const loose = threats.filter(t => t.speed && !answered(t)).sort((a, b) => b.speed - a.speed);
+	const topSpeed = Math.max(0, ...sets.map(s => speedStat(dex, s) * (item(s) === 'choicescarf' ? 1.5 : 1)));
+	report.outsped = loose.length && topSpeed <= loose[0].speed ? loose[0].name : null;
 	report.weather = {};
 	for (const [name, w] of Object.entries(WEATHER)) {
 		const setters = who(s => w.setters.includes(ability(s)) || has(s, w.setMoves));
@@ -257,7 +412,13 @@ function stageFor(badges) {
 /** What is wrong with a team, most important first: [{ severity: 'hard'|'soft', text }]. */
 function issues(report, { stage = 'full', themed = false } = {}) {
 	const out = [];
-	const add = (severity, text) => out.push({ severity, text });
+	/*
+	 * `weight` (optional) is what a soft issue costs in score() when it is not
+	 * the usual 3: the lesser of Pinkacross's 18 things ("the least crucial
+	 * item" is his phrase for the contact punisher) cost less, so six of them
+	 * cannot outvote a hard rule in the search.
+	 */
+	const add = (severity, text, weight) => out.push(weight === undefined ? { severity, text } : { severity, text, weight });
 	if (stage === 'movesets' || report.size < 3) return out;
 
 	const worst = Object.entries(report.weak).sort((a, b) => b[1].length - a[1].length)[0];
@@ -296,6 +457,16 @@ function issues(report, { stage = 'full', themed = false } = {}) {
 	if (stage === 'basics') return out;
 
 	if (!report.winCondition.length) add(report.style === 'stall' ? 'soft' : 'hard', 'nothing that wins a game on its own (a setup sweeper, or a breaker with a Choice item or Life Orb)');
+	/*
+	 * Immediate power (24 Sep 2026; B2): a balance or bulky offense team needs a
+	 * breaker that hits hard on the turn it comes in, not only setup sweepers -
+	 * "setup sweepers do not count" (Pinkacross, 18 Things Every Team Needs).
+	 * Hard there, as the research frames it; soft on hyper offense, which has
+	 * other ways through bulk (a sweeper per check); stall is exempt.
+	 */
+	if (report.breakers && !report.breakers.length && report.style !== 'stall') {
+		add(['balance', 'bulky offense'].includes(report.style) ? 'hard' : 'soft', 'no immediate power (a breaker with a Choice Band/Specs or Life Orb that needs no setup)');
+	}
 	if (!report.stealthRock.length) add('hard', 'no Stealth Rock');
 	if (report.stealthRock.length > 1) add('soft', `${report.stealthRock.length} Stealth Rock setters (${report.stealthRock.join(', ')}); one is enough`);
 	// Rule 2: hazard control. Heavy rock damage needs a remover; a balance or stall team wants one anyway,
@@ -313,8 +484,9 @@ function issues(report, { stage = 'full', themed = false } = {}) {
 	if (!report.speedControl.length) add('hard', 'nothing fast and no priority');
 	else if (report.speedControl.length < needSpeed) add('hard', `only ${report.speedControl.length} of the ${needSpeed} speed control a ${report.style} team needs (${report.speedControl.join(', ')})`);
 	else if (!report.priority.length && report.style !== 'stall') add('soft', 'no priority move');
+	// Rule 8: "pivots: at least 2 users, except stall and HO" (Pinkacross, 18 Things). Soft, as he frames it.
 	if (!report.pivots.length && ['balance', 'bulky offense'].includes(report.style)) add('soft', 'no pivot (U-turn, Volt Switch, Flip Turn, Teleport, Parting Shot)');
-	else if (report.pivots.length === 1 && report.style === 'balance') add('soft', 'a balance team with one pivot');
+	else if (report.pivots.length === 1 && ['balance', 'bulky offense'].includes(report.style)) add('soft', `a ${report.style} team with one pivot`);
 	/*
 	 * Rule 11, by mechanism: two Will-O-Wisp users are one answer, and not one to
 	 * Calm Mind. Two distinct ones, at least one that works on a special sweeper.
@@ -336,14 +508,65 @@ function issues(report, { stage = 'full', themed = false } = {}) {
 	const unhealed = report.defensive.filter(n => !report.recovery.includes(n));
 	if (report.style === 'stall' && unhealed.length) add('hard', `a stall team's ${unhealed.join(', ')} ${unhealed.length === 1 ? 'has' : 'have'} no recovery`);
 	else if (report.defensive.length && !report.recovery.length) add('soft', 'the defensive Pokémon have no recovery');
+	if (report.breakers) eighteenThings(report, { themed, add });
 	return out;
+}
+
+/*
+ * The rest of Pinkacross's "18 things every team needs" and his #1 mistake,
+ * mixing archetypes (24 Sep 2026; B4, B6, B7, B8 in docs/research-pinkacross.md).
+ * All soft, as he frames them - "strongly advised", "the least crucial item" -
+ * and because every new hard rule costs the search raw strength. Each keeps
+ * the exemptions he gives.
+ */
+function eighteenThings(report, { themed, add }) {
+	const style = report.style;
+	const offense = style === 'hyper offense';
+	// Toxic Spikes absorber: needed once a layer would poison three or more.
+	if (report.toxicSpikesVictims.length >= 3 && !report.toxicSpikesAbsorbers.length) {
+		add('soft', `no Toxic Spikes absorber (a grounded Poison type), and a layer poisons ${report.toxicSpikesVictims.length}`, 2);
+	}
+	// A Steel type: "strongly advised" (a type specialist is exempt from typing advice).
+	if (!themed && !report.steel.length) add('soft', 'no Steel type', 2);
+	// Knock Off: 1-2 users (hyper offense exempt), diminishing returns at 3; and a member that does not mind losing its item.
+	if (!report.knockOff.length && !offense && style !== 'stall') add('soft', 'no Knock Off');
+	else if (report.knockOff.length >= 3) add('soft', `${report.knockOff.length} Knock Off users; two is plenty`, 1.5);
+	if (report.itemsKnown && !report.knockOffAbsorbers.length && !offense) add('soft', 'nothing that minds losing its item less than the rest (a Knock Off absorber)', 1.5);
+	// A contact punisher: the least crucial of the 18, and not for hyper offense or stall.
+	if (!report.contactPunishers.length && !offense && style !== 'stall') add('soft', 'no contact punisher (Rocky Helmet, Rough Skin, Flame Body, Static...)', 1);
+	/*
+	 * Ground and Electric immunities, apart from resists: Electric "because Volt
+	 * Switch is otherwise the best move in the game against you". Air Balloon
+	 * counts only on hyper offense, which may also skip the Electric one.
+	 */
+	if (!themed) {
+		if (!report.groundImmune.length && !(offense && report.balloon.length)) add('soft', 'no Ground immunity (a Flying type, Levitate)', 2);
+		if (!report.electricImmune.length && !offense) add('soft', 'no Electric immunity (a Ground type, Volt Absorb, Lightning Rod)', 2);
+	}
+	// A fast member for the fastest threat nothing on the team walls.
+	if (report.outsped) add('soft', `nothing outspeeds ${report.outsped}, and nothing walls it`);
+	/*
+	 * Mixing archetypes, "the #1 mistake" (Pinkacross): a passive set on hyper
+	 * offense; a passive wall with no other wall behind it on bulky offense
+	 * ("passive Pokemon need other walls behind them"); more than two passive
+	 * members anywhere but stall (rule 13); and one-use, win-or-fail-fast sets
+	 * on balance or stall, which play the long game ("playing with five").
+	 */
+	const passive = report.passive;
+	if (offense && passive.length) add('soft', `${passive.join(', ')} ${passive.length === 1 ? 'is' : 'are'} too passive for hyper offense`);
+	else if (style === 'bulky offense' && passive.length && report.defensive.length <= 1) add('soft', `${passive.join(', ')} ${passive.length === 1 ? 'is' : 'are'} passive with no other wall behind`);
+	if (passive.length > 2 && style !== 'stall') add('soft', `${passive.length} passive members (${passive.join(', ')}) on a ${style} team`);
+	if (['balance', 'stall'].includes(style) && report.fastPace.length) add('soft', `one-use sets on a ${style} team (${report.fastPace.join(', ')}): it plays a long game`);
 }
 
 /** A single number to compare teams by: higher is better. Hard issues cost far more than soft ones. */
 function score(dex, sets, options = {}) {
 	const report = analyze(dex, sets, options);
 	const found = issues(report, options);
-	return { report, issues: found, score: -found.reduce((n, i) => n + (i.severity === 'hard' ? 10 : 3), 0) };
+	return { report, issues: found, score: -found.reduce((n, i) => n + (i.weight !== undefined ? i.weight : i.severity === 'hard' ? 10 : 3), 0) };
 }
 
-module.exports = { analyze, issues, score, stageFor, effectiveness, attackSide, speedStat, KEY_TYPES, MOVES, ABILITIES };
+module.exports = {
+	analyze, issues, score, stageFor, effectiveness, attackSide, speedStat, isBreaker, isDefensive, isPassive, paceOf,
+	KEY_TYPES, MOVES, ABILITIES, ONE_USE_ITEMS,
+};
