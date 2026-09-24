@@ -2268,6 +2268,20 @@ class BattleAI {
 		}
 		if (move.status) {
 			if (foe.status) return -25;
+			/*
+			 * Poison or a burn that finishes it at the end of this turn is a knockout:
+			 * Toxic and a burn take a sixteenth, poison an eighth. Replay gen9rpou-6-tlvwbi,
+			 * turn 6: Mew held Toxic in front of a Weavile at 5% and clicked Future Sight.
+			 * Not through a Leftovers or Black Sludge it is known to hold (that heals
+			 * first), nor Magic Guard, Poison Heal or Guts.
+			 */
+			const them = (ctx.foes || [])[0];
+			const tick = { tox: 6.25, brn: 6.25, psn: 12.5 }[move.status];
+			if (tick && them && !this.cfg.naive && this.cfg.sanity !== false && move.target !== 'self') {
+				const left = them.hp === undefined ? 100 : them.hp * 100 / (them.maxhp || 100);
+				const heals = /^(leftovers|blacksludge)$/.test(String(them.item || '').toLowerCase().replace(/[^a-z]/g, '')) ? 6.25 : 0;
+				if (left + heals <= tick && !/^(magicguard|poisonheal|guts|toxicboost|flareboost)$/.test(foeAbility)) return 70;
+			}
 			if (ctx.rules && ctx.rules.status && move.target !== 'self') return this.stallStatus(gen, move, foe, ctx);
 			if (move.status === 'slp') return 45;
 			if (move.status === 'par' || move.status === 'brn' || move.status === 'tox') return 32;
@@ -3019,6 +3033,17 @@ class BattleAI {
 	 * twice the size.
 	 */
 	dynamaxWorthIt(hpPct, incoming, best, { attacks = 4, damage = 100, turn = 99, hold = false, maxDamage = damage } = {}) {
+		/*
+		 * Never to click a status move: it becomes Max Guard, and the Dynamax spends a
+		 * turn blocking a hit the plain move was chosen for. Replay gen9rpou-6-tlvwbi,
+		 * turn 9: Togekiss at 43% Dynamaxed for Roost ("it survives the hit"), got Max
+		 * Guard into a Slowbro that Teleported out, no heal, and died next turn to
+		 * Weavile's Triple Axel with its Roost never used.
+		 */
+		if (this.cfg.sanity !== false && best && best.name) {
+			const picked = PkmnDex.forGen(8).moves.get(best.name);
+			if (picked && picked.exists && picked.category === 'Status') return false;
+		}
 		if (incoming >= hpPct && incoming < hpPct * 2) return true;   // survives it
 		if (incoming >= hpPct) return false;                          // dies regardless
 		// Stall's Dynamax is held for a kill (see chooseForSlot, holdDynamax).
@@ -3330,6 +3355,21 @@ class BattleAI {
 					if (outsped && pct < 100 && !(data && data.priority > 0) && s > 0) s *= 0.35;
 					if (s > score) { score = s; target = foe.slot === 'b' ? 2 : 1; }
 				}
+				/*
+				 * Future Sight and Doom Desire land two turns later, on whatever is in
+				 * that slot then: never a knockout now. Replay gen9rpou-6-tlvwbi, turn 6:
+				 * Mew read Future Sight into a Weavile at 5% as 1143% of its HP and a KO
+				 * worth 210, clicked it, took a Knock Off to 12% - and the hit landed on
+				 * the Slowbro that came in, for 21%. Toxic, which kills a 5% Weavile at the
+				 * end of the turn, sat beside it. What it is worth is its hit on a full
+				 * foe (a share of the maximum, not of what this one has left), discounted
+				 * for the wait; the playout sees no damage this turn.
+				 */
+				const delayed = this.cfg.sanity !== false && !this.cfg.naive && data && data.flags && data.flags.futuremove;
+				if (delayed && foes[0]) {
+					const ofMax = Math.min(100, this.damageToFoe(gen, me, foes[0], name, field) * (foes[0].hp === undefined ? 1 : foes[0].hp / (foes[0].maxhp || 100)));
+					score = ofMax * 0.6;
+				}
 				// A second Future Sight before the first lands fails (the Stockfish reviews).
 				if (this.cfg.sanity !== false && data && /^(futuresight|doomdesire)$/.test(data.id) && state.futureSight &&
 					state.turn <= (state.futureSight[state.myPlayer] || -9) + 2) score = -30;
@@ -3354,11 +3394,12 @@ class BattleAI {
 			// opponent can do about it, which the heuristic score cannot see.
 			ranked.push({
 				kind: 'move', n: move.n, target, name, score,
-				damage: data && data.category !== 'Status'
+				// A delayed hit (Future Sight) does nothing this turn: the playout takes its heuristic worth.
+				damage: data && data.category !== 'Status' && !(this.cfg.sanity !== false && !this.cfg.naive && data.flags && data.flags.futuremove)
 					? Math.max(0, ...foes.map(f => this.damagePct(gen, me, this.foePokemon(gen, f), name, field)))
 					: 0,
 				priority: data ? (data.priority || 0) : 0,
-				heuristic: data && data.category === 'Status' ? score : 0,
+				heuristic: data && (data.category === 'Status' || (this.cfg.sanity !== false && !this.cfg.naive && data.flags && data.flags.futuremove)) ? score : 0,
 				// What a heal restores, for the search to play out (recovery).
 				heal: (this.cfg.recovery || (stall && rules.heal)) && data && RECOVERY.includes(data.name) && !(data.id === 'rest' && me.status === 'slp')
 					? this.healShare(data, state) : 0,

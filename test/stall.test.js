@@ -277,5 +277,56 @@ console.log('\n--- R13: the last heals are saved for low HP ---');
 	check('but at 40% they are spent', ai.stallRecovery(move, me, p.state, 40, 10, false, { pp: { Recover: 2 } }) > 60, true);
 }
 
-console.log(`\n=== ${pass} passed, ${fail} failed`);
-process.exitCode = fail ? 1 : 0;
+console.log('\n--- Future Sight is not a knockout, a status that finishes it is (replay gen9rpou-6-tlvwbi, turn 6) ---');
+{
+	/*
+	 * Mew (91%) in front of Choice Band Weavile at 5%: Future Sight read as 1143% of
+	 * Weavile's HP, a KO worth 210, while it lands two turns later on whatever is
+	 * there (the Slowbro that came in, for 21%). Toxic kills the 5% Weavile at the
+	 * end of this turn.
+	 */
+	const moves = ['Chrysalis Veil', 'Future Sight', 'Toxic Spikes', 'Toxic'];
+	const build = () => position({
+		me: mon('Mew', moves, { item: 'Leftovers', ability: 'Synchronize', hp: 91 }), myMoves: moves,
+		bench: [
+			mon('Quagsire', ['Recover', 'Earthquake', 'Curse', 'Toxic'], { item: 'Rocky Helmet', ability: 'Unaware' }),
+			mon('Gourgeist', ['Synthesis', 'Poltergeist', 'Toxic', 'Will-O-Wisp'], { item: 'Leftovers', ability: 'Frisk' }),
+			mon('Empoleon', ['Roost', 'Imperial Torrent', 'Royal Decree', 'Toxic'], { item: 'Leftovers', ability: 'Emperors Pride', hp: 33 }),
+			mon('Miltank', ['Milk Drink', 'Body Slam', 'Stealth Rock', 'Heal Bell'], { item: 'Leftovers', ability: 'Thick Fat' }),
+			mon('Togekiss', ['Roost', 'Dazzling Gleam', 'Defog', 'Toxic'], { ability: 'Hustle', hp: 66 }),
+		],
+		foe: { species: 'Weavile', hp: 5, moves: ['Knock Off'] },
+		foeBench: ['Corviknight', 'Landorus-Therian', 'Slowbro', 'Iron Valiant'], foeDown: ['Banette'], turn: 6,
+	});
+	const ai = stockfish();
+	const gen = ai.gen(9);
+	const p = build();
+	const me = ai.myPokemon(gen, p.request.side.pokemon[0], p.state);
+	const foe = p.state.opponent.a;
+	ai.myMoveNames = moves;
+	check('Toxic into a 5% Weavile scores as the knockout it is', ai.statusScore(gen, 'Toxic', me, ai.foePokemon(gen, foe), p.state, 30, { foes: [foe], entry: p.request.side.pokemon[0] }) >= 60, true);
+	check('not through a Leftovers it is known to hold', ai.statusScore(gen, 'Toxic', me, ai.foePokemon(gen, foe), p.state, 30, { foes: [{ ...foe, item: 'Leftovers' }], entry: p.request.side.pokemon[0] }) < 60, true);
+	check('Mew does not click Future Sight', moveOf(p.request, stockfish().decide(p.request, p.state)), c => c !== 'Future Sight');
+}
+
+console.log('\n--- no Dynamax for a status move (replay gen9rpou-6-tlvwbi, turn 9) ---');
+{
+	// Togekiss at 43% Dynamaxed for Roost: a Max Guard into a Teleport, no heal, dead next turn.
+	const ai = stockfish();
+	check('a status move is never Dynamaxed, even "to survive"', ai.dynamaxWorthIt(43, 50, { score: 74, name: 'Roost' }, { attacks: 1, damage: 0, turn: 9 }), false);
+	check('an attack that survives the hit through it still is', ai.dynamaxWorthIt(43, 50, { score: 50, name: 'Dazzling Gleam' }, { attacks: 1, damage: 53, turn: 9 }), true);
+}
+
+// Straight from the replay's input log (test/replay-position.js): the positions the bot met.
+(async () => {
+	console.log('\n--- replay gen9rpou-6-tlvwbi, played again on this build ---');
+	const { replayPositions, named } = require('./replay-position');
+	const seen = await replayPositions('gen9rpou-6-tlvwbi', { upTo: 9 });
+	const at = t => named(seen[t].request, seen[t].decide());
+	check('turn 6: Mew (91%) in front of a 5% Weavile does not click Future Sight', at(6), c => !/futuresight/.test(c));
+	check('turn 9: Togekiss (43%) does not Dynamax', at(9), c => !/dynamax/.test(c));
+
+	console.log(`\n=== ${pass} passed, ${fail} failed`);
+	process.exitCode = fail ? 1 : 0;
+	process.exit();
+})();
