@@ -355,7 +355,9 @@ function summoned(summon, { place, badges, levelCap, ace = null }) {
 		}
 		// How well they play, when the scene wants a pushover or a wall. Left out,
 		// the badge count decides it, as it does for any trainer on the route.
-		if (['easy', 'normal', 'hard'].includes(summon.ai)) rolled.ai = summon.ai;
+		// Gyms and the League ask for the top two (src/ai.js): a leader should not
+		// blunder a Heat Crash into Flash Fire.
+		if (['easy', 'normal', 'hard', 'champion', 'stockfish'].includes(summon.ai)) rolled.ai = summon.ai;
 		const Dex2 = require('./rp-dex')();
 		const written = [];
 		for (const want of (Array.isArray(summon.with) ? summon.with : []).slice(0, 6)) {
