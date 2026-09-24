@@ -330,7 +330,15 @@ class TeamBuilder {
 	 */
 	sameAsBase(ctx, species) {
 		const base = ctx.dex.species.get(species.baseSpecies);
-		return base.exists && base.types.join() === species.types.join() && !species.forme.match(/alola|galar|hisui|paldea/i);
+		/*
+		 * Same types is not enough: Ursaluna-Bloodmoon is Ground/Normal like Ursaluna,
+		 * borrowed its Guts + Flame Orb Facade set and ran a Flame Orb with Mind's Eye
+		 * (owner, 24 Sep 2026). A forme that borrows must also keep the stats and the
+		 * abilities - which is what a cosmetic or Gmax forme does.
+		 */
+		const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+		return base.exists && base.types.join() === species.types.join() && !species.forme.match(/alola|galar|hisui|paldea/i) &&
+			same(base.baseStats, species.baseStats) && same(Object.values(base.abilities).sort(), Object.values(species.abilities).sort());
 	}
 
 	/*
