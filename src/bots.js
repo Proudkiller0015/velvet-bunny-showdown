@@ -41,7 +41,7 @@ process.on('disconnect', () => process.exit(0));
 const players = [];   // every bot that can be in a battle
 const difficultyFor = new Map();
 
-const { ShowdownBot } = require('./bot');
+const { ShowdownBot, expireIdleBattles } = require('./bot');
 const bot = new ShowdownBot({ url, difficultyFor });
 bot.connect();
 players.push(bot);
@@ -85,6 +85,13 @@ let recycling = false;
 
 function check() {
 	const memory = process.memoryUsage();
+	// 24 Sep 2026: a battle that went silent without a deinit would otherwise
+	// count as "busy" forever and hold the recycle off; see expireIdleBattles().
+	for (const p of players) {
+		if (!p.battles) continue;
+		const dropped = expireIdleBattles(p);
+		if (dropped) console.log(`[bots] ${p.name}: dropped ${dropped} battle(s) idle for over 30 minutes`);
+	}
 	const busy = busyWith();
 	try {
 		fs.mkdirSync(path.dirname(statusFile), { recursive: true });
