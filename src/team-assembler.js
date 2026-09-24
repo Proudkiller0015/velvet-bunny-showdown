@@ -74,7 +74,7 @@ function untrain(dex, set, moveIds, legal) {
 	// Nothing in the role's pool: anything else it may use, but a trainer with a short
 	// list keeps the duplicate hazard rather than going into battle with three moves.
 	const rest = [...(legal ? new Set([...legal].map(toID)) : RS.learnable(dex, species))].map(id => dex.moves.get(id))
-		.filter(m => m.exists && !m.isNonstandard && !moveIds.includes(m.id) && !RS.HAZARDS.includes(m.id) && !set.moves.some(x => toID(x) === m.id))
+		.filter(m => m.exists && !m.isNonstandard && !m.id.startsWith('hiddenpower') && !moveIds.includes(m.id) && !RS.HAZARDS.includes(m.id) && !set.moves.some(x => toID(x) === m.id))
 		.sort((a, b) => (b.category !== 'Status') - (a.category !== 'Status') || RS.attackValue(species, b) - RS.attackValue(species, a));
 	if (rest.length) set.moves[index] = rest[0].name;
 }
@@ -90,13 +90,16 @@ function untrain(dex, set, moveIds, legal) {
  *   strengthWeight   how much raw strength counts against the checklist (25)
  *   roles      at most this many roles tried per candidate (3)
  *   fixed      candidates that must be on the team (a trainer's ace)
+ *   threats    the format's common Pokemon ([{ name or types, weight?, ability? }]), when
+ *              known: sets pick coverage against them and the checklist's rule 5
+ *              (every threat hit neutrally by two members) is scored
  *
  * Returns [{ ...set, ref, level }]: species, role, ability, item, moves, nature, evs, teraType.
  */
 function assemble(dex, candidates, options = {}) {
 	const {
 		size = 6, stage = 'full', themed = false, rng = Math.random, items = true,
-		strengthWeight = 25, roles = 3, fixed = [], maxEvaluations = 4000,
+		strengthWeight = 25, roles = 3, fixed = [], maxEvaluations = 4000, threats = null,
 	} = options;
 	const usable = candidates.filter(c => dex.species.get(c.species).exists);
 	if (!usable.length) return [];
@@ -108,7 +111,7 @@ function assemble(dex, candidates, options = {}) {
 		const found = RS.roleSets(dex, c.species, c.legal || null).slice(0, roles);
 		const built = [];
 		for (const r of found) {
-			const set = RS.buildSet(dex, c.species, { role: r.role, rng, level: c.level || 100, items: false, legal: c.legal || null });
+			const set = RS.buildSet(dex, c.species, { role: r.role, rng, level: c.level || 100, items: false, legal: c.legal || null, threats });
 			if (set && !built.some(b => b.moves.slice().sort().join() === set.moves.slice().sort().join())) built.push(set);
 		}
 		if (built.length) options_.set(c, built);
@@ -118,13 +121,20 @@ function assemble(dex, candidates, options = {}) {
 
 	const value = picks => {
 		const sets = picks.map(([c, i]) => options_.get(c)[i]);
-		const logic = stage === 'movesets' ? 0 : TL.score(dex, sets, { stage, themed }).score;
+		const logic = stage === 'movesets' ? 0 : TL.score(dex, sets, { stage, themed, threats }).score;
 		const power = picks.reduce((n, [c]) => n + (c.strength || 1) / strongest, 0) / Math.max(1, picks.length);
 		// Two of the same role is fine; four setup sweepers and no support is not a team.
 		const roleCounts = {};
 		for (const s of sets) roleCounts[s.role] = (roleCounts[s.role] || 0) + 1;
 		const crowding = Object.values(roleCounts).reduce((n, k) => n + Math.max(0, k - 2) * 2, 0);
-		return logic + strengthWeight * power - crowding + rng() * 0.01;
+		/*
+		 * A set with one or two moves is not a member, whatever box it ticks: an Unown
+		 * with Hypno Whirl and a Choice Scarf was taken as "speed control" once the
+		 * checklist counted it. Each missing move below three costs as much as a
+		 * soft rule, where the Pokemon has anything better to be swapped for.
+		 */
+		const thin = sets.reduce((n, s) => n + Math.max(0, 3 - s.moves.length) * 4, 0);
+		return logic + strengthWeight * power - crowding - thin + rng() * 0.01;
 	};
 
 	// Start from the strongest, fixed members first, each in a random role of theirs.
@@ -178,10 +188,71 @@ function assemble(dex, candidates, options = {}) {
 		}
 		// Again: a second Stealth Rock taken off above may have been replaced by Spikes.
 		oneSetterEach(dex, team);
+		answerSetup(dex, team);
+		addSpeedControl(dex, team);
 	}
 
 	if (items) assignItems(dex, team, items === true ? null : items.bag || {});
 	return team.map(({ legal, ...set }) => set);
+}
+
+/*
+ * Rule 11 after the search: two distinct ways to stop a setup sweeper, one of
+ * them good against a special one. The search scores it, but the six it picks
+ * can still be short - a team of attackers whose only answer is one burn. Then
+ * a supportive member learns the missing mechanism, the kind a wall runs
+ * anyway: Haze, Whirlwind or Roar, Encore, Thunder Wave, Will-O-Wisp last
+ * (it does nothing to Calm Mind). A move a set would miss more than the answer
+ * (its recovery, its setup, its only attack) is never replaced - see teach().
+ */
+const SETUP_ANSWER_MOVES = [
+	['haze', 'clearsmog'], ['whirlwind', 'roar', 'dragontail', 'circlethrow'], ['encore'], ['thunderwave', 'glare', 'nuzzle'], ['willowisp'],
+];
+function answerSetup(dex, team) {
+	for (let tries = 0; tries < 2; tries++) {
+		const report = TL.analyze(dex, team);
+		if (report.setupMechanisms.length >= 2 && report.specialSetupAnswer) return;
+		// Not an Assault Vest pivot: the vest it is about to be given cannot click Roar.
+		const helpers = team.filter(s => supportRank(s) >= 2 && s.role !== 'AV Pivot').sort((a, b) => supportRank(b) - supportRank(a));
+		let taught = false;
+		for (const moves of SETUP_ANSWER_MOVES) {
+			// A second burner adds nothing when the special side is what is missing.
+			if (moves.includes('willowisp') && report.setupMechanisms.length) continue;
+			for (const set of helpers) {
+				if (set.moves.some(m => SETUP_ANSWER_MOVES.flat().includes(toID(m)))) continue;
+				if (teach(dex, set, moves, set.legal)) { taught = true; break; }
+			}
+			if (taught) break;
+		}
+		if (!taught) return;
+	}
+}
+
+/*
+ * Rule 7 after the search: an offensive team short of speed control gets a
+ * priority attack on an attacker that learns a strong one - Extreme Speed,
+ * Sucker Punch, Bullet Punch, Aqua Jet on a Water type (see
+ * RS.priorityValue) - in place of its least useful coverage move.
+ */
+function addSpeedControl(dex, team) {
+	const need = { 'hyper offense': 3, 'bulky offense': 2, balance: 1 };
+	for (let tries = 0; tries < 2; tries++) {
+		const report = TL.analyze(dex, team);
+		if (report.speedControl.length >= (need[report.style] || 0)) return;
+		const attackers = team.filter(s => !report.speedControl.includes(s.species) && supportRank(s) <= 1);
+		let taught = false;
+		for (const set of attackers) {
+			const species = dex.species.get(set.species);
+			const side = TL.attackSide(dex, set) === 'special' ? 'Special' : 'Physical';
+			const pool = set.legal ? new Set([...set.legal].map(toID)) : RS.learnable(dex, species);
+			const best = [...pool].map(id => dex.moves.get(id)).filter(m => m.exists && !m.isNonstandard)
+				.map(m => [m, RS.priorityValue(species, m, side, set.ability)])
+				.filter(([, v]) => v >= RS.STRONG_PRIORITY)
+				.sort((a, b) => b[1] - a[1])[0];
+			if (best && teach(dex, set, [best[0].id], set.legal)) { taught = true; break; }
+		}
+		if (!taught) return;
+	}
 }
 
 /*

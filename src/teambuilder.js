@@ -297,11 +297,22 @@ class TeamBuilder {
 	}
 
 	// ------------------------------------------------------------ set sourcing
+	/*
+	 * Whether a forme can borrow its base species' sets: a Gmax or cosmetic forme
+	 * can, a regional one cannot. Zapdos-Galar took Zapdos's Static, Thunder Wave
+	 * and Discharge, failed validation and was rebuilt from its learnset into
+	 * Aerial Ace, Brick Break, Counter and Light Screen.
+	 */
+	sameAsBase(ctx, species) {
+		const base = ctx.dex.species.get(species.baseSpecies);
+		return base.exists && base.types.join() === species.types.join() && !species.forme.match(/alola|galar|hisui|paldea/i);
+	}
+
 	/** A real Smogon analysis set for this species in this exact format. */
 	smogonSet(ctx, species, rng) {
 		const data = this.smogon.get(ctx.id);
 		if (!data) return null;
-		const entry = data[species.name] || data[species.baseSpecies];
+		const entry = data[species.name] || (this.sameAsBase(ctx, species) && data[species.baseSpecies]);
 		if (!entry) return null;
 		const names = Object.keys(entry);
 		if (!names.length) return null;
@@ -335,7 +346,7 @@ class TeamBuilder {
 	usageSet(ctx, species, rng) {
 		const stats = this.usage.get(ctx.id);
 		if (!stats) return null;
-		const entry = stats[species.name] || stats[species.baseSpecies];
+		const entry = stats[species.name] || (this.sameAsBase(ctx, species) && stats[species.baseSpecies]);
 		if (!entry || !entry.moves) return null;
 
 		const moves = [];
@@ -447,7 +458,7 @@ class TeamBuilder {
 			// its attacks are worth, with its own moves and ability counting for more.
 			let set = null, best = -Infinity;
 			for (const role of roles) {
-				const candidate = RS.buildSet(ctx.dex, species.name, { role: role.role, rng, level: ctx.level });
+				const candidate = RS.buildSet(ctx.dex, species.name, { role: role.role, rng, level: ctx.level, threats: this.threats(ctx) });
 				if (!candidate || candidate.moves.length < 3) continue;
 				let value = 0;
 				for (const name of candidate.moves) {
@@ -962,11 +973,41 @@ class TeamBuilder {
 			if (/(is banned|is not obtainable|does not exist|is tagged|unreleased|is not usable|can't be used)/.test(p) &&
 				!/move|item|ability|tera|nature/.test(p)) return false;
 
+			/*
+			 * An event-only Pokemon with fixed IVs (Raging Bolt: 20 in all but Attack).
+			 * Smogon's sets leave IVs out, so every Raging Bolt failed validation and
+			 * fell through to a set built from its learnset - Twister, Electro Ball and
+			 * Charge. The validator says exactly which IVs it wants; give it them.
+			 */
+			const ivRule = /must have (\d+) (HP|Attack|Defense|Special Attack|Special Defense|Speed) IVs/i;
+			if (/needs to match its event:?$/.test(p) && problems.some(x => ivRule.test(x))) continue;
+			const iv = problem.match(ivRule);
+			if (iv) {
+				const stat = { hp: 'hp', attack: 'atk', defense: 'def', 'special attack': 'spa', 'special defense': 'spd', speed: 'spe' }[iv[2].toLowerCase()];
+				set.ivs = { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31, ...(set.ivs || {}), [stat]: parseInt(iv[1], 10) };
+				changed = true; continue;
+			}
+
 			const badMove = set.moves.find(m => p.includes(m.toLowerCase()));
 			if (badMove && /move|learn|know|incompatible|event|transferred|illegal/.test(p)) {
 				set.moves = set.moves.filter(m => m !== badMove);
-				const pool = [...ctx.dex.species.getMovePool(ctx.dex.species.get(set.species).id)]
-					.map(id => ctx.dex.moves.get(id).name).filter(m => m && !set.moves.includes(m));
+				/*
+				 * The replacement is one of its best attacks of a type the set lacks, not any
+				 * move it learns: a random pick put Hidden Power (typed by IVs nothing here
+				 * sets) on an Assault Vest Rillaboom.
+				 */
+				const species = ctx.dex.species.get(set.species);
+				const RS = require('./role-sets');
+				const all = [...ctx.dex.species.getMovePool(species.id)].map(id => ctx.dex.moves.get(id))
+					.filter(m => m.exists && !m.id.startsWith('hiddenpower') && !set.moves.includes(m.name));
+				const attacks = set.moves.map(n => ctx.dex.moves.get(n)).filter(m => m.category !== 'Status');
+				const types = attacks.map(m => m.type);
+				const physical = attacks.filter(m => m.category === 'Physical').length;
+				const stat = physical * 2 === attacks.length ? (species.baseStats.atk >= species.baseStats.spa ? 'Physical' : 'Special')
+					: physical * 2 > attacks.length ? 'Physical' : 'Special';
+				const good = all.filter(m => m.category === stat && m.basePower >= 60 && !types.includes(m.type))
+					.sort((a, b) => RS.attackValue(species, b, stat) - RS.attackValue(species, a, stat)).slice(0, 3);
+				const pool = (good.length ? good : all).map(m => m.name);
 				if (pool.length) set.moves.push(pick(rng, pool));
 				changed = true; continue;
 			}
@@ -1329,7 +1370,7 @@ class TeamBuilder {
 		const bag = {};
 		for (const name of ctx.items) bag[toID(name)] = 1;
 		const built = TeamAssembler.assemble(ctx.dex, candidates, {
-			size: ctx.size, stage: 'full', rng, items: { bag }, maxEvaluations: 2500,
+			size: ctx.size, stage: 'full', rng, items: { bag }, maxEvaluations: 2500, threats: this.threats(ctx),
 		});
 		if (built.length < ctx.size) return null;
 		// A bag with one of each can run out before the last Pokemon; an empty
@@ -1386,11 +1427,24 @@ class TeamBuilder {
 			.filter(x => x.use > 0)
 			.sort((a, b) => b.use - a.use)
 			.slice(0, 16);
-		const list = scored.map(({ s }) => ({
+		/*
+		 * `weight` is how common it is (any scale: role-sets.js only compares them)
+		 * and `ability` its most used one, so a coverage move is not credited for
+		 * hitting a Rotom-Wash with Earthquake (src/role-sets.js threatGain).
+		 */
+		const abilityOf = name => {
+			const e = stats && stats[name];
+			if (!e || !e.abilities) return '';
+			const top = Object.entries(e.abilities).sort((a, b) => b[1] - a[1])[0];
+			return top ? top[0] : '';
+		};
+		const list = scored.map(({ s, use }) => ({
 			name: s.name,
 			types: s.types.slice(),
 			speed: s.baseStats.spe,
 			physical: s.baseStats.atk >= s.baseStats.spa,
+			weight: use,
+			ability: abilityOf(s.name) || (Object.keys(s.abilities).length === 1 ? s.abilities[0] : ''),
 		}));
 		this.threatCache = { id: ctx.id, list };
 		return list;
@@ -1445,7 +1499,8 @@ class TeamBuilder {
 		const rankOf = new Map(drafted.map((set, i) => [set, 1 - i / drafted.length]));
 		const value = team => {
 			let logic = 0;
-			try { logic = TeamLogic.score(ctx.dex, team, { stage }).score; } catch (e) { logic = 0; }
+			// With the format's threats: rule 5 (each one hit neutrally by two members) is scored too.
+			try { logic = TeamLogic.score(ctx.dex, team, { stage, threats: this.threats(ctx) }).score; } catch (e) { logic = 0; }
 			const usage = team.reduce((n, set) => n + rankOf.get(set), 0) / team.length;
 			let cover = 1;
 			try { cover = this.threatCover(ctx, team); } catch (e) { cover = 1; }
