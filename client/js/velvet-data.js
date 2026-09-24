@@ -488,7 +488,8 @@
 			var css = document.createElement('style');
 			css.id = 'velvet-bag-css';
 			css.textContent =
-				'.battle-log .uhtml-rpballs,.battle-log .uhtml-rpitems,.battle-log [class*="uhtml-rpball"]{display:none!important}' +
+				// rpforfeit: the Forfeit button a battle with a person sends, only to mark it as one (readBag).
+				'.battle-log .uhtml-rpballs,.battle-log .uhtml-rpitems,.battle-log [class*="uhtml-rpball"],.battle-log .uhtml-rpforfeit{display:none!important}' +
 				'.velvet-cmd{display:flex;gap:6px;margin:6px 0 4px;clear:both}' +
 				'.velvet-cmd button{flex:1;min-height:40px;font-size:14px;font-weight:bold;border-radius:6px;cursor:pointer}' +
 				'.velvet-cmd .velvet-bagbtn{background:#f0b429;border:1px solid #b7791f;color:#3a2600}' +
@@ -605,11 +606,32 @@
 			return buf;
 		}
 
+		function forfeitButton(room) {
+			return '<button type="button" class="velvet-runbtn" data-velvet="forfeit">' +
+				(room.velvetForfeit ? 'Sure? Tap again to forfeit' : '🏳️ Forfeit') + '</button>';
+		}
+
+		/*
+		 * Forfeit when there are no moves on screen: choosing who to send out
+		 * after a faint, or waiting on the other side. It lived in the move
+		 * controls only, so a player stuck on a switch they didn't want to make
+		 * had no way out of a trainer battle at all (23 Sep 2026). Same two taps.
+		 */
+		function drawForfeitElsewhere(room) {
+			if (!room.$controls) return;
+			room.$controls.find('.velvet-cmd').remove();
+			if (room.battle && room.battle.ended) return;
+			var at = room.$controls.find('.switchcontrols');
+			if (!at.length) at = room.$controls.find('.controls').first();
+			if (!at.length || !readBag(room).trainer) return;
+			at.append('<div class="velvet-cmd">' + forfeitButton(room) + '</div>');
+		}
+
 		// Draw (or redraw) the Bag and Run row under the moves.
 		function drawBag(room) {
 			try {
 				var controls = room.$controls && room.$controls.find('.movecontrols');
-				if (!controls || !controls.length) return;
+				if (!controls || !controls.length) { drawForfeitElsewhere(room); return; }
 				var bag = readBag(room);
 				controls.find('.velvet-cmd, .velvet-bag').remove();
 				if (!bag.wild && !bag.hasItems && !bag.trainer) { controls.find('.moveselect, .movemenu').show(); return; }
@@ -617,8 +639,7 @@
 					(bag.wild || bag.hasItems ? '<button type="button" class="velvet-bagbtn" data-velvet="bag">🎒 Bag</button>' : '') +
 					(bag.wild && bag.run ? '<button type="button" class="velvet-runbtn" data-velvet-send="' + esc(bag.run.value) + '">🏃 Run</button>' : '') +
 					// Where Run would be: you can't run from a person, only give up.
-					(bag.trainer ? '<button type="button" class="velvet-runbtn" data-velvet="forfeit">' +
-						(room.velvetForfeit ? 'Sure? Tap again to forfeit' : '🏳️ Forfeit') + '</button>' : '') +
+					(bag.trainer ? forfeitButton(room) : '') +
 					'</div>';
 				controls.find('.movemenu').after(row);
 				var tab = room.velvetBagTab;
@@ -735,6 +756,16 @@
 			drawBag(this);
 			return result;
 		};
+		// The switch and waiting screens get the Forfeit row too (drawForfeitElsewhere).
+		['updateSwitchControls', 'updateWaitControls'].forEach(function (name) {
+			var drawn = R.prototype[name];
+			if (!drawn) return;
+			R.prototype[name] = function () {
+				var result = drawn.apply(this, arguments);
+				try { hook(this); drawBag(this); } catch (e) { /* the controls stay as Showdown drew them */ }
+				return result;
+			};
+		});
 		// A new turn starts on the moves, the way the games do.
 		var receiveRequest = R.prototype.receiveRequest;
 		if (receiveRequest) {

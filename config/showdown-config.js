@@ -2360,10 +2360,22 @@ function roleplay() {
 				this.rpNotes = {};
 				for (const player of this.players) {
 					const note = notes.get(player.id);
-					// The only way out of a battle with a person, said once, where they can see it.
-					const out = '<div style="margin-top:4px"><b>Had enough?</b> <button class="button" name="send" value="/forfeit">Forfeit</button> ' +
+					/*
+					 * The only way out of a battle with a person is the Forfeit button
+					 * the client draws where Run would be, which takes two taps
+					 * (client/js/velvet-data.js). It draws it for a battle whose log
+					 * has a /forfeit button in it, so every player gets one, as a
+					 * uhtml panel the client hides - the same as a trainer encounter's.
+					 * It used to be a visible one-tap button inside the note, and a
+					 * battle with no note (a friendly with no character) got none,
+					 * so no Forfeit row at all (23 Sep 2026).
+					 */
+					const out = '|uhtml|rpforfeit|<div class="infobox"><b>Had enough?</b> <button class="button" name="send" value="/forfeit">Forfeit</button> ' +
 						'<small>you cannot run from a trainer; the RP settles a forfeit as a loss.</small></div>';
-					if (note && player.slot) this.rpNotes[player.slot] = `|raw|<div class="infobox"><small>${esc(note)}</small>${out}</div>`;
+					const said = note ? `|raw|<div class="infobox"><small>${esc(note)}</small>` +
+						'<div style="margin-top:4px"><small><b>Had enough?</b> Forfeit is under your moves, where Run would be (tap it twice). ' +
+						'You cannot run from a trainer; the RP settles a forfeit as a loss.</small></div></div>\n' : '';
+					if (player.slot) this.rpNotes[player.slot] = said + out;
 				}
 				// Players battling each other: each sees a panel of their own character's items.
 				for (const player of this.players) {
