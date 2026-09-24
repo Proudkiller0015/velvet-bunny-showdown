@@ -310,6 +310,13 @@ const TRAINER_CLASSES = [
 	{ id: 'backpacker', title: 'Backpacker', avatar: 'backpacker-gen6', types: [], sex: 'm' },
 	{ id: 'acetrainer', title: 'Ace Trainer', avatar: 'acetrainer-gen4dp', types: [], sex: 'm', short: 'Ace' },
 	{ id: 'acetrainerf', title: 'Ace Trainer', avatar: 'acetrainerf-gen4dp', types: [], sex: 'f', short: 'Ace' },
+	/*
+	 * The stall Ace Trainer, by name (see ACE_STALL_CHANCE for the random one):
+	 * an Ace Trainer like the others, who always brings a stall team. Staff can
+	 * summon it ("stallace"); routes never list it, so it turns up at random
+	 * only as the ordinary Ace Trainers' stall roll.
+	 */
+	{ id: 'acetrainerstall', title: 'Ace Trainer', avatar: 'acetrainer-gen4dp', types: [], sex: 'm', short: 'Ace', stall: true, aliases: ['stallace', 'acestall', 'stalltrainer'] },
 	{ id: 'veteran', title: 'Veteran', avatar: 'veteran-gen6', types: [], sex: 'm' },
 	{ id: 'dragontamer', title: 'Dragon Tamer', avatar: 'dragontamer-gen6', types: ['Dragon'], sex: 'm', short: 'Tamer' },
 	{ id: 'scientist', title: 'Scientist', avatar: 'scientist-gen4', types: ['Electric', 'Poison', 'Steel'], sex: 'm' },
@@ -345,6 +352,15 @@ const TRAINER_CLASSES = [
 	{ id: 'twins', title: 'Twins', avatar: 'twins-gen4', types: ['Normal', 'Fairy', 'Electric', 'Bug'], sex: 'pair', pair: true },
 	{ id: 'youngcouple', title: 'Young Couple', avatar: 'youngcouple-gen4dp', types: ['Normal', 'Fairy', 'Psychic', 'Water'], sex: 'pair', pair: true, short: 'Couple' },
 ];
+
+/*
+ * The stall Ace Trainer's odds (24 Sep 2026): one Ace Trainer in four, from six
+ * badges, brings a dedicated stall team (see rollTrainer). Rarer than that and
+ * a player could finish the badges without meeting one; much commoner and the
+ * Ace Trainers stop being the all-rounders they are in the games.
+ */
+const ACE_CLASSES = ['acetrainer', 'acetrainerf'];
+const ACE_STALL_CHANCE = 0.25;
 
 const NAMES = {
 	m: ['Bob', 'Ken', 'Ryo', 'Taro', 'Joey', 'Mike', 'Leo', 'Sam', 'Dan', 'Jin', 'Kai', 'Ben', 'Tom', 'Ray',
@@ -789,7 +805,8 @@ function rollTrainer({ place, badges, levelCap = null, rng = Math.random, classI
 		.map(findClass).filter(c => c && !c.story);   // a route never sends a Champion at random
 	const cls = (classId && findClass(classId)) || pick(classes, rng);
 	const tier = BADGE_TIERS[badges];
-	const isDouble = cls.pair || (double === null ? badges >= 1 && rng() < 0.15 : !!double);
+	// The stall Ace Trainer battles single unless a double is asked for: stall is a singles game.
+	const isDouble = cls.pair || (double === null ? !cls.stall && badges >= 1 && rng() < 0.15 : !!double);
 	const size = Math.max(isDouble ? 2 : 1, tier.size);
 
 	// The ace pulls a trainer down the same way it pulls the wild: somebody whose best
@@ -822,6 +839,32 @@ function rollTrainer({ place, badges, levelCap = null, rng = Math.random, classI
 	 * attacking sides) from three badges, the whole checklist from six. A type
 	 * specialist keeps its types, so shared weaknesses are its theme, not a flaw.
 	 */
+	const levels = [];
+	/*
+	 * The stall Ace Trainer (owner, 24 Sep 2026: "also add a stall trainer for
+	 * ace trainers in rp"). An Ace Trainer met from six badges on brings a
+	 * dedicated stall team one time in four (ACE_STALL_CHANCE), and the one
+	 * summoned by name always does, from four badges - where trainers start
+	 * to know recovery, hazards and status moves (trainerMoves). Same badge
+	 * rules as every trainer: its Pokemon come from the badge-weighted lines,
+	 * its levels, moves, IVs and EVs are dealt as trainerTeam() deals them.
+	 * Anything short of a real stall team (too few walls this early) and it
+	 * brings an ordinary team instead.
+	 */
+	const stall = !isDouble && badges >= 4 && (cls.stall || (ACE_CLASSES.includes(cls.id) && badges >= 6 && rng() < ACE_STALL_CHANCE));
+	let team = null;
+	if (stall) {
+		for (let i = 0; i < size; i++) levels.push(i === size - 1 ? hi : randInt(Math.max(lo, hi - 5), Math.max(lo, hi - 1), rng));
+		levels.sort((a, b) => a - b);
+		try { team = stallTrainerTeam(entries, levels, badges, rng); } catch (e) { team = null; }
+		if (team) {
+			return {
+				kind: 'trainer', double: false, name: trainerName(cls, rng), avatar: cls.avatar, className: cls.title, classId: cls.id,
+				team, ai: tier.ai, format: TRAINER_FORMAT, badges, style: 'stall',
+			};
+		}
+		levels.length = 0;
+	}
 	const rolled = [];
 	const taken = new Set();
 	for (let i = 0; i < Math.min(12, size * 2); i++) {
@@ -830,10 +873,8 @@ function rollTrainer({ place, badges, levelCap = null, rng = Math.random, classI
 		taken.add(root.id);
 		rolled.push(root);
 	}
-	const levels = [];
 	for (let i = 0; i < size; i++) levels.push(i === size - 1 ? hi : randInt(Math.max(lo, hi - 5), Math.max(lo, hi - 1), rng));
 	levels.sort((a, b) => a - b);
-	let team = null;
 	try {
 		team = trainerTeam(rolled, levels, badges, rng, { themed: !!(cls.types && cls.types.length) });
 	} catch (e) {
@@ -925,6 +966,48 @@ function trainerTeam(roots, levels, badges, rng, { themed = false } = {}) {
 		maxEvaluations: 1500,
 	});
 	if (!built.length) return null;
+	return dealTrainerTeam(built, levels, badges, rng);
+}
+
+/*
+ * The stall Ace Trainer's team (see rollTrainer): stall-worthy Pokemon from
+ * the same badge-weighted lines every trainer draws from - many more of them
+ * than fit, since only the bulky ones that heal can be used - evolved as far
+ * as the ace's level allows, each knowing what trainerMoves() says a trainer
+ * with these badges has taught it. Null when they do not make a real stall
+ * team (src/stall-builder.js stallReport).
+ */
+function stallTrainerTeam(entries, levels, badges, rng) {
+	const SB = require('./stall-builder');
+	const top = levels[levels.length - 1];
+	const pool = [];
+	const legal = new Map();
+	const taken = new Set();
+	for (let i = 0; i < 160 && pool.length < 90; i++) {
+		const root = weightedPick(entries.filter(e => !taken.has(e.item.id)), rng);
+		if (!root) break;
+		taken.add(root.id);
+		const species = stageFor(root, top, rng, { behind: 0 });
+		if (legal.has(species.id)) continue;
+		legal.set(species.id, trainerMoves(species, top, badges));
+		pool.push({ species, level: top });
+	}
+	const built = SB.build(Dex, pool, {
+		size: levels.length, rng, level: top, tera: false,
+		// Items from six badges, as for every trainer; none of them one-use (no Oran Berry) on stall.
+		items: badges >= 6 ? null : false,
+		learn: (species, id) => (legal.get(species.id) || new Set()).has(id),
+	});
+	if (!built || built.length < levels.length || !SB.stallReport(Dex, built).ok) return null;
+	return dealTrainerTeam(built, levels, badges, rng, { stall: true });
+}
+
+/*
+ * Levels, IVs and EVs by badges, for a built trainer team. A stall team spends
+ * the same EV total (six stats at badges x 10) on HP and the side it walls,
+ * which is what makes it a wall; everyone else spreads it evenly.
+ */
+function dealTrainerTeam(built, levels, badges, rng, { stall = false } = {}) {
 	/*
 	 * The strongest is the ace, on the cap - and no Pokemon below the level it
 	 * evolves at (24 Sep 2026). A candidate was evolved for the level it was
@@ -942,7 +1025,16 @@ function trainerTeam(roots, levels, badges, rng, { themed = false } = {}) {
 	return built.map((set, i) => {
 		const species = Dex.species.get(set.species);
 		let item = set.item || '';
-		if (badges >= 3 && badges < 6 && rng() < 0.5) item = 'Oran Berry';
+		if (!stall && badges >= 3 && badges < 6 && rng() < 0.5) item = 'Oran Berry';
+		if (stall) {
+			const wall = set.evs && set.evs.def > set.evs.spd ? 'def' : 'spd';
+			const evs = { hp: Math.min(252, 3 * ev), atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
+			evs[wall] = Math.min(252, 3 * ev);
+			return {
+				name: species.name, species: species.name, level: dealt[i], moves: set.moves, ability: set.ability, nature: set.nature, item,
+				ivs: { hp: iv, atk: set.ivs && set.ivs.atk === 0 ? 0 : iv, def: iv, spa: iv, spd: iv, spe: iv }, evs,
+			};
+		}
 		return {
 			name: species.name,
 			species: species.name,
@@ -1124,6 +1216,6 @@ module.exports = {
 	catchRate, BALLS, findBall, catchChance, shakesFor, CATCH_BOOST, PITY_PER_MISS,
 	TRAINER_CLASSES, findClass, trainerName, minLevel, rootOf, lineOf, lineWeight, BADGE_TIERS, Rarity,
 	stageFor, BABIES, babyWeight, clock, clockWeight, TIME_OF_DAY, DAY_OF_WEEK, SEASONS, EVENTS, eventOn, aceAdjusted, aceLevel,
-	rollWild, rollTrainer, trainerSet, describe,
+	rollWild, rollTrainer, trainerSet, describe, stallTrainerTeam, ACE_CLASSES, ACE_STALL_CHANCE,
 	WILD_FORMAT, WILD_DOUBLE_FORMAT, TUTORIAL_FORMAT, TUTORIAL_PIKACHU, TUTORIAL_RATTATA, TUTORIAL_BAG, TRAINER_FORMAT, TRAINER_DOUBLE_FORMAT,
 };

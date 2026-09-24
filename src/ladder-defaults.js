@@ -51,4 +51,32 @@ function ladderQueues(base) {
 	});
 }
 
-module.exports = { RUNGS, DEFAULT_FORMATS, DEFAULT_DIFFICULTIES, ladderQueues };
+/*
+ * How often a bot's team is dedicated stall, per format (24 Sep 2026).
+ *
+ * The owner: "I want the ladder, including the RP tier, to build dedicated
+ * stall sometimes... since it goes against usage." Sometimes: about one team
+ * in eight, 13% - enough that a regular meets it every few games and has to
+ * know how to beat it, not so much that the ladder stops looking like the
+ * format. The rungs have no personalities (one account per difficulty, a new
+ * team built for every search - src/ladder.js), so this is a per-team draw
+ * and no bot is locked into stall.
+ *
+ * A format missing here takes `default`. PS_STALL_SHARE overrides without a
+ * deploy: "0.2" for every format, or "gen9rpou=0.2,gen9ou=0.1,default=0.13";
+ * 0 turns stall off.
+ */
+const STALL_SHARE = { default: 0.13 };
+
+function stallShare(format) {
+	const id = toId(format);
+	const table = { ...STALL_SHARE };
+	for (const part of split(process.env.PS_STALL_SHARE)) {
+		const [key, value] = part.includes('=') ? part.split('=') : ['default', part];
+		const n = Number(value);
+		if (Number.isFinite(n)) table[toId(key) || 'default'] = Math.max(0, Math.min(1, n));
+	}
+	return table[id] !== undefined ? table[id] : table.default;
+}
+
+module.exports = { RUNGS, DEFAULT_FORMATS, DEFAULT_DIFFICULTIES, ladderQueues, STALL_SHARE, stallShare };
