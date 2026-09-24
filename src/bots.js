@@ -28,7 +28,14 @@ const PORT = Number(process.env.PORT) || 8000;
 const HOST = '127.0.0.1';
 const url = `ws://${HOST}:${PORT}/showdown/websocket`;
 
-const RECYCLE_MB = Number(process.env.PS_BOTS_RECYCLE_MB || 150);
+// 24 Sep 2026: 150 -> 120. The box is killed at 512MB and idles at ~356MB rss
+// for all three processes. A bots heap of 150MB is ~220MB rss; add the server
+// at its measured 130MB heap peak (~200MB rss) and the wrapper's ~50MB and it
+// is 470MB before anyone's battle allocates anything. At 120MB heap (~190MB
+// rss) the same sum is ~440MB, about 70MB of slack. It is still well above a
+// fresh process with a few formats loaded, and MIN_UPTIME_S keeps it from
+// turning into a restart loop if that ever stops being true.
+const RECYCLE_MB = Number(process.env.PS_BOTS_RECYCLE_MB || 120);
 const CHECK_MS = Number(process.env.PS_BOTS_CHECK_MS || 30000);
 // Never sooner than this after starting, so a threshold set below what a fresh
 // process needs cannot turn into a restart every minute.

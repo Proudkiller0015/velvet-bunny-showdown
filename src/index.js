@@ -57,12 +57,17 @@ function startServer() {
 		 * holds - and nothing could see that until the memory note a few lines
 		 * below this one. Measure for a day, then set it here; a knob shipped
 		 * before the measurement would just be a guess with an env var on it.
+		 *
+		 * 24 Sep 2026: the measurement is in (render.yaml: 60MB idle, 130MB
+		 * peak), and render.yaml has set 256 ever since. The default follows it,
+		 * so a deploy that loses the env var does not quietly go back to a cap
+		 * that alone is most of the 512MB box.
 		 */
 		env: {
 			...process.env,
 			PORT: String(PORT),
 			NODE_OPTIONS: process.env.PS_SERVER_NODE_OPTIONS ||
-				`--max-old-space-size=${Number(process.env.PS_SERVER_HEAP_MB || 400)} ` +
+				`--max-old-space-size=${Number(process.env.PS_SERVER_HEAP_MB || 256)} ` +
 				/*
 				 * And a small young generation, which is the one V8 knob that paid.
 				 *
