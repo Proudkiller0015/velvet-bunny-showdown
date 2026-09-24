@@ -107,6 +107,7 @@ function entryFor(dex, species, tier) {
 function buildPool(dex, { includeNfe = true } = {}) {
 	const out = [];
 	const seen = new Set();
+	const seenSig = new Set();
 	for (const species of dex.species.all()) {
 		if (!species.exists || seen.has(species.id)) continue;
 		seen.add(species.id);
@@ -124,6 +125,17 @@ function buildPool(dex, { includeNfe = true } = {}) {
 		// A Mega whose stone the dex cannot find cannot be brought.
 		const entry = entryFor(dex, species, tier);
 		if (entry.mega && (!entry.item || !dex.items.get(entry.item).exists)) continue;
+		/*
+		 * One entry per Pokemon that actually plays differently. Twenty Vivillon
+		 * patterns, the Alcremie flavours, Minior's colours, the Pikachu caps and
+		 * the three Tatsugiri Megas have the same stats, types and abilities as a
+		 * sibling: separate entries would only split one Pokemon's games twenty
+		 * ways. The first seen stands for the rest (the base forme comes first).
+		 */
+		const sig = [species.num, entry.mega, Object.values(species.baseStats).join(','), species.types.join('/'),
+			Object.values(species.abilities).slice().sort().join('/')].join('|');
+		if (seenSig.has(sig)) continue;
+		seenSig.add(sig);
 		out.push(entry);
 	}
 	return out.sort((a, b) => RANK[b.tier] - RANK[a.tier] || a.name.localeCompare(b.name));
