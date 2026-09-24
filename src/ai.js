@@ -165,6 +165,23 @@ const NEEDS_TARGET = new Set(['normal', 'any', 'adjacentFoe', 'adjacentAlly', 'a
  * own, so anything short of a large difference is buried by it. Take nothing here
  * on fewer than a few hundred games; see test/elo.test.js.
  */
+/*
+ * The judgement from docs/research-pinkacross.md (24 Sep 2026), one knob per
+ * rule so each can be switched off for a measurement (test/ablation.js takes the
+ * same names as overrides):
+ *
+ *   accuracy     a 70% KO is worth 70% of a KO (A10). Hard and up: reading the
+ *                accuracy is not judgement, it is reading the move.
+ *   sacking      a Pokemon is worth what it can still do against what they have
+ *                left, and never goes in as setup fodder (A14, The Art of Sacking)
+ *   leads        leads scored by lead traits against their likely leads (A2-A4)
+ *   setupWin     no setup when the unboosted Pokemon already wins (A11)
+ *   middleGround the search weights their replies by how plausible they are and
+ *                plays safer ahead, sharper behind (A6-A8) - search only
+ *   endgame      a small exact tree at three-or-fewer a side (A16) - search only
+ */
+const PINKACROSS_CHAMPION = { accuracy: true, sacking: true, leads: true, setupWin: true };
+const PINKACROSS_SEARCH = { middleGround: true, endgame: true };
 const DIFFICULTIES = {
 	// An in-game trainer. It reaches for whatever move has the biggest number on
 	// it, without working out what that move would actually do, and it never
@@ -181,15 +198,15 @@ const DIFFICULTIES = {
 	// ability the thing in front of it is generated with. It still misjudges a
 	// position now and again, which is the difference between a strong opponent
 	// and an unbeatable one.
-	hard:     { blunder: 0.06, greedy: false, noise: 12, switching: true,  tempo: true,  predict: false, tera: true, switchMargin: 40, knowsSets: true },
+	hard:     { blunder: 0.06, greedy: false, noise: 12, switching: true,  tempo: true,  predict: false, tera: true, switchMargin: 40, knowsSets: true, accuracy: true },
 	// Everything Hard does and no lapses at all: it counts the speed tiers before
 	// committing, and in Random Battle it knows the whole set - moves and Tera
 	// types included - before any of it is used.
-	champion: { blunder: 0,    greedy: false, noise: 0,  switching: true,  tempo: true,  predict: true,  tera: true, switchMargin: 25, knowsSets: true, readsSets: true, playbook: true },
+	champion: { blunder: 0,    greedy: false, noise: 0,  switching: true,  tempo: true,  predict: true,  tera: true, switchMargin: 25, knowsSets: true, readsSets: true, playbook: true, ...PINKACROSS_CHAMPION },
 	// Experimental. Everything Champion does, plus a one-turn search over our
 	// options against their likely replies, weighted by numbers the trainer tuned
 	// from self-play rather than by hand.
-	stockfish: { blunder: 0,   greedy: false, noise: 0,  switching: true,  tempo: true,  predict: true,  tera: true, switchMargin: 25, knowsSets: true, readsSets: true, search: true, playbook: true },
+	stockfish: { blunder: 0,   greedy: false, noise: 0,  switching: true,  tempo: true,  predict: true,  tera: true, switchMargin: 25, knowsSets: true, readsSets: true, search: true, playbook: true, ...PINKACROSS_CHAMPION, ...PINKACROSS_SEARCH },
 };
 const DEFAULT_DIFFICULTY = 'hard';
 
@@ -1080,6 +1097,13 @@ class BattleAI {
 				const stacked = raised.length ? Math.min(...raised) : 0;
 				if (stacked >= 4) score -= 30;
 				else if (stacked >= 2) score -= 10;
+				/*
+				 * From -2 or worse, a boost only climbs back towards zero, and switching
+				 * out gets all of it back for free. Swords Dance at -4 Attack beat an
+				 * 85% Fire Blast once accuracy started counting (24 Sep 2026); it
+				 * should not have been close before either.
+				 */
+				else if (stacked <= -2) score -= 20;
 				// A foe that has shown Will-O-Wisp answers an Attack boost with a burn.
 				const wisp = (ctx.foes || []).some(o => o.moves && [...o.moves].some(m => /will-o-wisp/i.test(m)));
 				if (wisp && (boostsUp.atk || 0) > 0 && !me.status && !(me.types || []).includes('Fire')) score -= 15;
@@ -1435,6 +1459,45 @@ class BattleAI {
 		return (drops[stat] || 0) < 0 ? (me.boosts[stat] || 0) : 0;
 	}
 
+	/**
+	 * The chance this move of ours lands, 0..1.
+	 *
+	 * Accuracy is part of a move's value (Pinkacross, How to Play Like a Pro and
+	 * the Rank 1 tips, 24 Sep 2026): the expected damage of Focus Blast is 70% of
+	 * its number, and clicking the 70% move when a 100% one already does the job
+	 * is how a won game is handed back on a miss. ai.js never read `accuracy`
+	 * before today, so Focus Blast and Aura Sphere scored the same.
+	 *
+	 * The accuracy role-sets.js weighs is a different decision - which moves go
+	 * on the set at build time - so counting it here again is not a double
+	 * penalty: that one picks the moveset, this one picks the click.
+	 *
+	 * The modifiers that commonly matter: No Guard (either side), Compound Eyes,
+	 * Hustle, Wide Lens, rain for Thunder and Hurricane (and sun against them),
+	 * snow for Blizzard, and accuracy/evasion stages. Anything rarer is left at
+	 * the listed number, which errs towards the move landing.
+	 */
+	hitChance(gen, data, me, foe, state, live) {
+		if (!data || data.accuracy === true || !data.accuracy) return 1;
+		const id = s => String(s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+		const myAbility = id(me && me.ability), theirAbility = id(foe && foe.ability);
+		if (myAbility === 'noguard' || theirAbility === 'noguard') return 1;
+		const weather = id(state && state.weather);
+		const rain = /raindance|primordialsea/.test(weather), sun = /sunnyday|desolateland/.test(weather);
+		if ((data.id === 'thunder' || data.id === 'hurricane' || data.id === 'bleakwindstorm' || data.id === 'wildboltstorm' || data.id === 'sandsearstorm') && rain) return 1;
+		if (data.id === 'blizzard' && /snow|hail/.test(weather)) return 1;
+		let acc = data.accuracy;
+		if ((data.id === 'thunder' || data.id === 'hurricane') && sun) acc = 50;
+		const stage = Math.max(-6, Math.min(6, ((live && live.boosts && live.boosts.accuracy) || 0) - ((foe && foe.boosts && foe.boosts.evasion) || 0)));
+		acc *= stage >= 0 ? (3 + stage) / 3 : 3 / (3 - stage);
+		if (myAbility === 'compoundeyes') acc *= 1.3;
+		if (myAbility === 'hustle' && data.category === 'Physical') acc *= 0.8;
+		if (myAbility === 'victorystar') acc *= 1.1;
+		if (id(me && me.item) === 'widelens') acc *= 1.1;
+		if (/brightpowder|laxincense/.test(id(foe && foe.item))) acc *= 0.9;
+		return Math.max(0, Math.min(1, acc / 100));
+	}
+
 	forceSwitch(request, state) {
 		const gen = this.gen(state.gen);
 		const field = new calc.Field({ weather: state.weather || undefined, terrain: state.terrain || undefined });
@@ -1771,6 +1834,12 @@ class BattleAI {
 					: 5;
 				// Nothing set up on the turn we are knocked out ever gets used.
 				if (outsped && score > 0) score *= 0.2;
+				// A Will-O-Wisp that misses is a free turn for them: a status move aimed at
+				// the foe is worth its hit chance (A10, 24 Sep 2026). Self-targeting moves
+				// and hazards cannot miss and come back as 1.
+				if (this.cfg.accuracy && !this.cfg.naive && score > 0 && foe && data.target !== 'self' && data.target !== 'foeSide') {
+					score *= this.hitChance(gen, data, me, foe, state, state.mine && state.mine['abc'[index]]);
+				}
 				/*
 				 * Dynamaxed, every status move is Max Guard. The bot clicked Roost and
 				 * Will-O-Wisp as Moltres and got two Max Guards (the second failed) while
@@ -1792,7 +1861,12 @@ class BattleAI {
 					const pct = this.cfg.naive
 						? (data.basePower || 0) * (me.types && me.types.includes(data.type) ? 1.5 : 1) * 0.6
 						: this.damageToFoe(gen, me, foe, name, field) * this.maxRatio(gen, name, state.mine && state.mine['abc'[index]] && state.mine['abc'[index]].dynamaxed);
-					let s = pct;
+					/*
+					 * Past about one and a half KOs the extra number buys nothing, and left
+					 * uncapped a 250% Focus Blast outscored a 110% Close Combat by more
+					 * than the miss chance could take back (24 Sep 2026, A10).
+					 */
+					let s = this.cfg.accuracy && !this.cfg.naive ? Math.min(pct, 150) : pct;
 					// An attack that does nothing (an immunity, an absorbing ability, an Air
 					// Balloon) is worse than any status move, not level with them: at 0 it won
 					// ties, and Dragonite clicked Extreme Speed into Spiritomb.
@@ -1847,6 +1921,13 @@ class BattleAI {
 					 */
 					if (movesFirst && pct < 60 && this.dropOpensKo(gen, me, foe, data, field)) s -= 25;
 					// We are dead before this lands unless it kills or it has priority.
+					/*
+					 * Expected value, KO bonus included: a 70% KO is worth 70% of a KO
+					 * (Pinkacross, How to Play Like a Pro: he fired six Pyro Balls where two
+					 * were needed; 24 Sep 2026). So the accurate KO wins whenever there is
+					 * one, and the inaccurate move is still clicked when it alone KOs.
+					 */
+					if (this.cfg.accuracy && !this.cfg.naive && s > 0) s *= this.hitChance(gen, data, me, foe, state, state.mine && state.mine['abc'[index]]);
 					if (outsped && pct < 100 && !(data && data.priority > 0) && s > 0) s *= 0.35;
 					if (s > score) { score = s; target = foe.slot === 'b' ? 2 : 1; }
 				}
@@ -1877,6 +1958,9 @@ class BattleAI {
 					: 0,
 				priority: data ? (data.priority || 0) : 0,
 				heuristic: data && data.category === 'Status' ? score : 0,
+				// The search plays the miss out as its own branch rather than shrinking the hit.
+				accuracy: this.cfg.accuracy && data && data.category !== 'Status' && foes[0]
+					? this.hitChance(gen, data, me, foes[0], state, state.mine && state.mine['abc'[index]]) : 1,
 			});
 		}
 

@@ -64,8 +64,7 @@ class TurnSearch {
 
 		let best = null;
 		for (const ours of candidates) {
-			const outcomes = theirActions.map(theirs =>
-				this.playTurn(gen, { me, them, entry, foe }, ours, theirs, state, field, request));
+			const outcomes = theirActions.map(theirs => this.expected(gen, { me, them, entry, foe }, ours, theirs, state, field, request));
 			const worst = Math.min(...outcomes);
 			const mean = outcomes.reduce((a, b) => a + b, 0) / outcomes.length;
 			const lookahead = this.w.pessimism * worst + (1 - this.w.pessimism) * mean;
@@ -75,6 +74,22 @@ class TurnSearch {
 			if (!best || score > best.score) best = { ...ours, score };
 		}
 		return best;
+	}
+
+	/**
+	 * One pairing, with our miss played out as its own branch.
+	 *
+	 * A 70% KO is two futures - the KO, and a turn where we did nothing and they
+	 * hit us - not one future at 70% of the damage. Shrinking the damage instead
+	 * would turn a sometimes-KO into a never-KO and lose the KO bonus entirely
+	 * (A10, Pinkacross; 24 Sep 2026).
+	 */
+	expected(gen, board, ours, theirs, state, field, request) {
+		const hit = ours.accuracy === undefined ? 1 : ours.accuracy;
+		const landed = this.playTurn(gen, board, ours, theirs, state, field, request);
+		if (hit >= 1 || !(ours.damage > 0)) return landed;
+		const missed = this.playTurn(gen, board, { ...ours, damage: 0 }, theirs, state, field, request);
+		return hit * landed + (1 - hit) * missed;
 	}
 
 	/** What the opponent might reasonably do this turn. */
