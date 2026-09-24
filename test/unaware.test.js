@@ -83,7 +83,10 @@ const cases = [
 		name: 'our own Haze, against a sweeper at +2',
 		setup: {
 			myMoves: ['Haze', 'Tackle'], mySpecies: 'Toxapex',
-			foeSpecies: 'Dragonite', foeBoosts: { atk: 2, spe: 2 },
+			// A Quiver Dancer, not a Dragon Dancer: with Stockfish's foe model a +2
+			// fully invested Dragonite's Earthquake knocks this Toxapex out, and a
+			// Pokemon that dies before it moves has no right answer to test (24 Sep 2026).
+			foeSpecies: 'Volcarona', foeBoosts: { spa: 2, spd: 2, spe: 2 },
 		},
 		expect: move => move === 'Haze',
 		wanted: 'Haze',

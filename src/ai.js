@@ -182,6 +182,25 @@ const NEEDS_TARGET = new Set(['normal', 'any', 'adjacentFoe', 'adjacentAlly', 'a
  */
 const PINKACROSS_CHAMPION = { accuracy: true, sacking: true, leads: true, setupWin: true };
 const PINKACROSS_SEARCH = { middleGround: true, endgame: true };
+/*
+ * From the review of 93 tier-sim games, both sides Stockfish (24 Sep 2026),
+ * one knob each so they can be measured apart - Stockfish only until they are:
+ *
+ *   foeModel   in a built-team format, a foe is what this server's own role sets
+ *              (src/role-sets.js) build for it: its likely attacks, full
+ *              investment in the stat it attacks with, and a damage item until
+ *              the battle shows otherwise - then corrected by how hard it
+ *              actually hits (learnFoeScale). The old 85-EV, no-item guess read
+ *              a Choice Band Close Combat as half of what it did.
+ *   recovery   heal when the heal outruns the hit, before the "this is the last
+ *              turn" return, and Wish at 70% or lower (A20). 0 of 108 chances
+ *              to recover at half health or less were taken.
+ *   hazardPlan Stealth Rock and Spikes worth what they will hit - the foes left
+ *              without Boots - and more early (A12); Spikes up to three layers.
+ *   setupCap   no setting up in front of a KO on the hope they switch once we
+ *              are at 30% or less (Mega Blaziken, Swords Dance at 14%).
+ */
+const STOCKFISH_REVIEW = { foeModel: true, recovery: true, hazardPlan: true, setupCap: true };
 const DIFFICULTIES = {
 	// An in-game trainer. It reaches for whatever move has the biggest number on
 	// it, without working out what that move would actually do, and it never
@@ -206,7 +225,7 @@ const DIFFICULTIES = {
 	// Experimental. Everything Champion does, plus a one-turn search over our
 	// options against their likely replies, weighted by numbers the trainer tuned
 	// from self-play rather than by hand.
-	stockfish: { blunder: 0,   greedy: false, noise: 0,  switching: true,  tempo: true,  predict: true,  tera: true, switchMargin: 25, knowsSets: true, readsSets: true, search: true, playbook: true, ...PINKACROSS_CHAMPION, ...PINKACROSS_SEARCH },
+	stockfish: { blunder: 0,   greedy: false, noise: 0,  switching: true,  tempo: true,  predict: true,  tera: true, switchMargin: 25, knowsSets: true, readsSets: true, search: true, playbook: true, ...PINKACROSS_CHAMPION, ...PINKACROSS_SEARCH, ...STOCKFISH_REVIEW },
 };
 const DEFAULT_DIFFICULTY = 'hard';
 
@@ -223,6 +242,9 @@ const DEFAULT_DIFFICULTY = 'hard';
  * Exported so the tuner can search them.
  */
 const TEMPO = { death: 45, entry: 30 };
+
+/** Species -> the sets the role-set builder makes for it (BattleAI.foeProfile), for the process. */
+const FOE_PROFILES = new Map();
 
 function toName(id, kind) {
 	const entry = PkmnDex.forGen(9)[kind].get(id);
@@ -319,6 +341,19 @@ class BattleAI {
 		if (!this.cfg.naive && this.cfg.maxSpeed !== false && !/random/.test(this.format || '') && mon && mon.species && mon.species.baseStats) {
 			const level = mon.level || 100;
 			const top = Math.floor(Math.floor((2 * mon.species.baseStats.spe + 31 + 63) * level / 100 + 5) * 1.1);
+			/*
+			 * And a Choice Scarf when nearly every set this server builds for it runs
+			 * one (Rotom-Mow, Indeedee-F, Purugly) and nothing has ruled it out - an
+			 * item seen or lost, or two different moves in one stay. (foeModel, 24 Sep 2026)
+			 */
+			const guess = this.cfg.foeModel && !mon.item ? this.foeGuess(foe) : null;
+			if (guess && guess.scarf >= 0.75) {
+				// At the Speed those Scarf sets are built with: a bulky Scarf Rotom-Mow puts nothing in Speed.
+				const ev = guess.scarfSpe;
+				const scarfed = Math.floor(Math.floor((2 * mon.species.baseStats.spe + 31 + Math.floor(ev / 4)) * level / 100 + 5) * (ev >= 252 ? 1.1 : 1)) * 1.5;
+				return Math.max(this.speedOf({ stats: { spe: top }, ability: mon.ability }, foe.boosts, foe.status, weather),
+					this.speedOf({ stats: { spe: scarfed }, ability: mon.ability }, foe.boosts, foe.status, weather));
+			}
 			if (mon.stats && top > mon.stats.spe) return this.speedOf({ stats: { spe: top }, ability: mon.ability, item: mon.item }, foe.boosts, foe.status, weather);
 		}
 		return this.speedOf(mon, foe.boosts, foe.status, weather);
@@ -482,8 +517,13 @@ class BattleAI {
 		return { ...(overrides || {}), ...past, ...(changedPast || {}) };
 	}
 
-	/** Build a calc Pokemon for an opponent we can only partially see. */
-	foePokemon(gen, foe) {
+	/**
+	 * Build a calc Pokemon for an opponent we can only partially see.
+	 *
+	 * `bare`: without the damage-item guess or what its hits have shown, for
+	 * measuring those hits against (learnFoeScale).
+	 */
+	foePokemon(gen, foe, { bare = false } = {}) {
 		const species = foe.transformed || foe.species;
 		const opts = {
 			level: foe.level || 100,
@@ -495,10 +535,29 @@ class BattleAI {
 			// Unknown spread: assume a balanced, plausible investment rather than 0s.
 			evs: { hp: 85, atk: 85, def: 85, spa: 85, spd: 85, spe: 85 },
 		};
+		/*
+		 * In a built-team format, the spread this server's builder gives it (foeModel,
+		 * 24 Sep 2026). The balanced 85s under-read every attacker: real sets put
+		 * 252 and a boosting nature into the stat they hit with, so Tauros-Paldea-
+		 * Combat's Close Combat on Rotom-Mow read 47-56% and did 81-96%. Bulk is the
+		 * average of its built sets - a Blissey is 252 HP / 252 Sp. Def, a Tauros
+		 * is neither - so our own damage reads true as well.
+		 */
+		const guess = this.cfg.foeModel && !/random/.test(this.format || '') ? this.foeGuess(foe) : null;
+		if (guess && guess.sets.length) {
+			const side = guess.side;
+			opts.evs = { ...guess.bulk, [side === 'Special' ? 'spa' : 'atk']: 252 };
+			if (side === 'Mixed') { opts.evs.atk = 252; opts.evs.spa = 252; }
+			opts.nature = side === 'Physical' ? 'Adamant' : side === 'Special' ? 'Modest' : 'Hardy';
+		}
 		try {
 			opts.overrides = this.speciesOverrides(gen, species, opts.overrides);
 			const mon = new calc.Pokemon(gen, species, opts);
 			if (foe.maxhp === 100 && foe.hp < 100) mon.originalCurHP = Math.max(1, Math.round(mon.maxHP() * foe.hp / 100));
+			if (guess && !bare) {
+				const scale = this.foeScale(foe, guess);
+				if (scale) mon.velvetScale = scale;
+			}
 			return mon;
 		} catch (e) {
 			// Something rather than nothing: a Pikachu-shaped guess is a bad
@@ -514,6 +573,178 @@ class BattleAI {
 				return new calc.Pokemon(gen, 'Pikachu', { level: opts.level });
 			}
 		}
+	}
+
+	/** Is the foe model on for this format? Random Battles publish their sets, so not there. */
+	modelsFoes() { return !!this.cfg.foeModel && !this.cfg.naive && !/random/.test(this.format || ''); }
+
+	/**
+	 * What this server's builder makes of a species: a few sets per role from
+	 * src/role-sets.js - the same generator the tier sim, the ladder bots and the
+	 * trainers draft from - each as its moves, attacks, item, spread and attacking
+	 * side. Seeded, so the same species always reads the same, and kept for the
+	 * life of the process (a tier-sim worker plays thousands of games).
+	 */
+	foeProfile(species) {
+		const key = String(species || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+		if (FOE_PROFILES.has(key)) return FOE_PROFILES.get(key);
+		const sets = [];
+		try {
+			const RS = require('./role-sets');
+			const dex = require('./rp-dex')();
+			let seed = 1;
+			for (const ch of key) seed = (seed * 31 + ch.charCodeAt(0)) % 2147483647;
+			const rng = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+			const roles = RS.roleSets(dex, species);
+			const each = Math.max(1, Math.min(3, Math.floor(9 / Math.max(1, roles.length))));
+			for (const role of roles) {
+				for (let k = 0; k < each; k++) {
+					const built = RS.buildSet(dex, species, { role: role.role, rng });
+					if (!built) continue;
+					const moves = built.moves.map(n => dex.moves.get(n)).filter(m => m.exists);
+					const attacks = moves.filter(m => m.category !== 'Status');
+					const phys = attacks.filter(m => m.category === 'Physical').length, spec = attacks.length - phys;
+					sets.push({
+						ids: moves.map(m => m.id), attacks: attacks.map(m => m.name),
+						item: String(built.item || '').toLowerCase().replace(/[^a-z0-9]/g, ''),
+						evs: built.evs || {}, side: phys === spec ? null : phys > spec ? 'Physical' : 'Special',
+					});
+				}
+			}
+		} catch (e) { /* no data: the old guess stands */ }
+		FOE_PROFILES.set(key, sets);
+		return sets;
+	}
+
+	/**
+	 * The foe as its built sets say it probably is, narrowed by what it has shown:
+	 * only the sets that carry every move it has used (all of them if none do),
+	 * its attacking side, the bulk those sets average, its likely unseen attacks,
+	 * the damage its item probably adds, and how likely a Choice Scarf is. What
+	 * the battle has revealed always wins - a seen item, a lost one, or two
+	 * different moves in one stay (no Choice item) switch the guess off.
+	 */
+	foeGuess(foe) {
+		const species = String((foe && (foe.transformed || foe.species)) || '').split(',')[0];
+		const seen = [...((foe && foe.moves) || [])].map(m => String(m).toLowerCase().replace(/[^a-z0-9]/g, ''));
+		const itemKnown = !!(foe && (foe.item || foe.itemGone));
+		const free = !!(foe && foe.movedFreely);
+		const key = `${species}|${seen.slice().sort().join(',')}|${itemKnown}|${free}`;
+		this._guess = this._guess || new Map();
+		if (this._guess.has(key)) return this._guess.get(key);
+		if (this._guess.size > 400) this._guess.clear();
+		const all = this.foeProfile(species);
+		let sets = all.filter(s => seen.every(m => s.ids.includes(m)));
+		if (!sets.length) sets = all;
+		const dex = PkmnDex.forGen(9);
+		const seenAttacks = seen.map(m => dex.moves.get(m)).filter(m => m && m.exists && m.category !== 'Status');
+		const phys = seenAttacks.filter(m => m.category === 'Physical').length, spec = seenAttacks.length - phys;
+		let side;
+		if (phys && spec) side = 'Mixed';
+		else if (phys || spec) side = phys ? 'Physical' : 'Special';
+		else {
+			const p = sets.filter(s => s.side === 'Physical').length, q = sets.filter(s => s.side === 'Special').length;
+			if (p !== q) side = p > q ? 'Physical' : 'Special';
+			else {
+				const sheet = dex.species.get(species);
+				side = sheet && sheet.exists && sheet.baseStats.spa > sheet.baseStats.atk ? 'Special' : 'Physical';
+			}
+		}
+		const avg = stat => sets.length ? Math.round(sets.reduce((n, s) => n + (s.evs[stat] || 0), 0) / sets.length / 4) * 4 : 85;
+		const bulk = { hp: avg('hp'), atk: avg('atk'), def: avg('def'), spa: avg('spa'), spd: avg('spd'), spe: avg('spe') };
+		// Its likely attacks not yet seen: carried by a quarter of the sets or more, as many as it has slots left.
+		const count = new Map();
+		for (const s of sets) for (const a of s.attacks) count.set(a, (count.get(a) || 0) + 1);
+		const seenNames = new Set([...((foe && foe.moves) || [])]);
+		const attacks = [...count.entries()].filter(([a, n]) => n >= sets.length / 4 && !seenNames.has(a))
+			.sort((a, b) => b[1] - a[1]).slice(0, Math.max(0, 4 - seen.length)).map(([a]) => a);
+		// The item's damage, averaged over the sets: Band or Specs 1.5 on their side, Life Orb 1.3.
+		const boost = (item, cat) => (item === 'lifeorb' ? 1.3 : !free && ((item === 'choiceband' && cat === 'Physical') || (item === 'choicespecs' && cat === 'Special')) ? 1.5 : 1);
+		const factor = cat => (itemKnown || !sets.length ? 1 : sets.reduce((n, s) => n + boost(s.item, cat), 0) / sets.length);
+		const out = {
+			sets, side, bulk, attacks,
+			factor: { Physical: factor('Physical'), Special: factor('Special') },
+			scarf: itemKnown || free || !sets.length ? 0 : sets.filter(s => s.item === 'choicescarf').length / sets.length,
+			scarfSpe: Math.max(0, ...sets.filter(s => s.item === 'choicescarf').map(s => s.evs.spe || 0)),
+		};
+		this._guess.set(key, out);
+		return out;
+	}
+
+	/**
+	 * How much harder than the bare model this foe hits, per side: the item
+	 * guess, corrected by its hits so far (learnFoeScale). Null when it is 1 both ways.
+	 */
+	foeScale(foe, guess) {
+		const out = {};
+		let any = false;
+		for (const cat of ['Physical', 'Special']) {
+			const prior = guess.factor[cat];
+			const seen = (foe.hits || []).filter(h => h.ratio && h.cat === cat && h.itemAt === String(foe.item || ''));
+			let v = seen.length ? (prior * 0.5 + seen.reduce((n, h) => n + h.ratio, 0)) / (0.5 + seen.length) : prior;
+			v = Math.max(0.7, Math.min(2, v));
+			out[cat] = v;
+			if (Math.abs(v - 1) > 0.01) any = true;
+		}
+		return any ? out : null;
+	}
+
+	/**
+	 * Read their item off how hard they hit (foeModel, 24 Sep 2026).
+	 *
+	 * Each plain hit battle.js recorded is measured against the bare model - the
+	 * same foe with full investment and no item guess, at the boosts both sides
+	 * had then - and the ratio is kept. About 1.5 is a Choice Band or Specs, 1.3 a
+	 * Life Orb (whose recoil usually names it first), about 1 no damage item, and
+	 * less than that a set not built to hit. foeScale() then uses the ratio in
+	 * place of the guess. Nothing here names the item: a Huge Power or an
+	 * Adaptability reads the same way, and should.
+	 */
+	learnFoeScale(gen, state, request) {
+		if (!this.modelsFoes() || !request || !request.side) return;
+		const dex = PkmnDex.forGen(gen.num);
+		const foes = [...Object.values(state.opponent || {}), ...Object.values(state.theirBench || {})];
+		for (const foe of foes) {
+			if (!foe || !foe.hits) continue;
+			for (const h of foe.hits) {
+				if (h.ratio !== undefined) continue;
+				h.ratio = null;
+				const d = dex.moves.get(h.move);
+				if (!d || !d.exists || d.category === 'Status' || d.multihit || d.basePowerCallback || FIXED_DAMAGE[d.name] || h.screens ||
+					/^(foulplay|bodypress|knockoff|terablast|photongeyser)$/.test(d.id) || foe.dynamaxed) continue;
+				const entry = request.side.pokemon.find(p => String(p.details || '').split(',')[0] === h.target && !/fnt/.test(p.condition || ''));
+				if (!entry) continue;
+				try {
+					const me = this.myPokemon(gen, entry, state);
+					me.boosts = { ...(me.boosts || {}), ...h.myBoosts };
+					me.originalCurHP = me.maxHP();
+					const them = this.foePokemon(gen, { ...foe, boosts: h.foeBoosts || {}, tera: h.foeTera, hp: 100, maxhp: 100 }, { bare: true });
+					const field = new calc.Field({ weather: h.weather || undefined, terrain: h.terrain || undefined });
+					const expect = this.damagePct(gen, them, me, d.name, field);
+					if (expect < 4) continue;
+					h.ratio = (h.dealt / h.maxhp * 100) / expect;
+					h.cat = d.category;
+					h.itemAt = String(foe.item || '');
+				} catch (e) { h.ratio = null; }
+			}
+		}
+	}
+
+	/**
+	 * The attacks to judge a foe by: what it has shown, this server's own attacks
+	 * its species carries, and - with the foe model - its likely unseen ones.
+	 * Null means nothing to go on (roughIncoming's probes). Without the foe model
+	 * a foe with one move shown was judged by that one move alone, and one that
+	 * had shown only Swords Dance by nothing at all.
+	 */
+	foeAttacks(gen, foe, hidden = true) {
+		const seen = foe && foe.moves ? [...foe.moves] : [];
+		const custom = hidden ? this.hiddenAttacks(gen, foe) : [];
+		if (this.modelsFoes() && seen.length < 4) {
+			const all = [...new Set([...seen, ...custom, ...this.foeGuess(foe).attacks])];
+			return all.length ? all : null;
+		}
+		return seen.length ? [...seen, ...custom] : null;
 	}
 
 	/**
@@ -629,6 +860,7 @@ class BattleAI {
 		this.format = format || '';
 		this.presets = format ? presetsFor(format) : null;
 		this.presetDamaging = new Map();
+		this._guess = null;
 		return this.presets;
 	}
 
@@ -645,6 +877,11 @@ class BattleAI {
 	 * which entries are attacks costs a dex lookup each time it is asked.
 	 */
 	knownAttacks(gen, species) {
+		// A built-team format has no presets; the foe model reads this server's own sets instead.
+		if (!this.presets && this.modelsFoes()) {
+			const likely = this.foeGuess({ species, moves: new Set() }).attacks;
+			return likely.length ? likely : null;
+		}
 		if (!this.cfg.readsSets || !this.presets) return null;
 		const key = String(species || '').toLowerCase();
 		if (this.presetDamaging.has(key)) return this.presetDamaging.get(key);
@@ -685,6 +922,8 @@ class BattleAI {
 			if (!move.bp) return 0;
 			// A Charge doubles the next Electric move; the calculator has no idea.
 			const charged = attacker.velvetCharged && move.type === 'Electric' ? 2 : 1;
+			// A foe's likely damage item, or what its hits have shown (foeModel: foeScale()).
+			const scale = attacker.velvetScale ? (attacker.velvetScale[move.category] || 1) : 1;
 			if (CALC_ABILITY[String(attacker.ability || '')]) {
 				attacker = attacker.clone();
 				attacker.ability = CALC_ABILITY[String(attacker.ability)];
@@ -717,7 +956,7 @@ class BattleAI {
 			const dmg = result.damage;
 			const rolls = Array.isArray(dmg) ? dmg.flat().filter(n => typeof n === 'number') : [dmg];
 			if (!rolls.length) return 0;
-			const avg = charged * rolls.reduce((a, b) => a + b, 0) / rolls.length;
+			const avg = charged * scale * rolls.reduce((a, b) => a + b, 0) / rolls.length;
 			const hp = defender.originalCurHP || defender.maxHP();
 			return Math.max(0, (avg / hp) * 100);
 		} catch (e) {
@@ -854,9 +1093,9 @@ class BattleAI {
 				theirs.forEach((foe, j) => {
 					const them = this.foePokemon(gen, foe);
 					const out = Math.max(0, ...moves.map(m => this.damageToFoe(gen, me, foe, m, field)));
-					const seen = [...(foe.moves || [])];
-					const back = seen.length
-						? Math.max(0, ...[...seen, ...this.hiddenAttacks(gen, foe)].map(m => this.damagePct(gen, them, me, m, field)))
+					const list = this.foeAttacks(gen, foe);
+					const back = list
+						? Math.max(0, ...list.map(m => this.damagePct(gen, them, me, m, field)))
 						: this.roughIncoming(gen, them, me, field);
 					const theirSpe = this.foeSpeed(gen, foe, state.weather);
 					const faster = state.trickRoom ? mySpe < theirSpe : mySpe > theirSpe;
@@ -980,9 +1219,9 @@ class BattleAI {
 			const them = this.foePokemon(gen, foe);
 			let ourBest = 0;
 			for (const m of this.myMoveNames) ourBest = Math.max(ourBest, this.damageToFoe(gen, me, foe, m, field));
-			const seen = [...foe.moves];
-			const theirBest = seen.length
-				? Math.max(...seen.map(m => this.damagePct(gen, them, me, m, field)))
+			const seen = this.foeAttacks(gen, foe, false);
+			const theirBest = seen
+				? Math.max(0, ...seen.map(m => this.damagePct(gen, them, me, m, field)))
 				: this.roughIncoming(gen, them, me, field);
 
 			let p = 0;
@@ -1011,8 +1250,9 @@ class BattleAI {
 		for (const foe of foes) {
 			const them = this.foePokemon(gen, foe);
 			for (const m of this.myMoveNames) best = Math.max(best, this.damageToFoe(gen, boosted, foe, m, field));
-			const theirSpe = (them.stats && them.stats.spe) || 0;
-			const mySpe = (boosted.stats && boosted.stats.spe) || 0;
+			// With the foe model, speed as foeSpeed() and speedOf() read it (boosts and all), like everywhere else.
+			const theirSpe = this.cfg.foeModel ? this.foeSpeed(gen, foe, state.weather) : ((them.stats && them.stats.spe) || 0);
+			const mySpe = this.cfg.foeModel ? this.speedOf(boosted, boosted.boosts, boosted.status, state.weather) : ((boosted.stats && boosted.stats.spe) || 0);
 			if (state.trickRoom ? mySpe > theirSpe : mySpe < theirSpe) fasterThanAll = false;
 		}
 		const immediate = best >= 100 ? (fasterThanAll ? 1 : 0.6) : best >= 70 ? (fasterThanAll ? 0.55 : 0.3) : best / 200;
@@ -1032,7 +1272,7 @@ class BattleAI {
 		const dex = PkmnDex.forGen(gen.num);
 		const attackOf = m => { const d = dex.moves.get(m); return d && d.exists && d.category !== 'Status' ? d : null; };
 		const myPriority = this.myMoveNames.filter(m => { const d = attackOf(m); return d && d.priority > 0; });
-		const mySpe = (boosted.stats && boosted.stats.spe) || 0;
+		const mySpe = this.cfg.foeModel ? this.speedOf(boosted, boosted.boosts, boosted.status, state.weather) : ((boosted.stats && boosted.stats.spe) || 0);
 		const team = state.foeTeam();
 		let worth = 0, revenge = false;
 		for (const foe of team) {
@@ -1040,10 +1280,10 @@ class BattleAI {
 			let hit = 0;
 			for (const m of this.myMoveNames) hit = Math.max(hit, this.damageToFoe(gen, boosted, foe, m, field));
 			const prio = Math.max(0, ...myPriority.map(m => this.damageToFoe(gen, boosted, foe, m, field)));
-			const theirSpe = (them.stats && them.stats.spe) || 0;
+			const theirSpe = this.cfg.foeModel ? this.foeSpeed(gen, foe, state.weather) : ((them.stats && them.stats.spe) || 0);
 			const first = (state.trickRoom ? mySpe < theirSpe : mySpe > theirSpe) || prio >= 100;
 			worth += hit >= 100 ? (first ? 1 : 0.55) : hit >= 50 ? (first ? 0.4 : 0.25) : hit / 250;
-			const theirs = [...(foe.moves || []), ...this.hiddenAttacks(gen, foe)];
+			const theirs = this.foeAttacks(gen, foe) || this.hiddenAttacks(gen, foe);
 			if (theirs.some(m => { const d = attackOf(m); return d && d.priority > 0 && this.damagePct(gen, them, boosted, m, field) >= 100; })) revenge = true;
 		}
 		const share = team.length ? worth / team.length : 0;
@@ -1130,7 +1370,7 @@ class BattleAI {
 			const theirSpe = this.foeSpeed(gen, foe, state.weather);
 			const first = (state.trickRoom ? mySpe < theirSpe : mySpe > theirSpe) || prio >= 100;
 			const them = this.foePokemon(gen, foe);
-			const theirs = [...(foe.moves || []), ...this.hiddenAttacks(gen, foe)];
+			const theirs = this.foeAttacks(gen, foe) || this.hiddenAttacks(gen, foe);
 			if (theirs.some(m => { const d = attack(m); return d && d.priority > 0 && this.damagePct(gen, them, me, m, field) >= myHp; })) return false;
 			if (hit >= 100 && first) continue;
 			if (!foe.bench && hit >= 50 && (first ? incoming < myHp : incoming * 2 < myHp)) continue;
@@ -1604,15 +1844,17 @@ class BattleAI {
 			const copied = imposter && foes[0] ? [...new Set([...foes[0].moves, ...(this.knownAttacks(gen, (this.foePokemon(gen, foes[0]).species || {}).name) || [])])] : null;
 			const mine = (copied || (entry.moves || []).map(m => toName(m, 'moves'))).map(m => this.damageToFoe(gen, me, foe, m, field));
 			best = Math.max(best, ...(mine.length ? mine : [0]));
-			const seen = [...foe.moves];
-			const back = seen.length
-				? [...seen, ...this.hiddenAttacks(gen, foe)].map(m => this.damagePct(gen, them, me, m, field) * this.maxRatio(gen, m, foe.dynamaxed))
+			const list = this.foeAttacks(gen, foe);
+			const back = list
+				? list.map(m => this.damagePct(gen, them, me, m, field) * this.maxRatio(gen, m, foe.dynamaxed))
 				: [this.roughIncoming(gen, them, me, field) * (foe.dynamaxed ? 1.3 : 1)];
 			worst = Math.max(worst, ...back);
 		}
 
 		// What the hazards on our side take on the way in (Raging Bolt came in on Stealth Rock and poison).
-		worst += this.entryHazards(gen, me, entry, state);
+		const hit = worst;   // a share of the HP it has now, as damagePct counts
+		const hazards = this.entryHazards(gen, me, entry, state);   // a share of its maximum
+		worst += hazards;
 		let score = best - worst;
 
 		/*
@@ -1670,7 +1912,14 @@ class BattleAI {
 			// of these six is the expensive one, and a team of six walls should still
 			// be willing to spend one.
 			const rank = this.valueRank(gen, entry, state, request);
-			if (worst >= hpPct) score -= TEMPO.death * (0.4 + 0.6 * rank);
+			/*
+			 * Dies coming in. The hit is a share of the HP it has now and hpPct a share
+			 * of its maximum, so comparing them straight counted a 70% Lopunny taking
+			 * 64% as dead; with the foe model's harder hits that stopped it being sent
+			 * in at all. Counted in the same units there (24 Sep 2026).
+			 */
+			const dies = this.cfg.foeModel ? hit * hpPct / 100 + hazards >= hpPct : worst >= hpPct;
+			if (dies) score -= TEMPO.death * (0.4 + 0.6 * rank);
 			// Only a voluntary switch pays for the hit on the way in. Replacing a
 			// fainted Pokemon is free, and charging it there is what made the bot
 			// send in whatever it cared least about after every knockout.
@@ -1689,7 +1938,7 @@ class BattleAI {
 	switchInAs(gen, entry, state, foes) {
 		const ability = String(entry.ability || entry.baseAbility || '').toLowerCase();
 		if (ability === 'imposter' && foes.length) {
-			const copy = this.foePokemon(gen, foes[0]);
+			const copy = this.foePokemon(gen, foes[0], { bare: true });
 			// It arrives with its own HP, and Imposter does not copy HP.
 			const cond = /^(\d+)\/(\d+)/.exec(entry.condition || '');
 			if (cond) {
@@ -1809,8 +2058,9 @@ class BattleAI {
 		const seen = [...(foe.moves || [])];
 		if (seen.some(m => { const d = dex.moves.get(m); return d && d.exists && d.priority > 0 && d.category !== 'Status'; })) return false;
 		const them = this.foePokemon(gen, foe);
-		const worst = target => (seen.length
-			? Math.max(0, ...[...seen, ...this.hiddenAttacks(gen, foe)].map(m => this.damagePct(gen, them, target, m, field)))
+		const list = this.foeAttacks(gen, foe);
+		const worst = target => (list
+			? Math.max(0, ...list.map(m => this.damagePct(gen, them, target, m, field)))
 			: this.roughIncoming(gen, them, target, field));
 		// damagePct is a share of the HP we have left: 100 is a KO.
 		if (worst(me) >= 100) return false;
@@ -1887,6 +2137,7 @@ class BattleAI {
 			.map((p, i) => ({ p, i: i + 1 }))
 			.filter(({ p }) => !p.active && !/fnt/.test(p.condition));
 		if (!options.length) return 'default';
+		this.learnFoeScale(gen, state, request);
 		/*
 		 * In the endgame, who comes in is decided by playing the rest out (A16):
 		 * "if they bring X, I send Y" is exactly this choice. (24 Sep 2026)
@@ -1930,9 +2181,9 @@ class BattleAI {
 		let worst = 0;
 		for (const foe of foes) {
 			const them = this.foePokemon(gen, foe);
-			const seen = [...foe.moves];
-			const back = seen.length ?
-				[...seen, ...this.hiddenAttacks(gen, foe)].map(m => this.damagePct(gen, them, me, m, field) * this.maxRatio(gen, m, foe.dynamaxed)) :
+			const list = this.foeAttacks(gen, foe);
+			const back = list ?
+				list.map(m => this.damagePct(gen, them, me, m, field) * this.maxRatio(gen, m, foe.dynamaxed)) :
 				[this.roughIncoming(gen, them, me, field) * (foe.dynamaxed ? 1.3 : 1)];
 			worst = Math.max(worst, ...back);
 		}
@@ -2020,8 +2271,8 @@ class BattleAI {
 				plainOut = Math.max(plainOut, this.damageToFoe(gen, me, foe, best.name, field));
 				teraOut = Math.max(teraOut, this.damageToFoe(gen, teraMe, foe, best.name, field));
 			}
-			const seen = [...foe.moves];
-			if (seen.length) {
+			const seen = this.foeAttacks(gen, foe, false);
+			if (seen) {
 				for (const m of seen) {
 					plainIn = Math.max(plainIn, this.damagePct(gen, them, me, m, field));
 					teraIn = Math.max(teraIn, this.damagePct(gen, them, teraMe, m, field));
@@ -2160,7 +2411,10 @@ class BattleAI {
 	}
 
 	chooseForSlot(gen, active, entry, index, request, state, field) {
-		if (index === 0) this.inferScarf(gen, state, request);
+		if (index === 0) {
+			this.inferScarf(gen, state, request);
+			this.learnFoeScale(gen, state, request);
+		}
 		const me = this.myPokemon(gen, entry, state);
 		const foes = state.foes();
 		// switchPressure/sweepPotential need to know what we can actually click.
@@ -2181,8 +2435,8 @@ class BattleAI {
 		let incoming = 0;
 		for (const foe of foes) {
 			const them = this.foePokemon(gen, foe);
-			const seen = [...foe.moves];
-			const back = seen.length ? [...seen, ...this.hiddenAttacks(gen, foe)].map(m => this.damagePct(gen, them, me, m, field) * this.maxRatio(gen, m, foe.dynamaxed))
+			const list = this.foeAttacks(gen, foe);
+			const back = list ? list.map(m => this.damagePct(gen, them, me, m, field) * this.maxRatio(gen, m, foe.dynamaxed))
 				: [this.roughIncoming(gen, them, me, field) * (foe.dynamaxed ? 1.3 : 1)];
 			incoming = Math.max(incoming, ...back);
 		}

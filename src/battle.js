@@ -133,6 +133,22 @@ class BattleState {
 				if (store[owner.slot]) store[owner.slot].ability = ability;
 			}
 		}
+		/*
+		 * The same for items: "|-damage|p2a: Tauros|80/100|[from] item: Life Orb" is
+		 * the Life Orb announcing itself, and so are Leftovers healing and a Flame
+		 * Orb burning. Only the ability line was read, so a Life Orb that had been
+		 * showing its recoil for five turns was still an unknown item to the AI.
+		 * With an [of] the item belongs to that Pokemon (Rocky Helmet hurts the
+		 * attacker, not its holder). (24 Sep 2026)
+		 */
+		const fromItem = /^-(damage|heal|status)$/.test(parts[0]) && parts.find(p => /^\[from\] item: /.test(p));
+		if (fromItem) {
+			const owner = of ? this.slotOf(of.slice('[of] '.length)) : this.slotOf(args[0]);
+			if (owner && owner.side !== this.myPlayer && this.opponent[owner.slot]) {
+				this.opponent[owner.slot].item = fromItem.slice('[from] item: '.length).trim();
+				this.opponent[owner.slot].itemGone = false;
+			}
+		}
 		switch (cmd) {
 		case 'player': {
 			// |player|p1|Username|avatar|rating
@@ -206,6 +222,9 @@ class BattleState {
 					for (const m of back.moves || []) mon.moves.add(m);
 					if (back.ability && !mon.ability) mon.ability = back.ability;
 					if (back.item && !mon.item) mon.item = back.item;
+					// And how hard it has been seen to hit (the AI's item read), and a lost item.
+					if (back.hits) mon.hits = back.hits;
+					if (back.itemGone) mon.itemGone = true;
 				}
 				delete this.theirBench[mon.species];
 				this.theirSeen.add(mon.species);
@@ -245,7 +264,32 @@ class BattleState {
 			const cond = parseCondition(args[1]);
 			if (!id || !cond) break;
 			const store = id.side === this.myPlayer ? this.mine : this.opponent;
+			const before = store[id.slot] ? store[id.slot].hp : null;
 			if (store[id.slot]) Object.assign(store[id.slot], cond);
+			/*
+			 * How hard their attack actually hit us, for the AI to compare with what it
+			 * expected (BattleAI.learnFoeScale). A Choice Band gives itself away only
+			 * like this: a Tauros-Paldea-Combat Close Combat read as half of a Rotom-Mow
+			 * and took nine tenths of it. Only a plain hit - no [from] (recoil, hazards,
+			 * items), no critical hit, and not the hit that knocked us out, which says
+			 * only "at least this much". (24 Sep 2026)
+			 */
+			if (cmd === '-damage' && id.side === this.myPlayer && store[id.slot] && !parts.some(p => /^\[from\]/.test(p))) {
+				const lm = this.lastMove;
+				const foe = lm && lm.side !== this.myPlayer && lm.slot ? this.opponent[lm.slot] : null;
+				const mine = store[id.slot];
+				if (foe && !foe.fainted && lm.name && typeof before === 'number' && cond.hp > 0 && cond.maxhp > 1 && before > cond.hp &&
+					this.critOn !== args[0] && lm.turn === this.turn) {
+					const mySide = this.hazards[this.myPlayer] || {};
+					foe.hits = (foe.hits || []).slice(-5);
+					foe.hits.push({
+						move: lm.name, dealt: before - cond.hp, maxhp: cond.maxhp, target: mine.species, turn: this.turn,
+						myBoosts: { ...(mine.boosts || {}) }, foeBoosts: { ...(foe.boosts || {}) }, foeTera: foe.tera || null,
+						weather: this.weather || '', terrain: this.terrain || '',
+						screens: !!(mySide['Reflect'] || mySide['Light Screen'] || mySide['Aurora Veil']),
+					});
+				}
+			}
 			// Our move landing on them proves they are NOT immune to it, which
 			// rules out every ability that would have absorbed it.
 			if (cmd === '-damage' && id.side !== this.myPlayer && store[id.slot]) {
@@ -331,7 +375,11 @@ class BattleState {
 		}
 		case '-enditem': {
 			const id = this.slotOf(args[0]);
-			if (id && this.opponent[id.slot] && id.side !== this.myPlayer) this.opponent[id.slot].item = null;
+			if (id && this.opponent[id.slot] && id.side !== this.myPlayer) {
+				this.opponent[id.slot].item = null;
+				// Gone, not unknown: the AI stops guessing a damage item for it.
+				this.opponent[id.slot].itemGone = true;
+			}
 			break;
 		}
 		case '-ability': {
@@ -351,6 +399,9 @@ class BattleState {
 				// [from] lines (Magic Bounce, Dancer) and called moves are not the Pokemon's own choice.
 				const own = !parts.some(p => /^\[from\]/.test(p));
 				if (mon && own) {
+					// Two different moves in one stay on the field: not Choice-locked, so
+					// not holding a Choice item (the AI's item guess). (24 Sep 2026)
+					if (mon.lastMove && mon.lastMove !== args[1] && !/^(Struggle|Max Guard)$/.test(args[1])) mon.movedFreely = true;
 					mon.lastMove = args[1];
 					mon.lastFailed = null;
 					mon.repeat = mon.lastMoveTurn === this.turn - 1 && mon.previousMove === args[1] ? (mon.repeat || 1) + 1 : 1;
@@ -362,9 +413,11 @@ class BattleState {
 			}
 			// Remember what was just used, so the result line that follows can be
 			// attributed to it.
-			this.lastMove = { side: id.side, name: args[1], target: args[2] || '' };
+			this.lastMove = { side: id.side, slot: id.slot, name: args[1], target: args[2] || '', turn: this.turn };
+			this.critOn = null;
 			break;
 		}
+		case '-crit': this.critOn = args[0]; break;
 		case '-immune': {
 			// Whatever just bounced off, its type is one this Pokemon is immune to.
 			const id = this.slotOf(args[0]);
@@ -380,6 +433,13 @@ class BattleState {
 				const dm = this.slotOf(args[0]);
 				const dstore = dm && (dm.side === this.myPlayer ? this.mine : this.opponent);
 				if (dstore && dstore[dm.slot]) dstore[dm.slot].dynamaxed = cmd === '-start';
+				break;
+			}
+			// No Retreat fails a second time; it lasts until the Pokemon leaves (a switch replaces the entry).
+			if (cmd === '-start' && /No Retreat/.test(String(args[1] || ''))) {
+				const nr = this.slotOf(args[0]);
+				const nstore = nr && (nr.side === this.myPlayer ? this.mine : this.opponent);
+				if (nstore && nstore[nr.slot]) nstore[nr.slot].noRetreat = true;
 				break;
 			}
 			// Charge (the move, or Luxray's Gleamstalk): the next Electric move is doubled.

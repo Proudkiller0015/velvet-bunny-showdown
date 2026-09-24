@@ -76,7 +76,18 @@ class TurnSearch {
 		 *     who thinks they are winning is the safe one (How to Make Comebacks).
 		 */
 		let pessimism = this.w.pessimism;
-		let board = { me, them, entry, foe };
+		/*
+		 * Turn order as the rest of the AI reads it: boosts, paralysis, weather and
+		 * Scarf through speedOf(), and their Speed at full investment through
+		 * foeSpeed(). playTurn compared the raw stats - 85 Speed EVs for them - so
+		 * the heuristic thought it moved second and the playout thought it moved
+		 * first, or the other way round. (24 Sep 2026)
+		 */
+		let board = {
+			me, them, entry, foe,
+			mySpe: this.ai.speedOf(me, me.boosts, me.status, state.weather),
+			theirSpe: this.ai.foeSpeed(gen, foe, state.weather),
+		};
 		if (middle) {
 			this.weighReplies(gen, theirActions, me, foe, field, state);
 			const edge = this.ai.advantage(state, request);
@@ -133,6 +144,7 @@ class TurnSearch {
 		for (const a of actions) {
 			if (a.weight !== undefined) continue;
 			a.weight = a.damage <= 1 ? 0.03 : 0.15 + Math.min(1, a.damage / 100) + (a.damage >= myHp ? 0.8 : 0);
+			if (a.unseen) a.weight *= 0.7;
 		}
 		if (this.ai.cfg.switching === false) return;
 		let pressure = 0;
@@ -175,9 +187,15 @@ class TurnSearch {
 	theirActions(gen, them, me, foe, field) {
 		const seen = [...foe.moves];
 		const out = [];
-		if (seen.length) {
-			for (const m of seen) {
-				out.push({ name: m, damage: this.ai.damagePct(gen, them, me, m, field), priority: this.movePriority(gen, m) });
+		/*
+		 * With the foe model, its likely unseen attacks are replies too (a foe that
+		 * had shown one move was playing out as a one-move Pokemon), at a little
+		 * under the weight of the ones it has shown. (24 Sep 2026)
+		 */
+		const list = this.ai.modelsFoes && this.ai.modelsFoes() ? (this.ai.foeAttacks(gen, foe) || []) : seen;
+		if (list.length) {
+			for (const m of list) {
+				out.push({ name: m, damage: this.ai.damagePct(gen, them, me, m, field), priority: this.movePriority(gen, m), unseen: !seen.includes(m) });
 			}
 		} else {
 			// Nothing revealed: assume something around their best plausible hit.
@@ -223,8 +241,8 @@ class TurnSearch {
 		}
 
 		// Turn order decides who gets to act at all when a knockout is involved.
-		const mySpe = (board.me.stats && board.me.stats.spe) || 0;
-		const theirSpe = (board.them.stats && board.them.stats.spe) || 0;
+		const mySpe = board.mySpe !== undefined ? board.mySpe : (board.me.stats && board.me.stats.spe) || 0;
+		const theirSpe = board.theirSpe !== undefined ? board.theirSpe : (board.them.stats && board.them.stats.spe) || 0;
 		const ourPriority = ours.priority || 0;
 		const theirPriority = theirs.priority || 0;
 		let weMoveFirst;
@@ -331,7 +349,10 @@ class TurnSearch {
 		const T = theirs.map(foe => {
 			const mon = ai.foePokemon(gen, foe);
 			const seen = [...(foe.moves || [])].filter(m => attack(m));
-			let names = [...new Set([...seen, ...ai.hiddenAttacks(gen, foe), ...(seen.length >= 4 ? [] : (ai.knownAttacks(gen, foe.species) || []))])];
+			let names = ai.modelsFoes && ai.modelsFoes()
+				// The likely unseen attacks of the sets that fit what it has shown (foeModel).
+				? (ai.foeAttacks(gen, foe) || []).filter(m => attack(m))
+				: [...new Set([...seen, ...ai.hiddenAttacks(gen, foe), ...(seen.length >= 4 ? [] : (ai.knownAttacks(gen, foe.species) || []))])];
 			if (!names.length) names = ai.probeAttacks(gen, mon);
 			return {
 				foe, mon, hp: Math.max(0, (foe.hp || 0) / (foe.maxhp || 100) * 100), hpFrac: Math.max(0.01, (foe.hp || 0) / (foe.maxhp || 100)),
