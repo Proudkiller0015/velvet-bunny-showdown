@@ -93,13 +93,16 @@ function untrain(dex, set, moveIds, legal) {
  *   threats    the format's common Pokemon ([{ name or types, weight?, ability? }]), when
  *              known: sets pick coverage against them and the checklist's rule 5
  *              (every threat hit neutrally by two members) is scored
+ *   archetype  optional plan: 'hyper offense' | 'bulky offense' | 'balance' | 'stall'.
+ *              Each candidate's roles are tried in the order that suits it, and a team
+ *              that comes out as that archetype earns a soft rule's worth (24 Sep 2026)
  *
  * Returns [{ ...set, ref, level }]: species, role, ability, item, moves, nature, evs, teraType.
  */
 function assemble(dex, candidates, options = {}) {
 	const {
 		size = 6, stage = 'full', themed = false, rng = Math.random, items = true,
-		strengthWeight = 25, roles = 3, fixed = [], maxEvaluations = 4000, threats = null,
+		strengthWeight = 25, roles = 3, fixed = [], maxEvaluations = 4000, threats = null, archetype = null,
 	} = options;
 	const usable = candidates.filter(c => dex.species.get(c.species).exists);
 	if (!usable.length) return [];
@@ -108,10 +111,17 @@ function assemble(dex, candidates, options = {}) {
 	// Every (candidate, role) option, built once.
 	const options_ = new Map();
 	for (const c of usable) {
-		const found = RS.roleSets(dex, c.species, c.legal || null).slice(0, roles);
+		/*
+		 * With a plan, the roles that suit it are the ones tried (Pinkacross's #1
+		 * mistake is mixing archetypes, B8): Setup Sweeper before Bulky Support on
+		 * hyper offense, the other way round on stall. The sort is stable, so with
+		 * no plan the order is the data's, as before.
+		 */
+		const found = RS.roleSets(dex, c.species, c.legal || null)
+			.sort((a, b) => (archetype ? RS.archetypeFit(b.role, archetype) - RS.archetypeFit(a.role, archetype) : 0)).slice(0, roles);
 		const built = [];
 		for (const r of found) {
-			const set = RS.buildSet(dex, c.species, { role: r.role, rng, level: c.level || 100, items: false, legal: c.legal || null, threats });
+			const set = RS.buildSet(dex, c.species, { role: r.role, rng, level: c.level || 100, items: false, legal: c.legal || null, threats, archetype });
 			if (set && !built.some(b => b.moves.slice().sort().join() === set.moves.slice().sort().join())) built.push(set);
 		}
 		if (built.length) options_.set(c, built);
@@ -134,7 +144,8 @@ function assemble(dex, candidates, options = {}) {
 		 * soft rule, where the Pokemon has anything better to be swapped for.
 		 */
 		const thin = sets.reduce((n, s) => n + Math.max(0, 3 - s.moves.length) * 4, 0);
-		return logic + strengthWeight * power - crowding - thin + core(picks, sets) + rng() * 0.01;
+		const plan = archetype && stage !== 'movesets' && TL.analyze(dex, sets).style === archetype ? 3 : 0;
+		return logic + strengthWeight * power - crowding - thin + core(picks, sets) + plan + rng() * 0.01;
 	};
 
 	// Start from the strongest, fixed members first, each in a random role of theirs.
@@ -222,6 +233,17 @@ function assemble(dex, candidates, options = {}) {
 		addKnockOff(dex, team);
 	}
 
+	/*
+	 * Set sanity (24 Sep 2026; RS.repairSet): the passes above teach and untrain
+	 * moves one at a time, and a set can end them with no STAB or with a slot
+	 * that does nothing. Moves only here - items come next, chosen to fit them.
+	 * IVs follow the final moves (RS.ivsFor: 0 Attack on a special set).
+	 */
+	for (const set of team) {
+		RS.repairSet(dex, set, { threats, legal: set.legal, items: false });
+		const ivs = RS.ivsFor(dex, dex.species.get(set.species), set.moves);
+		if (ivs) set.ivs = ivs; else delete set.ivs;
+	}
 	if (items) assignItems(dex, team, items === true ? null : items.bag || {}, { stage, themed, threats });
 	return team.map(({ legal, ...set }) => set);
 }
@@ -348,6 +370,38 @@ function cover(dex, set, drawn) {
 	return got / total;
 }
 
+/*
+ * The order a finished team is sent in, lead first (24 Sep 2026). "A good lead
+ * has at least one of three traits: a move with lasting value (hazards, Knock
+ * Off, status...), a pivot move, or strong immediate breaking power. Setup
+ * sweepers and plain cleaners are bad leads" (Pinkacross, How to Choose Your
+ * Lead; A2 in docs/research-pinkacross.md). The rest follow: walls and pivots,
+ * then breakers, and the setup sweepers - the win conditions - at the back,
+ * where team preview does not put them first. Returns a new array; each set
+ * is unchanged. Works on any { species, moves, item } sets.
+ */
+function leadOrder(dex, team) {
+	const has = (set, ids) => (set.moves || []).some(m => ids.includes(toID(m)));
+	const leadScore = set => {
+		const b = dex.species.get(set.species).baseStats || { spe: 0 };
+		let v = 0;
+		if (has(set, TL.MOVES.stealthRock)) v += 3;
+		if (has(set, TL.MOVES.spikes)) v += 2;
+		if (has(set, TL.MOVES.pivot)) v += 2;
+		if (has(set, ['knockoff', 'taunt', ...TL.MOVES.status])) v += 1.5;
+		if (TL.isBreaker(dex, set)) v += 1;
+		if (b.spe >= 90) v += 0.5;
+		if (['focussash'].includes(toID(set.item))) v += 1;
+		if (has(set, TL.MOVES.setup)) v -= 4;
+		return v;
+	};
+	const backScore = set => (has(set, TL.MOVES.setup) ? 2 : TL.isBreaker(dex, set) ? 1 : 0);
+	const scored = team.map((set, i) => ({ set, i, lead: leadScore(set) }));
+	const lead = scored.slice().sort((a, b) => b.lead - a.lead || a.i - b.i)[0];
+	const rest = scored.filter(x => x !== lead).sort((a, b) => backScore(a.set) - backScore(b.set) || a.i - b.i);
+	return lead ? [lead.set, ...rest.map(x => x.set)] : [];
+}
+
 function supportRank(set) {
 	return RS.SUPPORT_ROLES.includes(set.role) ? 3 : RS.BULKY_ROLES.includes(set.role) ? 2 : set.role === 'Fast Attacker' ? 1 : 0;
 }
@@ -366,13 +420,13 @@ function assignItems(dex, team, bag, options = {}) {
 	for (const set of order) {
 		const species = dex.species.get(set.species);
 		const side = TL.attackSide(dex, set) === 'special' ? 'Special' : 'Physical';
-		const role = { role: set.role };
+		const role = { role: set.role, ability: set.ability };
 		let allowed = null;
 		if (left) {
 			allowed = new Set(Object.entries(left).filter(([, n]) => n > 0).map(([id]) => id).filter(id => dex.items.get(id).exists));
 			if (!allowed.size) { set.item = ''; continue; }
 		}
-		set.item = RS.itemFor(dex, species, role, set.moves, side, allowed ? new Set(heldOnly(dex, allowed)) : null, { oneUse });
+		set.item = RS.itemFor(dex, species, role, set.moves, side, allowed ? new Set(heldOnly(dex, allowed)) : null, { oneUse, threats: options.threats });
 		if (left && set.item) left[toID(set.item)]--;
 	}
 	if (options.stage && options.stage !== 'movesets' && team.length >= 3) improveItems(dex, team, left, options);
@@ -435,4 +489,4 @@ function heldOnly(dex, ids) {
 	});
 }
 
-module.exports = { assemble, teach, untrain, assignItems, improveItems, keepValue, drawnIn, cover };
+module.exports = { assemble, teach, untrain, assignItems, improveItems, keepValue, drawnIn, cover, leadOrder };
