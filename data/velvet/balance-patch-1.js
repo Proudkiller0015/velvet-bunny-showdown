@@ -389,7 +389,11 @@ exports.MOVES = {
 		ignoreDefensive: true,
 		ignoreEvasion: true,
 		onModifyMove(move, pokemon) {
-			if (pokemon.getStat('atk', false, true) > pokemon.getStat('spa', false, true)) move.category = 'Physical';
+			// Before boosts, as the description says (24 Sep 2026: it read them with
+			// boosts, the unboosted flag being the second argument, not the third).
+			// A physical Azelf stays physical through a Nasty Plot, and the other
+			// way round.
+			if (pokemon.getStat('atk', true, true) > pokemon.getStat('spa', true, true)) move.category = 'Physical';
 		},
 		flags: { protect: 1, mirror: 1, metronome: 1, nosketch: 1 },
 		secondary: null,
@@ -518,11 +522,16 @@ exports.MOVES = {
 		basePower: 0, accuracy: true, pp: 10, priority: 0,
 		flags: { snatch: 1, heal: 1, metronome: 1, nosketch: 1 },
 		onHit(pokemon) {
-			const healed = !!this.heal(this.modify(pokemon.maxhp, 0.5));
-			if (!healed) this.add('-fail', pokemon, 'heal');
+			// 24 Sep 2026, three fixes to match the description (and Recover):
+			// - half of the *base* max HP, as Recover's `heal` takes it, so a
+			//   Dynamaxed Torterra does not heal half of its doubled HP;
+			// - rounded half up (Math.round), where modify() rounded half down;
+			// - no "-fail" line at full HP when the rocks still go up: the move
+			//   did something, and the log said it failed. It fails, properly and
+			//   once, only when neither half did anything.
+			const healed = pokemon.hp < pokemon.maxhp && !!this.heal(Math.round(pokemon.baseMaxhp / 2));
 			const rocks = pokemon.side.foe.addSideCondition('stealthrock', pokemon);
-			// Something happened if either half did.
-			if (!healed && !rocks) return this.NOT_FAIL;
+			if (!healed && !rocks) return false;
 		},
 		secondary: null,
 		target: "self", contestType: "Tough",
@@ -542,7 +551,9 @@ exports.MOVES = {
 		secondary: null,
 		target: "normal", contestType: "Beautiful",
 		flavor: "The emperor commands the tide, and the tide does not miss.",
-		shortDesc: "Never misses its 100% accuracy (a Hydro Pump that lands).",
+		// 24 Sep 2026: it said "never misses", which is `accuracy: true`. This is
+		// 100% - accuracy drops and evasion still count - so the text says that.
+		shortDesc: "A 110-power Hydro Pump with 100% accuracy.",
 		desc: "A 110-power Water attack with 100% accuracy.",
 	},
 	royaldecree: {
@@ -587,7 +598,11 @@ exports.MOVES = {
 		target: "normal", contestType: "Beautiful",
 		flavor: "One bouquet is flowers. The other is thorns, and they are poisoned.",
 		shortDesc: "Heals 50% of damage dealt. Poisons the target. Already poisoned? Hits as Grass and Poison.",
-		desc: "The user heals by half the damage it deals, and the target is poisoned. If the target was already poisoned before the hit, the attack counts as both Grass and Poison type for how effective it is - so Fairy and Grass types, which resist Grass, take it neutrally or worse, while Poison and Steel types resist it more.",
+		// 24 Sep 2026: the type notes were wrong. Fairy never resisted Grass (it
+		// takes the Poison half super effectively), and Steel's immunity to Poison
+		// is not carried over by the second chart - it counts as neutral there - so
+		// Steel still just resists it. Badly poisoned counts as poisoned.
+		desc: "The user heals by half the damage it deals, and the target is poisoned. If the target was already poisoned or badly poisoned before the hit, the attack counts as both Grass and Poison type for how effective it is: Grass types take it neutrally, Fairy types super effectively, Poison types resist it doubly, and Steel types still only resist it.",
 	},
 	soultoll: {
 		num: -35, gen: 9, name: "Soul Toll", type: "Ghost", category: "Physical",
@@ -1298,8 +1313,17 @@ exports.ABILITIES = {
 		onDamagePriority: -30,
 		onDamage(damage, target, source, effect) {
 			if (!effect || effect.effectType !== 'Move' || damage < target.hp) return;
+			// 24 Sep 2026: an ability only hears events while its holder is on the
+			// field, so a faint while Spiritomb sat on the bench never mended the
+			// keystone - though the description says any faint does. The faint
+			// count at the crack is kept, and a higher one now means it mended.
+			if (target.m.keystoneCracked && this.sides.reduce((n, side) => n + side.totalFainted, 0) > (target.m.keystoneFaints || 0)) {
+				target.m.keystoneCracked = false;
+				this.add('-message', `A soul joins the legion. ${target.name}'s keystone mends!`);
+			}
 			if (target.m.keystoneCracked) return;
 			target.m.keystoneCracked = true;
+			target.m.keystoneFaints = this.sides.reduce((n, side) => n + side.totalFainted, 0);
 			this.add('-ability', target, 'Keystone Legion');
 			this.add('-message', `The spirits of the keystone shield ${target.name}!`);
 			if (source && source !== target && source.hp && !source.volatiles['curse']) {
@@ -1312,7 +1336,7 @@ exports.ABILITIES = {
 		num: -28,
 		gen: 9,
 		flavor: "108 spirits bound to one stone. Break it, and they break free - onto you.",
-		shortDesc: "Survives a KO hit at 1 HP and curses the attacker. Recharges when any Pokemon faints.",
+		shortDesc: "Survives a KO hit at 1 HP and curses the attacker. Recharges when another Pokemon faints.",
 		desc: "When an attack would knock this Pokemon out, it survives with 1 HP instead, and the attacker is cursed (it loses 1/4 of its maximum HP at the end of each turn until it switches out), as if by Curse. Works at any HP. After it triggers it cannot trigger again, even across switches, until any other Pokemon on either side faints. Mold Breaker and similar abilities ignore it.",
 	},
 };
