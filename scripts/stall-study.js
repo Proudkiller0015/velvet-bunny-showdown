@@ -14,6 +14,10 @@
  * fix the AI, play the next round.
  *
  * Opponents the server would not allow are skipped (Terapagos is Uber here).
+ *
+ * Stall's goal is not to lose (the owner's framing): a draw is a result for it, so
+ * games run to the Endless Battle Clause's 1000 turns instead of the tier sim's 300,
+ * and the headline number is "not lost" (wins + ties) next to plain wins.
  */
 
 const fs = require('fs');
@@ -41,7 +45,7 @@ if (has('worker')) {
 			const stall = Teams.import(fs.readFileSync(path.join(TEAM_DIR, job.stall), 'utf8'));
 			const opp = Teams.import(fs.readFileSync(path.join(TEAM_DIR, job.opp), 'utf8'));
 			const stallFirst = Math.random() < 0.5;
-			const r = await playGame(stallFirst ? stall : opp, stallFirst ? opp : stall, { format: FORMAT, keepLog: true });
+			const r = await playGame(stallFirst ? stall : opp, stallFirst ? opp : stall, { format: FORMAT, keepLog: true, maxTurns: 1000, maxMs: 20 * 60 * 1000 });
 			const stallSide = stallFirst ? 'p1' : 'p2';
 			const w = r.winner === 'tie' ? 't' : r.winner === null ? null : r.winner === stallSide ? 'stall' : 'opp';
 			const id = `stall-${job.id}`;
@@ -74,6 +78,8 @@ function report() {
 	};
 	const all = rows.reduce((s, r) => s + (r.w === 'stall' ? 1 : r.w === 't' ? 0.5 : 0), 0);
 	const p = all / Math.max(1, rows.length);
+	const notLost = rows.filter(r => r.w !== 'opp').length;
+	console.log(`not lost ${notLost}/${rows.length} (${Math.round(100 * notLost / Math.max(1, rows.length))}%), ties ${rows.filter(r => r.w === 't').length}`);
 	console.log(`${path.relative(ROOT, OUT_DIR)}: stall won ${all}/${rows.length} (${(100 * p).toFixed(0)}% +/- ${(164.5 * Math.sqrt(p * (1 - p) / Math.max(1, rows.length))).toFixed(0)}), avg ${(rows.reduce((s, r) => s + r.turns, 0) / Math.max(1, rows.length)).toFixed(1)} turns`);
 	for (const [k, s] of tally(r => r.stall)) console.log(`  ${k}: ${s[0]}/${s[1]}`);
 	for (const [k, s] of tally(r => `vs ${r.opp.replace(/-\d\.txt$/, '')}`)) console.log(`  ${k}: ${s[0]}/${s[1]}`);
