@@ -43,6 +43,9 @@ const DEFAULT_WEIGHTS = {
 	searchWeight: 0.45,
 };
 
+// Chip that status does every turn it is out: burn a sixteenth, poison (and Toxic, averaged) an eighth.
+const RESIDUAL_OF = { brn: 6.25, psn: 12.5, tox: 12.5 };
+
 class TurnSearch {
 	constructor(ai, weights) {
 		this.ai = ai;
@@ -203,6 +206,11 @@ class TurnSearch {
 			out.push({ name: null, damage: rough, priority: 0 });
 			out.push({ name: null, damage: rough * 0.5, priority: 0 });
 		}
+		// Shares of our maximum HP, the unit playTurn counts our HP in (hpUnits; see ai.chooseForSlot).
+		if (this.ai.cfg.hpUnits) {
+			const frac = (me.originalCurHP || me.maxHP()) / (me.maxHP() || 1);
+			for (const a of out) a.damage *= frac;
+		}
 		return out;
 	}
 
@@ -225,7 +233,8 @@ class TurnSearch {
 		let theirHp = Math.max(0, board.foe.hp / (board.foe.maxhp || 100) * 100);
 
 		let score = 0;
-		let myDamage = ours.damage || 0;
+		// Our damage is a share of what they have left (100 kills); theirHp is a share of their maximum.
+		let myDamage = (ours.damage || 0) * (this.ai.cfg.hpUnits ? theirHp / 100 : 1);
 		let incoming = theirs.damage || 0;
 
 		if (ours.kind === 'switch') {
@@ -264,7 +273,24 @@ class TurnSearch {
 			// newcomer, which is the whole point of U-turn over Earthquake.
 			if (/^(uturn|voltswitch|flipturn)$/.test(String(ours.name || '').toLowerCase().replace(/[^a-z]/g, ''))) score += 12;
 			if (ours.heuristic) score += ours.heuristic * 0.4;
+			if (ours.heal) score += Math.min(ours.heal, 100 - myHp) * w.ourHp;
 			return score;
+		}
+
+		/*
+		 * A heal is HP like any other (recovery, 24 Sep 2026). It was credited
+		 * nothing, so Recover could only ever lose the playout to an attack. Moving
+		 * first, it lands before their hit and can turn a KO into a survival;
+		 * moving second, it counts only if we are still there to use it.
+		 */
+		if (ours.heal && ours.kind !== 'switch') {
+			if (weMoveFirst) {
+				const gain = Math.min(ours.heal, 100 - myHp);
+				myHp += gain;
+				score += gain * w.ourHp;
+			} else if (incoming < myHp) {
+				score += Math.min(ours.heal, 100 - (myHp - incoming)) * w.ourHp;
+			}
 		}
 
 		const killsThem = myDamage >= theirHp;
@@ -310,7 +336,7 @@ class TurnSearch {
 	 * every move and switch of both sides, using damage numbers worked out once
 	 * from the calculator. The model is deliberately plain - average damage
 	 * scaled by accuracy, speed and priority for order, our hazards on our
-	 * switch-ins, the best-matched replacement after a faint, no status chip,
+	 * switch-ins, the best-matched replacement after a faint, burn and poison chip,
 	 * no boosts gained - because its job is move ORDER and who-trades-with-whom,
 	 * which that captures, not the last percent.
 	 *
@@ -335,14 +361,33 @@ class TurnSearch {
 		const { Dex } = require('@pkmn/dex');
 		const dex = Dex.forGen(gen.num);
 		const attack = name => { const d = dex.moves.get(name); return d && d.exists && d.category !== 'Status' ? d : null; };
+		/*
+		 * Moves that work only on the first turn in (Fake Out, First Impression,
+		 * Mat Block) are left out of the tree except as a root move of a Pokemon
+		 * that has just arrived: Purugly used Fake Out four turns running because
+		 * the tree thought it would flinch every time. (24 Sep 2026)
+		 */
+		const firstTurnOnly = d => /^(fakeout|firstimpression|matblock)$/.test(d.id);
+		const idOf = s => String(s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+		const meFresh = !!(state.mineCameIn && state.turn <= state.mineCameIn + 1) || state.turn <= 1;
+		const foeFresh = !!(state.foeCameIn && state.turn <= state.foeCameIn + 1) || state.turn <= 1;
+		const residual = (status, ability) => (/^(magicguard|poisonheal)$/.test(idOf(ability)) ? 0 : RESIDUAL_OF[status] || 0);
 		const O = ours.map(({ p, i }) => {
 			const mon = ai.myPokemon(gen, p, state);
 			const hpFrac = (mon.originalCurHP || mon.maxHP()) / (mon.maxHP() || 1);
 			const names = (p.active && ai.myMoveNames && ai.myMoveNames.length ? ai.myMoveNames : (p.moves || []).map(m => (dex.moves.get(m) || {}).name || m));
+			const all = names.map(n => dex.moves.get(n)).filter(d => d && d.exists);
+			const status = (/ (brn|psn|tox|par|slp|frz)/.exec(p.condition || '') || [])[1] || '';
 			return {
 				i, entry: p, mon, hp: hpFrac * 100, hpFrac, active: !!p.active,
 				spe: ai.speedOf(mon, p.active ? mon.boosts : {}, mon.status, state.weather),
-				moves: names.map(attack).filter(Boolean),
+				moves: all.filter(d => d.category !== 'Status' && (!firstTurnOnly(d) || (p.active && meFresh))),
+				// Burn, poison and paralysis moves are played for what they do, not as a pass.
+				inflicts: all.filter(d => d.category === 'Status' && /^(brn|psn|tox|par)$/.test(d.status || '') && (d.accuracy === true || d.accuracy >= 75)),
+				// Recover and the like, played as the HP they restore (Rest's sleep is not modelled, so not Rest).
+				heals: ai.cfg.recovery ? all.filter(d => d.flags && d.flags.heal && d.target === 'self' && d.id !== 'rest' && d.id !== 'wish').map(d => ({ d, amount: ai.healShare(d, state) })) : [],
+				choice: /^choice(band|specs|scarf)$/.test(idOf(p.item)),
+				res: residual(status, p.ability || p.baseAbility),
 				hz: p.active ? 0 : ai.entryHazards(gen, mon, p, state),
 			};
 		});
@@ -354,15 +399,28 @@ class TurnSearch {
 				? (ai.foeAttacks(gen, foe) || []).filter(m => attack(m))
 				: [...new Set([...seen, ...ai.hiddenAttacks(gen, foe), ...(seen.length >= 4 ? [] : (ai.knownAttacks(gen, foe.species) || []))])];
 			if (!names.length) names = ai.probeAttacks(gen, mon);
+			names = names.filter(n => !firstTurnOnly(attack(n) || {}) || (!foe.bench && foeFresh));
+			const types = (foe.tera ? [foe.tera] : (dex.species.get(foe.transformed || foe.species) || {}).types) || [];
+			const ability = idOf(foe.ability);
+			// Which of our status moves would take on it: not already statused, not a type or ability that stops it.
+			const takes = d => {
+				if (foe.status || /^(goodasgold|magicbounce|prescience|purifyingsalt|comatose)$/.test(ability)) return false;
+				if (foe.immuneTo && foe.immuneTo.has(d.name)) return false;
+				if (d.status === 'brn') return !types.includes('Fire') && !/^(waterveil|waterbubble|thermalexchange)$/.test(ability);
+				if (d.status === 'par') return !types.includes('Electric') && !(d.id === 'thunderwave' && types.includes('Ground')) && ability !== 'limber';
+				return !types.includes('Poison') && !types.includes('Steel') && !/^(immunity|pastelveil)$/.test(ability);
+			};
 			return {
 				foe, mon, hp: Math.max(0, (foe.hp || 0) / (foe.maxhp || 100) * 100), hpFrac: Math.max(0.01, (foe.hp || 0) / (foe.maxhp || 100)),
-				active: !foe.bench, spe: ai.foeSpeed(gen, foe, state.weather), names,
+				active: !foe.bench, spe: ai.foeSpeed(gen, foe, state.weather), names, takes,
+				status: foe.status || '', res: residual(foe.status, foe.ability),
 			};
 		});
 		// Damage as a share of the target's MAXIMUM health, once per pairing.
 		for (const o of O) {
 			o.dmg = T.map(t => o.moves.map(d => ai.damageToFoe(gen, o.mon, t.foe, d.name, field) * t.hpFrac *
 				(ai.cfg.accuracy ? ai.hitChance(gen, d, o.mon, t.foe, state) : 1)));
+			o.lands = T.map(t => o.inflicts.map(d => t.takes(d)));
 		}
 		for (const t of T) {
 			// Keep their four hardest-hitting options against our team; the rest are noise.
@@ -375,59 +433,105 @@ class TurnSearch {
 			t.dmg = O.map((_, a) => scored.map(x => x.into[a]));
 		}
 		const oa = O.findIndex(o => o.active), ta = T.findIndex(t => t.active);
-		return { O, T, oa: oa < 0 ? 0 : oa, ta: ta < 0 ? 0 : ta, trickRoom: !!state.trickRoom };
+		/*
+		 * Locked into one move by a Choice item: the tree may not pick another until
+		 * it switches. Indeedee-F clicked Hyper Voice into a Ghost sixteen times while
+		 * the tree planned the better move it believed it could use next turn.
+		 */
+		let lock = -1;
+		const act = request.active && request.active[0];
+		if (oa >= 0 && O[oa].choice && act && act.moves) {
+			const usable = act.moves.filter(m => !m.disabled && (m.pp === undefined || m.pp > 0));
+			if (usable.length === 1 && act.moves.length > 1) lock = O[oa].moves.findIndex(d => d.name === usable[0].move);
+		}
+		return { O, T, oa: oa < 0 ? 0 : oa, ta: ta < 0 ? 0 : ta, trickRoom: !!state.trickRoom, lock };
 	}
 
 	/**
 	 * Values of our root actions, deepest finished depth within the budget.
-	 * Actions: { m } a move of the active, { sw } a switch, { pass } a status move.
+	 * Actions: { m } a move of the active, { st } a status move it inflicts, { hl } a heal,
+	 * { sw } a switch, { pass } any other status move.
+	 *
+	 * Beyond the plain damage race (24 Sep 2026): a Choice-locked Pokemon of ours
+	 * keeps its move until it switches; burn, poison and paralysis we inflict
+	 * stay on their Pokemon, chip it every turn it is out, and a burn halves its
+	 * physical hits and paralysis its Speed (Night Shade into a Normal type was
+	 * kept by the tree because Will-O-Wisp read as doing nothing); and every
+	 * turn discounts what follows, so the same result sooner is worth more -
+	 * "switch now" beats "switch next turn".
 	 */
 	endgameSearch(model, { forcedFrom = null } = {}) {
-		const ENDGAME_MS = 250, MAX_DEPTH = 4;
+		const ENDGAME_MS = 250, MAX_DEPTH = 4, DISCOUNT = 0.97;
 		const started = Date.now();
 		const { O, T, trickRoom } = model;
 		const p = this.w.pessimism;
 		let nodes = 0;
 		const ABORT = {};
 		const alive = hp => hp.some(h => h > 0);
-		const actions = (side, act, hp, root) => {
+		const actions = (side, act, hp, root, lock) => {
 			const out = [];
 			const me = side[act];
 			if (hp[act] > 0) {
-				me.moves.forEach((_, m) => out.push({ m }));
-				if (root || !me.moves.length) out.push({ pass: true });
+				if (side === O && lock >= 0) out.push({ m: lock });
+				else {
+					me.moves.forEach((_, m) => out.push({ m }));
+					if (side === O) me.inflicts.forEach((_, s) => out.push({ st: s }));
+					if (side === O) me.heals.forEach((_, h) => out.push({ hl: h }));
+					if (root || !me.moves.length) out.push({ pass: true });
+				}
 			}
 			side.forEach((_, k) => { if (k !== act && hp[k] > 0) out.push({ sw: k }); });
 			return out.length ? out : [{ pass: true }];
 		};
 		// Who comes in after a faint: the best trade against what is in front.
-		const replace = (side, other, hp, otherAct, mine) => {
+		const replace = (side, other, hp, otherAct) => {
 			let best = -1, bestScore = -Infinity;
 			side.forEach((s, k) => {
 				if (hp[k] <= 0) return;
 				const out = Math.max(0, ...(s.dmg[otherAct] || []));
 				const back = Math.max(0, ...((other[otherAct] && other[otherAct].dmg[k]) || []));
-				const score = out - back + (mine ? 0 : 0);
+				const score = out - back;
 				if (score > bestScore) { bestScore = score; best = k; }
 			});
 			return best;
 		};
-		const step = (oa, ta, ohp, thp, a, b) => {
+		// S: { lock, tst } - our Choice lock, and the status we have put on each of theirs.
+		const step = (oa, ta, ohp, thp, a, b, S) => {
 			ohp = ohp.slice(); thp = thp.slice();
-			if (a.sw !== undefined) { oa = a.sw; ohp[oa] = Math.max(0, ohp[oa] - O[oa].hz); }
+			let lock = S.lock, tst = S.tst;
+			if (a.sw !== undefined) { oa = a.sw; ohp[oa] = Math.max(0, ohp[oa] - O[oa].hz); lock = -1; }
 			if (b.sw !== undefined) ta = b.sw;
 			const ourMove = a.m !== undefined ? O[oa].moves[a.m] : null;
+			const ourStatus = a.st !== undefined ? O[oa].inflicts[a.st] : null;
+			const ourHeal = a.hl !== undefined ? O[oa].heals[a.hl] : null;
 			const theirMove = b.m !== undefined ? T[ta].moves[b.m] : null;
-			const ours = () => { if (ourMove && ohp[oa] > 0 && thp[ta] > 0) thp[ta] = Math.max(0, thp[ta] - O[oa].dmg[ta][a.m]); };
-			const theirs = () => { if (theirMove && thp[ta] > 0 && ohp[oa] > 0) ohp[oa] = Math.max(0, ohp[oa] - T[ta].dmg[oa][b.m]); };
+			if (ourMove && O[oa].choice) lock = a.m;
+			const inflicted = tst[ta];
+			const ours = () => {
+				if (ohp[oa] <= 0 || thp[ta] <= 0) return;
+				if (ourHeal) { ohp[oa] = Math.min(100, ohp[oa] + ourHeal.amount); return; }
+				if (ourMove) thp[ta] = Math.max(0, thp[ta] - O[oa].dmg[ta][a.m]);
+				else if (ourStatus && !T[ta].status && !tst[ta] && O[oa].lands[ta][a.st]) { tst = tst.slice(); tst[ta] = ourStatus.status; }
+			};
+			const theirs = () => {
+				if (!theirMove || thp[ta] <= 0 || ohp[oa] <= 0) return;
+				let hit = T[ta].dmg[oa][b.m];
+				if (inflicted === 'brn' && theirMove.category === 'Physical') hit *= 0.5;
+				if (inflicted === 'par') hit *= 0.75;
+				ohp[oa] = Math.max(0, ohp[oa] - hit);
+			};
 			let oursFirst;
-			const op = ourMove ? ourMove.priority || 0 : 0, tp = theirMove ? theirMove.priority || 0 : 0;
+			const op = ourMove ? ourMove.priority || 0 : ourStatus ? ourStatus.priority || 0 : ourHeal ? ourHeal.d.priority || 0 : 0, tp = theirMove ? theirMove.priority || 0 : 0;
+			const theirSpe = inflicted === 'par' ? T[ta].spe * 0.5 : T[ta].spe;
 			if (op !== tp) oursFirst = op > tp;
-			else oursFirst = trickRoom ? O[oa].spe < T[ta].spe : O[oa].spe > T[ta].spe;   // a tie goes to them
+			else oursFirst = trickRoom ? O[oa].spe < theirSpe : O[oa].spe > theirSpe;   // a tie goes to them
 			if (oursFirst) { ours(); theirs(); } else { theirs(); ours(); }
-			if (ohp[oa] <= 0 && alive(ohp)) oa = replace(O, T, ohp, ta, true);
-			if (thp[ta] <= 0 && alive(thp)) ta = replace(T, O, thp, oa, false);
-			return [oa, ta, ohp, thp];
+			// End of turn: status chip on whoever is out.
+			if (thp[ta] > 0) thp[ta] = Math.max(0, thp[ta] - (T[ta].res || RESIDUAL_OF[tst[ta]] || 0));
+			if (ohp[oa] > 0 && O[oa].res) ohp[oa] = Math.max(0, ohp[oa] - O[oa].res);
+			if (ohp[oa] <= 0 && alive(ohp)) { oa = replace(O, T, ohp, ta); lock = -1; }
+			if (thp[ta] <= 0 && alive(thp)) ta = replace(T, O, thp, oa);
+			return [oa, ta, ohp, thp, lock === S.lock && tst === S.tst ? S : { lock, tst }];
 		};
 		const leaf = (ohp, thp) => {
 			let v = 0;
@@ -435,46 +539,47 @@ class TurnSearch {
 			for (const h of thp) if (h > 0) v -= h + 60;
 			return v;
 		};
-		const value = (oa, ta, ohp, thp, depth) => {
+		const value = (oa, ta, ohp, thp, depth, S) => {
 			if (++nodes % 512 === 0 && Date.now() - started > ENDGAME_MS) throw ABORT;
 			if (!alive(thp)) return 1000 + ohp.reduce((s, h) => s + Math.max(0, h), 0) + depth;
 			if (!alive(ohp)) return -1000 - thp.reduce((s, h) => s + Math.max(0, h), 0) - depth;
 			if (depth === 0) return leaf(ohp, thp);
 			let best = -Infinity;
-			const theirs = actions(T, ta, thp, false);
-			for (const a of actions(O, oa, ohp, false)) {
+			const theirs = actions(T, ta, thp, false, -1);
+			for (const a of actions(O, oa, ohp, false, S.lock)) {
 				let worst = Infinity, sum = 0;
 				for (const b of theirs) {
-					const [oa2, ta2, ohp2, thp2] = step(oa, ta, ohp, thp, a, b);
-					const v = value(oa2, ta2, ohp2, thp2, depth - 1);
+					const [oa2, ta2, ohp2, thp2, S2] = step(oa, ta, ohp, thp, a, b, S);
+					const v = value(oa2, ta2, ohp2, thp2, depth - 1, S2);
 					if (v < worst) worst = v;
 					sum += v;
 				}
-				const blended = p * worst + (1 - p) * sum / theirs.length;
+				const blended = DISCOUNT * (p * worst + (1 - p) * sum / theirs.length);
 				if (blended > best) best = blended;
 			}
 			return best;
 		};
 
 		const ohp0 = O.map(o => o.hp), thp0 = T.map(t => t.hp);
+		const S0 = { lock: model.lock === undefined ? -1 : model.lock, tst: T.map(() => '') };
 		let result = null, depthDone = 0;
 		for (let depth = 1; depth <= MAX_DEPTH; depth++) {
 			try {
 				if (forcedFrom !== null) {
 					// A forced replacement: the value of each of ours coming in, both sides then playing on.
-					const vals = forcedFrom.map(k => ({ sw: k, value: value(k, model.ta, ohp0, thp0, depth) }));
+					const vals = forcedFrom.map(k => ({ sw: k, value: value(k, model.ta, ohp0, thp0, depth, { ...S0, lock: -1 }) }));
 					result = vals;
 				} else {
-					const theirs = actions(T, model.ta, thp0, false);
-					result = actions(O, model.oa, ohp0, true).map(a => {
+					const theirs = actions(T, model.ta, thp0, false, -1);
+					result = actions(O, model.oa, ohp0, true, S0.lock).map(a => {
 						let worst = Infinity, sum = 0;
 						for (const b of theirs) {
-							const [oa2, ta2, ohp2, thp2] = step(model.oa, model.ta, ohp0, thp0, a, b);
-							const v = value(oa2, ta2, ohp2, thp2, depth - 1);
+							const [oa2, ta2, ohp2, thp2, S2] = step(model.oa, model.ta, ohp0, thp0, a, b, S0);
+							const v = value(oa2, ta2, ohp2, thp2, depth - 1, S2);
 							if (v < worst) worst = v;
 							sum += v;
 						}
-						return { ...a, value: p * worst + (1 - p) * sum / theirs.length };
+						return { ...a, value: DISCOUNT * (p * worst + (1 - p) * sum / theirs.length) };
 					});
 				}
 				depthDone = depth;
@@ -490,8 +595,14 @@ class TurnSearch {
 	/**
 	 * The endgame's choice for a normal turn, blended with the heuristic ranking
 	 * the rest of the AI produced: a status move is played as a pass in the tree
-	 * and keeps half its heuristic worth (the tree cannot see a heal or a boost);
-	 * a damaging move keeps a little of its heuristic as a tie-break.
+	 * (or as the status it inflicts) and keeps half its heuristic worth (the tree
+	 * cannot see a heal or a boost); a damaging move keeps a little of its
+	 * heuristic as a tie-break.
+	 *
+	 * A move the heuristic already knows fails - an immunity (-35), Fake Out after
+	 * the first turn, a status into one that cannot take it (-25 to -30) - is not
+	 * the tree's to pick while anything else is left, and then a switch needs no
+	 * margin to beat it. (24 Sep 2026)
 	 */
 	endgame(gen, entry, request, state, field, ranked) {
 		let model;
@@ -501,18 +612,23 @@ class TurnSearch {
 		if (!found || !found.actions.length) return null;
 		const active = model.O[model.oa];
 		const pass = found.actions.find(a => a.pass);
+		const works = ranked.filter(r => !(r.score <= -25));
+		const pool = works.length ? works : ranked;
 		let best = null;
-		for (const r of ranked) {
+		for (const r of pool) {
 			const m = active.moves.findIndex(d => d.name === r.name);
-			const node = m >= 0 ? found.actions.find(a => a.m === m) : pass;
+			const s = m < 0 ? active.inflicts.findIndex(d => d.name === r.name) : -1;
+			const h = m < 0 && s < 0 ? active.heals.findIndex(x => x.d.name === r.name) : -1;
+			const node = m >= 0 ? found.actions.find(a => a.m === m) : s >= 0 ? found.actions.find(a => a.st === s) : h >= 0 ? found.actions.find(a => a.hl === h) : pass;
 			if (!node) continue;
 			const score = node.value + (m >= 0 ? 0.3 : 0.5) * (r.score || 0);
 			if (!best || score > best.score) best = { kind: 'move', n: r.n, target: r.target, name: r.name, score };
 		}
+		const margin = works.length ? 10 : 0;
 		for (const a of found.actions) {
 			if (a.sw === undefined) continue;
 			// A switch must clearly beat the best move: it spends the turn.
-			if (!best || a.value > best.score + 10) best = { kind: 'switch', i: model.O[a.sw].i, score: a.value };
+			if (!best || a.value > best.score + margin) best = { kind: 'switch', i: model.O[a.sw].i, score: a.value };
 		}
 		if (best) best.endgame = { depth: found.depth, nodes: found.nodes, ms: found.ms };
 		return best;
