@@ -377,9 +377,12 @@ class ShowdownBot {
 			battle.retries = 0;
 			// RP wild Pokémon and trainers don't Mega Evolve, Terastallize, Dynamax
 			// or use Z-moves: hide the options so the AI never reaches for them.
+			// `noGimmicks` is true (none at all) or the list of request keys to hide (src/rp-bot.js).
 			if (this.noGimmicks) {
+				const hide = Array.isArray(this.noGimmicks) ? this.noGimmicks
+					: ['canTerastallize', 'canMegaEvo', 'canMegaEvoX', 'canMegaEvoY', 'canUltraBurst', 'canDynamax', 'canZMove', 'maxMoves'];
 				for (const active of request.active || []) {
-					for (const k of ['canTerastallize', 'canMegaEvo', 'canMegaEvoX', 'canMegaEvoY', 'canUltraBurst', 'canDynamax', 'canZMove', 'maxMoves']) delete active[k];
+					for (const k of hide) delete active[k];
 				}
 			}
 			const choice = ai.decide(request, state);

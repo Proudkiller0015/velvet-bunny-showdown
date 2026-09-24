@@ -40,6 +40,21 @@ const OPENERS = {
 const GENERIC = ['You look like a trainer. Let\'s battle!', 'I\'ve been waiting for someone like you!', 'Let\'s see what you\'ve got!'];
 
 /** One wild Pokemon or one trainer, for one battle. */
+/*
+ * What the encounter's own side may not use (owner, 23 Sep 2026):
+ *   wild Pokémon and route trainers   nothing at all
+ *   gym leaders                       Mega Evolution always; Z-Moves, Dynamax and
+ *                                     Terastallization from the fifth gym on
+ *   the Elite Four and the Champion   everything
+ * `badges` is the challenger's, so the fifth gym is four badges in.
+ */
+const BIG_GIMMICKS = ['canZMove', 'canDynamax', 'maxMoves', 'canTerastallize'];
+function gimmicksHidden(spawn) {
+	if (['elitefour', 'champion'].includes(spawn.classId)) return false;
+	if (spawn.classId === 'gymleader') return (Number(spawn.badges) || 0) >= 4 ? false : BIG_GIMMICKS;
+	return true;
+}
+
 class EncounterOpponent extends ShowdownBot {
 	constructor(spawn, options) {
 		super({
@@ -53,7 +68,7 @@ class EncounterOpponent extends ShowdownBot {
 			log: (...a) => options.log(`[${spawn.name}]`, ...a),
 		});
 		this.spawn = spawn;
-		this.noGimmicks = true;   // no Mega, Tera, Dynamax or Z-moves for wild Pokémon and RP trainers
+		this.noGimmicks = gimmicksHidden(spawn);
 		this.onDone = options.onDone;
 		this.renames = 0;
 		this.challenged = false;
@@ -248,4 +263,4 @@ class RpGuide extends ShowdownBot {
 	}
 }
 
-module.exports = { RpGuide, EncounterOpponent };
+module.exports = { RpGuide, EncounterOpponent, gimmicksHidden };

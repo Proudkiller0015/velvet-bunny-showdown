@@ -2029,6 +2029,8 @@ function roleplay() {
 				id: enc.id, target: enc.showdown, name: enc.name, avatar: enc.avatar, format: enc.format,
 				team: Teams.pack(enc.team), ai: enc.ai, kind: enc.kind, character: enc.character, balls: enc.balls, items: enc.items || null,
 				className: enc.className || null, classId: enc.classId || null, warning: enc.warning || '',
+				// The challenger's badges: a gym leader's Z-Moves, Dynamax and Tera wait for the fifth gym (src/rp-bot.js).
+				badges: enc.badges || 0,
 				// The player picked a team on Discord, so this one is opened rather
 				// than challenged: the bot waits to be put in a room (src/rp-bot.js).
 				open: !!enc.playerTeam,
