@@ -93,6 +93,28 @@ const NATURES_BULK = ['Careful', 'Bold', 'Impish', 'Calm'];
 const ITEM_PREFS = ['Leftovers', 'Life Orb', 'Choice Band', 'Choice Specs', 'Choice Scarf',
 	'Assault Vest', 'Heavy-Duty Boots', 'Focus Sash', 'Rocky Helmet', 'Sitrus Berry', 'Eviolite'];
 
+/*
+ * How much each kind of set suits each archetype (24 Sep 2026), from the
+ * archetype descriptions in docs/teambuilding-checklist.md section 2 and
+ * Pinkacross's pacing and passivity (B7, B8 in docs/research-pinkacross.md):
+ * hyper offense wants setup, Choice breakers and win-or-fail-fast items and no
+ * passive walls; bulky offense a sweeper, breakers and pivots; balance
+ * breakers, pivots and walls, and no one-use items ("no temporary items on
+ * balance and bulkier"); stall walls, with a setup wall its wincon. A factor
+ * per feature a set has, multiplied; 1 is neutral.
+ */
+const ARCHETYPE_WEIGHTS = {
+	// Choice on hyper offense is below neutral: "avoid it on HO, which has no switch-ins" (Pinkacross, R-T12).
+	'hyper offense': { setup: 3, choice: 0.8, oneUse: 1.5, pivot: 1, wall: 0.25 },
+	'bulky offense': { setup: 1.5, choice: 1.8, oneUse: 0.7, pivot: 1.6, wall: 1 },
+	balance: { setup: 0.8, choice: 1.8, oneUse: 0.3, pivot: 2, wall: 2 },
+	stall: { setup: 0.7, choice: 0.3, oneUse: 0.2, pivot: 1, wall: 4 },
+};
+/* How often a draft aims at each: the offense-to-balance middle is what the ladder plays most. */
+const ARCHETYPE_ODDS = [['hyper offense', 0.25], ['bulky offense', 0.3], ['balance', 0.35], ['stall', 0.1]];
+
+const toID = s => String(s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+
 /** Curated JSON is inconsistent about single value vs array - normalise. */
 function arr(v) { return v === undefined || v === null ? null : Array.isArray(v) ? v : [v]; }
 function pick(rng, a) { return a[Math.floor(rng() * a.length)]; }
@@ -116,6 +138,8 @@ class TeamBuilder {
 		this.fetchedAt = new Map();   // `${kind}|${formatId}` -> when it was loaded; see prefetch()
 		this.inflight = new Map();    // formatId -> the prefetch already under way
 		this.parsed = new Map();      // cache file -> {mtimeMs, data}, shared between formats; see fetchJSON()
+		this.refused = new WeakMap(); // set -> move ids the validator refused for it; see sane()
+		this.ownIvs = new WeakSet();  // sets whose IVs are the builder's to choose (the source gave none); see sane()
 	}
 
 	/** Random-team formats are generated server-side; we must NOT send a team. */
@@ -278,7 +302,8 @@ class TeamBuilder {
 
 		// Items that actually exist in this format's dex, preferred ones first.
 		const items = [];
-		for (const name of ITEM_PREFS) { const it = dex.items.get(name); if (it.exists && !ruleTable.isBanned(`item:${it.id}`)) items.push(it.name); }
+		// Not an item from a later generation: Gen 2 has no Life Orb, and a list that offered one refilled Item Clause slots with it.
+		for (const name of ITEM_PREFS) { const it = dex.items.get(name); if (it.exists && it.isNonstandard !== 'Future' && it.gen <= dex.gen && !ruleTable.isBanned(`item:${it.id}`)) items.push(it.name); }
 		if (!items.length) {
 			for (const it of dex.items.all()) { if (it.exists && !it.isNonstandard && !ruleTable.isBanned(`item:${it.id}`)) items.push(it.name); if (items.length > 40) break; }
 		}
@@ -308,15 +333,61 @@ class TeamBuilder {
 		return base.exists && base.types.join() === species.types.join() && !species.forme.match(/alola|galar|hisui|paldea/i);
 	}
 
+	/*
+	 * Which of a species' sets suits the team being built (24 Sep 2026).
+	 *
+	 * The draw took one of a species' Smogon sets at random, so a hyper offense
+	 * draft got the Specially Defensive Clefable and a balance one the Booster
+	 * Energy sweeper. "Mixing archetypes is the #1 mistake": a passive set on
+	 * hyper offense, a one-shot set on balance, which plays a long game
+	 * (Pinkacross, The #1 Team Building Mistake; B8 in docs/research-pinkacross.md).
+	 * The same species belongs on either team - "it depends on the set, not the
+	 * species: Curse Dondozo fits HO, Specs Iron Valiant fits balance" - so the
+	 * choice is between its sets, read off their moves and items: setup, Choice,
+	 * one-use item, pivot, and walls (recovery or Leftovers/Helmet with few
+	 * attacks). Still a weighted draw, so every set keeps a chance.
+	 */
+	setFeatures(ctx, raw) {
+		const dex = ctx.dex;
+		const all = [];
+		for (const slot of raw.moves || []) for (const m of arr(slot) || []) all.push(dex.moves.get(m));
+		const firsts = (raw.moves || []).map(slot => dex.moves.get((arr(slot) || [])[0] || ''));
+		const items = (arr(raw.item) || []).map(i => toID(i));
+		const RS = require('./role-sets');
+		const attacks = firsts.filter(m => m.exists && m.category !== 'Status').length;
+		return {
+			setup: all.some(m => RS.SETUP.includes(m.id)),
+			choice: items.some(i => RS.CHOICE_ITEMS.includes(i)),
+			oneUse: items.some(i => TeamLogic.ONE_USE_ITEMS.includes(i)),
+			pivot: all.some(m => TeamLogic.MOVES.pivot.includes(m.id)),
+			wall: attacks <= 2 && (all.some(m => RS.RECOVERY.includes(m.id)) || items.some(i => ['leftovers', 'rockyhelmet', 'blacksludge'].includes(i))),
+		};
+	}
+
+	pickByArchetype(ctx, sets, rng, archetype, keys) {
+		if (!archetype || sets.length < 2) return keys[Math.floor(rng() * keys.length)];
+		const W = ARCHETYPE_WEIGHTS[archetype] || {};
+		const entries = sets.map((raw, i) => {
+			const f = this.setFeatures(ctx, raw);
+			let w = 1;
+			for (const k of Object.keys(f)) if (f[k] && W[k] !== undefined) w *= W[k];
+			return [keys[i], w];
+		});
+		const total = entries.reduce((n, [, w]) => n + w, 0);
+		let r = rng() * total;
+		for (const [k, w] of entries) { r -= w; if (r <= 0) return k; }
+		return entries[entries.length - 1][0];
+	}
+
 	/** A real Smogon analysis set for this species in this exact format. */
-	smogonSet(ctx, species, rng) {
+	smogonSet(ctx, species, rng, archetype = null) {
 		const data = this.smogon.get(ctx.id);
 		if (!data) return null;
 		const entry = data[species.name] || (this.sameAsBase(ctx, species) && data[species.baseSpecies]);
 		if (!entry) return null;
 		const names = Object.keys(entry);
 		if (!names.length) return null;
-		const s = entry[pick(rng, names)];
+		const s = entry[this.pickByArchetype(ctx, names.map(n => entry[n]), rng, archetype, names)] || entry[pick(rng, names)];
 
 		// A move slot is either a move or a list of alternatives for that slot.
 		// If the drawn alternative is already on the set, take another from the
@@ -349,9 +420,28 @@ class TeamBuilder {
 		const entry = stats[species.name] || (this.sameAsBase(ctx, species) && stats[species.baseSpecies]);
 		if (!entry || !entry.moves) return null;
 
+		/*
+		 * The item first, then moves that go with it (24 Sep 2026). Usage statistics
+		 * count moves and items apart, so drawing each on its own stapled a Choice
+		 * Band to Will-O-Wisp (Dragapult) and a Scarf to Protect (Landorus): every
+		 * pair is common, the combination is nobody's set. With a Choice item or an
+		 * Assault Vest a status move is skipped (Trick and Switcheroo aside, which
+		 * hand the Choice item over); a second setup move is skipped always.
+		 */
+		const item = entry.items ? pickWeighted(rng, entry.items, k => k === 'Nothing') || undefined : undefined;
+		const itemId = toID(item);
+		const RS = require('./role-sets');
+		const locked = RS.CHOICE_ITEMS.includes(itemId) || itemId === 'assaultvest';
 		const moves = [];
+		const fits = name => {
+			const move = ctx.dex.moves.get(name);
+			if (!move.exists) return true;
+			if (locked && move.category === 'Status' && !(itemId !== 'assaultvest' && ['trick', 'switcheroo'].includes(move.id))) return false;
+			if (RS.SETUP.includes(move.id) && moves.some(n => RS.SETUP.includes(toID(n)))) return false;
+			return true;
+		};
 		for (let i = 0; i < 40 && moves.length < 4; i++) {
-			const m = pickWeighted(rng, entry.moves, k => k === 'Nothing' || moves.includes(k));
+			const m = pickWeighted(rng, entry.moves, k => k === 'Nothing' || moves.includes(k) || !fits(k));
 			if (!m) break;
 			moves.push(m);
 		}
@@ -359,7 +449,7 @@ class TeamBuilder {
 
 		const raw = {
 			moves,
-			item: entry.items ? pickWeighted(rng, entry.items, k => k === 'Nothing') || undefined : undefined,
+			item,
 			ability: entry.abilities ? pickWeighted(rng, entry.abilities) || undefined : undefined,
 			teraType: entry.teraTypes ? pickWeighted(rng, entry.teraTypes) || undefined : undefined,
 			source: 'usage',
@@ -419,6 +509,76 @@ class TeamBuilder {
 		return set;
 	}
 
+	/** Every item this format allows, as ids (cached on the context): what itemFor() may choose from. */
+	itemIds(ctx) {
+		if (ctx.itemIds) return ctx.itemIds;
+		const ids = new Set();
+		for (const it of ctx.dex.items.all()) {
+			if (!it.exists || it.isPokeball || it.megaStone || it.zMove || it.isGem) continue;
+			if (it.isNonstandard && it.isNonstandard !== 'Custom') continue;
+			if (ctx.ruleTable.isBanned(`item:${it.id}`)) continue;
+			ids.add(it.id);
+		}
+		ctx.itemIds = ids;
+		return ids;
+	}
+
+	/** The item that suits a finished set, from this format's items less `taken` (names): RS.itemFor on its inferred role. */
+	fitItem(ctx, set, taken = new Set()) {
+		const RS = require('./role-sets');
+		const takenIds = new Set([...taken].map(toID));
+		const free = new Set([...this.itemIds(ctx)].filter(id => !takenIds.has(id)));
+		return RS.itemFor(ctx.dex, ctx.dex.species.get(set.species), { role: RS.inferRole(ctx.dex, set), ability: set.ability }, set.moves,
+			RS.sideOf(ctx.dex, set), free, { threats: this.threats(ctx) }) || '';
+	}
+
+	/** Whether this format lets the species use a move, by the validator's own learn check. */
+	canLearn(ctx, species, moveName) {
+		const move = ctx.dex.moves.get(moveName);
+		if (!move.exists) return false;
+		try {
+			if (ctx.ruleTable.isBanned(`move:${move.id}`)) return false;
+			const v = ctx.validator;
+			const check = (ctx.ruleTable.checkCanLearn && ctx.ruleTable.checkCanLearn[0]) || v.checkCanLearn;
+			return !check.call(v, move, species, v.allSources(species), { species: species.name, name: species.name, level: ctx.level });
+		} catch (e) {
+			return false;
+		}
+	}
+
+	/*
+	 * Set sanity on every set the draw makes (24 Sep 2026): RS.repairSet() with
+	 * this format's learn check, so a repair never swaps a bad move for an
+	 * illegal one. Replaces sanitize() on the build path (kept for callers):
+	 * that only knew Choice + setup and Assault Vest + status, and left Choice
+	 * Specs with Protect, a Wide Lens and a two-move Pangoro alone. An item-less
+	 * set (Random Battle data, the learnset) gets its item here, from its moves.
+	 */
+	sane(ctx, species, set, rng, constraints = {}) {
+		const RS = require('./role-sets');
+		const noItems = constraints.noItems || ctx.gen < 2;
+		const oneUse = !['balance', 'stall'].includes(constraints.archetype);
+		if (!noItems && !set.item) {
+			const allowed = this.itemIds(ctx);
+			set.item = RS.itemFor(ctx.dex, species, { role: RS.inferRole(ctx.dex, set), ability: set.ability }, set.moves, RS.sideOf(ctx.dex, set), allowed, { oneUse, threats: this.threats(ctx) }) ||
+				ctx.items.find(name => allowed.has(toID(name))) || '';
+		}
+		if (constraints.onlyMove) return set;
+		const cache = new Map();
+		RS.repairSet(ctx.dex, set, {
+			rng, threats: this.threats(ctx), allowedItems: noItems ? null : this.itemIds(ctx), items: !noItems,
+			oneUse, gameType: ctx.gameType, avoid: this.refused.get(set) || null,
+			canLearn: name => { if (!cache.has(name)) cache.set(name, this.canLearn(ctx, species, name)); return cache.get(name); },
+		});
+		// 0 Attack on a set with no physical attack, 0 Speed on a slow Trick Room user, for the moves it ended with.
+		if (this.ownIvs.has(set) && !constraints.noEVs) {
+			const ivs = RS.ivsFor(ctx.dex, species, set.moves);
+			if (ivs) set.ivs = { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31, ...ivs };
+			else delete set.ivs;
+		}
+		return set;
+	}
+
 	/** The species whose sheets this server changed (data/velvet/unnerfs.js). */
 	changedSpecies() {
 		if (this._changed) return this._changed;
@@ -438,7 +598,7 @@ class TeamBuilder {
 	 * three moves and an Eviolite. Where a species carries an ability or a move of
 	 * ours, its own kit comes first.
 	 */
-	velvetSet(ctx, species, rng) {
+	velvetSet(ctx, species, rng, archetype = null) {
 		try {
 			const RS = require('./role-sets');
 			const roles = RS.roleSets(ctx.dex, species.name);
@@ -458,7 +618,7 @@ class TeamBuilder {
 			// its attacks are worth, with its own moves and ability counting for more.
 			let set = null, best = -Infinity;
 			for (const role of roles) {
-				const candidate = RS.buildSet(ctx.dex, species.name, { role: role.role, rng, level: ctx.level, threats: this.threats(ctx) });
+				const candidate = RS.buildSet(ctx.dex, species.name, { role: role.role, rng, level: ctx.level, threats: this.threats(ctx), archetype, allowedItems: this.itemIds(ctx) });
 				if (!candidate || candidate.moves.length < 3) continue;
 				let value = 0;
 				for (const name of candidate.moves) {
@@ -467,24 +627,26 @@ class TeamBuilder {
 					if (move.num < 0) value += 40;
 				}
 				if (ctx.dex.abilities.get(candidate.ability).num < 0) value += 60;
+				// A role that suits the team being built counts for a little (RS.archetypeFit).
+				if (archetype) value *= 0.85 + 0.15 * RS.archetypeFit(candidate.role, archetype);
 				if (value > best) { best = value; set = candidate; }
 			}
 			if (!set || set.moves.length < 3) return null;
 			return {
 				moves: set.moves, ability: set.ability, item: set.item,
-				nature: set.nature, evs: { ...set.evs }, teraType: set.teraType,
+				nature: set.nature, evs: { ...set.evs }, teraType: set.teraType, ivs: set.ivs ? { ...set.ivs } : undefined,
 				source: 'velvet',
 			};
 		} catch (e) { return null; }
 	}
 
-	curatedSet(ctx, species, rng) {
+	curatedSet(ctx, species, rng, archetype = null) {
 		const id = species.id, gen = ctx.gen;
 
 		// What this server made of it comes before what the outside world remembers.
-		const ours = this.velvetSet(ctx, species, rng);
+		const ours = this.velvetSet(ctx, species, rng, archetype);
 		if (ours && ours.moves.length) return ours;
-		const smogon = this.smogonSet(ctx, species, rng);
+		const smogon = this.smogonSet(ctx, species, rng, archetype);
 		if (smogon && smogon.moves.length) return smogon;
 		const usage = this.usageSet(ctx, species, rng);
 		if (usage && usage.moves.length) return usage;
@@ -493,7 +655,8 @@ class TeamBuilder {
 		if (fac) {
 			const tiers = shuffled(rng, Object.keys(fac)).filter(t => fac[t][id] && fac[t][id].sets && fac[t][id].sets.length);
 			if (tiers.length) {
-				const s = pick(rng, fac[pick(rng, tiers)][id].sets);
+				const list = fac[pick(rng, tiers)][id].sets;
+				const s = list[this.pickByArchetype(ctx, list, rng, archetype, list.map((x, i) => i))];
 				const moveSlots = (s.moves || []).map(slot => pick(rng, arr(slot) || []));
 				return {
 					moves: moveSlots.filter(m => m),
@@ -506,6 +669,28 @@ class TeamBuilder {
 					source: 'factory',
 				};
 			}
+		}
+
+		/*
+		 * A role set before a Random Battle movepool (24 Sep 2026), in the ninth
+		 * generation where role-sets.js reads the same data: chooseMoves() took
+		 * three random attacks and a random status move, which is how Pangoro
+		 * came out as Snarl, Shuffle Jab, Low Sweep and Quash. RS.buildSet()
+		 * picks by role - STAB, the role's job, coverage against the format's
+		 * threats - from everything the species learns, this server's moves
+		 * included, and covers species no data has a set for.
+		 */
+		if (gen >= 9) {
+			try {
+				const RS = require('./role-sets');
+				const built = RS.buildSet(ctx.dex, species.name, { rng, level: ctx.level, threats: this.threats(ctx), archetype, allowedItems: this.itemIds(ctx) });
+				if (built && built.moves.length >= 3) {
+					return {
+						moves: built.moves, ability: built.ability, item: built.item || undefined, nature: built.nature,
+						evs: { ...built.evs }, teraType: built.teraType, source: 'roles',
+					};
+				}
+			} catch (e) { /* fall through to the Random Battle data */ }
 		}
 
 		const rs = RANDSETS[gen];
@@ -907,7 +1092,20 @@ class TeamBuilder {
 	}
 
 	synthesizeSet(ctx, species, rng) {
-		const pool = [...ctx.dex.species.getMovePool(species.id)]
+		/*
+		 * The whole family's moves, not only the species' own list (24 Sep 2026):
+		 * where this server rewrote a learnset, getMovePool() can come back with
+		 * just the new moves - Pangoro's was Twilight Exit and Shuffle Jab, and
+		 * that was the set. RS.learnable() walks prevolutions and base formes the
+		 * way the validator does; the format's own learn check has the last word.
+		 */
+		const ids = new Set(ctx.dex.species.getMovePool(species.id));
+		if (ids.size < 12) {
+			try {
+				for (const id of require('./role-sets').learnable(ctx.dex, species)) if (!ids.has(id) && this.canLearn(ctx, species, id)) ids.add(id);
+			} catch (e) { /* the species' own list is still a set */ }
+		}
+		const pool = [...ids]
 			.map(id => ctx.dex.moves.get(id)).filter(m => m.exists && !['Struggle', 'Sketch'].includes(m.name));
 		if (!pool.length) return null;
 		return { moves: this.chooseMoves(ctx, species, pool.map(m => m.name), rng), source: 'synth' };
@@ -926,7 +1124,13 @@ class TeamBuilder {
 		if (gen >= 2 && !constraints.noItems) {
 			const abilities = Object.values(species.abilities || {}).filter(a => a);
 			set.ability = raw.ability || (abilities.length ? pick(rng, abilities) : undefined);
-			set.item = raw.item !== undefined ? raw.item : (ctx.items.length ? pick(rng, ctx.items) : '');
+			/*
+			 * No item from the source (Random Battle sets, a set built from the
+			 * learnset): one that suits the moves, given in sane() (24 Sep 2026).
+			 * A random pick from the format's list is how Regigigas came out
+			 * holding Choice Specs next to Protect and Substitute.
+			 */
+			set.item = raw.item !== undefined ? raw.item : '';
 		} else if (gen >= 2) {
 			const abilities = Object.values(species.abilities || {}).filter(a => a);
 			if (abilities.length) set.ability = raw.ability || pick(rng, abilities);
@@ -937,6 +1141,8 @@ class TeamBuilder {
 			set.nature = raw.nature || (phys > spec ? pick(rng, NATURES_PHYS) : spec > phys ? pick(rng, NATURES_SPEC) : pick(rng, NATURES_BULK));
 			set.evs = raw.evs || (spec > phys ? { hp: 4, spa: 252, spe: 252 } : { hp: 4, atk: 252, spe: 252 });
 			if (raw.ivs) set.ivs = raw.ivs;
+			// No IVs from the source: sane() gives the ones the final moves call for (RS.ivsFor).
+			else this.ownIvs.add(set);
 		}
 		if (gen >= 9 && raw.teraType && !constraints.noTera) set.teraType = raw.teraType;
 		// After the set is otherwise decided, and before it is checked: anything
@@ -945,7 +1151,7 @@ class TeamBuilder {
 		if (set.ability) this.considerOurAbilities(ctx, species, set, rng);
 		if (set.item !== undefined && !constraints.noItems) this.considerOurItems(ctx, species, set, rng);
 		if (set.item !== undefined && !constraints.noItems) this.considerMegaStone(ctx, species, set, rng);
-		this.sanitize(ctx, species, set, rng);
+		this.sane(ctx, species, set, rng, constraints);
 		// Cross Evolution: the set is validated as the target species, so the
 		// ability has to be one the target can legally have.
 		if (constraints.crossEvo) {
@@ -1117,7 +1323,7 @@ class TeamBuilder {
 		if (this.speciesOk.get(cacheKey) === false) return null;
 
 		for (let attempt = 0; attempt < 3; attempt++) {
-			const raw = (attempt === 0 && this.curatedSet(ctx, species, rng)) || this.synthesizeSet(ctx, species, rng);
+			const raw = (attempt === 0 && this.curatedSet(ctx, species, rng, constraints.archetype)) || this.synthesizeSet(ctx, species, rng);
 			if (!raw) break;
 			const set = this.dressSet(ctx, species, raw, rng, constraints);
 			if (!set) break;
@@ -1137,9 +1343,23 @@ class TeamBuilder {
 					this.speciesOk.set(cacheKey, true);
 					return set;
 				}
+				// Moves the validator refused are not offered again by the sanity pass.
+				const avoid = this.refused.get(set) || new Set();
+				for (const p of problems) {
+					for (const m of set.moves) if (p.toLowerCase().includes(m.toLowerCase()) && /learn|move|illegal|banned/i.test(p)) avoid.add(toID(m));
+				}
+				this.refused.set(set, avoid);
+				/*
+				 * An item the format refuses ("Life Orb does not exist in Gen 3", the
+				 * Champions item list) is refused for every set: off the list sane()
+				 * chooses from, or it would hand the same item straight back.
+				 */
+				if (set.item && problems.some(p => /item/i.test(p) && p.toLowerCase().includes(set.item.toLowerCase()))) {
+					this.itemIds(ctx).delete(toID(set.item));
+				}
 				if (!this.repair(ctx, set, problems, rng)) break;
 				if (!set.moves.length) break;
-				this.sanitize(ctx, species, set, rng);   // repairs can reintroduce incoherence
+				this.sane(ctx, species, set, rng, constraints);   // repairs can reintroduce incoherence
 			}
 		}
 		this.speciesOk.set(cacheKey, false);
@@ -1382,6 +1602,7 @@ class TeamBuilder {
 			name: set.species, species: set.species,
 			item: set.item || '', ability: set.ability, moves: set.moves.slice(),
 			nature: set.nature, evs: { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0, ...set.evs },
+			...(set.ivs ? { ivs: { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31, ...set.ivs } } : {}),
 			level: ctx.level, gender: '',
 			...(constraints.noTera || ctx.gen < 9 ? {} : { teraType: set.teraType }),
 		}));
@@ -1493,7 +1714,7 @@ class TeamBuilder {
 	 * shared weaknesses, both attacking sides, answers to setup - with usage
 	 * still counting, so a team is not built out of fringe picks to tick boxes.
 	 */
-	chooseTeam(ctx, drafted, rng) {
+	chooseTeam(ctx, drafted, rng, archetype = null) {
 		if (drafted.length <= ctx.size) return drafted;
 		const stage = ctx.gen >= 4 ? 'full' : 'basics';
 		const rankOf = new Map(drafted.map((set, i) => [set, 1 - i / drafted.length]));
@@ -1505,7 +1726,10 @@ class TeamBuilder {
 			let cover = 1;
 			try { cover = this.threatCover(ctx, team); } catch (e) { cover = 1; }
 			// Answering the format's threats is worth about as much as the checklist itself.
-			return logic + 20 * usage + 30 * cover + rng() * 0.01;
+			// A team that came out as the archetype it aimed at earns a soft rule's worth (see pickArchetype).
+			let plan = 0;
+			if (archetype) { try { plan = TeamLogic.analyze(ctx.dex, team).style === archetype ? 3 : 0; } catch (e) { plan = 0; } }
+			return logic + 20 * usage + 30 * cover + plan + rng() * 0.01;
 		};
 		let team = drafted.slice(0, ctx.size);
 		let best = value(team);
@@ -1518,6 +1742,72 @@ class TeamBuilder {
 					trial[slot] = incoming;
 					const v = value(trial);
 					if (v > best + 0.5) { best = v; team = trial; improved = true; }
+				}
+			}
+		}
+		return team;
+	}
+
+	/** An archetype to aim a draft at, by ARCHETYPE_ODDS. */
+	pickArchetype(rng) {
+		let r = rng();
+		for (const [name, p] of ARCHETYPE_ODDS) { r -= p; if (r <= 0) return name; }
+		return ARCHETYPE_ODDS[0][0];
+	}
+
+	/*
+	 * The checklist's fixed slots, after the six are chosen (24 Sep 2026).
+	 *
+	 * The draft only chooses among whole sets, so when none of the twelve drew a
+	 * Stealth Rock set the team went without: "no Stealth Rock" was the hard
+	 * failure on over half of the drafted gen9ou teams. The assembler already
+	 * teaches the missing piece to whoever loses least by it
+	 * (src/team-assembler.js); this does the same for the draft - Stealth Rock
+	 * ("on almost every team", Pinkacross B9; checklist rule 1), then a second
+	 * answer to setup (rule 11) - and keeps a change only when the set still
+	 * validates in this format and the checklist score does not drop.
+	 */
+	polish(ctx, team, rng, constraints = {}) {
+		if (team.length < 3) return team;
+		const A = require('./team-assembler');
+		const stage = ctx.gen >= 4 ? 'full' : 'basics';
+		if (stage !== 'full') return team;
+		const threats = this.threats(ctx);
+		const scoreOf = () => { try { return TeamLogic.score(ctx.dex, team, { stage, threats }).score; } catch (e) { return -Infinity; } };
+		const legalFor = set => {
+			const species = ctx.dex.species.get(set.species);
+			return new Set([...require('./role-sets').learnable(ctx.dex, species)].filter(id => this.canLearn(ctx, species, id)));
+		};
+		const tryTeach = (set, ids) => {
+			const before = { moves: set.moves.slice(), item: set.item };
+			const was = scoreOf();
+			const withRole = { ...set, role: set.role || require('./role-sets').inferRole(ctx.dex, set) };
+			if (!A.teach(ctx.dex, withRole, ids, legalFor(set))) return false;
+			set.moves = withRole.moves;
+			this.sane(ctx, ctx.dex.species.get(set.species), set, rng, constraints);
+			let problems;
+			try { problems = ctx.validator.validateSet({ ...set }, {}); } catch (e) { problems = ['error']; }
+			if ((problems && problems.length) || scoreOf() < was || !set.moves.some(m => ids.includes(toID(m)))) {
+				set.moves = before.moves; set.item = before.item;
+				return false;
+			}
+			return true;
+		};
+		const RS = require('./role-sets');
+		const supportive = set => {
+			const role = set.role || RS.inferRole(ctx.dex, set);
+			return RS.SUPPORT_ROLES.includes(role) ? 3 : RS.BULKY_ROLES.includes(role) ? 2 : role === 'Fast Attacker' ? 1 : 0;
+		};
+		let report = TeamLogic.analyze(ctx.dex, team);
+		if (!report.stealthRock.length) {
+			for (const set of team.slice().sort((a, b) => supportive(b) - supportive(a))) if (tryTeach(set, TeamLogic.MOVES.stealthRock)) break;
+		}
+		report = TeamLogic.analyze(ctx.dex, team);
+		if (report.setupMechanisms.length < 2 || !report.specialSetupAnswer) {
+			const answers = [['haze', 'clearsmog'], ['whirlwind', 'roar', 'dragontail'], ['encore'], ['thunderwave', 'glare', 'nuzzle']];
+			outer: for (const ids of answers) {
+				for (const set of team.filter(s => supportive(s) >= 2 && toID(s.item) !== 'assaultvest' && !RS.CHOICE_ITEMS.includes(toID(s.item)))) {
+					if (tryTeach(set, ids)) break outer;
 				}
 			}
 		}
@@ -1551,6 +1841,14 @@ class TeamBuilder {
 				}
 			}
 
+			/*
+			 * The plan first (24 Sep 2026): a drafted team aims at one archetype, and
+			 * each species' set is drawn to suit it (pickByArchetype) - "pick a
+			 * playstyle that suits the core" is step 2 of Pinkacross's 8 steps (B18)
+			 * and step 1 of the checklist's build procedure. Drawn per pass, so the
+			 * ladder sees every kind of team.
+			 */
+			constraints.archetype = this.drafts(ctx, constraints) ? this.pickArchetype(rng) : null;
 			const team = [];
 			const teamHas = {};
 			const usedItems = new Set();
@@ -1566,9 +1864,16 @@ class TeamBuilder {
 				const set = this.buildSet(ctx, species, teamHas, rng, constraints);
 				if (set) drafted.push(set);
 			}
-			for (const set of this.chooseTeam(ctx, drafted, rng)) {
+			const chosen = this.chooseTeam(ctx, drafted, rng, constraints.archetype);
+			if (this.drafts(ctx, constraints)) this.polish(ctx, chosen, rng, constraints);
+			for (const set of chosen) {
 				if (constraints.uniqueItems && set.item) {
-					if (usedItems.has(set.item)) set.item = ctx.items.find(i => !usedItems.has(i)) || '';
+					/*
+					 * Item Clause: a second Leftovers becomes the next item that suits
+					 * this set among those not taken (24 Sep 2026), not the next name on
+					 * a fixed list - which handed a wall a Choice Band.
+					 */
+					if (usedItems.has(set.item)) set.item = this.fitItem(ctx, set, usedItems) || ctx.items.find(i => !usedItems.has(i)) || '';
 					if (set.item) usedItems.add(set.item);
 				}
 
@@ -1584,8 +1889,9 @@ class TeamBuilder {
 				const gimmick = this.gimmickOf(ctx, set.item);
 				if (gimmick) {
 					if (gimmicksUsed.has(gimmick)) {
+						// An item that suits the set (24 Sep 2026): a random one from the list put an Assault Vest on a Stealth Rock Glimmora.
 						const plain = ctx.items.filter(name => !this.gimmickOf(ctx, name) && !usedItems.has(name));
-						set.item = plain.length ? pick(rng, plain) : '';
+						set.item = this.fitItem(ctx, set, usedItems) || (plain.length ? pick(rng, plain) : '');
 					} else {
 						gimmicksUsed.add(gimmick);
 					}
