@@ -125,6 +125,75 @@ check(hard <= 12, `high-badge trainers seldom miss a hard checklist rule (${hard
 	check(TL.speedStat(Dex, set('Garchomp', [], { evs: { spe: 252 }, nature: 'Jolly' })) === 333 && TL.speedStat(Dex, set('Dragapult', [], { evs: { spe: 252 }, nature: 'Timid' })) === 421, 'Speed is computed from EVs and nature');
 }
 
+// Pinkacross's rules (docs/research-pinkacross.md, B1 B2 B4 B6-B8 B10), 24 Sep 2026.
+{
+	const set = (species, moves, extra = {}) => ({ species, ability: '', item: '', moves, ...extra });
+	const texts = (sets, options = {}) => TL.issues(TL.analyze(Dex, sets, options), { stage: 'full' });
+	const find = (found, re) => found.find(i => re.test(i.text));
+
+	// Immediate power: setup sweepers do not count, a Band/Specs or Life Orb attacker does.
+	const sd = set('Garchomp', ['Swords Dance', 'Earthquake', 'Scale Shot', 'Stone Edge'], { item: 'Life Orb' });
+	const band = set('Garchomp', ['Earthquake', 'Outrage', 'Stone Edge', 'Fire Fang'], { item: 'Choice Band' });
+	check(!TL.isBreaker(Dex, sd) && TL.isBreaker(Dex, band), 'a Swords Dance set is no breaker; a Choice Band one is');
+	check(TL.isBreaker(Dex, set('Kyurem', ['Freeze-Dry', 'Earth Power', 'Draco Meteor'])) && !TL.isBreaker(Dex, set('Kyurem', ['Freeze-Dry', 'Earth Power', 'Draco Meteor'], { item: 'Leftovers' })),
+		'with no item yet an all-out attacker counts; holding Leftovers it does not');
+	const walls = [set('Blissey', ['Seismic Toss', 'Soft-Boiled', 'Toxic', 'Stealth Rock'], { item: 'Leftovers' }), set('Corviknight', ['Brave Bird', 'U-turn', 'Roost', 'Defog'], { item: 'Leftovers' })];
+	const setupOnly = [...walls, sd, set('Dragonite', ['Dragon Dance', 'Extreme Speed', 'Earthquake', 'Fire Punch'], { item: 'Heavy-Duty Boots' })];
+	let found = texts(setupOnly);
+	check(TL.analyze(Dex, setupOnly).style === 'balance' && (find(found, /immediate power/) || {}).severity === 'hard', 'a balance team of walls and setup sweepers lacks immediate power (hard)');
+	check(!find(texts([...walls, band, setupOnly[3]]), /immediate power/), 'a Choice Band Garchomp is the immediate power it needs');
+
+	// The 18 things: Toxic Spikes absorber, Steel, Knock Off, contact punisher, immunities, a fast member.
+	const grounded = [set('Garchomp', ['Earthquake']), set('Kingambit', ['Kowtow Cleave']), set('Great Tusk', ['Headlong Rush']), set('Iron Valiant', ['Moonblast'])];
+	check(TL.analyze(Dex, grounded).toxicSpikesVictims.join() === 'Garchomp,Great Tusk,Iron Valiant', 'Toxic Spikes would poison the grounded, non-Poison, non-Steel members');
+	check(find(texts(grounded), /Toxic Spikes absorber/) && !find(texts([...grounded, set('Toxapex', ['Surf'])]), /Toxic Spikes absorber/), 'three poisoned and no absorber is flagged; a grounded Toxapex absorbs');
+	check(find(texts([...grounded, set('Toxapex', ['Surf'], { item: 'Heavy-Duty Boots' })]), /Toxic Spikes absorber/), 'a Toxapex in Boots absorbs nothing');
+	const noSteel = [walls[0], set('Pelipper', ['Hurricane', 'U-turn', 'Roost', 'Surf'], { item: 'Leftovers' }), set('Dragonite', ['Outrage', 'Extreme Speed', 'Earthquake', 'Fire Punch'], { item: 'Choice Band' })];
+	found = texts(noSteel);
+	check(find(found, /no Steel type/) && find(found, /no Knock Off/) && find(found, /contact punisher/) && find(found, /no Electric immunity/),
+		'a team with no Steel, Knock Off, contact punisher or Electric immunity hears about each');
+	check(!find(found, /no Ground immunity/), 'Pelipper is its Ground immunity');
+	check(found.filter(i => /Steel type|Knock Off|contact punisher|immunity|Toxic Spikes/.test(i.text)).every(i => i.severity === 'soft'), 'and all of them are soft, as he frames them');
+	const slow = [set('Hippowdon', ['Earthquake', 'Slack Off']), set('Blissey', ['Seismic Toss', 'Soft-Boiled']), set('Dondozo', ['Wave Crash', 'Rest'])];
+	check(TL.analyze(Dex, slow, { threats: [{ name: 'Great Tusk' }] }).outsped === 'Great Tusk', 'nothing walls or outspeeds Great Tusk');
+	check(!TL.analyze(Dex, [...slow, set('Dragapult', ['Shadow Ball'])], { threats: [{ name: 'Great Tusk' }] }).outsped, 'a Dragapult outspeeds it');
+
+	// Passivity and pacing: a Rest wall on hyper offense, a Focus Sash on balance.
+	const rest = set('Dondozo', ['Wave Crash', 'Rest', 'Sleep Talk', 'Earthquake'], { item: 'Leftovers' });
+	check(TL.isPassive(Dex, rest) && TL.isPassive(Dex, walls[0]) && !TL.isPassive(Dex, band) && !TL.isPassive(Dex, walls[1]), 'Rest Dondozo and Blissey are passive; Band Garchomp and a U-turn Corviknight are not');
+	check(TL.paceOf(Dex, set('Iron Valiant', ['Moonblast'], { item: 'Focus Sash' })) === 'fast' && TL.paceOf(Dex, walls[0]) === 'slow', 'a Sash is fast-paced, a Soft-Boiled wall slow');
+	found = texts([rest, sd, band, set('Dragapult', ['Dragon Darts', 'Shadow Ball', 'U-turn'], { item: 'Choice Specs' })]);
+	check(find(found, /passive with no other wall/), 'a passive wall alone on an offensive team is flagged');
+	found = texts([...walls, set('Toxapex', ['Surf', 'Recover', 'Haze', 'Toxic']), set('Iron Valiant', ['Moonblast', 'Close Combat', 'Knock Off'], { item: 'Focus Sash' })]);
+	check(find(found, /one-use sets on a (balance|stall) team \(Iron Valiant\)/), 'a Focus Sash on a balance team is flagged');
+	const scored = TL.score(Dex, noSteel);
+	check(scored.issues.some(i => i.weight < 3) && scored.score === -scored.issues.reduce((n, i) => n + (i.weight !== undefined ? i.weight : i.severity === 'hard' ? 10 : 3), 0), 'the lesser soft rules cost less than 3 each');
+
+	// Item hygiene: no trap items as a fallback, no one-use items on a long game when anything else fits.
+	const sp = Dex.species.get('Garchomp');
+	check(RS.itemFor(Dex, sp, { role: 'Bulky Attacker' }, ['Earthquake', 'Outrage', 'Roar', 'Protect'], 'Physical', new Set(['shellbell', 'scopelens', 'widelens'])) === '', 'Shell Bell, Scope Lens and Wide Lens are never the fallback');
+	const fast = { role: 'Fast Support' };
+	check(RS.itemFor(Dex, sp, fast, ['Stealth Rock', 'Earthquake', 'Outrage', 'Roar'], 'Physical') === 'Focus Sash' &&
+		RS.itemFor(Dex, sp, fast, ['Stealth Rock', 'Earthquake', 'Outrage', 'Roar'], 'Physical', null, { oneUse: false }) === 'Leftovers', 'a Fast Support lead gets a Sash, but not on a balance team');
+	check(RS.itemFor(Dex, sp, { role: 'Bulky Support' }, ['Stealth Rock', 'Earthquake', 'Outrage', 'Roar'], 'Physical', new Set(['sitrusberry']), { oneUse: false }) === 'Sitrus Berry', 'a one-use item is still better than nothing');
+
+	// The assembler: a breaker for the team, and one aimed at what a wall seed draws in.
+	const assembled = A.assemble(Dex, box, { rng: seeded(9) });
+	const ar = TL.analyze(Dex, assembled);
+	check(ar.style === 'stall' || ar.breakers.length > 0, `the assembled team has immediate power (${ar.style}: ${ar.breakers})`);
+	const pex = set('Toxapex', ['Surf', 'Toxic', 'Recover', 'Haze']);
+	const drawn = A.drawnIn(Dex, pex, null);
+	check(drawn.map(t => t.types[0]).sort().join() === 'Dragon,Grass,Water', `a Surf Toxapex draws in what resists Water (${drawn.map(t => t.types[0])})`);
+	check(A.cover(Dex, set('Kyurem', ['Freeze-Dry', 'Earth Power', 'Draco Meteor']), drawn) > A.cover(Dex, set('Garchomp', ['Earthquake', 'Outrage']), drawn), 'Kyurem breaks what Toxapex draws in better than Garchomp does');
+	const wallBox = ['Blissey', 'Toxapex', 'Corviknight', 'Clodsire', 'Dondozo', 'Garganacl', 'Heatran', 'Kingambit', 'Gholdengo', 'Great Tusk', 'Iron Valiant', 'Dragapult'].map(name => ({ species: name, strength: 1 }));
+	let withBreaker = 0;
+	for (let i = 1; i <= 4; i++) {
+		const t = A.assemble(Dex, wallBox, { rng: seeded(i * 13), fixed: [wallBox[0]] });
+		if (t.some(s => s.species !== 'Blissey' && TL.isBreaker(Dex, s))) withBreaker++;
+	}
+	check(withBreaker >= 3, `a team seeded with a Blissey gets a breaker (${withBreaker}/4)`);
+}
+
 // The ladder builder's repairs: an event Pokemon's fixed IVs, and no regional forme borrowing its base's sets.
 {
 	const { TeamBuilder } = require('../src/teambuilder');
