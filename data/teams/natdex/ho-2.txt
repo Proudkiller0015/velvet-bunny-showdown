@@ -1,0 +1,63 @@
+Gholdengo @ Air Balloon  
+Ability: Good as Gold  
+Tera Type: Steel  
+EVs: 252 HP / 244 Def / 12 Spe  
+Bold Nature  
+IVs: 0 Atk  
+- Make It Rain  
+- Thunder Wave  
+- Hex  
+- Recover  
+
+Ogerpon-Wellspring (F) @ Wellspring Mask  
+Ability: Water Absorb  
+Tera Type: Water  
+EVs: 252 Atk / 4 Def / 252 Spe  
+Jolly Nature  
+- Swords Dance  
+- Ivy Cudgel  
+- Power Whip  
+- Superpower  
+
+Dragonite @ Dragonium Z  
+Ability: Multiscale  
+Tera Type: Dragon  
+EVs: 252 Atk / 4 Def / 252 Spe  
+Jolly Nature  
+- Outrage  
+- Earthquake  
+- Fire Punch  
+- Dragon Dance  
+
+Terapagos-Terastal @ Heavy-Duty Boots  
+Ability: Tera Shell  
+Tera Type: Stellar  
+EVs: 252 SpA / 4 SpD / 252 Spe  
+Timid Nature  
+- Tera Starstorm  
+- Ice Beam  
+- Rapid Spin  
+- Earth Power  
+
+Ting-Lu @ Red Card  
+Ability: Vessel of Ruin  
+Tera Type: Poison  
+EVs: 252 HP / 4 Def / 72 SpD / 180 Spe  
+Careful Nature  
+IVs: 0 Atk  
+- Spikes  
+- Taunt  
+- Stealth Rock  
+- Ruination  
+
+Volcarona @ Life Orb  
+Ability: Flame Body  
+Tera Type: Bug  
+EVs: 252 SpA / 4 SpD / 252 Spe  
+Timid Nature  
+IVs: 0 Atk  
+- Fire Blast  
+- Bug Buzz  
+- Quiver Dance  
+- Giga Drain  
+

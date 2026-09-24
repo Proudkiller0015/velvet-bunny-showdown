@@ -11,3 +11,4 @@ data/marathon/STOP
 
 # Tier sim results are local (append-only, resumable); the report in docs/ is what gets committed.
 data/tier-sim/
+data/stall-study/
