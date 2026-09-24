@@ -15,7 +15,9 @@
  *
  * Unknown opponent sets are assumed to be neutral-natured and uninvested, which
  * under-rates them slightly; the switch rule is deliberately trigger-happy to
- * compensate.
+ * compensate. Stockfish's foe model (foeModel, 24 Sep 2026) reads built-team
+ * foes from this server's own role sets instead: full investment, likely
+ * attacks and item, corrected by how hard they actually hit.
  */
 
 // Our moves and abilities into the AI's data before anything caches it (src/velvet-pkmn.js).
