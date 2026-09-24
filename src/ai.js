@@ -38,6 +38,23 @@ const GENS = new Generations(PkmnDex);
  * `species`, so the types have to be written there too - otherwise the change
  * silently vanishes (Oxidize kept reading Steel as immune).
  */
+/*
+ * A calc Pokemon whose real stats (from the request) survive clone(): the
+ * calculator's clone rebuilds rawStats from base stats, EVs and nature, and
+ * calculate() clones both sides before it reads anything (see myPokemon).
+ */
+function keepStats(mon) {
+	const clone = mon.clone;
+	mon.clone = function () {
+		const copy = clone.call(this);
+		copy.rawStats = { ...this.rawStats };
+		copy.stats = { ...this.stats };
+		copy.originalCurHP = this.originalCurHP;
+		return keepStats(copy);
+	};
+	return mon;
+}
+
 function retype(mon, types) {
 	const copy = mon.clone();
 	copy.species = Object.assign({}, copy.species, { types: types.slice() });
@@ -121,6 +138,8 @@ const ABILITY_IMMUNITY = {
 	'Volt Absorb': 'Electric', 'Lightning Rod': 'Electric', 'Motor Drive': 'Electric',
 	'Flash Fire': 'Fire', 'Well-Baked Body': 'Fire',
 	'Sap Sipper': 'Grass',
+	// This server's own absorbers (data/velvet/balance-patch-1.js): Vaporeon, Jolteon, Stunfisk.
+	'Liquid Body': 'Water', 'Static Needles': 'Electric', 'Mudflat Ambush': 'Electric',
 };
 
 /** Move targets that must be given an explicit slot number in doubles. */
@@ -255,9 +274,10 @@ const STALL_PLAY = { stallPlay: true };
  *   removal      R8   Defog and Spin worth what the hazards cost our team
  *   hazardTiming R7   hazards on a free turn, not under fire
  *   freeTurns         no Wish, Protect or passive turn gifted to a foe that sets up
+ *   holdDynamax       Dynamax only to live through a hit or for a Max Move that kills
  */
 const STYLE_RULES = {
-	stall: { pivot: true, preserve: true, boosted: true, heal: true, ppSave: true, wish: true, protect: true, status: true, removal: true, hazardTiming: true, freeTurns: true },
+	stall: { pivot: true, preserve: true, boosted: true, heal: true, ppSave: true, wish: true, protect: true, status: true, removal: true, hazardTiming: true, freeTurns: true, holdDynamax: true },
 	balance: {},
 	'bulky offense': {},
 	'hyper offense': {},
@@ -335,6 +355,7 @@ function changedSpecies() {
 const CALC_ABILITY = {
 	'Kindled Fury': 'Guts', 'Diamond Dust': 'Slush Rush', 'Solstice': 'Chlorophyll',
 	'Prescience': 'Magic Guard', 'Liquid Body': 'Water Absorb', 'Static Needles': 'Volt Absorb', 'Ribbon Hymn': 'Pixilate',
+	'Mudflat Ambush': 'Volt Absorb',
 };
 // Abilities that bounce status moves and hazards, and ones no status takes on.
 const BOUNCES = new Set(['magicbounce', 'prescience']);
@@ -462,6 +483,20 @@ class BattleAI {
 			if (live && live.charged) mon.velvetCharged = true;
 			if (entry.stats && !transformed) {
 				for (const k of ['atk', 'def', 'spa', 'spd', 'spe']) if (entry.stats[k]) mon.stats[k] = entry.stats[k];
+				/*
+				 * And into rawStats, which is what the calculator actually reads Attack
+				 * and Defence from - kept through every clone, since calculate() clones
+				 * both sides and a clone rebuilds rawStats from base stats, 0 EVs and a
+				 * neutral nature. Until now our own Pokemon were all calculated that
+				 * way: a 252 Def Bold Clefable took a Kingambit's Iron Head as 116-136%
+				 * when it is 66-78%, so in replay gen9rpou-10-tlvuiv the Unaware
+				 * Clefable "could not come in" on a +2 Kingambit and Blissey stayed in
+				 * front of it and died.
+				 */
+				if (!this.cfg.naive) {
+					for (const k of ['atk', 'def', 'spa', 'spd', 'spe']) if (entry.stats[k]) mon.rawStats[k] = entry.stats[k];
+					keepStats(mon);
+				}
 			}
 			if (cond) {
 				// maxHP() reads rawStats.hp, and Showdown's request stats carry no
@@ -616,6 +651,8 @@ class BattleAI {
 			opts.overrides = this.speciesOverrides(gen, species, opts.overrides);
 			const mon = new calc.Pokemon(gen, species, opts);
 			if (foe.maxhp === 100 && foe.hp < 100) mon.originalCurHP = Math.max(1, Math.round(mon.maxHP() * foe.hp / 100));
+			// No item shown and none knocked off: it probably holds one (Witch's Snatch in damagePct).
+			if (!foe.item && !foe.itemGone) mon.velvetItemUnknown = true;
 			if (guess && !bare) {
 				const scale = this.foeScale(foe, guess);
 				if (scale) mon.velvetScale = scale;
@@ -823,6 +860,15 @@ class BattleAI {
 		const name = foe.transformed || foe.species;
 		const species = PkmnDex.forGen(gen.num).species.get(name);
 		let abilities = species ? [...new Set(Object.values(species.abilities || {}).filter(a => a))] : [];
+		/*
+		 * The abilities this server gave it as well: @pkmn/dex lists Vaporeon as
+		 * Water Absorb / Hydration, and the battle's own dex adds Liquid Body (Water
+		 * Absorb and Regenerator) - an unrevealed Vaporeon is an absorber either way.
+		 */
+		try {
+			const rp = require('./rp-dex')().species.get(name);
+			if (rp && rp.exists) abilities = [...new Set([...abilities, ...Object.values(rp.abilities || {}).filter(a => a)])];
+		} catch (e) { /* no simulator data: the calculator's list is all there is */ }
 
 		// In Random Battle the species is generated with a known ability - usually
 		// exactly one - so there is nothing to guess. This is what turns a Gastrodon
@@ -899,6 +945,20 @@ class BattleAI {
 	}
 
 	damageToFoe(gen, attacker, foe, moveName, field) {
+		/*
+		 * A type that has already bounced off this foe (an -immune line, or an
+		 * absorbing ability's heal) stays bounced until one of that type lands: the
+		 * battle said so, whatever the ability tables know. The Max Move that bounced
+		 * counts for the plain move of its type. Not after it Terastallizes, which can
+		 * take a type immunity away.
+		 */
+		if (!this.cfg.naive && foe && !foe.tera && foe.immuneTo && foe.immuneTo.size) {
+			const dex = PkmnDex.forGen(gen.num);
+			const typeOf = n => { const m = dex.moves.get(n); return m && m.exists && m.category !== 'Status' ? m.type : null; };
+			const type = typeOf(moveName);
+			const landed = [...(foe.notImmuneTo || [])].some(n => typeOf(n) === type);
+			if (type && !landed && [...foe.immuneTo].some(n => typeOf(n) === type)) return 0;
+		}
 		const variants = this.foeVariants(gen, foe);
 		if (variants.length === 1) return this.damagePct(gen, attacker, variants[0].mon, moveName, field);
 		let total = 0, weight = 0;
@@ -985,7 +1045,27 @@ class BattleAI {
 			// A Charge doubles the next Electric move; the calculator has no idea.
 			const charged = attacker.velvetCharged && move.type === 'Electric' ? 2 : 1;
 			// A foe's likely damage item, or what its hits have shown (foeModel: foeScale()).
-			const scale = attacker.velvetScale ? (attacker.velvetScale[move.category] || 1) : 1;
+			let scale = attacker.velvetScale ? (attacker.velvetScale[move.category] || 1) : 1;
+			/*
+			 * The Witching Hour Mega Banette (data/velvet/halloween.js), which the
+			 * calculator knows only the type and 110 power of. Witching Hour makes its
+			 * Ghost moves 1.5x, and Witch's Snatch is 150 power into a held item, as
+			 * Knock Off checks it (not a Mega Stone on its owner). Replay
+			 * gen9rpou-10-tlvuiv: it read 89% into the Boots Clodsire the bot led with,
+			 * and knocked it out from full. A foe whose item is not yet known is taken
+			 * to hold one: nearly everything does.
+			 */
+			if (!this.cfg.naive) {
+				if (String(attacker.ability || '') === 'Witching Hour' && move.type === 'Ghost') scale *= 1.5;
+				if (move.name === "Witch's Snatch") {
+					const item = String(defender.item || '');
+					const data = item ? PkmnDex.forGen(9).items.get(item) : null;
+					const base = s => String(s || '').split('-')[0];
+					// A Mega Stone on the Pokemon it belongs to, or a Z-Crystal, cannot be taken.
+					const stuck = !!(data && data.exists && ((data.megaStone && base(data.megaEvolves) === base(defender.name)) || data.zMove));
+					if ((item && !stuck) || (!item && defender.velvetItemUnknown)) scale *= 150 / 110;
+				}
+			}
 			if (CALC_ABILITY[String(attacker.ability || '')]) {
 				attacker = attacker.clone();
 				attacker.ability = CALC_ABILITY[String(attacker.ability)];
@@ -2938,9 +3018,11 @@ class BattleAI {
 	 * defensive use: a hit that would knock us out may not once the HP bar is
 	 * twice the size.
 	 */
-	dynamaxWorthIt(hpPct, incoming, best, { attacks = 4, damage = 100, turn = 99 } = {}) {
+	dynamaxWorthIt(hpPct, incoming, best, { attacks = 4, damage = 100, turn = 99, hold = false, maxDamage = damage } = {}) {
 		if (incoming >= hpPct && incoming < hpPct * 2) return true;   // survives it
 		if (incoming >= hpPct) return false;                          // dies regardless
+		// Stall's Dynamax is held for a kill (see chooseForSlot, holdDynamax).
+		if (hold && maxDamage < 100) return false;
 		if (this.cfg.sanity !== false) {
 			// Three turns is the whole value: not on a Pokemon half gone, and not on a
 			// status move or a priority attack, which a Max Move turns into Max Guard
@@ -3487,6 +3569,17 @@ class BattleAI {
 			attacks: ranked.filter(r => r.kind === 'move' && r.damage > 0).length,
 			damage: (ranked.find(r => r.name === best.name) || {}).damage || 0,
 			turn: state.turn || 99,
+			/*
+			 * Stall holds it (holdDynamax). Dynamax turns every status move into Max
+			 * Guard, so a wall that Dynamaxes gives up its recovery, its status and its
+			 * hazards for three turns: replay gen9rpou-10-tlvuiv's Dondozo (Rest, Sleep
+			 * Talk) Dynamaxed at 86% into a Magearna that had just switched in, traded
+			 * three Max Moves for 66% of its HP, left at 20% and never recovered. On
+			 * stall it is for the moment it wins: living through a hit that would
+			 * knock us out, or a Max Move that knocks them out.
+			 */
+			hold: !!(rules && rules.holdDynamax),
+			maxDamage: ((ranked.find(r => r.name === best.name) || {}).damage || 0) * this.maxRatio(gen, best.name, true),
 		})) {
 			choice += ' dynamax';
 		}

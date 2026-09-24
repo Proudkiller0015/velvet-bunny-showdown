@@ -673,5 +673,82 @@ console.log('\n--- a move that ignores an immunity ---');
 		ai.damagePct(gen, gengar, ai.foePokemon(gen, plain.state.opponent.a), 'Shadow Ball', field), 0);
 }
 
+console.log('\n--- Witch\'s Snatch at its real power (replay gen9rpou-10-tlvuiv, turn 1) ---');
+{
+	/*
+	 * Mega Banette-Halloween's Witch's Snatch knocked out the Boots Clodsire the bot
+	 * led with, from full, and left a 252 Def Rocky Helmet Corviknight at 1%. The
+	 * calculator knew its type and 110 power, not the 150 into a held item nor
+	 * Witching Hour's 1.5x Ghost moves, and read it as 89% into Clodsire.
+	 */
+	const ai = new BattleAI({ difficulty: 'stockfish' });
+	ai.setFormat('gen9rpou');
+	const gen = ai.gen(9);
+	const st = new BattleState('test');
+	st.myPlayer = 'p1';
+	for (const l of ['|player|p1|Bot|1|', '|player|p2|Them|1|', '|switch|p1a: Clodsire|Clodsire, L100|404/404', '|switch|p2a: Banette|Banette, F|100/100',
+		'|detailschange|p2a: Banette|Banette-Mega-Halloween, F', '|-mega|p2a: Banette|Banette|Banettite-Halloween', '|-ability|p2a: Banette|Witching Hour']) st.line(l.slice(1).split('|'));
+	const banette = st.opponent.a;
+	check('the Mega\'s stone is read as its item', banette.item, 'Banettite-Halloween');
+	const them = ai.foePokemon(gen, banette);
+	const mine = (species, item, stats, hp) => ai.myPokemon(gen, { details: `${species}, L100`, condition: `${hp}/${hp}`, ability: '', baseAbility: '', item, moves: [], stats }, null);
+	const clod = mine('Clodsire', 'heavydutyboots', { atk: 186, def: 219, spa: 124, spd: 297, spe: 76 }, 404);
+	check(`into the Boots Clodsire it is a knockout (${ai.damagePct(gen, them, clod, "Witch's Snatch").toFixed(0)}%)`, ai.damagePct(gen, them, clod, "Witch's Snatch") >= 100, true);
+	const bare = mine('Clodsire', '', { atk: 186, def: 219, spa: 124, spd: 297, spe: 76 }, 404);
+	check('and a third less into one with nothing to take', ai.damagePct(gen, them, bare, "Witch's Snatch") < ai.damagePct(gen, them, clod, "Witch's Snatch") * 0.8, true);
+}
+
+console.log('\n--- absorbing abilities, ours included, and what a heal reply teaches ---');
+{
+	/*
+	 * Replay gen9rpou-10-tlvuiv turn 7: Dynamax Dondozo's Max Geyser into Magearna
+	 * looked like it healed it. It did not - the hit took 23% and Leftovers gave 6%
+	 * back; Magearna is Soul-Heart here too - but the check found the gaps it
+	 * pointed at: this server's absorbers were missing from the immunity table,
+	 * an unrevealed Vaporeon was never thought to be Liquid Body, and a heal in
+	 * reply to our move taught the bot nothing unless the ability was one it knew.
+	 */
+	const ai = new BattleAI({ difficulty: 'stockfish' });
+	ai.setFormat('gen9rpou');
+	const gen = ai.gen(9);
+	const s = scenario({ me: 'Dondozo', myMoves: ['Liquidation', 'Crunch'], foe: 'Vaporeon' });
+	const me = ai.myPokemon(gen, s.request.side.pokemon[0], s.state);
+	const foe = s.state.opponent.a;
+	foe.immuneTo = new Set(); foe.notImmuneTo = new Set();
+	const plain = ai.damageToFoe(gen, me, { ...foe, ability: 'Hydration' }, 'Liquidation');
+	const unknown = ai.damageToFoe(gen, me, foe, 'Liquidation');
+	check(`an unrevealed Vaporeon may be Water Absorb or Liquid Body: Liquidation weighed down (${unknown.toFixed(0)} of ${plain.toFixed(0)})`, unknown < plain * 0.5, true);
+	check('a revealed Liquid Body takes nothing', ai.damageToFoe(gen, me, { ...foe, ability: 'Liquid Body' }, 'Liquidation'), 0);
+
+	// The battle's own reply: our move, then a heal from an ability the tables have never heard of.
+	const feed = (st, line) => st.line(line.slice(1).split('|'));
+	const live = () => {
+		const st = new BattleState('test');
+		st.myPlayer = 'p1';
+		for (const l of ['|player|p1|Bot|1|', '|player|p2|Them|1|', '|turn|7', '|switch|p1a: Dondozo|Dondozo, L100|300/300', '|switch|p2a: Magearna|Magearna, L100|80/100']) feed(st, l);
+		return st;
+	};
+	let st = live();
+	feed(st, '|move|p1a: Dondozo|Max Geyser|p2a: Magearna');
+	feed(st, '|-heal|p2a: Magearna|100/100|[from] ability: Tidal Soul|[of] p1a: Dondozo');
+	const mag = st.opponent.a;
+	check('a heal straight after our Max Geyser is learnt as an immunity', mag.immuneTo.has('Max Geyser'), true);
+	const dozo = ai.myPokemon(gen, s.request.side.pokemon[0], s.state);
+	check('so the plain Water move reads as nothing next turn', ai.damageToFoe(gen, dozo, mag, 'Liquidation'), 0);
+	check('while a Dark move still lands', ai.damageToFoe(gen, dozo, mag, 'Crunch') > 0, true);
+	// Leftovers is not an ability, and Dry Skin's rain heal comes at the end of the turn, not after the move.
+	st = live();
+	feed(st, '|move|p1a: Dondozo|Max Geyser|p2a: Magearna');
+	feed(st, '|-damage|p2a: Magearna|57/100');
+	feed(st, '|-heal|p2a: Magearna|63/100|[from] item: Leftovers');
+	check('the replay\'s Leftovers heal after a hit teaches nothing', st.opponent.a.immuneTo.size, 0);
+	st = live();
+	feed(st, '|move|p1a: Dondozo|Earthquake|p2a: Magearna');
+	feed(st, '|-damage|p2a: Magearna|60/100');
+	feed(st, '|-weather|RainDance|[upkeep]');
+	feed(st, '|-heal|p2a: Magearna|72/100|[from] ability: Dry Skin');
+	check('nor does an end-of-turn ability heal', st.opponent.a.immuneTo.size, 0);
+}
+
 console.log(`\n=== ${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);

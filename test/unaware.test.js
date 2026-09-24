@@ -26,7 +26,14 @@
 const { BattleAI } = require('../src/ai');
 const { BattleState } = require('../src/battle');
 
-const STATS = { atk: 220, def: 160, spa: 120, spd: 160, spe: 180 };
+/*
+ * Each Pokemon's own stats (85 EVs, neutral), as a request reports them. One
+ * made-up spread for all of them stopped being harmless once the request's
+ * stats reached the calculator (replay gen9rpou-10-tlvuiv): Toxapex at 160
+ * Sp. Def died to the +2 Volcarona before its Haze.
+ */
+const { realStats } = require('./pinkacross.test.js');
+const STATS = species => { const { hp, ...rest } = realStats(species); return rest; };
 
 function position({ myMoves, foeSpecies, foeAbility, foeMoves = [], foeBoosts = null, mySpecies = 'Garchomp' }) {
 	const state = new BattleState('test');
@@ -50,10 +57,10 @@ function position({ myMoves, foeSpecies, foeAbility, foeMoves = [], foeBoosts = 
 				pokemon: [{
 					active: true, details: `${mySpecies}, L100`, condition: '300/300',
 					moves: myMoves.map(m => m.toLowerCase().replace(/\W/g, '')),
-					ability: '', baseAbility: '', item: '', stats: STATS,
+					ability: '', baseAbility: '', item: '', stats: STATS(mySpecies),
 				}, {
 					active: false, details: 'Blissey, L100', condition: '400/400',
-					moves: ['softboiled'], ability: '', baseAbility: '', item: '', stats: STATS,
+					moves: ['softboiled'], ability: '', baseAbility: '', item: '', stats: STATS('Blissey'),
 				}],
 			},
 		},
