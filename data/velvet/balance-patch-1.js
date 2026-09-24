@@ -121,9 +121,12 @@ exports.EVOLUTIONS = {
 	mrmime: { from: 'levelMove', to: 16, why: 'Baby: grows up at 16 (was knowing Mimic)' },
 	mantine: { from: 'levelExtra', to: 16, why: 'Baby: grows up at 16 (was a Remoraid in the party)' },
 	chansey: { from: 'Oval Stone', to: 16, why: 'Baby: also grows up at 16; the Oval Stone still works' },
-	roselia: { from: 'levelFriendship', to: 16, why: 'Baby: also grows up at 16; a Sun Stone still works' },
-	lucario: { from: 'levelFriendship', to: 16, why: 'Baby: also grows up at 16; a Soothe Bell still works' },
-	chimecho: { from: 'levelFriendship', to: 16, why: 'Baby: also grows up at 16; a Moon Stone still works' },
+	// 24 Sep 2026: these three named items that have nothing to do with it (the
+	// Sun Stone is Roselia's own evolution, not Budew's). Budew and Riolu evolve
+	// by friendship in the day, Chingling by friendship at night.
+	roselia: { from: 'levelFriendship', to: 16, why: 'Baby: also grows up at 16; high friendship in the day still works' },
+	lucario: { from: 'levelFriendship', to: 16, why: 'Baby: also grows up at 16; high friendship in the day still works' },
+	chimecho: { from: 'levelFriendship', to: 16, why: 'Baby: also grows up at 16; high friendship at night still works' },
 
 	/*
 	 * The caps. No evolution into a final stage after level 50 - pseudo-
