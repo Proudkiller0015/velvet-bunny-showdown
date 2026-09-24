@@ -11,7 +11,7 @@
  * on an offense bench where that shows the gate.
  */
 
-const { BattleAI } = require('../src/ai');
+const { BattleAI, STYLE_RULES } = require('../src/ai');
 const { position, mon } = require('./pinkacross.test.js');
 
 let pass = 0, fail = 0;
@@ -52,6 +52,29 @@ console.log('\n--- knowing we are stall ---');
 	const offReq = position({ me: WALLS.Blissey(), myMoves: ['Seismic Toss'], bench: OFFENSE(), foe: { species: 'Garchomp' } }).request;
 	check('one wall and four attackers are not', stockfish().stallTeam(offReq), false);
 	check('and the knob switches it off', stockfish({ stallPlay: false }).stallTeam(stallReq), false);
+	// Every thinking rung plays a stall team as stall (ladder bots, gyms, trainers, summons); the greedy ones never do.
+	for (const rung of ['hard', 'champion']) check(`${rung} knows it too`, new BattleAI({ difficulty: rung }).stallTeam(stallReq), true);
+	for (const rung of ['easy', 'normal']) check(`${rung} stays greedy`, !!new BattleAI({ difficulty: rung }).cfg.stallPlay, false);
+	// The style of our own team, and the rules each style plays.
+	check('the stall team reads as stall', ai.ourArchetype(stallReq), 'stall');
+	check('Blissey and four attackers (two of them setup) read as bulky offense', stockfish().ourArchetype(offReq), 'bulky offense');
+	const balReq = position({ me: WALLS.Blissey(), myMoves: ['Seismic Toss'], bench: [WALLS.Toxapex(), ...OFFENSE().slice(0, 3)], foe: { species: 'Garchomp' } }).request;
+	check('two walls and three attackers read as balance', stockfish().ourArchetype(balReq), 'balance');
+	check('balance plays none of the stall rules yet', stockfish().styleRules(balReq), null);
+	check('unless a measurement switches one on', !!stockfish({ styleRules: { ...STYLE_RULES, balance: { preserve: true } } }).styleRules(balReq), true);
+}
+
+console.log('\n--- a switch-in judged by the move they will click (round 2: Blissey died with Clodsire benched) ---');
+{
+	const moves = ['Seismic Toss', 'Soft-Boiled', 'Stealth Rock', 'Wish'];
+	const me = mon('Blissey', moves, { item: 'Leftovers', ability: 'Natural Cure', hp: 13, status: 'par' });
+	const p = position({ me, myMoves: moves, bench: wallsBut('Blissey'), foe: { species: 'Raging Bolt', moves: ['Thunderbolt'], item: 'Choice Specs' } });
+	p.state.opponent.a.lastMove = 'Thunderbolt';   // locked into it
+	check('Blissey at 13% leaves for the Ground type', moveOf(p.request, stockfish().decide(p.request, p.state)), c => /switch (Clodsire|Gliscor)/.test(c));
+	const hard = new BattleAI({ difficulty: 'hard' }); hard.setFormat('gen9nationaldex');
+	let saved = 0;
+	for (let i = 0; i < 6; i++) if (/switch (Clodsire|Gliscor)/.test(moveOf(p.request, hard.decide(p.request, p.state)))) saved++;
+	check(`and so does Hard, most of the time (${saved}/6)`, saved >= 4, true);
 }
 
 console.log('\n--- R1: pivot before the hit, even at full health ---');
@@ -62,7 +85,8 @@ console.log('\n--- R1: pivot before the hit, even at full health ---');
 		const { request, state } = position({ me: WALLS.Clodsire(100), myMoves: moves, bench, foe: { species: 'Greninja', moves: ['Hydro Pump', 'Ice Beam'], item: 'Choice Specs' } });
 		return moveOf(request, stockfish().decide(request, state));
 	};
-	check('stall: Clodsire leaves for the Water resist at 100%', ask(wallsBut('Clodsire')), 'switch Toxapex');
+	// Toxapex resists it; Blissey is the special wall. Either is the human play.
+	check('stall: Clodsire leaves in front of Specs Greninja at 100%', ask(wallsBut('Clodsire')), c => /switch (Toxapex|Blissey)/.test(c));
 }
 
 console.log('\n--- R2/R3: preserve at 35% or less, heal when the heal outruns the hit ---');
@@ -96,7 +120,7 @@ console.log('\n--- R6: status aimed ---');
 	const me = ai.myPokemon(gen, request.side.pokemon[0], state);
 	ai.myMoveNames = ['Scald', 'Toxic', 'Recover', 'Haze'];
 	const foe = state.opponent.a;
-	const ctx = { foes: [foe], entry: request.side.pokemon[0], stall: true, request };
+	const ctx = { foes: [foe], entry: request.side.pokemon[0], rules: STYLE_RULES.stall, request };
 	check('no Toxic into a Gliscor that may be Poison Heal', ai.statusScore(gen, 'Toxic', me, ai.foePokemon(gen, foe), state, 10, ctx), s => s < 15);
 	const burn = ai.stallStatus(gen, { status: 'brn' }, ai.foePokemon(gen, { ...foe, species: 'Kingambit', ability: 'Supreme Overlord' }), { foes: [{ ...foe, species: 'Kingambit', ability: 'Supreme Overlord', moves: new Set(['Kowtow Cleave']) }] });
 	const burnSpecial = ai.stallStatus(gen, { status: 'brn' }, ai.foePokemon(gen, { ...foe, species: 'Heatran' }), { foes: [{ ...foe, species: 'Iron Moth', moves: new Set(['Fiery Dance']) }] });
@@ -133,12 +157,12 @@ console.log('\n--- R9: Protect with a purpose, never twice ---');
 	const gen = ai.gen(9);
 	const p = position({ me: WALLS.Gliscor(), myMoves: ['Earthquake', 'Knock Off', 'Protect', 'Toxic'], bench: wallsBut('Gliscor'), foe: { species: 'Heatran', status: 'tox', moves: ['Magma Storm'] } });
 	const me = ai.myPokemon(gen, p.request.side.pokemon[0], p.state);
-	const ctx = { foes: [p.state.opponent.a], stall: true, live: p.state.mine.a };
+	const ctx = { foes: [p.state.opponent.a], rules: STYLE_RULES.stall, live: p.state.mine.a };
 	check('Protect into a badly poisoned foe has a purpose', ai.stallProtect(gen, { id: 'protect' }, me, p.state, 80, ctx) >= 20, true);
 	p.state.lastTurnMoves = [{ side: 'p2', slot: 'a', name: 'Protect', species: 'Gliscor' }];
 	check('but not twice in a row', ai.stallProtect(gen, { id: 'protect' }, me, p.state, 80, ctx), -30);
 	const calm = position({ me: WALLS.Gliscor(), myMoves: ['Protect'], bench: wallsBut('Gliscor'), foe: { species: 'Blissey', moves: ['Seismic Toss', 'Soft-Boiled'] }, turn: 12 });
-	check('and without a purpose it is a lost turn', ai.stallProtect(gen, { id: 'protect' }, me, calm.state, 100, { foes: [calm.state.opponent.a], stall: true, live: calm.state.mine.a }) < 0, true);
+	check('and without a purpose it is a lost turn', ai.stallProtect(gen, { id: 'protect' }, me, calm.state, 100, { foes: [calm.state.opponent.a], rules: STYLE_RULES.stall, live: calm.state.mine.a }) < 0, true);
 }
 
 console.log('\n--- R10: Wish at about 80%, and pass it ---');

@@ -90,7 +90,7 @@ if (has('report')) { report(); process.exit(0); }
 
 // ------------------------------------------------------------- coordinator
 const GAMES = Number(arg('games', 100));
-const WORKERS = Math.max(1, Math.min(8, Number(arg('workers', 4)) || 4));
+const WORKERS = Math.max(1, Math.min(10, Number(arg('workers', 4)) || 4));
 const files = fs.readdirSync(TEAM_DIR).filter(f => f.endsWith('.txt'));
 const allowed = f => !SKIP.test(fs.readFileSync(path.join(TEAM_DIR, f), 'utf8'));
 const stalls = files.filter(f => f.startsWith('stall-') && allowed(f));
