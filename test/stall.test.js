@@ -60,8 +60,33 @@ console.log('\n--- knowing we are stall ---');
 	check('Blissey and four attackers (two of them setup) read as bulky offense', stockfish().ourArchetype(offReq), 'bulky offense');
 	const balReq = position({ me: WALLS.Blissey(), myMoves: ['Seismic Toss'], bench: [WALLS.Toxapex(), ...OFFENSE().slice(0, 3)], foe: { species: 'Garchomp' } }).request;
 	check('two walls and three attackers read as balance', stockfish().ourArchetype(balReq), 'balance');
-	check('balance plays none of the stall rules yet', stockfish().styleRules(balReq), null);
-	check('unless a measurement switches one on', !!stockfish({ styleRules: { ...STYLE_RULES, balance: { preserve: true } } }).styleRules(balReq), true);
+	check('a measurement can switch balance off', stockfish({ styleRules: { ...STYLE_RULES, balance: {} } }).styleRules(balReq), null);
+	check('and switch one rule back on', stockfish({ styleRules: { ...STYLE_RULES, balance: { preserve: true } } }).styleRules(balReq).preserve, true);
+}
+
+console.log('\n--- the rules each style plays (the mirrored head-to-head, 24 Sep 2026) ---');
+{
+	const on = rules => Object.keys(rules || {}).filter(k => rules[k]).sort().join(' ');
+	const ALL = 'boosted freeTurns protect status';
+	const balReq = position({ me: WALLS.Blissey(), myMoves: ['Seismic Toss'], bench: [WALLS.Toxapex(), ...OFFENSE().slice(0, 3)], foe: { species: 'Garchomp' } }).request;
+	check('balance plays all but holding Dynamax', on(stockfish().styleRules(balReq)), 'boosted freeTurns hazardTiming heal pivot ppSave preserve protect removal status wish');
+	// Bulky offense: a wall in plays the walls' rules, an attacker in does not.
+	const boWall = position({ me: WALLS.Blissey(), myMoves: ['Seismic Toss'], bench: OFFENSE(), foe: { species: 'Garchomp' } }).request;
+	check('bulky offense with its wall in', on(stockfish().styleRules(boWall)), 'boosted freeTurns heal pivot preserve protect removal status wish');
+	const [chomp, ...rest] = OFFENSE();
+	const boAttacker = position({ me: chomp, myMoves: ['Earthquake'], bench: [WALLS.Blissey(), ...rest], foe: { species: 'Garchomp' } }).request;
+	check('the same team reads as bulky offense with an attacker in', stockfish().ourArchetype(boAttacker), 'bulky offense');
+	check('bulky offense with an attacker in', on(stockfish().styleRules(boAttacker)), 'boosted freeTurns protect removal status');
+	// Hyper offense: removal only on a team mostly without Boots.
+	const hoMons = () => [...OFFENSE(), mon('Volcarona', ['Quiver Dance', 'Fiery Dance', 'Bug Buzz', 'Giga Drain'], { item: 'Life Orb', ability: 'Flame Body' })];
+	const [ho1, ...hoRest] = hoMons();
+	const hoReq = position({ me: ho1, myMoves: ['Earthquake'], bench: hoRest, foe: { species: 'Garchomp' } }).request;
+	check('five attackers, three of them setup, read as hyper offense', stockfish().ourArchetype(hoReq), 'hyper offense');
+	check('hyper offense without Boots removes hazards', on(stockfish().styleRules(hoReq)), 'boosted freeTurns protect removal status');
+	for (const p of hoReq.side.pokemon) p.item = 'heavydutyboots';
+	check('and with Boots it does not', on(stockfish().styleRules(hoReq)), ALL);
+	check('never pivot, preserve or heal band on hyper offense', ['pivot', 'preserve', 'heal', 'wish', 'ppSave', 'hazardTiming'].some(k => STYLE_RULES['hyper offense'][k]), false);
+	check('saving the last heals and hazards on a free turn: stall and balance only', Object.keys(STYLE_RULES).filter(s => STYLE_RULES[s].ppSave && STYLE_RULES[s].hazardTiming).join(','), 'stall,balance');
 }
 
 console.log('\n--- a switch-in judged by the move they will click (round 2: Blissey died with Clodsire benched) ---');
