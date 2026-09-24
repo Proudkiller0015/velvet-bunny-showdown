@@ -94,6 +94,9 @@ class BattleState {
 	/** Feed one protocol line (already split on '|', without the leading empty). */
 	line(parts) {
 		const [cmd, ...args] = parts;
+		// The line before this one, for replies that only mean something straight after a move (-heal below).
+		this.prevParts = this.thisParts || null;
+		this.thisParts = parts;
 		/*
 		 * Any line that says an ability did something names it: "|-weather|Snowscape|
 		 * [from] ability: Diamond Dust|[of] p2a: Glaceon". Only the ability's own
@@ -266,6 +269,20 @@ class BattleState {
 			const store = id.side === this.myPlayer ? this.mine : this.opponent;
 			const before = store[id.slot] ? store[id.slot].hp : null;
 			if (store[id.slot]) Object.assign(store[id.slot], cond);
+			/*
+			 * An absorbing ability answers our move with a heal, not an -immune line,
+			 * whenever the absorber is not at full health (Water Absorb, Volt Absorb,
+			 * and this server's Liquid Body and Static Needles). Straight after our
+			 * move and from an ability, the heal says the move did nothing: learn it
+			 * the way an -immune line teaches it, so a custom absorber the tables do
+			 * not know is still not hit twice. Only straight after the move line, so
+			 * Poison Heal or Dry Skin healing at the end of the turn is never read as it.
+			 */
+			if (cmd === '-heal' && id.side !== this.myPlayer && store[id.slot] && store[id.slot].immuneTo &&
+				parts.some(p => /^\[from\] ability: /.test(p)) && this.prevParts && this.prevParts[0] === 'move') {
+				const lm = this.lastMove;
+				if (lm && lm.side === this.myPlayer && lm.name && lm.turn === this.turn) store[id.slot].immuneTo.add(lm.name);
+			}
 			/*
 			 * How hard their attack actually hit us, for the AI to compare with what it
 			 * expected (BattleAI.learnFoeScale). A Choice Band gives itself away only

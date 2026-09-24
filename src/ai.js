@@ -138,6 +138,8 @@ const ABILITY_IMMUNITY = {
 	'Volt Absorb': 'Electric', 'Lightning Rod': 'Electric', 'Motor Drive': 'Electric',
 	'Flash Fire': 'Fire', 'Well-Baked Body': 'Fire',
 	'Sap Sipper': 'Grass',
+	// This server's own absorbers (data/velvet/balance-patch-1.js): Vaporeon, Jolteon, Stunfisk.
+	'Liquid Body': 'Water', 'Static Needles': 'Electric', 'Mudflat Ambush': 'Electric',
 };
 
 /** Move targets that must be given an explicit slot number in doubles. */
@@ -352,6 +354,7 @@ function changedSpecies() {
 const CALC_ABILITY = {
 	'Kindled Fury': 'Guts', 'Diamond Dust': 'Slush Rush', 'Solstice': 'Chlorophyll',
 	'Prescience': 'Magic Guard', 'Liquid Body': 'Water Absorb', 'Static Needles': 'Volt Absorb', 'Ribbon Hymn': 'Pixilate',
+	'Mudflat Ambush': 'Volt Absorb',
 };
 // Abilities that bounce status moves and hazards, and ones no status takes on.
 const BOUNCES = new Set(['magicbounce', 'prescience']);
@@ -854,6 +857,15 @@ class BattleAI {
 		const name = foe.transformed || foe.species;
 		const species = PkmnDex.forGen(gen.num).species.get(name);
 		let abilities = species ? [...new Set(Object.values(species.abilities || {}).filter(a => a))] : [];
+		/*
+		 * The abilities this server gave it as well: @pkmn/dex lists Vaporeon as
+		 * Water Absorb / Hydration, and the battle's own dex adds Liquid Body (Water
+		 * Absorb and Regenerator) - an unrevealed Vaporeon is an absorber either way.
+		 */
+		try {
+			const rp = require('./rp-dex')().species.get(name);
+			if (rp && rp.exists) abilities = [...new Set([...abilities, ...Object.values(rp.abilities || {}).filter(a => a)])];
+		} catch (e) { /* no simulator data: the calculator's list is all there is */ }
 
 		// In Random Battle the species is generated with a known ability - usually
 		// exactly one - so there is nothing to guess. This is what turns a Gastrodon
@@ -930,6 +942,20 @@ class BattleAI {
 	}
 
 	damageToFoe(gen, attacker, foe, moveName, field) {
+		/*
+		 * A type that has already bounced off this foe (an -immune line, or an
+		 * absorbing ability's heal) stays bounced until one of that type lands: the
+		 * battle said so, whatever the ability tables know. The Max Move that bounced
+		 * counts for the plain move of its type. Not after it Terastallizes, which can
+		 * take a type immunity away.
+		 */
+		if (!this.cfg.naive && foe && !foe.tera && foe.immuneTo && foe.immuneTo.size) {
+			const dex = PkmnDex.forGen(gen.num);
+			const typeOf = n => { const m = dex.moves.get(n); return m && m.exists && m.category !== 'Status' ? m.type : null; };
+			const type = typeOf(moveName);
+			const landed = [...(foe.notImmuneTo || [])].some(n => typeOf(n) === type);
+			if (type && !landed && [...foe.immuneTo].some(n => typeOf(n) === type)) return 0;
+		}
 		const variants = this.foeVariants(gen, foe);
 		if (variants.length === 1) return this.damagePct(gen, attacker, variants[0].mon, moveName, field);
 		let total = 0, weight = 0;
