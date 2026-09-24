@@ -795,6 +795,14 @@ function rollTrainer({ place, badges, levelCap = null, rng = Math.random, classI
 	// The ace pulls a trainer down the same way it pulls the wild: somebody whose best
 	// Pokemon is far under their cap is not handed a full-cap team to lose to.
 	const [lo, hi] = levelRange(badges, levelCap, ace);
+	/*
+	 * A trainer has a theme, not a class's whole list (24 Sep 2026). A Kimono
+	 * Girl's six types or a Youngster's four made a team of six unrelated
+	 * Pokemon; a real trainer of that class favours one or two of them. The
+	 * first types listed are the class's own, so they are the likelier focus;
+	 * the rest of the list still turns up, less often.
+	 */
+	const focus = themeOf(cls.types || [], rng);
 	const ctx = { badges, types: cls.types, maxLevel: hi };
 	// The place still counts: a Backpacker on a volcano brings fire types more
 	// often than one at the harbour.
@@ -802,6 +810,7 @@ function rollTrainer({ place, badges, levelCap = null, rng = Math.random, classI
 	const entries = allRoots().map(item => {
 		let w = lineWeight(item, ctx);
 		if (w > 0 && placeTypes.length && lineOf(item).some(s => s.types.some(t => placeTypes.includes(t)))) w *= 1.5;
+		if (w > 0 && focus.length && lineOf(item).some(s => s.types.some(t => focus.includes(t)))) w *= 4;
 		return { item, w };
 	}).filter(e => e.w > 0);
 
@@ -850,6 +859,16 @@ function rollTrainer({ place, badges, levelCap = null, rng = Math.random, classI
 		format: isDouble ? TRAINER_DOUBLE_FORMAT : TRAINER_FORMAT,
 		badges,
 	};
+}
+
+/** One or two of a class's types for this trainer to favour: the first listed most often. */
+function themeOf(types, rng) {
+	if (types.length <= 2) return types.slice();
+	const weights = types.map((t, i) => ({ item: t, w: 1 / (i + 1) }));
+	const first = weightedPick(weights, rng);
+	if (rng() < 0.5) return [first];
+	const second = weightedPick(weights.filter(e => e.item !== first), rng);
+	return [first, second].filter(Boolean);
 }
 
 /**
@@ -906,9 +925,18 @@ function trainerTeam(roots, levels, badges, rng, { themed = false } = {}) {
 		maxEvaluations: 1500,
 	});
 	if (!built.length) return null;
-	// The strongest is the ace, on the cap.
-	built.sort((a, b) => Object.values(Dex.species.get(a.species).baseStats).reduce((x, y) => x + y, 0) -
-		Object.values(Dex.species.get(b.species).baseStats).reduce((x, y) => x + y, 0));
+	/*
+	 * The strongest is the ace, on the cap - and no Pokemon below the level it
+	 * evolves at (24 Sep 2026). A candidate was evolved for the level it was
+	 * rolled at, then dealt a level by its stat total, so a final stage could
+	 * land two levels under its own evolution. Levels go out in order of the
+	 * level each one needs, then of strength, and none is dealt below its own.
+	 */
+	const bstOf = set => Object.values(Dex.species.get(set.species).baseStats).reduce((x, y) => x + y, 0);
+	built.sort((a, b) => minLevelOf(Dex.species.get(a.species)) - minLevelOf(Dex.species.get(b.species)) || bstOf(a) - bstOf(b));
+	const top = levels[levels.length - 1];
+	const dealt = built.map((set, i) => Math.min(top, Math.max(levels[i], minLevelOf(Dex.species.get(set.species)))));
+	for (let i = 1; i < dealt.length; i++) dealt[i] = Math.max(dealt[i], dealt[i - 1]);
 	const iv = Math.min(31, 8 + badges * 3);
 	const ev = badges * 10;
 	return built.map((set, i) => {
@@ -918,7 +946,7 @@ function trainerTeam(roots, levels, badges, rng, { themed = false } = {}) {
 		return {
 			name: species.name,
 			species: species.name,
-			level: levels[i],
+			level: dealt[i],
 			moves: set.moves,
 			// Early trainers have not thought about abilities or natures yet.
 			ability: badges >= 3 ? set.ability : abilityFor(species, rng, 0.05),
