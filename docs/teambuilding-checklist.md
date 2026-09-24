@@ -5,7 +5,7 @@ Tier-agnostic rules; the threat list per format should come from that format's u
 H = hard constraint (reject the team), S = soft preference (scored). Numeric thresholds are a
 calibration of the guides, which give almost no numbers.
 
-**Status** (2026-09-23) is marked on each rule: *implemented*, *partly* or *not*, with where.
+**Status** (2026-09-23, Pinkacross's rules added 2026-09-24) is marked on each rule: *implemented*, *partly* or *not*, with where.
 The rules live in `src/team-logic.js` (`analyze()` measures, `issues()` judges; a hard issue
 costs 10 in `score()`, a soft one 3, so "reject" means "loses to any team without it"). The
 team is searched against that score by `src/team-assembler.js` (RP trainers, the RP bot's
@@ -31,7 +31,7 @@ plus `data/velvet/rp-usage.json`) when there is one. Per-set move choice is `src
 7. **Speed control** (H offense, S balance): points from priority attacks, Choice Scarf, Thunder Wave, final Speed >= 336. HO >= 3, bulky offense >= 2, balance >= 1.
    - *Implemented.* `speedStat()` computes real Speed from EVs/nature/level (336 scaled by level); priority, Scarf, Thunder Wave/Icy Wind/Tailwind/Trick Room count. HO needs 3, BO 2 (hard), balance 1. The assembler teaches a strong priority attack to an attacker when short (`addSpeedControl()`), and setup sweepers take one in role-sets.js.
 8. **Pivoting** (H bulky offense/balance, S otherwise): U-turn, Volt Switch, Flip Turn, Teleport, Parting Shot, Chilly Reception, Shed Tail. Balance >= 2.
-   - *Partly.* No pivot on BO/balance and a single pivot on balance are soft issues; not made hard yet (not in this round's priorities, and each new hard rule costs the search raw strength).
+   - *Partly.* No pivot on BO/balance and a single pivot on BO or balance are soft issues (2026-09-24: bulky offense added, after Pinkacross's "at least 2 users, except stall and HO"). Not made hard: he frames it as a need, but each new hard rule costs the search raw strength.
 9. **Recovery on defensive members** (H stall, S elsewhere): Recover/Roost/Slack Off/Soft-Boiled/Synthesis/Moonlight/Morning Sun/Strength Sap/Shore Up/Milk Drink/Rest/Wish, Regenerator, Poison Heal.
    - *Implemented.* Hard on stall for every defensive member without it (Regenerator/Poison Heal count), soft elsewhere when no wall has any.
 10. **Status absorber** (S >= 1): Poison/Steel (Toxic), Fire (burn), Electric (paralysis), Guts, Poison Heal, Magic Guard, Natural Cure, Purifying Salt, Good as Gold, Comatose, Lum Berry, a cleric.
@@ -41,9 +41,33 @@ plus `data/velvet/rp-usage.json`) when there is one. Per-set move choice is `src
 12. **Stallbreaking** (S, H on HO/BO): Taunt, Knock Off, Trick, Encore, or a Band/Specs attacker.
    - *Implemented.* Hard on HO/BO, soft on balance.
 13. **No role redundancy** (S): no duplicate SR, no second remover (except stall), <= 2 passive members on offense.
-   - *Partly.* Second SR, second remover (off stall) and duplicate hazard setters are handled; the passive-member count on offense is not.
+   - *Implemented* (2026-09-24). Second SR, second remover (off stall) and duplicate hazard setters are handled; more than two passive members off stall is soft (rule 23).
 14. **Every slot has a purpose** (S): reject a candidate that adds no new role or threat answer.
    - *Not implemented* as a rule. The assembler's strength weight and its role-crowding and thin-set penalties approximate it.
+
+## 1b. Pinkacross's rules (added 2026-09-24)
+From `docs/research-pinkacross.md` (his "18 things every team needs", "the #1 teambuilding mistake",
+breaking cores, item traps). All in `src/team-logic.js` (`analyze()` fields, `issues()` and
+`eighteenThings()`), soft unless said otherwise. A soft issue may carry a smaller `weight` in
+`score()` (default 3) so the lesser ones cannot outvote a hard rule.
+
+15. **Immediate power** (B2; H on balance and bulky offense, S on HO, stall exempt): a breaker that hits hard on entry without setting up - Choice Band/Specs or Life Orb, or an all-out set with Huge Power, Sheer Force, Adaptability and the like. Setup sweepers do not count.
+    - *Implemented.* `isBreaker()`; `report.breakers`. With no item yet (the assembler's search, the RP bot before the first badge) an all-out attacker on 100+ Atk/SpA counts, since `itemFor()` makes it a Band/Specs/LO set. After items, `improveItems()` in the assembler swaps an attacker to Band/Specs/LO when that raises the score (never at the cost of the Scarf that was the team's speed control).
+16. **Breaking core first** (B1): when the seed is a wall, the next pick is a breaker aimed at what the wall draws in.
+    - *Partly.* `assemble()` treats the first fixed member (else the strongest candidate) as the seed; while it plays a wall, a breaker whose attacks hit what the wall's attacks cannot (the format's threats, else the 18 types: `drawnIn()`, `cover()`) adds up to 6 to the search score. Not done: usage/teammate data for the real switch-ins; choosing the archetype from the seed; `TeamBuilder.chooseTeam()` (the Smogon draw) has no seed.
+17. **Toxic Spikes absorber** (B6; S): flagged when a layer would poison 3+ members (grounded, not Poison/Steel, no Boots or Immunity/Poison Heal/Magic Guard...) and no grounded, Boots-free Poison type is there. Weight 2. *Implemented.* The "1-2 poisoned and no removal" case is left to the removal rule.
+18. **A Steel type** (S, weight 2; themed teams exempt). *Implemented.*
+19. **Knock Off**: 1-2 users (none is S off HO/stall; 3+ is S, weight 1.5), and a **Knock Off absorber** (S off HO, weight 1.5: no item, a one-use item, Sticky Hold/Unburden/Klutz; only checked when items are known). *Implemented*; the assembler teaches Knock Off to its most supportive member when the six have none (`addKnockOff()`).
+20. **Contact punisher** (S off HO/stall, weight 1 - "the least crucial"): Rocky Helmet, Rough Skin, Iron Barbs, Flame Body, Static... *Implemented*; `improveItems()` gives a Rocky Helmet to a wall that heals when that raises the score.
+21. **Ground and Electric immunities**, apart from resists (B4; S, weight 2 each; themed exempt): Ground by a Flying type, Levitate or Earth Eater (Air Balloon only on HO); Electric by a Ground type, Volt Absorb, Lightning Rod or Motor Drive (HO exempt). *Implemented.* Left soft: rule 4 already makes the resist hard, and he allows "solid resists plus answers" instead of a Ground immunity.
+22. **A fast member** (S): faster (Scarf counted) than the fastest threat nothing on the team walls (resists one of its types, weak to none). *Implemented* where threats are known (`report.outsped`).
+23. **Passivity and pacing** (B8, his #1 mistake; S): per set, `isPassive()` (no pivot, no setup, and Rest or no attack worth a STAB-adjusted 90 from a real attacking stat) and `paceOf()` (fast: one-use item or a move that spends the user; slow: recovery/Regenerator/Leftovers wall). Flagged: a passive set on HO; a passive wall with no other wall behind it on bulky offense; 3+ passive members off stall; one-use sets on balance or stall.
+    - *Partly.* Scored against; `buildSet()` does not yet choose setup vs Choice sets by archetype.
+    - **Item hygiene** (B7, B10): `itemFor()` no longer falls back to Shell Bell, Scope Lens, Wide Lens, Quick Claw or King's Rock; `itemFor(..., { oneUse: false })` (the assembler passes it for balance and stall) skips Focus Sash, berries, Booster Energy, White Herb, Weakness Policy, Air Balloon unless nothing else fits. *Implemented.*
+
+Not done from the research: priority made hard off stall (B7b), pivots hard on balance (B7c), Eviolite
+only on proven NFE walls (B10), Tera planning (B14), speed/EV benchmarks (B15), threat weighting by usage
+floor (B17).
 
 ## 2. Archetypes
 - **Hyper offense**: 2-4 sweepers, 1-3 breakers, SR (often a suicide lead), 0-1 remover, >= 3 speed control; the check to one sweeper is what another sets up on. Avoid passive or slow members. Preview: >= 5 offensive species, Glimmora/Deoxys-S leads, Booster Energy Paradoxes.
@@ -67,7 +91,8 @@ checked; the builders do not yet pick an archetype first and fill its quotas.
 6. Threat check: >= 2 checks or 1 counter per top threat. Counter: takes the threat's best hit from its top 2 sets at <= 50% and 2HKOs back. Check: faster and OHKOs, or survives and KOs. Score >= 2 (check = 1, counter = 2).
 7. Reject hard-rule failures; rank the rest by weighted soft rules plus usage, with shared weaknesses and threat coverage weighted above raw usage.
 
-Status: steps 4, 5 and 7 are what the assembler and `chooseTeam()` do. Step 6 is *partly*: the
+Status: steps 4, 5 and 7 are what the assembler and `chooseTeam()` do; step 3 is *partly* there
+for a wall seed (rule 16). Step 6 is *partly*: the
 threat check is type-level (`TeamBuilder.threatCover()`: resists the threat's STAB or outspeeds
 it and hits it super effectively; rule 5 above for the other direction), not a damage calculation
 of checks and counters. Steps 1-3 (choosing a win condition first) are *not* implemented.
