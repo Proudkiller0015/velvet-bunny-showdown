@@ -251,8 +251,17 @@ function roleSets(dex, name, legal = null) {
 		let abilities = (set.abilities || []).filter(a => own.includes(a));
 		if (!abilities.length) abilities = own.slice();
 		if (oursAbility) abilities = [oursAbility, ...abilities.filter(a => a !== oursAbility)];
+		/*
+		 * The priority attacks it learns, for a setup role that has none in its pool
+		 * (pickMoves takes the strongest). Not for a hand-written set of ours, which
+		 * says exactly what it runs.
+		 */
+		const priorityMoves = handWritten || !SETUP_ROLES.includes(role) ? [] : [...moves].map(id => dex.moves.get(id))
+			.filter(m => m.exists && !m.isNonstandard && m.category !== 'Status' && m.priority > 0 &&
+				!NOT_PRIORITY.includes(m.id) && !AWKWARD.includes(m.id) && !pool.some(p => p.id === m.id))
+			.map(m => m.name);
 		// A hand-written set (data/velvet/random-sets.js) may fix its nature, spread and item too.
-		return { role, movepool: pool.map(m => m.name), abilities, teraTypes: set.teraTypes || species.types, nature: set.nature, evs: set.evs, item: set.item, core: set.core, synthetic: !found };
+		return { role, movepool: pool.map(m => m.name), abilities, teraTypes: set.teraTypes || species.types, nature: set.nature, evs: set.evs, item: set.item, core: set.core, synthetic: !found, priorityMoves };
 	});
 }
 
@@ -276,6 +285,100 @@ function coverageGain(dex, chosen, move) {
 	return gain;
 }
 
+/*
+ * How hard an attack hits a Pokemon of these types, for coverage: 0 immune, 0.25
+ * to 4. Freeze-Dry is the one attack whose chart differs from its type's, and
+ * an ability that makes the target immune (Levitate, Flash Fire, Water Absorb -
+ * see src/team-logic.js) counts when the threat list says which one it runs.
+ */
+const ABILITY_IMMUNE = {
+	levitate: 'Ground', eartheater: 'Ground', flashfire: 'Fire', wellbakedbody: 'Fire',
+	waterabsorb: 'Water', stormdrain: 'Water', dryskin: 'Water', voltabsorb: 'Electric',
+	lightningrod: 'Electric', motordrive: 'Electric', sapsipper: 'Grass', purifyingsalt: 'Ghost',
+};
+function hitOn(dex, move, types, ability = '') {
+	if (ABILITY_IMMUNE[toID(ability)] === move.type) return 0;
+	if (!dex.getImmunity(move.type, types)) return 0;
+	let mult = 2 ** dex.getEffectiveness(move.type, types);
+	if (move.id === 'freezedry' && types.includes('Water')) mult *= 4;
+	return mult;
+}
+
+/** A threat list entry, whatever the caller handed in: { types, weight, ability }. */
+function threatEntry(dex, threat) {
+	const species = dex.species.get(threat.name || threat.species || '');
+	const types = threat.types || (species.exists ? species.types : null);
+	if (!types || !types.length) return null;
+	return { types, weight: threat.weight > 0 ? threat.weight : 1, ability: threat.ability || '' };
+}
+
+/**
+ * coverageGain, measured against the Pokemon that are actually out there.
+ *
+ * The eighteen-types count treats a Bug type and a Steel type as equally worth
+ * hitting, whatever the format plays. What a coverage move is really for is the
+ * common Pokemon that wall the set's STAB: Fire Blast on a Swords Dance
+ * Garchomp is there for Corviknight and Skarmory (Earthquake cannot touch them,
+ * Dragon is resisted), and if those are not common in the format it is a worse
+ * slot than a stronger move or a priority attack. So each threat counts by its
+ * usage (`weight`, any scale), and by its actual type pair and ability - a
+ * Steel/Flying immune to Ground is not "a Steel type Earthquake hits".
+ *
+ * A threat the chosen attacks already hit neutrally or better gains a little
+ * from a super effective move (a quarter); one they cannot hit well - the wall -
+ * gains in full. Scaled to the eighteen-types count (a type's worth per share
+ * of the list) so the two are interchangeable in the move picker.
+ */
+function threatGain(dex, chosen, move, threats) {
+	if (move.category === 'Status' || !threats || !threats.length) return 0;
+	const list = threats.map(t => threatEntry(dex, t)).filter(Boolean);
+	const total = list.reduce((n, t) => n + t.weight, 0);
+	if (!total) return 0;
+	const attacks = chosen.filter(c => c.category !== 'Status');
+	let gain = 0;
+	for (const t of list) {
+		const best = attacks.length ? attacks.reduce((n, c) => Math.max(n, hitOn(dex, c, t.types, t.ability)), 0) : 1;
+		const mine = Math.min(2, hitOn(dex, move, t.types, t.ability));
+		if (mine <= best) continue;
+		gain += (mine - best) * (best < 1 ? 1 : 0.25) * t.weight / total;
+	}
+	return gain * 18;
+}
+
+/*
+ * Priority on a setup sweeper.
+ *
+ * A Dragon Dance Dragonite that has Extreme Speed does not need to outspeed a
+ * Scarf user after one boost: it moves first anyway, and at +1 an 80 base power
+ * priority move is a finisher. Smogon's sets run it for that reason, and so do
+ * Scizor's Bullet Punch, Kingambit's Sucker Punch and Azumarill's Aqua Jet. A
+ * weak one (a non-STAB Ice Shard, 40) is not worth the slot, and moves that
+ * only work on the first turn or against another priority move are not the
+ * same thing. "Strong" is its value as attackValue reads it, Technician
+ * included: 60 is a STAB 40 or anything 60 and up.
+ */
+const NOT_PRIORITY = ['fakeout', 'firstimpression', 'feint', 'upperhand'];
+function priorityValue(species, move, stat, ability = '') {
+	if (move.category === 'Status' || !(move.priority > 0) || NOT_PRIORITY.includes(move.id) || AWKWARD.includes(move.id)) return 0;
+	if (stat && move.category !== stat) return 0;
+	const technician = toID(ability) === 'technician' && move.basePower <= 60 ? 1.5 : 1;
+	return attackValue(species, move) * technician;
+}
+const STRONG_PRIORITY = 60;
+
+/*
+ * Close Combat, Superpower, Draco Meteor, Make It Rain: an attack that lowers
+ * the user's own Attack or defences. On a fast attacker that hits once and
+ * leaves, that costs nothing - Close Combat is the best Fighting move there is
+ * for it. On a wall that is meant to stay in and take hits it is a lowered
+ * Defense it keeps until it switches, so a bulky role marks it down. A Speed
+ * drop alone (Hammer Arm) does not count: a wall was not outspeeding anything.
+ */
+function selfDrop(m) {
+	const boosts = (m.self && m.self.boosts) || (m.selfBoost && m.selfBoost.boosts) || null;
+	return !!boosts && ['atk', 'def', 'spa', 'spd'].some(s => boosts[s] < 0);
+}
+
 /** Pick one entry of a list, weighted. */
 function weighted(rng, entries) {
 	const total = entries.reduce((n, [, w]) => n + Math.max(0, w), 0);
@@ -290,7 +393,7 @@ function weighted(rng, entries) {
  * recovery and a hazard or status for support), then coverage. Our own moves are
  * favoured. `rng` adds variety between sets of the same role.
  */
-function pickMoves(dex, species, set, rng = Math.random) {
+function pickMoves(dex, species, set, rng = Math.random, { threats = null } = {}) {
 	const pool = set.movepool.map(n => dex.moves.get(n)).filter(m => m.exists);
 	const b = species.baseStats;
 	const statCount = { Physical: 0, Special: 0 };
@@ -324,6 +427,8 @@ function pickMoves(dex, species, set, rng = Math.random) {
 		// built from the learnset has no one's judgement behind it, so the drop counts against it.
 		let value = attackValue(species, m, stat) * (set.synthetic && hardDrop(m) ? 0.75 : 1);
 		if (!defensive) return value;
+		// Close Combat on a wall: see selfDrop.
+		if (selfDrop(m)) value *= 0.5;
 		if (m.secondary && m.secondary.status) value *= 1.7;
 		if (m.id === 'knockoff' || m.id === 'scald' || m.id === 'lavaplume') value *= 1.3;
 		// A pivot is how a wall does its job: it comes in, does something, and leaves.
@@ -353,7 +458,26 @@ function pickMoves(dex, species, set, rng = Math.random) {
 		(chosen.length ? null : best(m => attack(m) && species.types.includes(m.type), wallValue)));
 	// The role's job.
 	if (SETUP_ROLES.includes(set.role)) {
-		take(best(m => (stat === 'Physical' ? PHYSICAL_SETUP : SPECIAL_SETUP).includes(m.id) || (m.id === 'shellsmash'), m => (m.num < 0 ? 2 : 1)));
+		// Iron Defense is a Body Press user's attack boost: Zamazenta's Bulky Setup came out
+		// Body Press, Rest and two coverage moves with nothing to press with.
+		const pressSetup = m => m.id === 'irondefense' && chosen.some(c => c.id === 'bodypress');
+		take(best(m => (stat === 'Physical' ? PHYSICAL_SETUP : SPECIAL_SETUP).includes(m.id) || (m.id === 'shellsmash') || pressSetup(m),
+			m => (m.num < 0 ? 2 : 1) + (pressSetup(m) ? 2 : 0)));
+		/*
+		 * Then its strongest priority attack, if it has one worth the slot (see
+		 * priorityValue) - from the role's movepool or, failing that, anything it
+		 * learns: Showdown's Dragon Dance Dragonite pool does not always list
+		 * Extreme Speed, and it is the best move that set can have.
+		 */
+		if (chosen.some(c => SETUP.includes(c.id))) {
+			const ability = (set.abilities || [])[0] || '';
+			const options = [...pool, ...(set.priorityMoves || []).map(n => dex.moves.get(n)).filter(m => m.exists)]
+				.filter(m => !chosen.some(c => c.id === m.id))
+				.map(m => [m, priorityValue(species, m, stat, ability)])
+				.filter(([, v]) => v >= STRONG_PRIORITY)
+				.sort((a, b) => b[1] - a[1]);
+			if (options.length) take(options[0][0]);
+		}
 	}
 	if (BULKY_ROLES.includes(set.role) || SUPPORT_ROLES.includes(set.role)) {
 		take(best(m => RECOVERY.includes(m.id), m => (m.id === 'rest' ? 0.3 : m.num < 0 ? 2 : 1)));
@@ -373,9 +497,26 @@ function pickMoves(dex, species, set, rng = Math.random) {
 	 * coverage move earns credit for every type the moves already chosen hit
 	 * badly and it hits well, and the accuracy it pays is weighed against that.
 	 */
-	const coverageValue = m => wallValue(m) * (1 + 0.15 * coverageGain(dex, chosen, m));
+	/*
+	 * With a threat list (the format's usage, from src/teambuilder.js), coverage is
+	 * what the move does to the common Pokemon that wall this set (threatGain); the
+	 * type count stays on as a fifth of it, a tie-break between two moves that do
+	 * the same to the threats. Without one - the RP bot's Build my team, a gym
+	 * trainer - the type count is all there is.
+	 */
+	const gainOf = m => (threats && threats.length ? threatGain(dex, chosen, m, threats) + 0.2 * coverageGain(dex, chosen, m) : coverageGain(dex, chosen, m));
+	const coverageValue = m => wallValue(m) * (1 + 0.15 * gainOf(m));
+	/*
+	 * On a wall, a self-dropping attack is the last resort for a coverage slot:
+	 * Scizor's Bulky Support ran Close Combat whenever it was the only new type
+	 * left, where Defog - what that set is for - was still in the pool.
+	 */
+	const wallJob = [...RECOVERY, ...HAZARDS, ...STATUS, ...UTILITY, ...PIVOTS];
 	while (chosen.length < 4) {
-		const next = best(m => attack(m) && !chosen.some(c => c.category !== 'Status' && c.type === m.type), coverageValue) ||
+		const newType = m => attack(m) && !chosen.some(c => c.category !== 'Status' && c.type === m.type);
+		const next = (defensive && (best(m => newType(m) && !selfDrop(m), coverageValue) ||
+			best(m => m.category === 'Status' && wallJob.includes(m.id), m => (m.num < 0 ? 2 : 1)))) ||
+			best(newType, coverageValue) ||
 			best(m => m.category === 'Status' && !(SETUP.includes(m.id) && chosen.some(c => SETUP.includes(c.id))) &&
 				!(PHYSICAL_SETUP.includes(m.id) && stat === 'Special') && !(SPECIAL_SETUP.includes(m.id) && stat === 'Physical'), m => (m.num < 0 ? 2 : 1)) ||
 			best(m => attack(m), wallValue);
@@ -448,12 +589,14 @@ function spreadFor(species, set, stat) {
  * One complete set: { species, role, ability, item, moves, nature, evs, level, teraType }.
  * `allowedItems` (a Set of item ids) limits the item, '' when nothing is allowed.
  */
-function buildSet(dex, name, { role = null, rng = Math.random, level = 100, allowedItems = null, items = true, legal = null } = {}) {
+function buildSet(dex, name, { role = null, rng = Math.random, level = 100, allowedItems = null, items = true, legal = null, threats = null } = {}) {
 	const species = dex.species.get(name);
 	const sets = roleSets(dex, name, legal);
 	if (!sets.length) return null;
 	const set = (role && sets.find(s => s.role === role)) || sets[Math.min(sets.length - 1, Math.floor(rng() * sets.length))];
-	const { moves, stat } = pickMoves(dex, species, set, rng);
+	// `threats`: the format's common Pokemon ([{ name or types, weight, ability }]), when
+	// the caller knows them - coverage is then judged against those (threatGain).
+	const { moves, stat } = pickMoves(dex, species, set, rng, { threats });
 	const spread = spreadFor(species, set, stat);
 	const nature = set.nature || spread.nature;
 	const evs = set.evs || spread.evs;
@@ -472,5 +615,6 @@ function buildSet(dex, name, { role = null, rng = Math.random, level = 100, allo
 
 module.exports = {
 	roleSets, buildSet, pickMoves, itemFor, spreadFor, learnable, attackValue, coverageGain,
+	threatGain, priorityValue, selfDrop, STRONG_PRIORITY,
 	SETUP, RECOVERY, HAZARDS, PIVOTS, STATUS, UTILITY, BULKY_ROLES, SETUP_ROLES, SUPPORT_ROLES,
 };
