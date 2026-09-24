@@ -1,553 +1,1432 @@
 {
-	"updated": "2026-09-17T18:48:50.821Z",
-	"games": 100,
+	"updated": "2026-09-24T07:08:20.393Z",
+	"games": 727,
 	"formats": {
 		"gen9rpbattle": {
-			"Iron Valiant": {
+			"Banette": {
+				"games": 57,
+				"kos": 83,
+				"faints": 0,
+				"wins": 57,
+				"players": 2,
+				"kosPerGame": 1.456140350877193,
+				"faintsPerGame": 0,
+				"breadth": 0.667,
+				"score": 1.41091
+			},
+			"Helioptile": {
+				"games": 26,
+				"kos": 17,
+				"faints": 1,
+				"wins": 25,
+				"players": 2,
+				"kosPerGame": 0.6538461538461539,
+				"faintsPerGame": 0.038461538461538464,
+				"breadth": 0.667,
+				"score": 1.10613
+			},
+			"Infernape": {
+				"games": 15,
+				"kos": 26,
+				"faints": 1,
+				"wins": 15,
+				"players": 1,
+				"kosPerGame": 1.7333333333333334,
+				"faintsPerGame": 0.06666666666666667,
+				"breadth": 0.333,
+				"score": 0.97794
+			},
+			"Gouging Fire": {
+				"games": 15,
+				"kos": 26,
+				"faints": 2,
+				"wins": 15,
+				"players": 1,
+				"kosPerGame": 1.7333333333333334,
+				"faintsPerGame": 0.13333333333333333,
+				"breadth": 0.333,
+				"score": 0.94247
+			},
+			"Kecleon": {
+				"games": 80,
+				"kos": 31,
+				"faints": 1,
+				"wins": 79,
+				"players": 2,
+				"kosPerGame": 0.3875,
+				"faintsPerGame": 0.0125,
+				"breadth": 0.667,
+				"score": 0.91804
+			},
+			"Nuzleaf": {
+				"games": 15,
+				"kos": 4,
+				"faints": 2,
+				"wins": 13,
+				"players": 4,
+				"kosPerGame": 0.26666666666666666,
+				"faintsPerGame": 0.13333333333333333,
+				"breadth": 1,
+				"score": 0.80903
+			},
+			"Monferno": {
+				"games": 277,
+				"kos": 202,
+				"faints": 6,
+				"wins": 276,
+				"players": 1,
+				"kosPerGame": 0.7292418772563177,
+				"faintsPerGame": 0.021660649819494584,
+				"breadth": 0.333,
+				"score": 0.79511
+			},
+			"Flutter Mane": {
+				"games": 209,
+				"kos": 143,
+				"faints": 4,
+				"wins": 208,
+				"players": 1,
+				"kosPerGame": 0.6842105263157895,
+				"faintsPerGame": 0.019138755980861243,
+				"breadth": 0.333,
+				"score": 0.78423
+			},
+			"Fletchling": {
+				"games": 37,
+				"kos": 20,
+				"faints": 5,
+				"wins": 35,
+				"players": 2,
+				"kosPerGame": 0.5405405405405406,
+				"faintsPerGame": 0.13513513513513514,
+				"breadth": 0.667,
+				"score": 0.73117
+			},
+			"Nidoqueen": {
+				"games": 74,
+				"kos": 30,
+				"faints": 0,
+				"wins": 74,
+				"players": 1,
+				"kosPerGame": 0.40540540540540543,
+				"faintsPerGame": 0,
+				"breadth": 0.333,
+				"score": 0.72173
+			},
+			"Chimchar": {
+				"games": 5,
+				"kos": 4,
+				"faints": 0,
+				"wins": 5,
+				"players": 1,
+				"kosPerGame": 0.8,
+				"faintsPerGame": 0,
+				"breadth": 0.333,
+				"score": 0.71726
+			},
+			"Doduo": {
+				"games": 4,
+				"kos": 3,
+				"faints": 0,
+				"wins": 4,
+				"players": 2,
+				"kosPerGame": 0.75,
+				"faintsPerGame": 0,
+				"breadth": 0.667,
+				"score": 0.71111
+			},
+			"Smeargle": {
+				"games": 272,
+				"kos": 0,
+				"faints": 3,
+				"wins": 271,
+				"players": 5,
+				"kosPerGame": 0,
+				"faintsPerGame": 0.011029411764705883,
+				"breadth": 1,
+				"score": 0.70701
+			},
+			"Volbeat": {
+				"games": 4,
+				"kos": 4,
+				"faints": 0,
+				"wins": 4,
+				"players": 1,
+				"kosPerGame": 1,
+				"faintsPerGame": 0,
+				"breadth": 0.333,
+				"score": 0.69444
+			},
+			"Azumarill": {
+				"games": 115,
+				"kos": 31,
+				"faints": 1,
+				"wins": 115,
+				"players": 1,
+				"kosPerGame": 0.26956521739130435,
+				"faintsPerGame": 0.008695652173913044,
+				"breadth": 0.333,
+				"score": 0.68697
+			},
+			"Beedrill": {
+				"games": 14,
+				"kos": 7,
+				"faints": 1,
+				"wins": 13,
+				"players": 1,
+				"kosPerGame": 0.5,
+				"faintsPerGame": 0.07142857142857142,
+				"breadth": 0.333,
+				"score": 0.68125
+			},
+			"Froakie": {
+				"games": 41,
+				"kos": 14,
+				"faints": 5,
+				"wins": 37,
+				"players": 2,
+				"kosPerGame": 0.34146341463414637,
+				"faintsPerGame": 0.12195121951219512,
+				"breadth": 0.667,
+				"score": 0.68095
+			},
+			"Wingull": {
+				"games": 13,
+				"kos": 2,
+				"faints": 2,
+				"wins": 12,
+				"players": 2,
+				"kosPerGame": 0.15384615384615385,
+				"faintsPerGame": 0.15384615384615385,
+				"breadth": 0.667,
+				"score": 0.66429
+			},
+			"Togepi": {
+				"games": 66,
+				"kos": 10,
+				"faints": 0,
+				"wins": 66,
+				"players": 1,
+				"kosPerGame": 0.15151515151515152,
+				"faintsPerGame": 0,
+				"breadth": 0.333,
+				"score": 0.65865
+			},
+			"Rotom-Heat": {
+				"games": 15,
+				"kos": 3,
+				"faints": 0,
+				"wins": 15,
+				"players": 1,
+				"kosPerGame": 0.2,
+				"faintsPerGame": 0,
+				"breadth": 0.333,
+				"score": 0.65735
+			},
+			"Staravia": {
+				"games": 118,
+				"kos": 14,
+				"faints": 1,
+				"wins": 118,
+				"players": 1,
+				"kosPerGame": 0.11864406779661017,
+				"faintsPerGame": 0.00847457627118644,
+				"breadth": 0.333,
+				"score": 0.65
+			},
+			"Stufful": {
+				"games": 6,
+				"kos": 4,
+				"faints": 1,
+				"wins": 5,
+				"players": 1,
+				"kosPerGame": 0.6666666666666666,
+				"faintsPerGame": 0.16666666666666666,
+				"breadth": 0.333,
+				"score": 0.64286
+			},
+			"Simisear": {
+				"games": 15,
+				"kos": 3,
+				"faints": 1,
+				"wins": 15,
+				"players": 1,
+				"kosPerGame": 0.2,
+				"faintsPerGame": 0.06666666666666667,
+				"breadth": 0.333,
+				"score": 0.63971
+			},
+			"Gumshoos": {
+				"games": 13,
+				"kos": 4,
+				"faints": 1,
+				"wins": 12,
+				"players": 1,
+				"kosPerGame": 0.3076923076923077,
+				"faintsPerGame": 0.07692307692307693,
+				"breadth": 0.333,
+				"score": 0.6381
+			},
+			"Skarmory": {
+				"games": 95,
+				"kos": 8,
+				"faints": 2,
+				"wins": 94,
+				"players": 1,
+				"kosPerGame": 0.08421052631578947,
+				"faintsPerGame": 0.021052631578947368,
+				"breadth": 0.333,
+				"score": 0.63499
+			},
+			"Noibat": {
+				"games": 51,
+				"kos": 2,
+				"faints": 0,
+				"wins": 51,
+				"players": 1,
+				"kosPerGame": 0.0392156862745098,
+				"faintsPerGame": 0,
+				"breadth": 0.333,
+				"score": 0.6299
+			},
+			"Magnemite": {
+				"games": 10,
+				"kos": 1,
+				"faints": 0,
+				"wins": 10,
+				"players": 1,
+				"kosPerGame": 0.1,
+				"faintsPerGame": 0,
+				"breadth": 0.333,
+				"score": 0.62708
+			},
+			"Milotic": {
+				"games": 10,
+				"kos": 3,
+				"faints": 1,
+				"wins": 9,
+				"players": 1,
+				"kosPerGame": 0.3,
+				"faintsPerGame": 0.1,
+				"breadth": 0.333,
+				"score": 0.62121
+			},
+			"Zigzagoon-Galar": {
+				"games": 15,
+				"kos": 2,
+				"faints": 1,
+				"wins": 14,
+				"players": 1,
+				"kosPerGame": 0.13333333333333333,
+				"faintsPerGame": 0.06666666666666667,
+				"breadth": 0.333,
+				"score": 0.60938
+			},
+			"Ariados": {
+				"games": 13,
+				"kos": 2,
+				"faints": 1,
+				"wins": 12,
+				"players": 1,
+				"kosPerGame": 0.15384615384615385,
+				"faintsPerGame": 0.07692307692307693,
+				"breadth": 0.333,
+				"score": 0.60714
+			},
+			"Tentacool": {
+				"games": 10,
+				"kos": 0,
+				"faints": 0,
+				"wins": 10,
+				"players": 1,
+				"kosPerGame": 0,
+				"faintsPerGame": 0,
+				"breadth": 0.333,
+				"score": 0.60417
+			},
+			"Charizard": {
+				"games": 12,
+				"kos": 4,
+				"faints": 1,
+				"wins": 10,
+				"players": 2,
+				"kosPerGame": 0.3333333333333333,
+				"faintsPerGame": 0.08333333333333333,
+				"breadth": 0.667,
+				"score": 0.60417
+			},
+			"Snorlax": {
+				"games": 159,
+				"kos": 26,
+				"faints": 1,
+				"wins": 156,
+				"players": 2,
+				"kosPerGame": 0.16352201257861634,
+				"faintsPerGame": 0.006289308176100629,
+				"breadth": 0.667,
+				"score": 0.59841
+			},
+			"Indeedee-F": {
+				"games": 7,
+				"kos": 0,
+				"faints": 0,
+				"wins": 7,
+				"players": 1,
+				"kosPerGame": 0,
+				"faintsPerGame": 0,
+				"breadth": 0.333,
+				"score": 0.59722
+			},
+			"Ninetales": {
+				"games": 15,
+				"kos": 2,
+				"faints": 3,
+				"wins": 15,
+				"players": 1,
+				"kosPerGame": 0.13333333333333333,
+				"faintsPerGame": 0.2,
+				"breadth": 0.333,
+				"score": 0.59722
+			},
+			"Dwebble": {
+				"games": 4,
+				"kos": 4,
+				"faints": 1,
+				"wins": 3,
+				"players": 1,
+				"kosPerGame": 1,
+				"faintsPerGame": 0.25,
+				"breadth": 0.333,
+				"score": 0.59444
+			},
+			"Pidgey": {
+				"games": 8,
+				"kos": 4,
+				"faints": 3,
+				"wins": 7,
+				"players": 1,
+				"kosPerGame": 0.5,
+				"faintsPerGame": 0.375,
+				"breadth": 0.333,
+				"score": 0.59318
+			},
+			"Budew": {
+				"games": 7,
+				"kos": 2,
+				"faints": 1,
+				"wins": 5,
+				"players": 2,
+				"kosPerGame": 0.2857142857142857,
+				"faintsPerGame": 0.14285714285714285,
+				"breadth": 0.667,
+				"score": 0.59167
+			},
+			"Krabby": {
+				"games": 13,
+				"kos": 0,
+				"faints": 1,
+				"wins": 13,
+				"players": 1,
+				"kosPerGame": 0,
+				"faintsPerGame": 0.07692307692307693,
+				"breadth": 0.333,
+				"score": 0.59167
+			},
+			"Diglett": {
+				"games": 16,
+				"kos": 0,
+				"faints": 1,
+				"wins": 15,
+				"players": 1,
+				"kosPerGame": 0,
+				"faintsPerGame": 0.0625,
+				"breadth": 0.333,
+				"score": 0.58415
+			},
+			"Beautifly": {
+				"games": 14,
+				"kos": 0,
+				"faints": 1,
+				"wins": 13,
+				"players": 1,
+				"kosPerGame": 0,
+				"faintsPerGame": 0.07142857142857142,
+				"breadth": 0.333,
+				"score": 0.57917
+			},
+			"Charizard-Mega-Y": {
+				"games": 5,
+				"kos": 1,
+				"faints": 1,
+				"wins": 5,
+				"players": 1,
+				"kosPerGame": 0.2,
+				"faintsPerGame": 0.2,
+				"breadth": 0.333,
+				"score": 0.5744
+			},
+			"Happiny": {
+				"games": 7,
+				"kos": 2,
+				"faints": 2,
+				"wins": 6,
+				"players": 1,
+				"kosPerGame": 0.2857142857142857,
+				"faintsPerGame": 0.2857142857142857,
+				"breadth": 0.333,
+				"score": 0.56944
+			},
+			"Chikorita": {
+				"games": 13,
+				"kos": 6,
+				"faints": 5,
+				"wins": 9,
+				"players": 1,
+				"kosPerGame": 0.46153846153846156,
+				"faintsPerGame": 0.38461538461538464,
+				"breadth": 0.333,
+				"score": 0.55093
+			},
+			"Tarountula": {
+				"games": 5,
+				"kos": 0,
+				"faints": 1,
+				"wins": 5,
+				"players": 1,
+				"kosPerGame": 0,
+				"faintsPerGame": 0.2,
+				"breadth": 0.333,
+				"score": 0.54464
+			},
+			"Shellder": {
+				"games": 4,
+				"kos": 0,
+				"faints": 1,
+				"wins": 4,
+				"players": 2,
+				"kosPerGame": 0,
+				"faintsPerGame": 0.25,
+				"breadth": 0.667,
+				"score": 0.54167
+			},
+			"Butterfree": {
+				"games": 67,
+				"kos": 0,
+				"faints": 1,
+				"wins": 66,
+				"players": 2,
+				"kosPerGame": 0,
+				"faintsPerGame": 0.014925373134328358,
+				"breadth": 0.667,
+				"score": 0.53799
+			},
+			"Trubbish": {
 				"games": 3,
 				"kos": 0,
 				"faints": 0,
 				"wins": 3,
+				"players": 1,
 				"kosPerGame": 0,
 				"faintsPerGame": 0,
-				"score": 0.59
+				"breadth": 0.333,
+				"score": 0.5375
 			},
-			"Nuzleaf": {
+			"Whimsicott": {
 				"games": 3,
+				"kos": 0,
+				"faints": 0,
+				"wins": 3,
+				"players": 1,
+				"kosPerGame": 0,
+				"faintsPerGame": 0,
+				"breadth": 0.333,
+				"score": 0.5375
+			},
+			"Rattata": {
+				"games": 8,
+				"kos": 0,
+				"faints": 2,
+				"wins": 7,
+				"players": 1,
+				"kosPerGame": 0,
+				"faintsPerGame": 0.25,
+				"breadth": 0.333,
+				"score": 0.535
+			},
+			"Hattrem": {
+				"games": 9,
 				"kos": 2,
-				"faints": 1,
-				"wins": 2,
-				"kosPerGame": 0.6666666666666666,
+				"faints": 3,
+				"wins": 7,
+				"players": 2,
+				"kosPerGame": 0.2222222222222222,
 				"faintsPerGame": 0.3333333333333333,
-				"score": 0.575
+				"breadth": 0.667,
+				"score": 0.52778
+			},
+			"Elekid": {
+				"games": 5,
+				"kos": 0,
+				"faints": 1,
+				"wins": 4,
+				"players": 1,
+				"kosPerGame": 0,
+				"faintsPerGame": 0.2,
+				"breadth": 0.333,
+				"score": 0.51984
+			},
+			"Skwovet": {
+				"games": 8,
+				"kos": 0,
+				"faints": 2,
+				"wins": 6,
+				"players": 1,
+				"kosPerGame": 0,
+				"faintsPerGame": 0.25,
+				"breadth": 0.333,
+				"score": 0.515
 			},
 			"Pangoro": {
 				"games": 3,
 				"kos": 1,
 				"faints": 1,
 				"wins": 2,
+				"players": 1,
 				"kosPerGame": 0.3333333333333333,
 				"faintsPerGame": 0.3333333333333333,
-				"score": 0.53
+				"breadth": 0.333,
+				"score": 0.5125
+			},
+			"Fennekin": {
+				"games": 4,
+				"kos": 0,
+				"faints": 2,
+				"wins": 4,
+				"players": 1,
+				"kosPerGame": 0,
+				"faintsPerGame": 0.5,
+				"breadth": 0.333,
+				"score": 0.50926
 			},
 			"Samantha": {
 				"games": 6,
 				"kos": 15,
 				"faints": 3,
 				"wins": 1,
+				"players": 3,
 				"kosPerGame": 2.5,
 				"faintsPerGame": 0.5,
-				"score": 0.5
+				"breadth": 1,
+				"score": 0.50417
 			},
-			"Raging Bolt": {
-				"games": 4,
-				"kos": 0,
-				"faints": 2,
-				"wins": 3,
-				"kosPerGame": 0,
-				"faintsPerGame": 0.5,
-				"score": 0.47778
-			},
-			"Slowking-Galar": {
+			"Burmy": {
 				"games": 3,
 				"kos": 0,
-				"faints": 2,
+				"faints": 1,
 				"wins": 2,
+				"players": 1,
 				"kosPerGame": 0,
-				"faintsPerGame": 0.6666666666666666,
-				"score": 0.458
+				"faintsPerGame": 0.3333333333333333,
+				"breadth": 0.333,
+				"score": 0.49375
 			},
 			"Primarina": {
-				"games": 3,
+				"games": 4,
 				"kos": 1,
-				"faints": 2,
+				"faints": 3,
 				"wins": 1,
-				"kosPerGame": 0.3333333333333333,
-				"faintsPerGame": 0.6666666666666666,
-				"score": 0.446
+				"players": 2,
+				"kosPerGame": 0.25,
+				"faintsPerGame": 0.75,
+				"breadth": 0.667,
+				"score": 0.41444
 			}
 		},
 		"gen9rpbattlewildencounter": {
+			"Banette": {
+				"games": 14,
+				"kos": 9,
+				"faints": 0,
+				"wins": 14,
+				"players": 2,
+				"kosPerGame": 0.6428571428571429,
+				"faintsPerGame": 0,
+				"breadth": 0.667,
+				"score": 0.98854
+			},
+			"Kecleon": {
+				"games": 31,
+				"kos": 8,
+				"faints": 0,
+				"wins": 29,
+				"players": 2,
+				"kosPerGame": 0.25806451612903225,
+				"faintsPerGame": 0,
+				"breadth": 0.667,
+				"score": 0.82699
+			},
+			"Monferno": {
+				"games": 27,
+				"kos": 16,
+				"faints": 0,
+				"wins": 26,
+				"players": 1,
+				"kosPerGame": 0.5925925925925926,
+				"faintsPerGame": 0,
+				"breadth": 0.333,
+				"score": 0.74569
+			},
+			"Froakie": {
+				"games": 31,
+				"kos": 9,
+				"faints": 1,
+				"wins": 31,
+				"players": 2,
+				"kosPerGame": 0.2903225806451613,
+				"faintsPerGame": 0.03225806451612903,
+				"breadth": 0.667,
+				"score": 0.72135
+			},
+			"Flutter Mane": {
+				"games": 54,
+				"kos": 27,
+				"faints": 0,
+				"wins": 48,
+				"players": 1,
+				"kosPerGame": 0.5,
+				"faintsPerGame": 0,
+				"breadth": 0.333,
+				"score": 0.70313
+			},
 			"Chikorita": {
+				"games": 8,
+				"kos": 2,
+				"faints": 0,
+				"wins": 8,
+				"players": 1,
+				"kosPerGame": 0.25,
+				"faintsPerGame": 0,
+				"breadth": 0.333,
+				"score": 0.65625
+			},
+			"Smeargle": {
+				"games": 13,
+				"kos": 0,
+				"faints": 0,
+				"wins": 13,
+				"players": 2,
+				"kosPerGame": 0,
+				"faintsPerGame": 0,
+				"breadth": 0.667,
+				"score": 0.64881
+			},
+			"Chimchar": {
+				"games": 5,
+				"kos": 2,
+				"faints": 0,
+				"wins": 5,
+				"players": 1,
+				"kosPerGame": 0.4,
+				"faintsPerGame": 0,
+				"breadth": 0.333,
+				"score": 0.64583
+			},
+			"Pidgey": {
+				"games": 6,
+				"kos": 1,
+				"faints": 0,
+				"wins": 6,
+				"players": 1,
+				"kosPerGame": 0.16666666666666666,
+				"faintsPerGame": 0,
+				"breadth": 0.333,
+				"score": 0.63021
+			},
+			"Gumshoos": {
+				"games": 8,
+				"kos": 1,
+				"faints": 0,
+				"wins": 8,
+				"players": 1,
+				"kosPerGame": 0.125,
+				"faintsPerGame": 0,
+				"breadth": 0.333,
+				"score": 0.62813
+			},
+			"Dwebble": {
+				"games": 4,
+				"kos": 2,
+				"faints": 0,
+				"wins": 4,
+				"players": 1,
+				"kosPerGame": 0.5,
+				"faintsPerGame": 0,
+				"breadth": 0.333,
+				"score": 0.625
+			},
+			"Tentacool": {
 				"games": 5,
 				"kos": 1,
 				"faints": 0,
 				"wins": 5,
+				"players": 1,
 				"kosPerGame": 0.2,
 				"faintsPerGame": 0,
-				"score": 0.76429
+				"breadth": 0.333,
+				"score": 0.61012
 			},
-			"Dwebble": {
+			"Volbeat": {
+				"games": 3,
+				"kos": 2,
+				"faints": 0,
+				"wins": 3,
+				"players": 1,
+				"kosPerGame": 0.6666666666666666,
+				"faintsPerGame": 0,
+				"breadth": 0.333,
+				"score": 0.60417
+			},
+			"Helioptile": {
+				"games": 3,
+				"kos": 2,
+				"faints": 0,
+				"wins": 3,
+				"players": 1,
+				"kosPerGame": 0.6666666666666666,
+				"faintsPerGame": 0,
+				"breadth": 0.333,
+				"score": 0.60417
+			},
+			"Infernape": {
+				"games": 3,
+				"kos": 2,
+				"faints": 0,
+				"wins": 3,
+				"players": 1,
+				"kosPerGame": 0.6666666666666666,
+				"faintsPerGame": 0,
+				"breadth": 0.333,
+				"score": 0.60417
+			},
+			"Nidoqueen": {
+				"games": 8,
+				"kos": 0,
+				"faints": 0,
+				"wins": 8,
+				"players": 1,
+				"kosPerGame": 0,
+				"faintsPerGame": 0,
+				"breadth": 0.333,
+				"score": 0.6
+			},
+			"Skarmory": {
+				"games": 8,
+				"kos": 0,
+				"faints": 0,
+				"wins": 8,
+				"players": 1,
+				"kosPerGame": 0,
+				"faintsPerGame": 0,
+				"breadth": 0.333,
+				"score": 0.6
+			},
+			"Wingull": {
+				"games": 4,
+				"kos": 0,
+				"faints": 0,
+				"wins": 4,
+				"players": 2,
+				"kosPerGame": 0,
+				"faintsPerGame": 0,
+				"breadth": 0.667,
+				"score": 0.58333
+			},
+			"Budew": {
+				"games": 3,
+				"kos": 1,
+				"faints": 0,
+				"wins": 3,
+				"players": 1,
+				"kosPerGame": 0.3333333333333333,
+				"faintsPerGame": 0,
+				"breadth": 0.333,
+				"score": 0.57083
+			},
+			"Rotom-Heat": {
+				"games": 3,
+				"kos": 1,
+				"faints": 0,
+				"wins": 3,
+				"players": 1,
+				"kosPerGame": 0.3333333333333333,
+				"faintsPerGame": 0,
+				"breadth": 0.333,
+				"score": 0.57083
+			},
+			"Bayleef": {
+				"games": 4,
+				"kos": 1,
+				"faints": 0,
+				"wins": 3,
+				"players": 1,
+				"kosPerGame": 0.25,
+				"faintsPerGame": 0,
+				"breadth": 0.333,
+				"score": 0.55556
+			},
+			"Stufful": {
+				"games": 4,
+				"kos": 0,
+				"faints": 0,
+				"wins": 4,
+				"players": 1,
+				"kosPerGame": 0,
+				"faintsPerGame": 0,
+				"breadth": 0.333,
+				"score": 0.55556
+			},
+			"Ariados": {
+				"games": 5,
+				"kos": 0,
+				"faints": 1,
+				"wins": 5,
+				"players": 1,
+				"kosPerGame": 0,
+				"faintsPerGame": 0.2,
+				"breadth": 0.333,
+				"score": 0.54464
+			},
+			"Hattrem": {
+				"games": 4,
+				"kos": 0,
+				"faints": 0,
+				"wins": 3,
+				"players": 2,
+				"kosPerGame": 0,
+				"faintsPerGame": 0,
+				"breadth": 0.667,
+				"score": 0.54444
+			},
+			"Tarountula": {
+				"games": 3,
+				"kos": 0,
+				"faints": 0,
+				"wins": 3,
+				"players": 1,
+				"kosPerGame": 0,
+				"faintsPerGame": 0,
+				"breadth": 0.333,
+				"score": 0.5375
+			},
+			"Beedrill": {
+				"games": 3,
+				"kos": 1,
+				"faints": 0,
+				"wins": 2,
+				"players": 1,
+				"kosPerGame": 0.3333333333333333,
+				"faintsPerGame": 0,
+				"breadth": 0.333,
+				"score": 0.5375
+			},
+			"Ninetales": {
+				"games": 3,
+				"kos": 0,
+				"faints": 0,
+				"wins": 3,
+				"players": 1,
+				"kosPerGame": 0,
+				"faintsPerGame": 0,
+				"breadth": 0.333,
+				"score": 0.5375
+			},
+			"Simisear": {
+				"games": 3,
+				"kos": 0,
+				"faints": 0,
+				"wins": 3,
+				"players": 1,
+				"kosPerGame": 0,
+				"faintsPerGame": 0,
+				"breadth": 0.333,
+				"score": 0.5375
+			},
+			"Gouging Fire": {
+				"games": 3,
+				"kos": 0,
+				"faints": 0,
+				"wins": 3,
+				"players": 1,
+				"kosPerGame": 0,
+				"faintsPerGame": 0,
+				"breadth": 0.333,
+				"score": 0.5375
+			},
+			"Nuzleaf": {
+				"games": 3,
+				"kos": 0,
+				"faints": 0,
+				"wins": 3,
+				"players": 1,
+				"kosPerGame": 0,
+				"faintsPerGame": 0,
+				"breadth": 0.333,
+				"score": 0.5375
+			}
+		},
+		"gen9rpou": {
+			"Glaceon": {
+				"games": 84,
+				"kos": 121,
+				"faints": 54,
+				"wins": 68,
+				"players": 2,
+				"kosPerGame": 1.4404761904761905,
+				"faintsPerGame": 0.6428571428571429,
+				"breadth": 0.667,
+				"score": 0.82647
+			},
+			"Spiritomb": {
+				"games": 51,
+				"kos": 43,
+				"faints": 1,
+				"wins": 45,
+				"players": 1,
+				"kosPerGame": 0.8431372549019608,
+				"faintsPerGame": 0.0196078431372549,
+				"breadth": 0.333,
+				"score": 0.76724
+			},
+			"Kingambit": {
+				"games": 38,
+				"kos": 58,
+				"faints": 17,
+				"wins": 28,
+				"players": 2,
+				"kosPerGame": 1.5263157894736843,
+				"faintsPerGame": 0.4473684210526316,
+				"breadth": 0.667,
+				"score": 0.7659
+			},
+			"Togekiss": {
+				"games": 46,
+				"kos": 59,
+				"faints": 12,
+				"wins": 40,
+				"players": 1,
+				"kosPerGame": 1.2826086956521738,
+				"faintsPerGame": 0.2608695652173913,
+				"breadth": 0.333,
+				"score": 0.76158
+			},
+			"Lucario": {
+				"games": 46,
+				"kos": 43,
+				"faints": 17,
+				"wins": 40,
+				"players": 1,
+				"kosPerGame": 0.9347826086956522,
+				"faintsPerGame": 0.3695652173913043,
+				"breadth": 0.333,
+				"score": 0.67667
+			},
+			"Haxorus": {
+				"games": 32,
+				"kos": 30,
+				"faints": 19,
+				"wins": 26,
+				"players": 1,
+				"kosPerGame": 0.9375,
+				"faintsPerGame": 0.59375,
+				"breadth": 0.333,
+				"score": 0.61635
+			},
+			"Pawmot": {
+				"games": 27,
+				"kos": 26,
+				"faints": 17,
+				"wins": 22,
+				"players": 1,
+				"kosPerGame": 0.9629629629629629,
+				"faintsPerGame": 0.6296296296296297,
+				"breadth": 0.333,
+				"score": 0.61383
+			},
+			"Vaporeon": {
 				"games": 5,
 				"kos": 2,
 				"faints": 0,
 				"wins": 4,
+				"players": 1,
 				"kosPerGame": 0.4,
 				"faintsPerGame": 0,
-				"score": 0.75
-			},
-			"Stufful": {
-				"games": 5,
-				"kos": 0,
-				"faints": 0,
-				"wins": 4,
-				"kosPerGame": 0,
-				"faintsPerGame": 0,
-				"score": 0.60714
-			}
-		},
-		"gen9rpou": {
-			"Spiritomb": {
-				"games": 35,
-				"kos": 34,
-				"faints": 0,
-				"wins": 35,
-				"kosPerGame": 0.9714285714285714,
-				"faintsPerGame": 0,
-				"score": 1.91815
-			},
-			"Togekiss": {
-				"games": 32,
-				"kos": 44,
-				"faints": 8,
-				"wins": 32,
-				"kosPerGame": 1.375,
-				"faintsPerGame": 0.25,
-				"score": 1.84412
-			},
-			"Glaceon": {
-				"games": 32,
-				"kos": 62,
-				"faints": 18,
-				"wins": 32,
-				"kosPerGame": 1.9375,
-				"faintsPerGame": 0.5625,
-				"score": 1.82471
-			},
-			"Lucario": {
-				"games": 32,
-				"kos": 36,
-				"faints": 11,
-				"wins": 32,
-				"kosPerGame": 1.125,
-				"faintsPerGame": 0.34375,
-				"score": 1.53488
+				"breadth": 0.333,
+				"score": 0.60417
 			},
 			"Roserade": {
-				"games": 32,
-				"kos": 23,
-				"faints": 18,
-				"wins": 32,
-				"kosPerGame": 0.71875,
-				"faintsPerGame": 0.5625,
-				"score": 1.06765
+				"games": 46,
+				"kos": 31,
+				"faints": 26,
+				"wins": 40,
+				"players": 1,
+				"kosPerGame": 0.6739130434782609,
+				"faintsPerGame": 0.5652173913043478,
+				"breadth": 0.333,
+				"score": 0.60337
+			},
+			"Gyarados": {
+				"games": 7,
+				"kos": 8,
+				"faints": 6,
+				"wins": 6,
+				"players": 1,
+				"kosPerGame": 1.1428571428571428,
+				"faintsPerGame": 0.8571428571428571,
+				"breadth": 0.333,
+				"score": 0.59936
 			},
 			"Simipour": {
-				"games": 4,
+				"games": 7,
 				"kos": 11,
-				"faints": 2,
+				"faints": 5,
+				"wins": 4,
+				"players": 1,
+				"kosPerGame": 1.5714285714285714,
+				"faintsPerGame": 0.7142857142857143,
+				"breadth": 0.333,
+				"score": 0.58333
+			},
+			"Stakataka": {
+				"games": 3,
+				"kos": 5,
+				"faints": 3,
 				"wins": 3,
-				"kosPerGame": 2.75,
-				"faintsPerGame": 0.5,
-				"score": 0.83333
+				"players": 1,
+				"kosPerGame": 1.6666666666666667,
+				"faintsPerGame": 1,
+				"breadth": 0.333,
+				"score": 0.57083
+			},
+			"Torterra": {
+				"games": 5,
+				"kos": 2,
+				"faints": 1,
+				"wins": 4,
+				"players": 1,
+				"kosPerGame": 0.4,
+				"faintsPerGame": 0.2,
+				"breadth": 0.333,
+				"score": 0.56944
+			},
+			"Simisear": {
+				"games": 5,
+				"kos": 4,
+				"faints": 3,
+				"wins": 4,
+				"players": 1,
+				"kosPerGame": 0.8,
+				"faintsPerGame": 0.6,
+				"breadth": 0.333,
+				"score": 0.56324
+			},
+			"Flareon": {
+				"games": 4,
+				"kos": 5,
+				"faints": 3,
+				"wins": 3,
+				"players": 1,
+				"kosPerGame": 1.25,
+				"faintsPerGame": 0.75,
+				"breadth": 0.333,
+				"score": 0.55952
+			},
+			"Diancie-Mega": {
+				"games": 3,
+				"kos": 5,
+				"faints": 2,
+				"wins": 2,
+				"players": 1,
+				"kosPerGame": 1.6666666666666667,
+				"faintsPerGame": 0.6666666666666666,
+				"breadth": 0.333,
+				"score": 0.5575
+			},
+			"Corviknight": {
+				"games": 23,
+				"kos": 5,
+				"faints": 9,
+				"wins": 18,
+				"players": 1,
+				"kosPerGame": 0.21739130434782608,
+				"faintsPerGame": 0.391304347826087,
+				"breadth": 0.333,
+				"score": 0.54125
+			},
+			"Garganacl": {
+				"games": 8,
+				"kos": 1,
+				"faints": 3,
+				"wins": 7,
+				"players": 1,
+				"kosPerGame": 0.125,
+				"faintsPerGame": 0.375,
+				"breadth": 0.333,
+				"score": 0.53864
+			},
+			"Clefable": {
+				"games": 3,
+				"kos": 0,
+				"faints": 0,
+				"wins": 3,
+				"players": 1,
+				"kosPerGame": 0,
+				"faintsPerGame": 0,
+				"breadth": 0.333,
+				"score": 0.5375
 			},
 			"Zygarde": {
 				"games": 3,
 				"kos": 1,
 				"faints": 1,
 				"wins": 3,
+				"players": 1,
 				"kosPerGame": 0.3333333333333333,
 				"faintsPerGame": 0.3333333333333333,
-				"score": 0.59
+				"breadth": 0.333,
+				"score": 0.5375
+			},
+			"Tapu Koko": {
+				"games": 14,
+				"kos": 4,
+				"faints": 7,
+				"wins": 11,
+				"players": 1,
+				"kosPerGame": 0.2857142857142857,
+				"faintsPerGame": 0.5,
+				"breadth": 0.333,
+				"score": 0.53571
+			},
+			"Magearna": {
+				"games": 12,
+				"kos": 18,
+				"faints": 5,
+				"wins": 4,
+				"players": 1,
+				"kosPerGame": 1.5,
+				"faintsPerGame": 0.4166666666666667,
+				"breadth": 0.333,
+				"score": 0.53256
+			},
+			"Clodsire": {
+				"games": 3,
+				"kos": 1,
+				"faints": 2,
+				"wins": 3,
+				"players": 1,
+				"kosPerGame": 0.3333333333333333,
+				"faintsPerGame": 0.6666666666666666,
+				"breadth": 0.333,
+				"score": 0.5175
 			},
 			"Empoleon": {
 				"games": 3,
 				"kos": 1,
 				"faints": 2,
 				"wins": 3,
+				"players": 1,
 				"kosPerGame": 0.3333333333333333,
 				"faintsPerGame": 0.6666666666666666,
-				"score": 0.542
+				"breadth": 0.333,
+				"score": 0.5175
 			},
 			"Espeon": {
 				"games": 6,
 				"kos": 0,
 				"faints": 2,
 				"wins": 5,
+				"players": 1,
 				"kosPerGame": 0,
 				"faintsPerGame": 0.3333333333333333,
-				"score": 0.5375
+				"breadth": 0.333,
+				"score": 0.51563
 			},
-			"Ferrothorn": {
+			"Blissey": {
 				"games": 3,
 				"kos": 0,
 				"faints": 0,
 				"wins": 2,
+				"players": 1,
 				"kosPerGame": 0,
 				"faintsPerGame": 0,
-				"score": 0.53
+				"breadth": 0.333,
+				"score": 0.5125
 			},
 			"Garchomp": {
-				"games": 33,
+				"games": 53,
+				"kos": 9,
+				"faints": 39,
+				"wins": 43,
+				"players": 1,
+				"kosPerGame": 0.16981132075471697,
+				"faintsPerGame": 0.7358490566037735,
+				"breadth": 0.333,
+				"score": 0.50978
+			},
+			"Heatran": {
+				"games": 4,
 				"kos": 1,
-				"faints": 31,
-				"wins": 32,
-				"kosPerGame": 0.030303030303030304,
-				"faintsPerGame": 0.9393939393939394,
-				"score": 0.50089
+				"faints": 2,
+				"wins": 3,
+				"players": 1,
+				"kosPerGame": 0.25,
+				"faintsPerGame": 0.5,
+				"breadth": 0.333,
+				"score": 0.50926
+			},
+			"Landorus-Therian": {
+				"games": 11,
+				"kos": 2,
+				"faints": 4,
+				"wins": 7,
+				"players": 1,
+				"kosPerGame": 0.18181818181818182,
+				"faintsPerGame": 0.36363636363636365,
+				"breadth": 0.333,
+				"score": 0.50833
 			},
 			"Swampert": {
 				"games": 3,
 				"kos": 1,
 				"faints": 2,
 				"wins": 2,
+				"players": 1,
 				"kosPerGame": 0.3333333333333333,
 				"faintsPerGame": 0.6666666666666666,
-				"score": 0.494
+				"breadth": 0.333,
+				"score": 0.4975
 			},
-			"Ogerpon": {
-				"games": 4,
+			"Tinkaton": {
+				"games": 10,
+				"kos": 2,
+				"faints": 10,
+				"wins": 8,
+				"players": 1,
+				"kosPerGame": 0.2,
+				"faintsPerGame": 1,
+				"breadth": 0.333,
+				"score": 0.4875
+			},
+			"Banette": {
+				"games": 7,
 				"kos": 5,
-				"faints": 3,
-				"wins": 1,
-				"kosPerGame": 1.25,
-				"faintsPerGame": 0.75,
-				"score": 0.47143
+				"faints": 5,
+				"wins": 3,
+				"players": 1,
+				"kosPerGame": 0.7142857142857143,
+				"faintsPerGame": 0.7142857142857143,
+				"breadth": 0.333,
+				"score": 0.48611
 			},
-			"Blissey": {
+			"Dragonite": {
+				"games": 7,
+				"kos": 2,
+				"faints": 2,
+				"wins": 3,
+				"players": 1,
+				"kosPerGame": 0.2857142857142857,
+				"faintsPerGame": 0.2857142857142857,
+				"breadth": 0.333,
+				"score": 0.48611
+			},
+			"Ferrothorn": {
 				"games": 4,
 				"kos": 0,
 				"faints": 1,
 				"wins": 2,
+				"players": 1,
 				"kosPerGame": 0,
 				"faintsPerGame": 0.25,
-				"score": 0.46
+				"breadth": 0.333,
+				"score": 0.48333
 			},
-			"Clodsire": {
-				"games": 5,
-				"kos": 1,
-				"faints": 4,
-				"wins": 3,
-				"kosPerGame": 0.2,
-				"faintsPerGame": 0.8,
-				"score": 0.44048
-			},
-			"Enamorus": {
-				"games": 3,
-				"kos": 5,
-				"faints": 3,
-				"wins": 0,
-				"kosPerGame": 1.6666666666666667,
-				"faintsPerGame": 1,
-				"score": 0.43
-			},
-			"Gliscor": {
+			"Genesect": {
 				"games": 3,
 				"kos": 1,
-				"faints": 3,
-				"wins": 0,
+				"faints": 2,
+				"wins": 1,
+				"players": 1,
 				"kosPerGame": 0.3333333333333333,
-				"faintsPerGame": 1,
-				"score": 0.39
-			},
-			"Dragapult": {
-				"games": 3,
-				"kos": 1,
-				"faints": 3,
-				"wins": 0,
-				"kosPerGame": 0.3333333333333333,
-				"faintsPerGame": 1,
-				"score": 0.39
-			},
-			"Rillaboom": {
-				"games": 3,
-				"kos": 1,
-				"faints": 3,
-				"wins": 0,
-				"kosPerGame": 0.3333333333333333,
-				"faintsPerGame": 1,
-				"score": 0.39
-			},
-			"Iron Moth": {
-				"games": 3,
-				"kos": 1,
-				"faints": 3,
-				"wins": 0,
-				"kosPerGame": 0.3333333333333333,
-				"faintsPerGame": 1,
-				"score": 0.39
-			},
-			"Clefable": {
-				"games": 6,
-				"kos": 0,
-				"faints": 4,
-				"wins": 3,
-				"kosPerGame": 0,
 				"faintsPerGame": 0.6666666666666666,
-				"score": 0.38
+				"breadth": 0.333,
+				"score": 0.4775
 			},
-			"Rotom-Wash": {
-				"games": 3,
-				"kos": 0,
-				"faints": 3,
-				"wins": 0,
-				"kosPerGame": 0,
-				"faintsPerGame": 1,
-				"score": 0.38
-			},
-			"Lokix": {
-				"games": 3,
-				"kos": 0,
-				"faints": 3,
-				"wins": 0,
-				"kosPerGame": 0,
-				"faintsPerGame": 1,
-				"score": 0.38
-			},
-			"Alomomola": {
-				"games": 3,
-				"kos": 0,
-				"faints": 3,
-				"wins": 0,
-				"kosPerGame": 0,
-				"faintsPerGame": 1,
-				"score": 0.38
-			},
-			"Sinistcha": {
-				"games": 3,
-				"kos": 0,
-				"faints": 3,
-				"wins": 0,
-				"kosPerGame": 0,
-				"faintsPerGame": 1,
-				"score": 0.38
-			},
-			"Raging Bolt": {
-				"games": 5,
-				"kos": 3,
-				"faints": 4,
-				"wins": 1,
-				"kosPerGame": 0.6,
-				"faintsPerGame": 0.8,
-				"score": 0.37698
-			},
-			"Ninetales": {
-				"games": 4,
-				"kos": 0,
-				"faints": 3,
-				"wins": 1,
-				"kosPerGame": 0,
-				"faintsPerGame": 0.75,
-				"score": 0.37619
-			},
-			"Zapdos": {
-				"games": 4,
-				"kos": 3,
-				"faints": 4,
-				"wins": 0,
-				"kosPerGame": 0.75,
-				"faintsPerGame": 1,
-				"score": 0.35833
-			},
-			"Walking Wake": {
-				"games": 4,
-				"kos": 2,
-				"faints": 4,
-				"wins": 0,
-				"kosPerGame": 0.5,
-				"faintsPerGame": 1,
-				"score": 0.35
-			},
-			"Pecharunt": {
-				"games": 4,
-				"kos": 0,
-				"faints": 4,
-				"wins": 0,
-				"kosPerGame": 0,
-				"faintsPerGame": 1,
-				"score": 0.33333
-			},
-			"Moltres": {
-				"games": 5,
-				"kos": 5,
-				"faints": 5,
-				"wins": 0,
-				"kosPerGame": 1,
-				"faintsPerGame": 1,
-				"score": 0.32143
-			},
-			"Slowking-Galar": {
+			"Ursaluna-Bloodmoon": {
 				"games": 5,
 				"kos": 2,
-				"faints": 5,
-				"wins": 0,
+				"faints": 1,
+				"wins": 1,
+				"players": 1,
 				"kosPerGame": 0.4,
-				"faintsPerGame": 1,
-				"score": 0.3
+				"faintsPerGame": 0.2,
+				"breadth": 0.333,
+				"score": 0.46528
 			},
-			"Cresselia": {
-				"games": 5,
-				"kos": 0,
-				"faints": 5,
-				"wins": 0,
-				"kosPerGame": 0,
-				"faintsPerGame": 1,
-				"score": 0.28571
+			"Diancie": {
+				"games": 9,
+				"kos": 1,
+				"faints": 4,
+				"wins": 4,
+				"players": 1,
+				"kosPerGame": 0.1111111111111111,
+				"faintsPerGame": 0.4444444444444444,
+				"breadth": 0.333,
+				"score": 0.46241
 			},
-			"Corviknight": {
-				"games": 5,
-				"kos": 0,
-				"faints": 5,
-				"wins": 0,
-				"kosPerGame": 0,
-				"faintsPerGame": 1,
-				"score": 0.28571
-			},
-			"Ting-Lu": {
-				"games": 6,
-				"kos": 4,
-				"faints": 6,
-				"wins": 0,
-				"kosPerGame": 0.6666666666666666,
-				"faintsPerGame": 1,
-				"score": 0.2625
-			},
-			"Dragonite": {
-				"games": 6,
-				"kos": 3,
-				"faints": 5,
-				"wins": 0,
-				"kosPerGame": 0.5,
-				"faintsPerGame": 0.8333333333333334,
-				"score": 0.26136
-			},
-			"Kyurem": {
-				"games": 6,
-				"kos": 3,
-				"faints": 6,
-				"wins": 0,
-				"kosPerGame": 0.5,
-				"faintsPerGame": 1,
-				"score": 0.25625
-			},
-			"Landorus-Therian": {
+			"Regieleki": {
 				"games": 10,
 				"kos": 3,
-				"faints": 7,
-				"wins": 3,
+				"faints": 8,
+				"wins": 4,
+				"players": 1,
 				"kosPerGame": 0.3,
-				"faintsPerGame": 0.7,
-				"score": 0.2549
-			},
-			"Glimmora": {
-				"games": 6,
-				"kos": 0,
-				"faints": 6,
-				"wins": 0,
-				"kosPerGame": 0,
-				"faintsPerGame": 1,
-				"score": 0.2375
+				"faintsPerGame": 0.8,
+				"breadth": 0.333,
+				"score": 0.45023
 			},
 			"Hatterene": {
-				"games": 11,
-				"kos": 4,
-				"faints": 12,
+				"games": 7,
+				"kos": 0,
+				"faints": 4,
 				"wins": 3,
-				"kosPerGame": 0.36363636363636365,
-				"faintsPerGame": 1.0909090909090908,
-				"score": 0.20067
+				"players": 1,
+				"kosPerGame": 0,
+				"faintsPerGame": 0.5714285714285714,
+				"breadth": 0.333,
+				"score": 0.44571
 			},
-			"Great Tusk": {
-				"games": 13,
-				"kos": 9,
-				"faints": 13,
-				"wins": 2,
-				"kosPerGame": 0.6923076923076923,
-				"faintsPerGame": 1,
-				"score": 0.16923
-			},
-			"Kingambit": {
-				"games": 15,
-				"kos": 11,
-				"faints": 14,
-				"wins": 2,
-				"kosPerGame": 0.7333333333333333,
-				"faintsPerGame": 0.9333333333333333,
-				"score": 0.15822
-			},
-			"Zamazenta-*": {
-				"games": 9,
+			"Enamorus-Therian": {
+				"games": 4,
 				"kos": 0,
 				"faints": 0,
 				"wins": 0,
+				"players": 1,
 				"kosPerGame": 0,
 				"faintsPerGame": 0,
-				"score": 0.13182
-			},
-			"Samurott-Hisui": {
-				"games": 13,
-				"kos": 4,
-				"faints": 14,
-				"wins": 2,
-				"kosPerGame": 0.3076923076923077,
-				"faintsPerGame": 1.0769230769230769,
-				"score": 0.12593
-			},
-			"Gholdengo": {
-				"games": 9,
-				"kos": 5,
-				"faints": 9,
-				"wins": 0,
-				"kosPerGame": 0.5555555555555556,
-				"faintsPerGame": 1,
-				"score": 0.11364
-			},
-			"Zamazenta": {
-				"games": 9,
-				"kos": 4,
-				"faints": 9,
-				"wins": 0,
-				"kosPerGame": 0.4444444444444444,
-				"faintsPerGame": 1,
-				"score": 0.10909
-			},
-			"Iron Valiant": {
-				"games": 10,
-				"kos": 3,
-				"faints": 10,
-				"wins": 0,
-				"kosPerGame": 0.3,
-				"faintsPerGame": 1,
-				"score": 0.05417
-			},
-			"Cinderace": {
-				"games": 14,
-				"kos": 5,
-				"faints": 14,
-				"wins": 0,
-				"kosPerGame": 0.35714285714285715,
-				"faintsPerGame": 1,
-				"score": 0.04241
+				"breadth": 0.333,
+				"score": 0.44444
 			}
 		},
 		"gen9rptutorial": {
 			"Pikachu": {
-				"games": 28,
-				"kos": 2,
+				"games": 34,
+				"kos": 3,
 				"faints": 0,
-				"wins": 18,
-				"kosPerGame": 0.07142857142857142,
+				"wins": 23,
+				"players": 21,
+				"kosPerGame": 0.08823529411764706,
 				"faintsPerGame": 0,
-				"score": 0.67857
-			},
-			"Rattata": {
-				"games": 28,
-				"kos": 0,
-				"faints": 2,
-				"wins": 10,
-				"kosPerGame": 0,
-				"faintsPerGame": 0.07142857142857142,
-				"score": 0.34222
+				"breadth": 1,
+				"score": 0.60714
 			}
 		}
 	}

@@ -26,6 +26,31 @@ const DIR = path.join(__dirname, '..', 'data', 'replays');
 const OUT = path.join(__dirname, '..', 'data', 'velvet', 'rp-usage.json');
 const MIN_GAMES = 3;
 
+/*
+ * Who counts (owner, 24 Sep 2026). The table was mostly the bots' own games
+ * (Bunny Stockfish played more RP OU than anyone) and the owner playing one
+ * Cynthia team dozens of times, so "our meta" was the bots' drafts plus one
+ * test team - and the bots drafted against themselves. Now: bots and RP
+ * encounter opponents don't count at all, and each human counts once per
+ * Pokemon however many games they played with it.
+ */
+const toId = s => String(s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+const BOT_IDS = new Set(['velvetbunny', ...require('../src/ladder-defaults').ladderQueues('Velvet Bunny').map(q => q.id)]);
+let TITLES = [];
+try { TITLES = Object.values(require('../src/encounters').TRAINER_CLASSES).map(c => c.title || c.name).filter(Boolean); } catch (e) { /* no classes: bots by name only */ }
+TITLES.push('Leader', 'Elite Four', 'Champion', 'Wild');
+function isBot(name) {
+	const n = String(name || '').trim();
+	if (!n) return true;
+	if (BOT_IDS.has(toId(n))) return true;
+	return TITLES.some(t => n === t || n.startsWith(t + ' '));
+}
+
+function cell(per, species, player) {
+	const bySpecies = (per[species] = per[species] || {});
+	return (bySpecies[player] = bySpecies[player] || { games: 0, kos: 0, faints: 0, wins: 0 });
+}
+
 function formatOf(id) {
 	const m = /^([a-z0-9]+)-/.exec(String(id || ''));
 	return m ? m[1] : String(id || '');
@@ -47,6 +72,7 @@ function mine() {
 		// its side keeps losing (the bots' own Dragonite led the appearance count).
 		const winner = (/\|win\|(.+)/.exec(replay.log) || [])[1];
 		const players = replay.players || [];
+		const playerOf = side => String(players[side === 'p2' ? 1 : 0] || '').trim();
 		const wonSide = winner ? (String(players[0] || '').trim() === String(winner).trim() ? 'p1' : 'p2') : null;
 		const seen = new Map();
 		const active = { p1: '', p2: '' };
@@ -70,22 +96,40 @@ function mine() {
 			if (cmd === 'move') { lastMove = { side, species: active[side] }; continue; }
 			if (cmd === 'faint') {
 				const died = active[side];
-				if (died) {
-					const row = (per[died] = per[died] || { games: 0, kos: 0, faints: 0, wins: 0 });
-					row.faints++;
-				}
+				if (died && !isBot(playerOf(side))) cell(per, died, playerOf(side)).faints++;
 				// The knockout goes to whoever moved last, unless they knocked themselves out.
-				if (lastMove && lastMove.side !== side && lastMove.species) {
-					const row = (per[lastMove.species] = per[lastMove.species] || { games: 0, kos: 0, faints: 0, wins: 0 });
-					row.kos++;
+				if (lastMove && lastMove.side !== side && lastMove.species && !isBot(playerOf(lastMove.side))) {
+					cell(per, lastMove.species, playerOf(lastMove.side)).kos++;
 				}
 			}
 		}
 		for (const [species, owner] of seen) {
-			const row = (per[species] = per[species] || { games: 0, kos: 0, faints: 0, wins: 0 });
-			row.games++;
-			if (wonSide && owner === wonSide) row.wins++;
+			if (isBot(playerOf(owner))) continue;
+			const c = cell(per, species, playerOf(owner));
+			c.games++;
+			if (wonSide && owner === wonSide) c.wins++;
 		}
+	}
+	/*
+	 * Per species, each player's record on their own first, then the players
+	 * averaged as equals: seventy games of one team is one player's opinion.
+	 */
+	for (const [format, per] of Object.entries(table)) {
+		const out = {};
+		for (const [species, byPlayer] of Object.entries(per)) {
+			const rows = Object.values(byPlayer);
+			const sum = k => rows.reduce((n, r) => n + r[k], 0);
+			const strengthOf = r => {
+				const winRate = (r.wins + 1) / (r.games + 2);
+				return winRate * (1 + Math.min(2, r.kos / r.games)) / (1 + Math.min(1.5, r.faints / r.games));
+			};
+			out[species] = {
+				games: sum('games'), kos: sum('kos'), faints: sum('faints'), wins: sum('wins'),
+				players: rows.length,
+				strength: rows.reduce((n, r) => n + strengthOf(r), 0) / rows.length,
+			};
+		}
+		table[format] = out;
 	}
 	/*
 	 * The score a draft sorts by: how well it does here, not how often it turns up.
@@ -96,12 +140,13 @@ function mine() {
 	for (const per of Object.values(table)) {
 		for (const row of Object.values(per)) {
 			const games = row.games || 1;
-			const winRate = (row.wins + 1) / (games + 2);
 			row.kosPerGame = row.kos / games;
 			row.faintsPerGame = row.faints / games;
-			const confidence = Math.min(1, games / 10);
-			const strength = winRate * (1 + Math.min(2, row.kosPerGame)) / (1 + Math.min(1.5, row.faintsPerGame));
-			row.score = Number((0.5 + confidence * (strength - 0.5)).toFixed(5));
+			// Confidence and breadth come from how many different people play it, not games.
+			const confidence = Math.min(1, row.players / 4) * Math.min(1, games / 6);
+			row.breadth = Number(Math.min(1, row.players / 3).toFixed(3));
+			row.score = Number((0.5 + confidence * (row.strength - 0.5)).toFixed(5));
+			delete row.strength;
 		}
 	}
 	return { games, table };

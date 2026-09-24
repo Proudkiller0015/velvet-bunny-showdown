@@ -1459,7 +1459,9 @@ class TeamBuilder {
 		const buffed = this.buffed();
 		// Anything that has earned its place in this server's own games is drafted like a staple.
 		const here = this.local(ctx.id);
-		const localOf = s => { const row = here && (here[s.name] || here[s.baseSpecies]); return row ? row.score : 0; };
+		// Weighted by how many different people play it (scripts/rp-usage.js breadth): one
+		// player's favourite team, played seventy times, is not the server's meta.
+		const localOf = s => { const row = here && (here[s.name] || here[s.baseSpecies]); return row ? row.score * (row.breadth ?? 1) : 0; };
 		const analysed = [], used = [], rest = [];
 		for (const s of pool) {
 			if (has(sets, s) || localOf(s) > 0) analysed.push(s);
@@ -1583,7 +1585,7 @@ class TeamBuilder {
 			const bst = Object.values(species.baseStats).reduce((a, b) => a + b, 0);
 			const row = here && (here[species.name] || here[species.baseSpecies]);
 			// What has won games here is worth more than its stat total says.
-			candidates.push({ species: species.name, level: ctx.level, strength: bst * (1 + Math.min(0.3, (row && row.score) || 0)) });
+			candidates.push({ species: species.name, level: ctx.level, strength: bst * (1 + Math.min(0.3, ((row && row.score) || 0) * ((row && row.breadth) ?? 1))) });
 		}
 		if (candidates.length < ctx.size) return null;
 
@@ -1642,7 +1644,7 @@ class TeamBuilder {
 		// What has actually knocked things out here counts for more than what Smogon's ladder plays.
 		const localOf = name => {
 			const row = here && (here[name] || here[String(name).split('-')[0]]);
-			return row ? row.score : 0;
+			return row ? row.score * (row.breadth ?? 1) : 0;
 		};
 		const scored = ctx.pool.map(s => ({ s, use: usageOf(s.name) + 3 * localOf(s.name) }))
 			.filter(x => x.use > 0)
