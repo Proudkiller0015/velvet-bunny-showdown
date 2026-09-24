@@ -1,0 +1,12 @@
+{
+	"id": "gen9rpbattle-6-tluihb",
+	"format": "[Gen 9] RP Battle",
+	"players": [
+		"simia ignis",
+		"StaleThunder126"
+	],
+	"rating": null,
+	"log": "|j|☆simia ignis\n|j|☆StaleThunder126\n|t:|1790215225\n|gametype|singles\n|player|p1|simia ignis|simia-ignis.png|\n|player|p2|StaleThunder126|jolt.png|\n|gen|9\n|tier|[Gen 9] RP Battle\n|clearpoke\n|poke|p1|Ninetales|\n|poke|p1|Infernape|\n|poke|p1|Rotom-Heat|\n|poke|p1|Simisear|\n|poke|p1|Gouging Fire|\n|poke|p1|Charizard-Mega-Y|\n|poke|p2|Hattrem, L13|\n|poke|p2|Nuzleaf, L13|\n|poke|p2|Froakie, L13|\n|poke|p2|Helioptile, L13|\n|poke|p2|Fletchling, L13|\n|poke|p2|Diglett, L13|\n|teampreview\n|\n|t:|1790215239\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Infernape|Infernape|100/100\n|switch|p2a: Diglett|Diglett, L13|100/100\n|turn|1\n|\n|t:|1790215249\n|move|p1a: Infernape|Pyre Strike|p2a: Diglett\n|-damage|p2a: Diglett|0 fnt\n|faint|p2a: Diglett\n|\n|upkeep\n|\n|t:|1790215254\n|switch|p2a: Nuzleaf|Nuzleaf, L13, shiny|100/100\n|turn|2\n|\n|t:|1790215273\n|move|p1a: Infernape|Pyre Strike|p2a: Nuzleaf\n|-supereffective|p2a: Nuzleaf\n|-damage|p2a: Nuzleaf|0 fnt\n|faint|p2a: Nuzleaf\n|\n|upkeep\n|\n|t:|1790215279\n|switch|p2a: Froakie|Froakie, L13|100/100\n|turn|3\n|\n|t:|1790215284\n|move|p1a: Infernape|Pyre Strike|p2a: Froakie\n|-resisted|p2a: Froakie\n|-damage|p2a: Froakie|0 fnt\n|faint|p2a: Froakie\n|\n|upkeep\n|\n|t:|1790215289\n|switch|p2a: Hattrem|Hattrem, L13|100/100\n|turn|4\n|\n|t:|1790215293\n|move|p1a: Infernape|Pyre Strike|p2a: Hattrem\n|-crit|p2a: Hattrem\n|-damage|p2a: Hattrem|0 fnt\n|faint|p2a: Hattrem\n|\n|upkeep\n|\n|t:|1790215298\n|switch|p2a: Fletchling|Fletchling, L13|100/100\n|turn|5\n|\n|t:|1790215302\n|move|p1a: Infernape|Pyre Strike|p2a: Fletchling\n|-crit|p2a: Fletchling\n|-damage|p2a: Fletchling|0 fnt\n|faint|p2a: Fletchling\n|\n|upkeep\n",
+	"inputlog": null,
+	"uploadtime": 1790215304
+}
