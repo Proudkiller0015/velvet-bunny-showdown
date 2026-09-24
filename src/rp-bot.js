@@ -19,6 +19,9 @@ const { ShowdownBot } = require('./bot');
 const MAX_LIVE = Number(process.env.PS_RP_MAX_ENCOUNTERS || 12);
 const CHALLENGE_MS = 5 * 60 * 1000;
 const LIFETIME_MS = 60 * 60 * 1000;
+// A battle still being played at LIFETIME_MS is given until this, checked every few minutes.
+const HARD_CAP_MS = 3 * 60 * 60 * 1000;
+const RECHECK_MS = 5 * 60 * 1000;
 
 /** A few things a trainer says. The class decides the flavour; most say something generic. */
 const OPENERS = {
@@ -74,7 +77,24 @@ class EncounterOpponent extends ShowdownBot {
 		this.challenged = false;
 		this.battleRoom = null;
 		this.timers = [];
-		this.later(() => this.finish('the encounter ran too long'), LIFETIME_MS);
+		this.born = Date.now();
+		this.later(() => this.outlived(), LIFETIME_MS);
+	}
+
+	/*
+	 * An hour is plenty to wait for a battle, but not a limit on one being
+	 * played: finishing here closed the socket, and a long battle lost its
+	 * opponent mid-turn (23 Sep 2026). So a live battle keeps going, looked at
+	 * again every few minutes, up to a hard cap that only something stuck
+	 * reaches.
+	 */
+	outlived() {
+		if (this.finished) return;
+		if (this.battleRoom && Date.now() - this.born < HARD_CAP_MS) {
+			this.later(() => this.outlived(), RECHECK_MS);
+			return;
+		}
+		this.finish(this.battleRoom ? 'the battle ran past the hard cap' : 'the encounter ran too long');
 	}
 
 	later(fn, ms) {
