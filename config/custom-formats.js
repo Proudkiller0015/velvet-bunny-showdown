@@ -753,33 +753,43 @@ function installCatching(battle) {
 			const r = /^\s*run\b\s*(.*)$/i.exec(String(input));
 			if (r) {
 				const foe = this.foe;
-				if (this.requestState !== 'move' || !this.active[0] || this.active[0].fainted) {
-					return this.emitChoiceError(`Can't run right now: send a Pokémon out first`);
-				}
-				if (!isWildSide(foe)) {
-					/*
-					 * And put their menu back. A refused choice leaves this client
-					 * sitting on "waiting for opponent" with Fight shut, which a
-					 * player reported as the battle freezing for five minutes - so
-					 * the request is sent again behind the error and the turn is
-					 * theirs to play again straight away.
-					 */
-					const no = this.emitChoiceError(`You can't run from a trainer - that battle is settled in the RP`);
+				/*
+				 * Every refusal puts their menu back. A refused choice leaves the
+				 * client sitting on "waiting for opponent" with Fight shut, which a
+				 * player reported as the battle freezing for five minutes - so the
+				 * request is sent again behind the error and the turn is theirs to
+				 * play again straight away. At first only the trainer refusal did
+				 * this; a legendary, a turn that can't be run or a Poké Doll that
+				 * isn't one froze the menu just the same (23 Sep 2026).
+				 */
+				const refuse = (message) => {
+					const no = message ? this.emitChoiceError(message) : false;
 					if (this.activeRequest) this.emitRequest(this.activeRequest);
 					return no;
+				};
+				/*
+				 * Any Pokémon still standing can run. In a wild double the left one
+				 * fainting used to lock Run until it was replaced, with the right one
+				 * alive beside it (23 Sep 2026). A fainted one's slot is a 'pass' in
+				 * the fillers below, and the one standing is the one that tries.
+				 */
+				if (this.requestState !== 'move' || !this.active.some(p => p && !p.fainted)) {
+					return refuse(`Can't run right now: send a Pokémon out first`);
 				}
+				if (!isWildSide(foe)) return refuse(`You can't run from a trainer - that battle is settled in the RP`);
 				const wild = foe.active.find(p => p && !p.fainted);
-				if (!wild) return this.emitChoiceError(`There's nothing to run from`);
+				if (!wild) return refuse(`There's nothing to run from`);
 				if (E.isLegendary(wild.species)) {
-					return this.emitChoiceError(`${wild.species.name} will not let you leave. Legendaries are not escapable`);
+					return refuse(`${wild.species.name} will not let you leave. Legendaries are not escapable`);
 				}
 				const item = r[1] ? E.findBattleItem(r[1]) : null;
-				if (r[1] && (!item || !item.escape)) return this.emitChoiceError(`"${r[1]}" is not something that gets you out of a battle`);
+				if (r[1] && (!item || !item.escape)) return refuse(`"${r[1]}" is not something that gets you out of a battle`);
 				const fillers = this.active.map(p => fillerChoice(battle, p));
 				if (fillers.some(f => f === null) || fillers.every(f => f === 'pass')) {
-					return this.emitChoiceError(`Can't run this turn`);
+					return refuse(`Can't run this turn`);
 				}
-				if (!choose.call(this, fillers.join(', '))) return false;
+				// The engine has said why already; the menu still has to come back.
+				if (!choose.call(this, fillers.join(', '))) return refuse(null);
 				this.rpRunItem = item || null;
 				this.rpPendingRun = { turn: battle.turn, tried: false };
 				return true;
