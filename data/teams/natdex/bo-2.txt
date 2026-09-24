@@ -1,0 +1,63 @@
+Kingambit @ Leftovers  
+Ability: Supreme Overlord  
+Tera Type: Dark  
+EVs: 240 HP / 252 Atk / 16 Spe  
+Adamant Nature  
+- Swords Dance  
+- Knock Off  
+- Sucker Punch  
+- Iron Head  
+
+Garchomp @ Rocky Helmet  
+Ability: Rough Skin  
+Tera Type: Dragon  
+EVs: 252 HP / 192 Def / 64 SpD  
+Impish Nature  
+- Earthquake  
+- Dragon Tail  
+- Stealth Rock  
+- Spikes  
+
+Gholdengo @ Air Balloon  
+Ability: Good as Gold  
+Tera Type: Steel  
+EVs: 252 HP / 92 Def / 152 SpD / 12 Spe  
+Calm Nature  
+IVs: 0 Atk  
+- Make It Rain  
+- Hex  
+- Thunder Wave  
+- Recover  
+
+Zamazenta @ Life Orb  
+Ability: Dauntless Shield  
+Happiness: 0  
+Tera Type: Fighting  
+EVs: 252 Atk / 4 SpD / 252 Spe  
+Adamant Nature  
+- Close Combat  
+- Stone Edge  
+- Crunch  
+- Ice Fang  
+
+Terapagos-Terastal @ Heavy-Duty Boots  
+Ability: Tera Shell  
+Tera Type: Stellar  
+EVs: 252 SpA / 4 SpD / 252 Spe  
+Modest Nature  
+- Rapid Spin  
+- Tera Starstorm  
+- Flamethrower  
+- Ice Beam  
+
+Tapu Lele @ Choice Scarf  
+Ability: Psychic Surge  
+Tera Type: Psychic  
+EVs: 252 SpA / 4 SpD / 252 Spe  
+Timid Nature  
+IVs: 0 Atk  
+- Future Sight  
+- Psychic  
+- Moonblast  
+- Psyshock  
+

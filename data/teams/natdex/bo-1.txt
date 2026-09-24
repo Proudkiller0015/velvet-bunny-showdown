@@ -1,0 +1,62 @@
+Raging Bolt @ Choice Specs  
+Ability: Protosynthesis  
+Tera Type: Electric  
+EVs: 88 HP / 252 SpA / 168 Spe  
+Modest Nature  
+IVs: 20 Atk  
+- Thunderclap  
+- Thunderbolt  
+- Draco Meteor  
+- Volt Switch  
+
+Corviknight @ Leftovers  
+Ability: Pressure  
+Tera Type: Flying  
+EVs: 252 HP / 116 Def / 140 SpD  
+Impish Nature  
+- Defog  
+- Brave Bird  
+- U-turn  
+- Roost  
+
+Zamazenta @ Fightinium Z  
+Ability: Dauntless Shield  
+Tera Type: Fighting  
+EVs: 252 Atk / 4 SpD / 252 Spe  
+Jolly Nature  
+- Close Combat  
+- Crunch  
+- Stone Edge  
+- Heavy Slam  
+
+Hatterene (F) @ Leftovers  
+Ability: Magic Bounce  
+Tera Type: Psychic  
+EVs: 252 HP / 204 Def / 52 Spe  
+Bold Nature  
+IVs: 0 Atk  
+- Psychic Noise  
+- Draining Kiss  
+- Mystical Fire  
+- Calm Mind  
+
+Ting-Lu @ Leftovers  
+Ability: Vessel of Ruin  
+Tera Type: Dark  
+EVs: 252 HP / 252 SpD  
+Careful Nature  
+- Stealth Rock  
+- Ruination  
+- Earthquake  
+- Whirlwind  
+
+Ogerpon-Wellspring (F) @ Wellspring Mask  
+Ability: Water Absorb  
+Tera Type: Water  
+EVs: 252 Atk / 4 SpD / 252 Spe  
+Jolly Nature  
+- Ivy Cudgel  
+- Knock Off  
+- U-turn  
+- Synthesis  
+

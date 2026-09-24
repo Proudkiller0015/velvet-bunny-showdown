@@ -1,0 +1,62 @@
+Dondozo @ Leftovers  
+Ability: Unaware  
+Tera Type: Dragon  
+EVs: 252 HP / 252 Def / 4 SpD  
+Impish Nature  
+- Liquidation  
+- Body Press  
+- Rest  
+- Sleep Talk  
+
+Gliscor @ Toxic Orb  
+Ability: Poison Heal  
+Tera Type: Fairy  
+EVs: 244 HP / 56 Def / 208 SpD  
+Careful Nature  
+- Earthquake  
+- Toxic  
+- Stealth Rock  
+- Protect  
+
+Blissey @ Leftovers  
+Ability: Natural Cure  
+Tera Type: Dark  
+EVs: 252 HP / 252 Def / 4 SpD  
+Bold Nature  
+IVs: 0 Atk  
+- Protect  
+- Toxic  
+- Wish  
+- Seismic Toss  
+
+Clodsire @ Leftovers  
+Ability: Unaware  
+Tera Type: Steel  
+EVs: 252 HP / 4 Def / 252 SpD  
+Careful Nature  
+- Spikes  
+- Recover  
+- Amnesia  
+- Poison Jab  
+
+Corviknight @ Leftovers  
+Ability: Pressure  
+Tera Type: Dragon  
+EVs: 252 HP / 188 Def / 68 Spe  
+Bold Nature  
+IVs: 0 Atk  
+- Iron Defense  
+- Body Press  
+- Roost  
+- Defog  
+
+Toxapex @ Rocky Helmet  
+Ability: Regenerator  
+Tera Type: Psychic  
+EVs: 252 HP / 92 Def / 164 SpD  
+Careful Nature  
+- Toxic Spikes  
+- Scald  
+- Knock Off  
+- Recover  
+

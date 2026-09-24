@@ -1,0 +1,63 @@
+Gliscor @ Toxic Orb  
+Ability: Poison Heal  
+Tera Type: Water  
+EVs: 244 HP / 252 SpD / 12 Spe  
+Careful Nature  
+- Swords Dance  
+- Facade  
+- Knock Off  
+- Protect  
+
+Corviknight @ Heavy-Duty Boots  
+Ability: Pressure  
+Tera Type: Dragon  
+EVs: 200 HP / 188 Def / 120 Spe  
+Impish Nature  
+IVs: 0 Atk  
+- Iron Defense  
+- Roost  
+- Body Press  
+- Defog  
+
+Clodsire @ Heavy-Duty Boots  
+Ability: Unaware  
+Tera Type: Dark  
+EVs: 252 HP / 4 Def / 252 SpD  
+Careful Nature  
+- Spikes  
+- Earthquake  
+- Toxic  
+- Recover  
+
+Blissey (F) @ Leftovers  
+Ability: Natural Cure  
+Tera Type: Normal  
+EVs: 252 HP / 252 Def / 4 SpD  
+Bold Nature  
+IVs: 0 Atk  
+- Protect  
+- Seismic Toss  
+- Wish  
+- Stealth Rock  
+
+Pecharunt @ Heavy-Duty Boots  
+Ability: Poison Puppeteer  
+Tera Type: Ghost  
+EVs: 164 HP / 228 Def / 116 Spe  
+Bold Nature  
+IVs: 0 Atk  
+- Malignant Chain  
+- Foul Play  
+- Shadow Ball  
+- Recover  
+
+Alomomola @ Rocky Helmet  
+Ability: Regenerator  
+Tera Type: Water  
+EVs: 252 HP / 252 Def / 4 SpD  
+Impish Nature  
+- Wish  
+- Protect  
+- Toxic  
+- Flip Turn  
+
