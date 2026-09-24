@@ -151,6 +151,48 @@ console.log('\n--- R11: a boosted foe meets its answer ---');
 	check('Blissey facing a +1 Band Dragonite brings in a check', moveOf(p.request, stockfish().decide(p.request, p.state)), c => /switch (Clodsire|Toxapex|Corviknight)/.test(c));
 }
 
+console.log('\n--- R11 in replay gen9rpou-10-tlvuiv: Blissey stayed in front of a +2 Kingambit ---');
+{
+	/*
+	 * Turn 14, the bot's own sets and the stats Showdown reported for them. Blissey
+	 * (51%) Seismic Tossed and died to +2 Iron Head. The Unaware Clefable behind it
+	 * takes 66-78% from that Iron Head, boosts or not; the bot read 116-136%, because
+	 * the calculator was working from 0 EVs and a neutral nature for every one of our
+	 * own Pokemon (the request's stats never reached it), and so kept Blissey in.
+	 */
+	const withStats = (m, hp, stats) => {
+		const c = /^(\d+)\/(\d+)/.exec(m.condition);
+		m.stats = stats;
+		m.condition = /fnt/.test(m.condition) ? '0 fnt' : `${Math.round(hp * c[1] / c[2])}/${hp}`;
+		return m;
+	};
+	const blissMoves = ['Soft-Boiled', 'Calm Mind', 'Seismic Toss', 'Shadow Ball'];
+	const build = (atk, blissHp) => position({
+		me: withStats(mon('Blissey', blissMoves, { item: 'Leftovers', ability: 'Serene Grace', hp: blissHp }), 652, { atk: 50, def: 119, spa: 186, spd: 405, spe: 146 }),
+		myMoves: blissMoves,
+		bench: [
+			mon('Clodsire', ['Earthquake', 'Recover', 'Toxic', 'Stealth Rock'], { item: 'Heavy-Duty Boots', ability: 'Unaware', fainted: true }),
+			mon('Corviknight', ['Brave Bird', 'Defog', 'Iron Defense', 'Roost'], { item: 'Rocky Helmet', ability: 'Unnerve', fainted: true }),
+			withStats(mon('Regieleki', ['Volt Switch', 'Rapid Spin', 'Swift', 'Thunderbolt'], { item: 'Choice Specs', ability: 'Transistor' }), 301, { atk: 212, def: 136, spa: 299, spd: 137, spe: 548 }),
+			withStats(mon('Clefable', ['Calm Mind', 'Moonblast', 'Moonlight', 'Thunder Wave'], { item: 'Heavy-Duty Boots', ability: 'Unaware' }), 394, { atk: 158, def: 269, spa: 226, spd: 217, spe: 156 }),
+			withStats(mon('Dondozo', ['Rest', 'Undertow', 'Crunch', 'Sleep Talk'], { item: 'Heavy-Duty Boots', ability: 'Water Veil', hp: 20 }), 504, { atk: 266, def: 361, spa: 149, spd: 167, spe: 106 }),
+		],
+		foe: { species: 'Kingambit', hp: 81, moves: ['Swords Dance'], boosts: { atk, spd: -1 }, item: 'Leftovers', ability: 'Supreme Overlord' },
+		foeBench: ['Ursaluna-Bloodmoon', 'Magearna', 'Hatterene', 'Stakataka'], foeDown: ['Banette'], turn: 14,
+	});
+	const rp = () => { const ai = new BattleAI({ difficulty: 'stockfish' }); ai.setFormat('gen9rpou'); return ai; };
+	const ai = rp();
+	const gen = ai.gen(9);
+	const p = build(2, 51);
+	const clef = ai.myPokemon(gen, p.request.side.pokemon[4], p.state);
+	const iron = ai.damagePct(gen, ai.foePokemon(gen, p.state.opponent.a), clef, 'Iron Head', undefined);
+	check(`our own stats reach the calculator: +2 Iron Head on the Unaware Clefable reads ${iron.toFixed(0)}% (66-78)`, iron > 60 && iron < 82, true);
+	check('the team (five walls that heal, and a Regieleki) is played as stall', ai.stallTeam(p.request), true);
+	check('Blissey at 51% facing +2 Kingambit brings in Clefable', moveOf(p.request, rp().decide(p.request, p.state)), 'switch Clefable');
+	const t13 = build(0, 45);
+	check('and a turn earlier, at 45% in front of its Iron Head, already goes', moveOf(t13.request, rp().decide(t13.request, t13.state)), 'switch Clefable');
+}
+
 console.log('\n--- R9: Protect with a purpose, never twice ---');
 {
 	const ai = stockfish();

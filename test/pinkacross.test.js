@@ -192,7 +192,9 @@ if (MAIN) {
 		const off = new BattleAI({ difficulty: rung, cfg: { sacking: false } });
 		const p = position({
 			me: mon('Chansey', ['Soft-Boiled']), myMoves: ['Soft-Boiled'],
-			bench: [mon('Coalossal', ['Stone Edge'], { hp: 70 }), mon('Lopunny', ['Double-Edge'])],
+			// Lopunny worn to 80%: at its real 85 EVs (read since replay gen9rpou-10-tlvuiv) a
+			// full one takes 47% from Volcarona, and nothing of ours would be threatened at all.
+			bench: [mon('Coalossal', ['Stone Edge'], { hp: 70 }), mon('Lopunny', ['Double-Edge'], { hp: 80 })],
 			foe: { species: 'Volcarona', hp: 100, moves: ['Quiver Dance', 'Fiery Dance', 'Bug Buzz'] },
 			foeBench: ['Blissey'], foeDown: ['Pikachu', 'Raichu', 'Eevee', 'Jolteon'],
 		});

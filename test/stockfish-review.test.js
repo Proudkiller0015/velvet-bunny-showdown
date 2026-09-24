@@ -265,7 +265,12 @@ console.log('\n--- the endgame tree ---');
 	const gen = ai.gen(9);
 	const w = position({
 		me: mon('Sableye', ['Night Shade', 'Will-O-Wisp', 'Recover']), myMoves: ['Night Shade', 'Will-O-Wisp', 'Recover'],
-		bench: [mon('Skarmory', ['Brave Bird'], { hp: 50 })],
+		/*
+		 * Skarmory at 30%, not 50%: at its real stats (read since replay
+		 * gen9rpou-10-tlvuiv) a 50% Skarmory's Brave Bird is a 3HKO on the Snorlax,
+		 * and the endgame tree - which plays no recoil - read that as a win.
+		 */
+		bench: [mon('Skarmory', ['Brave Bird'], { hp: 30 })],
 		foe: { species: 'Snorlax', hp: 100, moves: ['Body Slam'] }, foeDown: ['Pikachu', 'Raichu', 'Eevee', 'Jolteon', 'Vaporeon'],
 	});
 	ai.myMoveNames = ['Night Shade', 'Will-O-Wisp', 'Recover'];

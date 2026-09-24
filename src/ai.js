@@ -38,6 +38,23 @@ const GENS = new Generations(PkmnDex);
  * `species`, so the types have to be written there too - otherwise the change
  * silently vanishes (Oxidize kept reading Steel as immune).
  */
+/*
+ * A calc Pokemon whose real stats (from the request) survive clone(): the
+ * calculator's clone rebuilds rawStats from base stats, EVs and nature, and
+ * calculate() clones both sides before it reads anything (see myPokemon).
+ */
+function keepStats(mon) {
+	const clone = mon.clone;
+	mon.clone = function () {
+		const copy = clone.call(this);
+		copy.rawStats = { ...this.rawStats };
+		copy.stats = { ...this.stats };
+		copy.originalCurHP = this.originalCurHP;
+		return keepStats(copy);
+	};
+	return mon;
+}
+
 function retype(mon, types) {
 	const copy = mon.clone();
 	copy.species = Object.assign({}, copy.species, { types: types.slice() });
@@ -462,6 +479,20 @@ class BattleAI {
 			if (live && live.charged) mon.velvetCharged = true;
 			if (entry.stats && !transformed) {
 				for (const k of ['atk', 'def', 'spa', 'spd', 'spe']) if (entry.stats[k]) mon.stats[k] = entry.stats[k];
+				/*
+				 * And into rawStats, which is what the calculator actually reads Attack
+				 * and Defence from - kept through every clone, since calculate() clones
+				 * both sides and a clone rebuilds rawStats from base stats, 0 EVs and a
+				 * neutral nature. Until now our own Pokemon were all calculated that
+				 * way: a 252 Def Bold Clefable took a Kingambit's Iron Head as 116-136%
+				 * when it is 66-78%, so in replay gen9rpou-10-tlvuiv the Unaware
+				 * Clefable "could not come in" on a +2 Kingambit and Blissey stayed in
+				 * front of it and died.
+				 */
+				if (!this.cfg.naive) {
+					for (const k of ['atk', 'def', 'spa', 'spd', 'spe']) if (entry.stats[k]) mon.rawStats[k] = entry.stats[k];
+					keepStats(mon);
+				}
 			}
 			if (cond) {
 				// maxHP() reads rawStats.hp, and Showdown's request stats carry no
