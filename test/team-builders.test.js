@@ -72,5 +72,69 @@ check(fullMoves, 'trainer Pokemon past level 10 know at least three moves');
 // Some trainers' Pokemon cannot learn Stealth Rock at all, so this is a rate, not a guarantee.
 check(hard <= 12, `high-badge trainers seldom miss a hard checklist rule (${hard} across 12 teams)`);
 
+// Move choice (docs/teambuilding-checklist.md; the owner's principles for role-sets.js).
+{
+	const mv = n => Dex.moves.get(n);
+	// Coverage is worth what it does to the common walls of the STAB, not to all eighteen types.
+	const steel = [{ name: 'Corviknight', weight: 30 }, { name: 'Skarmory', weight: 20 }, { name: 'Great Tusk', weight: 10 }];
+	const fairy = [{ name: 'Clefable', weight: 30 }, { name: 'Iron Valiant', weight: 20 }, { name: 'Great Tusk', weight: 10 }];
+	const stab = [mv('Earthquake'), mv('Scale Shot')];
+	check(RS.threatGain(Dex, stab, mv('Fire Fang'), steel) > RS.threatGain(Dex, stab, mv('Stone Edge'), steel) &&
+		RS.threatGain(Dex, stab, mv('Fire Fang'), steel) > RS.threatGain(Dex, stab, mv('Fire Fang'), fairy),
+	'Fire on a Garchomp is worth what it does to the Steel walls, and only if they are common');
+	check(RS.threatGain(Dex, stab, mv('Earthquake'), [{ name: 'Rotom-Wash', ability: 'Levitate' }]) === 0, 'a Levitate threat gains nothing from Ground');
+	const fire = threats => [1, 2, 3, 4, 5, 6].filter(i => RS.buildSet(Dex, 'Garchomp', { role: 'Setup Sweeper', rng: seeded(i * 31), items: false, threats })
+		.moves.some(m => mv(m).type === 'Fire')).length;
+	check(fire(steel) > fire(fairy), `Swords Dance Garchomp carries Fire when Corviknight is common (${fire(steel)}/6), less when it is not (${fire(fairy)}/6)`);
+	// No threat list (Build my team, gym trainers): the eighteen-types count, exactly as before.
+	const plain = RS.buildSet(Dex, 'Garchomp', { role: 'Setup Sweeper', rng: seeded(7), items: false });
+	const empty = RS.buildSet(Dex, 'Garchomp', { role: 'Setup Sweeper', rng: seeded(7), items: false, threats: [] });
+	check(plain.moves.join() === empty.moves.join(), 'an empty threat list falls back to the type count');
+
+	// A setup sweeper takes a strong priority attack it learns.
+	for (const [name, move] of [['Dragonite', 'Extreme Speed'], ['Scizor', 'Bullet Punch'], ['Lucario', 'Vacuum Wave']]) {
+		const set = RS.buildSet(Dex, name, { role: 'Setup Sweeper', rng: seeded(3), items: false });
+		check(has(set, move), `${name}'s setup set has ${move} (${set.moves})`);
+	}
+	check(RS.priorityValue(Dex.species.get('Garchomp'), mv('Ice Shard'), 'Physical') < RS.STRONG_PRIORITY, 'a non-STAB Ice Shard is not worth a sweeper\'s slot');
+
+	// Close Combat: fine on a fast attacker, marked down on a wall.
+	check(RS.selfDrop(mv('Close Combat')) && RS.selfDrop(mv('Draco Meteor')) && !RS.selfDrop(mv('Hammer Arm')), 'self-dropping attacks are recognised (a Speed drop alone is not one)');
+	const bulkyScizor = [1, 2, 3, 4, 5].filter(i => has(RS.buildSet(Dex, 'Scizor', { role: 'Bulky Support', rng: seeded(i * 17), items: false }), 'Close Combat')).length;
+	check(bulkyScizor === 0, `a Bulky Support Scizor does not run Close Combat (${bulkyScizor}/5)`);
+	check(has(RS.buildSet(Dex, 'Lucario', { role: 'Fast Attacker', rng: seeded(3), items: false }), 'Close Combat'), 'a fast Lucario still does');
+	const zama = RS.buildSet(Dex, 'Zamazenta', { role: 'Bulky Setup', rng: seeded(3), items: false });
+	check(!has(zama, 'Body Press') || has(zama, 'Iron Defense'), `a Body Press set has Iron Defense to press with (${zama.moves})`);
+}
+
+// The checklist rules added for the builders (src/team-logic.js).
+{
+	const set = (species, moves, extra = {}) => ({ species, ability: '', item: '', moves, ...extra });
+	// Rule 11: two burners are one mechanism, and not one that stops Calm Mind.
+	const burners = [set('Moltres', ['Will-O-Wisp', 'Flamethrower', 'Roost', 'Hurricane']), set('Sableye', ['Will-O-Wisp', 'Knock Off', 'Recover', 'Foul Play'])];
+	let r = TL.analyze(Dex, burners);
+	check(r.setupMechanisms.join() === 'burn' && !r.specialSetupAnswer, 'two Will-O-Wisp users are one setup answer, and none to special setup');
+	r = TL.analyze(Dex, [...burners, set('Toxapex', ['Haze', 'Recover', 'Surf', 'Toxic'])]);
+	check(r.setupMechanisms.length === 2 && r.specialSetupAnswer, 'Haze adds a second, special-proof one');
+	// Rule 5: a threat hit neutrally by fewer than two members.
+	const team = [set('Garchomp', ['Earthquake', 'Outrage']), set('Rhyperior', ['Earthquake', 'Megahorn']), set('Dragapult', ['Dragon Darts', 'U-turn'])];
+	r = TL.analyze(Dex, team, { threats: [{ name: 'Corviknight' }, { name: 'Great Tusk' }] });
+	check(r.threatsUnhit.join() === 'Corviknight', `Corviknight walls Ground and Dragon (${r.threatsUnhit})`);
+	check(TL.issues(r).some(i => i.severity === 'hard' && /Corviknight/.test(i.text)), 'and that is a hard checklist failure');
+	// Rule 7: real Speed, counted by style.
+	check(TL.speedStat(Dex, set('Garchomp', [], { evs: { spe: 252 }, nature: 'Jolly' })) === 333 && TL.speedStat(Dex, set('Dragapult', [], { evs: { spe: 252 }, nature: 'Timid' })) === 421, 'Speed is computed from EVs and nature');
+}
+
+// The ladder builder's repairs: an event Pokemon's fixed IVs, and no regional forme borrowing its base's sets.
+{
+	const { TeamBuilder } = require('../src/teambuilder');
+	const tb = new TeamBuilder();
+	const ctx = tb.context('gen9ou');
+	const bolt = { species: 'Raging Bolt', name: 'Raging Bolt', moves: ['Thunderbolt', 'Draco Meteor', 'Thunderclap', 'Calm Mind'], ability: 'Protosynthesis', nature: 'Modest', evs: { hp: 252, spa: 252, spe: 4 }, ivs: { atk: 20 }, level: 100 };
+	const problems = ctx.validator.validateSet(bolt, {});
+	check(problems && tb.repair(ctx, bolt, problems, seeded(1)) && !ctx.validator.validateSet(bolt, {}), `Raging Bolt gets its event IVs rather than a learnset set (${JSON.stringify(bolt.ivs)})`);
+	check(!tb.sameAsBase(ctx, ctx.dex.species.get('Zapdos-Galar')) && tb.sameAsBase(ctx, ctx.dex.species.get('Rillaboom-Gmax')), 'Zapdos-Galar does not borrow Zapdos\'s sets; a Gmax forme does');
+}
+
 console.log(`\n${passed} passed, ${failed} failed`);
 process.exit(failed ? 1 : 0);
