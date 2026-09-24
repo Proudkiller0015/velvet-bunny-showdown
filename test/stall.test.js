@@ -193,6 +193,40 @@ console.log('\n--- R11 in replay gen9rpou-10-tlvuiv: Blissey stayed in front of 
 	check('and a turn earlier, at 45% in front of its Iron Head, already goes', moveOf(t13.request, rp().decide(t13.request, t13.state)), 'switch Clefable');
 }
 
+console.log('\n--- Dynamax held for the moment it wins (replay gen9rpou-10-tlvuiv, turn 7) ---');
+{
+	/*
+	 * Dondozo (Rest, Sleep Talk) Dynamaxed at 86% for Undertow, and Magearna came
+	 * in on it: three turns of Max Guard where its Rest was, three Max Moves for 66% of its
+	 * HP, and it left at 20% for good. On stall the Dynamax is for surviving a hit or
+	 * for a Max Move that kills.
+	 */
+	const ai = stockfish();
+	check('stall does not Dynamax for a strong hit that does not kill', ai.dynamaxWorthIt(86, 25, { score: 70, name: 'Liquidation' }, { attacks: 2, damage: 40, turn: 7, hold: true, maxDamage: 55 }), false);
+	check('the same turn on offense still does', ai.dynamaxWorthIt(86, 25, { score: 70, name: 'Liquidation' }, { attacks: 2, damage: 40, turn: 7, maxDamage: 55 }), true);
+	check('stall Dynamaxes to live through a hit', ai.dynamaxWorthIt(40, 60, { score: 10 }, { hold: true, maxDamage: 20 }), true);
+	check('and for a Max Move that kills', ai.dynamaxWorthIt(86, 25, { score: 90, name: 'Liquidation' }, { attacks: 2, damage: 80, turn: 7, hold: true, maxDamage: 104 }), true);
+	// The replay's turn 7: in on Stakataka's Gyro Ball under Trick Room, Undertow is its best hit.
+	const moves = ['Rest', 'Undertow', 'Crunch', 'Sleep Talk'];
+	const bench = [
+		mon('Blissey', ['Soft-Boiled', 'Calm Mind', 'Seismic Toss', 'Shadow Ball'], { item: 'Leftovers', ability: 'Serene Grace' }),
+		mon('Regieleki', ['Volt Switch', 'Rapid Spin', 'Swift', 'Thunderbolt'], { item: 'Choice Specs', ability: 'Transistor' }),
+		mon('Clefable', ['Calm Mind', 'Moonblast', 'Moonlight', 'Thunder Wave'], { item: 'Heavy-Duty Boots', ability: 'Unaware' }),
+		mon('Clodsire', ['Earthquake', 'Recover', 'Toxic', 'Stealth Rock'], { item: 'Heavy-Duty Boots', ability: 'Unaware', fainted: true }),
+		mon('Corviknight', ['Brave Bird', 'Defog', 'Iron Defense', 'Roost'], { item: 'Rocky Helmet', ability: 'Unnerve', fainted: true }),
+	];
+	const p = position({
+		me: mon('Dondozo', moves, { item: 'Heavy-Duty Boots', ability: 'Water Veil', hp: 86 }), myMoves: moves, bench,
+		foe: { species: 'Stakataka', hp: 91, moves: ['Gyro Ball'], item: 'Life Orb' },
+		foeBench: ['Ursaluna-Bloodmoon', 'Hatterene', 'Kingambit', 'Magearna'], foeDown: ['Banette'], turn: 7,
+	});
+	p.request.active[0].canDynamax = true;
+	p.state.pseudo['Trick Room'] = true;
+	const rp = new BattleAI({ difficulty: 'stockfish' });
+	rp.setFormat('gen9rpou');
+	check('Dondozo at 86% attacks Stakataka without its Dynamax', String(rp.decide(p.request, p.state)), c => /^move/.test(c) && !/dynamax/.test(c));
+}
+
 console.log('\n--- R9: Protect with a purpose, never twice ---');
 {
 	const ai = stockfish();

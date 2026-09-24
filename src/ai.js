@@ -274,9 +274,10 @@ const STALL_PLAY = { stallPlay: true };
  *   removal      R8   Defog and Spin worth what the hazards cost our team
  *   hazardTiming R7   hazards on a free turn, not under fire
  *   freeTurns         no Wish, Protect or passive turn gifted to a foe that sets up
+ *   holdDynamax       Dynamax only to live through a hit or for a Max Move that kills
  */
 const STYLE_RULES = {
-	stall: { pivot: true, preserve: true, boosted: true, heal: true, ppSave: true, wish: true, protect: true, status: true, removal: true, hazardTiming: true, freeTurns: true },
+	stall: { pivot: true, preserve: true, boosted: true, heal: true, ppSave: true, wish: true, protect: true, status: true, removal: true, hazardTiming: true, freeTurns: true, holdDynamax: true },
 	balance: {},
 	'bulky offense': {},
 	'hyper offense': {},
@@ -2995,9 +2996,11 @@ class BattleAI {
 	 * defensive use: a hit that would knock us out may not once the HP bar is
 	 * twice the size.
 	 */
-	dynamaxWorthIt(hpPct, incoming, best, { attacks = 4, damage = 100, turn = 99 } = {}) {
+	dynamaxWorthIt(hpPct, incoming, best, { attacks = 4, damage = 100, turn = 99, hold = false, maxDamage = damage } = {}) {
 		if (incoming >= hpPct && incoming < hpPct * 2) return true;   // survives it
 		if (incoming >= hpPct) return false;                          // dies regardless
+		// Stall's Dynamax is held for a kill (see chooseForSlot, holdDynamax).
+		if (hold && maxDamage < 100) return false;
 		if (this.cfg.sanity !== false) {
 			// Three turns is the whole value: not on a Pokemon half gone, and not on a
 			// status move or a priority attack, which a Max Move turns into Max Guard
@@ -3544,6 +3547,17 @@ class BattleAI {
 			attacks: ranked.filter(r => r.kind === 'move' && r.damage > 0).length,
 			damage: (ranked.find(r => r.name === best.name) || {}).damage || 0,
 			turn: state.turn || 99,
+			/*
+			 * Stall holds it (holdDynamax). Dynamax turns every status move into Max
+			 * Guard, so a wall that Dynamaxes gives up its recovery, its status and its
+			 * hazards for three turns: replay gen9rpou-10-tlvuiv's Dondozo (Rest, Sleep
+			 * Talk) Dynamaxed at 86% into a Magearna that had just switched in, traded
+			 * three Max Moves for 66% of its HP, left at 20% and never recovered. On
+			 * stall it is for the moment it wins: living through a hit that would
+			 * knock us out, or a Max Move that knocks them out.
+			 */
+			hold: !!(rules && rules.holdDynamax),
+			maxDamage: ((ranked.find(r => r.name === best.name) || {}).damage || 0) * this.maxRatio(gen, best.name, true),
 		})) {
 			choice += ' dynamax';
 		}
