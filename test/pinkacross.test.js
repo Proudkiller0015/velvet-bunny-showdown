@@ -113,8 +113,9 @@ if (MAIN) {
 		foe: { species: 'Tyranitar', hp: 30, moves: ['Crunch'] },
 	}), (c, r) => moveName(c, r) === 'Close Combat', 'takes the 100% KO over the 70% one');
 
-	// Thunder against Thunderbolt, neither a KO: 110 x 0.7 is less than 90 x 1.
-	onRungs(['hard', 'champion', 'stockfish'], 6, () => position({
+	// Thunder against Thunderbolt, neither a KO: 110 x 0.7 is less than 90 x 1. (Not on Hard:
+	// its +-12 noise is wider than that gap, so there it is a coin flip by design.)
+	onRungs(['champion', 'stockfish'], 6, () => position({
 		me: mon('Raikou', ['Thunder', 'Thunderbolt']),
 		myMoves: ['Thunder', 'Thunderbolt'],
 		foe: { species: 'Slowbro', hp: 100, moves: ['Scald'] },
@@ -283,6 +284,45 @@ if (MAIN) {
 		const covered = heatran(preview(team(['Corviknight', ['Roost', 'Brave Bird', 'U-turn']]), theirs).ai);
 		check(`champion: a Ground-immune teammate makes the Heatran lead safer (${alone.toFixed(0)} -> ${covered.toFixed(0)})`, covered > alone + 5, true);
 	}
+}
+
+// ------------------------------------------------------------- middle ground
+if (MAIN) console.log('\n--- A6-A8: middle-ground search ---');
+if (MAIN) {
+	const calc = require('@smogon/calc');
+	const ai = new BattleAI({ difficulty: 'stockfish' });
+	ai.setFormat('gen9ou');
+	const gen = ai.gen(9);
+	const field = new calc.Field();
+	const moves = ['U-turn', 'Earthquake', 'Stone Edge'];
+	const board = (myHp, foeHp, foeBench = ['Skarmory', 'Clefable', 'Toxapex']) => position({
+		me: mon('Landorus-Therian', moves, { hp: myHp }), myMoves: moves,
+		bench: [mon('Blissey', ['Seismic Toss'], { hp: myHp }), mon('Garchomp', ['Earthquake'], { hp: myHp })],
+		foe: { species: 'Heatran', hp: foeHp, moves: ['Magma Storm', 'Earth Power'] }, foeBench, foeDown: ['Pikachu'],
+	});
+
+	const ahead = board(100, 30, ['Skarmory']), behind = board(30, 100);
+	check('an honest count says ahead when ahead', ai.advantage(ahead.state, ahead.request) > 0.15, true);
+	check('and behind when behind', ai.advantage(behind.state, behind.request) < -0.15, true);
+
+	// Their replies, weighted: Earth Power does nothing to a Levitate/Flying
+	// Landorus and is pruned; the switch is on the list, to the Skarmory that
+	// shrugs off Earthquake.
+	const p = board(100, 100);
+	ai.myMoveNames = moves;
+	const me = ai.myPokemon(gen, p.request.side.pokemon[0], p.state);
+	const foe = p.state.foes()[0];
+	const replies = ai.search.theirActions(gen, ai.foePokemon(gen, foe), me, foe, field);
+	ai.search.weighReplies(gen, replies, me, foe, field, p.state);
+	const ep = replies.find(r => r.name === 'Earth Power'), ms = replies.find(r => r.name === 'Magma Storm');
+	const sw = replies.find(r => r.switch);
+	check(`an immune reply is pruned (Earth Power ${ep && ep.weight.toFixed(2)} vs Magma Storm ${ms && ms.weight.toFixed(2)})`, ep && ms && ep.weight < ms.weight / 5, true);
+	check(`the switch is a reply, into ${sw && sw.switchIn && sw.switchIn.species}`, sw && sw.switchIn && sw.switchIn.species, 'Skarmory');
+
+	// And against that switch U-turn is the better click than Earthquake.
+	const brd = { me, them: ai.foePokemon(gen, foe), entry: p.request.side.pokemon[0], foe };
+	const play = name => ai.search.playTurn(gen, brd, { kind: 'move', name, damage: ai.damageToFoe(gen, me, foe, name, field), priority: 0 }, sw, p.state, field, p.request);
+	check(`into their switch, U-turn beats Earthquake (${play('U-turn').toFixed(0)} vs ${play('Earthquake').toFixed(0)})`, play('U-turn') > play('Earthquake'), true);
 }
 
 module.exports = { position, mon, onRungs, moveName, check, realStats };

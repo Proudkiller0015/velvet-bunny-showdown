@@ -1082,6 +1082,24 @@ class BattleAI {
 	}
 
 	/**
+	 * Who is ahead, -1 (lost) .. +1 (won), counted honestly: the health each
+	 * side has left, a fainted Pokemon as nothing and an unseen one of theirs as
+	 * full. Judge the game state honestly, not emotionally (Pinkacross, How to
+	 * Make Comebacks) - this is the number the search plays safe or sharp by.
+	 * (24 Sep 2026)
+	 */
+	advantage(state, request) {
+		const ours = (request && request.side && request.side.pokemon || []).reduce((sum, p) => {
+			if (/fnt/.test(p.condition || '')) return sum;
+			const cond = /^(\d+)\/(\d+)/.exec(p.condition || '');
+			return sum + (cond && +cond[2] ? +cond[1] / +cond[2] : 1);
+		}, 0);
+		const { list, unknown } = this.foeRemaining(state);
+		const theirs = unknown + list.reduce((sum, f) => sum + (f.fainted ? 0 : Math.max(0, (f.hp || 0) / (f.maxhp || 100))), 0);
+		return ours + theirs > 0 ? (ours - theirs) / (ours + theirs) : 0;
+	}
+
+	/**
 	 * Does this Pokemon already win from here without another boost?
 	 *
 	 * Setup is not automatic (Pinkacross, 10 Noob Traps and the Rank 1 tips):
