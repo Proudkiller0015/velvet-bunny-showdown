@@ -93,6 +93,41 @@ function sweep() {
 	}
 }
 
+/*
+ * Which account on the server is an encounter's own opponent.
+ *
+ * The RP bot logs in as "Hiker Bob" with no password, and when somebody really
+ * is called that it takes "Hiker Bob42" instead (src/rp-bot.js, nametaken). So
+ * the opponent is the plain name or the name with 1-3 digits after it - the
+ * same rule the server lets it log in under (showdown-config.js rolled) - and
+ * every one of its connections comes from this machine. A person called Hiker
+ * Bob, or Hiker Bob42, is on some other address and is never picked: seating
+ * them in the battle would hand a stranger the encounter's team (23 Sep 2026).
+ */
+const LOOPBACK = ['127.0.0.1', '::1', '::ffff:127.0.0.1'];
+function isEncounterName(baseId, userid) {
+	if (!baseId || !userid) return false;
+	return userid === baseId || (userid.startsWith(baseId) && /^\d{1,3}$/.test(userid.slice(baseId.length)));
+}
+function isLocalOnly(user) {
+	const connections = (user && user.connections) || [];
+	return connections.length > 0 && connections.every(c => LOOPBACK.includes(c.ip));
+}
+/**
+ * The opponent's account among `users` (Users.users.values() on the server),
+ * or null. If two match - one being retired while its replacement logs in -
+ * the one that connected last is the replacement.
+ */
+function encounterAccount(users, name) {
+	const baseId = toID(name);
+	let best = null;
+	for (const user of users) {
+		if (!user || !user.connected || !isEncounterName(baseId, user.id) || !isLocalOnly(user)) continue;
+		if (!best || (user.lastConnected || 0) > (best.lastConnected || 0)) best = user;
+	}
+	return best;
+}
+
 /** The encounter a player already has open, if any - so declining one doesn't reroll it. */
 function openFor(userid) {
 	sweep();
@@ -155,6 +190,14 @@ function requestEncounter(payload, deps) {
 		return { ok: false, code: 'busy', message: `${payload.showdown} already has an encounter open (${E.describe(existing)}). Finish it or use !complete first.` };
 	}
 	if (existing) {
+		/*
+		 * Already being battled: say where, rather than sending a challenge
+		 * that isn't coming. Without the room the Discord bot fell back to
+		 * "you've been challenged, click Accept" (23 Sep 2026).
+		 */
+		if (existing.status === 'battling' && existing.roomid) {
+			return { ok: true, again: true, opened: true, roomid: existing.roomid, encounter: publicView(existing) };
+		}
 		if (!deps.isOnline(userid)) {
 			return { ok: false, code: 'offline', message: `You're not on Showdown as ${payload.showdown} right now.`, encounter: publicView(existing) };
 		}
@@ -166,7 +209,7 @@ function requestEncounter(payload, deps) {
 		if (payload.badges !== undefined) existing.badges = E.clampBadges(payload.badges);
 		// A team picked since it was first sent: this time it opens rather than challenges.
 		if (Array.isArray(payload.playerTeam) && payload.playerTeam.length) existing.playerTeam = payload.playerTeam.slice(0, 6);
-		if (existing.status === 'waiting') deps.spawn(existing);
+		if (existing.status === 'waiting' && deps.spawn(existing) === false) return notSpawned(existing);
 		return { ok: true, again: true, encounter: publicView(existing) };
 	}
 
@@ -223,8 +266,19 @@ function requestEncounter(payload, deps) {
 		result: null,
 	};
 	encounters.set(enc.id, enc);
-	deps.spawn(enc);
+	if (deps.spawn(enc) === false) return notSpawned(enc);
 	return { ok: true, encounter: publicView(enc) };
+}
+
+/*
+ * The RP bot could not be handed the encounter (it is offline): deps.spawn has
+ * put the encounter in 'error' with the reason. Discord hears that now, as a
+ * failure, instead of "you've been challenged" for a challenge nobody sends
+ * (23 Sep 2026). The encounter is closed, so asking again rolls a fresh one.
+ */
+function notSpawned(enc) {
+	const message = (enc.result && enc.result.message) || 'The RP bot could not start that encounter. Try again in a minute.';
+	return { ok: false, code: 'error', message, encounter: publicView(enc) };
 }
 
 /**
@@ -240,7 +294,7 @@ function requestTutorial(payload, deps) {
 	const existing = openFor(userid);
 	if (existing) {
 		if (existing.tutorial && existing.status === 'waiting') {
-			deps.spawn(existing);
+			if (deps.spawn(existing) === false) return notSpawned(existing);
 			return { ok: true, again: true, encounter: publicView(existing) };
 		}
 		return { ok: false, code: 'busy', message: `${payload.showdown} already has an encounter open (${E.describe(existing)}). Finish it first.` };
@@ -262,7 +316,7 @@ function requestTutorial(payload, deps) {
 		result: null,
 	};
 	encounters.set(enc.id, enc);
-	deps.spawn(enc);
+	if (deps.spawn(enc) === false) return notSpawned(enc);
 	return { ok: true, encounter: publicView(enc) };
 }
 
@@ -1031,10 +1085,23 @@ function httpRoute(deps, log) {
 				 * An encounter opened with the player's Discord team: wait for the
 				 * room (at most ~20 s, openEncounter) so Discord can post its link.
 				 * roomid null means it could not be opened.
+				 *
+				 * Then the Discord bot says "try again" (it reads `opened && !roomid`),
+				 * and the encounter itself is closed as an error by openEncounter, so
+				 * the next !encounter starts clean rather than finding this one still
+				 * "waiting" for a battle that never came. `message` says why.
 				 */
 				const opening = answer.ok && answer.encounter && deps.opening ? deps.opening(answer.encounter.id) : undefined;
 				if (!opening) return send(res, 200, answer);
-				return Promise.resolve(opening).then(roomid => send(res, 200, { ...answer, opened: true, roomid: roomid || null }));
+				return Promise.resolve(opening).catch(e => {
+					log(`open encounter failed: ${e.stack || e.message}`);
+					return null;
+				}).then(roomid => {
+					if (roomid) return send(res, 200, { ...answer, opened: true, roomid });
+					const enc = encounters.get(answer.encounter.id);
+					const message = (enc && enc.result && enc.result.message) || "Showdown couldn't open that encounter just now.";
+					send(res, 200, { ...answer, opened: true, roomid: null, code: 'notopened', message, encounter: enc ? publicView(enc) : answer.encounter });
+				});
 			}).catch(() => send(res, 400, { ok: false, code: 'bad', message: 'Bad request.' }));
 			return true;
 		}
@@ -1084,7 +1151,7 @@ function httpRoute(deps, log) {
 
 module.exports = {
 	freeCatch, FREE_CATCHES, allowCatch, summoned, chosenSet,
-	pvpCheck, pvpNotice, friendlyNotice, isAgreed, verify, placeFor, requestEncounter, requestTutorial, completeEncounter, canUseItem, usedInLog, setBags, bagFor, pvpItemsFor, canUsePvpItem, NPC_ITEMS_EACH, publicView, canThrow, thrownInLog, resultFromLog, openFor,
+	pvpCheck, pvpNotice, friendlyNotice, isAgreed, verify, placeFor, requestEncounter, requestTutorial, completeEncounter, canUseItem, usedInLog, setBags, bagFor, pvpItemsFor, canUsePvpItem, NPC_ITEMS_EACH, publicView, canThrow, thrownInLog, resultFromLog, openFor, encounterAccount, isEncounterName, isLocalOnly, LOOPBACK,
 	checkTeam, gimmickIn, GIMMICK_ITEM, GIMMICK_NAME, sidesInLog, startMatch,
 	httpRoute, encounters, RP_ROOM, CHALLENGE_MS, recordFinished, finishedSince,
 };

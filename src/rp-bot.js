@@ -257,19 +257,41 @@ class RpGuide extends ShowdownBot {
 	startEncounter(spawn) {
 		const existing = this.live.get(spawn.id);
 		if (existing && !existing.finished) {
-			// Asked again for the same one: challenge again rather than start another.
-			if (!existing.battleRoom) {
+			if (!existing.battleRoom && spawn.open && existing.spawn.open) {
+				/*
+				 * Asked again while it waits to be seated: the server puts it in the
+				 * room (showdown-config.js openEncounter), so there is nothing to
+				 * send. It takes what came with the new spawn - badges, bag, the
+				 * warning - and keeps waiting. A /challenge here went out next to
+				 * the room being opened (23 Sep 2026).
+				 */
+				existing.spawn = spawn;
+				existing.noGimmicks = gimmicksHidden(spawn);
+				return;
+			}
+			if (!existing.battleRoom && !spawn.open) {
+				// Asked again for the same one: challenge again rather than start another.
+				existing.spawn = spawn;
+				existing.noGimmicks = gimmicksHidden(spawn);
 				existing.send(`|/challenge ${spawn.target}, ${spawn.format}`);
 				return;
 			}
-			// It already had a battle, which the server has called off (the team didn't
-			// match the box) - the server only asks again for an encounter that isn't
-			// being battled. That opponent may not have noticed yet: retire it, send a new one.
-			existing.finish('replaced after a called-off battle');
+			/*
+			 * Otherwise this opponent is done with. Either it already had a battle,
+			 * which the server has called off (the team didn't match the box) - the
+			 * server only asks again for an encounter that isn't being battled - and
+			 * it may not have noticed yet; or it is waiting on a challenge and the
+			 * player has since picked a team, so this one is opened instead. Retire
+			 * it (withdrawing any challenge) and send a new one.
+			 */
+			if (!existing.battleRoom) existing.send(`|/cancelchallenge ${existing.spawn.target}`);
+			existing.finish(existing.battleRoom ? 'replaced after a called-off battle' : 'replaced: the player picked a team');
 			this.live.delete(spawn.id);
 		}
 		if (this.live.size >= MAX_LIVE) {
 			this.pm(spawn.target, 'The RP bot is running a lot of battles right now. Try !encounter again in a few minutes.');
+			// And the server, so an open stops waiting and Discord hears why (showdown-config.js rpbusy).
+			this.send(`|/rpbusy ${spawn.id}`);
 			return;
 		}
 		const opponent = new EncounterOpponent(spawn, {

@@ -544,6 +544,15 @@ exports.commands = {
 		if (!answer.ok) throw new Chat.ErrorMessage(String(answer.message || 'The tutorial could not start.').replace(/\*\*/g, ''));
 		this.sendReply('A wild Rattata is about to challenge you. Click Accept (no team needed): you battle with a Lv. 5 Pikachu, 1 Potion and 1 Pokéball. Throw it and use the Potion from the Bag under your moves. Nothing counts, so try everything.');
 	},
+	/*
+	 * The RP Guide saying it can't take an encounter right now (src/rp-bot.js,
+	 * MAX_LIVE). Only the guide's own account, from this machine, is listened
+	 * to; for anybody else it is a command that does nothing. Hidden: no help.
+	 */
+	rpbusy(target, room, user) {
+		if (user.id !== toID(RP_BOT) || !isRpBot(user)) return;
+		rpBusy(toID(target));
+	},
 	tutorialhelp: ['/tutorial - A practice wild battle: a Lv. 5 Pikachu with 1 Potion and 1 Pokéball against a Lv. 5 Rattata. Nothing is recorded.'],
 
 	useitemhelp: ["/useitem [item], [pokemon] - In any RP battle, use an item from your character's bag instead of attacking: Potions, status heals, Revives (on a benched Pokémon), Ethers, X items... The item panel's buttons do this for you. NPCs have 5 of each; RP Custom Game is unlimited."],
@@ -1850,6 +1859,8 @@ let isRpBot = () => false;
 const RP_FORMATS = new Set(['gen9rpbattlewildencounter', 'gen9rpbattlewilddoubles', 'gen9rptutorial']);
 // Set once the roleplay hooks are up: what /tutorial needs to start a battle.
 let tutorialDeps = null;
+// Set by roleplay(): the RP bot turning an encounter down (the /rpbusy command).
+let rpBusy = () => {};
 // Battles between players where bag items work (not RP Custom Game).
 const RP_PVP_FORMATS = new Set(['gen9rpbattle', 'gen9rpbattledoubles']);
 
@@ -1965,25 +1976,51 @@ function roleplay() {
 		};
 	}
 	function rolled(userid) {
-		return [...allowed].some(id => userid === id || (userid.startsWith(id) && /^\d{1,3}$/.test(userid.slice(id.length))));
+		return [...allowed].some(id => rp.isEncounterName(id, userid));
 	}
-	isRpBot = user => rolled(user.id) && user.connections.length > 0 &&
-		user.connections.every(c => ['127.0.0.1', '::1', '::ffff:127.0.0.1'].includes(c.ip));
+	isRpBot = user => rolled(user.id) && rp.isLocalOnly(user);
 
 	/*
 	 * Put the player and the encounter's own account into a battle, once that
 	 * account has finished logging in. Nobody accepts anything: the room simply
 	 * opens, the same as a battle between two players.
+	 *
+	 * The account is found by the rule it logs in under (rp.encounterAccount):
+	 * "Hiker Bob", or "Hiker Bob42" when a person has the plain name, and only
+	 * from this machine. Looking up the exact name missed the renamed bot, and
+	 * could have seated the person (23 Sep 2026).
+	 *
+	 * A battle that could not be opened closes the encounter as an error, with
+	 * the reason, and sends the waiting opponent home: otherwise it stood in
+	 * the Roleplay room for five minutes, and the encounter stayed "waiting",
+	 * so the next !encounter came back as "still waiting from before" with no
+	 * room and nothing on Discord to settle it (23 Sep 2026).
 	 */
 	async function openEncounter(enc, spawn) {
 		const until = Date.now() + 20000;
+		const failed = (why, message) => {
+			console.log(`[roleplay] open encounter ${enc.id}: ${why}`);
+			if (enc.status === 'waiting') {
+				enc.status = 'error';
+				enc.result = { outcome: 'error', message };
+			}
+			deps.cancel(enc);
+			return null;
+		};
 		let bot = null;
+		let player = null;
 		while (Date.now() < until) {
-			bot = Users.get(toID(spawn.name));
-			const player = Users.get(toID(enc.showdown));
-			if (bot && bot.connected && player && player.connected) {
+			// Closed while we waited: the RP bot refused it (too many battles at
+			// once, /rpbusy) or staff finished it. Nothing to wait for any more.
+			if (enc.status !== 'waiting') {
+				return failed(`no longer waiting (${enc.status})`, (enc.result && enc.result.message) || 'The encounter was closed.');
+			}
+			bot = rp.encounterAccount(Users.users.values(), spawn.name);
+			player = Users.get(toID(enc.showdown));
+			if (bot && player && player.connected) {
+				let room = null;
 				try {
-					const room = Rooms.createBattle({
+					room = Rooms.createBattle({
 						format: enc.format,
 						players: [
 							{ user: bot, team: spawn.team },
@@ -1991,26 +2028,41 @@ function roleplay() {
 						],
 						rated: 0,
 					});
-					if (room) {
-						enc.roomid = room.roomid;
-						player.popup(`|html|<b>Your encounter is ready.</b><br />It is open in front of you - nothing to accept.`);
-						return room.roomid;
-					}
 				} catch (e) {
-					console.log(`[roleplay] open encounter: ${e.message}`);
+					return failed(`the battle would not open: ${e.stack || e.message}`, 'The battle server would not open the battle.');
 				}
-				return null;
+				if (!room) return failed('the battle would not open (no room)', 'The battle server would not open the battle (it may be restarting).');
+				enc.roomid = room.roomid;
+				player.popup(`|html|<b>Your encounter is ready.</b><br />It is open in front of you - nothing to accept.`);
+				return room.roomid;
 			}
 			await new Promise(done => setTimeout(done, 400));
 		}
-		console.log('[roleplay] open encounter: the opponent never came online');
-		return null;
+		if (!player || !player.connected) {
+			return failed('the player went offline', `${enc.showdown} is not on Showdown right now.`);
+		}
+		return failed('the opponent never came online', 'The encounter\'s opponent never logged in.');
 	}
 	/*
 	 * Encounters being opened, by id, so the /rp/encounter answer can wait for
 	 * the room and hand Discord its link (rp-server.js httpRoute, deps.opening).
 	 */
 	const openings = new Map();
+	// The same, for as long as openEncounter is still running (spawn, below).
+	const inFlight = new Map();
+	/*
+	 * The RP bot turned an encounter down because it is already running as
+	 * many as it may (src/rp-bot.js MAX_LIVE). It says so with /rpbusy, and the
+	 * encounter closes with that reason: an open stops waiting for an opponent
+	 * that isn't coming, and Discord is told rather than left saying "you've
+	 * been challenged" (23 Sep 2026).
+	 */
+	rpBusy = id => {
+		const enc = rp.encounters.get(id);
+		if (!enc || enc.status !== 'waiting') return;
+		enc.status = 'error';
+		enc.result = { outcome: 'error', message: 'The RP bot is running a lot of battles right now. Try !encounter again in a few minutes.' };
+	};
 
 	const deps = {
 		isOnline: userid => {
@@ -2045,7 +2097,19 @@ function roleplay() {
 			 * takes a moment, so this waits for it; the answer to Discord waits
 			 * too, so it can post the room's link (deps.opening).
 			 */
-			if (enc.playerTeam) openings.set(enc.id, openEncounter(enc, spawn));
+			if (enc.playerTeam) {
+				/*
+				 * Asked again while the first open is still waiting for the bot:
+				 * the same wait answers both, rather than a second loop opening a
+				 * second room with the same two people in it (23 Sep 2026).
+				 */
+				let pending = inFlight.get(enc.id);
+				if (!pending) {
+					pending = openEncounter(enc, spawn).finally(() => inFlight.delete(enc.id));
+					inFlight.set(enc.id, pending);
+				}
+				openings.set(enc.id, pending);
+			}
 			return true;
 		},
 		/*
