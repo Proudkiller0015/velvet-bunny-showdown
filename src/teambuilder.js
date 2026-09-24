@@ -940,7 +940,19 @@ class TeamBuilder {
 	 */
 	considerMegaStone(ctx, species, set, rng) {
 		if (this.gimmickOf(ctx, set.item)) return;     // it already has one
-		if (rng() > 0.33) return;
+		/*
+		 * A Pokemon that is only here because of its Mega wants the stone. Banette
+		 * (ZU) came to RP OU with a Life Orb and never Mega Evolved (owner, 24 Sep
+		 * 2026, replay gen9rpou-9-tlvuiv): a one-in-three roll is right for a
+		 * Garchomp that is fine either way, not for a base form two tiers below the
+		 * format. Those take the stone nine times in ten.
+		 */
+		const RANK = { Uber: 7, AG: 8, OU: 6, UUBL: 5.5, UU: 5, RUBL: 4.5, RU: 4, NUBL: 3.5, NU: 3, PUBL: 2.5, PU: 2, ZUBL: 1.5, ZU: 1, NFE: 0, LC: 0 };
+		const m = /(ubers|ou|uu|ru|nu|pu|zu)$/.exec(String(ctx.id || ''));
+		const formatRank = m ? RANK[m[1] === 'ubers' ? 'Uber' : m[1].toUpperCase()] : RANK.OU;
+		const baseRank = RANK[String(species.tier || '').replace(/[()]/g, '')];
+		const onlyForTheMega = baseRank !== undefined && baseRank <= formatRank - 2;
+		if (rng() > (onlyForTheMega ? 0.9 : 0.33)) return;
 		const stone = this.megaStoneFor(ctx, species);
 		if (stone) set.item = stone;
 	}
