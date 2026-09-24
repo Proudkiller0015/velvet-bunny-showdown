@@ -257,10 +257,17 @@ const STOCKFISH_REVIEW = { foeModel: true, hpUnits: true, recovery: true, hazard
 const STALL_PLAY = { stallPlay: true };
 /*
  * Which of those rules each style of our own team plays, keyed by ourArchetype()
- * (the teambuilding checklist's styles). Stall plays them all; the others are off
- * until each rule is measured on them (the owner's next step: the study's rules
- * where they fit balance and offense too). A cfg.styleRules of the same shape
- * overrides this for a measurement.
+ * (the teambuilding checklist's styles). Stall plays them all. The others play
+ * the rules that fit them (24 Sep 2026): every style answers a boosted foe, aims
+ * status, never Protects twice and gifts a setup foe no free turn; balance adds
+ * pivot, preserve, the heal band, Wish, saving the last heals and hazards on a
+ * free turn; bulky offense adds removal and, while one of its walls is in
+ * ('walls'), pivot, preserve, the heal band and Wish; hyper offense removes
+ * hazards only when most of the team lacks Boots ('noBoots'). Measured in a
+ * mirrored head-to-head against the stall-only table, 792 games in gen9rpou and
+ * gen9nationaldex at Champion, win rate of the side with the new rules (90%):
+ * balance 51.9% +/- 5.7, bulky offense 54.7% +/- 4.7, hyper offense 54.6% +/- 5.5.
+ * A cfg.styleRules of the same shape overrides this for a measurement.
  *
  *   pivot        R1   switch to the wall that takes the hit, even at full health
  *   preserve     R2/3 never sack, keep a Pokemon at 35% or less
@@ -278,9 +285,9 @@ const STALL_PLAY = { stallPlay: true };
  */
 const STYLE_RULES = {
 	stall: { pivot: true, preserve: true, boosted: true, heal: true, ppSave: true, wish: true, protect: true, status: true, removal: true, hazardTiming: true, freeTurns: true, holdDynamax: true },
-	balance: {},
-	'bulky offense': {},
-	'hyper offense': {},
+	balance: { pivot: true, preserve: true, boosted: true, heal: true, ppSave: true, wish: true, protect: true, status: true, removal: true, hazardTiming: true, freeTurns: true },
+	'bulky offense': { pivot: 'walls', preserve: 'walls', boosted: true, heal: 'walls', wish: 'walls', protect: true, status: true, removal: true, freeTurns: true },
+	'hyper offense': { boosted: true, protect: true, status: true, removal: 'noBoots', freeTurns: true },
 };
 const DIFFICULTIES = {
 	// An in-game trainer. It reaches for whatever move has the biggest number on
@@ -1616,16 +1623,20 @@ class BattleAI {
 		const Dex = require('./rp-dex')();
 		const idOf = s => String(s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
 		let walls = 0, setup = 0;
+		const wallSet = new Set();
 		for (const p of mons) {
 			const set = { species: String(p.details || '').split(',')[0], moves: (p.moves || []).map(idOf), ability: idOf(p.baseAbility || p.ability), item: idOf(p.item) };
 			if (set.moves.some(m => TL.MOVES.setup.includes(m))) setup++;
 			try {
 				if (!Dex.species.get(set.species).exists || /^choice/.test(set.item)) continue;
 				const heals = set.moves.some(m => TL.MOVES.recovery.includes(m)) || TL.ABILITIES.recovery.includes(set.ability);
-				if (heals && TL.isDefensive(Dex, set)) walls++;
+				if (heals && TL.isDefensive(Dex, set)) { walls++; wallSet.add(p.details); }
 			} catch (e) { /* an unknown species is not a wall we can count on */ }
 		}
 		this._styleKey = key;
+		this._walls = wallSet;
+		// Boots on under half the team: hazards cost it enough for removal to pay (hyper offense).
+		this._noBoots = mons.filter(p => idOf(p.item) !== 'heavydutyboots').length * 2 > mons.length;
 		this._style = mons.length >= 4 && walls >= 4 ? 'stall' : walls >= 2 ? 'balance' : walls === 1 || setup < 2 ? 'bulky offense' : 'hyper offense';
 		return this._style;
 	}
@@ -1635,8 +1646,14 @@ class BattleAI {
 		if (!this.cfg.stallPlay || this.cfg.naive || this.cfg.greedy) return null;
 		const style = this.ourArchetype(request);
 		const table = this.cfg.styleRules || STYLE_RULES;
-		const rules = style && table[style];
-		return rules && Object.values(rules).some(Boolean) ? rules : null;
+		const row = style && table[style];
+		if (!row) return null;
+		// A rule is true for the whole team, 'walls' only while one of its walls is in, 'noBoots' only on a team mostly without Boots.
+		const active = (request.side.pokemon || []).find(p => p.active);
+		const on = v => v === true || (v === 'walls' && !!active && this._walls.has(active.details)) || (v === 'noBoots' && this._noBoots);
+		const rules = {};
+		for (const k of Object.keys(row)) rules[k] = on(row[k]);
+		return Object.values(rules).some(Boolean) ? rules : null;
 	}
 
 	/** Is our own team stall, with the stall rules on? */
