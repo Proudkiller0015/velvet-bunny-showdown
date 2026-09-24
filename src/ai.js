@@ -1525,7 +1525,9 @@ class BattleAI {
 			if (dying) return null;
 			// Humans Wish at a median 82% and pass it 40% of the time (the bot: 100%, 14%).
 			const own = myHpPct <= 85 ? 30 + (85 - myHpPct) * 0.7 : 0;
-			return Math.max(own, ctx.wishMate ? 34 : 0, 2);
+			// For a teammate only when the turn is free: not in front of a foe that sets up (round 2:
+			// Wish at a median 100% HP, 547 of them, passed 27% of the time).
+			return Math.max(own, ctx.wishMate && !ctx.foeSetup ? 24 : 0, 2);
 		}
 		if (move.id === 'rest' && me.status === 'slp') return -30;
 		if (myHpPct >= 99.5) return -30;
@@ -1550,7 +1552,8 @@ class BattleAI {
 		}
 		if (incoming >= full * 0.9) return 12 * sleeps * save;
 		if (myHpPct <= 65) return (48 + (65 - myHpPct) * 1.2) * sleeps * save;
-		return (10 + (90 - myHpPct) * 0.4) * sleeps * save;
+		// 65-90%: only when nothing else is worth the turn (round 2's heals: median 68%, p75 82%; humans' p75 65%).
+		return (4 + (90 - myHpPct) * 0.3) * sleeps * save;
 	}
 
 	/**
@@ -1622,6 +1625,8 @@ class BattleAI {
 				: !!(sheet && sheet.baseStats && sheet.baseStats.atk >= sheet.baseStats.spa);
 			value = physical ? value + 20 : value * 0.6;
 		}
+		// Status the wincon: poison and burn are what a setup sweeper cannot boost past (B1).
+		if (ctx.foeSetup) value += 12;
 		if (known === 'regenerator') value *= 0.6;
 		else if (known === 'naturalcure') value *= 0.5;
 		return value;
@@ -1743,7 +1748,16 @@ class BattleAI {
 			if (spent || sackOk) return null;
 			const survive = cands.filter(c => c.after > 0);
 			const safes = survive.filter(safe);
-			const pick = safes.length ? byBench(safes) : survive.sort((a, b) => b.after - a.after)[0];
+			/*
+			 * With no safe switch-in, a switch only spreads the damage: round 2 had five
+			 * walls in six turns each come in on a Hatterene's Psychic Noise and leave at
+			 * 30-50%. Take the unsafe one only when it clearly ends better than staying,
+			 * and not straight after coming in.
+			 */
+			const inNow = state.turn - (state.mineCameIn || 0) <= 1;
+			const fallback = survive.sort((a, b) => b.after - a.after)[0];
+			const pick = safes.length ? byBench(safes)
+				: fallback && !inNow && fallback.after >= 30 && fallback.after > hp - incoming + 15 ? fallback : null;
 			return pick ? { switch: pick.i, why: 'preserve' } : null;
 		}
 		if (planned || dying) return null;
@@ -1900,7 +1914,10 @@ class BattleAI {
 		const hopeful = isSetup && pressure >= 0.7 && !(this.cfg.setupCap && myHpPct <= 30);
 		const live = ctx.live;
 		// Wish on its way: Protect is how it lands (recovery, A20).
-		if (this.cfg.recovery && PROTECTS.has(move.id) && move.id !== 'endure' && live && live.lastMove === 'Wish' && live.lastMoveTurn === state.turn - 1) return 45;
+		// Not for a healthy stall wall in front of a setup foe: Alomomola at 100% Wished and Protected while Ogerpon
+		// used Swords Dance twice, then swept five (stall study round 2).
+		if (this.cfg.recovery && PROTECTS.has(move.id) && move.id !== 'endure' && live && live.lastMove === 'Wish' && live.lastMoveTurn === state.turn - 1 &&
+			!(ctx.stall && ctx.foeSetup && myHpPct >= 70)) return 45;
 		// Healing is judged before "this is the last turn": healing first can make it not the last.
 		if (this.cfg.recovery && (RECOVERY.includes(move.name) || move.id === 'wish')) {
 			const heal = this.recoveryScore(move, me, state, myHpPct, incoming, dying, ctx);
@@ -3027,6 +3044,8 @@ class BattleAI {
 			for (const m of legal) stallCtx.pp[m.move || toName(m.id, 'moves')] = m.pp;
 			stallCtx.sleepTalk = legal.some(m => /^sleeptalk$/.test(String(m.id || '').toLowerCase()));
 			// A teammate that a Wish passed to would bring back from half health (R10).
+			// A foe that is boosted or can boost: a passive turn in front of it is its free setup.
+			stallCtx.foeSetup = !!foes[0] && (Object.values(foes[0].boosts || {}).some(v => v > 0) || this.foeCanSetUp(gen, foes[0]));
 			stallCtx.wishMate = request.side.pokemon.some(p => {
 				if (p.active || /fnt/.test(p.condition || '')) return false;
 				const c = /^(\d+)\/(\d+)/.exec(p.condition || '');

@@ -153,6 +153,17 @@ console.log('\n--- R10: Wish at about 80%, and pass it ---');
 	check('with our Wish landing, Blissey passes it to the 40% Toxapex', moveOf(p.request, stockfish().decide(p.request, p.state)), 'switch Toxapex');
 }
 
+console.log('\n--- no free turns for a setup foe (round 2: Alomomola Wished and Protected into two Swords Dances) ---');
+{
+	const moves = ['Wish', 'Protect', 'Toxic', 'Flip Turn'];
+	const alomomola = () => mon('Alomomola', moves, { item: 'Rocky Helmet', ability: 'Regenerator' });
+	const p = position({ me: alomomola(), myMoves: moves, bench: wallsBut('Toxapex').concat([WALLS.Toxapex(40)]), foe: { species: 'Ogerpon-Wellspring', moves: ['Swords Dance', 'Ivy Cudgel'], ability: 'Water Absorb' } });
+	check('healthy Alomomola in front of Ogerpon does not Wish for the bench', moveOf(p.request, stockfish().decide(p.request, p.state)), m => m !== 'Wish' && m !== 'Protect');
+	p.state.mine.a.lastMove = 'Wish'; p.state.mine.a.lastMoveTurn = p.state.turn - 1;
+	p.state.opponent.a.boosts = { atk: 2 };
+	check('nor Protects at full health while it boosts', moveOf(p.request, stockfish().decide(p.request, p.state)), m => m !== 'Protect');
+}
+
 console.log('\n--- R13: the last heals are saved for low HP ---');
 {
 	const ai = stockfish();
