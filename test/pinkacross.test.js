@@ -325,6 +325,57 @@ if (MAIN) {
 	check(`into their switch, U-turn beats Earthquake (${play('U-turn').toFixed(0)} vs ${play('Earthquake').toFixed(0)})`, play('U-turn') > play('Earthquake'), true);
 }
 
+// ------------------------------------------------------------------- endgame
+if (MAIN) console.log('\n--- A16: the exact endgame ---');
+if (MAIN) {
+	const calc = require('@smogon/calc');
+	const field = new calc.Field();
+	const ai = new BattleAI({ difficulty: 'stockfish' });
+	ai.setFormat('gen9ou');
+	const gen = ai.gen(9);
+	const three = () => position({
+		me: mon('Garchomp', ['Earthquake', 'Dragon Claw', 'Stone Edge', 'Fire Fang']),
+		myMoves: ['Earthquake', 'Dragon Claw', 'Stone Edge', 'Fire Fang'],
+		bench: [mon('Scizor', ['Bullet Punch', 'U-turn', 'Close Combat', 'Knock Off'], { hp: 60 }), mon('Rotom-Wash', ['Hydro Pump', 'Volt Switch', 'Will-O-Wisp'], { hp: 80 })],
+		foe: { species: 'Weavile', hp: 70, moves: ['Triple Axel', 'Knock Off', 'Ice Shard'] },
+		foeBench: ['Heatran', 'Toxapex'], foeDown: ['Pikachu', 'Raichu', 'Eevee'],
+	});
+	{
+		const p = three();
+		ai.myMoveNames = p.request.active[0].moves.map(m => m.move);
+		const model = ai.search.endgameModel(gen, p.request, p.state, field);
+		check('applies at three a side with all of theirs seen', !!model, true);
+		const found = model && ai.search.endgameSearch(model);
+		check(`stays inside its time budget (${found && found.ms}ms, depth ${found && found.depth}, ${found && found.nodes} nodes)`,
+			!!found && found.ms <= 400 && found.depth >= 2, true);
+		const t0 = Date.now();
+		const choice = String(ai.decide(p.request, p.state));
+		check(`a whole decision stays quick (${Date.now() - t0}ms, ${choice})`, Date.now() - t0 < 1500, true);
+	}
+	{
+		// Without a preview and with foes never seen, it must stand down.
+		const p = three();
+		p.state.preview = null;
+		p.state.theirSeen = new Set(['Weavile']);
+		ai.myMoveNames = p.request.active[0].moves.map(m => m.move);
+		check('stands down while some of theirs are unseen', ai.search.endgameModel(gen, p.request, p.state, field), null);
+	}
+	{
+		// After a faint, against a Weavile at half health that outruns everything:
+		// the Scizor whose Bullet Punch finishes it, not the Garchomp it kills first.
+		const p = position({
+			me: mon('Dragapult', ['Dragon Darts'], { fainted: true }), myMoves: ['Dragon Darts'],
+			bench: [mon('Garchomp', ['Earthquake', 'Dragon Claw'], { hp: 35 }), mon('Scizor', ['Bullet Punch', 'U-turn'])],
+			foe: { species: 'Weavile', hp: 45, moves: ['Triple Axel', 'Knock Off'] }, foeDown: ['Pikachu', 'Raichu', 'Eevee', 'Jolteon', 'Vaporeon'],
+		});
+		p.request.forceSwitch = [true];
+		delete p.request.active;
+		const planned = ai.search.endgameReplacement(gen, p.request, p.state, field);
+		check(`plans the replacement that wins (${planned && planned.i}, value ${planned && planned.value.toFixed(0)})`, planned && planned.i, 3);
+		check('and decide() sends it', String(ai.decide(p.request, p.state)), 'switch 3');
+	}
+}
+
 module.exports = { position, mon, onRungs, moveName, check, realStats };
 
 if (require.main === module) {

@@ -1753,6 +1753,19 @@ class BattleAI {
 		return this.hiddenCache.get(species).filter(n => !seen.includes(n));
 	}
 
+	/**
+	 * Named stand-in attacks for a foe that has shown none: one per type it
+	 * has, on the side it hits harder with - the same probes roughIncoming
+	 * uses, as moves the endgame tree can play (24 Sep 2026).
+	 */
+	probeAttacks(gen, them) {
+		const species = PkmnDex.forGen(gen.num).species.get(them.name || (them.species && them.species.name));
+		if (!species) return [];
+		const physical = ((them.stats && them.stats.atk) || 0) >= ((them.stats && them.stats.spa) || 0);
+		const PROBES = physical ? PHYSICAL_PROBES : SPECIAL_PROBES;
+		return species.types.map(t => PROBES[t]).filter(Boolean);
+	}
+
 	/** Worst-case estimate when the opponent has revealed nothing. */
 	roughIncoming(gen, them, me, field) {
 		// If the format generated this Pokemon from a known list, guessing is
@@ -1874,6 +1887,14 @@ class BattleAI {
 			.map((p, i) => ({ p, i: i + 1 }))
 			.filter(({ p }) => !p.active && !/fnt/.test(p.condition));
 		if (!options.length) return 'default';
+		/*
+		 * In the endgame, who comes in is decided by playing the rest out (A16):
+		 * "if they bring X, I send Y" is exactly this choice. (24 Sep 2026)
+		 */
+		if (this.cfg.endgame && this.cfg.search && options.length > 1) {
+			const planned = this.search.endgameReplacement(gen, request, state, field);
+			if (planned && options.some(o => o.i === planned.i)) return `switch ${planned.i}`;
+		}
 		let best = options[0], bestScore = -Infinity;
 		for (const opt of options) {
 			const score = this.benchScore(gen, opt.p, state, field, request) + this.jitter();
@@ -2336,14 +2357,27 @@ class BattleAI {
 		// Search: play each of our options out against each of their likely
 		// replies and score where the turn ends, rather than scoring the move
 		// against a position the opponent is assumed not to touch.
+		let planned = null;
 		if (this.cfg.search && ranked.length) {
-			const shortlist = ranked.slice().sort((a, b) => b.score - a.score).slice(0, 5);
-			const searched = this.search.choose(gen, active, entry, request, state, field, shortlist, incoming);
-			if (searched) best = { score: searched.score, n: searched.n, target: searched.target, name: searched.name };
+			/*
+			 * Three or fewer a side, all of theirs seen: plan it exactly instead
+			 * (A16, Pinkacross; 24 Sep 2026). The tree already weighed every switch
+			 * of ours, so the bench logic below stands down when it has spoken.
+			 */
+			if (this.cfg.endgame) planned = this.search.endgame(gen, entry, request, state, field, ranked);
+			if (planned && planned.kind === 'switch' && !active.trapped && !active.maybeTrapped) return `switch ${planned.i}`;
+			if (planned && planned.kind === 'move') {
+				best = { score: planned.score, n: planned.n, target: planned.target, name: planned.name };
+			} else {
+				planned = null;
+				const shortlist = ranked.slice().sort((a, b) => b.score - a.score).slice(0, 5);
+				const searched = this.search.choose(gen, active, entry, request, state, field, shortlist, incoming);
+				if (searched) best = { score: searched.score, n: searched.n, target: searched.target, name: searched.name };
+			}
 		}
 
 		// Would anything on the bench do better than what we are about to do here?
-		if (this.cfg.switching && request.side.pokemon.length > 1 && !active.trapped && !active.maybeTrapped) {
+		if (!planned && this.cfg.switching && request.side.pokemon.length > 1 && !active.trapped && !active.maybeTrapped) {
 			const myHpPct = (me.originalCurHP / me.maxHP()) * 100;
 			const doomed = incoming >= myHpPct;
 			// Stuck with a self-dropped attacking stat and nothing that kills: switching resets it.
