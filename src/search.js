@@ -236,6 +236,8 @@ class TurnSearch {
 		// Our damage is a share of what they have left (100 kills); theirHp is a share of their maximum.
 		let myDamage = (ours.damage || 0) * (this.ai.cfg.hpUnits ? theirHp / 100 : 1);
 		let incoming = theirs.damage || 0;
+		// Stall's Protect (ai.js marks it only for a stall team): their hit this turn is blocked (R9).
+		if (ours.protect) incoming = 0;
 
 		if (ours.kind === 'switch') {
 			// We do nothing this turn and eat the hit on the way in. The

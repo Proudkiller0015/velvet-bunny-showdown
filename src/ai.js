@@ -215,6 +215,53 @@ const PINKACROSS_SEARCH = { middleGround: true, endgame: true };
  *              endgame tree has a plan (Indeedee-F, Hyper Voice into a Ghost x16).
  */
 const STOCKFISH_REVIEW = { foeModel: true, hpUnits: true, recovery: true, hazardPlan: true, setupCap: true, endgameGuard: true };
+/*
+ * Stall, played the way 63 human NatDex stall sides rated 1849-1934 played it
+ * (docs/stall-replay-study.md, rules R1-R13; 24 Sep 2026). Each rule is on per
+ * style of our own team (ourArchetype(), STYLE_RULES below): today only for
+ * stall - four or more walls with recovery - so every other team plays exactly
+ * as before:
+ *
+ *   stallPlay  pivot to the wall that takes the hit, even at full health (R1);
+ *              never sack a wall, keep one at 35% or less (R2, R3); heal in the
+ *              45-65% band unless the hit outruns the heal (R4, R5); aim status
+ *              (R6); remove hazards once a layer costs the team (R8); answer a
+ *              boosted foe with the answer or a heal (R11); Protect with a
+ *              purpose, never twice (R9); Wish at about 80% and pass it (R10);
+ *              keep making progress in long games (R12); save the last heals (R13).
+ *
+ * On every rung that thinks (Hard, Champion, Stockfish): the site's ladder bots,
+ * gyms, trainers and summons all play through this class, and whichever of them
+ * is handed a stall team should play it as stall (owner, 24 Sep 2026). Easy and
+ * Normal stay greedy - they only ever attack, by design - so it is off there.
+ */
+const STALL_PLAY = { stallPlay: true };
+/*
+ * Which of those rules each style of our own team plays, keyed by ourArchetype()
+ * (the teambuilding checklist's styles). Stall plays them all; the others are off
+ * until each rule is measured on them (the owner's next step: the study's rules
+ * where they fit balance and offense too). A cfg.styleRules of the same shape
+ * overrides this for a measurement.
+ *
+ *   pivot        R1   switch to the wall that takes the hit, even at full health
+ *   preserve     R2/3 never sack, keep a Pokemon at 35% or less
+ *   boosted      R11  a boosted foe: the answer comes in, or we heal; Haze and
+ *                     phaze at +1; Unaware and phazers favoured coming in
+ *   heal         R4/5 heal in the 45-65% band, not into a hit that outruns it
+ *   ppSave       R13  the last three heals kept for low HP
+ *   wish         R10  Wish at about 80%, and passed to a teammate
+ *   protect      R9   Protect to scout or for a residual tick, never twice
+ *   status       R6   status aimed: burns at physical attackers, nothing into absorbers
+ *   removal      R8   Defog and Spin worth what the hazards cost our team
+ *   hazardTiming R7   hazards on a free turn, not under fire
+ *   freeTurns         no Wish, Protect or passive turn gifted to a foe that sets up
+ */
+const STYLE_RULES = {
+	stall: { pivot: true, preserve: true, boosted: true, heal: true, ppSave: true, wish: true, protect: true, status: true, removal: true, hazardTiming: true, freeTurns: true },
+	balance: {},
+	'bulky offense': {},
+	'hyper offense': {},
+};
 const DIFFICULTIES = {
 	// An in-game trainer. It reaches for whatever move has the biggest number on
 	// it, without working out what that move would actually do, and it never
@@ -231,15 +278,15 @@ const DIFFICULTIES = {
 	// ability the thing in front of it is generated with. It still misjudges a
 	// position now and again, which is the difference between a strong opponent
 	// and an unbeatable one.
-	hard:     { blunder: 0.06, greedy: false, noise: 12, switching: true,  tempo: true,  predict: false, tera: true, switchMargin: 40, knowsSets: true, accuracy: true },
+	hard:     { blunder: 0.06, greedy: false, noise: 12, switching: true,  tempo: true,  predict: false, tera: true, switchMargin: 40, knowsSets: true, accuracy: true, ...STALL_PLAY },
 	// Everything Hard does and no lapses at all: it counts the speed tiers before
 	// committing, and in Random Battle it knows the whole set - moves and Tera
 	// types included - before any of it is used.
-	champion: { blunder: 0,    greedy: false, noise: 0,  switching: true,  tempo: true,  predict: true,  tera: true, switchMargin: 25, knowsSets: true, readsSets: true, playbook: true, ...PINKACROSS_CHAMPION },
+	champion: { blunder: 0,    greedy: false, noise: 0,  switching: true,  tempo: true,  predict: true,  tera: true, switchMargin: 25, knowsSets: true, readsSets: true, playbook: true, ...PINKACROSS_CHAMPION, ...STALL_PLAY },
 	// Experimental. Everything Champion does, plus a one-turn search over our
 	// options against their likely replies, weighted by numbers the trainer tuned
 	// from self-play rather than by hand.
-	stockfish: { blunder: 0,   greedy: false, noise: 0,  switching: true,  tempo: true,  predict: true,  tera: true, switchMargin: 25, knowsSets: true, readsSets: true, search: true, playbook: true, ...PINKACROSS_CHAMPION, ...PINKACROSS_SEARCH, ...STOCKFISH_REVIEW },
+	stockfish: { blunder: 0,   greedy: false, noise: 0,  switching: true,  tempo: true,  predict: true,  tera: true, switchMargin: 25, knowsSets: true, readsSets: true, search: true, playbook: true, ...PINKACROSS_CHAMPION, ...PINKACROSS_SEARCH, ...STOCKFISH_REVIEW, ...STALL_PLAY },
 };
 const DEFAULT_DIFFICULTY = 'hard';
 
@@ -1465,6 +1512,364 @@ class BattleAI {
 		return false;
 	}
 
+	// ------------------------------------------------------------------ stall
+	/**
+	 * The style of our own team: 'stall', 'balance', 'bulky offense' or 'hyper
+	 * offense', by the teambuilding checklist's rule (team-logic analyze(): four
+	 * walls or more is stall, two or three balance, one wall or fewer than two
+	 * setup users bulky offense, the rest hyper offense).
+	 *
+	 * A wall here is stricter than the checklist's: team-logic isDefensive (recovery
+	 * or big bulk, two attacks at most) and recovery of its own as well - a move,
+	 * Wish, or Regenerator or Poison Heal - and no Choice item. The replay study
+	 * called a side stall at 4+ walls of 6 (26 of its 63 sides were exactly 4); the
+	 * recovery test keeps a fat balance team out (balance-2's Scarf Gholdengo and
+	 * Leech Seed Ferrothorn are bulky, not walls that heal). Read from the request,
+	 * so it is our real team, whoever is playing it: a ladder bot, a gym, a summon.
+	 */
+	ourArchetype(request) {
+		if (!request || !request.side) return null;
+		const mons = request.side.pokemon || [];
+		const key = mons.map(p => `${p.details}|${p.item}`).join(';');
+		if (this._styleKey === key) return this._style;
+		const TL = require('./team-logic');
+		const Dex = require('./rp-dex')();
+		const idOf = s => String(s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+		let walls = 0, setup = 0;
+		for (const p of mons) {
+			const set = { species: String(p.details || '').split(',')[0], moves: (p.moves || []).map(idOf), ability: idOf(p.baseAbility || p.ability), item: idOf(p.item) };
+			if (set.moves.some(m => TL.MOVES.setup.includes(m))) setup++;
+			try {
+				if (!Dex.species.get(set.species).exists || /^choice/.test(set.item)) continue;
+				const heals = set.moves.some(m => TL.MOVES.recovery.includes(m)) || TL.ABILITIES.recovery.includes(set.ability);
+				if (heals && TL.isDefensive(Dex, set)) walls++;
+			} catch (e) { /* an unknown species is not a wall we can count on */ }
+		}
+		this._styleKey = key;
+		this._style = mons.length >= 4 && walls >= 4 ? 'stall' : walls >= 2 ? 'balance' : walls === 1 || setup < 2 ? 'bulky offense' : 'hyper offense';
+		return this._style;
+	}
+
+	/** The STYLE_RULES our team's style plays, or null when none is on (or on a rung without them). */
+	styleRules(request) {
+		if (!this.cfg.stallPlay || this.cfg.naive || this.cfg.greedy) return null;
+		const style = this.ourArchetype(request);
+		const table = this.cfg.styleRules || STYLE_RULES;
+		const rules = style && table[style];
+		return rules && Object.values(rules).some(Boolean) ? rules : null;
+	}
+
+	/** Is our own team stall, with the stall rules on? */
+	stallTeam(request) {
+		return !!this.cfg.stallPlay && !this.cfg.naive && this.ourArchetype(request) === 'stall';
+	}
+
+	/**
+	 * Healing, for stall (R4, R5, R10, R13 in docs/stall-replay-study.md).
+	 * Humans heal 3.9 times a game at a median 57% (p25 44, p75 65), the same
+	 * against threats and not; at 50% or less with recovery they heal half the
+	 * time, switch a third, and almost never attack. The bot healed 0.25 times a
+	 * game. A heal the hit outruns is a losing loop - stallSwitch() finds the wall
+	 * that takes it instead. Returns undefined to leave the move to the old rule.
+	 */
+	stallRecovery(move, me, state, myHpPct, incoming, dying, ctx) {
+		const live = ctx.live;
+		if (move.id === 'wish') {
+			if (live && live.lastMove === 'Wish' && live.lastMoveTurn >= state.turn - 1) return -20;
+			if (dying) return null;
+			// Humans Wish at a median 82% and pass it 40% of the time (the bot: 100%, 14%).
+			const own = myHpPct <= 85 ? 30 + (85 - myHpPct) * 0.7 : 0;
+			// For a teammate only when the turn is free: not in front of a foe that sets up (round 2:
+			// Wish at a median 100% HP, 547 of them, passed 27% of the time).
+			return Math.max(own, ctx.wishMate && !ctx.foeSetup ? 24 : 0, 2);
+		}
+		if (move.id === 'rest' && me.status === 'slp') return -30;
+		if (myHpPct >= 99.5) return -30;
+		// Never at 90% or more: 1% of human heals were at 95%+, 12% of the bot's.
+		if (myHpPct >= 90) return -20;
+		const full = this.healShare(move, state);
+		const heal = Math.min(full, 100 - myHpPct);
+		// Rest is two turns asleep: low, or to shed a status, or with Sleep Talk to fill them (A4).
+		const rest = move.id === 'rest';
+		if (rest && myHpPct > 50 && !(me.status && myHpPct <= 70)) return -10;
+		const sleeps = rest ? (ctx.sleepTalk ? 0.85 : 0.65) : 1;
+		/*
+		 * R13, the one PP rule the replays support: a wall used its heal a median 2
+		 * times a game (p75 4) and nobody Struggled, so PP is kept only at the very
+		 * end - the last three are for when HP is really short.
+		 */
+		const pp = ctx.pp ? ctx.pp[move.name] : undefined;
+		const save = pp !== undefined && pp <= 3 && myHpPct > 45 && (!ctx.rules || ctx.rules.ppSave) ? 0.5 : 1;
+		if (dying) {
+			if (ctx.movesFirst && heal > incoming && myHpPct + heal > incoming) return (60 + (heal - incoming)) * sleeps;
+			return null;
+		}
+		if (incoming >= full * 0.9) return 12 * sleeps * save;
+		if (myHpPct <= 65) return (48 + (65 - myHpPct) * 1.2) * sleeps * save;
+		// 65-90%: only when nothing else is worth the turn (round 2's heals: median 68%, p75 82%; humans' p75 65%).
+		return (4 + (90 - myHpPct) * 0.3) * sleeps * save;
+	}
+
+	/**
+	 * Protect, for stall (R9). 42% of human Protects scout a foe that has just
+	 * come in, 42% take a residual tick (their poison or burn, our Leftovers or
+	 * Poison Heal), 11% receive a Wish; 3% are a second Protect in a row (the
+	 * bot's: 13%, then 39% in round 1 - Blissey Protected six turns running into
+	 * a Ceruledge it could not touch). Without a purpose it is a lost turn.
+	 */
+	stallProtect(gen, move, me, state, myHpPct, ctx) {
+		const idOf = s => String(s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+		const live = ctx.live;
+		// Twice in a row, read off last turn's moves as well as the live entry.
+		const lastTurn = (state.lastTurnMoves || []).some(m => m.side === state.myPlayer && PROTECTS.has(idOf(m.name)));
+		if (lastTurn || (live && live.lastMoveTurn === state.turn - 1 && PROTECTS.has(idOf(live.lastMove)))) return -30;
+		if (move.id === 'endure') return -10;
+		const them = (ctx.foes || [])[0];
+		if (!them) return -4;
+		let score = -4;
+		// Scouting: the first turn against a foe we know little about.
+		const fresh = state.foeCameIn && state.foeCameIn >= state.turn - 1;
+		if (fresh && (!them.moves || them.moves.size < 2)) score = 22;
+		// Residual: their status ticks while we lose nothing.
+		const ability = idOf(them.ability);
+		if (/^(psn|tox|brn)$/.test(them.status || '') && !/^(magicguard|poisonheal|guts)$/.test(ability)) score = Math.max(score, them.status === 'tox' ? 30 : 24);
+		// And ours: Leftovers, Black Sludge or Poison Heal while we are short of full.
+		const myItem = idOf(me.item), myAbility = idOf(me.ability);
+		if (myHpPct < 94) {
+			if (myAbility === 'poisonheal' && /^(psn|tox)$/.test(me.status || '')) score = Math.max(score, 24);
+			else if (myItem === 'leftovers' || myItem === 'blacksludge') score = Math.max(score, 14);
+		}
+		// A free turn for a foe that sets up is the wrong free turn.
+		if (!them.status && this.foeCanSetUp(gen, them)) score -= 12;
+		return score;
+	}
+
+	/**
+	 * Status, aimed (R6 and research B1/B2). Humans burned physical attackers 82%
+	 * of the time and statused an immune foe 1% of the time (the bot: 12%).
+	 * Poison is worth nothing into Poison Heal, Guts, Magic Guard and the like,
+	 * less into Regenerator and Natural Cure (they shed or outheal it), and a
+	 * burn is for the physical attacker.
+	 */
+	stallStatus(gen, move, foe, ctx) {
+		const idOf = s => String(s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+		const them = (ctx.foes || [])[0];
+		if ((foe && foe.status) || (them && them.status)) return -25;
+		const dex = PkmnDex.forGen(gen.num);
+		const sheet = them ? dex.species.get(them.transformed || them.species) : null;
+		// Only what the battle revealed: the calc's Pokemon carries a default ability (Gliscor: Hyper Cutter).
+		const known = idOf(them ? them.ability : foe && foe.ability);
+		// Unrevealed, a Gliscor is Poison Heal all the same: weigh the abilities it can have.
+		const could = known ? [known] : Object.values((sheet && sheet.abilities) || {}).map(idOf);
+		// Unrevealed, the ability that absorbs it is the one a real set picks (Poison Heal Gliscor, Guts Conkeldurr).
+		const share = list => known ? (list.includes(known) ? 1 : 0) : could.some(a => list.includes(a)) ? 0.85 : 0;
+		let value = move.status === 'slp' ? 45 : 32;
+		if (move.status === 'tox' || move.status === 'psn') {
+			const absorbs = share(['poisonheal', 'guts', 'magicguard', 'toxicboost', 'quickfeet', 'marvelscale', 'immunity', 'pastelveil']);
+			if (absorbs >= 1) return -20;
+			value *= 1 - 0.7 * absorbs;
+		}
+		if (move.status === 'brn') {
+			const absorbs = share(['guts', 'flareboost', 'magicguard', 'quickfeet', 'marvelscale', 'waterbubble', 'waterveil', 'thermalexchange']);
+			if (absorbs >= 1) return -20;
+			value *= 1 - 0.7 * absorbs;
+			const attacks = [...((them && them.moves) || [])].map(m => dex.moves.get(m)).filter(m => m && m.exists && m.category !== 'Status');
+			const physical = attacks.length
+				? attacks.filter(m => m.category === 'Physical').length >= attacks.filter(m => m.category === 'Special').length
+				: !!(sheet && sheet.baseStats && sheet.baseStats.atk >= sheet.baseStats.spa);
+			value = physical ? value + 20 : value * 0.6;
+		}
+		// Status the wincon: poison and burn are what a setup sweeper cannot boost past (B1).
+		if (ctx.foeSetup) value += 12;
+		if (known === 'regenerator') value *= 0.6;
+		else if (known === 'naturalcure') value *= 0.5;
+		return value;
+	}
+
+	/**
+	 * Hazard removal, for stall (R8). Humans remove 1.2 times a game, at the
+	 * first calm turn after about one layer is up (the bot: 0.1). What it is
+	 * worth is what the hazards take from our own team on every entry - nothing
+	 * from a Heavy-Duty Boots wall, so a team in Boots can live with them (they
+	 * were up for 38% of human turns).
+	 */
+	stallRemoval(gen, move, state, request, myHpPct, incoming) {
+		const count = side => HAZARDS.reduce((n, h) => n + (Number((state.hazards[side] || {})[h]) || 0), 0);
+		if (!count(state.myPlayer)) return -15;
+		let cost = 0;
+		for (const p of (request && request.side && request.side.pokemon) || []) {
+			if (/fnt/.test(p.condition || '')) continue;
+			cost += this.entryHazards(gen, this.myPokemon(gen, p, state), p, state);
+			// Toxic Spikes poison a grounded, non-Poison, non-Steel wall without Boots.
+		}
+		const tspikes = Number((state.hazards[state.myPlayer] || {})['Toxic Spikes']) || 0;
+		if (tspikes) cost += 8 * tspikes;
+		if (cost < 5) return 2;
+		let score = 20 + cost * 1.2;
+		if (move.id === 'defog') {
+			score -= count(state.theirPlayer) * 8;
+			const theirs = state.hazards[state.theirPlayer] || {};
+			if (theirs['Reflect'] || theirs['Light Screen'] || theirs['Aurora Veil']) score += 10;
+		}
+		// A calm turn, not one where the hit coming at us is half of what we have.
+		if (incoming >= myHpPct * 0.5) score *= 0.5;
+		return Math.min(70, score);
+	}
+
+	/**
+	 * Stall's switching (R1, R2, R3, R10, R11, R12), before the general rule
+	 * gets a say. Returns { switch: i }, { move: n } to insist on a move, or null.
+	 *
+	 *   - Wish passed: our Wish lands this turn and a teammate needs it more.
+	 *   - A boosted foe: bring the answer (Unaware, Haze, a phazer), or heal when
+	 *     the heal outruns the hit; don't trade blows with a non-answer (humans
+	 *     attacked 34% of such turns, the bot 57-61%).
+	 *   - Preserve: at 35% or less, or about to be knocked out, heal if it lands
+	 *     in time and outruns the hit, otherwise switch to one that survives
+	 *     coming in (humans 87%, the bot 50-58%). The two measured exceptions to
+	 *     "never sack": a spent wall (25% or less, no job, no safe switch-in), and
+	 *     a boosted foe whose answer could not come in safely - the faint buys it
+	 *     a free switch.
+	 *   - Pivot: the hit is more than we heal, or we are walled - switch, even
+	 *     at full health, to the wall that takes it (humans switch out at a median
+	 *     94% HP, the bot at 49-63%), at most three times in six turns so two
+	 *     pairs of Pokemon do not swap forever.
+	 */
+	stallSwitch(gen, active, entry, me, request, state, field, foes, incoming, movesFirst, ranked, index, planned, rules = STYLE_RULES.stall) {
+		const foe = foes[0];
+		if (!foe) return null;
+		const idOf = s => String(s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+		const hp = (me.originalCurHP / me.maxHP()) * 100;
+		const dying = incoming >= hp;
+		const live = state.mine && state.mine['abc'[index]];
+		const bench = request.side.pokemon.map((p, i) => ({ p, i: i + 1 })).filter(({ p }) => !p.active && !/fnt/.test(p.condition || ''));
+		if (!bench.length) return null;
+		// Our KO first settles it: stall takes KOs too.
+		if (ranked.some(r => r.damage >= 100 && r.score > 0 && (r.accuracy === undefined || r.accuracy >= 0.85) && (movesFirst || r.priority > 0 || !dying))) return null;
+		const heal = ranked.filter(r => r.heal > 0 && r.score > -20).sort((a, b) => b.heal - a.heal)[0];
+		const H = heal ? Math.min(heal.heal, 100 - hp) : 0;
+		const boosts = foe.boosts || {};
+		const boosted = ['atk', 'spa', 'spe'].reduce((n, s) => n + Math.max(0, boosts[s] || 0), 0);
+		const noPhaze = /^(suctioncups|guarddog)$/.test(idOf(foe.ability));
+		const answers = (ability, moves) => ability === 'unaware' ||
+			moves.some(m => /^(haze|clearsmog)$/.test(m) || (!noPhaze && /^(roar|whirlwind|dragontail|circlethrow)$/.test(m)));
+		/*
+		 * What the foe will most likely click: its best shown attack on the Pokemon in
+		 * front of it. The worst of everything its sets might carry made every switch-in
+		 * look unsafe - Blissey at 13%, paralysed, stayed in front of a Specs Raging
+		 * Bolt's Thunderbolt with Clodsire on the bench, because Clodsire "took" Draco
+		 * Meteor (round 2). The worst case still counts, at 60%.
+		 */
+		const dex = PkmnDex.forGen(gen.num);
+		const them = this.foePokemon(gen, foe);
+		let likely = null, likelyHit = -1;
+		for (const m of foe.moves || []) {
+			const d = dex.moves.get(m);
+			if (!d || !d.exists || d.category === 'Status') continue;
+			const dmg = this.damagePct(gen, them, me, m, field);
+			if (dmg > likelyHit) { likelyHit = dmg; likely = m; }
+		}
+		// Choice-locked, the move is not a guess: it is the one it used last.
+		const locked = /^choice/.test(idOf(foe.item)) && foe.lastMove && !foe.movedFreely ? foe.lastMove : null;
+		if (locked) likely = locked;
+		const cands = bench.map(({ p, i }) => {
+			const cond = /^(\d+)\/(\d+)/.exec(p.condition || '');
+			const bhp = cond ? +cond[1] / +cond[2] * 100 : 100;
+			const mon = this.switchInAs(gen, p, state, foes);
+			// damagePct is a share of the HP it has now; everything here is a share of its maximum.
+			const worst = this.worstIncoming(gen, p, state, field);
+			const onLikely = likely ? this.damagePct(gen, them, mon, likely, field) : worst;
+			const hit = (locked ? onLikely : Math.max(onLikely, 0.6 * worst)) * bhp / 100;
+			const takes = hit + this.entryHazards(gen, mon, p, state);
+			return { p, i, bhp, takes, after: bhp - takes, answer: answers(idOf(p.ability || p.baseAbility), (p.moves || []).map(idOf)) };
+		});
+		const safe = c => c.after >= 25 && c.takes <= Math.max(30, c.bhp * 0.45);
+		const byBench = list => {
+			let top = null;
+			for (const c of list) {
+				const s = this.benchScore(gen, c.p, state, field, request, true);
+				if (!top || s > top.s) top = { c, s };
+			}
+			return top && top.c;
+		};
+
+		// Wish passed (R10): ours lands at the end of this turn.
+		if (rules.wish && live && live.lastMove === 'Wish' && live.lastMoveTurn === state.turn - 1 && !dying && hp >= 70) {
+			const needy = cands.filter(c => c.bhp <= 65 && c.after >= 15 && c.takes < c.bhp * 0.6).sort((a, b) => a.bhp - b.bhp)[0];
+			if (needy) return { switch: needy.i, why: 'wish pass' };
+		}
+
+		// A boosted foe (R11).
+		let sackOk = false;
+		if (rules.boosted && boosted >= 1) {
+			const mine = (active.moves || []).filter(m => !m.disabled && (m.pp === undefined || m.pp > 0)).map(m => idOf(m.move || m.id));
+			if (!answers(idOf(entry.ability || entry.baseAbility), mine)) {
+				const ans = cands.filter(c => c.answer && c.after > 0).sort((a, b) => b.after - a.after)[0];
+				if (ans && ans.takes < ans.bhp * 0.6) return { switch: ans.i, why: 'answer to a boosted foe' };
+				if (heal && H > incoming && !dying) return { move: heal.n, why: 'heal vs boosted' };
+				// The answer is there but cannot come in on this: the faint brings it in free.
+				// Humans' sacks into a boosted foe were of worn Pokemon (sacks at a median 28%), not healthy ones.
+				if (ans && hp <= 50) sackOk = true;
+			} else if (heal && hp <= 65 && H > incoming && (!dying || movesFirst)) return { move: heal.n, why: 'answer heals' };
+		}
+
+		// Preserve (R2, R3).
+		const low = hp <= 35 && (incoming >= 10 || boosted >= 1);
+		const threatened = dying || (hp <= 69 && incoming >= hp * 0.75);
+		if (rules.preserve && (low || threatened)) {
+			if (heal && H > incoming && (movesFirst || !dying)) return { move: heal.n, why: 'preserve by healing' };
+			const row = this.cfg.sacking ? this.teamPlan(gen, state, request).rows.get(this.entryKey(entry)) : null;
+			const spent = hp <= 25 && !(row && row.sole) && !cands.some(safe);
+			if (spent || sackOk) return null;
+			const survive = cands.filter(c => c.after > 0);
+			const safes = survive.filter(safe);
+			/*
+			 * With no safe switch-in, a switch only spreads the damage: round 2 had five
+			 * walls in six turns each come in on a Hatterene's Psychic Noise and leave at
+			 * 30-50%. Take the unsafe one only when it clearly ends better than staying,
+			 * and not straight after coming in.
+			 */
+			const inNow = state.turn - (state.mineCameIn || 0) <= 1;
+			const fallback = survive.sort((a, b) => b.after - a.after)[0];
+			const pick = safes.length ? byBench(safes)
+				: fallback && !inNow && fallback.after >= 15 && fallback.after > hp - incoming + 10 ? fallback : null;
+			return pick ? { switch: pick.i, why: 'preserve' } : null;
+		}
+		if (planned || dying || !rules.pivot) return null;
+
+		// Pivot (R1, R12).
+		const inFor = state.turn - (state.mineCameIn || 0);
+		const top = ranked.filter(r => r.damage > 0).sort((a, b) => b.damage - a.damage)[0];
+		const bestScore = Math.max(...ranked.map(r => r.score));
+		// Judged on what the heal restores at all: Roost at full health scores -30 but heals 50 later.
+		const capacity = Math.max(0, ...ranked.map(r => r.heal || 0));
+		const loses = incoming >= 45 || (incoming >= 25 && incoming >= capacity * 0.9);
+		const walled = inFor >= 2 && (!top || top.damage < 12) && bestScore < 20 && incoming < hp * 0.5;
+		this._stallPivots = (this._stallPivots || []).filter(t => t >= state.turn - 6 && t <= state.turn);
+		if (!(loses || walled) || this._stallPivots.length >= 3) return null;
+		if (loses && bestScore >= 55 && incoming < hp * 0.5) return null;
+		let good = loses ? cands.filter(c => c.takes <= Math.min(incoming * 0.6, 30) && c.after >= 40) : [];
+		if (!good.length && walled) {
+			/*
+			 * Walled: the one that makes progress on this foe - real damage, or a status
+			 * it can take. Corviknight Roosted at full health six turns running into a
+			 * Gholdengo it could not touch while Blissey, taking a third, sat on the bench.
+			 */
+			const them = foe;
+			good = cands.filter(c => {
+				if (c.after < 40 || c.takes >= 40) return false;
+				const mon = this.switchInAs(gen, c.p, state, foes);
+				const moves = (c.p.moves || []).map(m => toName(m, 'moves'));
+				if (Math.max(0, ...moves.map(m => this.damageToFoe(gen, mon, them, m, field))) >= 25) return true;
+				return !them.status && moves.some(m => /^(Toxic|Will-O-Wisp|Thunder Wave)$/.test(m));
+			});
+		}
+		const pick = byBench(good);
+		if (!pick) return null;
+		this._stallPivots.push(state.turn);
+		return { switch: pick.i, why: loses && !walled ? 'pivot' : 'walled' };
+	}
+
 	/** Per cent of maximum HP a healing move restores now (Wish: next turn). */
 	healShare(move, state) {
 		const weather = String((state && state.weather) || '').toLowerCase().replace(/[^a-z]/g, '');
@@ -1489,6 +1894,7 @@ class BattleAI {
 	 *     before the critical-HP turn).
 	 */
 	recoveryScore(move, me, state, myHpPct, incoming, dying, ctx) {
+		if (ctx.rules && (move.id === 'wish' ? ctx.rules.wish : ctx.rules.heal)) return this.stallRecovery(move, me, state, myHpPct, incoming, dying, ctx);
 		const live = ctx.live;
 		if (move.id === 'wish') {
 			if (live && live.lastMove === 'Wish' && live.lastMoveTurn >= state.turn - 1) return -20;
@@ -1583,12 +1989,17 @@ class BattleAI {
 		const hopeful = isSetup && pressure >= 0.7 && !(this.cfg.setupCap && myHpPct <= 30);
 		const live = ctx.live;
 		// Wish on its way: Protect is how it lands (recovery, A20).
-		if (this.cfg.recovery && PROTECTS.has(move.id) && move.id !== 'endure' && live && live.lastMove === 'Wish' && live.lastMoveTurn === state.turn - 1) return 45;
+		// Not for a healthy stall wall in front of a setup foe: Alomomola at 100% Wished and Protected while Ogerpon
+		// used Swords Dance twice, then swept five (stall study round 2).
+		if ((this.cfg.recovery || (ctx.rules && ctx.rules.wish)) && PROTECTS.has(move.id) && move.id !== 'endure' && live && live.lastMove === 'Wish' && live.lastMoveTurn === state.turn - 1 &&
+			!(ctx.rules && ctx.rules.freeTurns && ctx.foeSetup && myHpPct >= 70)) return 45;
 		// Healing is judged before "this is the last turn": healing first can make it not the last.
-		if (this.cfg.recovery && (RECOVERY.includes(move.name) || move.id === 'wish')) {
+		if ((this.cfg.recovery || (ctx.rules && (ctx.rules.heal || ctx.rules.wish))) && (RECOVERY.includes(move.name) || move.id === 'wish')) {
 			const heal = this.recoveryScore(move, me, state, myHpPct, incoming, dying, ctx);
 			if (heal !== null) return heal;
 		}
+		// Stall's Protect has a purpose or is a lost turn (R9); judged before "the last turn" - it can buy one.
+		if (ctx.rules && ctx.rules.protect && PROTECTS.has(move.id)) return this.stallProtect(gen, move, me, state, myHpPct, ctx);
 
 		// Nothing that takes a turn is worth it when the turn is the last one -
 		// unless the opponent is not going to be there to take it.
@@ -1701,6 +2112,8 @@ class BattleAI {
 			if (move.status === 'par' && types.includes('Electric')) return -25;
 		}
 		if (HAZARDS.includes(move.name)) {
+			// Stall sets them on a free turn (humans' first Stealth Rock: turn 8, the bot's: turn 2-3; R7).
+			if (this.cfg.hazardPlan && ctx.rules && ctx.rules.hazardTiming && incoming >= myHpPct * 0.4) return Math.round(this.hazardScore(gen, move, state) * 0.6);
 			if (this.cfg.hazardPlan) return this.hazardScore(gen, move, state);
 			const theirSide = state.hazards[state.theirPlayer] || {};
 			return theirSide[move.name] ? -30 : 38;
@@ -1775,6 +2188,7 @@ class BattleAI {
 		}
 		if (move.status) {
 			if (foe.status) return -25;
+			if (ctx.rules && ctx.rules.status && move.target !== 'self') return this.stallStatus(gen, move, foe, ctx);
 			if (move.status === 'slp') return 45;
 			if (move.status === 'par' || move.status === 'brn' || move.status === 'tox') return 32;
 		}
@@ -1791,6 +2205,8 @@ class BattleAI {
 				const boosts = other.boosts || {};
 				theirBoosts = Math.max(theirBoosts, Object.values(boosts).reduce((n, v) => n + Math.max(0, v), 0));
 			}
+			// Stall hazes at +1 too: the boost is the threat, and stall has the turns (R11, D1).
+			if (ctx.rules && ctx.rules.boosted && theirBoosts === 1) return 45;
 			return theirBoosts >= 2 ? 55 + theirBoosts * 8 : theirBoosts ? 24 : -8;
 		}
 		/*
@@ -1801,6 +2217,7 @@ class BattleAI {
 		 * so only real hazards are counted.
 		 */
 		if (/^(defog|rapidspin|mortalspin|tidyup)$/.test(move.id)) {
+			if (ctx.rules && ctx.rules.removal && ctx.request) return this.stallRemoval(gen, move, state, ctx.request, myHpPct, incoming);
 			const count = side => HAZARDS.reduce((n, h) => n + (Number((state.hazards[side] || {})[h]) || 0), 0);
 			const ours = count(state.myPlayer);
 			if (!ours) return -15;
@@ -1838,6 +2255,7 @@ class BattleAI {
 			}
 			const theirHazards = HAZARDS.reduce((n, h) => n + (Number((state.hazards[state.theirPlayer] || {})[h]) || 0), 0);
 			if (theirBoosts >= 2) return 52 + theirBoosts * 8 + theirHazards * 6;
+			if (ctx.rules && ctx.rules.boosted && theirBoosts === 1) return 42 + theirHazards * 4;
 			return theirBoosts ? 22 + theirHazards * 4 : theirHazards ? 12 : -6;
 		}
 		if (/taunt|encore|disable|trick|knockoff/i.test(move.id)) return 22;
@@ -2033,6 +2451,21 @@ class BattleAI {
 		if (this.cfg.sacking && !imposter && foes[0] && best < 30 && this.foeCanSetUp(gen, foes[0])) {
 			const answersSetup = (entry.moves || []).some(m => /^(roar|whirlwind|dragontail|circlethrow|haze|clearsmog|encore|taunt|yawn|royaldecree)$/.test(String(m).toLowerCase().replace(/[^a-z0-9]/g, '')));
 			if (!answersSetup) score -= 25;
+		}
+
+		/*
+		 * Stall answers a boosted foe with the Pokemon built for it (R11): Unaware
+		 * ignores the boosts, Haze and a phazer take them away. Humans sent in
+		 * Unaware 6% and switched 23% of such turns; the bot attacked 57-61%.
+		 */
+		const style = request && foes[0] && foes[0].boosts ? this.styleRules(request) : null;
+		if (style && style.boosted) {
+			const up = ['atk', 'spa', 'spe'].reduce((n, s) => n + Math.max(0, foes[0].boosts[s] || 0), 0);
+			if (up >= 1) {
+				const moves = (entry.moves || []).map(m => String(m).toLowerCase().replace(/[^a-z0-9]/g, ''));
+				if (String(entry.ability || entry.baseAbility || '').toLowerCase().replace(/[^a-z]/g, '') === 'unaware') score += 25;
+				else if (moves.some(m => /^(haze|clearsmog|roar|whirlwind|dragontail|circlethrow)$/.test(m))) score += 15;
+			}
 		}
 
 		// A boosted foe is exactly what Ditto answers: it arrives with the same
@@ -2677,6 +3110,28 @@ class BattleAI {
 			outsped = !order.some(Boolean) && incoming >= myHp;
 		}
 
+		// The rules our team's style plays (STYLE_RULES; all of them for stall), with what they need to see.
+		const rules = this.styleRules(request);
+		const stall = !!rules;
+		const stallCtx = {};
+		if (stall) {
+			// The rules' thresholds are shares of maximum HP, on every rung (hpUnits is Stockfish's knob).
+			if (!this.cfg.hpUnits) incoming *= me.originalCurHP / me.maxHP();
+			stallCtx.rules = rules;
+			stallCtx.request = request;
+			stallCtx.pp = {};
+			for (const m of legal) stallCtx.pp[m.move || toName(m.id, 'moves')] = m.pp;
+			stallCtx.sleepTalk = legal.some(m => /^sleeptalk$/.test(String(m.id || '').toLowerCase()));
+			// A teammate that a Wish passed to would bring back from half health (R10).
+			// A foe that is boosted or can boost: a passive turn in front of it is its free setup.
+			stallCtx.foeSetup = !!rules.freeTurns && !!foes[0] && (Object.values(foes[0].boosts || {}).some(v => v > 0) || this.foeCanSetUp(gen, foes[0]));
+			stallCtx.wishMate = request.side.pokemon.some(p => {
+				if (p.active || /fnt/.test(p.condition || '')) return false;
+				const c = /^(\d+)\/(\d+)/.exec(p.condition || '');
+				return c && +c[1] / +c[2] <= 0.6;
+			});
+		}
+
 		let best = null;
 		const ranked = [];
 		for (const move of legal) {
@@ -2689,7 +3144,7 @@ class BattleAI {
 				// A greedy player sees status moves as "the ones that do no damage".
 				if (this.cfg.greedy) score = 2;
 				else score = foe
-					? this.statusScore(gen, name, me, this.foePokemon(gen, foe), state, incoming, { foes, field, entry, live: state.mine && state.mine['abc'[index]], movesFirst })
+					? this.statusScore(gen, name, me, this.foePokemon(gen, foe), state, incoming, { foes, field, entry, live: state.mine && state.mine['abc'[index]], movesFirst, ...stallCtx })
 					: 5;
 				// Nothing set up on the turn we are knocked out ever gets used.
 				// (Except Protect with a Wish landing this turn: that is the whole point of it.)
@@ -2823,11 +3278,15 @@ class BattleAI {
 				priority: data ? (data.priority || 0) : 0,
 				heuristic: data && data.category === 'Status' ? score : 0,
 				// What a heal restores, for the search to play out (recovery).
-				heal: this.cfg.recovery && data && RECOVERY.includes(data.name) && !(data.id === 'rest' && me.status === 'slp')
+				heal: (this.cfg.recovery || (stall && rules.heal)) && data && RECOVERY.includes(data.name) && !(data.id === 'rest' && me.status === 'slp')
 					? this.healShare(data, state) : 0,
 				// The search plays the miss out as its own branch rather than shrinking the hit.
 				accuracy: this.cfg.accuracy && data && data.category !== 'Status' && foes[0]
 					? this.hitChance(gen, data, me, foes[0], state, state.mine && state.mine['abc'[index]]) : 1,
+				// Stall's Protect is played out as the hit it blocks (R9); elsewhere as before.
+				// Not a second one in a row: that fails, and the playout must not read it as a block
+				// (Alomomola Protected three turns running into Ogerpon because it did).
+				protect: stall && !!rules.protect && data && PROTECTS.has(data.id) && data.id !== 'endure' && score > -25,
 			});
 		}
 
@@ -2853,6 +3312,21 @@ class BattleAI {
 			}
 		}
 
+		// Stall's own switching and healing first (stallSwitch); a move it insists on skips the general rule.
+		let stallKeeps = false;
+		if (stall && (rules.pivot || rules.preserve || rules.boosted || rules.wish) && this.cfg.switching && request.side.pokemon.length > 1 && !active.trapped && !active.maybeTrapped) {
+			const verdict = this.stallSwitch(gen, active, entry, me, request, state, field, foes, incoming, movesFirst, ranked, index, !!planned, rules);
+			if (verdict && verdict.switch) {
+				this.log(`stall: ${verdict.why} -> switch ${verdict.switch}`);
+				return `switch ${verdict.switch}`;
+			}
+			if (verdict && verdict.move) {
+				const row = ranked.find(r => r.n === verdict.move);
+				if (row) { best = { score: row.score, n: row.n, target: row.target, name: row.name }; stallKeeps = true; }
+				this.log(`stall: ${verdict.why} -> move ${verdict.move}`);
+			}
+		}
+
 		// Would anything on the bench do better than what we are about to do here?
 		/*
 		 * The endgame tree's plan does not excuse a Choice lock into a move that does
@@ -2863,7 +3337,7 @@ class BattleAI {
 		 */
 		const guarded = planned && planned.kind === 'move' && this.cfg.endgameGuard;
 		const own = guarded ? (ranked.find(r => r.n === best.n) || {}).score || 0 : best.score;
-		if ((!planned || guarded) && this.cfg.switching && request.side.pokemon.length > 1 && !active.trapped && !active.maybeTrapped) {
+		if (!stallKeeps && (!planned || guarded) && this.cfg.switching && request.side.pokemon.length > 1 && !active.trapped && !active.maybeTrapped) {
 			const myHpPct = (me.originalCurHP / me.maxHP()) * 100;
 			const doomed = incoming >= myHpPct;
 			// Stuck with a self-dropped attacking stat and nothing that kills: switching resets it.
@@ -3020,4 +3494,4 @@ class BattleAI {
 	}
 }
 
-module.exports = { BattleAI, TEMPO };
+module.exports = { BattleAI, TEMPO, STYLE_RULES };

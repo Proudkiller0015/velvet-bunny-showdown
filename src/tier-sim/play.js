@@ -32,15 +32,16 @@ const { registerFormat } = require('./format');
  * engines: { p1, p2 } of { BattleAI, BattleState } to pit two AI versions against
  * each other (scripts/ai-bench.js); both sides use the current AI by default.
  */
-async function playGame(setsA, setsB, { difficulty = 'stockfish', maxTurns = 300, maxErrors = 40, maxMs = 8 * 60 * 1000, seed = null, engines = {}, keepLog = false } = {}) {
-	const formatid = registerFormat();
+async function playGame(setsA, setsB, { difficulty = 'stockfish', maxTurns = 300, maxErrors = 40, maxMs = 8 * 60 * 1000, seed = null, engines = {}, keepLog = false, format = null } = {}) {
+	// format: a real format id (the stall study plays gen9nationaldex); default the tier sim's own.
+	const formatid = format || registerFormat();
 	const stream = new BattleStream();
 	const streams = getPlayerStreams(stream);
 	const engine = who => engines[who] || { BattleAI, BattleState };
 	const ai = { p1: new (engine('p1').BattleAI)({ difficulty }), p2: new (engine('p2').BattleAI)({ difficulty }) };
 	// The AI's own format hooks key off the id (Random Battle presets); a built-team
 	// RP id gives it the "sets are unknown" behaviour, which is the honest one here.
-	for (const k of ['p1', 'p2']) ai[k].setFormat('gen9rpubers');
+	for (const k of ['p1', 'p2']) ai[k].setFormat(format || 'gen9rpubers');
 	const start = { formatid };
 	if (seed) start.seed = seed;
 	void streams.omniscient.write(
