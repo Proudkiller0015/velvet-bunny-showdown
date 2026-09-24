@@ -95,7 +95,7 @@ class Matchmaker {
 	 * pool: entries. options: teammates (Map), usage (Map), rng, step (prior gap per
 	 * tier rank, the same number rating.js starts from), band (how far a peer may be).
 	 */
-	constructor(pool, { teammates = new Map(), usage = new Map(), rng = Math.random, step = 0.18, band = 0.25, candidates = 14 } = {}) {
+	constructor(pool, { teammates = new Map(), usage = new Map(), rng = Math.random, step = 0.18, band = 0.25, candidates = 14, focus = null } = {}) {
 		this.pool = pool;
 		this.byName = new Map(pool.map(e => [e.name, e]));
 		this.teammates = teammates;
@@ -105,6 +105,9 @@ class Matchmaker {
 		this.size = candidates;
 		this.apps = new Map(pool.map(e => [e.name, 0]));
 		this.est = new Map(pool.map(e => [e.name, step * RANK[e.tier]]));
+		// Only these are built around (scripts/tier-focus.js); everyone still fills teams.
+		const kept = focus && new Set(focus.filter(n => this.byName.has(n)));
+		this.isFocus = kept && kept.size >= 2 ? e => kept.has(e.name) : () => true;
 	}
 
 	setEstimates(rows) {
@@ -161,13 +164,13 @@ class Matchmaker {
 	}
 
 	next() {
-		const fa = this.leastPlayed(() => true);
+		const fa = this.leastPlayed(this.isFocus);
 		const xa = this.est.get(fa.name);
 		let fb = null;
 		for (let width = this.band * 0.8, tries = 0; !fb && tries < 6; tries++, width *= 1.5) {
-			fb = this.leastPlayed(e => e.num !== fa.num && Math.abs(this.est.get(e.name) - xa) <= width, 6);
+			fb = this.leastPlayed(e => this.isFocus(e) && e.num !== fa.num && Math.abs(this.est.get(e.name) - xa) <= width, 6);
 		}
-		fb = fb || this.leastPlayed(e => e.num !== fa.num);
+		fb = fb || this.leastPlayed(e => this.isFocus(e) && e.num !== fa.num) || this.leastPlayed(e => e.num !== fa.num);
 		const a = this.candidatesFor(fa), b = this.candidatesFor(fb);
 		return {
 			a: { names: a.map(e => e.name), strengths: this.strengths(a), archetype: this.archetype() },

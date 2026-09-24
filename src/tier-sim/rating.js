@@ -280,13 +280,45 @@ function rate(pool, records, { tau = 0.3, step = 0.18, rounds = 3 } = {}) {
  * 90%) sits wholly outside its current tier's band; then it goes to the band
  * its point estimate is in, at least one step in the direction of the evidence.
  */
-function assignTiers(rows, tierMean, { z = 1.645, order = ['Uber', 'OU', 'UU', 'RU', 'NU', 'PU', 'ZU', 'NFE'] } = {}) {
+const TIER_ORDER = ['Uber', 'OU', 'UU', 'RU', 'NU', 'PU', 'ZU', 'NFE'];
+
+/** Each tier's band: from the midpoint with the tier below to the midpoint with the tier above. */
+function tierBands(tierMean, order = TIER_ORDER) {
 	const means = order.map(t => tierMean[t] !== undefined ? tierMean[t] : null);
 	// Fill any tier the pool has none of, by interpolation, so bands stay ordered.
 	for (let i = 0; i < means.length; i++) if (means[i] === null) means[i] = i > 0 ? means[i - 1] - 0.18 : 1;
 	const upper = order.map((t, i) => (i === 0 ? Infinity : (means[i] + means[i - 1]) / 2));
 	const lower = order.map((t, i) => (i === order.length - 1 ? -Infinity : (means[i] + means[i + 1]) / 2));
 	const bandOf = x => { for (let i = 0; i < order.length; i++) if (x >= lower[i]) return i; return order.length - 1; };
+	return { order, upper, lower, bandOf };
+}
+
+// Standard normal CDF (Abramowitz-Stegun 26.2.17, error under 1e-7).
+function normalCdf(x) {
+	const t = 1 / (1 + 0.2316419 * Math.abs(x));
+	const d = 0.3989422804014327 * Math.exp(-x * x / 2);
+	const p = d * t * (0.31938153 + t * (-0.356563782 + t * (1.781477937 + t * (-1.821255978 + t * 1.330274429))));
+	return x >= 0 ? 1 - p : p;
+}
+
+/**
+ * How likely each Pokemon's true strength lies outside its current tier's band,
+ * under the fit's normal approximation. The sim uses it to stop spending games on
+ * Pokemon that are clearly where they belong.
+ */
+function outsideChance(rows, tierMean, order = TIER_ORDER) {
+	const { upper, lower } = tierBands(tierMean, order);
+	return rows.map(r => {
+		const cur = Math.max(0, order.indexOf(r.played));
+		const sd = Math.max(1e-6, r.sd);
+		const below = lower[cur] === -Infinity ? 0 : normalCdf((lower[cur] - r.theta) / sd);
+		const above = upper[cur] === Infinity ? 0 : 1 - normalCdf((upper[cur] - r.theta) / sd);
+		return { name: r.name, played: r.played, theta: r.theta, sd: r.sd, apps: r.apps, p: below + above, below, above };
+	});
+}
+
+function assignTiers(rows, tierMean, { z = 1.645, order = TIER_ORDER } = {}) {
+	const { upper, lower, bandOf } = tierBands(tierMean, order);
 	return rows.map(r => {
 		const cur = Math.max(0, order.indexOf(r.played));
 		const lo = r.theta - z * r.sd, hi = r.theta + z * r.sd;
@@ -298,4 +330,4 @@ function assignTiers(rows, tierMean, { z = 1.645, order = ['Uber', 'OU', 'UU', '
 	});
 }
 
-module.exports = { fitBT, rate, assignTiers, isotonic, contributions, cholesky, cholSolve, inverseDiagonal, sigmoid, UTILITY_WEIGHTS, SUPPORT_FIELDS };
+module.exports = { fitBT, rate, assignTiers, tierBands, outsideChance, normalCdf, TIER_ORDER, isotonic, contributions, cholesky, cholSolve, inverseDiagonal, sigmoid, UTILITY_WEIGHTS, SUPPORT_FIELDS };

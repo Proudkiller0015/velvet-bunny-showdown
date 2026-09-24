@@ -10,7 +10,8 @@
  *
  * Options: --out <file> (data/tier-sim/games.jsonl), --difficulty (stockfish),
  * --heap <MB> (512, and never more), --refit <games> (300), --target <apps>
- * (stop early once every Pokemon has this many appearances).
+ * (stop early once every Pokemon has this many appearances), --focus <file> (only build
+ * teams around the Pokemon listed there - scripts/tier-focus.js writes it).
  *
  * It runs on the owner's home PC next to other work, so the limits are hard
  * ones rather than defaults: at most two battle workers, each a separate node
@@ -130,7 +131,10 @@ const { rate } = require('../src/tier-sim/rating');
 
 const pool = buildPool(dex);
 const { teammates, files } = loadTeammates(ROOT, pool.map(e => e.name));
-const mm = new Matchmaker(pool, { teammates, usage: loadServerUsage(ROOT) });
+const FOCUS_FILE = arg('focus', '');
+const focus = FOCUS_FILE ? JSON.parse(fs.readFileSync(path.resolve(ROOT, FOCUS_FILE), 'utf8')).keep : null;
+const mm = new Matchmaker(pool, { teammates, usage: loadServerUsage(ROOT), focus });
+if (focus) console.log(`focus: teams built around ${pool.filter(mm.isFocus).length} of ${pool.length} (${FOCUS_FILE}).`);
 console.log(`pool ${pool.length} Pokemon; teammate data from ${files} usage files for ${teammates.size} of them.`);
 
 fs.mkdirSync(path.dirname(OUT), { recursive: true });
@@ -172,7 +176,7 @@ if (records.length) refit();
 
 function progress() {
 	const hrs = (Date.now() - stats.started) / 3600000;
-	const apps = [...mm.apps.values()];
+	const apps = pool.filter(mm.isFocus).map(e => mm.apps.get(e.name));
 	const min = Math.min(...apps);
 	const at40 = apps.filter(n => n >= 40).length;
 	console.log(`[${new Date().toISOString().slice(11, 19)}] ${stats.done} games this session (${(stats.done / Math.max(1e-9, hrs)).toFixed(0)}/h), ` +
@@ -188,7 +192,7 @@ function shouldStop() {
 	if (stopping) return true;
 	if (MINUTES && Date.now() - stats.started > MINUTES * 60000) stopping = true;
 	if (fs.existsSync(STOP_FILE)) stopping = true;
-	if (TARGET && Math.min(...mm.apps.values()) >= TARGET) stopping = true;
+	if (TARGET && Math.min(...pool.filter(mm.isFocus).map(e => mm.apps.get(e.name))) >= TARGET) stopping = true;
 	return stopping;
 }
 

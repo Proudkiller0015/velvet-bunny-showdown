@@ -160,5 +160,39 @@ console.log('\n--- drafting ---');
 	}
 }
 
+// ---------------------------------------------------------------- focus
+{
+	console.log('focus');
+	const means = { Uber: 1.2, OU: 1.0, UU: 0.8 };
+	const rows = [
+		{ name: 'Mid', played: 'OU', theta: 1.0, sd: 0.02 },     // dead centre, sure
+		{ name: 'Edge', played: 'OU', theta: 1.09, sd: 0.05 },   // near the Uber line
+		{ name: 'Riser', played: 'OU', theta: 1.3, sd: 0.05 },   // well above
+		{ name: 'Unsure', played: 'OU', theta: 1.0, sd: 1 },     // no evidence
+		{ name: 'Top', played: 'Uber', theta: 5, sd: 0.1 },      // Uber has no ceiling
+	];
+	const p = Object.fromEntries(R.outsideChance(rows, means).map(x => [x.name, x.p]));
+	check('normal CDF is right at 0 and 1.645', Math.abs(R.normalCdf(0) - 0.5) < 1e-6 && Math.abs(R.normalCdf(1.645) - 0.95) < 1e-3);
+	check('a sure mid-tier Pokemon has ~0 chance to move', p.Mid < 1e-6, p.Mid);
+	check('ordered: Riser > Unsure/Edge > Mid', p.Riser > 0.95 && p.Edge > p.Mid && p.Unsure > p.Mid && p.Riser > p.Edge, JSON.stringify(p));
+	check('nothing is above the top tier', p.Top === 0, p.Top);
+
+	const { Matchmaker } = require('../src/tier-sim/match');
+	const dex = require('../src/rp-dex')();
+	const pool = require('../src/tier-sim/pool').buildPool(dex);
+	const kept = pool.filter((e, i) => i % 10 === 0).map(e => e.name);
+	const mm = new Matchmaker(pool, { focus: kept, rng: mulberry(7) });
+	const set = new Set(kept);
+	let onlyFocus = true, fillers = 0;
+	for (let i = 0; i < 40; i++) {
+		const j = mm.next();
+		if (!set.has(j.a.names[0]) || !set.has(j.b.names[0])) onlyFocus = false;
+		fillers += [...j.a.names, ...j.b.names].filter(n => !set.has(n)).length;
+		mm.record([...j.a.names.slice(0, 6), ...j.b.names.slice(0, 6)]);
+	}
+	check('teams are built only around focus Pokemon', onlyFocus);
+	check('the rest still fill teams', fillers > 0);
+}
+
 console.log(`\n${pass} passed, ${fail} failed`);
 process.exit(fail ? 1 : 0);
