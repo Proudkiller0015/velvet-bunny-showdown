@@ -1495,6 +1495,8 @@ class BattleAI {
 		}
 		if (move.id === 'rest' && me.status === 'slp') return -30;
 		const heal = Math.min(this.healShare(move, state), 100 - myHpPct);
+		// At full health it fails outright (Quagsire, Recover six turns running at 100%).
+		if (myHpPct >= 99.5) return -30;
 		if (heal <= 6) return -15;
 		const sleeps = move.id === 'rest' ? 0.7 : 1;
 		if (dying) {
@@ -1551,7 +1553,8 @@ class BattleAI {
 		const early = Math.max(0.5, 1 - Math.max(0, (state.turn || 1) - 8) / 30);
 		// A remover they have shown takes it off again.
 		const removal = list.some(f => [...(f.moves || [])].some(m => /^(defog|rapidspin|mortalspin|tidyup|courtchange)$/.test(idOf(m))));
-		return Math.round((8 + value * 0.65 * early) * (removal ? 0.7 : 1));
+		// Capped: five Rock-weak foes make it very good, not better than a KO.
+		return Math.round(Math.min(65, 8 + value * 0.65 * early) * (removal ? 0.7 : 1));
 	}
 
 	/** Score a status move by what it is actually worth this turn. */
@@ -1563,6 +1566,12 @@ class BattleAI {
 		const boostsUp = move.boosts || (move.self && move.self.boosts);
 		const isSetup = boostsUp && Object.values(boostsUp).some(v => v > 0);
 		const pressure = ctx.foes ? this.switchPressure(gen, me, ctx.foes, ctx.field) : 0;
+		/*
+		 * Sleep Talk works only asleep, and then it is the move: Dondozo clicked it
+		 * awake thirteen turns running in the sampled games, where the endgame tree
+		 * read it as a harmless pass. (24 Sep 2026)
+		 */
+		if (move.id === 'sleeptalk' && !this.cfg.naive && this.cfg.sanity !== false) return me.status === 'slp' ? 35 : -30;
 
 		/*
 		 * "They will switch" is no reason to set up at 30% or less in front of a KO:
@@ -1673,6 +1682,9 @@ class BattleAI {
 			 */
 			if (/^(encore|disable)$/.test(move.id) && theirState) {
 				if (!theirState.lastMove) return -20;
+				// Already encored, or its last move is one Encore cannot hold it to: it fails (the sampled games).
+				if (move.id === 'encore' && (theirState.encored || theirState.dynamaxed ||
+					/^(encore|transform|mimic|struggle|sketch|sleeptalk|assist|copycat|mirrormove|mefirst|metronome|dynamaxcannon|behemothblade|behemothbash)$/.test(String(theirState.lastMove).toLowerCase().replace(/[^a-z0-9]/g, '')))) return -30;
 				const last = PkmnDex.forGen(gen.num).moves.get(theirState.lastMove);
 				if (move.id === 'encore' && last && last.category === 'Status') return 40;
 			}
@@ -1812,6 +1824,11 @@ class BattleAI {
 			const blocked = (ctx.foes || []).some(f =>
 				/^(suctioncups|guarddog)$/.test(String(f.ability || '').toLowerCase().replace(/[^a-z0-9]/g, '')));
 			if (blocked) return -12;
+			// With nothing of theirs left to drag in it fails (Gogoat, Roar at 1% nine turns running).
+			if (this.cfg.sanity !== false) {
+				const { list, unknown } = this.foeRemaining(state);
+				if (!unknown && !list.some(f => f.bench && !f.fainted)) return -30;
+			}
 			let theirBoosts = 0;
 			for (const other of (ctx.foes || [])) {
 				const boosts = other.boosts || {};

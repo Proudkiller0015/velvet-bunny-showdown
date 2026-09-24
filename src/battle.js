@@ -435,6 +435,13 @@ class BattleState {
 				if (dstore && dstore[dm.slot]) dstore[dm.slot].dynamaxed = cmd === '-start';
 				break;
 			}
+			// Encore on either side: a second Encore into an encored Pokemon fails (Ogerpon tried five in a row).
+			if (/^(move: )?Encore$/.test(String(args[1] || ''))) {
+				const en = this.slotOf(args[0]);
+				const estore = en && (en.side === this.myPlayer ? this.mine : this.opponent);
+				if (estore && estore[en.slot]) estore[en.slot].encored = cmd === '-start';
+				break;
+			}
 			// No Retreat fails a second time; it lasts until the Pokemon leaves (a switch replaces the entry).
 			if (cmd === '-start' && /No Retreat/.test(String(args[1] || ''))) {
 				const nr = this.slotOf(args[0]);

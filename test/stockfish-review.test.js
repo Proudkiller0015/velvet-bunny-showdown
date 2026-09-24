@@ -194,6 +194,25 @@ console.log('\n--- status-move sanity ---');
 	};
 	check('no Encore into a foe that has not moved since it came in', pick(encore(false)), 'Moonblast');
 	check('Encore into the Calm Mind it just used', pick(encore(true)), 'Encore');
+	// Found in the first validation games: moves that fail, clicked turn after turn.
+	{
+		const ai = stockfish();
+		const gen = ai.gen(9);
+		const p = position({ me: mon('Dondozo', ['Sleep Talk', 'Rest', 'Wave Crash']), myMoves: ['Sleep Talk', 'Rest', 'Wave Crash'],
+			foe: { species: 'Blissey', moves: ['Seismic Toss'] }, foeDown: ['Pikachu', 'Raichu', 'Eevee', 'Jolteon', 'Vaporeon'] });
+		const me = ai.myPokemon(gen, p.request.side.pokemon[0], p.state);
+		const them = ai.foePokemon(gen, p.state.foes()[0]);
+		ai.myMoveNames = ['Sleep Talk', 'Rest', 'Wave Crash'];
+		const ctx = { foes: p.state.foes(), field: new calc.Field(), entry: p.request.side.pokemon[0], live: p.state.mine.a };
+		check('Sleep Talk awake fails', ai.statusScore(gen, 'Sleep Talk', me, them, p.state, 10, ctx), -30);
+		check('Recover at full health fails', ai.statusScore(gen, 'Recover', me, them, p.state, 10, ctx), -30);
+		check('Roar with nothing of theirs left to drag in fails', ai.statusScore(gen, 'Roar', me, them, p.state, 10, ctx), -30);
+		p.state.opponent.a.lastMove = 'Seismic Toss';
+		p.state.opponent.a.encored = true;
+		check('Encore into an encored foe fails', ai.statusScore(gen, 'Encore', me, them, p.state, 10, { ...ctx, foes: p.state.foes() }), -30);
+		const asleep = ai.myPokemon(gen, { ...p.request.side.pokemon[0], condition: p.request.side.pokemon[0].condition + ' slp' }, p.state);
+		check('Sleep Talk asleep is the move', ai.statusScore(gen, 'Sleep Talk', asleep, them, p.state, 10, ctx) > 20, true);
+	}
 	// No Retreat a second time fails.
 	const nr = () => {
 		const p = position({ me: mon('Urshifu', ['No Retreat', 'Wicked Blow']), myMoves: ['No Retreat', 'Wicked Blow'], foe: { species: 'Blissey', moves: ['Soft-Boiled'] } });
