@@ -23,11 +23,12 @@ const fs = require('fs');
 const path = require('path');
 const { Dex } = require('pokemon-showdown');
 
-const DIR = path.join(__dirname, '..', 'data', 'replays');
 const args = process.argv.slice(2);
+// --dir data/tier-sim/logs --player P1: the tier sim's sampled games (--sample-logs).
+const DIR = args.includes('--dir') ? path.resolve(args[args.indexOf('--dir') + 1]) : path.join(__dirname, '..', 'data', 'replays');
 const since = (args.includes('--since') && Date.parse(args[args.indexOf('--since') + 1])) || 0;
 const who = (args.includes('--player') && args[args.indexOf('--player') + 1]) || 'Bunny';
-const patterns = args.filter(a => !a.startsWith('--') && a !== String(since) && a !== who);
+const patterns = args.filter((a, i) => !a.startsWith('--') && a !== String(since) && a !== who && args[i - 1] !== '--dir');
 const verbose = args.includes('--verbose');
 
 const matches = id => !patterns.length || patterns.some(p => new RegExp(`^${p.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/%/g, '.*')}$`).test(id));
