@@ -527,8 +527,25 @@ function pickMoves(dex, species, set, rng = Math.random, { threats = null } = {}
 	return { moves: chosen.map(m => m.name), stat };
 }
 
-/** An item that suits the role, from `allowed` when a bag limits the choice. */
-function itemFor(dex, species, set, moves, stat, allowed = null) {
+/*
+ * Items that do their job once and are gone (24 Sep 2026). Pinkacross's rule
+ * for balance and anything bulkier: "no temporary items (Booster Energy,
+ * Focus Sash, one-use berries)" - a long game outlasts them (Top 5 Team
+ * Building Mistakes, part II). The assembler asks for none on such a team
+ * (`oneUse: false`); they are then a last resort, still better than nothing.
+ */
+const ONE_USE = ['focussash', 'sitrusberry', 'lumberry', 'oranberry', 'boosterenergy', 'weaknesspolicy', 'whiteherb', 'airballoon'];
+
+/**
+ * An item that suits the role, from `allowed` when a bag limits the choice.
+ * `options.oneUse` false: the team plays a long game, so a one-use item only
+ * when nothing else fits.
+ */
+function itemFor(dex, species, set, moves, stat, allowed = null, { oneUse = true } = {}) {
+	if (!oneUse) {
+		return itemFor(dex, species, set, moves, stat, allowed ? new Set([...allowed].filter(id => !ONE_USE.includes(toID(id)))) : null, { oneUse: 'never' }) ||
+			(allowed ? itemFor(dex, species, set, moves, stat, allowed) : '');
+	}
 	const moveData = moves.map(n => dex.moves.get(n));
 	const allAttacks = moveData.every(m => m.category !== 'Status');
 	const rockWeak = dex.getEffectiveness('Rock', species.types) >= 1 && dex.getImmunity('Rock', species.types);
@@ -547,12 +564,19 @@ function itemFor(dex, species, set, moves, stat, allowed = null) {
 	default: wants.push('Leftovers', 'Rocky Helmet', 'Sitrus Berry');
 	}
 	for (const name of wants) {
+		if (oneUse === 'never' && ONE_USE.includes(toID(name))) continue;
 		if (!allowed || allowed.has(toID(name))) return name;
 	}
-	// Nothing the role wants is in the bag: something harmless, never a Choice item on a set with status moves
-	// or a Life Orb on a wall.
-	const harmless = ['leftovers', 'sitrusberry', 'lumberry', 'rockyhelmet', 'heavydutyboots', 'expertbelt', 'shellbell', 'blacksludge',
-		'oranberry', 'quickclaw', 'kingsrock', 'scopelens', 'widelens', 'muscleband', 'wiseglasses', 'lifeorb', 'focussash'];
+	/*
+	 * Nothing the role wants is in the bag: something harmless, never a Choice
+	 * item on a set with status moves or a Life Orb on a wall. Not the trap items
+	 * (24 Sep 2026): Shell Bell, Scope Lens, Wide Lens, Quick Claw and King's
+	 * Rock do next to nothing in singles - "never Wide Lens, Scope Lens, Shell
+	 * Bell" (Pinkacross's item traps, B10 in docs/research-pinkacross.md) - and
+	 * the ladder builder refills an empty slot from the format's list anyway.
+	 */
+	const harmless = ['leftovers', 'sitrusberry', 'lumberry', 'rockyhelmet', 'heavydutyboots', 'expertbelt', 'blacksludge',
+		'oranberry', 'muscleband', 'wiseglasses', 'lifeorb', 'focussash'];
 	const attacker = !BULKY_ROLES.includes(set.role) && !SUPPORT_ROLES.includes(set.role);
 	if (allowed) {
 		for (const id of allowed) {
@@ -615,6 +639,6 @@ function buildSet(dex, name, { role = null, rng = Math.random, level = 100, allo
 
 module.exports = {
 	roleSets, buildSet, pickMoves, itemFor, spreadFor, learnable, attackValue, coverageGain,
-	threatGain, priorityValue, selfDrop, STRONG_PRIORITY,
+	threatGain, priorityValue, selfDrop, hitOn, STRONG_PRIORITY, ONE_USE,
 	SETUP, RECOVERY, HAZARDS, PIVOTS, STATUS, UTILITY, BULKY_ROLES, SETUP_ROLES, SUPPORT_ROLES,
 };
