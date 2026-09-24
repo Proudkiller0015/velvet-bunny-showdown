@@ -134,11 +134,40 @@ function assemble(dex, candidates, options = {}) {
 		 * soft rule, where the Pokemon has anything better to be swapped for.
 		 */
 		const thin = sets.reduce((n, s) => n + Math.max(0, 3 - s.moves.length) * 4, 0);
-		return logic + strengthWeight * power - crowding - thin + rng() * 0.01;
+		return logic + strengthWeight * power - crowding - thin + core(picks, sets) + rng() * 0.01;
 	};
 
 	// Start from the strongest, fixed members first, each in a random role of theirs.
 	const byStrength = pool.slice().sort((a, b) => (b.strength || 1) - (a.strength || 1));
+	/*
+	 * Breaking core first (24 Sep 2026). "Start from a progress-making core, not
+	 * a defensive one. If the seed is a wall, the very next pick is a breaker
+	 * that exploits the Pokemon that wall draws in" - walls stacked on walls
+	 * turn into "an accidental bad stall team" (Pinkacross, How to Build Around
+	 * Defensive Pokemon; B1 in docs/research-pinkacross.md). The seed is the
+	 * first fixed member (a trainer's ace), else the strongest candidate. When
+	 * it plays a wall, what it draws in is what its attacks cannot hurt - the
+	 * format's threats when known, else the eighteen types - and a breaker
+	 * (TL.isBreaker) that hits those hard earns up to CORE_WEIGHT, two soft
+	 * rules' worth: enough to steer the search, not to outvote a hard rule.
+	 */
+	const seed = fixed.find(c => pool.includes(c)) || byStrength[0];
+	const coreCache = new Map();
+	const core = (picks, sets) => {
+		if (stage === 'movesets') return 0;
+		const at = picks.findIndex(([c]) => c === seed);
+		if (at < 0 || !TL.isDefensive(dex, sets[at])) return 0;
+		const wall = sets[at];
+		if (!coreCache.has(wall)) coreCache.set(wall, { drawn: drawnIn(dex, wall, threats), by: new Map() });
+		const memo = coreCache.get(wall);
+		let bestCover = 0;
+		sets.forEach((set, i) => {
+			if (i === at) return;
+			if (!memo.by.has(set)) memo.by.set(set, TL.isBreaker(dex, set) ? cover(dex, set, memo.drawn) : 0);
+			bestCover = Math.max(bestCover, memo.by.get(set));
+		});
+		return CORE_WEIGHT * bestCover;
+	};
 	const start = [...fixed.filter(c => pool.includes(c)), ...byStrength.filter(c => !fixed.includes(c))].slice(0, size);
 	let picks = start.map(c => [c, Math.floor(rng() * options_.get(c).length)]);
 	let best = value(picks);
@@ -190,9 +219,10 @@ function assemble(dex, candidates, options = {}) {
 		oneSetterEach(dex, team);
 		answerSetup(dex, team);
 		addSpeedControl(dex, team);
+		addKnockOff(dex, team);
 	}
 
-	if (items) assignItems(dex, team, items === true ? null : items.bag || {});
+	if (items) assignItems(dex, team, items === true ? null : items.bag || {}, { stage, themed, threats });
 	return team.map(({ legal, ...set }) => set);
 }
 
@@ -271,14 +301,67 @@ function oneSetterEach(dex, team) {
 	}
 }
 
+/*
+ * Knock Off (24 Sep 2026): "1-2 users" on every team but hyper offense
+ * (Pinkacross, 18 Things Every Team Needs). The search scores it as a soft
+ * rule; when the six it picks still have none, the most supportive member that
+ * learns it takes it in place of what it misses least (teach()), the way a
+ * wall picks up Haze in answerSetup(). Never a second one: three users is
+ * past his diminishing-returns point, and the soft rule says so.
+ */
+function addKnockOff(dex, team) {
+	const report = TL.analyze(dex, team);
+	if (report.knockOff.length || ['hyper offense', 'stall'].includes(report.style)) return;
+	const helpers = team.filter(s => supportRank(s) >= 2).sort((a, b) => supportRank(b) - supportRank(a));
+	for (const set of helpers) if (teach(dex, set, ['knockoff'], set.legal)) return;
+}
+
+/*
+ * What a wall draws in (breaking core, above): the threats - or, without a
+ * list, the eighteen types - that its attacks hit for less than neutral, so
+ * they switch into it freely. With no attacks at all, everything does.
+ */
+const CORE_WEIGHT = 6;
+function drawnIn(dex, wall, threats) {
+	const fixedDamage = m => ['seismictoss', 'nightshade'].includes(m.id);
+	const attacks = wall.moves.map(n => dex.moves.get(n)).filter(m => m.exists && m.category !== 'Status' && (m.basePower > 0 || fixedDamage(m)));
+	const list = threats && threats.length
+		? threats.map(t => {
+			const sp = dex.species.get(t.name || t.species || '');
+			return { types: t.types || (sp.exists ? sp.types : []), ability: t.ability || '', weight: t.weight > 0 ? t.weight : 1 };
+		}).filter(t => t.types.length)
+		: dex.types.names().filter(t => t !== 'Stellar').map(t => ({ types: [t], ability: '', weight: 1 }));
+	// Seismic Toss and Night Shade do set damage to anything not immune to their type.
+	const hit = (m, t) => (fixedDamage(m) ? (dex.getImmunity(m.type, t.types) ? 1 : 0) : RS.hitOn(dex, m, t.types, t.ability));
+	return list.filter(t => !attacks.some(m => hit(m, t) >= 1));
+}
+/** How well a breaker's attacks hit what a wall draws in: 0-1, super effective in full, neutral a third. */
+function cover(dex, set, drawn) {
+	const total = drawn.reduce((n, t) => n + t.weight, 0);
+	if (!total) return 0;
+	const attacks = set.moves.map(n => dex.moves.get(n)).filter(m => m.exists && m.category !== 'Status' && m.basePower > 0);
+	let got = 0;
+	for (const t of drawn) {
+		const best = attacks.reduce((n, m) => Math.max(n, RS.hitOn(dex, m, t.types, t.ability)), 0);
+		got += t.weight * (best >= 2 ? 1 : best >= 1 ? 0.35 : 0);
+	}
+	return got / total;
+}
+
 function supportRank(set) {
 	return RS.SUPPORT_ROLES.includes(set.role) ? 3 : RS.BULKY_ROLES.includes(set.role) ? 2 : set.role === 'Fast Attacker' ? 1 : 0;
 }
 
-/** Items by role; with a bag, only what is in it, as many as there are. */
-function assignItems(dex, team, bag) {
+/**
+ * Items by role; with a bag, only what is in it, as many as there are.
+ * `options` (all optional): the checklist's { stage, themed, threats }, for
+ * the pass that fixes what the role-by-role choice left the team short of.
+ */
+function assignItems(dex, team, bag, options = {}) {
 	const report = TL.analyze(dex, team);
 	const left = bag ? { ...bag } : null;
+	// A balance or stall team plays a long game: no one-use items where anything else fits (see RS.ONE_USE).
+	const oneUse = !['balance', 'stall'].includes(report.style);
 	const order = team.slice().sort((a, b) => report.defensive.includes(b.species) - report.defensive.includes(a.species) || supportRank(b) - supportRank(a));
 	for (const set of order) {
 		const species = dex.species.get(set.species);
@@ -289,8 +372,58 @@ function assignItems(dex, team, bag) {
 			allowed = new Set(Object.entries(left).filter(([, n]) => n > 0).map(([id]) => id).filter(id => dex.items.get(id).exists));
 			if (!allowed.size) { set.item = ''; continue; }
 		}
-		set.item = RS.itemFor(dex, species, role, set.moves, side, allowed ? new Set(heldOnly(dex, allowed)) : null);
+		set.item = RS.itemFor(dex, species, role, set.moves, side, allowed ? new Set(heldOnly(dex, allowed)) : null, { oneUse });
 		if (left && set.item) left[toID(set.item)]--;
+	}
+	if (options.stage && options.stage !== 'movesets' && team.length >= 3) improveItems(dex, team, left, options);
+}
+
+/*
+ * Items for the team, not only the role (24 Sep 2026). itemFor() picks one set
+ * at a time, so a team can end up with its only all-out attacker on a Choice
+ * Scarf or Boots and no immediate power (Pinkacross, 18 Things: "Choice
+ * Band/Specs, or a raw breaker"), or with no contact punisher when a wall
+ * could carry a Rocky Helmet. Each set may swap to a better item for the
+ * team - Band/Specs or Life Orb on an attacker, a Rocky Helmet on a wall that
+ * heals without Leftovers, Boots on a Stealth Rock-weak one - and a swap is
+ * kept only when the checklist's score rises, so a Scarf that was the team's
+ * speed control stays a Scarf. With a bag, only what is left in it.
+ */
+function improveItems(dex, team, left, { stage = 'full', themed = false, threats = null } = {}) {
+	const scoreOf = () => TL.score(dex, team, { stage, themed, threats }).score;
+	const available = id => !left || (left[id] || 0) > 0;
+	for (let pass = 0; pass < 2; pass++) {
+		let changed = false;
+		for (const set of team) {
+			if (set.moves.some(m => ['trick', 'switcheroo'].includes(toID(m)))) continue;
+			const species = dex.species.get(set.species);
+			const moves = set.moves.map(n => dex.moves.get(n));
+			const allAttacks = moves.length >= 3 && moves.every(m => m.category !== 'Status');
+			const options = [];
+			if (!RS.BULKY_ROLES.includes(set.role) && !RS.SUPPORT_ROLES.includes(set.role) && !moves.some(m => RS.SETUP.includes(m.id))) {
+				if (allAttacks) options.push(TL.attackSide(dex, set) === 'special' ? 'choicespecs' : 'choiceband');
+				options.push('lifeorb');
+			}
+			const heals = set.moves.some(m => RS.RECOVERY.includes(toID(m))) || toID(set.ability) === 'regenerator';
+			if (TL.isDefensive(dex, set) && heals) options.push('rockyhelmet');
+			if (dex.getEffectiveness('Rock', species.types) >= 1 && dex.getImmunity('Rock', species.types)) options.push('heavydutyboots');
+			const current = toID(set.item);
+			let best = scoreOf(), choice = null;
+			for (const id of options) {
+				if (id === current || !available(id) || !dex.items.get(id).exists) continue;
+				const was = set.item;
+				set.item = dex.items.get(id).name;
+				const s = scoreOf();
+				set.item = was;
+				if (s > best + 0.01) { best = s; choice = id; }
+			}
+			if (!choice) continue;
+			if (left && current) left[current] = (left[current] || 0) + 1;
+			if (left) left[choice]--;
+			set.item = dex.items.get(choice).name;
+			changed = true;
+		}
+		if (!changed) return;
 	}
 }
 
@@ -302,4 +435,4 @@ function heldOnly(dex, ids) {
 	});
 }
 
-module.exports = { assemble, teach, untrain, assignItems, keepValue };
+module.exports = { assemble, teach, untrain, assignItems, improveItems, keepValue, drawnIn, cover };
