@@ -838,9 +838,40 @@ class BattleAI {
 			const mySpe = (boosted.stats && boosted.stats.spe) || 0;
 			if (state.trickRoom ? mySpe > theirSpe : mySpe < theirSpe) fasterThanAll = false;
 		}
-		if (best >= 100) return fasterThanAll ? 1 : 0.6;
-		if (best >= 70) return fasterThanAll ? 0.55 : 0.3;
-		return best / 200;
+		const immediate = best >= 100 ? (fasterThanAll ? 1 : 0.6) : best >= 70 ? (fasterThanAll ? 0.55 : 0.3) : best / 200;
+		if (!this.cfg.predict || typeof state.foeTeam !== 'function') return immediate;
+
+		/*
+		 * Looking past the one in front of us, the way a good player does (owner,
+		 * 23 Sep 2026). A boost is worth what it does to the whole team that is left:
+		 *
+		 *   - Beat means KO it and get there first. Our own priority counts as getting
+		 *     there first: a +1 Dragonite's Extreme Speed does not care who is faster.
+		 *   - Not sweeping all the way still counts. A boosted hit that 2HKOs makes a
+		 *     hole, and a hole is most of what a setup sweeper is for.
+		 *   - Their priority ends it. A shown priority attack that KOs the boosted
+		 *     Pokemon halves the plan: it gets revenge-killed after one KO.
+		 */
+		const dex = PkmnDex.forGen(gen.num);
+		const attackOf = m => { const d = dex.moves.get(m); return d && d.exists && d.category !== 'Status' ? d : null; };
+		const myPriority = this.myMoveNames.filter(m => { const d = attackOf(m); return d && d.priority > 0; });
+		const mySpe = (boosted.stats && boosted.stats.spe) || 0;
+		const team = state.foeTeam();
+		let worth = 0, revenge = false;
+		for (const foe of team) {
+			const them = this.foePokemon(gen, foe);
+			let hit = 0;
+			for (const m of this.myMoveNames) hit = Math.max(hit, this.damageToFoe(gen, boosted, foe, m, field));
+			const prio = Math.max(0, ...myPriority.map(m => this.damageToFoe(gen, boosted, foe, m, field)));
+			const theirSpe = (them.stats && them.stats.spe) || 0;
+			const first = (state.trickRoom ? mySpe < theirSpe : mySpe > theirSpe) || prio >= 100;
+			worth += hit >= 100 ? (first ? 1 : 0.55) : hit >= 50 ? (first ? 0.4 : 0.25) : hit / 250;
+			const theirs = [...(foe.moves || []), ...this.hiddenAttacks(gen, foe)];
+			if (theirs.some(m => { const d = attackOf(m); return d && d.priority > 0 && this.damagePct(gen, them, boosted, m, field) >= 100; })) revenge = true;
+		}
+		const share = team.length ? worth / team.length : 0;
+		const plan = Math.max(immediate * 0.6, (immediate + share) / 2);
+		return revenge ? plan * 0.5 : plan;
 	}
 
 	/**
@@ -858,8 +889,11 @@ class BattleAI {
 
 		for (const other of foes) {
 			const ability = String(other.ability || '').toLowerCase().replace(/[^a-z]/g, '');
-			// Unaware kills the offensive half and leaves the defensive half alone.
-			if (ability === 'unaware' && offensive && !defensive) return true;
+			// Unaware kills the offensive half and leaves the defensive half alone -
+			// but only against an Unaware Pokemon that can stay in. A Clodsire that
+			// cannot 1v1 Garchomp at all is leaving or losing either way, and the
+			// Swords Dance is for whatever comes in after (owner, 23 Sep 2026).
+			if (ability === 'unaware' && offensive && !defensive && !this.forcesOut(gen, ctx && ctx.me, other, ctx && ctx.field)) return true;
 
 			const seen = other.moves ? [...other.moves] : [];
 			for (const move of seen) {
@@ -1357,6 +1391,42 @@ class BattleAI {
 		return worst;
 	}
 
+	/**
+	 * Does this move's drop to our own Defence or Sp. Def turn their best hit into
+	 * a KO it was not before? False when nothing is dropped, when they have shown
+	 * priority, or when we were dead to them anyway.
+	 */
+	dropOpensKo(gen, me, foe, data, field) {
+		const drops = (data && data.self && data.self.boosts) || null;
+		if (!drops || !((drops.def || 0) < 0 || (drops.spd || 0) < 0)) return false;
+		const dex = PkmnDex.forGen(gen.num);
+		const seen = [...(foe.moves || [])];
+		if (seen.some(m => { const d = dex.moves.get(m); return d && d.exists && d.priority > 0 && d.category !== 'Status'; })) return false;
+		const them = this.foePokemon(gen, foe);
+		const worst = target => (seen.length
+			? Math.max(0, ...[...seen, ...this.hiddenAttacks(gen, foe)].map(m => this.damagePct(gen, them, target, m, field)))
+			: this.roughIncoming(gen, them, target, field));
+		// damagePct is a share of the HP we have left: 100 is a KO.
+		if (worst(me) >= 100) return false;
+		const lowered = me.clone();
+		lowered.boosts = { ...me.boosts };
+		for (const stat of ['def', 'spd']) {
+			if ((drops[stat] || 0) < 0) lowered.boosts[stat] = Math.max(-6, (me.boosts[stat] || 0) + drops[stat]);
+		}
+		return worst(lowered) >= 100;
+	}
+
+	/**
+	 * Does our unboosted best hit take half of what this foe has left? Then it
+	 * cannot sit in front of us: it switches, or it loses the 1v1.
+	 */
+	forcesOut(gen, me, foe, field) {
+		if (!me || !foe || !this.myMoveNames || !this.myMoveNames.length) return false;
+		let hit = 0;
+		for (const m of this.myMoveNames) hit = Math.max(hit, this.damageToFoe(gen, me, foe, m, field || new calc.Field()));
+		return hit >= 50;
+	}
+
 	/** The stage of the stat a self-dropping move lowers (0 for any other move). */
 	droppedFor(data, me) {
 		const drops = (data && ((data.self && data.self.boosts) || (data.selfBoost && data.selfBoost.boosts))) || null;
@@ -1768,6 +1838,14 @@ class BattleAI {
 					// Draco Meteor, Overheat, Leaf Storm...: fired again from -2 or lower
 					// they hit like wet paper. Anyone past Easy notices and looks elsewhere.
 					if (!this.cfg.naive && pct < 100 && this.droppedFor(data, me) <= -2) s -= 12 + 4 * Math.abs(this.droppedFor(data, me));
+					/*
+					 * Close Combat, Superpower, Headlong Rush: the Defence drop only costs
+					 * something when we were going to stay in (owner, 23 Sep 2026). It is free
+					 * when the hit kills, when they outrun us or have priority (we switch or
+					 * sack after anyway), or when it tore a big hole. What is left: we move
+					 * first, it does not kill, and their best hit only kills us through the drop.
+					 */
+					if (movesFirst && pct < 60 && this.dropOpensKo(gen, me, foe, data, field)) s -= 25;
 					// We are dead before this lands unless it kills or it has priority.
 					if (outsped && pct < 100 && !(data && data.priority > 0) && s > 0) s *= 0.35;
 					if (s > score) { score = s; target = foe.slot === 'b' ? 2 : 1; }

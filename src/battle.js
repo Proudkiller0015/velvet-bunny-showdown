@@ -207,6 +207,8 @@ class BattleState {
 			if (!id) break;
 			const store = id.side === this.myPlayer ? this.mine : this.opponent;
 			if (store[id.slot]) { store[id.slot].fainted = true; store[id.slot].hp = 0; }
+			// Their fallen, by species: team preview lists the whole team, and this is what is gone from it.
+			if (id.side === this.theirPlayer && store[id.slot]) (this.theirDown = this.theirDown || []).push(store[id.slot].species);
 			// Keystone Legion (Spiritomb) mends whenever any other Pokemon faints.
 			this.legionCracked = {};
 			break;
@@ -405,6 +407,29 @@ class BattleState {
 		return Object.entries(this.opponent)
 			.filter(([, m]) => m && !m.fainted)
 			.map(([slot, m]) => ({ slot, ...m }));
+	}
+
+	/**
+	 * Everything they still have: the Pokemon on the field as the log knows them,
+	 * plus the rest of the team preview at full health. Without a preview (no
+	 * Team Preview in the format) it is just the field.
+	 */
+	foeTeam() {
+		const field = this.foes();
+		const list = (this.preview && this.preview[this.theirPlayer]) || [];
+		if (!list.length) return field;
+		const base = s => String(s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+		const down = [...(this.theirDown || [])].map(base);
+		const out = [...field];
+		for (const p of list) {
+			const id = base(p.species);
+			if (field.some(f => base(f.species).startsWith(id) || id.startsWith(base(f.species)))) continue;
+			const gone = down.findIndex(d => d.startsWith(id) || id.startsWith(d));
+			if (gone >= 0) { down.splice(gone, 1); continue; }
+			out.push({ slot: null, species: p.species, level: p.level, hp: 100, maxhp: 100, status: '', boosts: {},
+				moves: new Set(), immuneTo: new Set(), notImmuneTo: new Set(), bench: true });
+		}
+		return out;
 	}
 }
 

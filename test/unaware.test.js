@@ -130,5 +130,30 @@ for (const rung of ['normal', 'hard', 'champion', 'stockfish']) {
 	}
 }
 
+/*
+ * Unaware only wastes a boost against an Unaware Pokemon that can stay in (owner,
+ * 23 Sep 2026: "Clodsire is Unaware but absolutely cannot 1v1 Garchomp, so a SD
+ * will kill the other ones after"). One that our plain hit takes half of is
+ * leaving or losing, and the boost is for what comes after it.
+ */
+{
+	const calc = require('@smogon/calc');
+	const gen = calc.Generations.get(9);
+	const ai = new BattleAI({ difficulty: 'stockfish' });
+	ai.setFormat('gen9ou');
+	ai.myMoveNames = ['Swords Dance', 'Flower Trick'];
+	const me = new calc.Pokemon(gen, 'Meowscarada', { level: 100, evs: { atk: 252, spe: 252 }, nature: 'Jolly' });
+	const unaware = species => ({ species, name: species, level: 100, hp: 100, maxhp: 100, status: '', boosts: {}, moves: new Set(), ability: 'Unaware', immuneTo: new Set(), notImmuneTo: new Set() });
+	const checks = [
+		['an Unaware wall that can stay in (Skeledirge, resisting Grass) still wastes the boost', ai.setupIsWasted(gen, unaware('Skeledirge'), { atk: 2 }, { foes: [unaware('Skeledirge')], me }) === true],
+		['an Unaware Quagsire that a Grass hit tears apart does not', ai.setupIsWasted(gen, unaware('Quagsire'), { atk: 2 }, { foes: [unaware('Quagsire')], me }) === false],
+	];
+	console.log('\nforced out:');
+	for (const [name, ok] of checks) {
+		if (!ok) bad++;
+		console.log(`  ${ok ? 'ok  ' : 'FAIL'} ${name}`);
+	}
+}
+
 console.log(bad ? `\n${bad} wrong` : '\nit understands what boosts are worth');
 process.exit(bad ? 1 : 0);
