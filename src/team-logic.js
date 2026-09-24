@@ -397,7 +397,116 @@ function analyze(dex, sets, options = {}) {
 	}
 	const walls = report.defensive.length;
 	report.style = walls >= 4 ? 'stall' : walls >= 2 ? 'balance' : walls === 1 || report.setup.length < 2 ? 'bulky offense' : 'hyper offense';
+	moreFacts(dex, sets, report, threats);
 	return report;
+}
+
+/*
+ * The facts behind the rules added 24 Sep 2026 (checklist rules 3 and 14,
+ * and docs/research-teambuilding.md A1, A2, H1, T2, T4). All read off types,
+ * abilities, base stats, moves and items, never a species list, so they hold
+ * for this server's own Pokemon and its balance patch.
+ */
+function moreFacts(dex, sets, report, threats) {
+	const ability = s => toID(s.ability);
+	const item = s => toID(s.item);
+	const who = test => sets.filter(test).map(s => s.species);
+	const types = s => dex.species.get(s.species).types;
+	/*
+	 * Rule 3, spinblocking: a Ghost type blocks Rapid Spin and Mortal Spin, Good
+	 * as Gold and Magic Bounce make Defog fail against them, and a Defiant or
+	 * Competitive member punishes Defog's drop (research-teambuilding A8, from
+	 * Smogon's hazard stacking guide). Only worth a slot when hazards stack.
+	 */
+	/*
+	 * B3: "three of a type is fine; four is usually a problem; five or six
+	 * almost always is" (Pinkacross, Top 5 Team Building Mistakes) - the type
+	 * most members share, when four or more do.
+	 */
+	const typeCount = {};
+	for (const set of sets) for (const t of types(set)) typeCount[t] = (typeCount[t] || 0) + 1;
+	const top = Object.entries(typeCount).sort((a, b) => b[1] - a[1])[0];
+	report.typeStack = top && top[1] >= 4 ? { type: top[0], count: top[1] } : null;
+	/*
+	 * Niche duplicates (Fildrong, T8 in docs/research-fildrong.md): two members
+	 * in the same kind of slot - both walls, both breakers or both setup
+	 * sweepers - sharing a type, where neither sets hazards, removes them or
+	 * pivots. One of them is a slot the team could use for something else.
+	 * Offensive stacking on purpose is different (Pinkacross B3 likes it), so
+	 * attackers only count when they share every type.
+	 */
+	const kind = s => (report.defensive.includes(s.species) ? 'wall' : has(s, MOVES.setup) ? 'setup' : 'attack');
+	const distinct = s => has(s, MOVES.stealthRock) || has(s, MOVES.spikes) || has(s, MOVES.removal) || has(s, MOVES.pivot);
+	report.nicheDuplicates = [];
+	for (let i = 0; i < sets.length; i++) {
+		for (let j = i + 1; j < sets.length; j++) {
+			const a = sets[i], b = sets[j];
+			if (kind(a) !== kind(b) || distinct(a) || distinct(b)) continue;
+			const ta = types(a), tb = types(b);
+			const same = kind(a) === 'wall' ? ta.some(t => tb.includes(t)) : ta.length === tb.length && ta.every(t => tb.includes(t));
+			if (same) report.nicheDuplicates.push(`${a.species}/${b.species}`);
+		}
+	}
+	report.spinblockers = who(s => types(s).includes('Ghost') || ['goodasgold', 'defiant', 'competitive', 'magicbounce'].includes(ability(s)));
+	const layers = ['spikes', 'toxicspikes', 'royaldecree', 'ceaselessedge'];
+	report.stacksHazards = report.stealthRock.length > 0 && sets.some(s => has(s, layers));
+	// H1: Defog clears our own hazards and screens too; spin-type removal does not.
+	report.defogOwnWork = sets.some(s => has(s, ['defog'])) &&
+		(sets.some(s => has(s, layers)) || sets.some(s => has(s, ['reflect', 'lightscreen', 'auroraveil'])));
+	// A2: a cleric for stall (Heal Bell, Aromatherapy, or Wish support).
+	report.clerics = who(s => has(s, ['healbell', 'aromatherapy', 'wish', 'junglehealing', 'lunarblessing']));
+	/*
+	 * A1: a cleaner for hyper offense - something that picks off what the
+	 * breakers leave without setting up first: a Scarf, a naturally fast
+	 * attacker (base 100 and up), or a strong priority STAB.
+	 */
+	report.cleaners = who(s => !has(s, MOVES.setup) && attackCount(dex, s) >= 2 && (item(s) === 'choicescarf' ||
+		dex.species.get(s.species).baseStats.spe >= 100 || (s.moves || []).some(m => {
+			const mv = dex.moves.get(m);
+			return mv.exists && mv.category !== 'Status' && mv.priority > 0 && !['fakeout', 'firstimpression'].includes(mv.id) &&
+				(mv.basePower || 0) * (types(s).includes(mv.type) ? 1.5 : 1) >= 60;
+		})));
+	/*
+	 * T4: "no common wall may wall most of the team" (Smogon's teambuilding
+	 * heuristics). A wall is a threat whose bulk outweighs its offence, by its
+	 * base stats; a member is walled by it when none of its attacks hits it
+	 * super effectively. At four walled, the team needs one member that does,
+	 * or Knock Off, Taunt or Toxic to wear it down.
+	 */
+	report.freeWalls = [];
+	for (const t of threats) {
+		const sp = dex.species.get(t.name || '');
+		if (!sp.exists) continue;
+		const b = sp.baseStats;
+		if (b.hp + b.def + b.spd < 280 || b.hp + b.def + b.spd < 1.4 * Math.max(b.atk, b.spa) + b.spe) continue;
+		const hitsHard = s => (s.moves || []).some(m => {
+			const mv = dex.moves.get(m);
+			return mv.exists && mv.category !== 'Status' && (mv.basePower || 0) >= 50 && hitThreat(dex, mv, t) >= 2;
+		});
+		const walled = sets.filter(s => !hitsHard(s)).length;
+		const answer = sets.some(s => hitsHard(s) || has(s, ['knockoff', 'taunt', 'toxic']));
+		if (walled >= 4 && !answer) report.freeWalls.push(t.name);
+	}
+	/*
+	 * Rule 14, every slot has a purpose: a member that is not one of at most two
+	 * doing anything - hazards, removal, pivoting, speed control, a setup
+	 * answer, stallbreaking, breaking or winning, status absorbing, an immunity,
+	 * the team's only resist to a key type, one of three walls or fewer - is a
+	 * slot another Pokemon could use better.
+	 */
+	const few = list => list.length > 0 && list.length <= 2;
+	const jobs = [report.stealthRock, report.otherHazards, report.removal, report.pivots, report.speedControl, report.stallbreak,
+		report.breakers, report.winCondition, report.statusAbsorb, report.knockOff, report.groundImmune, report.electricImmune, report.steel,
+		report.contactPunishers, report.spinblockers, report.clerics];
+	report.purposeless = sets.filter(s => {
+		if (jobs.some(list => few(list) && list.includes(s.species))) return false;
+		if (report.defensive.includes(s.species) && report.defensive.length <= 3) return false;
+		for (const [k, test] of Object.entries(SETUP_ANSWERS)) {
+			if (test && test(s) && sets.filter(test).length <= 2) return false;
+		}
+		if (KEY_TYPES.some(t => (report.resist[t] || []).includes(s.species) && (report.resist[t] || []).length <= 1)) return false;
+		return true;
+	}).map(s => s.species);
 }
 
 /**
@@ -432,7 +541,7 @@ function issues(report, { stage = 'full', themed = false } = {}) {
 	 */
 	if (!themed) {
 		const offense = report.style === 'hyper offense';
-		const noAnswer = KEY_TYPES.filter(t => !report.resist[t].length);
+		const noAnswer = KEY_TYPES.filter(t => report.resist[t] && !report.resist[t].length);
 		if (noAnswer.length) add(noAnswer.length >= 3 || !offense ? 'hard' : 'soft', `nothing resists ${noAnswer.join(', ')}`);
 		const thin = ['Water', 'Ground', 'Fighting', 'Dragon'].filter(t => report.resist[t] && report.resist[t].length === 1);
 		if (thin.length && !offense && stage === 'full') add('soft', `only one answer to ${thin.join(', ')}`);
@@ -483,10 +592,18 @@ function issues(report, { stage = 'full', themed = false } = {}) {
 	const needSpeed = { 'hyper offense': 3, 'bulky offense': 2, balance: 1 }[report.style] || 0;
 	if (!report.speedControl.length) add('hard', 'nothing fast and no priority');
 	else if (report.speedControl.length < needSpeed) add('hard', `only ${report.speedControl.length} of the ${needSpeed} speed control a ${report.style} team needs (${report.speedControl.join(', ')})`);
-	else if (!report.priority.length && report.style !== 'stall') add('soft', 'no priority move');
+	/*
+	 * "Priority matters more than speed control": boosts and type changes let a
+	 * sweeper outrun anything fast, and priority covers what the builder did
+	 * not foresee (Pinkacross, 10 Things / Beat HO; R-T11). He would make it
+	 * hard off stall; kept soft, but at 5 rather than 3 (24 Sep 2026).
+	 */
+	else if (!report.priority.length && report.style !== 'stall') add('soft', 'no priority move', 5);
 	// Rule 8: "pivots: at least 2 users, except stall and HO" (Pinkacross, 18 Things). Soft, as he frames it.
 	if (!report.pivots.length && ['balance', 'bulky offense'].includes(report.style)) add('soft', 'no pivot (U-turn, Volt Switch, Flip Turn, Teleport, Parting Shot)');
 	else if (report.pivots.length === 1 && ['balance', 'bulky offense'].includes(report.style)) add('soft', `a ${report.style} team with one pivot`);
+	// "Prediction is hard and U-turn is easy": balance wants three (Pinkacross, Mistakes II; R-T15). Light.
+	else if (report.pivots.length === 2 && report.style === 'balance') add('soft', 'a balance team with two pivots; three is easier to play', 1);
 	/*
 	 * Rule 11, by mechanism: two Will-O-Wisp users are one answer, and not one to
 	 * Calm Mind. Two distinct ones, at least one that works on a special sweeper.
@@ -557,6 +674,39 @@ function eighteenThings(report, { themed, add }) {
 	else if (style === 'bulky offense' && passive.length && report.defensive.length <= 1) add('soft', `${passive.join(', ')} ${passive.length === 1 ? 'is' : 'are'} passive with no other wall behind`);
 	if (passive.length > 2 && style !== 'stall') add('soft', `${passive.length} passive members (${passive.join(', ')}) on a ${style} team`);
 	if (['balance', 'stall'].includes(style) && report.fastPace.length) add('soft', `one-use sets on a ${style} team (${report.fastPace.join(', ')}): it plays a long game`);
+	if (report.purposeless) moreRules(report, { add, themed });
+}
+
+/*
+ * Rules added 24 Sep 2026, all soft and lightly weighted: each is a
+ * refinement a strong player makes after the basics, and none may outvote a
+ * hard rule. Sources: checklist rules 3 and 14 (Smogon's guides), and
+ * docs/research-teambuilding.md A1, A2, H1, T2, T4 (Smogon articles; where
+ * they touch Pinkacross's rules they agree with him).
+ */
+function moreRules(report, { add, themed = false }) {
+	const style = report.style;
+	// B3: four or more of one type (a type specialist is exempt: that is its theme).
+	if (!themed && report.typeStack) add('soft', `${report.typeStack.count} ${report.typeStack.type} types`, 1.5);
+	// T8 (Fildrong): two members doing the same job with the same typing.
+	if (!themed && report.nicheDuplicates.length) add('soft', `${report.nicheDuplicates.join(', ')} fill the same niche`, 1);
+	// Rule 3: stacked hazards want a spinblocker (or a Defog punisher).
+	if (report.stacksHazards && !report.spinblockers.length) add('soft', 'hazards stacked with nothing to keep them up (a Ghost spinblocker, Good as Gold, Defiant)', 1);
+	// H1: Defog undoes the team's own hazards and screens.
+	if (report.defogOwnWork) add('soft', `Defog would clear the team's own hazards or screens (Rapid Spin does not)`, 1);
+	// Rule 14: every slot has a purpose.
+	if (report.purposeless.length) add('soft', `${report.purposeless.join(', ')} ${report.purposeless.length === 1 ? 'has' : 'have'} no job no one else does`, 1.5);
+	// T2: a backup win condition, so one counter at team preview does not end the game (stall exempt).
+	if (style !== 'stall' && report.winCondition.length === 1) add('soft', `one win condition (${report.winCondition[0]}); a second with different checks`, 1);
+	// A1: hyper offense runs two breakers and a cleaner.
+	if (style === 'hyper offense') {
+		if (report.breakers.length < 2) add('soft', 'hyper offense with fewer than two wallbreakers', 1);
+		if (!report.cleaners.length) add('soft', 'hyper offense with no cleaner (a Scarf, a fast attacker, strong priority)', 1);
+	}
+	// A2: stall needs a cleric, or status wears it down.
+	if (style === 'stall' && !report.clerics.length) add('soft', 'a stall team with no cleric (Heal Bell, Aromatherapy, Wish)', 1);
+	// T4: one common wall that walls most of the team, and nothing to break it.
+	if (report.freeWalls.length) add('soft', `${report.freeWalls.join(', ')} ${report.freeWalls.length === 1 ? 'walls' : 'wall'} four or more members, and nothing breaks ${report.freeWalls.length === 1 ? 'it' : 'them'}`, 2);
 }
 
 /** A single number to compare teams by: higher is better. Hard issues cost far more than soft ones. */

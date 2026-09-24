@@ -393,7 +393,7 @@ function weighted(rng, entries) {
  * recovery and a hazard or status for support), then coverage. Our own moves are
  * favoured. `rng` adds variety between sets of the same role.
  */
-function pickMoves(dex, species, set, rng = Math.random, { threats = null } = {}) {
+function pickMoves(dex, species, set, rng = Math.random, { threats = null, archetype = null } = {}) {
 	const pool = set.movepool.map(n => dex.moves.get(n)).filter(m => m.exists);
 	const b = species.baseStats;
 	const statCount = { Physical: 0, Special: 0 };
@@ -487,6 +487,14 @@ function pickMoves(dex, species, set, rng = Math.random, { threats = null } = {}
 		take(best(m => STATUS.includes(m.id) || UTILITY.includes(m.id), m => (m.num < 0 ? 2 : 1)));
 	}
 	if (set.role === 'AV Pivot' || set.role === 'Fast Attacker') take(best(m => PIVOTS.includes(m.id)));
+	/*
+	 * Bulky offense and balance want two pivots or more ("pivots: at least 2
+	 * users, except stall and HO" - Pinkacross, 18 Things; checklist rule 8), so
+	 * there a Wallbreaker or Bulky Attacker takes its pivot move too, when its
+	 * pool has one (24 Sep 2026). Hyper offense and stall keep the slot.
+	 */
+	if (['bulky offense', 'balance'].includes(archetype) && ['Wallbreaker', 'Bulky Attacker'].includes(set.role) &&
+		chosen.some(c => c.category !== 'Status')) take(best(m => PIVOTS.includes(m.id) && m.category !== 'Status'));
 	// A second STAB, then coverage of new types, then anything useful.
 	// Only attacks count: Stealth Rock is Rock-type, and it was keeping Stone Edge out of Tyranitar's STAB slot.
 	take(best(m => attack(m) && species.types.includes(m.type) && !chosen.some(c => c.category !== 'Status' && c.type === m.type), wallValue));
@@ -541,29 +549,78 @@ const ONE_USE = ['focussash', 'sitrusberry', 'lumberry', 'oranberry', 'boosteren
  * `options.oneUse` false: the team plays a long game, so a one-use item only
  * when nothing else fits.
  */
-function itemFor(dex, species, set, moves, stat, allowed = null, { oneUse = true } = {}) {
+function itemFor(dex, species, set, moves, stat, allowed = null, { oneUse = true, threats = null } = {}) {
 	if (!oneUse) {
-		return itemFor(dex, species, set, moves, stat, allowed ? new Set([...allowed].filter(id => !ONE_USE.includes(toID(id)))) : null, { oneUse: 'never' }) ||
-			(allowed ? itemFor(dex, species, set, moves, stat, allowed) : '');
+		return itemFor(dex, species, set, moves, stat, allowed ? new Set([...allowed].filter(id => !ONE_USE.includes(toID(id)))) : null, { oneUse: 'never', threats }) ||
+			(allowed ? itemFor(dex, species, set, moves, stat, allowed, { threats }) : '');
 	}
 	const moveData = moves.map(n => dex.moves.get(n));
 	const allAttacks = moveData.every(m => m.category !== 'Status');
+	const real = moveData.filter(m => m.category !== 'Status' && (m.basePower || 0) >= 60);
+	const mixed = real.filter(m => m.category === 'Physical').length >= 2 && real.filter(m => m.category === 'Special').length >= 2;
 	const rockWeak = dex.getEffectiveness('Rock', species.types) >= 1 && dex.getImmunity('Rock', species.types);
 	const nfe = species.nfe;
 	const wants = [];
+	/*
+	 * Self-status abilities want their orb (24 Sep 2026): Guts, Flare Boost,
+	 * Toxic Boost and Poison Heal are switched on deliberately with a Flame or
+	 * Toxic Orb (Fildrong, D5 in docs/research-fildrong.md; Pinkacross does not
+	 * disagree). Toxic for Poison Heal and Toxic Boost; Flame for Flare Boost
+	 * and for Guts unless the holder is a Fire type (then Toxic, unless it
+	 * cannot be poisoned either). Only when the set attacks.
+	 */
+	const ability = toID(set.ability || (set.abilities || [])[0]);
+	const attacksAtAll = moveData.some(m => m.category !== 'Status');
+	const burnable = !species.types.includes('Fire');
+	const poisonable = !species.types.includes('Poison') && !species.types.includes('Steel');
+	if (attacksAtAll || ability === 'poisonheal') {
+		if (['poisonheal', 'toxicboost'].includes(ability) && poisonable) wants.push('Toxic Orb');
+		else if (ability === 'flareboost' && burnable) wants.push('Flame Orb');
+		else if (ability === 'guts') wants.push(burnable ? 'Flame Orb' : poisonable ? 'Toxic Orb' : null);
+	}
 	if (nfe) wants.push('Eviolite');
 	if (rockWeak) wants.push('Heavy-Duty Boots');
 	// Trick is for handing over a Choice item.
 	if (moveData.some(m => m.id === 'trick' || m.id === 'switcheroo')) wants.unshift(stat === 'Physical' ? 'Choice Band' : 'Choice Scarf');
+	/*
+	 * An easy click (24 Sep 2026): a Band or Specs user is locked into one move,
+	 * so its best STAB has to be one most of the format takes at least neutral
+	 * damage from, or the set needs a pivot to leave on - "Specs Shadow Ball,
+	 * which nothing common is immune to, versus Band Iron Leaves, where every
+	 * move needs a read" (Pinkacross, How to Use Choice Items; R-T12). Judged
+	 * against the format's threats when known: 70% of their usage.
+	 */
+	const easyClick = !threats || !threats.length || moveData.some(m => PIVOTS.includes(m.id)) || clickShare(dex, species, moveData, threats) >= 0.7;
 	switch (set.role) {
 	case 'AV Pivot': wants.push('Assault Vest', 'Leftovers'); break;
-	case 'Fast Attacker': wants.push(allAttacks ? 'Choice Scarf' : 'Life Orb', allAttacks ? (stat === 'Physical' ? 'Choice Band' : 'Choice Specs') : 'Leftovers'); break;
-	case 'Wallbreaker': wants.push(allAttacks ? (stat === 'Physical' ? 'Choice Band' : 'Choice Specs') : 'Life Orb', 'Life Orb'); break;
+	/*
+	 * A mixed attacker takes Life Orb, not a Choice item (24 Sep 2026): Band or
+	 * Specs boosts half its moves, and "Life Orb only on ... mixed attackers"
+	 * is one of Pinkacross's three right homes for it (B10 in
+	 * docs/research-pinkacross.md). Mixed is two real attacks of each side.
+	 */
+	/*
+	 * Scarf only where the speed changes something (24 Sep 2026): "a Choice
+	 * Scarf trades power for speed; it pays only when the extra speed changes
+	 * what the Pokemon outspeeds" (Smogon's SV OU speed tiers and HO guide; I1
+	 * in docs/research-teambuilding.md). With the format's threats known, a
+	 * fast attacker that already outruns them, or would still not, takes Band
+	 * or Specs instead. Without a threat list, as before.
+	 */
+	case 'Fast Attacker': {
+		const scarf = allAttacks && !mixed && (!threats || !threats.length || scarfPays(dex, species, threats));
+		const power = stat === 'Physical' ? 'Choice Band' : 'Choice Specs';
+		if (allAttacks && !mixed) wants.push(...(scarf ? ['Choice Scarf', power] : easyClick ? [power, 'Choice Scarf'] : ['Life Orb', power]));
+		else wants.push('Life Orb', 'Leftovers');
+		break;
+	}
+	case 'Wallbreaker': wants.push(allAttacks && !mixed && easyClick ? (stat === 'Physical' ? 'Choice Band' : 'Choice Specs') : 'Life Orb', 'Life Orb'); break;
 	case 'Setup Sweeper': case 'Fast Bulky Setup': case 'Tera Blast user': wants.push('Life Orb', 'Leftovers'); break;
 	case 'Fast Support': wants.push('Focus Sash', 'Leftovers'); break;
 	default: wants.push('Leftovers', 'Rocky Helmet', 'Sitrus Berry');
 	}
 	for (const name of wants) {
+		if (!name) continue;
 		if (oneUse === 'never' && ONE_USE.includes(toID(name))) continue;
 		if (!allowed || allowed.has(toID(name))) return name;
 	}
@@ -591,9 +648,385 @@ function itemFor(dex, species, set, moves, stat, allowed = null, { oneUse = true
 	return '';
 }
 
-/** Nature and EVs for a role and an attacking side. */
-function spreadFor(species, set, stat) {
+/*
+ * Set sanity (24 Sep 2026): the checks a strong player makes on a single set
+ * before looking at the team, and the smallest repair for each.
+ *
+ * Every builder has produced a set that fails one of these at a glance -
+ * the Smogon draw handed Regigigas Choice Specs with Protect and Substitute
+ * (the item was drawn from a list with no look at the moves), Lilligant-Hisui
+ * a Wide Lens, and Pangoro a set of Twilight Exit and Shuffle Jab. The rules
+ * are the item traps and set hygiene of Pinkacross (B7, B10 in
+ * docs/research-pinkacross.md: "never Wide Lens, Scope Lens, Shell Bell";
+ * Life Orb on mixed or fast attackers, Band/Specs on all-out ones) and the
+ * Smogon basics every guide opens with: a Choice item locks the holder into
+ * one move, so a status move on it is a dead slot, and Assault Vest forbids
+ * status moves outright; a set needs its STAB and enough moves that do
+ * something. Written from the move and item data, never from a species list,
+ * so this server's own moves and abilities are read the same way.
+ */
+const CHOICE_ITEMS = ['choiceband', 'choicespecs', 'choicescarf'];
+// Trick and Switcheroo hand the Choice item over: the reason a Choice Scarf Trick set exists. Healing Wish,
+// Lunar Dance and Memento end the user, so the lock never matters (Scarf Healing Wish is a standard set).
+const CHOICE_STATUS_OK = ['trick', 'switcheroo', 'healingwish', 'lunardance', 'memento'];
+// Items that do next to nothing in singles (Pinkacross's item traps), or only hurt the holder.
+const TRAP_ITEMS = ['widelens', 'scopelens', 'shellbell', 'quickclaw', 'kingsrock', 'razorclaw', 'razorfang', 'blunderpolicy',
+	'laggingtail', 'ironball', 'ringtarget', 'stickybarb', 'fullincense', 'laxincense', 'brightpowder', 'zoomlens', 'metronome',
+	'machobrace', 'powerweight', 'powerbracer', 'powerbelt', 'powerlens', 'powerband', 'poweranklet', 'destinyknot',
+	'smokeball', 'soothebell', 'luckyegg', 'amuletcoin', 'cleansetag', 'everstone', 'expshare', 'floatstone'];
+// An orb that burns or poisons its holder is a trap unless the set turns the status into power or healing.
+const ORB_USERS = ['guts', 'poisonheal', 'toxicboost', 'flareboost', 'marvelscale', 'quickfeet', 'magicguard'];
+// The -ate abilities turn Normal moves into their own type: Pixilate Hyper Voice is Sylveon's STAB.
+const ATE = { pixilate: 'Fairy', aerilate: 'Flying', refrigerate: 'Ice', galvanize: 'Electric', normalize: 'Normal' };
+// Status moves that do nothing worth a turn in a real game: a stat drop on the foe, a turn spent on nothing.
+const NOT_USEFUL = ['growl', 'tailwhip', 'leer', 'sandattack', 'smokescreen', 'kinesis', 'flash', 'harden', 'withdraw', 'defensecurl',
+	'splash', 'celebrate', 'holdhands', 'charge', 'focusenergy', 'laserfocus', 'minimize', 'doubleteam', 'sweetscent', 'stringshot',
+	'scaryface', 'cottonspore', 'charm', 'featherdance', 'playnice', 'confide', 'babydolleyes', 'nobleroar', 'tearfullook',
+	'screech', 'metalsound', 'faketears', 'captivate', 'lockon', 'mindreader', 'foresight', 'odorsleuth', 'miracleeye', 'teeterdance',
+	'supersonic', 'confuseray', 'sweetkiss', 'flatter', 'swagger', 'attract', 'mimic', 'conversion', 'conversion2', 'camouflage',
+	'magiccoat', 'snatch', 'imprison', 'grudge', 'spite', 'endure', 'powertrick', 'powersplit', 'guardsplit',
+	'powerswap', 'guardswap', 'speedswap', 'heartswap', 'skillswap', 'roleplay', 'entrainment', 'simplebeam', 'worryseed', 'gastroacid',
+	'soak', 'magicpowder', 'forestscurse', 'trickortreat', 'electrify', 'iondeluge', 'powder', 'embargo', 'healblock', 'telekinesis',
+	'magnetrise', 'ingrain', 'aquaring', 'lockon', 'stockpile', 'swallow', 'spitup', 'acupressure', 'helpinghand', 'followme', 'ragepowder',
+	'allyswitch', 'aromaticmist', 'coaching', 'decorate', 'instruct', 'afteryou', 'quash', 'wideguard', 'quickguard', 'matblock', 'craftyshield'];
+// In doubles these are the job itself: redirection, ally support, spread protection.
+const DOUBLES_USEFUL = ['helpinghand', 'followme', 'ragepowder', 'allyswitch', 'coaching', 'decorate', 'instruct', 'afteryou',
+	'wideguard', 'quickguard', 'icywind', 'electroweb', 'snarl'];
+
+/** Whether a move does something a strong player would spend a slot on. */
+// Charge moves a real set runs: the charge turn is the point (Meteor Beam raises SpA) or protects (Phantom Force).
+const CHARGE_OK = ['meteorbeam', 'electroshot', 'phantomforce', 'shadowforce', 'geomancy'];
+function usefulMove(dex, move, options = {}) {
+	const { gameType = 'singles' } = options;
+	if (!move || !move.exists) return false;
+	if (move.category !== 'Status') {
+		// A charge turn with no Power Herb or weather to skip it is a free turn for the foe (Fly, Dig, Sky Attack).
+		if (move.flags && move.flags.charge && !CHARGE_OK.includes(move.id) && !options.skipsCharge) return false;
+		return (move.basePower || 0) > 0 || !!move.basePowerCallback || !!move.damage || !!move.damageCallback || !!move.ohko;
+	}
+	if (gameType !== 'singles' && DOUBLES_USEFUL.includes(move.id)) return true;
+	if (NOT_USEFUL.includes(move.id)) return false;
+	// This server's own moves were each written with a job in mind (Twilight Exit sets Trick Room and pivots).
+	if (move.num < 0) return true;
+	if (move.selfSwitch || move.heal || move.status || move.sideCondition || move.weather || move.terrain || move.pseudoWeather ||
+		move.slotCondition || move.forceSwitch || move.stallingMove) return true;
+	const boosts = move.boosts || (move.self && move.self.boosts) || null;
+	if (boosts && (move.target === 'self' || move.target === 'adjacentAllyOrSelf' || move.target === 'allySide') &&
+		Object.values(boosts).some(v => v > 0)) return true;
+	if (move.volatileStatus && !['confusion', 'attract', 'focusenergy', 'charge', 'minimize', 'lockon'].includes(move.volatileStatus)) return true;
+	return [...RECOVERY, ...HAZARDS, ...PIVOTS, ...STATUS, ...UTILITY, ...SETUP, 'haze', 'clearsmog', 'painsplit', 'bellydrum',
+		'sleeptalk', 'trickroom', 'tailwind', 'reflect', 'lightscreen', 'auroraveil', 'healingwish', 'lunardance', 'memento',
+		'perishsong', 'meanlook', 'block', 'spiderweb', 'destinybond', 'psychup', 'transform', 'batonpass', 'revivalblessing',
+		'shedtail', 'defog', 'courtchange', 'tidyup', 'whirlwind', 'roar', 'healbell', 'aromatherapy', 'lifedew'].includes(move.id);
+}
+
+/** Whether an attack is a STAB for this set, the -ate abilities and Protean included. */
+function isStab(species, move, ability = '') {
+	if (move.category === 'Status' || move.id === 'terablast') return false;
+	if (!((move.basePower || 0) > 0 || move.basePowerCallback || move.damage || move.damageCallback)) return false;
+	const ab = toID(ability);
+	if (['protean', 'libero'].includes(ab)) return true;
+	const type = ATE[ab] && move.type === 'Normal' ? ATE[ab] : move.type;
+	return species.types.includes(type);
+}
+
+/**
+ * The role a set plays, read off its moves and item, for a set that did not
+ * come with one (a Smogon analysis, usage statistics, a factory set). The
+ * names are role-sets.js's own, so itemFor() can be asked about any set.
+ */
+function inferRole(dex, set) {
+	if (set.role) return set.role;
+	const species = dex.species.get(set.species);
+	const moves = (set.moves || []).map(n => dex.moves.get(n)).filter(m => m.exists);
+	const attacks = moves.filter(m => m.category !== 'Status').length;
 	const b = species.baseStats;
+	const bulk = b.hp + b.def + b.spd;
+	if (moves.some(m => SETUP.includes(m.id))) return bulk >= 280 && b.spe < 90 ? 'Bulky Setup' : 'Setup Sweeper';
+	const heals = moves.some(m => RECOVERY.includes(m.id)) || toID(set.ability) === 'regenerator';
+	const support = moves.filter(m => [...HAZARDS, ...STATUS, ...UTILITY].includes(m.id) && m.category === 'Status').length;
+	if (attacks <= 2 && (heals || support >= 1)) return bulk >= 250 ? 'Bulky Support' : 'Fast Support';
+	if (attacks >= 3 && moves.some(m => PIVOTS.includes(m.id)) && bulk >= 280 && b.spe < 90) return 'AV Pivot';
+	if (attacks >= 3) return b.spe >= 95 ? 'Fast Attacker' : bulk >= 300 ? 'Bulky Attacker' : 'Wallbreaker';
+	return bulk >= 280 ? 'Bulky Attacker' : 'Fast Attacker';
+}
+
+/** The side a set attacks from, 'Physical' or 'Special', by its attacks (Body Press physical), else its stats. */
+function sideOf(dex, set) {
+	const species = dex.species.get(set.species);
+	let physical = 0, special = 0;
+	for (const n of set.moves || []) {
+		const m = dex.moves.get(n);
+		if (!m.exists || m.category === 'Status') continue;
+		if (m.category === 'Physical') physical++; else special++;
+	}
+	if (physical === special) return species.baseStats.atk >= species.baseStats.spa ? 'Physical' : 'Special';
+	return physical > special ? 'Physical' : 'Special';
+}
+
+/**
+ * What is wrong with one set: [{ code, text }], empty when a strong player
+ * would accept it. Codes: choice-status, av-status, trap-item, wrong-side
+ * (Band on a special set, Specs on a physical one), lo-passive (Life Orb with
+ * at most one attack), thin (fewer than three moves that do something),
+ * dead-move (a move that does nothing worth its slot), no-stab, dup-move.
+ */
+function setProblems(dex, set, { gameType = 'singles' } = {}) {
+	const out = [];
+	const species = dex.species.get(set.species);
+	if (!species.exists) return out;
+	const moves = (set.moves || []).map(n => dex.moves.get(n));
+	const item = toID(set.item);
+	const status = moves.filter(m => m.exists && m.category === 'Status');
+	const attacks = moves.filter(m => m.exists && m.category !== 'Status' && usefulMove(dex, m));
+	if (CHOICE_ITEMS.includes(item)) {
+		// With Trick on the set the item is meant to be handed over, and what follows is free (Scarf Trick Recover Gholdengo).
+		const tricks = status.some(m => ['trick', 'switcheroo'].includes(m.id));
+		const bad = tricks ? [] : status.filter(m => !CHOICE_STATUS_OK.includes(m.id));
+		if (bad.length) out.push({ code: 'choice-status', text: `${set.item} with ${bad.map(m => m.name).join(', ')}` });
+		// Band on a special set (or Specs on a physical one) boosts nothing it clicks.
+		const physical = attacks.filter(m => m.category === 'Physical').length;
+		const special = attacks.length - physical;
+		if ((item === 'choiceband' && special > physical) || (item === 'choicespecs' && physical > special)) {
+			out.push({ code: 'wrong-side', text: `${set.item} on a ${item === 'choiceband' ? 'special' : 'physical'} set` });
+		}
+	}
+	if (item === 'assaultvest' && status.length) out.push({ code: 'av-status', text: `Assault Vest with ${status.map(m => m.name).join(', ')}` });
+	if (TRAP_ITEMS.includes(item)) out.push({ code: 'trap-item', text: `${set.item} does next to nothing` });
+	if (['flameorb', 'toxicorb'].includes(item) && !ORB_USERS.includes(toID(set.ability)) &&
+		!moves.some(m => ['facade', 'psychoshift', 'fling'].includes(m.id))) {
+		out.push({ code: 'trap-item', text: `${set.item} with nothing that uses the status` });
+	}
+	if (item === 'lifeorb' && attacks.length <= 1) out.push({ code: 'lo-passive', text: 'Life Orb on a set with at most one attack' });
+	// Power Herb, or the weather that skips the charge (Drought for Solar Beam), makes a charge move a real attack.
+	const skipsCharge = item === 'powerherb' || ['drought', 'orichalcumpulse', 'desolateland', 'drizzle', 'primordialsea'].includes(toID(set.ability));
+	const useful = moves.filter(m => usefulMove(dex, m, { gameType, skipsCharge }));
+	if (useful.length < 3) {
+		out.push({ code: 'thin', text: `only ${useful.length} useful move${useful.length === 1 ? '' : 's'} (${moves.map(m => m.name).join(', ')})` });
+	} else if (useful.length < moves.length) {
+		// A slot that does nothing (Swagger, Focus Energy, an unskipped Fly) when the set could hold a real move.
+		out.push({ code: 'dead-move', text: `${moves.filter(m => !useful.includes(m)).map(m => m.name).join(', ')} does nothing worth a slot` });
+	}
+	/*
+	 * A set's main attack is its STAB, with the exceptions every analysis has:
+	 * fixed damage (Seismic Toss Blissey), Body Press on a Defense wall
+	 * (Corviknight), Facade on a Toxic Orb or Guts set (Gliscor), Foul Play.
+	 */
+	const main = m => m.exists && (isStab(species, m, set.ability) || !!m.damage || ['bodypress', 'foulplay'].includes(m.id) ||
+		(m.id === 'facade' && (['flameorb', 'toxicorb'].includes(item) || ORB_USERS.includes(toID(set.ability)))));
+	if (!moves.some(main)) out.push({ code: 'no-stab', text: 'no STAB attack' });
+	if (new Set(moves.map(m => m.id)).size !== moves.length) out.push({ code: 'dup-move', text: 'the same move twice' });
+	return out;
+}
+
+/*
+ * The smallest change that makes a set sane, in order: the item first when
+ * the moves say what the set is (a support set with Choice Specs keeps its
+ * support moves and gets Leftovers), the moves when the set is an attacker
+ * (a Choice Band set with one stray Protect swaps it for its best missing
+ * attack), then STAB, then enough useful moves.
+ *
+ * options: rng, threats (the format's common Pokemon, for coverage), allowedItems
+ * (Set of ids; null any), oneUse (see itemFor), canLearn(moveName) -> bool (the
+ * format's own learn check, from the ladder builder's validator), avoid (Set of
+ * move ids the validator already refused), legal (the moves a trainer knows),
+ * gameType, items (false: never touch the item), noStab (skip the STAB rule).
+ */
+function repairSet(dex, set, options = {}) {
+	const { threats = null, allowedItems = null, oneUse = true, canLearn = null, avoid = null, legal = null, gameType = 'singles', items = true } = options;
+	const species = dex.species.get(set.species);
+	if (!species.exists || !Array.isArray(set.moves)) return set;
+	const pool = legal ? new Set([...legal].map(toID)) : learnable(dex, species);
+	const learns = m => m.exists && pool.has(m.id) && !m.isZ && !m.isMax && m.isNonstandard !== 'Unobtainable' && m.isNonstandard !== 'LGPE' &&
+		!(avoid && avoid.has(m.id)) && !m.id.startsWith('hiddenpower') && !FAILS_ALONE.includes(m.id) && (!canLearn || canLearn(m.name));
+	let candidates = null;
+	const options_ = () => candidates || (candidates = [...pool].map(id => dex.moves.get(id)).filter(learns));
+	const ability = set.ability || '';
+	const itemId = () => toID(set.item);
+	const skips = () => itemId() === 'powerherb' || ['drought', 'orichalcumpulse', 'desolateland', 'drizzle', 'primordialsea'].includes(toID(ability));
+	const has = id => set.moves.some(n => toID(n) === id);
+	const bestAttack = (filter) => {
+		const side = sideOf(dex, set);
+		const chosen = set.moves.map(n => dex.moves.get(n));
+		const list = options_().filter(m => m.category !== 'Status' && usefulMove(dex, m) && !has(m.id) && !AWKWARD.includes(m.id) && filter(m));
+		if (!list.length) return null;
+		const value = m => attackValue(species, m, side) * (isStab(species, m, ability) ? 1.2 : 1) *
+			(1 + 0.15 * (threats && threats.length ? threatGain(dex, chosen, m, threats) + 0.2 * coverageGain(dex, chosen, m) : coverageGain(dex, chosen, m)));
+		return list.sort((a, b) => value(b) - value(a))[0];
+	};
+	// Which move a set misses least: a status move that does nothing, then a duplicate type, then the weakest attack.
+	const weakest = (keep = () => false) => {
+		let worst = -1, worstValue = Infinity;
+		set.moves.forEach((n, i) => {
+			const m = dex.moves.get(n);
+			if (keep(m)) return;
+			let v;
+			if (!usefulMove(dex, m, { gameType, skipsCharge: skips() })) v = -100;
+			else if (m.category === 'Status') v = 60;
+			else {
+				const sameType = set.moves.filter(x => dex.moves.get(x).category !== 'Status' && dex.moves.get(x).type === m.type).length;
+				v = attackValue(species, m, sideOf(dex, set)) * (sameType > 1 ? 0.5 : 1) * (isStab(species, m, ability) && sameType === 1 ? 3 : 1);
+			}
+			if (v < worstValue) { worstValue = v; worst = i; }
+		});
+		return worst;
+	};
+	const reItem = () => {
+		if (!items) return;
+		const role = { role: inferRole(dex, set), ability: set.ability };
+		const next = itemFor(dex, species, role, set.moves, sideOf(dex, set), allowedItems, { oneUse, threats });
+		set.item = next || '';
+	};
+
+	// Duplicates first: they hide how many moves the set really has.
+	set.moves = set.moves.filter((n, i) => set.moves.findIndex(x => toID(x) === toID(n)) === i);
+
+	/*
+	 * Moves before items: a two-move set is fixed by giving it moves, after
+	 * which the item that suits it can be read off them (a Life Orb on a set
+	 * with one attack stops being wrong once it has four).
+	 */
+	for (let round = 0; round < 4; round++) {
+		const problems = setProblems(dex, set, { gameType });
+		if (!problems.length) break;
+		const codes = problems.map(p => p.code);
+		if (codes.includes('no-stab') && !options.noStab) {
+			const stab = bestAttack(m => isStab(species, m, ability));
+			if (stab) {
+				if (set.moves.length < 4) set.moves.push(stab.name);
+				else {
+					// The weakest attack or a move that does nothing; never the set's setup, recovery, hazard or pivot.
+					let i = weakest(m => m.category === 'Status' && usefulMove(dex, m, { gameType }));
+					// Four support moves and no attack at all: a passive set (Pinkacross's #1 mistake). The least
+					// central status move goes - never recovery, hazards, removal, a pivot or setup.
+					if (i < 0) i = weakest(m => [...RECOVERY, ...HAZARDS, ...PIVOTS, ...SETUP, 'defog', 'rapidspin', 'mortalspin', 'courtchange'].includes(m.id));
+					if (i >= 0) set.moves[i] = stab.name;
+				}
+			}
+		}
+		if (codes.includes('thin') || codes.includes('dead-move') || set.moves.length < 4) {
+			// Fill free slots, then replace moves that do nothing.
+			while (set.moves.length < 4) {
+				const next = bestAttack(() => true);
+				if (!next) break;
+				set.moves.push(next.name);
+			}
+			for (let i = 0; i < set.moves.length; i++) {
+				if (usefulMove(dex, dex.moves.get(set.moves[i]), { gameType, skipsCharge: skips() })) continue;
+				const next = bestAttack(() => true);
+				if (next) set.moves[i] = next.name;
+			}
+		}
+		// Item against moves: fix whichever is cheaper to change.
+		if (codes.includes('choice-status') || codes.includes('av-status')) {
+			const isChoice = CHOICE_ITEMS.includes(itemId());
+			const tricks = isChoice && set.moves.some(n => ['trick', 'switcheroo'].includes(toID(n)));
+			const bad = tricks ? [] : set.moves.filter(n => dex.moves.get(n).category === 'Status' && !(isChoice && CHOICE_STATUS_OK.includes(toID(n))));
+			const attacks = set.moves.length - set.moves.filter(n => dex.moves.get(n).category === 'Status').length;
+			// A set that is mostly attacks keeps its item and loses the stray status move; a support set keeps its moves.
+			if ((attacks >= 3 && bad.length <= 1) || !items) {
+				for (const n of bad) {
+					const next = bestAttack(() => true);
+					const i = set.moves.indexOf(n);
+					if (next) set.moves[i] = next.name; else if (!items) set.moves.splice(i, 1);
+				}
+				if (items && setProblems(dex, set, { gameType }).some(p => p.code === 'choice-status' || p.code === 'av-status')) reItem();
+			} else reItem();
+			continue;
+		}
+		if (items && problems.some(p => ['trap-item', 'wrong-side', 'lo-passive'].includes(p.code))) reItem();
+	}
+	return set;
+}
+
+/*
+ * How well a role suits an archetype, 0 to 2 (1 neutral), for choosing between
+ * a species' roles when the team's archetype is known (24 Sep 2026). The
+ * archetype quotas of docs/teambuilding-checklist.md section 2 and
+ * Pinkacross's pacing rule (B8: setup and win-or-fail-fast sets for short
+ * games, walls and pivots for long ones).
+ */
+const ARCHETYPE_ROLES = {
+	'hyper offense': { 'Setup Sweeper': 2, 'Fast Bulky Setup': 1.8, 'Fast Attacker': 1.5, Wallbreaker: 1.5, 'Fast Support': 1.2,
+		'Bulky Setup': 1, 'Bulky Attacker': 0.6, 'AV Pivot': 0.6, 'Bulky Support': 0.3 },
+	'bulky offense': { 'Setup Sweeper': 1.2, 'Fast Bulky Setup': 1.3, 'Fast Attacker': 1.3, Wallbreaker: 1.6, 'Fast Support': 1,
+		'Bulky Setup': 1.2, 'Bulky Attacker': 1.3, 'AV Pivot': 1.4, 'Bulky Support': 0.8 },
+	balance: { 'Setup Sweeper': 0.8, 'Fast Bulky Setup': 0.9, 'Fast Attacker': 1.1, Wallbreaker: 1.6, 'Fast Support': 0.8,
+		'Bulky Setup': 1.1, 'Bulky Attacker': 1.3, 'AV Pivot': 1.5, 'Bulky Support': 1.6 },
+	stall: { 'Setup Sweeper': 0.4, 'Fast Bulky Setup': 0.6, 'Fast Attacker': 0.5, Wallbreaker: 0.6, 'Fast Support': 0.6,
+		'Bulky Setup': 1.4, 'Bulky Attacker': 1, 'AV Pivot': 0.9, 'Bulky Support': 2 },
+};
+function archetypeFit(role, archetype) {
+	const table = ARCHETYPE_ROLES[archetype];
+	return table && table[role] !== undefined ? table[role] : 1;
+}
+
+/*
+ * Whether a Choice Scarf moves this Pokemon past enough of the format's
+ * threats to be worth its power: the usage share of threats (unboosted, or at
+ * +1 for a setup sweeper) that are faster than it at top Speed but slower
+ * than it scarfed. A quarter of the list is the bar.
+ */
+/** The usage share of threats the set's best STAB hits at least neutrally (ability immunities counted). */
+function clickShare(dex, species, moveData, threats) {
+	const stabs = moveData.filter(m => m.category !== 'Status' && (m.basePower || 0) >= 60 && species.types.includes(m.type));
+	if (!stabs.length) return 1;
+	let total = 0;
+	const byMove = stabs.map(() => 0);
+	for (const t of threats) {
+		const entry = threatEntry(dex, t);
+		if (!entry) continue;
+		total += entry.weight;
+		stabs.forEach((m, i) => { if (hitOn(dex, m, entry.types, entry.ability) >= 1) byMove[i] += entry.weight; });
+	}
+	return total ? Math.max(...byMove) / total : 1;
+}
+
+function scarfPays(dex, species, threats) {
+	const top = base => Math.floor((2 * base + 31 + 63 + 5) * 1.1);
+	const mine = top(species.baseStats.spe);
+	let gain = 0, total = 0;
+	for (const t of threats) {
+		const sp = dex.species.get(t.name || t.species || '');
+		const base = t.speed || (sp.exists ? sp.baseStats.spe : 0);
+		if (!base) continue;
+		const w = t.weight > 0 ? t.weight : 1;
+		total += w;
+		const theirs = top(base);
+		if ((theirs >= mine && theirs < mine * 1.5) || (theirs * 1.5 >= mine && theirs * 1.5 < mine * 1.5)) gain += w;
+	}
+	return !total || gain / total >= 0.25;
+}
+
+/*
+ * IVs a set does not want (24 Sep 2026): 0 Attack on a set with no physical
+ * attack - Foul Play and confusion hit it with Attack, and Smogon's default is
+ * 0 for such sets (E4 in docs/research-teambuilding.md) - and 0 Speed on a
+ * slow Trick Room or Gyro Ball user, which wants to move last (E5). Body
+ * Press and Foul Play do not use the user's own Attack. Only from Gen 3,
+ * never with Hidden Power (its type is its IVs). Returns undefined when
+ * nothing changes, so a set with no IVs stays one.
+ */
+function ivsFor(dex, species, moves) {
+	const data = moves.map(n => dex.moves.get(n)).filter(m => m.exists);
+	if (dex.gen < 3 || data.some(m => m.id.startsWith('hiddenpower'))) return undefined;
+	const ivs = {};
+	if (!data.some(m => m.category === 'Physical' && !['bodypress', 'foulplay'].includes(m.id))) ivs.atk = 0;
+	if (species.baseStats.spe <= 60 && data.some(m => ['trickroom', 'gyroball'].includes(m.id))) ivs.spe = 0;
+	return Object.keys(ivs).length ? ivs : undefined;
+}
+
+/** Nature and EVs for a role and an attacking side. */
+function spreadFor(species, set, stat, moves = null) {
+	const b = species.baseStats;
+	// A slow Trick Room or Gyro Ball user moves last on purpose (see ivsFor): a -Speed nature, no Speed EVs.
+	if (moves && b.spe <= 60 && moves.some(n => ['trickroom', 'gyroball'].includes(toID(n)))) {
+		const bulky = BULKY_ROLES.includes(set.role) || SUPPORT_ROLES.includes(set.role);
+		return {
+			nature: stat === 'Physical' ? (bulky ? 'Relaxed' : 'Brave') : (bulky ? 'Sassy' : 'Quiet'),
+			evs: bulky ? { hp: 252, def: b.def > b.spd ? 252 : 4, spd: b.def > b.spd ? 4 : 252 } : stat === 'Physical' ? { hp: 252, atk: 252, def: 4 } : { hp: 252, spa: 252, def: 4 },
+		};
+	}
 	if (set.role === 'Bulky Support') {
 		const physicalWall = b.def > b.spd;
 		const nature = physicalWall ? (stat === 'Physical' ? 'Impish' : 'Bold') : (stat === 'Physical' ? 'Careful' : 'Calm');
@@ -613,32 +1046,47 @@ function spreadFor(species, set, stat) {
  * One complete set: { species, role, ability, item, moves, nature, evs, level, teraType }.
  * `allowedItems` (a Set of item ids) limits the item, '' when nothing is allowed.
  */
-function buildSet(dex, name, { role = null, rng = Math.random, level = 100, allowedItems = null, items = true, legal = null, threats = null } = {}) {
+function buildSet(dex, name, { role = null, rng = Math.random, level = 100, allowedItems = null, items = true, legal = null, threats = null, archetype = null } = {}) {
 	const species = dex.species.get(name);
 	const sets = roleSets(dex, name, legal);
 	if (!sets.length) return null;
-	const set = (role && sets.find(s => s.role === role)) || sets[Math.min(sets.length - 1, Math.floor(rng() * sets.length))];
+	/*
+	 * `archetype` (optional, 24 Sep 2026): the team's plan - 'hyper offense',
+	 * 'bulky offense', 'balance' or 'stall'. With no role asked for, the role is
+	 * drawn weighted by archetypeFit(), so a hyper offense team gets the Swords
+	 * Dance set and a balance team the Choice or pivot one; the item skips
+	 * one-use items on balance and stall (see ONE_USE); and pickMoves gives an
+	 * attacker on bulky offense or balance its pivot move when it has one.
+	 */
+	const drawn = archetype && !role && sets.length > 1
+		? weighted(rng, sets.map(s => [s, archetypeFit(s.role, archetype)]))
+		: null;
+	const set = (role && sets.find(s => s.role === role)) || drawn || sets[Math.min(sets.length - 1, Math.floor(rng() * sets.length))];
 	// `threats`: the format's common Pokemon ([{ name or types, weight, ability }]), when
 	// the caller knows them - coverage is then judged against those (threatGain).
-	const { moves, stat } = pickMoves(dex, species, set, rng, { threats });
-	const spread = spreadFor(species, set, stat);
+	const { moves, stat } = pickMoves(dex, species, set, rng, { threats, archetype });
+	const spread = spreadFor(species, set, stat, moves);
 	const nature = set.nature || spread.nature;
 	const evs = set.evs || spread.evs;
+	const ivs = ivsFor(dex, species, moves);
 	return {
 		species: species.name,
 		role: set.role,
 		ability: set.abilities[0] || Object.values(species.abilities)[0] || '',
-		item: !items ? '' : set.item && (!allowedItems || allowedItems.has(toID(set.item))) ? set.item : itemFor(dex, species, set, moves, stat, allowedItems),
+		item: !items ? '' : set.item && (!allowedItems || allowedItems.has(toID(set.item))) ? set.item
+			: itemFor(dex, species, set, moves, stat, allowedItems, { oneUse: !['balance', 'stall'].includes(archetype), threats }),
 		moves,
 		nature,
 		evs,
 		level,
 		teraType: (set.teraTypes || species.types)[0],
+		...(ivs ? { ivs } : {}),
 	};
 }
 
 module.exports = {
 	roleSets, buildSet, pickMoves, itemFor, spreadFor, learnable, attackValue, coverageGain,
 	threatGain, priorityValue, selfDrop, hitOn, STRONG_PRIORITY, ONE_USE,
+	setProblems, repairSet, usefulMove, isStab, inferRole, sideOf, archetypeFit, ivsFor, scarfPays, CHOICE_ITEMS, TRAP_ITEMS,
 	SETUP, RECOVERY, HAZARDS, PIVOTS, STATUS, UTILITY, BULKY_ROLES, SETUP_ROLES, SUPPORT_ROLES,
 };
