@@ -57,3 +57,13 @@ jobs:
               c.get("cacheMB"), d.get("process", {}).get("rssMB"),
               d.get("process", {}).get("heapUsedMB")))
           '
+      # Curtain Call, the RP card game, is a separate free Render service (its own
+      # account) with the same fifteen-minute sleep, so this run wakes it too. Its
+      # own step, so one server being down never hides the other's result.
+      - name: Wake the card game
+        if: always()
+        run: |
+          curl --silent --show-error --max-time 180 --retry 2 --retry-delay 15 "https://curtain-call-c5i4.onrender.com/health" || {
+            echo "no answer from the card game server"
+            exit 1
+          }
