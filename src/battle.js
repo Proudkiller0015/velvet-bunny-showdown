@@ -371,6 +371,19 @@ class BattleState {
 			if (store[id.slot]) store[id.slot].tera = args[1];
 			break;
 		}
+		/*
+		 * "|-mega|p2a: Banette|Banette|Banettite-Halloween": the stone is its item.
+		 * Unread, a Mega's item stayed a guess, and the foe model's Life Orb put
+		 * another 30% on every hit it had (replay gen9rpou-10-tlvuiv).
+		 */
+		case '-mega': {
+			const id = this.slotOf(args[0]);
+			if (id && id.side !== this.myPlayer && this.opponent[id.slot] && args[2]) {
+				this.opponent[id.slot].item = args[2];
+				this.opponent[id.slot].itemGone = false;
+			}
+			break;
+		}
 		case '-item': {
 			const id = this.slotOf(args[0]);
 			if (id && this.opponent[id.slot] && id.side !== this.myPlayer) this.opponent[id.slot].item = args[1];

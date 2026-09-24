@@ -651,6 +651,8 @@ class BattleAI {
 			opts.overrides = this.speciesOverrides(gen, species, opts.overrides);
 			const mon = new calc.Pokemon(gen, species, opts);
 			if (foe.maxhp === 100 && foe.hp < 100) mon.originalCurHP = Math.max(1, Math.round(mon.maxHP() * foe.hp / 100));
+			// No item shown and none knocked off: it probably holds one (Witch's Snatch in damagePct).
+			if (!foe.item && !foe.itemGone) mon.velvetItemUnknown = true;
 			if (guess && !bare) {
 				const scale = this.foeScale(foe, guess);
 				if (scale) mon.velvetScale = scale;
@@ -1043,7 +1045,27 @@ class BattleAI {
 			// A Charge doubles the next Electric move; the calculator has no idea.
 			const charged = attacker.velvetCharged && move.type === 'Electric' ? 2 : 1;
 			// A foe's likely damage item, or what its hits have shown (foeModel: foeScale()).
-			const scale = attacker.velvetScale ? (attacker.velvetScale[move.category] || 1) : 1;
+			let scale = attacker.velvetScale ? (attacker.velvetScale[move.category] || 1) : 1;
+			/*
+			 * The Witching Hour Mega Banette (data/velvet/halloween.js), which the
+			 * calculator knows only the type and 110 power of. Witching Hour makes its
+			 * Ghost moves 1.5x, and Witch's Snatch is 150 power into a held item, as
+			 * Knock Off checks it (not a Mega Stone on its owner). Replay
+			 * gen9rpou-10-tlvuiv: it read 89% into the Boots Clodsire the bot led with,
+			 * and knocked it out from full. A foe whose item is not yet known is taken
+			 * to hold one: nearly everything does.
+			 */
+			if (!this.cfg.naive) {
+				if (String(attacker.ability || '') === 'Witching Hour' && move.type === 'Ghost') scale *= 1.5;
+				if (move.name === "Witch's Snatch") {
+					const item = String(defender.item || '');
+					const data = item ? PkmnDex.forGen(9).items.get(item) : null;
+					const base = s => String(s || '').split('-')[0];
+					// A Mega Stone on the Pokemon it belongs to, or a Z-Crystal, cannot be taken.
+					const stuck = !!(data && data.exists && ((data.megaStone && base(data.megaEvolves) === base(defender.name)) || data.zMove));
+					if ((item && !stuck) || (!item && defender.velvetItemUnknown)) scale *= 150 / 110;
+				}
+			}
 			if (CALC_ABILITY[String(attacker.ability || '')]) {
 				attacker = attacker.clone();
 				attacker.ability = CALC_ABILITY[String(attacker.ability)];

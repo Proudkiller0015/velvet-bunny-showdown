@@ -673,6 +673,31 @@ console.log('\n--- a move that ignores an immunity ---');
 		ai.damagePct(gen, gengar, ai.foePokemon(gen, plain.state.opponent.a), 'Shadow Ball', field), 0);
 }
 
+console.log('\n--- Witch\'s Snatch at its real power (replay gen9rpou-10-tlvuiv, turn 1) ---');
+{
+	/*
+	 * Mega Banette-Halloween's Witch's Snatch knocked out the Boots Clodsire the bot
+	 * led with, from full, and left a 252 Def Rocky Helmet Corviknight at 1%. The
+	 * calculator knew its type and 110 power, not the 150 into a held item nor
+	 * Witching Hour's 1.5x Ghost moves, and read it as 89% into Clodsire.
+	 */
+	const ai = new BattleAI({ difficulty: 'stockfish' });
+	ai.setFormat('gen9rpou');
+	const gen = ai.gen(9);
+	const st = new BattleState('test');
+	st.myPlayer = 'p1';
+	for (const l of ['|player|p1|Bot|1|', '|player|p2|Them|1|', '|switch|p1a: Clodsire|Clodsire, L100|404/404', '|switch|p2a: Banette|Banette, F|100/100',
+		'|detailschange|p2a: Banette|Banette-Mega-Halloween, F', '|-mega|p2a: Banette|Banette|Banettite-Halloween', '|-ability|p2a: Banette|Witching Hour']) st.line(l.slice(1).split('|'));
+	const banette = st.opponent.a;
+	check('the Mega\'s stone is read as its item', banette.item, 'Banettite-Halloween');
+	const them = ai.foePokemon(gen, banette);
+	const mine = (species, item, stats, hp) => ai.myPokemon(gen, { details: `${species}, L100`, condition: `${hp}/${hp}`, ability: '', baseAbility: '', item, moves: [], stats }, null);
+	const clod = mine('Clodsire', 'heavydutyboots', { atk: 186, def: 219, spa: 124, spd: 297, spe: 76 }, 404);
+	check(`into the Boots Clodsire it is a knockout (${ai.damagePct(gen, them, clod, "Witch's Snatch").toFixed(0)}%)`, ai.damagePct(gen, them, clod, "Witch's Snatch") >= 100, true);
+	const bare = mine('Clodsire', '', { atk: 186, def: 219, spa: 124, spd: 297, spe: 76 }, 404);
+	check('and a third less into one with nothing to take', ai.damagePct(gen, them, bare, "Witch's Snatch") < ai.damagePct(gen, them, clod, "Witch's Snatch") * 0.8, true);
+}
+
 console.log('\n--- absorbing abilities, ours included, and what a heal reply teaches ---');
 {
 	/*
