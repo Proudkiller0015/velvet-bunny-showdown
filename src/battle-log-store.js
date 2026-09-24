@@ -120,6 +120,23 @@ class BattleLogStore {
 				const data = await current.json();
 				sha = data.sha;
 				existing = Buffer.from(data.content || '', 'base64').toString('utf8');
+				/*
+				 * 24 Sep 2026: past 1MB the contents API stops inlining the file -
+				 * `content` comes back empty, with "encoding": "none" - and this used
+				 * to read that as an empty log and write the header plus this batch
+				 * over the whole month. A busy month gets there. So a file with a size
+				 * and no content is fetched raw (the same endpoint serves it up to
+				 * 100MB), and if that does not give back every byte the write is
+				 * refused: the lines go back in the queue, the month is left alone.
+				 */
+				if (!existing && data.size > 0) {
+					const raw = await fetch(`${url}?ref=${BRANCH}`, { headers: Object.assign(this.headers(), { Accept: 'application/vnd.github.raw' }) });
+					if (!raw.ok) throw new Error(`reading the ${data.size}-byte log raw returned ${raw.status}`);
+					existing = await raw.text();
+					if (Buffer.byteLength(existing, 'utf8') !== data.size) {
+						throw new Error(`the log is ${data.size} bytes but ${Buffer.byteLength(existing, 'utf8')} came back; not overwriting it`);
+					}
+				}
 			} else if (current.status !== 404) {
 				throw new Error(`reading the log returned ${current.status}`);
 			}
