@@ -182,6 +182,30 @@ function startServer() {
 	const memoryTimer = setInterval(noteMemory, Number(process.env.PS_MEMORY_NOTE_MS || 30000));
 	if (memoryTimer.unref) memoryTimer.unref();
 
+	/*
+	 * Keep the card game awake. Curtain Call is a free Render service of its own,
+	 * asleep after fifteen minutes without an outside request, and GitHub's
+	 * scheduled keep-awake turned out to run every four hours or so, not every ten
+	 * minutes (24 Sep 2026). This server is up all day, so it knocks every five
+	 * minutes; the card server knocks back, so neither sleeps. KEEP_AWAKE_URLS
+	 * (comma-separated) overrides the list; "none" turns it off.
+	 */
+	const keepAwake = (process.env.KEEP_AWAKE_URLS || 'https://curtain-call-c5i4.onrender.com/health')
+		.split(',').map(s => s.trim()).filter(u => /^https:\/\//.test(u));
+	if (keepAwake.length) {
+		const https = require('https');
+		const knock = () => {
+			for (const url of keepAwake) {
+				const req = https.get(url, { timeout: 90000 }, res => res.resume());
+				req.on('error', () => {});
+				req.on('timeout', () => req.destroy());
+			}
+		};
+		setTimeout(knock, 60000).unref();
+		const awakeTimer = setInterval(knock, 5 * 60 * 1000);
+		if (awakeTimer.unref) awakeTimer.unref();
+	}
+
 	/**
 	 * Leave slowly enough for the server to say goodbye.
 	 *
