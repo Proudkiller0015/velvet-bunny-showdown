@@ -95,7 +95,7 @@ class Matchmaker {
 	 * pool: entries. options: teammates (Map), usage (Map), rng, step (prior gap per
 	 * tier rank, the same number rating.js starts from), band (how far a peer may be).
 	 */
-	constructor(pool, { teammates = new Map(), usage = new Map(), rng = Math.random, step = 0.18, band = 0.25, candidates = 14, focus = null } = {}) {
+	constructor(pool, { teammates = new Map(), usage = new Map(), rng = Math.random, step = 0.18, band = 0.25, candidates = 14, focus = null, climb = 0.3 } = {}) {
 		this.pool = pool;
 		this.byName = new Map(pool.map(e => [e.name, e]));
 		this.teammates = teammates;
@@ -103,6 +103,8 @@ class Matchmaker {
 		this.rng = rng;
 		this.band = band;
 		this.size = candidates;
+		this.step = step;
+		this.climb = climb;
 		this.apps = new Map(pool.map(e => [e.name, 0]));
 		this.est = new Map(pool.map(e => [e.name, step * RANK[e.tier]]));
 		// Only these are built around (scripts/tier-focus.js); everyone still fills teams.
@@ -165,10 +167,15 @@ class Matchmaker {
 
 	next() {
 		const fa = this.leastPlayed(this.isFocus);
-		const xa = this.est.get(fa.name);
+		// Most games are between peers. A share are "climbs": the opponent is built
+		// around a Pokemon about a tier and a half up or down, so the ladder's levels
+		// are measured directly instead of only through chains of peer games.
+		const shift = this.rng() < this.climb ? (this.rng() < 0.5 ? 1 : -1) * 1.5 * this.step : 0;
+		const xa = this.est.get(fa.name) + shift;
 		let fb = null;
 		for (let width = this.band * 0.8, tries = 0; !fb && tries < 6; tries++, width *= 1.5) {
-			fb = this.leastPlayed(e => this.isFocus(e) && e.num !== fa.num && Math.abs(this.est.get(e.name) - xa) <= width, 6);
+			// A climb may meet anyone, locked Ubers included: they are the best-known anchors.
+			fb = this.leastPlayed(e => (shift || this.isFocus(e)) && e.num !== fa.num && Math.abs(this.est.get(e.name) - xa) <= width, 6);
 		}
 		fb = fb || this.leastPlayed(e => this.isFocus(e) && e.num !== fa.num) || this.leastPlayed(e => e.num !== fa.num);
 		const a = this.candidatesFor(fa), b = this.candidatesFor(fb);

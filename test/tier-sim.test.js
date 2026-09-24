@@ -181,7 +181,7 @@ console.log('\n--- drafting ---');
 	const dex = require('../src/rp-dex')();
 	const pool = require('../src/tier-sim/pool').buildPool(dex);
 	const kept = pool.filter((e, i) => i % 10 === 0).map(e => e.name);
-	const mm = new Matchmaker(pool, { focus: kept, rng: mulberry(7) });
+	const mm = new Matchmaker(pool, { focus: kept, rng: mulberry(7), climb: 0 });
 	const set = new Set(kept);
 	let onlyFocus = true, fillers = 0;
 	for (let i = 0; i < 40; i++) {
@@ -192,6 +192,13 @@ console.log('\n--- drafting ---');
 	}
 	check('teams are built only around focus Pokemon', onlyFocus);
 	check('the rest still fill teams', fillers > 0);
+	const climber = new Matchmaker(pool, { focus: kept, rng: mulberry(9), climb: 1 });
+	let farther = 0;
+	for (let i = 0; i < 40; i++) {
+		const j = climber.next();
+		if (Math.abs(climber.est.get(j.a.names[0]) - climber.est.get(j.b.names[0])) > 0.15) farther++;
+	}
+	check('climb games meet an opponent from another level', farther >= 30, farther);
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);

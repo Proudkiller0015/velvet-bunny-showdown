@@ -278,7 +278,10 @@ function rate(pool, records, { tau = 0.3, step = 0.18, rounds = 3 } = {}) {
  * Tiers by strength. The bands are the fitted means of the main tiers, split at
  * the midpoints. A Pokemon stays where it is unless its interval (z = 1.645,
  * 90%) sits wholly outside its current tier's band; then it goes to the band
- * its point estimate is in, at least one step in the direction of the evidence.
+ * the interval's nearer end is in (one step at least): as far as the whole
+ * interval supports, not as far as the point estimate. A point estimate with a
+ * wide interval once sent NU Pokemon "to Uber" when the evidence only showed
+ * "too strong for NU".
  */
 const TIER_ORDER = ['Uber', 'OU', 'UU', 'RU', 'NU', 'PU', 'ZU', 'NFE'];
 // Tiers the owner keeps as they are (24 Sep 2026: "im not moving em down" - Ubers).
@@ -330,8 +333,8 @@ function assignTiers(rows, tierMean, { z = 1.645, order = TIER_ORDER, locked = L
 		const lo = r.theta - z * r.sd, hi = r.theta + z * r.sd;
 		let to = cur, evidence = 'none';
 		if (locked === LOCKED_TIERS ? isLocked(r) : locked.has(r.played)) evidence = 'locked';
-		else if (lo > upper[cur]) { to = Math.min(cur - 1, bandOf(r.theta)); evidence = 'up'; }
-		else if (hi < lower[cur]) { to = Math.max(cur + 1, bandOf(r.theta)); evidence = 'down'; }
+		else if (lo > upper[cur]) { to = Math.min(cur - 1, bandOf(lo)); evidence = 'up'; }
+		else if (hi < lower[cur]) { to = Math.max(cur + 1, bandOf(hi)); evidence = 'down'; }
 		to = Math.max(0, Math.min(order.length - 1, to));
 		return { ...r, proposed: order[to], move: to - cur === 0 ? 0 : cur - to, evidence, lo, hi, band: order[bandOf(r.theta)] };
 	});
