@@ -1456,6 +1456,7 @@ class BattleAI {
 		if (!this.cfg.naive && this.cfg.preview !== false && theirs && theirs.length && request.side.pokemon.length > 1) {
 			const field = new calc.Field({});
 			const dex = PkmnDex.forGen(gen.num);
+			if (this.cfg.leads) return this.pinkacrossLead(gen, mons, theirs, field);
 			for (const m of mons) {
 				let total = 0;
 				for (const t of theirs) {
@@ -1475,6 +1476,92 @@ class BattleAI {
 		}
 		mons.sort((a, b) => b.spe - a.spe);
 		return `team ${mons.map(m => m.i).join('')}`;
+	}
+
+	/**
+	 * Choosing a lead the way Pinkacross teaches it (How to Choose Your Lead;
+	 * research A2-A4, 24 Sep 2026).
+	 *
+	 *  - A good lead has a lead trait: a move with lasting value (hazards, Knock
+	 *    Off, status), a pivot, or immediate breaking power. A setup sweeper is a
+	 *    bad lead - it wants a free turn later, not a guess on turn one.
+	 *  - Their lead is a guess: drop their sweepers, favour their own lead traits
+	 *    and whatever is good into our six. Most games leave two to four likely
+	 *    leads, so our lead is scored against those, not a flat average of six.
+	 *  - Weigh the wrong guess: a lead that loses to a likely lead of theirs,
+	 *    with nothing behind it that comes in comfortably, is worse than one that
+	 *    covers fewer leads but never leaves us stuck.
+	 *  - Don't lead with the only answer to one of their threats; it has to be
+	 *    healthy when that threat comes.
+	 *
+	 * Order after the lead is unchanged (fastest first) - it is only the order
+	 * the forced switches consider, and they re-score by the position anyway.
+	 */
+	pinkacrossLead(gen, mons, theirs, field) {
+		const idOf = s => String(s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+		const RS = require('./role-sets');
+		const foes = theirs.map(t => ({ species: t.species, level: t.level, hp: 100, maxhp: 100, status: '', boosts: {},
+			moves: new Set(), immuneTo: new Set(), notImmuneTo: new Set() }));
+		// Both directions, once: what each of ours deals to each of theirs, what it takes back.
+		const out = [], back = [], faster = [];
+		mons.forEach((m, i) => {
+			out[i] = []; back[i] = []; faster[i] = [];
+			const mySpe = this.speedOf(m.mon, {}, undefined, null);
+			foes.forEach((foe, j) => {
+				const them = this.foePokemon(gen, foe);
+				out[i][j] = Math.min(100, Math.max(0, ...(m.p.moves || []).map(id => this.damageToFoe(gen, m.mon, foe, toName(id, 'moves'), field))));
+				back[i][j] = Math.min(100, this.roughIncoming(gen, them, m.mon, field));
+				faster[i][j] = mySpe > this.foeSpeed(gen, foe, null);
+			});
+		});
+		// How likely each of theirs is to lead: its lead traits, not a sweeper, and good into us.
+		const weight = foes.map((foe, j) => {
+			const kit = this.speciesKit(foe.species);
+			let w = 1 + 0.8 * kit.hazards + 0.4 * kit.pivot + 0.3 * kit.knock + 0.2 * kit.status;
+			if (kit.sweeperOnly) w *= 0.3;
+			const intoUs = mons.reduce((sum, m, i) => sum + back[i][j] - out[i][j], 0) / mons.length;
+			return w * (1 + Math.max(-0.5, Math.min(0.5, intoUs / 100)));
+		});
+		const total = weight.reduce((a, b) => a + b, 0) || 1;
+		const share = weight.map(w => w / total);
+
+		// Who answers what: outspeeds and KOs, or takes under 45% and deals 30% back.
+		const answers = foes.map((_, j) => mons.map((_, i) => i).filter(i => (faster[i][j] && out[i][j] >= 100) || (back[i][j] < 45 && out[i][j] >= 30)));
+		const threat = foes.map((_, j) => mons.filter((_, i) => back[i][j] >= 50).length >= mons.length / 2);
+
+		mons.forEach((m, i) => {
+			let score = 0;
+			foes.forEach((_, j) => { score += share[j] * (out[i][j] - back[i][j]); });
+			const moves = (m.p.moves || []).map(idOf);
+			const hazards = moves.some(x => RS.HAZARDS.includes(x));
+			const pivot = moves.some(x => RS.PIVOTS.includes(x));
+			const lasting = moves.includes('knockoff') || moves.some(x => RS.STATUS.includes(x));
+			const item = idOf(m.p.item);
+			const breaker = /^(choiceband|choicespecs|lifeorb)$/.test(item) || out[i].reduce((a, b) => a + b, 0) / Math.max(1, foes.length) >= 70;
+			const setup = moves.some(x => RS.SETUP.includes(x));
+			if (hazards) score += 20;
+			if (pivot) score += 12;
+			if (lasting) score += 10;
+			// Immediate power means power without a boost first: a setup sweeper is
+			// not a breaker, it is a bad lead (his words), and a large penalty is
+			// what it takes to outvote a good average matchup.
+			if (breaker && !setup) score += 8;
+			if (setup && !hazards && !pivot) score -= 40;
+			// The wrong guess: a likely lead of theirs we lose to, with no comfortable switch-in behind.
+			foes.forEach((_, j) => {
+				if (share[j] < 0.1 || out[i][j] - back[i][j] > -30) return;
+				const cover = mons.some((_, k) => k !== i && back[k][j] < 35);
+				if (!cover) score -= 60 * share[j];
+			});
+			// The only answer to one of their threats stays in the back.
+			if (foes.some((_, j) => threat[j] && answers[j].length === 1 && answers[j][0] === i)) score -= 15;
+			m.lead = score;
+		});
+		// Kept for the logs and the tests: who we think leads, and what each lead scored.
+		this.leadPlan = { theirs: foes.map((f, j) => ({ species: f.species, share: share[j] })), ours: mons.map(m => ({ details: m.p.details, score: m.lead })) };
+		const lead = mons.slice().sort((a, b) => b.lead - a.lead || b.spe - a.spe)[0];
+		const rest = mons.filter(m => m !== lead).sort((a, b) => b.spe - a.spe);
+		return `team ${[lead, ...rest].map(m => m.i).join('')}`;
 	}
 
 	/**

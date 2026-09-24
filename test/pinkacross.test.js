@@ -233,6 +233,58 @@ if (MAIN) {
 	void calc;
 }
 
+// -------------------------------------------------------------------- leads
+if (MAIN) console.log('\n--- A2-A4: choosing a lead ---');
+if (MAIN) {
+	const preview = (ours, theirs, rung = 'champion') => {
+		const ai = new BattleAI({ difficulty: rung, cfg: process.env.OFF ? JSON.parse(process.env.OFF) : undefined });
+		ai.setFormat('gen9ou');
+		const state = new BattleState('t');
+		state.myPlayer = 'p2';
+		state.gen = 9;
+		state.preview = { p1: theirs.map(species => ({ species, level: 100 })), p2: [] };
+		const request = { teamPreview: true, side: { pokemon: ours.map(([s, moves, item]) => mon(s, moves, { item })) } };
+		const choice = String(ai.decide(request, state));
+		return { ai, lead: ours[+choice[5] - 1][0] };
+	};
+	// Volcarona has the best average matchup into a Grass/Steel/Bug team, and it
+	// is a Quiver Dance sweeper: it wants its free turn later, not a guess now.
+	const ours = [
+		['Volcarona', ['Quiver Dance', 'Fiery Dance', 'Bug Buzz', 'Giga Drain']],
+		['Garchomp', ['Stealth Rock', 'Earthquake', 'Dragon Claw', 'Fire Fang']],
+		['Chansey', ['Soft-Boiled', 'Seismic Toss', 'Toxic']],
+		['Lopunny', ['Double-Edge', 'High Jump Kick']],
+	];
+	for (const rung of ['champion', 'stockfish']) {
+		const { lead } = preview(ours, ['Scizor', 'Ferrothorn', 'Breloom', 'Amoonguss', 'Celebi', 'Mew'], rung);
+		check(`${rung}: does not lead with the setup sweeper (led ${lead})`, lead, l => l !== 'Volcarona');
+	}
+
+	// Their likely lead is the hazard setter, not the sweeper.
+	{
+		const { ai } = preview(ours, ['Skarmory', 'Volcarona', 'Dragonite', 'Clefable', 'Rotom-Wash', 'Tyranitar']);
+		const share = s => ((ai.leadPlan && ai.leadPlan.theirs.find(t => t.species === s)) || {}).share || 0;
+		check(`champion: Skarmory is a likelier lead than Volcarona (${share('Skarmory').toFixed(2)} vs ${share('Volcarona').toFixed(2)})`,
+			share('Skarmory') > share('Volcarona'), true);
+	}
+
+	// The wrong guess costs more with nothing behind to take it: Heatran against a
+	// Garchomp lead, without and then with a Corviknight to switch to.
+	{
+		const theirs = ['Garchomp', 'Ferrothorn', 'Scizor', 'Clefable', 'Tentacruel', 'Magnezone'];
+		const team = third => [
+			['Heatran', ['Stealth Rock', 'Magma Storm', 'Earth Power', 'Flash Cannon']],
+			['Scizor', ['U-turn', 'Bullet Punch', 'Knock Off']],
+			third,
+			['Tyranitar', ['Crunch', 'Stone Edge']],
+		];
+		const heatran = ai => ((ai.leadPlan && ai.leadPlan.ours.find(o => /Heatran/.test(o.details))) || {}).score || 0;
+		const alone = heatran(preview(team(['Blissey', ['Soft-Boiled', 'Seismic Toss']]), theirs).ai);
+		const covered = heatran(preview(team(['Corviknight', ['Roost', 'Brave Bird', 'U-turn']]), theirs).ai);
+		check(`champion: a Ground-immune teammate makes the Heatran lead safer (${alone.toFixed(0)} -> ${covered.toFixed(0)})`, covered > alone + 5, true);
+	}
+}
+
 module.exports = { position, mon, onRungs, moveName, check, realStats };
 
 if (require.main === module) {
