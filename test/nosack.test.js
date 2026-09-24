@@ -63,16 +63,23 @@ function position({ mine, bench, foe, foeMoves }) {
 	};
 }
 
-const STATS = { atk: 200, def: 200, spa: 200, spd: 200, spe: 200 };
+/*
+ * Each Pokemon's own stats (85 EVs, neutral), as a request reports them. One
+ * flat 200 spread for all of them stopped being harmless once the request's
+ * stats reached the calculator (replay gen9rpou-10-tlvuiv): a Gyarados with 200
+ * Attack is not the switch-in the first case is about.
+ */
+const { realStats } = require('./pinkacross.test.js');
+const STATS = species => { const { hp, ...rest } = realStats(species); return rest; };
 
 const cases = [
 	{
 		name: 'a Water-type on the bench, against the Fire move that is killing us',
 		setup: {
-			mine: { name: 'Leafy', species: 'Sceptile', hp: '60/300', moves: ['Leaf Blade', 'Giga Drain'], stats: { ...STATS, spe: 120 } },
+			mine: { name: 'Leafy', species: 'Sceptile', hp: '60/300', moves: ['Leaf Blade', 'Giga Drain'], stats: { ...STATS('Sceptile'), spe: 120 } },
 			bench: [
-				{ species: 'Gyarados', hp: '330/330', moves: ['Waterfall', 'Earthquake'], stats: STATS },
-				{ species: 'Lopunny', hp: '300/300', moves: ['Return'], stats: STATS },
+				{ species: 'Gyarados', hp: '330/330', moves: ['Waterfall', 'Earthquake'], stats: STATS('Gyarados') },
+				{ species: 'Lopunny', hp: '300/300', moves: ['Return'], stats: STATS('Lopunny') },
 			],
 			foe: { name: 'Burny', species: 'Charizard' },
 			foeMoves: ['Flamethrower'],
@@ -82,10 +89,10 @@ const cases = [
 	{
 		name: 'nothing on the bench takes it any better',
 		setup: {
-			mine: { name: 'Leafy', species: 'Sceptile', hp: '60/300', moves: ['Leaf Blade'], stats: { ...STATS, spe: 120 } },
+			mine: { name: 'Leafy', species: 'Sceptile', hp: '60/300', moves: ['Leaf Blade'], stats: { ...STATS('Sceptile'), spe: 120 } },
 			bench: [
-				{ species: 'Sunflora', hp: '90/300', moves: ['Solar Beam'], stats: STATS },
-				{ species: 'Shiftry', hp: '80/300', moves: ['Leaf Blade'], stats: STATS },
+				{ species: 'Sunflora', hp: '90/300', moves: ['Solar Beam'], stats: STATS('Sunflora') },
+				{ species: 'Shiftry', hp: '80/300', moves: ['Leaf Blade'], stats: STATS('Shiftry') },
 			],
 			foe: { name: 'Burny', species: 'Charizard' },
 			foeMoves: ['Flamethrower'],
