@@ -150,6 +150,9 @@ class BattleState {
 			break;
 		}
 		case 'rated': this.rated = true; break;
+		// |teamsize|p2|6 - how many they brought, so the endgame knows when it has
+		// seen them all (24 Sep 2026).
+		case 'teamsize': (this.teamSize = this.teamSize || {})[args[0]] = +args[1] || 0; break;
 		case 'turn':
 			this.turn = +args[0] || 0;
 			this.lastTurnMoves = this.turnMoves;
@@ -183,6 +186,30 @@ class BattleState {
 			const cond = parseCondition(args[2]);
 			if (cond) Object.assign(mon, cond);
 			// HP for the opponent arrives as a percentage; ours arrives exact.
+			/*
+			 * What we knew about the one that just left, kept. Without a team preview
+			 * a foe that switched out vanished from the state entirely, so neither a
+			 * sack's "what can it still do against what they have left" (Pinkacross,
+			 * The Art of Sacking) nor an exact endgame could count it. Boosts and
+			 * volatiles go with the switch; HP, status and shown moves stay.
+			 */
+			if (id.side !== this.myPlayer) {
+				this.theirSeen = this.theirSeen || new Set();
+				this.theirBench = this.theirBench || {};
+				const old = store[id.slot];
+				if (old && !old.fainted && old.species && old.species !== mon.species) {
+					this.theirBench[old.species] = { ...old, boosts: {}, transformed: null, slot: null, bench: true };
+				}
+				// Coming back, it still has the moves, item and ability it showed last time.
+				const back = this.theirBench[mon.species];
+				if (back) {
+					for (const m of back.moves || []) mon.moves.add(m);
+					if (back.ability && !mon.ability) mon.ability = back.ability;
+					if (back.item && !mon.item) mon.item = back.item;
+				}
+				delete this.theirBench[mon.species];
+				this.theirSeen.add(mon.species);
+			}
 			store[id.slot] = mon;
 			break;
 		}

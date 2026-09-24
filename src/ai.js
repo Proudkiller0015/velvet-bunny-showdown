@@ -165,6 +165,23 @@ const NEEDS_TARGET = new Set(['normal', 'any', 'adjacentFoe', 'adjacentAlly', 'a
  * own, so anything short of a large difference is buried by it. Take nothing here
  * on fewer than a few hundred games; see test/elo.test.js.
  */
+/*
+ * The judgement from docs/research-pinkacross.md (24 Sep 2026), one knob per
+ * rule so each can be switched off for a measurement (test/ablation.js takes the
+ * same names as overrides):
+ *
+ *   accuracy     a 70% KO is worth 70% of a KO (A10). Hard and up: reading the
+ *                accuracy is not judgement, it is reading the move.
+ *   sacking      a Pokemon is worth what it can still do against what they have
+ *                left, and never goes in as setup fodder (A14, The Art of Sacking)
+ *   leads        leads scored by lead traits against their likely leads (A2-A4)
+ *   setupWin     no setup when the unboosted Pokemon already wins (A11)
+ *   middleGround the search weights their replies by how plausible they are and
+ *                plays safer ahead, sharper behind (A6-A8) - search only
+ *   endgame      a small exact tree at three-or-fewer a side (A16) - search only
+ */
+const PINKACROSS_CHAMPION = { accuracy: true, sacking: true, leads: true, setupWin: true };
+const PINKACROSS_SEARCH = { middleGround: true, endgame: true };
 const DIFFICULTIES = {
 	// An in-game trainer. It reaches for whatever move has the biggest number on
 	// it, without working out what that move would actually do, and it never
@@ -181,15 +198,15 @@ const DIFFICULTIES = {
 	// ability the thing in front of it is generated with. It still misjudges a
 	// position now and again, which is the difference between a strong opponent
 	// and an unbeatable one.
-	hard:     { blunder: 0.06, greedy: false, noise: 12, switching: true,  tempo: true,  predict: false, tera: true, switchMargin: 40, knowsSets: true },
+	hard:     { blunder: 0.06, greedy: false, noise: 12, switching: true,  tempo: true,  predict: false, tera: true, switchMargin: 40, knowsSets: true, accuracy: true },
 	// Everything Hard does and no lapses at all: it counts the speed tiers before
 	// committing, and in Random Battle it knows the whole set - moves and Tera
 	// types included - before any of it is used.
-	champion: { blunder: 0,    greedy: false, noise: 0,  switching: true,  tempo: true,  predict: true,  tera: true, switchMargin: 25, knowsSets: true, readsSets: true, playbook: true },
+	champion: { blunder: 0,    greedy: false, noise: 0,  switching: true,  tempo: true,  predict: true,  tera: true, switchMargin: 25, knowsSets: true, readsSets: true, playbook: true, ...PINKACROSS_CHAMPION },
 	// Experimental. Everything Champion does, plus a one-turn search over our
 	// options against their likely replies, weighted by numbers the trainer tuned
 	// from self-play rather than by hand.
-	stockfish: { blunder: 0,   greedy: false, noise: 0,  switching: true,  tempo: true,  predict: true,  tera: true, switchMargin: 25, knowsSets: true, readsSets: true, search: true, playbook: true },
+	stockfish: { blunder: 0,   greedy: false, noise: 0,  switching: true,  tempo: true,  predict: true,  tera: true, switchMargin: 25, knowsSets: true, readsSets: true, search: true, playbook: true, ...PINKACROSS_CHAMPION, ...PINKACROSS_SEARCH },
 };
 const DEFAULT_DIFFICULTY = 'hard';
 
@@ -730,8 +747,146 @@ class BattleAI {
 	 * slow one with nothing left to do is cheap, and spending it to keep the win
 	 * condition alive is the correct play.
 	 */
+	/**
+	 * Cache for one decision. The sacking and lead rules ask the same damage
+	 * questions of the same pairs many times over (valueRank calls monValue for
+	 * every teammate, per bench option); decide() opens this and closes it, so
+	 * nothing survives into the next turn's position. (24 Sep 2026)
+	 */
+	memo(key, fn) {
+		if (!this._memo) return fn();
+		if (this._memo.has(key)) return this._memo.get(key);
+		const value = fn();
+		this._memo.set(key, value);
+		return value;
+	}
+
+	/**
+	 * What a species usually brings, as shares of its sets (0..1 each): setup,
+	 * hazards, pivot, Knock Off, status, and whether every set is a setup
+	 * sweeper. From the Random Battle sets when we may read them, otherwise from
+	 * this server's role sets (src/role-sets.js, read only). Used to guess their
+	 * leads (Pinkacross, How to Choose Your Lead) and to see setup fodder coming
+	 * (The Art of Sacking). (24 Sep 2026)
+	 */
+	speciesKit(species) {
+		this.kitCache = this.kitCache || new Map();
+		const key = String(species || '');
+		if (this.kitCache.has(key)) return this.kitCache.get(key);
+		const RS = require('./role-sets');
+		const idOf = s => String(s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+		const traits = ids => ({
+			setup: ids.some(m => RS.SETUP.includes(m)),
+			hazards: ids.some(m => RS.HAZARDS.includes(m)),
+			pivot: ids.some(m => RS.PIVOTS.includes(m)),
+			knock: ids.includes('knockoff'),
+			status: ids.some(m => RS.STATUS.includes(m)),
+		});
+		let kit = { setup: 0, hazards: 0, pivot: 0, knock: 0, status: 0, sweeperOnly: false };
+		try {
+			const preset = this.cfg.readsSets && this.presets ? this.presets.moves(key) : null;
+			if (preset) {
+				const t = traits(preset.map(idOf));
+				kit = { setup: +t.setup, hazards: +t.hazards, pivot: +t.pivot, knock: +t.knock, status: +t.status, sweeperOnly: false };
+			} else {
+				const sets = RS.roleSets(require('./rp-dex')(), key);
+				if (sets.length) {
+					const each = sets.map(s => traits((s.movepool || []).map(idOf)));
+					const share = k => each.filter(t => t[k]).length / each.length;
+					kit = { setup: share('setup'), hazards: share('hazards'), pivot: share('pivot'), knock: share('knock'), status: share('status'),
+						sweeperOnly: sets.every(s => RS.SETUP_ROLES.includes(s.role)) };
+				}
+			}
+		} catch (e) { /* no data: a blank kit */ }
+		this.kitCache.set(key, kit);
+		return kit;
+	}
+
+	/** Has this foe shown, or does it usually carry, a way to set up? */
+	foeCanSetUp(gen, foe) {
+		if (!foe) return false;
+		if (Object.values(foe.boosts || {}).some(v => v > 0)) return true;
+		const dex = PkmnDex.forGen(gen.num);
+		for (const m of foe.moves || []) {
+			const d = dex.moves.get(m);
+			const up = d && (d.target === 'self' || !d.target) && d.category === 'Status' && (d.boosts || (d.self && d.self.boosts));
+			if (up && Object.values(up).some(v => v > 0)) return true;
+		}
+		if (foe.moves && foe.moves.size >= 4) return false;
+		return this.speciesKit(foe.transformed || foe.species).setup >= 0.5;
+	}
+
+	/** A stable name for one of our Pokemon within a decision. */
+	entryKey(entry) { return `${entry.ident || ''}|${entry.details || ''}`; }
+
+	/**
+	 * The team-wide picture the sacking rules need, once per decision: for each
+	 * of our living Pokemon, what it does to each foe that is left, which of them
+	 * it is the only answer to, and whether a foe hard-walls it with nothing else
+	 * of ours able to wear that foe down.
+	 *
+	 * The Art of Sacking (Pinkacross; 24 Sep 2026): a Pokemon is worth its health
+	 * AND what it can still do against what they have left - "good into five but
+	 * hard-walled by the sixth" is not valuable - AND whether it is the only
+	 * thing standing between a live threat and the rest of the team. HP alone
+	 * is the classic mistake: he sacked a full-health Gholdengo that had become
+	 * setup fodder and kept a 15% Moltres that was the only check to a sweeper.
+	 *
+	 * An answer: outspeeds and KOs it, or takes under 45% from it while taking
+	 * 30% or more back. A live threat: it hits half our living team for 50% or
+	 * more, or it sets up and hits any of them that hard. A hard wall: our best
+	 * hit does under 12% to it.
+	 */
+	teamPlan(gen, state, request) {
+		return this.memo('teamPlan', () => {
+			const field = new calc.Field({ weather: state.weather || undefined, terrain: state.terrain || undefined });
+			const ours = (request.side.pokemon || []).filter(p => !/fnt/.test(p.condition || ''));
+			const { list: theirs } = this.foeRemaining(state);
+			const rows = new Map();
+			for (const p of ours) rows.set(this.entryKey(p), { out: [], sole: 0, walled: false, avgOut: 0 });
+			const answers = theirs.map(() => []);
+			const threatens = theirs.map(() => 0);
+			ours.forEach(p => {
+				const me = this.myPokemon(gen, p, state);
+				const mySpe = this.speedOf(me, me.boosts, me.status, state.weather);
+				const moves = (p.moves || []).map(m => toName(m, 'moves'));
+				const row = rows.get(this.entryKey(p));
+				theirs.forEach((foe, j) => {
+					const them = this.foePokemon(gen, foe);
+					const out = Math.max(0, ...moves.map(m => this.damageToFoe(gen, me, foe, m, field)));
+					const seen = [...(foe.moves || [])];
+					const back = seen.length
+						? Math.max(0, ...[...seen, ...this.hiddenAttacks(gen, foe)].map(m => this.damagePct(gen, them, me, m, field)))
+						: this.roughIncoming(gen, them, me, field);
+					const theirSpe = this.foeSpeed(gen, foe, state.weather);
+					const faster = state.trickRoom ? mySpe < theirSpe : mySpe > theirSpe;
+					row.out.push(out);
+					if ((faster && out >= 100) || (back < 45 && out >= 30)) answers[j].push(row);
+					if (back >= 50) threatens[j]++;
+				});
+				row.avgOut = row.out.length ? row.out.reduce((a, b) => a + Math.min(100, b), 0) / row.out.length : 0;
+			});
+			theirs.forEach((foe, j) => {
+				// A setup sweeper is a live threat as soon as it hurts anything: the
+				// boosts are what make it hit the rest.
+				const live = threatens[j] >= Math.max(1, ours.length / 2) || (threatens[j] >= 1 && this.foeCanSetUp(gen, foe));
+				if (answers[j].length === 1 && live) answers[j][0].sole++;
+				const wornDown = [...rows.values()].some(r => r.out[j] >= 35);
+				for (const r of rows.values()) if (r.out[j] < 12 && !wornDown) r.walled = true;
+			});
+			return { rows, foes: theirs.length };
+		});
+	}
+
 	monValue(gen, entry, state, request) {
 		if (/fnt/.test(entry.condition || '')) return 0;   // dead is worth nothing
+		if (this.cfg.sacking && request && request.side) {
+			return this.memo(`value|${this.entryKey(entry)}|${entry.condition}`, () => this.monValueOf(gen, entry, state, request));
+		}
+		return this.monValueOf(gen, entry, state, request);
+	}
+
+	monValueOf(gen, entry, state, request) {
 
 		const cond = /^(\d+)\/(\d+)/.exec(entry.condition || '');
 		const hpPct = cond ? (+cond[1] / +cond[2]) * 100 : 100;
@@ -759,10 +914,24 @@ class BattleAI {
 			const field = new calc.Field({ weather: state.weather || undefined, terrain: state.terrain || undefined });
 			let best = 0;
 			for (const foe of foes) {
-				const them = this.foePokemon(gen, foe);
 				for (const m of entry.moves || []) best = Math.max(best, this.damageToFoe(gen, me, foe, toName(m, 'moves'), field));
 			}
-			value += Math.min(45, best * 0.45);
+			let offense = Math.min(45, best * 0.45);
+			/*
+			 * Offensive utility now, against everything they have left rather than
+			 * only the one in front, and next to nothing when a living foe hard-walls
+			 * it and none of our team can wear that foe down (The Art of Sacking,
+			 * 24 Sep 2026).
+			 */
+			const row = this.cfg.sacking && request && request.side ? this.teamPlan(gen, state, request).rows.get(this.entryKey(entry)) : null;
+			if (row && row.out.length) {
+				offense = 0.5 * offense + 0.5 * Math.min(45, row.avgOut * 0.45);
+				if (row.walled) offense *= 0.3;
+			}
+			value += offense;
+			// The only answer to a live threat is worth keeping for it, whatever it
+			// does to the rest (his Moltres at 15%).
+			if (row && row.sole) value += 14 + 6 * Math.min(2, row.sole);
 		}
 
 		// Status eats most of what makes a sweeper a sweeper.
@@ -775,6 +944,14 @@ class BattleAI {
 		// HP matters, but a Focus Sash / 1 HP cleaner still cleans - so this is a
 		// gentle curve rather than a straight multiplier.
 		value *= 0.55 + 0.45 * (hpPct / 100);
+		/*
+		 * Dead on entry: a benched Pokemon our own side's hazards would finish is
+		 * no longer a fighter, but it is not worthless either. It is a free switch
+		 * that can never become setup fodder, so it is worth keeping at a small,
+		 * fixed price rather than ranked as the cheapest thing to throw in (The Art
+		 * of Sacking, 24 Sep 2026).
+		 */
+		if (this.cfg.sacking && !entry.active && this.entryHazards(gen, me, entry, state) >= hpPct) value = 15;
 		return Math.max(0, Math.min(100, value));
 	}
 
@@ -872,6 +1049,94 @@ class BattleAI {
 		const share = team.length ? worth / team.length : 0;
 		const plan = Math.max(immediate * 0.6, (immediate + share) / 2);
 		return revenge ? plan * 0.5 : plan;
+	}
+
+	/**
+	 * Everything the opponent still has, as far as the battle has shown it, and
+	 * how many they have that we have never seen.
+	 *
+	 * foeTeam() knows the field and the team preview; it forgets a foe that
+	 * switched out in a format without a preview, and gives a previewed one full
+	 * health even after we chipped it. The battle state now keeps what it knew
+	 * about each foe that left (theirBench), so this merges the two. `unknown` is
+	 * 0 whenever a preview showed the whole team; otherwise it is their team size
+	 * minus what has been seen, and any rule that claims to know the whole board
+	 * (winning unboosted, the exact endgame) must stand down while it is above 0.
+	 * (24 Sep 2026)
+	 */
+	foeRemaining(state) {
+		const base = s => String(s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+		const same = (a, b) => { const x = base(a), y = base(b); return x.startsWith(y) || y.startsWith(x); };
+		const team = typeof state.foeTeam === 'function' ? state.foeTeam() : state.foes();
+		const bench = Object.values(state.theirBench || {}).filter(m => m && !m.fainted);
+		const list = team.map(f => {
+			if (!f.bench) return f;
+			const snap = bench.find(b => same(b.species, f.species));
+			return snap ? { ...f, ...snap, bench: true } : f;
+		});
+		for (const b of bench) if (!list.some(f => same(f.species, b.species))) list.push(b);
+		const previewed = !!(state.preview && state.preview[state.theirPlayer] && state.preview[state.theirPlayer].length);
+		const size = (state.teamSize && state.teamSize[state.theirPlayer]) || 6;
+		const seen = state.theirSeen ? state.theirSeen.size : list.length + (state.theirDown || []).length;
+		return { list, unknown: previewed ? 0 : Math.max(0, size - seen) };
+	}
+
+	/**
+	 * Who is ahead, -1 (lost) .. +1 (won), counted honestly: the health each
+	 * side has left, a fainted Pokemon as nothing and an unseen one of theirs as
+	 * full. Judge the game state honestly, not emotionally (Pinkacross, How to
+	 * Make Comebacks) - this is the number the search plays safe or sharp by.
+	 * (24 Sep 2026)
+	 */
+	advantage(state, request) {
+		const ours = (request && request.side && request.side.pokemon || []).reduce((sum, p) => {
+			if (/fnt/.test(p.condition || '')) return sum;
+			const cond = /^(\d+)\/(\d+)/.exec(p.condition || '');
+			return sum + (cond && +cond[2] ? +cond[1] / +cond[2] : 1);
+		}, 0);
+		const { list, unknown } = this.foeRemaining(state);
+		const theirs = unknown + list.reduce((sum, f) => sum + (f.fainted ? 0 : Math.max(0, (f.hp || 0) / (f.maxhp || 100))), 0);
+		return ours + theirs > 0 ? (ours - theirs) / (ours + theirs) : 0;
+	}
+
+	/**
+	 * Does this Pokemon already win from here without another boost?
+	 *
+	 * Setup is not automatic (Pinkacross, 10 Noob Traps and the Rank 1 tips):
+	 * when the sweeper already KOs everything that is left and gets there first,
+	 * every extra boosting turn is only a turn for a crit, a secondary effect or
+	 * a status to land. So: each remaining foe is KOed before it moves (by speed
+	 * or by our priority), except the one in front, which may instead be a 2HKO
+	 * it cannot survive in time. Any unseen foe, or a shown priority attack that
+	 * KOs us, and the answer is no. (A11, 24 Sep 2026)
+	 */
+	winsUnboosted(gen, entry, state, field, incoming) {
+		const { list, unknown } = this.foeRemaining(state);
+		if (unknown > 0 || !list.length || !this.myMoveNames || !this.myMoveNames.length) return false;
+		const me = this.myPokemon(gen, entry, state);
+		const myHp = (me.originalCurHP / me.maxHP()) * 100;
+		const mySpe = this.speedOf(me, me.boosts, me.status, state.weather);
+		const dex = PkmnDex.forGen(gen.num);
+		const attack = m => { const d = dex.moves.get(m); return d && d.exists && d.category !== 'Status' ? d : null; };
+		for (const foe of list) {
+			let hit = 0, prio = 0;
+			for (const m of this.myMoveNames) {
+				const d = attack(m);
+				if (!d) continue;
+				const dealt = this.damageToFoe(gen, me, foe, m, field) * (this.cfg.accuracy ? this.hitChance(gen, d, me, foe, state) : 1);
+				hit = Math.max(hit, dealt);
+				if (d.priority > 0) prio = Math.max(prio, dealt);
+			}
+			const theirSpe = this.foeSpeed(gen, foe, state.weather);
+			const first = (state.trickRoom ? mySpe < theirSpe : mySpe > theirSpe) || prio >= 100;
+			const them = this.foePokemon(gen, foe);
+			const theirs = [...(foe.moves || []), ...this.hiddenAttacks(gen, foe)];
+			if (theirs.some(m => { const d = attack(m); return d && d.priority > 0 && this.damagePct(gen, them, me, m, field) >= myHp; })) return false;
+			if (hit >= 100 && first) continue;
+			if (!foe.bench && hit >= 50 && (first ? incoming < myHp : incoming * 2 < myHp)) continue;
+			return false;
+		}
+		return true;
 	}
 
 	/**
@@ -1080,9 +1345,31 @@ class BattleAI {
 				const stacked = raised.length ? Math.min(...raised) : 0;
 				if (stacked >= 4) score -= 30;
 				else if (stacked >= 2) score -= 10;
+				/*
+				 * From -2 or worse, a boost only climbs back towards zero, and switching
+				 * out gets all of it back for free. Swords Dance at -4 Attack beat an
+				 * 85% Fire Blast once accuracy started counting (24 Sep 2026); it
+				 * should not have been close before either.
+				 */
+				else if (stacked <= -2) score -= 20;
 				// A foe that has shown Will-O-Wisp answers an Attack boost with a burn.
 				const wisp = (ctx.foes || []).some(o => o.moves && [...o.moves].some(m => /will-o-wisp/i.test(m)));
 				if (wisp && (boostsUp.atk || 0) > 0 && !me.status && !(me.types || []).includes('Fire')) score -= 15;
+			}
+			/*
+			 * Don't set up when already winning (Pinkacross, A11; 24 Sep 2026). Two
+			 * checks against the same Pokemon unboosted: does it already beat all
+			 * that is left - then attack, the boost only buys them a turn - and does
+			 * the boost change the sweep at all? A purely offensive boost that moves
+			 * sweepPotential by less than a tenth is a turn thrown away.
+			 */
+			if (this.cfg.setupWin && ctx.entry && ctx.foes) {
+				if (this.winsUnboosted(gen, ctx.entry, state, ctx.field, incoming)) return Math.min(score, 8);
+				const defensive = (boostsUp.def || 0) > 0 || (boostsUp.spd || 0) > 0;
+				if (!defensive) {
+					const now = this.sweepPotential(gen, ctx.entry, state, ctx.foes, ctx.field, {});
+					if (sweep - now < 0.1) score -= 20;
+				}
 			}
 			return score;
 		}
@@ -1160,10 +1447,16 @@ class BattleAI {
 	 */
 	decide(request, state) {
 		if (request.wait) return null;
-		if (request.teamPreview) return this.teamOrder(request, state);
-		if (request.forceSwitch) return this.forceSwitch(request, state);
-		if (request.active) return this.turnChoice(request, state);
-		return 'default';
+		// One decision's cache (see memo()); closed again whatever happens.
+		this._memo = new Map();
+		try {
+			if (request.teamPreview) return this.teamOrder(request, state);
+			if (request.forceSwitch) return this.forceSwitch(request, state);
+			if (request.active) return this.turnChoice(request, state);
+			return 'default';
+		} finally {
+			this._memo = null;
+		}
 	}
 
 	teamOrder(request, state) {
@@ -1181,6 +1474,7 @@ class BattleAI {
 		if (!this.cfg.naive && this.cfg.preview !== false && theirs && theirs.length && request.side.pokemon.length > 1) {
 			const field = new calc.Field({});
 			const dex = PkmnDex.forGen(gen.num);
+			if (this.cfg.leads) return this.pinkacrossLead(gen, mons, theirs, field);
 			for (const m of mons) {
 				let total = 0;
 				for (const t of theirs) {
@@ -1200,6 +1494,92 @@ class BattleAI {
 		}
 		mons.sort((a, b) => b.spe - a.spe);
 		return `team ${mons.map(m => m.i).join('')}`;
+	}
+
+	/**
+	 * Choosing a lead the way Pinkacross teaches it (How to Choose Your Lead;
+	 * research A2-A4, 24 Sep 2026).
+	 *
+	 *  - A good lead has a lead trait: a move with lasting value (hazards, Knock
+	 *    Off, status), a pivot, or immediate breaking power. A setup sweeper is a
+	 *    bad lead - it wants a free turn later, not a guess on turn one.
+	 *  - Their lead is a guess: drop their sweepers, favour their own lead traits
+	 *    and whatever is good into our six. Most games leave two to four likely
+	 *    leads, so our lead is scored against those, not a flat average of six.
+	 *  - Weigh the wrong guess: a lead that loses to a likely lead of theirs,
+	 *    with nothing behind it that comes in comfortably, is worse than one that
+	 *    covers fewer leads but never leaves us stuck.
+	 *  - Don't lead with the only answer to one of their threats; it has to be
+	 *    healthy when that threat comes.
+	 *
+	 * Order after the lead is unchanged (fastest first) - it is only the order
+	 * the forced switches consider, and they re-score by the position anyway.
+	 */
+	pinkacrossLead(gen, mons, theirs, field) {
+		const idOf = s => String(s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+		const RS = require('./role-sets');
+		const foes = theirs.map(t => ({ species: t.species, level: t.level, hp: 100, maxhp: 100, status: '', boosts: {},
+			moves: new Set(), immuneTo: new Set(), notImmuneTo: new Set() }));
+		// Both directions, once: what each of ours deals to each of theirs, what it takes back.
+		const out = [], back = [], faster = [];
+		mons.forEach((m, i) => {
+			out[i] = []; back[i] = []; faster[i] = [];
+			const mySpe = this.speedOf(m.mon, {}, undefined, null);
+			foes.forEach((foe, j) => {
+				const them = this.foePokemon(gen, foe);
+				out[i][j] = Math.min(100, Math.max(0, ...(m.p.moves || []).map(id => this.damageToFoe(gen, m.mon, foe, toName(id, 'moves'), field))));
+				back[i][j] = Math.min(100, this.roughIncoming(gen, them, m.mon, field));
+				faster[i][j] = mySpe > this.foeSpeed(gen, foe, null);
+			});
+		});
+		// How likely each of theirs is to lead: its lead traits, not a sweeper, and good into us.
+		const weight = foes.map((foe, j) => {
+			const kit = this.speciesKit(foe.species);
+			let w = 1 + 0.8 * kit.hazards + 0.4 * kit.pivot + 0.3 * kit.knock + 0.2 * kit.status;
+			if (kit.sweeperOnly) w *= 0.3;
+			const intoUs = mons.reduce((sum, m, i) => sum + back[i][j] - out[i][j], 0) / mons.length;
+			return w * (1 + Math.max(-0.5, Math.min(0.5, intoUs / 100)));
+		});
+		const total = weight.reduce((a, b) => a + b, 0) || 1;
+		const share = weight.map(w => w / total);
+
+		// Who answers what: outspeeds and KOs, or takes under 45% and deals 30% back.
+		const answers = foes.map((_, j) => mons.map((_, i) => i).filter(i => (faster[i][j] && out[i][j] >= 100) || (back[i][j] < 45 && out[i][j] >= 30)));
+		const threat = foes.map((_, j) => mons.filter((_, i) => back[i][j] >= 50).length >= mons.length / 2);
+
+		mons.forEach((m, i) => {
+			let score = 0;
+			foes.forEach((_, j) => { score += share[j] * (out[i][j] - back[i][j]); });
+			const moves = (m.p.moves || []).map(idOf);
+			const hazards = moves.some(x => RS.HAZARDS.includes(x));
+			const pivot = moves.some(x => RS.PIVOTS.includes(x));
+			const lasting = moves.includes('knockoff') || moves.some(x => RS.STATUS.includes(x));
+			const item = idOf(m.p.item);
+			const breaker = /^(choiceband|choicespecs|lifeorb)$/.test(item) || out[i].reduce((a, b) => a + b, 0) / Math.max(1, foes.length) >= 70;
+			const setup = moves.some(x => RS.SETUP.includes(x));
+			if (hazards) score += 20;
+			if (pivot) score += 12;
+			if (lasting) score += 10;
+			// Immediate power means power without a boost first: a setup sweeper is
+			// not a breaker, it is a bad lead (his words), and a large penalty is
+			// what it takes to outvote a good average matchup.
+			if (breaker && !setup) score += 8;
+			if (setup && !hazards && !pivot) score -= 40;
+			// The wrong guess: a likely lead of theirs we lose to, with no comfortable switch-in behind.
+			foes.forEach((_, j) => {
+				if (share[j] < 0.1 || out[i][j] - back[i][j] > -30) return;
+				const cover = mons.some((_, k) => k !== i && back[k][j] < 35);
+				if (!cover) score -= 60 * share[j];
+			});
+			// The only answer to one of their threats stays in the back.
+			if (foes.some((_, j) => threat[j] && answers[j].length === 1 && answers[j][0] === i)) score -= 15;
+			m.lead = score;
+		});
+		// Kept for the logs and the tests: who we think leads, and what each lead scored.
+		this.leadPlan = { theirs: foes.map((f, j) => ({ species: f.species, share: share[j] })), ours: mons.map(m => ({ details: m.p.details, score: m.lead })) };
+		const lead = mons.slice().sort((a, b) => b.lead - a.lead || b.spe - a.spe)[0];
+		const rest = mons.filter(m => m !== lead).sort((a, b) => b.spe - a.spe);
+		return `team ${[lead, ...rest].map(m => m.i).join('')}`;
 	}
 
 	/**
@@ -1234,6 +1614,19 @@ class BattleAI {
 		// What the hazards on our side take on the way in (Raging Bolt came in on Stealth Rock and poison).
 		worst += this.entryHazards(gen, me, entry, state);
 		let score = best - worst;
+
+		/*
+		 * Setup fodder. A Pokemon that cannot hurt the thing in front of it, sent
+		 * in against something that sets up, hands it the free turn that ends the
+		 * game - "never sack onto a setup turn" (Pinkacross, The Art of Sacking:
+		 * he stays in with the more valuable Pokemon rather than switch to the
+		 * cheap sack a sweeper would boost on). A phazer, Haze, Encore or Taunt
+		 * user is the answer to the setup, not fodder for it. (24 Sep 2026)
+		 */
+		if (this.cfg.sacking && !imposter && foes[0] && best < 30 && this.foeCanSetUp(gen, foes[0])) {
+			const answersSetup = (entry.moves || []).some(m => /^(roar|whirlwind|dragontail|circlethrow|haze|clearsmog|encore|taunt|yawn|royaldecree)$/.test(String(m).toLowerCase().replace(/[^a-z0-9]/g, '')));
+			if (!answersSetup) score -= 25;
+		}
 
 		// A boosted foe is exactly what Ditto answers: it arrives with the same
 		// boosts, and a revenge kill on a setup sweeper swings the whole game.
@@ -1360,6 +1753,19 @@ class BattleAI {
 		return this.hiddenCache.get(species).filter(n => !seen.includes(n));
 	}
 
+	/**
+	 * Named stand-in attacks for a foe that has shown none: one per type it
+	 * has, on the side it hits harder with - the same probes roughIncoming
+	 * uses, as moves the endgame tree can play (24 Sep 2026).
+	 */
+	probeAttacks(gen, them) {
+		const species = PkmnDex.forGen(gen.num).species.get(them.name || (them.species && them.species.name));
+		if (!species) return [];
+		const physical = ((them.stats && them.stats.atk) || 0) >= ((them.stats && them.stats.spa) || 0);
+		const PROBES = physical ? PHYSICAL_PROBES : SPECIAL_PROBES;
+		return species.types.map(t => PROBES[t]).filter(Boolean);
+	}
+
 	/** Worst-case estimate when the opponent has revealed nothing. */
 	roughIncoming(gen, them, me, field) {
 		// If the format generated this Pokemon from a known list, guessing is
@@ -1435,6 +1841,45 @@ class BattleAI {
 		return (drops[stat] || 0) < 0 ? (me.boosts[stat] || 0) : 0;
 	}
 
+	/**
+	 * The chance this move of ours lands, 0..1.
+	 *
+	 * Accuracy is part of a move's value (Pinkacross, How to Play Like a Pro and
+	 * the Rank 1 tips, 24 Sep 2026): the expected damage of Focus Blast is 70% of
+	 * its number, and clicking the 70% move when a 100% one already does the job
+	 * is how a won game is handed back on a miss. ai.js never read `accuracy`
+	 * before today, so Focus Blast and Aura Sphere scored the same.
+	 *
+	 * The accuracy role-sets.js weighs is a different decision - which moves go
+	 * on the set at build time - so counting it here again is not a double
+	 * penalty: that one picks the moveset, this one picks the click.
+	 *
+	 * The modifiers that commonly matter: No Guard (either side), Compound Eyes,
+	 * Hustle, Wide Lens, rain for Thunder and Hurricane (and sun against them),
+	 * snow for Blizzard, and accuracy/evasion stages. Anything rarer is left at
+	 * the listed number, which errs towards the move landing.
+	 */
+	hitChance(gen, data, me, foe, state, live) {
+		if (!data || data.accuracy === true || !data.accuracy) return 1;
+		const id = s => String(s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+		const myAbility = id(me && me.ability), theirAbility = id(foe && foe.ability);
+		if (myAbility === 'noguard' || theirAbility === 'noguard') return 1;
+		const weather = id(state && state.weather);
+		const rain = /raindance|primordialsea/.test(weather), sun = /sunnyday|desolateland/.test(weather);
+		if ((data.id === 'thunder' || data.id === 'hurricane' || data.id === 'bleakwindstorm' || data.id === 'wildboltstorm' || data.id === 'sandsearstorm') && rain) return 1;
+		if (data.id === 'blizzard' && /snow|hail/.test(weather)) return 1;
+		let acc = data.accuracy;
+		if ((data.id === 'thunder' || data.id === 'hurricane') && sun) acc = 50;
+		const stage = Math.max(-6, Math.min(6, ((live && live.boosts && live.boosts.accuracy) || 0) - ((foe && foe.boosts && foe.boosts.evasion) || 0)));
+		acc *= stage >= 0 ? (3 + stage) / 3 : 3 / (3 - stage);
+		if (myAbility === 'compoundeyes') acc *= 1.3;
+		if (myAbility === 'hustle' && data.category === 'Physical') acc *= 0.8;
+		if (myAbility === 'victorystar') acc *= 1.1;
+		if (id(me && me.item) === 'widelens') acc *= 1.1;
+		if (/brightpowder|laxincense/.test(id(foe && foe.item))) acc *= 0.9;
+		return Math.max(0, Math.min(1, acc / 100));
+	}
+
 	forceSwitch(request, state) {
 		const gen = this.gen(state.gen);
 		const field = new calc.Field({ weather: state.weather || undefined, terrain: state.terrain || undefined });
@@ -1442,6 +1887,14 @@ class BattleAI {
 			.map((p, i) => ({ p, i: i + 1 }))
 			.filter(({ p }) => !p.active && !/fnt/.test(p.condition));
 		if (!options.length) return 'default';
+		/*
+		 * In the endgame, who comes in is decided by playing the rest out (A16):
+		 * "if they bring X, I send Y" is exactly this choice. (24 Sep 2026)
+		 */
+		if (this.cfg.endgame && this.cfg.search && options.length > 1) {
+			const planned = this.search.endgameReplacement(gen, request, state, field);
+			if (planned && options.some(o => o.i === planned.i)) return `switch ${planned.i}`;
+		}
 		let best = options[0], bestScore = -Infinity;
 		for (const opt of options) {
 			const score = this.benchScore(gen, opt.p, state, field, request) + this.jitter();
@@ -1771,6 +2224,12 @@ class BattleAI {
 					: 5;
 				// Nothing set up on the turn we are knocked out ever gets used.
 				if (outsped && score > 0) score *= 0.2;
+				// A Will-O-Wisp that misses is a free turn for them: a status move aimed at
+				// the foe is worth its hit chance (A10, 24 Sep 2026). Self-targeting moves
+				// and hazards cannot miss and come back as 1.
+				if (this.cfg.accuracy && !this.cfg.naive && score > 0 && foe && data.target !== 'self' && data.target !== 'foeSide') {
+					score *= this.hitChance(gen, data, me, foe, state, state.mine && state.mine['abc'[index]]);
+				}
 				/*
 				 * Dynamaxed, every status move is Max Guard. The bot clicked Roost and
 				 * Will-O-Wisp as Moltres and got two Max Guards (the second failed) while
@@ -1792,7 +2251,12 @@ class BattleAI {
 					const pct = this.cfg.naive
 						? (data.basePower || 0) * (me.types && me.types.includes(data.type) ? 1.5 : 1) * 0.6
 						: this.damageToFoe(gen, me, foe, name, field) * this.maxRatio(gen, name, state.mine && state.mine['abc'[index]] && state.mine['abc'[index]].dynamaxed);
-					let s = pct;
+					/*
+					 * Past about one and a half KOs the extra number buys nothing, and left
+					 * uncapped a 250% Focus Blast outscored a 110% Close Combat by more
+					 * than the miss chance could take back (24 Sep 2026, A10).
+					 */
+					let s = this.cfg.accuracy && !this.cfg.naive ? Math.min(pct, 150) : pct;
 					// An attack that does nothing (an immunity, an absorbing ability, an Air
 					// Balloon) is worse than any status move, not level with them: at 0 it won
 					// ties, and Dragonite clicked Extreme Speed into Spiritomb.
@@ -1847,6 +2311,13 @@ class BattleAI {
 					 */
 					if (movesFirst && pct < 60 && this.dropOpensKo(gen, me, foe, data, field)) s -= 25;
 					// We are dead before this lands unless it kills or it has priority.
+					/*
+					 * Expected value, KO bonus included: a 70% KO is worth 70% of a KO
+					 * (Pinkacross, How to Play Like a Pro: he fired six Pyro Balls where two
+					 * were needed; 24 Sep 2026). So the accurate KO wins whenever there is
+					 * one, and the inaccurate move is still clicked when it alone KOs.
+					 */
+					if (this.cfg.accuracy && !this.cfg.naive && s > 0) s *= this.hitChance(gen, data, me, foe, state, state.mine && state.mine['abc'[index]]);
 					if (outsped && pct < 100 && !(data && data.priority > 0) && s > 0) s *= 0.35;
 					if (s > score) { score = s; target = foe.slot === 'b' ? 2 : 1; }
 				}
@@ -1877,20 +2348,36 @@ class BattleAI {
 					: 0,
 				priority: data ? (data.priority || 0) : 0,
 				heuristic: data && data.category === 'Status' ? score : 0,
+				// The search plays the miss out as its own branch rather than shrinking the hit.
+				accuracy: this.cfg.accuracy && data && data.category !== 'Status' && foes[0]
+					? this.hitChance(gen, data, me, foes[0], state, state.mine && state.mine['abc'[index]]) : 1,
 			});
 		}
 
 		// Search: play each of our options out against each of their likely
 		// replies and score where the turn ends, rather than scoring the move
 		// against a position the opponent is assumed not to touch.
+		let planned = null;
 		if (this.cfg.search && ranked.length) {
-			const shortlist = ranked.slice().sort((a, b) => b.score - a.score).slice(0, 5);
-			const searched = this.search.choose(gen, active, entry, request, state, field, shortlist, incoming);
-			if (searched) best = { score: searched.score, n: searched.n, target: searched.target, name: searched.name };
+			/*
+			 * Three or fewer a side, all of theirs seen: plan it exactly instead
+			 * (A16, Pinkacross; 24 Sep 2026). The tree already weighed every switch
+			 * of ours, so the bench logic below stands down when it has spoken.
+			 */
+			if (this.cfg.endgame) planned = this.search.endgame(gen, entry, request, state, field, ranked);
+			if (planned && planned.kind === 'switch' && !active.trapped && !active.maybeTrapped) return `switch ${planned.i}`;
+			if (planned && planned.kind === 'move') {
+				best = { score: planned.score, n: planned.n, target: planned.target, name: planned.name };
+			} else {
+				planned = null;
+				const shortlist = ranked.slice().sort((a, b) => b.score - a.score).slice(0, 5);
+				const searched = this.search.choose(gen, active, entry, request, state, field, shortlist, incoming);
+				if (searched) best = { score: searched.score, n: searched.n, target: searched.target, name: searched.name };
+			}
 		}
 
 		// Would anything on the bench do better than what we are about to do here?
-		if (this.cfg.switching && request.side.pokemon.length > 1 && !active.trapped && !active.maybeTrapped) {
+		if (!planned && this.cfg.switching && request.side.pokemon.length > 1 && !active.trapped && !active.maybeTrapped) {
 			const myHpPct = (me.originalCurHP / me.maxHP()) * 100;
 			const doomed = incoming >= myHpPct;
 			// Stuck with a self-dropped attacking stat and nothing that kills: switching resets it.
