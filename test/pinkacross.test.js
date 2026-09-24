@@ -136,6 +136,28 @@ if (MAIN) {
 	}), (c, r) => moveName(c, r) === 'Focus Blast', 'Focus Blast when only it kills');
 }
 
+// ------------------------------------------------------ setup when winning
+if (MAIN) console.log('\n--- A11: no setup when the unboosted Pokemon already wins ---');
+if (MAIN) {
+	const moves = ['Swords Dance', 'Earthquake', 'Dragon Claw'];
+	// A fast Garchomp; Toxapex in front (a 2HKO that barely scratches it), and a
+	// Heatran and a Magnezone behind, both slower and both OHKOed by Earthquake.
+	const board = foeBench => () => {
+		const p = position({
+			me: mon('Garchomp', moves), myMoves: moves, bench: [mon('Blissey', ['Soft-Boiled'])],
+			foe: { species: 'Toxapex', hp: 100, moves: ['Surf'] }, foeBench, foeDown: ['Pikachu', 'Raichu', 'Eevee'],
+		});
+		p.request.side.pokemon[0].stats.spe = 333;
+		return p;
+	};
+	onRungs(['champion', 'stockfish'], 3, board(['Heatran', 'Magnezone']),
+		(c, r) => moveName(c, r) === 'Earthquake', 'attacks when Earthquake already beats all that is left');
+	// With a Dondozo behind, unboosted Earthquake does not win and the Swords Dance is the plan.
+	// (Champion only: Stockfish's search already prefers the Earthquake here with the rule off.)
+	onRungs(['champion'], 3, board(['Heatran', 'Dondozo']),
+		(c, r) => moveName(c, r) === 'Swords Dance', 'still sets up when a foe behind survives the unboosted hit');
+}
+
 module.exports = { position, mon, onRungs, moveName, check, realStats };
 
 if (require.main === module) {

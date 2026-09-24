@@ -892,6 +892,76 @@ class BattleAI {
 	}
 
 	/**
+	 * Everything the opponent still has, as far as the battle has shown it, and
+	 * how many they have that we have never seen.
+	 *
+	 * foeTeam() knows the field and the team preview; it forgets a foe that
+	 * switched out in a format without a preview, and gives a previewed one full
+	 * health even after we chipped it. The battle state now keeps what it knew
+	 * about each foe that left (theirBench), so this merges the two. `unknown` is
+	 * 0 whenever a preview showed the whole team; otherwise it is their team size
+	 * minus what has been seen, and any rule that claims to know the whole board
+	 * (winning unboosted, the exact endgame) must stand down while it is above 0.
+	 * (24 Sep 2026)
+	 */
+	foeRemaining(state) {
+		const base = s => String(s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+		const same = (a, b) => { const x = base(a), y = base(b); return x.startsWith(y) || y.startsWith(x); };
+		const team = typeof state.foeTeam === 'function' ? state.foeTeam() : state.foes();
+		const bench = Object.values(state.theirBench || {}).filter(m => m && !m.fainted);
+		const list = team.map(f => {
+			if (!f.bench) return f;
+			const snap = bench.find(b => same(b.species, f.species));
+			return snap ? { ...f, ...snap, bench: true } : f;
+		});
+		for (const b of bench) if (!list.some(f => same(f.species, b.species))) list.push(b);
+		const previewed = !!(state.preview && state.preview[state.theirPlayer] && state.preview[state.theirPlayer].length);
+		const size = (state.teamSize && state.teamSize[state.theirPlayer]) || 6;
+		const seen = state.theirSeen ? state.theirSeen.size : list.length + (state.theirDown || []).length;
+		return { list, unknown: previewed ? 0 : Math.max(0, size - seen) };
+	}
+
+	/**
+	 * Does this Pokemon already win from here without another boost?
+	 *
+	 * Setup is not automatic (Pinkacross, 10 Noob Traps and the Rank 1 tips):
+	 * when the sweeper already KOs everything that is left and gets there first,
+	 * every extra boosting turn is only a turn for a crit, a secondary effect or
+	 * a status to land. So: each remaining foe is KOed before it moves (by speed
+	 * or by our priority), except the one in front, which may instead be a 2HKO
+	 * it cannot survive in time. Any unseen foe, or a shown priority attack that
+	 * KOs us, and the answer is no. (A11, 24 Sep 2026)
+	 */
+	winsUnboosted(gen, entry, state, field, incoming) {
+		const { list, unknown } = this.foeRemaining(state);
+		if (unknown > 0 || !list.length || !this.myMoveNames || !this.myMoveNames.length) return false;
+		const me = this.myPokemon(gen, entry, state);
+		const myHp = (me.originalCurHP / me.maxHP()) * 100;
+		const mySpe = this.speedOf(me, me.boosts, me.status, state.weather);
+		const dex = PkmnDex.forGen(gen.num);
+		const attack = m => { const d = dex.moves.get(m); return d && d.exists && d.category !== 'Status' ? d : null; };
+		for (const foe of list) {
+			let hit = 0, prio = 0;
+			for (const m of this.myMoveNames) {
+				const d = attack(m);
+				if (!d) continue;
+				const dealt = this.damageToFoe(gen, me, foe, m, field) * (this.cfg.accuracy ? this.hitChance(gen, d, me, foe, state) : 1);
+				hit = Math.max(hit, dealt);
+				if (d.priority > 0) prio = Math.max(prio, dealt);
+			}
+			const theirSpe = this.foeSpeed(gen, foe, state.weather);
+			const first = (state.trickRoom ? mySpe < theirSpe : mySpe > theirSpe) || prio >= 100;
+			const them = this.foePokemon(gen, foe);
+			const theirs = [...(foe.moves || []), ...this.hiddenAttacks(gen, foe)];
+			if (theirs.some(m => { const d = attack(m); return d && d.priority > 0 && this.damagePct(gen, them, me, m, field) >= myHp; })) return false;
+			if (hit >= 100 && first) continue;
+			if (!foe.bench && hit >= 50 && (first ? incoming < myHp : incoming * 2 < myHp)) continue;
+			return false;
+		}
+		return true;
+	}
+
+	/**
 	 * Is setting up against this opponent simply a wasted turn?
 	 *
 	 * Answered from what the battle has shown rather than from what the Pokemon
@@ -1107,6 +1177,21 @@ class BattleAI {
 				// A foe that has shown Will-O-Wisp answers an Attack boost with a burn.
 				const wisp = (ctx.foes || []).some(o => o.moves && [...o.moves].some(m => /will-o-wisp/i.test(m)));
 				if (wisp && (boostsUp.atk || 0) > 0 && !me.status && !(me.types || []).includes('Fire')) score -= 15;
+			}
+			/*
+			 * Don't set up when already winning (Pinkacross, A11; 24 Sep 2026). Two
+			 * checks against the same Pokemon unboosted: does it already beat all
+			 * that is left - then attack, the boost only buys them a turn - and does
+			 * the boost change the sweep at all? A purely offensive boost that moves
+			 * sweepPotential by less than a tenth is a turn thrown away.
+			 */
+			if (this.cfg.setupWin && ctx.entry && ctx.foes) {
+				if (this.winsUnboosted(gen, ctx.entry, state, ctx.field, incoming)) return Math.min(score, 8);
+				const defensive = (boostsUp.def || 0) > 0 || (boostsUp.spd || 0) > 0;
+				if (!defensive) {
+					const now = this.sweepPotential(gen, ctx.entry, state, ctx.foes, ctx.field, {});
+					if (sweep - now < 0.1) score -= 20;
+				}
 			}
 			return score;
 		}
