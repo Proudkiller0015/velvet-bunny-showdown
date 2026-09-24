@@ -118,5 +118,12 @@ for (const [species, id] of [['Simisage', 'junglerush'], ['Simisear', 'cinderrus
 	check(eff('Muk', 'Stench') === -2, 'vs a poisoned Poison: doubly resisted');
 }
 
+// The babies that grow up by a condition get their extra level 16 too (buffs.js).
+{
+	const six = ['sudowoodo', 'mrmime', 'mantine', 'roselia', 'lucario', 'chimecho'];
+	const missing = six.filter(id => Dex.species.get(id).velvetLevelToo !== 16);
+	check(!missing.length, `the condition-evolving babies also grow up at 16 (missing: ${missing.join(', ') || 'none'})`);
+}
+
 console.log(failed ? `\n${failed} failed` : '\nall passed');
 process.exit(failed ? 1 : 0);
