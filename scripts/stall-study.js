@@ -15,9 +15,11 @@
  *
  * Opponents the server would not allow are skipped (Terapagos is Uber here).
  *
- * Stall's goal is not to lose (the owner's framing): a draw is a result for it, so
- * games run to the Endless Battle Clause's 1000 turns instead of the tier sim's 300,
- * and the headline number is "not lost" (wins + ties) next to plain wins.
+ * Stall plays not to lose, but it does not settle for a draw either (the owner:
+ * "refuse to draw, stall can go 100+"): it takes no risks and is patient enough to
+ * win over a hundred turns and more. So games run to the Endless Battle Clause's
+ * 1000 turns instead of the tier sim's 300; the headline is wins, with losses and
+ * draws beside it (a draw counts as a failure to convert).
  */
 
 const fs = require('fs');
@@ -78,8 +80,8 @@ function report() {
 	};
 	const all = rows.reduce((s, r) => s + (r.w === 'stall' ? 1 : r.w === 't' ? 0.5 : 0), 0);
 	const p = all / Math.max(1, rows.length);
-	const notLost = rows.filter(r => r.w !== 'opp').length;
-	console.log(`not lost ${notLost}/${rows.length} (${Math.round(100 * notLost / Math.max(1, rows.length))}%), ties ${rows.filter(r => r.w === 't').length}`);
+	const long = rows.filter(r => r.turns >= 100);
+	console.log(`lost ${rows.filter(r => r.w === 'opp').length}, drew ${rows.filter(r => r.w === 't').length}; games of 100+ turns: ${long.length} (stall won ${long.filter(r => r.w === 'stall').length})`);
 	console.log(`${path.relative(ROOT, OUT_DIR)}: stall won ${all}/${rows.length} (${(100 * p).toFixed(0)}% +/- ${(164.5 * Math.sqrt(p * (1 - p) / Math.max(1, rows.length))).toFixed(0)}), avg ${(rows.reduce((s, r) => s + r.turns, 0) / Math.max(1, rows.length)).toFixed(1)} turns`);
 	for (const [k, s] of tally(r => r.stall)) console.log(`  ${k}: ${s[0]}/${s[1]}`);
 	for (const [k, s] of tally(r => `vs ${r.opp.replace(/-\d\.txt$/, '')}`)) console.log(`  ${k}: ${s[0]}/${s[1]}`);
