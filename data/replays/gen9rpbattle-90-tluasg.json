@@ -1,0 +1,12 @@
+{
+	"id": "gen9rpbattle-90-tluasg",
+	"format": "[Gen 9] RP Battle",
+	"players": [
+		"Fisherman Gus",
+		"StaleThunder126"
+	],
+	"rating": null,
+	"log": "|j|☆Fisherman Gus\n|j|☆StaleThunder126\n|t:|1790214214\n|gametype|singles\n|player|p1|Fisherman Gus|fisherman-gen4|\n|player|p2|StaleThunder126|jolt.png|\n|gen|9\n|tier|[Gen 9] RP Battle\n|clearpoke\n|poke|p1|Mantyke, L12|\n|poke|p1|Corsola, L13|\n|poke|p2|Hattrem, L13|\n|poke|p2|Nuzleaf, L13|\n|poke|p2|Tentacool, L13|\n|poke|p2|Froakie, L13|\n|poke|p2|Smeargle, L13|\n|poke|p2|Whismur, L13|\n|teampreview\n|inactive|Battle timer is ON: inactive players will automatically lose when time's up. (requested by Fisherman Gus)\n|c|☆Fisherman Gus|⚠️ Jolt can't use held items (they unlock with your first badge) yet (not blocked, so just don't).\n|c|☆Fisherman Gus|🔒 Z-Moves, Dynamax, Terastallization are locked until the story gives Jolt the item; the battle won't allow them.\n|c|☆Fisherman Gus|Your Showdown team must match your box: only Pokémon you own, at or below their box le\n|c|☆Fisherman Gus|Hooked one! Oh, it is a trainer.\n|\n|t:|1790214238\n|teamsize|p1|2\n|teamsize|p2|6\n|start\n|switch|p1a: Mantyke|Mantyke, L12|100/100\n|switch|p2a: Nuzleaf|Nuzleaf, L13, shiny|100/100\n|turn|1\n|\n|t:|1790214248\n|move|p2a: Nuzleaf|Leaf Storm|p1a: Mantyke\n|-damage|p1a: Mantyke|61/100\n|-unboost|p2a: Nuzleaf|spa|2\n|move|p1a: Mantyke|Water Pulse|p2a: Nuzleaf\n|-resisted|p2a: Nuzleaf\n|-damage|p2a: Nuzleaf|85/100\n|-start|p2a: Nuzleaf|confusion\n|\n|upkeep\n|turn|2\n|\n|t:|1790214265\n|-activate|p2a: Nuzleaf|confusion\n|move|p2a: Nuzleaf|Leaf Storm|p1a: Mantyke\n|-damage|p1a: Mantyke|44/100\n|-unboost|p2a: Nuzleaf|spa|2\n|move|p1a: Mantyke|Water Pulse|p2a: Nuzleaf\n|-resisted|p2a: Nuzleaf\n|-damage|p2a: Nuzleaf|69/100\n|\n|upkeep\n|turn|3\n|\n|t:|1790214284\n|-end|p2a: Nuzleaf|confusion\n|move|p2a: Nuzleaf|Leaf Storm|p1a: Mantyke\n|-damage|p1a: Mantyke|30/100\n|-unboost|p2a: Nuzleaf|spa|2\n|move|p1a: Mantyke|Wing Attack|p2a: Nuzleaf\n|-supereffective|p2a: Nuzleaf\n|-damage|p2a: Nuzleaf|25/100\n|\n|upkeep\n|turn|4\n|\n|t:|1790214303\n|move|p2a: Nuzleaf|Knock Off|p1a: Mantyke\n|-damage|p1a: Mantyke|0 fnt\n|faint|p1a: Mantyke\n|\n|upkeep\n|\n|t:|1790214303\n|switch|p1a: Corsola|Corsola, L13|100/100\n|turn|5\n|\n|t:|1790214310\n|move|p2a: Nuzleaf|Leaf Storm|p1a: Corsola\n|-supereffective|p1a: Corsola\n|-damage|p1a: Corsola|68/100\n|move|p1a: Corsola|Tackle|p2a: Nuzleaf\n|-damage|p2a: Nuzleaf|7/100\n|\n|upkeep\n|turn|6\n",
+	"inputlog": null,
+	"uploadtime": 1790214318
+}
