@@ -11,7 +11,9 @@
  * Options: --out <file> (data/tier-sim/games.jsonl), --difficulty (stockfish),
  * --heap <MB> (512, and never more), --refit <games> (300), --target <apps>
  * (stop early once every Pokemon has this many appearances), --focus <file> (only build
- * teams around the Pokemon listed there - scripts/tier-focus.js writes it).
+ * teams around the Pokemon listed there - scripts/tier-focus.js writes it),
+ * --sample-logs <N> (keep one game log in N under data/tier-sim/logs, to judge
+ * how the AI plays with scripts/replay-flags.js --dir).
  *
  * It runs on the owner's home PC next to other work, so the limits are hard
  * ones rather than defaults: at most two battle workers, each a separate node
@@ -59,6 +61,8 @@ if (has('worker')) {
 	const pool = buildPool(dex);
 	const byName = new Map(pool.map(e => [e.name, e]));
 	const difficulty = arg('difficulty', 'stockfish');
+	const SAMPLE = Number(arg('sample-logs', 0));
+	const LOG_DIR = path.join(path.dirname(OUT), 'logs');
 
 	const draft = side => {
 		const entries = side.names.map(n => byName.get(n)).filter(Boolean);
@@ -82,7 +86,13 @@ if (has('worker')) {
 				const draftMs = Date.now() - t0;
 				// Side at random, so a first-player edge (there should be none) cannot pile onto one team.
 				const aFirst = Math.random() < 0.5;
-				const r = await playGame(aFirst ? A.sets : B.sets, aFirst ? B.sets : A.sets, { difficulty });
+				const keep = SAMPLE > 0 && Math.random() < 1 / SAMPLE;
+				const r = await playGame(aFirst ? A.sets : B.sets, aFirst ? B.sets : A.sets, { difficulty, keepLog: keep });
+				if (keep && r.log) {
+					// In the shape scripts/replay-flags.js reads (--dir data/tier-sim/logs --player P1).
+					fs.mkdirSync(LOG_DIR, { recursive: true });
+					fs.writeFileSync(path.join(LOG_DIR, `tiersim-${job.id}.json`), JSON.stringify({ id: `tiersim-${job.id}`, players: ['P1', 'P2'], uploadtime: Math.floor(Date.now() / 1000), log: r.log }));
+				}
 				const sa = aFirst ? r.p1 : r.p2, sb = aFirst ? r.p2 : r.p1;
 				const w = r.winner === 'tie' ? 't' : r.winner === null ? null : (r.winner === 'p1') === aFirst ? 'a' : 'b';
 				out = {
@@ -198,7 +208,7 @@ function shouldStop() {
 
 const workers = new Set();
 function spawn() {
-	const child = fork(__filename, ['--worker', '--difficulty', DIFFICULTY], { execArgv: [`--max-old-space-size=${HEAP}`], stdio: ['ignore', 'ignore', 'inherit', 'ipc'] });
+	const child = fork(__filename, ['--worker', '--difficulty', DIFFICULTY, '--sample-logs', String(Number(arg('sample-logs', 0)) || 0), '--out', OUT], { execArgv: [`--max-old-space-size=${HEAP}`], stdio: ['ignore', 'ignore', 'inherit', 'ipc'] });
 	const w = { child, games: 0, busy: false, ready: false };
 	workers.add(w);
 	child.on('message', msg => {

@@ -28,11 +28,16 @@ const { BattleState } = require('../battle');
 const { creditLog } = require('./credit');
 const { registerFormat } = require('./format');
 
-async function playGame(setsA, setsB, { difficulty = 'stockfish', maxTurns = 300, maxErrors = 40, maxMs = 8 * 60 * 1000, seed = null } = {}) {
+/**
+ * engines: { p1, p2 } of { BattleAI, BattleState } to pit two AI versions against
+ * each other (scripts/ai-bench.js); both sides use the current AI by default.
+ */
+async function playGame(setsA, setsB, { difficulty = 'stockfish', maxTurns = 300, maxErrors = 40, maxMs = 8 * 60 * 1000, seed = null, engines = {}, keepLog = false } = {}) {
 	const formatid = registerFormat();
 	const stream = new BattleStream();
 	const streams = getPlayerStreams(stream);
-	const ai = { p1: new BattleAI({ difficulty }), p2: new BattleAI({ difficulty }) };
+	const engine = who => engines[who] || { BattleAI, BattleState };
+	const ai = { p1: new (engine('p1').BattleAI)({ difficulty }), p2: new (engine('p2').BattleAI)({ difficulty }) };
 	// The AI's own format hooks key off the id (Random Battle presets); a built-team
 	// RP id gives it the "sets are unknown" behaviour, which is the honest one here.
 	for (const k of ['p1', 'p2']) ai[k].setFormat('gen9rpubers');
@@ -53,7 +58,7 @@ async function playGame(setsA, setsB, { difficulty = 'stockfish', maxTurns = 300
 	const timer = setTimeout(() => stop('timeout'), maxMs);
 
 	const run = async who => {
-		const state = new BattleState('tiersim');
+		const state = new (engine(who).BattleState)('tiersim');
 		state.myPlayer = who;
 		for await (const chunk of streams[who]) {
 			for (const line of chunk.split('\n')) {
@@ -106,6 +111,7 @@ async function playGame(setsA, setsB, { difficulty = 'stockfish', maxTurns = 300
 		decideMs: Math.round(decideMs),
 		maxDecideMs: Math.round(maxDecide),
 		ms: Date.now() - began,
+		log: keepLog ? log.join('\n') : undefined,
 	};
 }
 
