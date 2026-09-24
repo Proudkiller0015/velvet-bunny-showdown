@@ -284,6 +284,9 @@ const TIER_ORDER = ['Uber', 'OU', 'UU', 'RU', 'NU', 'PU', 'ZU', 'NFE'];
 // Tiers the owner keeps as they are (24 Sep 2026: "im not moving em down" - Ubers).
 // Never proposed to move and never built around; they still fill teams.
 const LOCKED_TIERS = new Set(['Uber']);
+// Same for these, by name: the Simi monkeys are Uber-worthy on purpose and stay put.
+const LOCKED_NAMES = new Set(['Simisage', 'Simipour', 'Simisear']);
+const isLocked = r => LOCKED_TIERS.has(r.played) || LOCKED_NAMES.has(r.name);
 
 /** Each tier's band: from the midpoint with the tier below to the midpoint with the tier above. */
 function tierBands(tierMean, order = TIER_ORDER) {
@@ -326,7 +329,7 @@ function assignTiers(rows, tierMean, { z = 1.645, order = TIER_ORDER, locked = L
 		const cur = Math.max(0, order.indexOf(r.played));
 		const lo = r.theta - z * r.sd, hi = r.theta + z * r.sd;
 		let to = cur, evidence = 'none';
-		if (locked.has(r.played)) evidence = 'locked';
+		if (locked === LOCKED_TIERS ? isLocked(r) : locked.has(r.played)) evidence = 'locked';
 		else if (lo > upper[cur]) { to = Math.min(cur - 1, bandOf(r.theta)); evidence = 'up'; }
 		else if (hi < lower[cur]) { to = Math.max(cur + 1, bandOf(r.theta)); evidence = 'down'; }
 		to = Math.max(0, Math.min(order.length - 1, to));
@@ -334,4 +337,4 @@ function assignTiers(rows, tierMean, { z = 1.645, order = TIER_ORDER, locked = L
 	});
 }
 
-module.exports = { fitBT, rate, assignTiers, tierBands, LOCKED_TIERS, outsideChance, normalCdf, TIER_ORDER, isotonic, contributions, cholesky, cholSolve, inverseDiagonal, sigmoid, UTILITY_WEIGHTS, SUPPORT_FIELDS };
+module.exports = { fitBT, rate, assignTiers, tierBands, LOCKED_TIERS, LOCKED_NAMES, isLocked, outsideChance, normalCdf, TIER_ORDER, isotonic, contributions, cholesky, cholSolve, inverseDiagonal, sigmoid, UTILITY_WEIGHTS, SUPPORT_FIELDS };

@@ -27,7 +27,7 @@ const KEEP = Math.max(0.05, Math.min(1, Number(arg('keep', 0.5)) || 0.5));
 
 const dex = require('../src/rp-dex')();
 const { buildPool } = require('../src/tier-sim/pool');
-const { rate, outsideChance, LOCKED_TIERS } = require('../src/tier-sim/rating');
+const { rate, outsideChance, LOCKED_TIERS, isLocked } = require('../src/tier-sim/rating');
 
 const pool = buildPool(dex);
 const good = [];
@@ -36,8 +36,8 @@ for (const l of fs.readFileSync(IN, 'utf8').split('\n')) {
 	try { const r = JSON.parse(l); if (['a', 'b', 't'].includes(r.w) && r.sa && r.sb) good.push(r); } catch (e) { /* a cut-off line */ }
 }
 const fit = rate(pool, good);
-// Locked tiers (the owner's Ubers) are never candidates.
-const ranked = outsideChance(fit.rows, fit.tierMean).filter(x => !LOCKED_TIERS.has(x.played)).sort((a, b) => b.p - a.p);
+// Locked tiers (the owner's Ubers) and the Simi monkeys are never candidates.
+const ranked = outsideChance(fit.rows, fit.tierMean).filter(x => !isLocked(x)).sort((a, b) => b.p - a.p);
 const lockedCount = fit.rows.length - ranked.length;
 const n = Math.round(ranked.length * KEEP);
 const keep = ranked.slice(0, n), drop = ranked.slice(n);
@@ -50,7 +50,7 @@ fs.writeFileSync(OUT, JSON.stringify({
 }, null, '\t'));
 
 const line = x => `${x.name} (${x.played}, ${Math.round(100 * x.p)}% ${x.above >= x.below ? 'up' : 'down'}, ${x.apps} apps)`;
-console.log(`${good.length} games. ${lockedCount} in locked tiers (${[...LOCKED_TIERS].join(', ')}) left out. Kept ${keep.length} of ${ranked.length} as focus (outside-band chance >= ${Math.round(100 * (keep.length ? keep[keep.length - 1].p : 0))}%).`);
+console.log(`${good.length} games. ${lockedCount} locked (${[...LOCKED_TIERS].join(', ')} and the Simi monkeys) left out. Kept ${keep.length} of ${ranked.length} as focus (outside-band chance >= ${Math.round(100 * (keep.length ? keep[keep.length - 1].p : 0))}%).`);
 console.log('Likeliest movers:', keep.slice(0, 15).map(line).join('; '));
 console.log('Surest to stay (dropped from focus):', drop.slice(-8).map(line).join('; '));
 console.log(`Written to ${path.relative(ROOT, OUT)}.`);
