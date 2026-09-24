@@ -435,6 +435,17 @@ exports.applyBuffs = (Pokedex, Learnsets) => {
 		else if (typeof change.from === 'string' && species.evoItem === change.from) {
 			species.velvetLevelToo = change.to;
 		}
+		/*
+		 * 24 Sep 2026: and `from` naming an evolution *type* (levelMove,
+		 * levelExtra, levelFriendship) is the same thing for the babies that grow
+		 * up by a condition rather than an item. Only evoItem was matched, so
+		 * Sudowoodo, Mr. Mime, Mantine, Roselia, Lucario and Chimecho never got
+		 * their level 16 on the server, though the client (build-buffs.js' evoAlso)
+		 * already showed it.
+		 */
+		else if (typeof change.from === 'string' && species.evoType === change.from) {
+			species.velvetLevelToo = change.to;
+		}
 	}
 
 	/*

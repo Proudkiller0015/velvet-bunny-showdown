@@ -16,8 +16,8 @@
  * Unticked is "Players only", which is exactly what the words mean - you leave
  * every bot's queue and wait for a person.
  *
- * The choice is remembered here and sent to the server on every change and once
- * at login, because the server keeps it per session: without that, a player who
+ * The choice is remembered here and sent to the server on every change and for
+ * every user id the tab takes on (see tick), because the server keeps it per session: without that, a player who
  * ticked "Players only" last week would see it ticked and be handed a bot.
  */
 (function () {
@@ -31,8 +31,12 @@
 	// whatever is actually queued, which is the honest list.
 	var FALLBACK = ['easy', 'normal', 'hard', 'champion'];
 
-	var rungs = null;         // [{ id, label, formats: Set }] once the status is in
-	var queuedFormats = null; // every format any bot is queued for
+	var rungs = null;         // [{ id, label }] once the status is in
+	var online = null;        // rung id -> connected, from the last good status read
+	var fetchedAt = 0;        // when the status was last asked for
+	var fetchedOk = false;    // and whether that answer could be used
+	var fetching = false;
+	var rungsChanged = false; // a later read changed the list the row was built from
 
 	/* ------------------------------------------------------------- the choice */
 
@@ -59,36 +63,54 @@
 
 	/* ------------------------------------------------------------ the choices */
 
+	/*
+	 * 24 Sep 2026: read again now and then, not once. It used to be fetched on
+	 * the first tick and never again, so one failed request (the server still
+	 * starting, a dropped connection) left the fallback list and no hint for
+	 * the whole session. Now a good answer is refreshed every minute and a bad
+	 * one retried after fifteen seconds; the row is drawn from whatever is in
+	 * hand meanwhile.
+	 */
 	function loadRungs(then) {
-		if (rungs) return then();
+		var age = Date.now() - fetchedAt;
+		if (rungs && (fetching || age < (fetchedOk ? 60000 : 15000))) return then();
+		if (fetching) return;
+		fetching = true;
+		fetchedAt = Date.now();
+		var done = function (status) {
+			fetching = false;
+			var next = [];
+			var up = {};
+			var seen = {};
+			for (var name in (status && status.queues) || {}) {
+				var queue = status.queues[name];
+				if (!queue || !queue.difficulty) continue;
+				if (!seen[queue.difficulty]) {
+					seen[queue.difficulty] = true;
+					next.push({ id: queue.difficulty, label: title(queue.difficulty) });
+				}
+				if (queue.connected) up[queue.difficulty] = true;
+			}
+			fetchedOk = next.length > 0;
+			if (fetchedOk) {
+				var before = rungs ? rungs.map(function (r) { return r.id; }).join() : '';
+				if (rungs && before !== next.map(function (r) { return r.id; }).join()) rungsChanged = true;
+				rungs = next;
+				online = up;
+			} else if (!rungs) {
+				rungs = FALLBACK.map(function (id) { return { id: id, label: title(id) }; });
+			}
+			then();
+		};
 		var request = new XMLHttpRequest();
 		request.open('GET', STATUS, true);
 		request.onreadystatechange = function () {
 			if (request.readyState !== 4) return;
-			rungs = [];
-			queuedFormats = {};
-			try {
-				var status = JSON.parse(request.responseText);
-				var seen = {};
-				for (var name in status.queues || {}) {
-					var queue = status.queues[name];
-					if (!queue || !queue.difficulty) continue;
-					if (!seen[queue.difficulty]) {
-						seen[queue.difficulty] = { id: queue.difficulty, label: title(queue.difficulty), formats: {} };
-						rungs.push(seen[queue.difficulty]);
-					}
-					if (queue.format) {
-						seen[queue.difficulty].formats[queue.format] = queue.connected !== false;
-						queuedFormats[queue.format] = true;
-					}
-				}
-			} catch (e) { /* the ladder has not started, or the file is not there */ }
-			if (!rungs.length) {
-				rungs = FALLBACK.map(function (id) { return { id: id, label: title(id), formats: {} }; });
-			}
-			then();
+			var status = null;
+			try { status = JSON.parse(request.responseText); } catch (e) { /* the ladder has not started, or the file is not there */ }
+			done(status);
 		};
-		try { request.send(); } catch (e) { rungs = FALLBACK.map(function (id) { return { id: id, label: title(id), formats: {} }; }); then(); }
+		try { request.send(); } catch (e) { done(null); }
 	}
 
 	function title(text) {
@@ -115,11 +137,14 @@
 	}
 
 	/**
-	 * Whether the bot you asked for is actually queued for the format you picked.
+	 * Whether the bot you asked for can actually come.
 	 *
-	 * The bots queue a fixed list of formats. Searching one they do not queue is
-	 * not an error and not broken - it just means waiting for a person - but
-	 * finding that out by waiting is a bad way to find it out.
+	 * 24 Sep 2026: this used to warn when "no bot queues this format", from a
+	 * per-queue `format` the status file stopped writing when the bots moved to
+	 * being rung on demand for any format - so it could never fire. The
+	 * question that is still worth answering is whether the rung you picked
+	 * (or, for "Anyone", any rung) is connected at all. Quiet when the status
+	 * could not be read: warning because a fetch failed is worse than silence.
 	 */
 	function note($row, choice) {
 		var $note = $row.find('.velvet-opponent-note');
@@ -127,20 +152,23 @@
 			$note.text('You will wait for a real opponent.');
 			return;
 		}
-		var format = String($('button.formatselect').first().val() || '');
-		// Quiet unless there is something to say. An empty map means the status
-		// could not be read - not that nothing is queued - and warning about
-		// every format because a fetch failed is worse than saying nothing.
-		var known = queuedFormats && Object.keys(queuedFormats).length;
-		if (!format || !known || queuedFormats[format]) { $note.text(''); return; }
-		$note.text('No bot queues this format - you will wait for a player.');
+		if (!online) { $note.text(''); return; }
+		var up = choice.rung && choice.rung !== 'anyone' ? !!online[choice.rung] : Object.keys(online).length > 0;
+		$note.text(up ? '' : 'That bot is offline right now - you will wait for a player.');
 	}
 
 	function install() {
 		var $form = $('form.battleform[data-search]');
 		if (!$form.length) return false;
-		if ($form.find('.velvet-opponent').length) {
-			note($form.find('.velvet-opponent'), saved());
+		var $existing = $form.find('.velvet-opponent');
+		if ($existing.length && rungsChanged && !$existing.find('select:focus').length) {
+			// A later status read changed the list of rungs: draw the row again.
+			$existing.remove();
+			$existing = $form.find('.velvet-opponent');
+		}
+		rungsChanged = false;
+		if ($existing.length) {
+			note($existing, saved());
 			return true;
 		}
 
@@ -181,16 +209,30 @@
 	 * is what the client's own panels do; `install` returns without work when the
 	 * row is already there.
 	 */
-	var toldTheServer = false;
+	/*
+	 * Once per account, so the server agrees with what the box shows.
+	 *
+	 * 24 Sep 2026: it was once per session, and only once named. The server
+	 * keeps the preference by user id, and a guest's id changes when they pick
+	 * a name (and again on every rename) - so a guest who ticked "Players only"
+	 * and then named themselves, or anyone who renamed, searched under an id
+	 * the server had never been told about and was handed a bot. Now it is
+	 * sent for every id this tab is known by, guest ids included.
+	 */
+	var toldId = '';
 	function tick() {
 		if (!window.$ || !window.app) return;
 		loadRungs(function () {
 			install();
-			// Once per session, so the server agrees with what the box shows.
-			if (!toldTheServer && window.app.user && window.app.user.get &&
-				window.app.user.get('named')) {
-				toldTheServer = true;
-				tell(saved());
+			var user = window.app.user;
+			var id = user && user.get ? user.get('userid') : '';
+			if (id && id !== toldId) {
+				toldId = id;
+				// A new id starts at the server's default ("anyone"), so only a
+				// different choice needs saying - and saying nothing spares every
+				// page load a reply line in chat.
+				var choice = saved();
+				if (!choice.bot || (choice.rung && choice.rung !== 'anyone')) tell(choice);
 			}
 		});
 	}

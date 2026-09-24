@@ -23,12 +23,47 @@
 	var MAY_LOOK = ['&', '~'];
 	var MARK = 'velvet-guestbook';
 
+	/*
+	 * 24 Sep 2026: this asked `window.PS`, which is the new client's global - and
+	 * this site runs the old one (index.html loads oldclient/client.js), where
+	 * the global is `app` and PS does not exist. So the button never appeared
+	 * for anyone. The old client does not keep your own rank on app.user either
+	 * (updateuser strips it), but every room you are in lists you with it, so
+	 * that is where it is read from. The new-client check stays as a fallback.
+	 */
+	function myGroup() {
+		var app = window.app;
+		if (app && app.user && app.user.get) {
+			if (!app.user.get('named')) return null;
+			var id = app.user.get('userid');
+			for (var roomid in app.rooms) {
+				var room = app.rooms[roomid];
+				var me = room && room.users && room.users[id];
+				if (me && me.group) return me.group;
+			}
+			return null;
+		}
+		if (window.PS && PS.user && PS.user.named) return PS.user.group;
+		return null;
+	}
+
 	function allowed() {
 		try {
-			return !!(window.PS && PS.user && PS.user.named && MAY_LOOK.indexOf(PS.user.group) >= 0);
+			return MAY_LOOK.indexOf(myGroup()) >= 0;
 		} catch (e) {
 			return false;
 		}
+	}
+
+	/** Open a room in whichever client this is. */
+	function openRoom(id) {
+		if (window.app && app.joinRoom) return app.joinRoom(id);
+		PS.join(id);
+	}
+
+	function complain(text) {
+		if (window.app && app.addPopupMessage) return app.addPopupMessage(text);
+		if (window.PS && PS.alert) PS.alert(text);
 	}
 
 	/**
@@ -51,17 +86,17 @@
 			button.innerHTML = '<i class="fa fa-book" aria-hidden="true"></i> <strong>Guest book</strong>';
 			/*
 			 * The client routes its own links; a plain href would reload the page
-			 * and throw away the connection. `PS.join` is how every other link in
-			 * here opens a room.
+			 * and throw away the connection. app.joinRoom (PS.join in the new
+			 * client) is how every other link in here opens a room.
 			 */
 			button.addEventListener('click', function (event) {
 				event.preventDefault();
 				try {
-					PS.join('view-players');
+					openRoom('view-players');
 				} catch (e) {
 					// If the router ever changes shape, say so rather than doing
 					// nothing at all - the command still works.
-					PS.alert('Could not open the guest book. Type /players in any chat instead.');
+					complain('Could not open the guest book. Type /players in any chat instead.');
 				}
 			});
 			box.appendChild(button);

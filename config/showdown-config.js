@@ -1107,8 +1107,20 @@ function summonBots(botIds) {
 	const RING_AGAIN_MS = 15000;  // a bot still building a team is not rung twice
 	const RELEASE_MS = 60000;     // how long a bot waits in a format nobody is in
 
+	let lastPrune = Date.now();
 	const tick = () => {
 		const now = Date.now();
+		// 24 Sep 2026: rungAt got a key per player, format and preference that
+		// ever searched, and nothing removed them. A key only matters for
+		// RING_AGAIN_MS, so anything older is dropped once a minute.
+		if (now - lastPrune > 60000) {
+			lastPrune = now;
+			for (const [key, at] of rungAt) if (now - at >= RING_AGAIN_MS) rungAt.delete(key);
+			// wantedRung likewise kept every player who ever picked a rung. Once the
+			// server has let go of their user object (they left and did not come
+			// back) the preference goes too; the client sends it again on connect.
+			for (const id of wantedRung.keys()) if (!Users.get(id)) wantedRung.delete(id);
+		}
 		for (const [formatid, table] of Ladders.searches) {
 			if (!table || table.playerCount > 2) continue;
 			const searches = [...table.searches.values()];
@@ -2642,6 +2654,15 @@ exports.startuphook = function () {
 			else {
 				lastApplied.set(user.id, now);
 			}
+		}
+		// 24 Sep 2026: every id that ever connected, guests included, stayed here
+		// for good. Only connected users are looked at above, so an entry for
+		// anyone else is dead weight - and a stale one could even misread a
+		// reconnect's fresh default rank as a demotion. Dropped, a returning user
+		// simply goes through the "want" branch and gets their rank put back.
+		for (const id of lastApplied.keys()) {
+			const user = Users.users.get(id);
+			if (!user || !user.connected) lastApplied.delete(id);
 		}
 	}, 2000).unref();
 };

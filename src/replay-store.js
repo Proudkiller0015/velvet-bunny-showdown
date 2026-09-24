@@ -43,6 +43,12 @@ const DIR = process.env.REPLAY_REPO_DIR || 'data/replays';
 // Enough to serve the recent ones without a network round trip, small enough
 // that a busy day cannot grow into the memory ceiling this host runs against.
 const CACHE_LIMIT = Number(process.env.REPLAY_CACHE || 200);
+// 24 Sep 2026: and by size, because a count alone is not a memory bound. A
+// replay is its whole battle log - a few KB for a quick random battle, well
+// over 100KB for a long one - so 200 of the long ones is 20MB or more of a
+// server heap capped at 256MB. 8MB still holds dozens of recent replays; the
+// spool on disk and the repository serve the rest, a little slower.
+const CACHE_BYTES = Number(process.env.REPLAY_CACHE_MB || 8) * 1048576;
 /**
  * Replays are saved by one process and served by another.
  *
@@ -72,7 +78,37 @@ class ReplayStore {
 		this.log = log;
 		this.token = readToken();
 		this.cache = new Map();   // id -> replay
-		this.shas = new Map();    // id -> blob sha, needed to overwrite a file
+		this.sizes = new Map();   // id -> its size in bytes, roughly, for the byte cap
+		this.cacheBytes = 0;
+		// id -> blob sha, needed to overwrite a file. Trimmed with the cache (24
+		// Sep 2026): it grew by one entry per replay for the life of the process,
+		// and a missing sha costs only one extra request - save() already asks
+		// GitHub for the current one when a PUT without it is refused.
+		this.shas = new Map();
+	}
+
+	/** Into the memory cache, evicting the oldest past either limit. */
+	cachePut(replay, bytes) {
+		const id = replay.id;
+		if (this.cache.has(id)) {
+			this.cacheBytes -= this.sizes.get(id) || 0;
+			this.cache.delete(id);   // re-inserted below, so it counts as newest
+		}
+		if (bytes === undefined) {
+			try { bytes = JSON.stringify(replay).length; } catch (e) { bytes = 0; }
+		}
+		this.cache.set(id, replay);
+		this.sizes.set(id, bytes);
+		this.cacheBytes += bytes;
+		// Oldest out first; Map iterates in insertion order. The newest one always
+		// stays, even alone over the byte cap, so a link just handed out works.
+		while (this.cache.size > 1 && (this.cache.size > CACHE_LIMIT || this.cacheBytes > CACHE_BYTES)) {
+			const oldest = this.cache.keys().next().value;
+			this.cacheBytes -= this.sizes.get(oldest) || 0;
+			this.cache.delete(oldest);
+			this.sizes.delete(oldest);
+			this.shas.delete(oldest);
+		}
 	}
 
 	get enabled() { return !!this.token; }
@@ -90,16 +126,13 @@ class ReplayStore {
 	}
 
 	remember(replay) {
-		this.cache.set(replay.id, replay);
+		const json = JSON.stringify(replay);
+		this.cachePut(replay, json.length);
 		try {
 			fs.mkdirSync(SPOOL, { recursive: true });
-			fs.writeFileSync(this.spoolPath(replay.id), JSON.stringify(replay));
+			fs.writeFileSync(this.spoolPath(replay.id), json);
 		} catch (e) {
 			// A cache that cannot be written is still a cache in memory.
-		}
-		// Oldest out first; Map iterates in insertion order.
-		while (this.cache.size > CACHE_LIMIT) {
-			this.cache.delete(this.cache.keys().next().value);
 		}
 	}
 
@@ -138,7 +171,8 @@ class ReplayStore {
 		}
 		if (!res.ok) throw new Error(`GitHub refused the replay: ${res.status}`);
 		const data = await res.json();
-		if (data.content?.sha) this.shas.set(replay.id, data.content.sha);
+		// Only while the replay is still cached, so the two maps stay the same size.
+		if (data.content?.sha && this.cache.has(replay.id)) this.shas.set(replay.id, data.content.sha);
 		return replay.id;
 	}
 
@@ -148,8 +182,9 @@ class ReplayStore {
 		if (cached) return cached;
 
 		try {
-			const spooled = JSON.parse(fs.readFileSync(this.spoolPath(id), 'utf8'));
-			this.cache.set(id, spooled);
+			const text = fs.readFileSync(this.spoolPath(id), 'utf8');
+			const spooled = JSON.parse(text);
+			this.cachePut(spooled, text.length);
 			return spooled;
 		} catch (e) {
 			// Not saved by this instance, or the disk has been wiped since.

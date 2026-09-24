@@ -19,11 +19,15 @@ const { queenProtected } = require('./queens.js');
 /**
  * Whichever attacking stat is better, the way Photon Geyser does it.
  *
- * The third argument to getStat asks for the unmodified number, so a Swords
- * Dance cannot silently turn a special attacker physical mid-battle.
+ * The aim was always that a Swords Dance cannot silently turn a special
+ * attacker physical mid-battle, and the moves' descriptions say "before any
+ * boosts". But the flag doing that was the wrong one: getStat(stat, unboosted,
+ * unmodified), and only the third was set - so boosts were counted, exactly as
+ * Photon Geyser counts them. 24 Sep 2026: both flags, so the code does what the
+ * comment and the descriptions always said.
  */
 function betterAttackingStat(move, pokemon) {
-	if (pokemon.getStat('atk', false, true) < pokemon.getStat('spa', false, true)) {
+	if (pokemon.getStat('atk', true, true) < pokemon.getStat('spa', true, true)) {
 		move.category = 'Special';
 	}
 }

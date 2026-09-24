@@ -82,10 +82,16 @@ if (!stock && fs.existsSync(clientSrc)) {
 	// and a deploy quietly does nothing. Whoever edits the client should not have
 	// to remember to bump a number, so the number is the build.
 	const stamp = (process.env.RENDER_GIT_COMMIT || '').slice(0, 8) || Date.now().toString(36);
-	const indexPath = path.join(staticDir, 'index.html');
-	const page = fs.readFileSync(indexPath, 'utf8')
-		.replace(/(src|href)="(\/?(?:js|style|config|showdex)\/[^"?]+)(\?[^"]*)?"/g, `$1="$2?${stamp}"`);
-	fs.writeFileSync(indexPath, page);
+	// 24 Sep 2026: calc.html too. It loads js/velvet-calc-data.js by a bare URL,
+	// so a regenerated table (a new Pokemon, move or item) sat behind the
+	// browser's cached copy and the calculator went on not knowing it.
+	for (const name of ['index.html', 'calc.html']) {
+		const pagePath = path.join(staticDir, name);
+		if (!fs.existsSync(pagePath)) continue;
+		const page = fs.readFileSync(pagePath, 'utf8')
+			.replace(/(src|href)="(\/?(?:js|style|config|showdex)\/[^"?]+)(\?[^"]*)?"/g, `$1="$2?${stamp}"`);
+		fs.writeFileSync(pagePath, page);
+	}
 
 	console.log(`client -> ${staticDir} (served at the root; /play/ redirects here; build ${stamp})`);
 } else {

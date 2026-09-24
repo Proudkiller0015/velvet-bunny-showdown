@@ -2581,6 +2581,18 @@
 		memorywipe: ['psychic', 'confusion'],
 		soulresonance: ['heartstamp', 'drainingkiss', 'psyshock'],
 		resolutestrike: ['zenheadbutt', 'psychocut'],
+		// 24 Sep 2026: the ten added since this table was written, which all
+		// played Tackle. Each borrows the move it is described as a version of.
+		twilightexit: ['trickroom', 'partingshot'],            // Trick Room, then out
+		greatsagestrike: ['aurasphere', 'focusblast'],         // special Fighting
+		pyrestrike: ['flareblitz', 'fireblast'],               // Flare Blitz sans recoil
+		eldertimber: ['woodhammer', 'leafblade'],              // Wood Hammer sans recoil
+		tectonicshell: ['shoreup', 'recover'],                 // Ground heal (+ rocks)
+		imperialtorrent: ['hydropump', 'surf'],                // the Hydro Pump that lands
+		royaldecree: ['roar', 'whirlwind'],                    // Roar (+ Spikes)
+		thornedbouquet: ['petalblizzard', 'gigadrain'],        // flowers, drained
+		soultoll: ['hex', 'shadowclaw'],                       // Hex's rule, physical
+		witchssnatch: ['spectralthief', 'knockoff', 'shadowclaw'], // a Ghost that takes
 	};
 	function installMoveAnims() {
 		var anims = window.BattleMoveAnims;
@@ -2612,9 +2624,21 @@
 		}
 		return true;
 	}
+	/*
+	 * 24 Sep 2026: capped. On a page that never loads the battle scripts (the
+	 * teambuilder alone, the calculator) this polled four times a second for as
+	 * long as the tab was open. Ten minutes is far longer than the scripts take
+	 * to arrive when they arrive at all; after that it checks on a click
+	 * instead - opening a battle takes one, and a battle is the only time an
+	 * animation is needed. The install is cheap and returns early once done.
+	 */
+	var animTries = 0;
 	var animTimer = setInterval(function () {
-		if (installMoveAnims()) clearInterval(animTimer);
+		if (installMoveAnims() || ++animTries > 2400) clearInterval(animTimer);
 	}, 250);
+	document.addEventListener('click', function () {
+		if (animTries > 2400) installMoveAnims();
+	}, true);
 	installMoveAnims();
 
 	// The data files come from a CDN and arrive in their own time, so each piece

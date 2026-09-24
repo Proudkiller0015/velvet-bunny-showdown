@@ -128,6 +128,8 @@ exports.abilities = (data) => {
 exports.moves = (data) => {
 	data.witchssnatch = {
 		num: -40,
+		// Every other custom move says which generation it belongs to (24 Sep 2026).
+		gen: 9,
 		accuracy: 100,
 		basePower: 110,
 		category: 'Physical',
@@ -159,8 +161,10 @@ exports.moves = (data) => {
 		secondary: null,
 		target: 'normal',
 		type: 'Ghost',
+		// The Ghost type is added whether or not an item was taken (onAfterHit); the
+		// long text used to read as if it came only with the item (24 Sep 2026).
 		shortDesc: "150 power if it removes the target's item. Hits Normal types; adds Ghost type.",
-		desc: "Power is 150 instead of 110 if the target is holding an item that can be removed. Normal-type Pokemon are not immune to this move. If the target is holding an item that can be removed, it is taken away after the hit, and the target gains the Ghost type in addition to its own, as Trick-or-Treat does. Poltergeist becomes this move when Banette Mega Evolves into its Halloween 2026 form.",
+		desc: "Power is 150 instead of 110 if the target is holding an item that can be removed. Normal-type Pokemon are not immune to this move. If the target is holding an item that can be removed, it is taken away after the hit. Whether or not it held one, a target that survives gains the Ghost type in addition to its own, as Trick-or-Treat does. Poltergeist becomes this move when Banette Mega Evolves into its Halloween 2026 form.",
 	};
 	return data;
 };
