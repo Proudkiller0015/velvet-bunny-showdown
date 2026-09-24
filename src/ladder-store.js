@@ -212,12 +212,55 @@ class LadderStore {
 	 */
 	start(everyMs = Number(process.env.LADDER_SAVE_MS || 300000)) {
 		if (!this.ready) return;
-		this.timer = setInterval(() => void this.save(), everyMs);
+		this.timer = setInterval(() => void this.saveOnce(), everyMs);
 		this.timer.unref?.();
+		this.watch();
+	}
+
+	/**
+	 * And soon after every rated game, not up to five minutes later (24 Sep 2026).
+	 *
+	 * A restart inside those five minutes - a deploy, a crash, the host
+	 * recycling the box - lost every rating change since the last save, and a
+	 * player who just climbed watched it undone. This process cannot see a
+	 * battle end (that is two processes away), but it can see Showdown write
+	 * the ladder file when it does. The write is debounced so an evening of
+	 * back-to-back games is a commit every half a minute at most, not one per
+	 * game; the interval above stays as the backstop in case the watch misses.
+	 */
+	watch(debounceMs = Number(process.env.LADDER_SAVE_DEBOUNCE_MS || 30000)) {
+		if (this.watcher) return;
+		try {
+			fs.mkdirSync(this.dir, { recursive: true });
+			this.watcher = fs.watch(this.dir, (event, file) => {
+				if (file && !String(file).includes('.tsv')) return;
+				if (this.debounce) return;   // one save per burst, at the end of the window
+				this.debounce = setTimeout(() => { this.debounce = null; void this.saveOnce(); }, debounceMs);
+				this.debounce.unref?.();
+			});
+			this.watcher.unref?.();
+			this.watcher.on('error', e => this.log(`watching the ladder stopped: ${e.message}`));
+		} catch (e) {
+			this.log(`cannot watch the ladder (${e.message}); saving every few minutes only`);
+		}
+	}
+
+	/** save(), but never two at once: a slow commit and the next change overlap. */
+	async saveOnce() {
+		if (this.saving) { this.again = true; return 0; }
+		this.saving = true;
+		try {
+			return await this.save();
+		} finally {
+			this.saving = false;
+			if (this.again) { this.again = false; void this.saveOnce(); }
+		}
 	}
 
 	async stop() {
 		if (this.timer) clearInterval(this.timer);
+		if (this.debounce) clearTimeout(this.debounce);
+		try { this.watcher?.close(); } catch (e) { /* already closed */ }
 		await this.save();
 		try { await this.backend?.client?.quit(); } catch (e) { /* already gone */ }
 	}

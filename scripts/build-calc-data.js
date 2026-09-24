@@ -36,7 +36,9 @@ const OUT = path.join(ROOT, 'client', 'js', 'velvet-calc-data.js');
 const Dex = require(path.join(PACKAGE, 'dist', 'sim', 'dex.js')).Dex.mod('gen9rp');
 
 /** Everything this server invented, as opposed to everything it changed. */
-const SPECIES = ['samantha', 'nuzleafsold'];
+// Banette-Mega-Halloween (24 Sep 2026): the Halloween 2026 Mega, Ghost/Dark. The
+// calculator knows Mega Banette, but not this one's stats or second type.
+const SPECIES = ['samantha', 'nuzleafsold', 'banettemegahalloween'];
 /*
  * Moves and abilities are worked out rather than listed: anything with a
  * negative number is ours. A hand-written list is how Balance Patch 1's eleven
@@ -46,7 +48,8 @@ const SPECIES = ['samantha', 'nuzleafsold'];
 // Smogon's CAP Pokemon number theirs negatively too; those are not ours.
 const MOVES = Dex.moves.all().filter(m => m.exists && m.num < 0 && m.isNonstandard !== 'CAP').map(m => m.id);
 const ABILITIES = Dex.abilities.all().filter(a => a.exists && a.num < 0 && a.isNonstandard !== 'CAP').map(a => a.id);
-const ITEMS = ['elementalbanana', 'brokenpact'];
+// Banettite-Halloween (24 Sep 2026): its stone, so a set holding it is not refused.
+const ITEMS = ['elementalbanana', 'brokenpact', 'banettitehalloween'];
 
 /**
  * The calculator's own field names, which are not Showdown's.

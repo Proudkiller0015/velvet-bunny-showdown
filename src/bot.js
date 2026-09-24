@@ -325,9 +325,10 @@ class ShowdownBot {
 	onBattleEnd(roomid, winner) {}
 
 	onBattleLine(roomid, parts, raw) {
+		// A line for a battle that is already over is not the start of a new one,
+		// and a deinit/noinit drops the entry even while it is still live.
+		if (isEndedBattle(this, roomid, parts)) return;
 		let battle = this.battles.get(roomid);
-		// A line for a battle that is already over is not the start of a new one.
-		if (!battle && isEndedBattle(this, roomid, parts)) return;
 		if (!battle) {
 			battle = { state: new BattleState(roomid), ai: new BattleAI({ difficulty: this.defaultDifficulty }), greeted: false };
 			battle.state.myName = this.name;
@@ -348,6 +349,7 @@ class ShowdownBot {
 			}
 			this.battles.set(roomid, battle);
 		}
+		battle.lastSeen = Date.now();
 		const { state, ai } = battle;
 
 		switch (parts[0]) {
@@ -447,9 +449,43 @@ function forgetBattle(bot, roomid) {
 }
 
 function isEndedBattle(bot, roomid, parts) {
-	if (!bot.ended.has(roomid)) return false;
-	if (parts[0] === 'deinit') bot.ended.delete(roomid);
-	return true;
+	// 24 Sep 2026: a battle can also end without a |win| or |tie| reaching us -
+	// the room expires, the server restarts it away, or a join fails with
+	// |noinit|. Those entries were never forgotten, and bots.js counts every
+	// entry as a battle in progress, so a few leaked rooms were enough to keep
+	// the 150MB recycle from ever running and let the process climb to its heap
+	// cap. The server saying the room is gone is final: drop whatever we hold
+	// for it, and never let that line be the one that creates a fresh entry.
+	if (parts[0] === 'deinit' || parts[0] === 'noinit') {
+		bot.battles.delete(roomid);
+		bot.ended.delete(roomid);
+		return true;
+	}
+	return bot.ended.has(roomid);
 }
 
-module.exports = { ShowdownBot, forgetBattle, isEndedBattle };
+/**
+ * The backstop for a room that goes quiet with no word at all (a dropped
+ * connection that never delivers the deinit, say). 24 Sep 2026.
+ *
+ * Thirty minutes is far past anything a live game does between two lines: the
+ * battle timer, when on, forfeits an idle player well inside that, and a human
+ * thinking over a turn does not take half an hour. The entry is only dropped,
+ * not marked ended and not left, so if the battle does wake up its next
+ * request simply builds a fresh entry and the bot plays on - the request
+ * carries everything the AI needs to choose.
+ */
+const BATTLE_IDLE_MS = 30 * 60 * 1000;
+
+function expireIdleBattles(bot, now = Date.now(), idleMs = BATTLE_IDLE_MS) {
+	let dropped = 0;
+	for (const [roomid, battle] of bot.battles) {
+		if (now - (battle.lastSeen || 0) > idleMs) {
+			bot.battles.delete(roomid);
+			dropped++;
+		}
+	}
+	return dropped;
+}
+
+module.exports = { ShowdownBot, forgetBattle, isEndedBattle, expireIdleBattles, BATTLE_IDLE_MS };

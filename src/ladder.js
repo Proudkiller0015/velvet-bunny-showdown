@@ -245,8 +245,9 @@ class LadderBot {
 	}
 
 	onBattleLine(roomid, parts) {
+		// Over, or gone from the server (deinit/noinit): see isEndedBattle().
+		if (isEndedBattle(this, roomid, parts)) return;
 		let battle = this.battles.get(roomid);
-		if (!battle && isEndedBattle(this, roomid, parts)) return;
 		if (!battle) {
 			battle = { state: new BattleState(roomid), ai: new BattleAI({ difficulty: this.difficulty }), greeted: false };
 			battle.state.myName = this.name;
@@ -266,6 +267,7 @@ class LadderBot {
 			}
 			this.battles.set(roomid, battle);
 		}
+		battle.lastSeen = Date.now();
 		const { state, ai } = battle;
 
 		switch (parts[0]) {
@@ -291,13 +293,25 @@ class LadderBot {
 			if (!raw) return;
 			let request;
 			try { request = JSON.parse(raw); } catch (e) { return; }
+			battle.retries = 0;
 			const choice = ai.decide(request, state);
 			if (choice) this.send(`${roomid}|/choose ${choice}|${request.rqid || ''}`);
 			return;
 		}
-		case 'error':
+		case 'error': {
+			// 24 Sep 2026: the same guard src/bot.js has. Answering every error
+			// with "default" is right for an illegal choice, but when there is
+			// nothing left to choose the server refuses "default" too, and the two
+			// answered each other as fast as the socket allowed - pinning the one
+			// shared CPU. Nothing to choose means stop; otherwise five tries per
+			// request, reset when the next request arrives.
+			const message = parts.slice(1).join('|');
+			if (/nothing to choose|game is over|too late/i.test(message)) return;
+			battle.retries = (battle.retries || 0) + 1;
+			if (battle.retries > 5) return;
 			this.send(`${roomid}|/choose default`);
 			return;
+		}
 		case 'win': case 'tie': {
 			const wait = battle.versusBot ? this.selfPlayCooldown : 4000;
 			setTimeout(() => {

@@ -70,8 +70,11 @@ services:
         value: "256"
       - key: PS_BOTS_HEAP_MB
         value: "200"
+      # 24 Sep 2026: 150 -> 120, for headroom: at 150 the bots (~220MB rss)
+      # plus the server at its measured peak (~200MB rss) plus the wrapper
+      # (~50MB) left under 45MB of the 512MB box. See src/bots.js.
       - key: PS_BOTS_RECYCLE_MB
-        value: "150"
+        value: "120"
       - key: PS_BOT_NAME
         value: Velvet Bunny
       - key: PS_DIFFICULTY
