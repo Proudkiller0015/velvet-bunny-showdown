@@ -2510,6 +2510,45 @@ class BattleAI {
 	}
 
 	/**
+	 * Which Z-Move to use this turn, or null to hold it.
+	 *
+	 * The bot never used one: chooseForSlot added Mega, Ultra Burst, Dynamax and
+	 * Tera to its choice and never 'zmove', while Z-Moves are live here (National
+	 * Dex, and gym leaders from the fifth badge). A Z-Move is once a battle, so it
+	 * is spent only when it is the difference (24 Sep 2026):
+	 *   - it turns a hit that does not KO into one that does, when nothing else
+	 *     KOs already (and it lands - we move first, or we are not dying anyway);
+	 *   - or this Pokemon is going down this turn after moving, and the Z-Move
+	 *     does clearly more than the move it would have used - the crystal is
+	 *     worth nothing once it has fainted.
+	 * Z power over the move's own power scales the damage already worked out; a
+	 * status Z-Move is left alone.
+	 */
+	zChoice(gen, active, ranked, best, me, incoming, movesFirst) {
+		const dex = PkmnDex.forGen(gen.num);
+		const myHp = (me.originalCurHP / me.maxHP()) * 100;
+		const dying = incoming >= myHp;
+		if (dying && !movesFirst) return null;
+		const bestRow = ranked.find(r => r.n === best.n);
+		const bestDmg = bestRow && bestRow.damage > 0 ? bestRow.damage * (bestRow.accuracy === undefined ? 1 : bestRow.accuracy) : 0;
+		if (bestDmg >= 100) return null;
+		let pick = null;
+		active.canZMove.forEach((z, i) => {
+			if (!z) return;
+			const move = (active.moves || [])[i];
+			const d = move && dex.moves.get(move.move || move.id);
+			const row = ranked.find(r => r.n === i + 1);
+			if (!d || !d.exists || d.category === 'Status' || !d.basePower || !d.zMove || !d.zMove.basePower || !row || !(row.damage > 0)) return;
+			const zdmg = row.damage * d.zMove.basePower / d.basePower;
+			if (!pick || zdmg > pick.zdmg) pick = { n: i + 1, name: d.name, target: row.target, zdmg };
+		});
+		if (!pick) return null;
+		if (pick.zdmg >= 105) return pick;
+		if (dying && pick.zdmg >= bestDmg + 25) return pick;
+		return null;
+	}
+
+	/**
 	 * A Choice Scarf gives itself away by moving first when it should not.
 	 *
 	 * Last turn's order, against the fastest the foe could be without one: 252
@@ -2927,6 +2966,10 @@ class BattleAI {
 			}
 		}
 
+		// A Z-Move, when it is the difference (zChoice). Not with an Ultra Burst waiting: that goes first.
+		const zed = !this.cfg.naive && this.cfg.zmove !== false && Array.isArray(active.canZMove) && !active.canUltraBurst
+			? this.zChoice(gen, active, ranked, best, me, incoming, movesFirst) : null;
+		if (zed) best = { ...best, n: zed.n, name: zed.name, target: zed.target };
 		let choice = `move ${best.n}`;
 		// In doubles a single-target move is rejected outright without a target
 		// number, so take the requirement from the request rather than guessing
@@ -2941,7 +2984,8 @@ class BattleAI {
 		// measurably better for it. Committing it on a turn we are knocked out
 		// anyway - which is how a Gallade burned its Tera and fainted without
 		// moving - is the single worst way to use it.
-		if (this.cfg.tera && active.canTerastallize && this.teraWorthIt(gen, active, entry, state, foes, field, best, incoming)) {
+		if (zed) choice += ' zmove';
+		else if (this.cfg.tera && active.canTerastallize && this.teraWorthIt(gen, active, entry, state, foes, field, best, incoming)) {
 			choice += ' terastallize';
 		}
 		else if (active.canMegaEvo) choice += ' mega';

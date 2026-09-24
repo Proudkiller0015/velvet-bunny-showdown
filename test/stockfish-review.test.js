@@ -257,6 +257,23 @@ console.log('\n--- the endgame tree ---');
 	check('and the whole decision is Will-O-Wisp', moveName(String(stockfish().decide(w.request, w.state)), w.request), 'Will-O-Wisp');
 }
 
+// -------------------------------------------------------------------- Z-Moves
+console.log('\n--- Z-Moves ---');
+{
+	// Garchomp with a Groundium Z: Tectonic Rage (180) where Earthquake (100) does not kill.
+	const z = foeHp => {
+		const p = position({
+			me: mon('Garchomp', ['Earthquake', 'Dragon Claw'], { item: 'Groundium Z' }), myMoves: ['Earthquake', 'Dragon Claw'],
+			foe: { species: 'Clefable', hp: foeHp, moves: ['Moonblast'] },
+		});
+		p.request.active[0].canZMove = [{ move: 'Tectonic Rage', target: 'normal' }, null];
+		return String(stockfish().decide(p.request, p.state));
+	};
+	check('uses the Z-Move when it turns Earthquake into a KO', z(65), 'move 1 zmove');
+	check('but not when even the Z-Move does not kill', z(100), c => !/zmove/.test(c));
+	check('and holds it when Earthquake kills anyway', z(25), c => !/zmove/.test(c));
+}
+
 // ------------------------------------------------------------ decision time
 console.log('\n--- time ---');
 {
