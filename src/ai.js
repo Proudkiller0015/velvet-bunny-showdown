@@ -81,6 +81,13 @@ const HAZARDS = ['Stealth Rock', 'Spikes', 'Toxic Spikes', 'Sticky Web'];
 const RECOVERY = ['Recover', 'Roost', 'Soft-Boiled', 'Slack Off', 'Synthesis', 'Moonlight',
 	'Morning Sun', 'Rest', 'Shore Up', 'Milk Drink', 'Heal Order', 'Strength Sap'];
 const PIVOT = ['U-turn', 'Volt Switch', 'Flip Turn', 'Parting Shot', 'Teleport', 'Baton Pass'];
+// How many times each hazard stacks.
+const HAZARD_LAYERS = { 'Spikes': 3, 'Toxic Spikes': 2 };
+// Abilities that stop one kind of status, once shown (the status each blocks).
+const STATUS_BLOCKS = {
+	limber: ['par'], waterveil: ['brn'], waterbubble: ['brn'], thermalexchange: ['brn'],
+	immunity: ['psn', 'tox'], pastelveil: ['psn', 'tox'], insomnia: ['slp'], vitalspirit: ['slp'], sweetveil: ['slp'],
+};
 
 /**
  * One representative attack per type, for estimating what an opponent that has
@@ -199,8 +206,13 @@ const PINKACROSS_SEARCH = { middleGround: true, endgame: true };
  *              without Boots - and more early (A12); Spikes up to three layers.
  *   setupCap   no setting up in front of a KO on the hope they switch once we
  *              are at 30% or less (Mega Blaziken, Swords Dance at 14%).
+ *   hpUnits    the hit coming at us counted as a share of our maximum HP, like
+ *              the HP it is compared with (see chooseForSlot); and the search's
+ *              KOs likewise.
+ *   endgameGuard the Choice-locked and walled switches still apply when the
+ *              endgame tree has a plan (Indeedee-F, Hyper Voice into a Ghost x16).
  */
-const STOCKFISH_REVIEW = { foeModel: true, recovery: true, hazardPlan: true, setupCap: true };
+const STOCKFISH_REVIEW = { foeModel: true, hpUnits: true, recovery: true, hazardPlan: true, setupCap: true, endgameGuard: true };
 const DIFFICULTIES = {
 	// An in-game trainer. It reaches for whatever move has the biggest number on
 	// it, without working out what that move would actually do, and it never
@@ -277,7 +289,8 @@ const CALC_ABILITY = {
 };
 // Abilities that bounce status moves and hazards, and ones no status takes on.
 const BOUNCES = new Set(['magicbounce', 'prescience']);
-const STATUS_PROOF = new Set(['moonlitvenom', 'purifyingsalt', 'comatose']);
+// Good as Gold blocks every status move aimed at it (Blissey clicked Thunder Wave into Gholdengo three times).
+const STATUS_PROOF = new Set(['moonlitvenom', 'purifyingsalt', 'comatose', 'goodasgold']);
 const CORRODES = new Set(['corrosion', 'moonlitvenom']);
 // Weather Speed doublers, ours and the originals: [ability id, weathers].
 const WEATHER_SPEED = {
@@ -1371,7 +1384,7 @@ class BattleAI {
 			const first = (state.trickRoom ? mySpe < theirSpe : mySpe > theirSpe) || prio >= 100;
 			const them = this.foePokemon(gen, foe);
 			const theirs = this.foeAttacks(gen, foe) || this.hiddenAttacks(gen, foe);
-			if (theirs.some(m => { const d = attack(m); return d && d.priority > 0 && this.damagePct(gen, them, me, m, field) >= myHp; })) return false;
+			if (theirs.some(m => { const d = attack(m); return d && d.priority > 0 && this.damagePct(gen, them, me, m, field) >= (this.cfg.hpUnits ? 100 : myHp); })) return false;
 			if (hit >= 100 && first) continue;
 			if (!foe.bench && hit >= 50 && (first ? incoming < myHp : incoming * 2 < myHp)) continue;
 			return false;
@@ -1450,6 +1463,97 @@ class BattleAI {
 		return false;
 	}
 
+	/** Per cent of maximum HP a healing move restores now (Wish: next turn). */
+	healShare(move, state) {
+		const weather = String((state && state.weather) || '').toLowerCase().replace(/[^a-z]/g, '');
+		if (move.id === 'rest') return 100;
+		if (/^(synthesis|moonlight|morningsun)$/.test(move.id)) return /sunnyday|desolateland/.test(weather) ? 66.7 : weather ? 25 : 50;
+		if (move.id === 'shoreup') return /sandstorm/.test(weather) ? 66.7 : 50;
+		if (move.id === 'strengthsap') return 40;
+		return 50;
+	}
+
+	/**
+	 * What healing is worth this turn, or null to leave it to the "last turn" rule.
+	 *
+	 * The review found 0 of 108 chances to heal at half health or less taken:
+	 * the last-turn return came first and scored every heal -20, and the heal
+	 * itself was capped at 60 minus our HP (recovery, 24 Sep 2026). So:
+	 *   - in front of a KO, healing first is worth it when we move first and the
+	 *     heal outruns their hit - otherwise it only delays, and the old rule stands;
+	 *   - otherwise a heal is worth what it restores, more below half health, and
+	 *     half that when their hit outruns it;
+	 *   - Wish from 70% down, never while one is on its way (Pinkacross A20: use it
+	 *     before the critical-HP turn).
+	 */
+	recoveryScore(move, me, state, myHpPct, incoming, dying, ctx) {
+		const live = ctx.live;
+		if (move.id === 'wish') {
+			if (live && live.lastMove === 'Wish' && live.lastMoveTurn >= state.turn - 1) return -20;
+			if (dying) return null;
+			return myHpPct <= 70 ? 20 + (75 - myHpPct) * 0.8 : 4;
+		}
+		if (move.id === 'rest' && me.status === 'slp') return -30;
+		const heal = Math.min(this.healShare(move, state), 100 - myHpPct);
+		if (heal <= 6) return -15;
+		const sleeps = move.id === 'rest' ? 0.7 : 1;
+		if (dying) {
+			if (ctx.movesFirst && heal > incoming && myHpPct + heal > incoming) return (30 + (heal - incoming)) * sleeps;
+			return null;
+		}
+		if (myHpPct > 75) return -10;
+		let score = heal * (myHpPct <= 50 ? 1 : 0.6) * sleeps;
+		if (incoming >= heal) score *= 0.5;
+		return score;
+	}
+
+	/**
+	 * Stealth Rock and Spikes are worth what they will hit (hazardPlan, 24 Sep 2026).
+	 *
+	 * A flat 38 had them set in 30 of 176 side-games whose teams carried them,
+	 * and Spikes never went past one layer. Pinkacross (A12): set hazards early -
+	 * they pay on every switch that follows. So the score counts what this layer
+	 * takes from each foe still standing that will come in again - the one in
+	 * front at a discount, Heavy-Duty Boots and Magic Guard not at all, Flying
+	 * types and Levitate not for Spikes - and fades after the opening turns.
+	 */
+	hazardScore(gen, move, state) {
+		const theirSide = state.hazards[state.theirPlayer] || {};
+		const layers = Number(theirSide[move.name]) || 0;
+		if (layers >= (HAZARD_LAYERS[move.name] || 1)) return -30;
+		const dex = PkmnDex.forGen(gen.num);
+		const idOf = s => String(s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+		const { list, unknown } = this.foeRemaining(state);
+		const each = (types, ability, item) => {
+			if (item === 'heavydutyboots' || ability === 'magicguard') return 0;
+			const grounded = !types.includes('Flying') && ability !== 'levitate' && item !== 'airballoon';
+			if (move.name === 'Stealth Rock') {
+				let mult = 1;
+				for (const t of types) {
+					const taken = ((dex.types.get(t) || {}).damageTaken || {}).Rock;
+					mult *= taken === 1 ? 2 : taken === 2 ? 0.5 : taken === 3 ? 0 : 1;
+				}
+				return 12.5 * mult;
+			}
+			if (!grounded) return 0;
+			if (move.name === 'Spikes') return [12.5, 4.17, 8.33][layers] || 0;
+			if (move.name === 'Toxic Spikes') return types.includes('Poison') || types.includes('Steel') ? 0 : layers ? 5 : 10;
+			return 8;   // Sticky Web
+		};
+		let value = 0;
+		for (const foe of list) {
+			if (foe.fainted || foe.hp <= 0) continue;
+			const sheet = dex.species.get(foe.transformed || foe.species);
+			const v = each((sheet && sheet.exists && sheet.types) || [], idOf(foe.ability), idOf(foe.item));
+			value += foe.bench ? v : v * 0.7;
+		}
+		value += unknown * each([], '', '');
+		const early = Math.max(0.5, 1 - Math.max(0, (state.turn || 1) - 8) / 30);
+		// A remover they have shown takes it off again.
+		const removal = list.some(f => [...(f.moves || [])].some(m => /^(defog|rapidspin|mortalspin|tidyup|courtchange)$/.test(idOf(m))));
+		return Math.round((8 + value * 0.65 * early) * (removal ? 0.7 : 1));
+	}
+
 	/** Score a status move by what it is actually worth this turn. */
 	statusScore(gen, moveName, me, foe, state, incoming, ctx = {}) {
 		const move = PkmnDex.forGen(gen.num).moves.get(moveName);
@@ -1460,9 +1564,24 @@ class BattleAI {
 		const isSetup = boostsUp && Object.values(boostsUp).some(v => v > 0);
 		const pressure = ctx.foes ? this.switchPressure(gen, me, ctx.foes, ctx.field) : 0;
 
+		/*
+		 * "They will switch" is no reason to set up at 30% or less in front of a KO:
+		 * Mega Blaziken used Swords Dance at 14% and died to the hit it ignored, and
+		 * 37% of setup users in the review fainted that turn or the next (setupCap).
+		 */
+		const hopeful = isSetup && pressure >= 0.7 && !(this.cfg.setupCap && myHpPct <= 30);
+		const live = ctx.live;
+		// Wish on its way: Protect is how it lands (recovery, A20).
+		if (this.cfg.recovery && PROTECTS.has(move.id) && move.id !== 'endure' && live && live.lastMove === 'Wish' && live.lastMoveTurn === state.turn - 1) return 45;
+		// Healing is judged before "this is the last turn": healing first can make it not the last.
+		if (this.cfg.recovery && (RECOVERY.includes(move.name) || move.id === 'wish')) {
+			const heal = this.recoveryScore(move, me, state, myHpPct, incoming, dying, ctx);
+			if (heal !== null) return heal;
+		}
+
 		// Nothing that takes a turn is worth it when the turn is the last one -
 		// unless the opponent is not going to be there to take it.
-		if (dying && !(isSetup && pressure >= 0.7)) {
+		if (dying && !hopeful) {
 			if (move.priority > 0) return 5;
 			/*
 			 * On the last turn, what matters is what outlives us. A boost or a heal is
@@ -1471,7 +1590,7 @@ class BattleAI {
 			 * because every status move scored the same (replay gen9rpou-5-tliyi7).
 			 */
 			const theirSide = state.hazards[state.theirPlayer] || {};
-			if (HAZARDS.includes(move.name) && !theirSide[move.name]) return 8;
+			if (HAZARDS.includes(move.name) && (!theirSide[move.name] || (this.cfg.hazardPlan && (Number(theirSide[move.name]) || 0) < (HAZARD_LAYERS[move.name] || 1)))) return 8;
 			if (/^(partingshot|healingwish|lunardance|memento|uturn|voltswitch|flipturn|teleport)$/.test(move.id)) return 7;
 			if (move.status && move.target !== 'self' && foe && !foe.status) return 6;
 			return -20;
@@ -1532,6 +1651,31 @@ class BattleAI {
 				if (move.flags && move.flags.powder && (types.includes('Grass') || foeAbility === 'overcoat')) return -25;
 			}
 			if (move.id === 'yawn' && foe && foe.status) return -25;
+			/*
+			 * From the review of 93 Stockfish games (24 Sep 2026): Good as Gold turns
+			 * away every status move aimed at it, not only the ones that inflict a
+			 * status - Blissey used Thunder Wave into Gholdengo three times. Anything
+			 * the battle has already bounced off this foe (an -immune line, which names
+			 * the ability when there is one) stays bounced, and a known ability that
+			 * blocks this one status (Limber, Water Veil, Insomnia...) does too.
+			 */
+			const aimed = move.category === 'Status' && !['self', 'allySide', 'foeSide', 'all', 'allies', 'adjacentAllyOrSelf', 'ally'].includes(move.target);
+			if (aimed && foeAbility === 'goodasgold') return -30;
+			const theirState = (ctx.foes || [])[0];
+			if (aimed && theirState && theirState.immuneTo && theirState.immuneTo.has(move.name)) return -30;
+			if (move.status && (STATUS_BLOCKS[foeAbility] || []).includes(move.status)) return -25;
+			// No Retreat works once a stay (it came back three times in a row).
+			if (move.id === 'noretreat' && live && live.noRetreat) return -30;
+			/*
+			 * Encore and Disable act on the last move the foe used, so into one that has
+			 * not moved since it came in they fail. Into a status or setup move they are
+			 * the best thing on the board: it is stuck clicking it.
+			 */
+			if (/^(encore|disable)$/.test(move.id) && theirState) {
+				if (!theirState.lastMove) return -20;
+				const last = PkmnDex.forGen(gen.num).moves.get(theirState.lastMove);
+				if (move.id === 'encore' && last && last.category === 'Status') return 40;
+			}
 		}
 		if (move.status && move.target !== 'self') {
 			if (STATUS_PROOF.has(foeAbility)) return -25;
@@ -1543,6 +1687,7 @@ class BattleAI {
 			if (move.status === 'par' && types.includes('Electric')) return -25;
 		}
 		if (HAZARDS.includes(move.name)) {
+			if (this.cfg.hazardPlan) return this.hazardScore(gen, move, state);
 			const theirSide = state.hazards[state.theirPlayer] || {};
 			return theirSide[move.name] ? -30 : 38;
 		}
@@ -1572,7 +1717,8 @@ class BattleAI {
 			const sweep = ctx.foes ? this.sweepPotential(gen, ctx.entry, state, ctx.foes, ctx.field, boostsUp) : 0;
 			const danger = incoming / Math.max(1, myHpPct);      // 1 = exactly lethal
 			// A free turn bought by threatening them is the whole point.
-			const safety = Math.max(1 - danger, pressure);
+			// At 30% or less, their pressure to leave no longer buys safety (setupCap).
+			const safety = this.cfg.setupCap && myHpPct <= 30 ? 1 - danger : Math.max(1 - danger, pressure);
 			if (safety < 0.25) return -40;
 			let score = 18 + safety * 34 + sweep * 45;
 			if (myHpPct < 45 && pressure < 0.6) score -= 25;
@@ -2283,6 +2429,8 @@ class BattleAI {
 			}
 		}
 
+		// In shares of our maximum, like hpPct (hpUnits; see chooseForSlot).
+		if (this.cfg.hpUnits) { plainIn *= hpPct / 100; teraIn *= hpPct / 100; }
 		// Defensive: it turns a hit we do not survive into one we do. This is the
 		// case that saves a Pokemon outright, so it beats hoarding the Tera - and
 		// it is the "unless it is the only way out" the rule above allows for.
@@ -2440,6 +2588,15 @@ class BattleAI {
 				: [this.roughIncoming(gen, them, me, field) * (foe.dynamaxed ? 1.3 : 1)];
 			incoming = Math.max(incoming, ...back);
 		}
+		/*
+		 * damagePct counts in shares of the HP we have NOW (100 is a KO), and every
+		 * test below compares it with our share of MAXIMUM HP. At full health the two
+		 * agree; at 40% a hit worth 25% of our maximum read as 62 >= 40, "dying", so
+		 * the bot never healed - 0 of 108 chances to recover at half health or less
+		 * in the review - and pulled Pokemon that were not in danger. In one unit
+		 * from here on (hpUnits, 24 Sep 2026).
+		 */
+		if (this.cfg.hpUnits) incoming = incoming * (me.originalCurHP / me.maxHP());
 
 		// Turn order is information, and acting on it is the difference between
 		// "that move kills" and "that move kills in time". If we move first and
@@ -2474,10 +2631,13 @@ class BattleAI {
 				// A greedy player sees status moves as "the ones that do no damage".
 				if (this.cfg.greedy) score = 2;
 				else score = foe
-					? this.statusScore(gen, name, me, this.foePokemon(gen, foe), state, incoming, { foes, field, entry, live: state.mine && state.mine['abc'[index]] })
+					? this.statusScore(gen, name, me, this.foePokemon(gen, foe), state, incoming, { foes, field, entry, live: state.mine && state.mine['abc'[index]], movesFirst })
 					: 5;
 				// Nothing set up on the turn we are knocked out ever gets used.
-				if (outsped && score > 0) score *= 0.2;
+				// (Except Protect with a Wish landing this turn: that is the whole point of it.)
+				const wishing = this.cfg.recovery && PROTECTS.has(data.id) && state.mine && state.mine['abc'[index]] && state.mine['abc'[index]].lastMove === 'Wish' &&
+					state.mine['abc'[index]].lastMoveTurn === state.turn - 1;
+				if (outsped && score > 0 && !wishing) score *= 0.2;
 				// A Will-O-Wisp that misses is a free turn for them: a status move aimed at
 				// the foe is worth its hit chance (A10, 24 Sep 2026). Self-targeting moves
 				// and hazards cannot miss and come back as 1.
@@ -2588,8 +2748,10 @@ class BattleAI {
 				 * move's damage still looked like the best number on the board,
 				 * because nothing in the scoring knew it would not happen at all.
 				 */
+				// It came in on turn N (the switch line follows |turn|N), so turn N+1 is its first move -
+				// the test used to be "after turn N", which made Fake Out fail on its one good turn too.
 				if (this.cfg.sanity !== false && data && /^(fakeout|firstimpression|matblock)$/.test(data.id) &&
-					state.turn > (state.mineCameIn || 0)) score = -30;
+					state.turn > (state.mineCameIn || 0) + 1) score = -30;
 			}
 			score += this.jitter();
 			if (!best || score > best.score) best = { score, n: move.n, target, name };
@@ -2602,6 +2764,9 @@ class BattleAI {
 					: 0,
 				priority: data ? (data.priority || 0) : 0,
 				heuristic: data && data.category === 'Status' ? score : 0,
+				// What a heal restores, for the search to play out (recovery).
+				heal: this.cfg.recovery && data && RECOVERY.includes(data.name) && !(data.id === 'rest' && me.status === 'slp')
+					? this.healShare(data, state) : 0,
 				// The search plays the miss out as its own branch rather than shrinking the hit.
 				accuracy: this.cfg.accuracy && data && data.category !== 'Status' && foes[0]
 					? this.hitChance(gen, data, me, foes[0], state, state.mine && state.mine['abc'[index]]) : 1,
@@ -2631,12 +2796,21 @@ class BattleAI {
 		}
 
 		// Would anything on the bench do better than what we are about to do here?
-		if (!planned && this.cfg.switching && request.side.pokemon.length > 1 && !active.trapped && !active.maybeTrapped) {
+		/*
+		 * The endgame tree's plan does not excuse a Choice lock into a move that does
+		 * little, or a Pokemon walled for turns: an Indeedee-F locked into Hyper Voice
+		 * clicked it into a Ghost sixteen times because a plan skipped this whole
+		 * block. With a plan, those two still send it to the bench, judged on the
+		 * heuristic score rather than the tree's value (endgameGuard, 24 Sep 2026).
+		 */
+		const guarded = planned && planned.kind === 'move' && this.cfg.endgameGuard;
+		const own = guarded ? (ranked.find(r => r.n === best.n) || {}).score || 0 : best.score;
+		if ((!planned || guarded) && this.cfg.switching && request.side.pokemon.length > 1 && !active.trapped && !active.maybeTrapped) {
 			const myHpPct = (me.originalCurHP / me.maxHP()) * 100;
 			const doomed = incoming >= myHpPct;
 			// Stuck with a self-dropped attacking stat and nothing that kills: switching resets it.
 			const bestData = PkmnDex.forGen(gen.num).moves.get(best.name);
-			const drained = bestData && bestData.category !== 'Status' && this.droppedFor(bestData, me) <= -2 && best.score < 70;
+			const drained = bestData && bestData.category !== 'Status' && this.droppedFor(bestData, me) <= -2 && own < 70;
 			/*
 			 * Crippled from outside: -2 or worse in the stat its best attack uses,
 			 * whoever did it - Intimidate, Charm, Parting Shot, a Sticky Web'd Speed
@@ -2648,7 +2822,7 @@ class BattleAI {
 			const topHit = ranked.filter(r => r.kind === 'move' && r.damage > 0).sort((a, b) => b.score - a.score)[0];
 			const topData = topHit ? PkmnDex.forGen(gen.num).moves.get(topHit.name) : null;
 			const usedStat = topData && topData.category === 'Special' ? 'spa' : 'atk';
-			const crippled = !this.cfg.naive && this.cfg.cripple !== false && !!topData && ((me.boosts && me.boosts[usedStat]) || 0) <= -2 && best.score < 70;
+			const crippled = !this.cfg.naive && this.cfg.cripple !== false && !!topData && ((me.boosts && me.boosts[usedStat]) || 0) <= -2 && own < 70;
 			/*
 			 * Walled: nothing we click does real damage and nothing we do is worth a
 			 * turn, while we are not under pressure either - the Stockfish reviews'
@@ -2657,15 +2831,15 @@ class BattleAI {
 			 * been in for a turn, so two walls do not swap back and forth.
 			 */
 			const inFor = state.turn - (state.mineCameIn || 0);
-			const walled = !this.cfg.naive && this.cfg.stall !== false && inFor >= 2 && best.score < 25 &&
+			const walled = !this.cfg.naive && this.cfg.stall !== false && inFor >= 2 && own < 25 &&
 				(!topHit || topHit.damage < 15) && incoming < myHpPct * 0.5;
 			// Choice-locked into a move that does little (Enamorus kept firing a resisted Mystical Fire into Garchomp).
 			const choiceLocked = !this.cfg.naive && this.cfg.sanity !== false && legal.length === 1 && (active.moves || []).length > 1 &&
-				/choice/i.test(String(entry.item || '')) && (!topHit || topHit.damage < 30) && best.score < 60;
-			const losing = drained || crippled || walled || choiceLocked || (incoming >= myHpPct * 0.5 && best.score < 55) ||
+				/choice/i.test(String(entry.item || '')) && (!topHit || topHit.damage < 30) && own < 60;
+			const losing = guarded ? (walled || choiceLocked) : drained || crippled || walled || choiceLocked || (incoming >= myHpPct * 0.5 && own < 55) ||
 				// Outsped and dying, with nothing lethal of our own to fire back:
 				// staying is a free knockout for them.
-				(outsped && best.score < 100);
+				(outsped && own < 100);
 			if (losing) {
 				const bench = request.side.pokemon
 					.map((p, i) => ({ p, i: i + 1 }))
@@ -2705,7 +2879,7 @@ class BattleAI {
 				 * comfortably, and the active really is dying, go.
 				 */
 				const WALLS_IT = 35;      // per cent of its own health, coming in
-				if (doomed && safest && safest.takes <= WALLS_IT && best.score < 100) {
+				if (!guarded && doomed && safest && safest.takes <= WALLS_IT && own < 100) {
 					return `switch ${safest.i}`;
 				}
 
@@ -2749,7 +2923,7 @@ class BattleAI {
 				// its second turn of three): stay unless this turn kills it.
 				const liveMe = state.mine && state.mine['abc'[index]];
 				if (this.cfg.sanity !== false && liveMe && liveMe.dynamaxed && !doomed) margin += 45;
-				if (alt && alt.score > best.score + margin) return `switch ${alt.i}`;
+				if (alt && alt.score > own + margin) return `switch ${alt.i}`;
 			}
 		}
 
