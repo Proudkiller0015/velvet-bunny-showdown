@@ -1549,6 +1549,7 @@ function serverHelpBox(user) {
 			`Use <b>[Gen 9] RP Battle</b> for your RP team, built from your box in the <a href="https://docs.google.com/spreadsheets/d/1-XoCX0qkrshpiVvY4Sw1sBNAfiEnJYX67ZXZUkDDGrs/edit">RP doc</a>: ` +
 			`any move it can learn whatever its level (TMs free), held items from your first gym badge. Wild Pok&eacute;mon and trainers come from ${cmd('!encounter')} on the Discord.`,
 			`In a wild battle, the <b>Bag</b> button under your moves (Pokéballs, Medicine) and <b>Run</b>, or ${cmd('/throwball [ball]')} catch; ${cmd('/useitem [item], [pokemon]')} uses a Potion or Revive from your bag, in any RP battle (unlimited in RP Custom Game).`,
+			`In a trainer battle there is no Run: <b>Forfeit</b> sits in its place (tap it twice), and the RP settles it as a loss.`,
 			`Your team is checked against your character's box, and Mega / Z / Dynamax / Tera need the story item.`,
 			`<b>[Gen 9] RP Custom Game</b> is for hackmons, illegal and fun battles: anything goes (items unlimited), challenge only, and no EXP or RP progress.`,
 		]) +
@@ -1873,7 +1874,7 @@ function roleplayIntro() {
 		`<p style="margin:0 0 8px"><b>First time? Start here:</b> <button class="button" name="send" value="/tutorial" style="font-size:12pt;padding:4px 12px"><b>Start the tutorial</b></button> ` +
 		`a 2-minute practice battle with a Lv. 5 Pikachu, 1 Potion and 1 Pok&eacute; Ball against a wild Rattata. No team or Discord needed, and nothing counts. (Or type <code>/tutorial</code>, or <code>!tutorial</code> on Discord.)</p>` +
 		`<p style="margin:0 0 6px">Battles for the Kagura RP. <b>You don't challenge anybody here</b>: ` +
-		`you ask for an encounter on ${discord} (<a href="https://discord.gg/pH86q7sdg7">join the Kagura RP</a>), and a wild Pok&eacute;mon or a trainer challenges you here.</p>` +
+		`you ask for an encounter on ${discord} (<a href="https://discord.gg/pH86q7sdg7">join the Kagura RP</a>), and the battle with a wild Pok&eacute;mon or a trainer opens here by itself, with the team you picked there (no team picked? then it arrives as a challenge to accept).</p>` +
 		`<p style="margin:0 0 6px"><b>The RP doc is your record</b>: your box (every Pok&eacute;mon, its level and ball), bag, money and badges. ` +
 		`Build your team from it: <a href="https://docs.google.com/spreadsheets/d/1-XoCX0qkrshpiVvY4Sw1sBNAfiEnJYX67ZXZUkDDGrs/edit">open the doc</a>. ` +
 		`<b>Moves:</b> any move it can learn, whatever its level, and TMs are free. <b>Held items:</b> from your first gym badge.</p>` +
@@ -1904,7 +1905,8 @@ function roleplayIntro() {
 			`<ol style="margin:0;padding-left:18px">` +
 			`<li>Have this site open and your name chosen.</li>` +
 			`<li>On ${discord}, in the channel your character is in, type <code>!encounter</code>. The bot already knows your badges and trainer level.</li>` +
-			`<li>A challenge pops up here from someone like <b>Wild Pidgey</b> or <b>Hiker Bob</b>. Click <b>Accept</b> and choose your RP team.</li>` +
+			`<li>Picked a team on ${discord} (<code>!team</code> or <b>Build my team</b>)? The battle against someone like <b>Wild Pidgey</b> or <b>Hiker Bob</b> opens here by itself, with that team: nothing to accept.</li>` +
+			`<li>No team picked there? Then it arrives as a challenge instead: click <b>Accept</b> and choose your RP team.</li>` +
 			`</ol>` +
 			`<small>Only routes, wilds and outdoor spots have wild Pok&eacute;mon; the bot tells you if you're somewhere without any. ` +
 			`Sometimes it's a double battle, so carry at least two Pok&eacute;mon once you have a badge.</small>`) +
@@ -1930,11 +1932,11 @@ function roleplayIntro() {
 
 		step('Something went wrong?',
 			`<ul style="margin:0;padding-left:18px">` +
-			`<li><b>No challenge came:</b> check your name here matches <code>!showdown</code>, and that this page is open. ` +
+			`<li><b>No battle opened (and no challenge came):</b> check your name here matches <code>!showdown</code>, and that this page is open. ` +
 			`If the site was asleep it takes about a minute to wake up; just try again.</li>` +
-			`<li><b>Declined it by accident:</b> use <code>!encounter</code> again. The same one comes back.</li>` +
+			`<li><b>Closed the battle tab, or declined a challenge by accident:</b> use <code>!encounter</code> again. The same one comes back.</li>` +
 			`<li><b>"Your team is invalid":</b> the team's format must be <b>[Gen 9] RP Battle</b>.</li>` +
-			`<li><b>"This RP battle is called off":</b> your team doesn't match your box. Fix what it lists, then <code>!encounter</code> again: the same one comes back.</li>` +
+			`<li><b>"This RP battle is called off":</b> your team doesn't match your box. Fix what it lists (pick the team again on ${discord}, or fix it in the Teambuilder if you accepted a challenge), then <code>!encounter</code> again: the same one comes back.</li>` +
 			`<li><b>Still stuck:</b> ask in this room, or ask Sam or Saku.</li>` +
 			`</ul>`) +
 		`</div>`;
@@ -2311,8 +2313,17 @@ function roleplay() {
 					enc.status = 'waiting';
 					this.rpEncounter = null;
 					this.rpInvalid = true;
+					/*
+					 * Where the team came from is where it gets fixed: a team picked on
+					 * Discord is picked again there (the Teambuilder has nothing to do
+					 * with it), one chosen on accepting a challenge in the Teambuilder
+					 * (23 Sep 2026).
+					 */
+					const fix = enc.playerTeam
+						? 'Pick your team again on Discord (<code>!team</code> or <b>Build my team</b>), with only Pok&eacute;mon your character owns, at or below their box level'
+						: 'Fix the team in the Teambuilder (only Pok&eacute;mon your character owns, at or below their box level)';
 					this.room.add(`|raw|<div class="broadcast-red"><b>This RP battle is called off: your team doesn't match your box.</b><br />${message.replace(/[&<>"']/g, ch => `&#${ch.charCodeAt(0)};`)}<br />` +
-						`Fix the team in the Teambuilder (only Pok&eacute;mon your character owns, at or below their box level), then use <code>!encounter</code> on Discord again. The same encounter comes back.</div>`);
+						`${fix}, then use <code>!encounter</code> on Discord again. The same encounter comes back.</div>`);
 					this.room.update();
 					void this.stream.write('>forcetie');
 					return out;
@@ -2340,7 +2351,7 @@ function roleplay() {
 				if (problems.length) {
 					this.rpInvalid = true;
 					this.room.add(`|raw|<div class="broadcast-red"><b>This RP battle is called off.</b><br />${problems.slice(0, 8).map(esc).join('<br />')}<br />` +
-						`Fix the team in the Teambuilder (only Pok&eacute;mon your character owns, at or below their box level), then challenge again. For anything-goes battles use <b>[Gen 9] RP Custom Game</b>.</div>`);
+						`Fix the team (only Pok&eacute;mon your character owns, at or below their box level), then ask for the battle again on Discord. For anything-goes battles use <b>[Gen 9] RP Custom Game</b>.</div>`);
 					this.room.update();
 					void this.stream.write('>forcetie');
 					return out;

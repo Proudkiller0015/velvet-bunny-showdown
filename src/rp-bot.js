@@ -251,7 +251,7 @@ class RpGuide extends ShowdownBot {
 		const fromId = from.replace(/^[^A-Za-z0-9]/, '').toLowerCase().replace(/[^a-z0-9]/g, '');
 		if (!fromId || fromId === this.name.toLowerCase().replace(/[^a-z0-9]/g, '')) return;
 		if (message.startsWith('/')) return;   // raw, uhtml and the like
-		this.pm(from.replace(/^[^A-Za-z0-9]/, ''), 'Hi! I run the RP encounters. Ask for one on Discord with !encounter, and I\'ll challenge you here. Type /roleplay for the full guide.');
+		this.pm(from.replace(/^[^A-Za-z0-9]/, ''), 'Hi! I run the RP encounters. Ask for one on Discord with !encounter: with a team picked there, the battle opens here by itself; without one, you get a challenge to accept. Type /roleplay for the full guide.');
 	}
 
 	startEncounter(spawn) {

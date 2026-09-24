@@ -1108,7 +1108,7 @@ exports.Formats = [
 			}
 			installCatching(this);
 			installItems(this);
-			this.add('-message', 'This is a practice battle. Normally a wild Pokémon or a trainer challenges you here when you type !encounter on Discord, in your character\'s channel, and you battle with your own RP team from your box.');
+			this.add('-message', 'This is a practice battle. Normally you type !encounter on Discord, in your character\'s channel, and the battle with a wild Pokémon or a trainer opens here by itself, with the RP team you picked there from your box. No team picked? Then it arrives as a challenge to accept.');
 			this.add('-message', 'Step 1: pick Thunder Shock to attack.');
 			this.add('-message', 'Hurt? Open the Bag (under your moves) > Medicine and use your 1 Potion (it uses your turn).');
 		},

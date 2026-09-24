@@ -644,7 +644,7 @@ function friendlyNotice(bag) {
 	return [
 		`🤝 **Friendly battle**${bag && !bag.npc && bag.character ? ` as **${bag.character}**` : ''}: nothing here counts.`,
 		'Any team is fine and every gimmick is allowed. No EXP, no win or loss, and nothing comes off your bag.',
-		'To play one that counts, both of you run `!pvp` at each other on Discord first, then challenge again.',
+		'To play one that counts, both of you run `!pvp` at each other on Discord, then ask for the battle again there.',
 	].join(String.fromCharCode(10));
 }
 
