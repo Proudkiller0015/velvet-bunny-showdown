@@ -31,7 +31,7 @@ const MIN_APPS = Number(arg('min-apps', 15));
 
 const dex = require('../src/rp-dex')();
 const { buildPool, MAIN_TIERS } = require('../src/tier-sim/pool');
-const { rate, assignTiers } = require('../src/tier-sim/rating');
+const { rate, assignTiers, LOCKED_TIERS } = require('../src/tier-sim/rating');
 
 const BY_DESIGN = new Set(['Simisage', 'Simipour', 'Simisear']);
 
@@ -85,7 +85,7 @@ p('## How to read this');
 p('');
 p('Strength is a Bradley-Terry coefficient: a team\'s log-odds of winning is the sum of its six strengths minus the opponent\'s, so each number is what the Pokemon adds to a team *after* its teammates and opponents are accounted for. Each Pokemon\'s prior is its current tier\'s fitted mean, shifted by how much more (or less) it contributed per game than its tier-mates - damage, KOs, hazard turns, removal, status, pivots, support, switch-ins absorbed, turns on the field - scaled by a slope fitted from the games themselves.');
 p('');
-p('**A Pokemon is proposed to move only when its whole 90% interval lies outside its current tier\'s band.** Otherwise it stays where it is, whatever its point estimate says. BL tiers are compared where they are played (UUBL in OU, and so on). Teams were drafted around each tested Pokemon from its own band with the bots\' team assembler, weighted by Smogon teammate data - peers first, not a sweeper carried by filler.');
+p('**A Pokemon is proposed to move only when its whole 90% interval lies outside its current tier\'s band.** Otherwise it stays where it is, whatever its point estimate says. BL tiers are compared where they are played (UUBL in OU, and so on). Locked tiers (' + [...LOCKED_TIERS].join(', ') + ') stay where they are by the owner\'s call: they are still played and rated, never proposed to move. Teams were drafted around each tested Pokemon from its own band with the bots\' team assembler, weighted by Smogon teammate data - peers first, not a sweeper carried by filler.');
 p('');
 
 const movers = rows.filter(r => r.move !== 0).sort((a, b) => b.move - a.move || b.theta - a.theta);
@@ -102,7 +102,7 @@ else {
 p('');
 
 // Watch list: point estimate in another band, interval not yet clear.
-const watch = rows.filter(r => r.move === 0 && r.band !== r.played && r.apps >= MIN_APPS)
+const watch = rows.filter(r => r.move === 0 && r.evidence !== 'locked' && r.band !== r.played && r.apps >= MIN_APPS)
 	.sort((a, b) => Math.abs(b.theta - fit.tierMean[b.played]) / b.sd - Math.abs(a.theta - fit.tierMean[a.played]) / a.sd).slice(0, 30);
 p(`## Watch list (point estimate in another tier, evidence not yet strong enough; ${MIN_APPS}+ appearances)`);
 p('');
