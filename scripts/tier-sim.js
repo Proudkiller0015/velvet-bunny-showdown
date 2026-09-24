@@ -44,7 +44,9 @@ const has = name => process.argv.includes(`--${name}`);
 
 const OUT = path.resolve(ROOT, arg('out', path.join('data', 'tier-sim', 'games.jsonl')));
 const STOP_FILE = path.join(path.dirname(OUT), 'STOP');
-const MAX_WORKERS = 2;
+// The owner allowed up to 80% of the PC for this (24 Sep 2026): 10 of its 12 logical
+// cores, ~330 MB each, leaving room for Windows and the live Discord bot.
+const MAX_WORKERS = 10;
 const MAX_HEAP = 512;
 
 // ------------------------------------------------------------------ worker
