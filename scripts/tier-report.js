@@ -161,10 +161,43 @@ for (const n of BY_DESIGN) {
 }
 p('');
 
+/*
+ * How long a run needs. A Pokemon's standard error from the games alone falls
+ * like 1/sqrt(appearances), so k = sd_data * sqrt(apps), measured on the
+ * Pokemon that have played 20+ games, says how many
+ * appearances bring a 90% interval down to a given half-width. Twelve
+ * appearances per game spread over the pool turns that into games, and the
+ * run's own pace (progress.json) into hours.
+ */
+{
+	const settled = rows.filter(r => r.apps >= 20);
+	// The data's own precision: the posterior's less the prior's (tau = 0.3, rating.js),
+	// so the prior's head start is not mistaken for evidence.
+	const ks = settled.map(r => Math.sqrt(r.apps / Math.max(1e-6, 1 / (r.sd * r.sd) - 1 / (0.3 * 0.3)))).sort((a, b) => a - b);
+	let pace = 0;
+	try { const pr = JSON.parse(fs.readFileSync(path.join(path.dirname(IN), 'progress.json'), 'utf8')); pace = pr.session.done / pr.session.hours; } catch (e) { /* no progress file */ }
+	p('## Run length estimate');
+	p('');
+	if (ks.length < 20) p('Not enough Pokemon with 20+ appearances to estimate yet.');
+	else {
+		const k = median(ks);
+		p(`Measured: sd (games alone) x sqrt(appearances) = ${k.toFixed(2)} (median over ${ks.length} Pokemon with 20+ appearances)${pace ? `; pace ${pace.toFixed(0)} games/hour` : ''}.`);
+		p('');
+		p('| goal | appearances each | games | hours at this pace |');
+		p('|---|---|---|---|');
+		const goals = [['40 appearances each (the owner\'s floor)', 40], ['90% CI half-width = half a tier gap', Math.pow(1.645 * k / (bandWidth / 2 || 0.1), 2)], ['90% CI half-width = a quarter tier gap (two-tier moves solid)', Math.pow(1.645 * k / (bandWidth / 4 || 0.05), 2)]];
+		for (const [label, a] of goals) {
+			const games = Math.ceil(a * pool.length / 12);
+			p(`| ${label} | ${Math.ceil(a)} | ${games} | ${pace ? (games / pace).toFixed(1) : '-'} |`);
+		}
+	}
+	p('');
+}
+
 p('## Confidence notes');
 p('');
 p(`- The prior carries most of the weight until a Pokemon has played a few dozen games; with ${median(apps)} median appearances, most strengths here are still close to their tier's mean by construction. "No move" means "no evidence yet", not "confirmed".`);
-p('- Both sides are the same AI. A Pokemon whose value depends on play the AI does badly (e.g. careful Wish passing, prediction-heavy pivots) is under-rated; one the AI plays well is over-rated. The AI also plans with the calculator\'s copy of the dex, which knows our new moves, abilities and species but not stat changes to existing Pokemon, so a buffed Pokemon\'s damage estimates are the pre-buff ones.');
+p('- Both sides are the same AI. A Pokemon whose value depends on play the AI does badly (e.g. careful Wish passing, prediction-heavy pivots) is under-rated; one the AI plays well is over-rated. The AI also plans with the calculator\'s copy of the dex, which knows our new moves, abilities and species but not stat or type changes to existing Pokemon (src/velvet-pkmn.js copies only species it has never heard of). Checked: Luxray, Roserade, Spiritomb, Togekiss, Cresselia, Pikachu and Eevee differ, so the AI plans with their pre-patch numbers on both sides - read their results with extra care.');
 p('- One set per role, from the role-set data and the assembler: a Pokemon whose best set is unusual may be judged on a worse one.');
 p('- The error bars come from the full inverse Hessian (teammate correlations included) but assume the model is right: that strengths add up on a team. Strong synergies (weather, Trick Room) break that and show up as noise.');
 p('- Teams are drafted from each Pokemon\'s band, so a Pokemon is judged mostly among peers; its estimate says how good it is *there*. A move of two tiers or more rests on fewer cross-band games and deserves a second look.');

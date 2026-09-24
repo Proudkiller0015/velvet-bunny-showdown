@@ -87,7 +87,9 @@ function evioliteViable(species) {
 /** One entry of the pool: what gets rated, and how to bring it. */
 function entryFor(dex, species, tier) {
 	const mega = !!(species.isMega || species.isPrimal);
-	const base = mega ? dex.species.get(species.battleOnly || species.baseSpecies) : species;
+	// battleOnly can be a list (Zygarde-Mega comes from Zygarde or Zygarde-10%): the first will do.
+	const from = Array.isArray(species.battleOnly) ? species.battleOnly[0] : species.battleOnly;
+	const base = mega ? dex.species.get(from || species.baseSpecies) : species;
 	return {
 		name: species.name,
 		id: species.id,
