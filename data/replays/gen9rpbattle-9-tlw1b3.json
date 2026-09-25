@@ -1,0 +1,12 @@
+{
+	"id": "gen9rpbattle-9-tlw1b3",
+	"format": "[Gen 9] RP Battle",
+	"players": [
+		"Scientist Jin",
+		"simia ignis"
+	],
+	"rating": null,
+	"log": "|j|☆Scientist Jin\n|j|☆simia ignis\n|t:|1790307508\n|gametype|singles\n|player|p1|Scientist Jin|scientist-gen4|\n|player|p2|simia ignis|simia-ignis.png|\n|gen|9\n|tier|[Gen 9] RP Battle\n|clearpoke\n|poke|p1|Blitzle, L18, M|\n|poke|p1|Emolga, L23, F|\n|poke|p2|Nidoqueen, L23, F|\n|poke|p2|Monferno, L23, F|\n|poke|p2|Milotic, L23, M|\n|poke|p2|Banette, L23, F|\n|poke|p2|Togekiss, L23, F|\n|poke|p2|Snorlax, L23, F|\n|teampreview\n|inactive|Battle timer is ON: inactive players will automatically lose when time's up. (requested by Scientist Jin)\n|n|☆Scientist Jin|scientistjin\n|\n|t:|1790307514\n|teamsize|p1|2\n|teamsize|p2|6\n|start\n|switch|p1a: Emolga|Emolga, L23, F|100/100\n|switch|p2a: Nidoqueen|Nidoqueen, L23, F|100/100\n|turn|1\n|\n|t:|1790307516\n|move|p1a: Emolga|Thunder Shock|p2a: Nidoqueen\n|-immune|p2a: Nidoqueen\n|move|p2a: Nidoqueen|Ice Beam|p1a: Emolga\n|-supereffective|p1a: Emolga\n|-damage|p1a: Emolga|0 fnt\n|faint|p1a: Emolga\n|\n|upkeep\n|\n|t:|1790307517\n|switch|p1a: Blitzle|Blitzle, L18, M|100/100\n|turn|2\n|\n|t:|1790307519\n|move|p2a: Nidoqueen|Earth Power|p1a: Blitzle\n|-supereffective|p1a: Blitzle\n|-damage|p1a: Blitzle|0 fnt\n|faint|p1a: Blitzle\n|\n|win|simia ignis\n",
+	"inputlog": ">start {\"formatid\":\"gen9rpbattle\",\"seed\":\"sodium,c2716ff8ea1adee171082241e173086d\"}\n>player p1 {\"name\":\"Scientist Jin\",\"avatar\":\"scientist-gen4\",\"team\":\"Blitzle|||MotorDrive|Spark,FlameCharge,QuickAttack,ThunderWave|Bashful|10,10,10,10,10,10||11,11,11,11,11,11||18|]Emolga|||Static|ThunderShock,QuickAttack,Nuzzle,TailWhip|Gentle|10,10,10,10,10,10||11,11,11,11,11,11||23|\",\"rating\":0}\n>player p2 {\"name\":\"simia ignis\",\"avatar\":\"simia-ignis.png\",\"team\":\"Nidoqueen|||SheerForce|SludgeWave,EarthPower,IceBeam,StealthRock|Modest|||||23|]Monferno|||KindlingCrown|FlareBlitz,KnockOff,CloseCombat,GunkShot|Jolly|||||23|]Milotic|||Competitive|Scald,Recover,IceBeam,DragonTail|Modest|||||23|]Banette|||CursedBody|Poltergeist,GunkShot,SwordsDance,ThunderWave|Adamant||||S|23|]Togekiss|||SereneGrace|AirSlash,NastyPlot,Roost,AuraSphere|Modest|||||23|]Snorlax|||ThickFat|BodySlam,Curse,Rest,Earthquake|Adamant|||||23|\",\"rating\":0}\n>p1 team 2, 1\n>p2 team 1, 2, 3, 4, 5, 6\n>p1 move thundershock\n>p2 move icebeam\n>p1 switch 2\n>p1 move spark\n>p2 move earthpower",
+	"uploadtime": 1790307519
+}
