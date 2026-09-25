@@ -1,0 +1,12 @@
+{
+	"id": "gen9rpbattle-16-tlw1b3",
+	"format": "[Gen 9] RP Battle",
+	"players": [
+		"Tuber Ryo",
+		"simia ignis"
+	],
+	"rating": null,
+	"log": "|j|☆Tuber Ryo\n|j|☆simia ignis\n|t:|1790308029\n|gametype|singles\n|player|p1|Tuber Ryo|tuber-gen6|\n|player|p2|simia ignis|simia-ignis.png|\n|gen|9\n|tier|[Gen 9] RP Battle\n|clearpoke\n|poke|p1|Goldeen, L18, M|\n|poke|p1|Finneon, L23, M|\n|poke|p2|Flutter Mane, L23|\n|poke|p2|Banette, L23, M|\n|poke|p2|Nidoqueen, L23, F|\n|poke|p2|Monferno, L23, M|\n|poke|p2|Skarmory, L23, M|\n|poke|p2|Smeargle, L23, F|\n|teampreview\n|inactive|Battle timer is ON: inactive players will automatically lose when time's up. (requested by Tuber Ryo)\n|n|☆Tuber Ryo|tuberryo\n|\n|t:|1790308036\n|teamsize|p1|2\n|teamsize|p2|6\n|start\n|switch|p1a: Finneon|Finneon, L23, M|100/100\n|switch|p2a: Monferno|Monferno, L23, M|100/100\n|turn|1\n|\n|t:|1790308042\n|move|p2a: Monferno|Thunder Punch|p1a: Finneon\n|-supereffective|p1a: Finneon\n|-damage|p1a: Finneon|0 fnt\n|faint|p1a: Finneon\n|\n|upkeep\n|\n|t:|1790308042\n|switch|p1a: Goldeen|Goldeen, L18, M|100/100\n|turn|2\n|\n|t:|1790308044\n|move|p2a: Monferno|Thunder Punch|p1a: Goldeen\n|-supereffective|p1a: Goldeen\n|-damage|p1a: Goldeen|0 fnt\n|faint|p1a: Goldeen\n|\n|win|simia ignis\n",
+	"inputlog": ">start {\"formatid\":\"gen9rpbattle\",\"seed\":\"sodium,6da9c721419c8442bdd77bf9ef8e3116\"}\n>player p1 {\"name\":\"Tuber Ryo\",\"avatar\":\"tuber-gen6\",\"team\":\"Goldeen|||WaterVeil|WaterPulse,Peck,HornAttack,Supersonic|Rash|10,10,10,10,10,10||11,11,11,11,11,11||18|]Finneon|||SwiftSwim|WaterPulse,Gust,Pound,RainDance|Mild|10,10,10,10,10,10||11,11,11,11,11,11||23|\",\"rating\":0}\n>player p2 {\"name\":\"simia ignis\",\"avatar\":\"simia-ignis.png\",\"team\":\"Flutter Mane||BoosterEnergy|Protosynthesis|Moonblast,ShadowBall,MysticalFire,CalmMind|||||S|23|]Banette||BanettiteHalloween|Prankster|SwordsDance,CarrionFeast,Poltergeist,PartingShot|||||S|23|]Nidoqueen||LifeOrb|SheerForce|EarthPower,Flamethrower,Thunderbolt,IceBeam||||||23|]Monferno||ChoiceBand|KindlingCrown|FlareBlitz,Uturn,CloseCombat,ThunderPunch||||||23|]Skarmory||RockyHelmet|Sturdy|Roost,BodyPress,IronDefense,Toxic||||||23|]Smeargle||FocusSash|Moody|Substitute,BatonPass,Spore,ShellSmash||||||23|\",\"rating\":0}\n>p1 team 2, 1\n>p2 team 4, 2, 3, 1, 5, 6\n>p1 move waterpulse\n>p2 move thunderpunch\n>p1 switch 2\n>p1 move waterpulse\n>p2 move thunderpunch",
+	"uploadtime": 1790308044
+}
