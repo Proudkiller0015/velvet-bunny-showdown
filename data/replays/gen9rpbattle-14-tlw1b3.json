@@ -1,0 +1,12 @@
+{
+	"id": "gen9rpbattle-14-tlw1b3",
+	"format": "[Gen 9] RP Battle",
+	"players": [
+		"Hiker Joey",
+		"simia ignis"
+	],
+	"rating": null,
+	"log": "|j|☆Hiker Joey\n|j|☆simia ignis\n|t:|1790307982\n|gametype|singles\n|player|p1|Hiker Joey|hiker-gen4|\n|player|p2|simia ignis|simia-ignis.png|\n|gen|9\n|tier|[Gen 9] RP Battle\n|clearpoke\n|poke|p1|Glimmet, L18, F|\n|poke|p1|Nosepass, L23, F|\n|poke|p2|Flutter Mane, L23|\n|poke|p2|Banette, L23, M|\n|poke|p2|Nidoqueen, L23, F|\n|poke|p2|Monferno, L23, F|\n|poke|p2|Skarmory, L23, F|\n|poke|p2|Smeargle, L23, M|\n|teampreview\n|inactive|Battle timer is ON: inactive players will automatically lose when time's up. (requested by Hiker Joey)\n|n|☆Hiker Joey|hikerjoey\n|\n|t:|1790307989\n|teamsize|p1|2\n|teamsize|p2|6\n|start\n|switch|p1a: Glimmet|Glimmet, L18, F|100/100\n|switch|p2a: Nidoqueen|Nidoqueen, L23, F|100/100\n|turn|1\n|\n|t:|1790307990\n|move|p2a: Nidoqueen|Earth Power|p1a: Glimmet\n|-supereffective|p1a: Glimmet\n|-damage|p1a: Glimmet|0 fnt\n|faint|p1a: Glimmet\n|\n|upkeep\n|\n|t:|1790307990\n|switch|p1a: Nosepass|Nosepass, L23, F|100/100\n|turn|2\n|\n|t:|1790307993\n|move|p2a: Nidoqueen|Earth Power|p1a: Nosepass\n|-supereffective|p1a: Nosepass\n|-damage|p1a: Nosepass|0 fnt\n|faint|p1a: Nosepass\n|\n|win|simia ignis\n",
+	"inputlog": ">start {\"formatid\":\"gen9rpbattle\",\"seed\":\"sodium,f4ab29a3eb33b4007c315a16394266e2\"}\n>player p1 {\"name\":\"Hiker Joey\",\"avatar\":\"hiker-gen4\",\"team\":\"Glimmet|||Corrosion|Venoshock,AncientPower,StealthRock,AcidSpray|Docile|10,10,10,10,10,10||11,11,11,11,11,11||18|]Nosepass|||MagnetPull|RockSlide,Rest,Spark,Tackle|Lonely|10,10,10,10,10,10||11,11,11,11,11,11||23|\",\"rating\":0}\n>player p2 {\"name\":\"simia ignis\",\"avatar\":\"simia-ignis.png\",\"team\":\"Flutter Mane||BoosterEnergy|Protosynthesis|Moonblast,ShadowBall,MysticalFire,CalmMind|||||S|23|]Banette||BanettiteHalloween|Prankster|SwordsDance,CarrionFeast,Poltergeist,PartingShot|||||S|23|]Nidoqueen||LifeOrb|SheerForce|EarthPower,Flamethrower,Thunderbolt,IceBeam||||||23|]Monferno||ChoiceBand|KindlingCrown|FlareBlitz,Uturn,CloseCombat,ThunderPunch||||||23|]Skarmory||RockyHelmet|Sturdy|Roost,BodyPress,IronDefense,Toxic||||||23|]Smeargle||FocusSash|Moody|Substitute,BatonPass,Spore,ShellSmash||||||23|\",\"rating\":0}\n>p1 team 1, 2\n>p2 team 3, 2, 1, 4, 5, 6\n>p1 move venoshock\n>p2 move earthpower\n>p1 switch 2\n>p1 move rockslide\n>p2 move earthpower",
+	"uploadtime": 1790307993
+}
