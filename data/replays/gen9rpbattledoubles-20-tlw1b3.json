@@ -1,0 +1,12 @@
+{
+	"id": "gen9rpbattledoubles-20-tlw1b3",
+	"format": "[Gen 9] RP Battle (Doubles)",
+	"players": [
+		"Hiker Ben",
+		"simia ignis"
+	],
+	"rating": null,
+	"log": "|j|☆Hiker Ben\n|j|☆simia ignis\n|t:|1790308110\n|gametype|doubles\n|player|p1|Hiker Ben|hiker-gen4|\n|player|p2|simia ignis|simia-ignis.png|\n|gen|9\n|tier|[Gen 9] RP Battle (Doubles)\n|clearpoke\n|poke|p1|Mudbray, L22, F|\n|poke|p1|Corsola, L23, F|\n|poke|p2|Flutter Mane, L23|\n|poke|p2|Banette, L23, F|\n|poke|p2|Nidoqueen, L23, F|\n|poke|p2|Monferno, L23, M|\n|poke|p2|Skarmory, L23, M|\n|poke|p2|Smeargle, L23, F|\n|teampreview\n|inactive|Battle timer is ON: inactive players will automatically lose when time's up. (requested by Hiker Ben)\n|n|☆Hiker Ben|hikerben\n|\n|t:|1790308115\n|teamsize|p1|2\n|teamsize|p2|6\n|start\n|switch|p1a: Mudbray|Mudbray, L22, F|100/100\n|switch|p1b: Corsola|Corsola, L23, F|100/100\n|switch|p2a: Monferno|Monferno, L23, M|100/100\n|switch|p2b: Nidoqueen|Nidoqueen, L23, F|100/100\n|turn|1\n|\n|t:|1790308120\n|move|p2a: Monferno|Close Combat|p1a: Mudbray\n|-damage|p1a: Mudbray|0 fnt\n|-unboost|p2a: Monferno|def|1\n|-unboost|p2a: Monferno|spd|1\n|faint|p1a: Mudbray\n|move|p2b: Nidoqueen|Earth Power|p1b: Corsola\n|-supereffective|p1b: Corsola\n|-damage|p1b: Corsola|0 fnt\n|faint|p1b: Corsola\n|\n|win|simia ignis\n",
+	"inputlog": ">start {\"formatid\":\"gen9rpbattledoubles\",\"seed\":\"sodium,9ef67dd5254edd8efc46c93449c8f7d4\"}\n>player p1 {\"name\":\"Hiker Ben\",\"avatar\":\"hiker-gen4\",\"team\":\"Mudbray|||OwnTempo|Bulldoze,Strength,RockSmash,IronDefense|Careful|10,10,10,10,10,10||11,11,11,11,11,11||22|]Corsola|||NaturalCure|AncientPower,WaterGun,Tackle,AquaRing|Bashful|10,10,10,10,10,10||11,11,11,11,11,11||23|\",\"rating\":0}\n>player p2 {\"name\":\"simia ignis\",\"avatar\":\"simia-ignis.png\",\"team\":\"Flutter Mane||BoosterEnergy|Protosynthesis|Moonblast,ShadowBall,MysticalFire,CalmMind|||||S|23|]Banette||BanettiteHalloween|Prankster|SwordsDance,CarrionFeast,Poltergeist,PartingShot|||||S|23|]Nidoqueen||LifeOrb|SheerForce|EarthPower,Flamethrower,Thunderbolt,IceBeam||||||23|]Monferno||ChoiceBand|KindlingCrown|FlareBlitz,Uturn,CloseCombat,ThunderPunch||||||23|]Skarmory||RockyHelmet|Sturdy|Roost,BodyPress,IronDefense,Toxic||||||23|]Smeargle||FocusSash|Moody|Substitute,BatonPass,Spore,ShellSmash||||||23|\",\"rating\":0}\n>p1 team 1, 2\n>p2 team 4, 3, 2, 1, 5, 6\n>p1 move strength +1, move watergun +1\n>p2 move closecombat +1, move earthpower +2",
+	"uploadtime": 1790308120
+}
