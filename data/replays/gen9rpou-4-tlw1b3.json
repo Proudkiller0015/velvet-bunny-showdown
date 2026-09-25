@@ -1,0 +1,12 @@
+{
+	"id": "gen9rpou-4-tlw1b3",
+	"format": "[Gen 9] RP OU",
+	"players": [
+		"Bunny Stockfish",
+		"SlimeQueenSamantha"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Stockfish\n|j|☆SlimeQueenSamantha\n|t:|1790296147\n|gametype|singles\n|badge|p1|silver|gen9rpou|2-2\n|badge|p2|bronze|gen9rpou|3-3\n|player|p1|Bunny Stockfish|bunny.png|1401\n|player|p2|SlimeQueenSamantha|queen.png|1393\n|gen|9\n|tier|[Gen 9] RP OU\n|rated|\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Endless Battle Clause: Forcing endless battles is banned\n|rule|Species Clause: Limit one of each Pokémon\n|rule|OHKO Clause: OHKO moves are banned\n|rule|Evasion Clause: Evasion abilities, items, and moves are banned\n|rule|Evasion Abilities Clause: Evasion abilities are banned\n|rule|Evasion Items Clause: Evasion items are banned\n|rule|Evasion Moves Clause: Evasion moves are banned\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|clearpoke\n|poke|p1|Magearna|\n|poke|p1|Dragapult|\n|poke|p1|Torterra|\n|poke|p1|Ursaluna-Bloodmoon|\n|poke|p1|Tinkaton|\n|poke|p1|Cinderace|\n|poke|p2|Spiritomb|\n|poke|p2|Glaceon|\n|poke|p2|Garchomp|\n|poke|p2|Roserade|\n|poke|p2|Togekiss|\n|poke|p2|Lucario|\n|teampreview\n|c|☆Bunny Stockfish|Good luck! Playing on **stockfish**.\n|\n|t:|1790296154\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Tinkaton|Tinkaton|100/100\n|switch|p2a: Roserade|Roserade|100/100\n|-ability|p2a: Roserade|Masquerade\n|-start|p1a: Tinkaton|move: Taunt\n|-item|p1a: Tinkaton|Air Balloon\n|turn|1\n|\n|t:|1790296157\n|switch|p1a: Dragapult|Dragapult|100/100\n|move|p2a: Roserade|Oxidize|p1a: Dragapult\n|-resisted|p1a: Dragapult\n|-damage|p1a: Dragapult|78/100\n|\n|upkeep\n|turn|2\n|\n|t:|1790296163\n|switch|p2a: Togekiss|Togekiss|100/100\n|move|p1a: Dragapult|Flamethrower|p2a: Togekiss\n|-damage|p2a: Togekiss|61/100\n|\n|upkeep\n|turn|3\n|\n|t:|1790296168\n|switch|p1a: Magearna|Magearna|100/100\n|move|p2a: Togekiss|Alluring Voice|p1a: Magearna\n|-resisted|p1a: Magearna\n|-damage|p1a: Magearna|81/100\n|\n|upkeep\n|turn|4\n|\n|t:|1790296172\n|switch|p2a: Roserade|Roserade|100/100\n|-ability|p2a: Roserade|Masquerade\n|-start|p1a: Magearna|move: Taunt\n|-start|p1a: Magearna|Dynamax|\n|-heal|p1a: Magearna|81/100|[silent]\n|move|p1a: Magearna|Max Steelspike|p2a: Roserade\n|-damage|p2a: Roserade|20/100\n|-boost|p1a: Magearna|def|1\n|\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1790296179
+}
