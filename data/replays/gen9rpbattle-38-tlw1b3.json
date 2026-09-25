@@ -1,0 +1,12 @@
+{
+	"id": "gen9rpbattle-38-tlw1b3",
+	"format": "[Gen 9] RP Battle",
+	"players": [
+		"Swimmer Hiro",
+		"simia ignis"
+	],
+	"rating": null,
+	"log": "|j|☆Swimmer Hiro\n|j|☆simia ignis\n|t:|1790308578\n|gametype|singles\n|player|p1|Swimmer Hiro|swimmer-gen4|\n|player|p2|simia ignis|simia-ignis.png|\n|gen|9\n|tier|[Gen 9] RP Battle\n|clearpoke\n|poke|p1|Shellder, L21, M|\n|poke|p1|Buizel, L23, M|\n|poke|p2|Flutter Mane, L23|\n|poke|p2|Banette, L23, F|\n|poke|p2|Nidoqueen, L23, F|\n|poke|p2|Monferno, L23, M|\n|poke|p2|Skarmory, L23, F|\n|poke|p2|Smeargle, L23, M|\n|teampreview\n|inactive|Battle timer is ON: inactive players will automatically lose when time's up. (requested by Swimmer Hiro)\n|n|☆Swimmer Hiro|swimmerhiro\n|\n|t:|1790308581\n|teamsize|p1|2\n|teamsize|p2|6\n|start\n|switch|p1a: Buizel|Buizel, L23, M|100/100\n|switch|p2a: Monferno|Monferno, L23, M|100/100\n|turn|1\n|\n|t:|1790308583\n|move|p2a: Monferno|Close Combat|p1a: Buizel\n|-damage|p1a: Buizel|0 fnt\n|-unboost|p2a: Monferno|def|1\n|-unboost|p2a: Monferno|spd|1\n|faint|p1a: Buizel\n|\n|upkeep\n|\n|t:|1790308583\n|switch|p1a: Shellder|Shellder, L21, M|100/100\n|turn|2\n|\n|t:|1790308584\n|move|p2a: Monferno|Close Combat|p1a: Shellder\n|-damage|p1a: Shellder|0 fnt\n|-unboost|p2a: Monferno|def|1\n|-unboost|p2a: Monferno|spd|1\n|faint|p1a: Shellder\n|\n|win|simia ignis\n",
+	"inputlog": ">start {\"formatid\":\"gen9rpbattle\",\"seed\":\"sodium,34ff640b87eb3bced50f8bf3fc9ca7d0\"}\n>player p1 {\"name\":\"Swimmer Hiro\",\"avatar\":\"swimmer-gen4\",\"team\":\"Shellder|||SkillLink|Whirlpool,IceShard,Tackle,WaterGun|Quiet|10,10,10,10,10,10||11,11,11,11,11,11||21|]Buizel|||SwiftSwim|WaterGun,Bite,QuickAttack,Tackle|Brave|10,10,10,10,10,10||11,11,11,11,11,11||23|\",\"rating\":0}\n>player p2 {\"name\":\"simia ignis\",\"avatar\":\"simia-ignis.png\",\"team\":\"Flutter Mane||BoosterEnergy|Protosynthesis|Moonblast,ShadowBall,MysticalFire,CalmMind|||||S|23|]Banette||BanettiteHalloween|Prankster|SwordsDance,CarrionFeast,Poltergeist,PartingShot|||||S|23|]Nidoqueen||LifeOrb|SheerForce|EarthPower,Flamethrower,Thunderbolt,IceBeam||||||23|]Monferno||ChoiceBand|KindlingCrown|FlareBlitz,Uturn,CloseCombat,ThunderPunch||||||23|]Skarmory||RockyHelmet|Sturdy|Roost,BodyPress,IronDefense,Toxic||||||23|]Smeargle||FocusSash|Moody|Substitute,BatonPass,Spore,ShellSmash||||||23|\",\"rating\":0}\n>p1 team 2, 1\n>p2 team 4, 2, 3, 1, 5, 6\n>p1 move watergun\n>p2 move closecombat\n>p1 switch 2\n>p1 move watergun\n>p2 move closecombat",
+	"uploadtime": 1790308584
+}
