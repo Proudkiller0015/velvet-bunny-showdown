@@ -1,0 +1,12 @@
+{
+	"id": "gen9rpbattle-228-tlw1b3",
+	"format": "[Gen 9] RP Battle",
+	"players": [
+		"Worker Max",
+		"StaleThunder126"
+	],
+	"rating": null,
+	"log": "|j|☆Worker Max\n|j|☆StaleThunder126\n|t:|1790466811\n|gametype|singles\n|player|p1|Worker Max|worker-gen6|\n|player|p2|StaleThunder126|jolt.png|\n|gen|9\n|tier|[Gen 9] RP Battle\n|clearpoke\n|poke|p1|Omanyte, L9, F|\n|poke|p1|Relicanth, L13, F|\n|poke|p2|Ariados, L13, M|\n|poke|p2|Froakie, L13, F|\n|poke|p2|Hattrem, L13, F|\n|poke|p2|Squawkabilly-Yellow, L13, F|\n|poke|p2|Nuzleaf, L13, F|\n|poke|p2|Zangoose, L13, F|\n|teampreview\n|inactive|Battle timer is ON: inactive players will automatically lose when time's up. (requested by Worker Max)\n|n|☆Worker Max|workermax\n|\n|t:|1790466824\n|teamsize|p1|2\n|teamsize|p2|6\n|start\n|switch|p1a: Relicanth|Relicanth, L13, F|100/100\n|switch|p2a: Nuzleaf|Nuzleaf, L13, F, shiny|100/100\n|turn|1\n|\n|t:|1790466830\n|move|p2a: Nuzleaf|Leaf Blade|p1a: Relicanth\n|-supereffective|p1a: Relicanth\n|-damage|p1a: Relicanth|0 fnt\n|faint|p1a: Relicanth\n|\n|upkeep\n|\n|t:|1790466830\n|switch|p1a: Omanyte|Omanyte, L9, F|100/100\n|turn|2\n|\n|t:|1790466838\n|move|p2a: Nuzleaf|Leaf Blade|p1a: Omanyte\n|-supereffective|p1a: Omanyte\n|-damage|p1a: Omanyte|0 fnt\n|faint|p1a: Omanyte\n|\n|win|StaleThunder126\n",
+	"inputlog": ">start {\"formatid\":\"gen9rpbattle\",\"seed\":\"sodium,399f9e354ede7716a3973f504f0f3ecc\"}\n>player p1 {\"name\":\"Worker Max\",\"avatar\":\"worker-gen6\",\"team\":\"Omanyte|||WeakArmor|Rollout,Bind,SandAttack,Withdraw|Jolly|||8,8,8,8,8,8||9|]Relicanth|||RockHead|AncientPower,WaterGun,Tackle,Harden|Timid|||8,8,8,8,8,8||13|\",\"rating\":0}\n>player p2 {\"name\":\"StaleThunder126\",\"avatar\":\"jolt.png\",\"team\":\"Ariados|||Insomnia|PoisonJab,StickyWeb,KnockOff,Megahorn|Adamant|||||13|]Froakie|||Protean|HydroPump,Uturn,IceBeam,GrassKnot|Modest|||||13|]Hattrem|||MagicBounce|Psychic,MysticalFire,DrainingKiss,Nuzzle|Modest|||||13|]Squawkabilly-Yellow|||Hustle|BraveBird,DoubleEdge,FoulPlay,PartingShot|Jolly|||||13|]Nuzleaf|||Chlorophyll|MerchantsCall,LeafBlade,SwordsDance,SuckerPunch|Adamant||||S|13|]Zangoose|||ToxicBoost|Facade,CloseCombat,KnockOff,SwordsDance|Jolly|||||13|\",\"rating\":0}\n>p1 team 2, 1\n>p2 team 5, 2, 3, 4, 1, 6\n>p1 move ancientpower\n>p2 move leafblade\n>p1 switch 2\n>p1 move bind\n>p2 move leafblade",
+	"uploadtime": 1790466838
+}
