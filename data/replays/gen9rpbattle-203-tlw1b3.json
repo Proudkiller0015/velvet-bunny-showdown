@@ -1,0 +1,12 @@
+{
+	"id": "gen9rpbattle-203-tlw1b3",
+	"format": "[Gen 9] RP Battle",
+	"players": [
+		"Camper Ken",
+		"StaleThunder126"
+	],
+	"rating": null,
+	"log": "|j|☆Camper Ken\n|j|☆StaleThunder126\n|t:|1790462448\n|gametype|singles\n|player|p1|Camper Ken|camper-gen6|\n|player|p2|StaleThunder126|jolt.png|\n|gen|9\n|tier|[Gen 9] RP Battle\n|clearpoke\n|poke|p1|Sewaddle, L12, F|\n|poke|p1|Farfetch’d, L13, F|\n|poke|p2|Squawkabilly-Yellow, L13, F|\n|poke|p2|Froakie, L13, M|\n|poke|p2|Ariados, L13, M|\n|poke|p2|Hattrem, L13, F|\n|poke|p2|Zangoose, L13, F|\n|poke|p2|Sawsbuck, L13, M|\n|teampreview\n|inactive|Battle timer is ON: inactive players will automatically lose when time's up. (requested by Camper Ken)\n|n|☆Camper Ken|camperken\n|\n|t:|1790462462\n|teamsize|p1|2\n|teamsize|p2|6\n|start\n|switch|p1a: Farfetch’d|Farfetch’d, L13, F|100/100\n|switch|p2a: Froakie|Froakie, L13, M|100/100\n|turn|1\n|\n|t:|1790462469\n|move|p2a: Froakie|Ice Beam|p1a: Farfetch’d\n|-start|p2a: Froakie|typechange|Ice|[from] ability: Protean\n|-supereffective|p1a: Farfetch’d\n|-damage|p1a: Farfetch’d|0 fnt\n|faint|p1a: Farfetch’d\n|\n|upkeep\n|\n|t:|1790462469\n|switch|p1a: Sewaddle|Sewaddle, L12, F|100/100\n|turn|2\n|\n|t:|1790462479\n|move|p2a: Froakie|Ice Beam|p1a: Sewaddle\n|-supereffective|p1a: Sewaddle\n|-damage|p1a: Sewaddle|0 fnt\n|faint|p1a: Sewaddle\n|\n|win|StaleThunder126\n",
+	"inputlog": ">start {\"formatid\":\"gen9rpbattle\",\"seed\":\"sodium,f617d636f9ca904b18d46bab1d312a0f\"}\n>player p1 {\"name\":\"Camper Ken\",\"avatar\":\"camper-gen6\",\"team\":\"Sewaddle|||Swarm|BugBite,Tackle,StringShot|Hasty|||8,8,8,8,8,8||12|]Farfetch’d|||InnerFocus|Peck,FuryCutter,Leer,SandAttack|Impish|||8,8,8,8,8,8||13|\",\"rating\":0}\n>player p2 {\"name\":\"StaleThunder126\",\"avatar\":\"jolt.png\",\"team\":\"Squawkabilly-Yellow|||Hustle|BraveBird,DoubleEdge,FoulPlay,PartingShot|Jolly|||||13|]Froakie|||Protean|HydroPump,Uturn,IceBeam,GrassKnot|Modest|||||13|]Ariados|||Insomnia|PoisonJab,StickyWeb,ToxicSpikes,Megahorn|Adamant|||||13|]Hattrem|||MagicBounce|Psychic,CalmMind,MysticalFire,ThunderWave|Modest|||||13|]Zangoose|||ToxicBoost|Facade,CloseCombat,KnockOff,SwordsDance|Jolly|||||13|]Sawsbuck|||SapSipper|DoubleEdge,SwordsDance,HornLeech,HighHorsepower|Jolly|||||13|\",\"rating\":0}\n>p1 team 2, 1\n>p2 team 2, 1, 3, 4, 5, 6\n>p1 move furycutter\n>p2 move icebeam\n>p1 switch 2\n>p1 move bugbite\n>p2 move icebeam",
+	"uploadtime": 1790462479
+}
