@@ -1,0 +1,12 @@
+{
+	"id": "gen9rpbattle-110-tlw1b3",
+	"format": "[Gen 9] RP Battle",
+	"players": [
+		"Lass Ruby",
+		"StaleThunder126"
+	],
+	"rating": null,
+	"log": "|j|☆Lass Ruby\n|j|☆StaleThunder126\n|t:|1790435345\n|gametype|singles\n|player|p1|Lass Ruby|lass-gen4|\n|player|p2|StaleThunder126|jolt.png|\n|gen|9\n|tier|[Gen 9] RP Battle\n|clearpoke\n|poke|p1|Pumpkaboo-*, L11, F|\n|poke|p1|Pumpkaboo-*, L13, F|\n|poke|p2|Smeargle, L13, M|\n|poke|p2|Nuzleaf, L13, M|\n|poke|p2|Pidgey, L13, F|\n|poke|p2|Taillow, L13, M|\n|poke|p2|Vivillon, L13, F|\n|poke|p2|Fletchling, L13, F|\n|teampreview\n|inactive|Battle timer is ON: inactive players will automatically lose when time's up. (requested by Lass Ruby)\n|n|☆Lass Ruby|lassruby\n|\n|t:|1790435351\n|teamsize|p1|2\n|teamsize|p2|6\n|start\n|switch|p1a: Pumpkaboo|Pumpkaboo-Small, L13, F|100/100\n|switch|p2a: Pidgey|Pidgey, L13, F|100/100\n|turn|1\n|\n|t:|1790435358\n|move|p1a: Pumpkaboo|Shadow Sneak|p2a: Pidgey\n|-immune|p2a: Pidgey\n|move|p2a: Pidgey|Brave Bird|p1a: Pumpkaboo\n|-supereffective|p1a: Pumpkaboo\n|-damage|p1a: Pumpkaboo|0 fnt\n|faint|p1a: Pumpkaboo\n|-damage|p2a: Pidgey|68/100|[from] Recoil\n|\n|upkeep\n|\n|t:|1790435358\n|switch|p1a: Pumpkaboo|Pumpkaboo-Super, L11, F|100/100\n|turn|2\n|\n|t:|1790435369\n|move|p2a: Pidgey|Brave Bird|p1a: Pumpkaboo\n|-supereffective|p1a: Pumpkaboo\n|-damage|p1a: Pumpkaboo|0 fnt\n|faint|p1a: Pumpkaboo\n|-damage|p2a: Pidgey|38/100|[from] Recoil\n|\n|win|StaleThunder126\n",
+	"inputlog": ">start {\"formatid\":\"gen9rpbattle\",\"seed\":\"sodium,d20e5337408e5271cbbd39c9621c120e\"}\n>player p1 {\"name\":\"Lass Ruby\",\"avatar\":\"lass-gen4\",\"team\":\"Pumpkaboo-Super|||Pickup|RazorLeaf,ShadowSneak,ConfuseRay,Astonish|Jolly|||8,8,8,8,8,8||11|]Pumpkaboo-Small|||Pickup|RazorLeaf,ShadowSneak,ConfuseRay,Astonish|Mild|||8,8,8,8,8,8||13|\",\"rating\":0}\n>player p2 {\"name\":\"StaleThunder126\",\"avatar\":\"jolt.png\",\"team\":\"Smeargle|||OwnTempo|DoubleEdge,StickyWeb,StealthRock,Taunt|Jolly|||||13|]Nuzleaf|||Chlorophyll|MerchantsCall,LeafStorm,Defog,KnockOff|Adamant||||S|13|]Pidgey|||BigPecks|BraveBird,Roost,Return,Uturn|Adamant|||||13|]Taillow|||Scrappy|Hurricane,Boomburst,HeatWave,Uturn|Timid|||||13|]Vivillon|||CompoundEyes|PollenPuff,QuiverDance,AirSlash,EnergyBall|Timid|||||13|]Fletchling|||GaleWings|BraveBird,SwordsDance,QuickAttack,FlareBlitz|Adamant|||||13|\",\"rating\":0}\n>p1 team 2, 1\n>p2 team 3, 2, 1, 4, 5, 6\n>p1 move shadowsneak\n>p2 move bravebird\n>p1 switch 2\n>p1 move astonish\n>p2 move bravebird",
+	"uploadtime": 1790435369
+}
