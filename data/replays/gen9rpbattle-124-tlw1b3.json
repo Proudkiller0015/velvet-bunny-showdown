@@ -1,0 +1,12 @@
+{
+	"id": "gen9rpbattle-124-tlw1b3",
+	"format": "[Gen 9] RP Battle",
+	"players": [
+		"Lass Ada",
+		"StaleThunder126"
+	],
+	"rating": null,
+	"log": "|j|☆Lass Ada\n|j|☆StaleThunder126\n|t:|1790436744\n|gametype|singles\n|player|p1|Lass Ada|lass-gen4|\n|player|p2|StaleThunder126|jolt.png|\n|gen|9\n|tier|[Gen 9] RP Battle\n|clearpoke\n|poke|p1|Lickitung, L11, F|\n|poke|p1|Munchlax, L13, M|\n|poke|p2|Ariados, L13, F|\n|poke|p2|Froakie, L13, F|\n|poke|p2|Helioptile, L13, F|\n|poke|p2|Meowth, L13, F|\n|poke|p2|Vivillon, L13, F|\n|poke|p2|Doduo, L13, M|\n|teampreview\n|inactive|Battle timer is ON: inactive players will automatically lose when time's up. (requested by Lass Ada)\n|n|☆Lass Ada|lassada\n|\n|t:|1790436758\n|teamsize|p1|2\n|teamsize|p2|6\n|start\n|switch|p1a: Lickitung|Lickitung, L11, F|100/100\n|switch|p2a: Meowth|Meowth, L13, F|100/100\n|turn|1\n|\n|t:|1790436767\n|move|p2a: Meowth|Body Slam|p1a: Lickitung\n|-damage|p1a: Lickitung|61/100\n|move|p1a: Lickitung|Defense Curl|p1a: Lickitung\n|-boost|p1a: Lickitung|def|1\n|\n|upkeep\n|turn|2\n|\n|t:|1790436776\n|move|p2a: Meowth|Body Slam|p1a: Lickitung\n|-damage|p1a: Lickitung|32/100\n|move|p1a: Lickitung|Lick|p2a: Meowth\n|-immune|p2a: Meowth\n|\n|upkeep\n|turn|3\n|\n|t:|1790436783\n|move|p2a: Meowth|Body Slam|p1a: Lickitung\n|-damage|p1a: Lickitung|3/100\n|-status|p1a: Lickitung|par\n|move|p1a: Lickitung|Lick|p2a: Meowth\n|-immune|p2a: Meowth\n|\n|upkeep\n|turn|4\n|\n|t:|1790436791\n|move|p2a: Meowth|Gunk Shot|p1a: Lickitung\n|-damage|p1a: Lickitung|0 fnt\n|faint|p1a: Lickitung\n|\n|upkeep\n|\n|t:|1790436791\n|switch|p1a: Munchlax|Munchlax, L13, M|100/100\n|turn|5\n|\n|t:|1790436798\n|move|p2a: Meowth|Body Slam|p1a: Munchlax\n|-damage|p1a: Munchlax|58/100\n|move|p1a: Munchlax|Tackle|p2a: Meowth\n|-damage|p2a: Meowth|68/100\n|\n|upkeep\n|turn|6\n",
+	"inputlog": null,
+	"uploadtime": 1790436803
+}
