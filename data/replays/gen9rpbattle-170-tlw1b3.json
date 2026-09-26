@@ -1,0 +1,12 @@
+{
+	"id": "gen9rpbattle-170-tlw1b3",
+	"format": "[Gen 9] RP Battle",
+	"players": [
+		"Youngster Hiro",
+		"StaleThunder126"
+	],
+	"rating": null,
+	"log": "|j|☆Youngster Hiro\n|j|☆StaleThunder126\n|t:|1790443933\n|gametype|singles\n|player|p1|Youngster Hiro|youngster-gen4|\n|player|p2|StaleThunder126|jolt.png|\n|gen|9\n|tier|[Gen 9] RP Battle\n|clearpoke\n|poke|p1|Stufful, L10, M|\n|poke|p1|Lickitung, L13, M|\n|poke|p2|Ariados, L13, F|\n|poke|p2|Froakie, L13, M|\n|poke|p2|Hattrem, L13, F|\n|poke|p2|Sawsbuck, L13, M|\n|poke|p2|Zangoose, L13, M|\n|poke|p2|Doduo, L13, M|\n|teampreview\n|inactive|Battle timer is ON: inactive players will automatically lose when time's up. (requested by Youngster Hiro)\n|n|☆Youngster Hiro|youngsterhiro\n|\n|t:|1790443949\n|teamsize|p1|2\n|teamsize|p2|6\n|start\n|switch|p1a: Stufful|Stufful, L10, M|100/100\n|switch|p2a: Zangoose|Zangoose, L13, M|100/100\n|turn|1\n|\n|t:|1790443957\n|move|p2a: Zangoose|Close Combat|p1a: Stufful\n|-supereffective|p1a: Stufful\n|-damage|p1a: Stufful|0 fnt\n|-unboost|p2a: Zangoose|def|1\n|-unboost|p2a: Zangoose|spd|1\n|faint|p1a: Stufful\n|\n|upkeep\n|\n|t:|1790443957\n|switch|p1a: Lickitung|Lickitung, L13, M|100/100\n|turn|2\n|\n|t:|1790443969\n|move|p2a: Zangoose|Close Combat|p1a: Lickitung\n|-supereffective|p1a: Lickitung\n|-damage|p1a: Lickitung|0 fnt\n|-unboost|p2a: Zangoose|def|1\n|-unboost|p2a: Zangoose|spd|1\n|faint|p1a: Lickitung\n|\n|win|StaleThunder126\n",
+	"inputlog": ">start {\"formatid\":\"gen9rpbattle\",\"seed\":\"sodium,6492005dc585effda503d81b9ad0af53\"}\n>player p1 {\"name\":\"Youngster Hiro\",\"avatar\":\"youngster-gen4\",\"team\":\"Stufful|||Klutz|Tackle,BrutalSwing,Payback,Leer|Rash|||8,8,8,8,8,8||10|]Lickitung|||Oblivious|Lick,Rollout,DefenseCurl,Supersonic|Serious|||8,8,8,8,8,8||13|\",\"rating\":0}\n>player p2 {\"name\":\"StaleThunder126\",\"avatar\":\"jolt.png\",\"team\":\"Ariados|||Insomnia|PoisonJab,StickyWeb,KnockOff,Megahorn|Adamant|||||13|]Froakie|||Protean|HydroPump,Uturn,IceBeam,GrassKnot|Modest|||||13|]Hattrem|||MagicBounce|Psychic,MysticalFire,DrainingKiss,Nuzzle|Modest|||||13|]Sawsbuck|||SapSipper|DoubleEdge,SwordsDance,HornLeech,HighHorsepower|Jolly|||||13|]Zangoose|||ToxicBoost|QuickAttack,CloseCombat,KnockOff,SwordsDance|Jolly|||||13|]Doduo|||EarlyBird|BraveBird,SwordsDance,QuickAttack,KnockOff|Adamant|||||13|\",\"rating\":0}\n>p1 team 1, 2\n>p2 team 5, 2, 3, 4, 1, 6\n>p1 move payback\n>p2 move closecombat\n>p1 switch 2\n>p1 move rollout\n>p2 move closecombat",
+	"uploadtime": 1790443969
+}
