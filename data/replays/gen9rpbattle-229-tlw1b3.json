@@ -1,0 +1,12 @@
+{
+	"id": "gen9rpbattle-229-tlw1b3",
+	"format": "[Gen 9] RP Battle",
+	"players": [
+		"Youngster Jin",
+		"StaleThunder126"
+	],
+	"rating": null,
+	"log": "|j|☆Youngster Jin\n|j|☆StaleThunder126\n|t:|1790466890\n|gametype|singles\n|player|p1|Youngster Jin|youngster-gen4|\n|player|p2|StaleThunder126|jolt.png|\n|gen|9\n|tier|[Gen 9] RP Battle\n|clearpoke\n|poke|p1|Combee, L12, F|\n|poke|p1|Bellsprout, L13, F|\n|poke|p2|Ariados, L13, F|\n|poke|p2|Froakie, L13, M|\n|poke|p2|Hattrem, L13, F|\n|poke|p2|Squawkabilly-Yellow, L13, M|\n|poke|p2|Nuzleaf, L13, M|\n|poke|p2|Zangoose, L13, F|\n|teampreview\n|inactive|Battle timer is ON: inactive players will automatically lose when time's up. (requested by Youngster Jin)\n|n|☆Youngster Jin|youngsterjin\n|\n|t:|1790466895\n|teamsize|p1|2\n|teamsize|p2|6\n|start\n|switch|p1a: Combee|Combee, L12, F|100/100\n|switch|p2a: Hattrem|Hattrem, L13, F|100/100\n|turn|1\n|\n|t:|1790466903\n|move|p2a: Hattrem|Mystical Fire|p1a: Combee\n|-supereffective|p1a: Combee\n|-damage|p1a: Combee|0 fnt\n|faint|p1a: Combee\n|\n|upkeep\n|\n|t:|1790466903\n|switch|p1a: Bellsprout|Bellsprout, L13, F|100/100\n|turn|2\n|\n|t:|1790466910\n|move|p2a: Hattrem|Mystical Fire|p1a: Bellsprout\n|-supereffective|p1a: Bellsprout\n|-damage|p1a: Bellsprout|0 fnt\n|faint|p1a: Bellsprout\n|\n|win|StaleThunder126\n",
+	"inputlog": ">start {\"formatid\":\"gen9rpbattle\",\"seed\":\"sodium,5047858eaddb780876b5cb3356c6bc3c\"}\n>player p1 {\"name\":\"Youngster Jin\",\"avatar\":\"youngster-gen4\",\"team\":\"Combee|||HoneyGather|Gust,StruggleBug,SweetScent,BugBite|Quiet|||8,8,8,8,8,8||12|]Bellsprout|||Chlorophyll|VineWhip,Wrap,Growth|Relaxed|||8,8,8,8,8,8||13|\",\"rating\":0}\n>player p2 {\"name\":\"StaleThunder126\",\"avatar\":\"jolt.png\",\"team\":\"Ariados|||Insomnia|PoisonJab,StickyWeb,KnockOff,Megahorn|Adamant|||||13|]Froakie|||Protean|HydroPump,Uturn,IceBeam,GrassKnot|Modest|||||13|]Hattrem|||MagicBounce|Psychic,MysticalFire,DrainingKiss,Nuzzle|Modest|||||13|]Squawkabilly-Yellow|||Hustle|BraveBird,DoubleEdge,FoulPlay,PartingShot|Jolly|||||13|]Nuzleaf|||Chlorophyll|MerchantsCall,LeafBlade,SwordsDance,SuckerPunch|Adamant||||S|13|]Zangoose|||ToxicBoost|Facade,CloseCombat,KnockOff,SwordsDance|Jolly|||||13|\",\"rating\":0}\n>p1 team 1, 2\n>p2 team 3, 2, 1, 4, 5, 6\n>p1 move bugbite\n>p2 move mysticalfire\n>p1 switch 2\n>p1 move vinewhip\n>p2 move mysticalfire",
+	"uploadtime": 1790466910
+}
