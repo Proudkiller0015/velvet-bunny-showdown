@@ -1,0 +1,12 @@
+{
+	"id": "gen9rpbattle-194-tlw1b3",
+	"format": "[Gen 9] RP Battle",
+	"players": [
+		"Fisherman Tom",
+		"StaleThunder126"
+	],
+	"rating": null,
+	"log": "|j|☆Fisherman Tom\n|j|☆StaleThunder126\n|t:|1790461116\n|gametype|singles\n|player|p1|Fisherman Tom|fisherman-gen4|\n|player|p2|StaleThunder126|jolt.png|\n|gen|9\n|tier|[Gen 9] RP Battle\n|clearpoke\n|poke|p1|Shellder, L11, F|\n|poke|p1|Chinchou, L13, F|\n|poke|p2|Ariados, L13, F|\n|poke|p2|Froakie, L13, F|\n|poke|p2|Hattrem, L13, F|\n|poke|p2|Squawkabilly-Yellow, L13, F|\n|poke|p2|Nuzleaf, L13, F|\n|poke|p2|Zangoose, L13, F|\n|teampreview\n|inactive|Battle timer is ON: inactive players will automatically lose when time's up. (requested by Fisherman Tom)\n|c|☆Fisherman Tom|⚠️ Jolt can't use held items (they unlock with your first badge) yet (not blocked, so just don't).\n|c|☆Fisherman Tom|🔒 Z-Moves, Dynamax, Terastallization are locked until the story gives Jolt the item; the battle won't allow them.\n|c|☆Fisherman Tom|Your Showdown team must match your box: only Pokémon you own, at or below their box le\n|c|☆Fisherman Tom|Hooked one! Oh, it is a trainer.\n|\n|t:|1790461128\n|teamsize|p1|2\n|teamsize|p2|6\n|start\n|switch|p1a: Chinchou|Chinchou, L13, F|100/100\n|switch|p2a: Squawkabilly|Squawkabilly-Yellow, L13, F|100/100\n|turn|1\n|\n|t:|1790461137\n|move|p2a: Squawkabilly|Foul Play|p1a: Chinchou\n|-damage|p1a: Chinchou|63/100\n|move|p1a: Chinchou|Bubble Beam|p2a: Squawkabilly\n|-damage|p2a: Squawkabilly|73/100\n|\n|upkeep\n|turn|2\n|\n|t:|1790461166\n|switch|p2a: Hattrem|Hattrem, L13, F|100/100\n|move|p1a: Chinchou|Water Gun|p2a: Hattrem\n|-damage|p2a: Hattrem|83/100\n|\n|upkeep\n|turn|3\n|\n|t:|1790461177\n|move|p1a: Chinchou|Bubble Beam|p2a: Hattrem\n|-damage|p2a: Hattrem|59/100\n|move|p2a: Hattrem|Draining Kiss|p1a: Chinchou\n|-damage|p1a: Chinchou|38/100\n|-heal|p2a: Hattrem|79/100|[from] drain|[of] p1a: Chinchou\n|\n|upkeep\n|turn|4\n|\n|t:|1790461185\n|move|p1a: Chinchou|Bubble Beam|p2a: Hattrem\n|-damage|p2a: Hattrem|57/100\n|move|p2a: Hattrem|Draining Kiss|p1a: Chinchou\n|-damage|p1a: Chinchou|12/100\n|-heal|p2a: Hattrem|76/100|[from] drain|[of] p1a: Chinchou\n|\n|upkeep\n|turn|5\n|\n|t:|1790461193\n|move|p1a: Chinchou|Bubble Beam|p2a: Hattrem\n|-damage|p2a: Hattrem|52/100\n|move|p2a: Hattrem|Draining Kiss|p1a: Chinchou\n|-damage|p1a: Chinchou|0 fnt\n|-heal|p2a: Hattrem|61/100|[from] drain|[of] p1a: Chinchou\n|faint|p1a: Chinchou\n|\n|upkeep\n|\n|t:|1790461193\n|switch|p1a: Shellder|Shellder, L11, F|100/100\n|turn|6\n",
+	"inputlog": null,
+	"uploadtime": 1790461204
+}
