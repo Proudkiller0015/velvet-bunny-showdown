@@ -1,0 +1,12 @@
+{
+	"id": "gen9rpbattle-115-tlw1b3",
+	"format": "[Gen 9] RP Battle",
+	"players": [
+		"Camper Finn",
+		"StaleThunder126"
+	],
+	"rating": null,
+	"log": "|j|☆Camper Finn\n|j|☆StaleThunder126\n|t:|1790435766\n|gametype|singles\n|player|p1|Camper Finn|camper-gen6|\n|player|p2|StaleThunder126|jolt.png|\n|gen|9\n|tier|[Gen 9] RP Battle\n|clearpoke\n|poke|p1|Capsakid, L9, M|\n|poke|p1|Litleo, L13, F|\n|poke|p2|Froakie, L13, F|\n|poke|p2|Doduo, L13, F|\n|poke|p2|Helioptile, L13, M|\n|poke|p2|Meowth, L13, M|\n|poke|p2|Vivillon, L13, F|\n|poke|p2|Sizzlipede, L13, F|\n|teampreview\n|inactive|Battle timer is ON: inactive players will automatically lose when time's up. (requested by Camper Finn)\n|n|☆Camper Finn|camperfinn\n|\n|t:|1790435788\n|teamsize|p1|2\n|teamsize|p2|6\n|start\n|switch|p1a: Litleo|Litleo, L13, F|100/100\n|switch|p2a: Froakie|Froakie, L13, F|100/100\n|turn|1\n|\n|t:|1790435795\n|move|p2a: Froakie|Hydro Pump|p1a: Litleo\n|-supereffective|p1a: Litleo\n|-damage|p1a: Litleo|0 fnt\n|faint|p1a: Litleo\n|\n|upkeep\n|\n|t:|1790435795\n|switch|p1a: Capsakid|Capsakid, L9, M|100/100\n|turn|2\n|\n|t:|1790435804\n|switch|p2a: Sizzlipede|Sizzlipede, L13, F|100/100\n|move|p1a: Capsakid|Razor Leaf|p2a: Sizzlipede\n|-resisted|p2a: Sizzlipede\n|-damage|p2a: Sizzlipede|98/100\n|\n|upkeep\n|turn|3\n|\n|t:|1790435821\n|move|p2a: Sizzlipede|Fire Lash|p1a: Capsakid\n|-supereffective|p1a: Capsakid\n|-damage|p1a: Capsakid|0 fnt\n|faint|p1a: Capsakid\n|\n|win|StaleThunder126\n",
+	"inputlog": ">start {\"formatid\":\"gen9rpbattle\",\"seed\":\"sodium,3122eced51c7b71174c778fa6beaa610\"}\n>player p1 {\"name\":\"Camper Finn\",\"avatar\":\"camper-gen6\",\"team\":\"Capsakid|||Chlorophyll|RazorLeaf,Bite,Growth,Leafage|Brave|||8,8,8,8,8,8||9|]Litleo|||Moxie|Headbutt,Ember,Tackle,WorkUp|Adamant|||8,8,8,8,8,8||13|\",\"rating\":0}\n>player p2 {\"name\":\"StaleThunder126\",\"avatar\":\"jolt.png\",\"team\":\"Froakie|||Protean|HydroPump,Uturn,IceBeam,GrassKnot|Modest|||||13|]Doduo|||EarlyBird|BraveBird,DoubleEdge,KnockOff,QuickAttack|Adamant|||||13|]Helioptile|||DrySkin|Thunderbolt,Glare,Surf,DarkPulse|Modest|||||13|]Meowth|||Pickup|DoubleEdge,SeedBomb,BodySlam,ThroatChop|Jolly|||||13|]Vivillon|||CompoundEyes|BugBuzz,QuiverDance,Hurricane,SleepPowder|Timid|||||13|]Sizzlipede|||FlashFire|LeechLife,Coil,FireLash,PowerWhip|Adamant|||||13|\",\"rating\":0}\n>p1 team 2, 1\n>p2 team 1, 2, 3, 4, 5, 6\n>p1 move headbutt\n>p2 move hydropump\n>p1 switch 2\n>p1 move razorleaf\n>p2 switch 6\n>p1 move razorleaf\n>p2 move firelash",
+	"uploadtime": 1790435821
+}
