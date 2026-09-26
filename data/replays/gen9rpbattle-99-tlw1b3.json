@@ -1,0 +1,12 @@
+{
+	"id": "gen9rpbattle-99-tlw1b3",
+	"format": "[Gen 9] RP Battle",
+	"players": [
+		"Lass Emi",
+		"StaleThunder126"
+	],
+	"rating": null,
+	"log": "|j|☆Lass Emi\n|j|☆StaleThunder126\n|t:|1790433392\n|gametype|singles\n|player|p1|Lass Emi|lass-gen4|\n|player|p2|StaleThunder126|jolt.png|\n|gen|9\n|tier|[Gen 9] RP Battle\n|clearpoke\n|poke|p1|Paras, L11, M|\n|poke|p1|Bellsprout, L13, M|\n|poke|p2|Froakie, L13, F|\n|poke|p2|Hattrem, L13, F|\n|poke|p2|Doduo, L13, F|\n|poke|p2|Helioptile, L13, F|\n|poke|p2|Nuzleaf, L13, F|\n|poke|p2|Fletchling, L13, F|\n|teampreview\n|inactive|Battle timer is ON: inactive players will automatically lose when time's up. (requested by Lass Emi)\n|n|☆Lass Emi|lassemi\n|\n|t:|1790433410\n|teamsize|p1|2\n|teamsize|p2|6\n|start\n|switch|p1a: Bellsprout|Bellsprout, L13, M|100/100\n|switch|p2a: Doduo|Doduo, L13, F|100/100\n|turn|1\n|\n|t:|1790433418\n|move|p2a: Doduo|Brave Bird|p1a: Bellsprout\n|-supereffective|p1a: Bellsprout\n|-damage|p1a: Bellsprout|0 fnt\n|faint|p1a: Bellsprout\n|-damage|p2a: Doduo|67/100|[from] Recoil\n|\n|upkeep\n|\n|t:|1790433418\n|switch|p1a: Paras|Paras, L11, M|100/100\n|turn|2\n|\n|t:|1790433427\n|move|p2a: Doduo|Brave Bird|p1a: Paras\n|-supereffective|p1a: Paras\n|-damage|p1a: Paras|0 fnt\n|faint|p1a: Paras\n|-damage|p2a: Doduo|39/100|[from] Recoil\n|\n|win|StaleThunder126\n",
+	"inputlog": ">start {\"formatid\":\"gen9rpbattle\",\"seed\":\"sodium,a291d13650c50da0f61051b58fd324a2\"}\n>player p1 {\"name\":\"Lass Emi\",\"avatar\":\"lass-gen4\",\"team\":\"Paras|||DrySkin|Absorb,Scratch,PoisonPowder,StunSpore|Serious|||8,8,8,8,8,8||11|]Bellsprout|||Chlorophyll|VineWhip,Wrap,SleepPowder,Growth|Timid|||8,8,8,8,8,8||13|\",\"rating\":0}\n>player p2 {\"name\":\"StaleThunder126\",\"avatar\":\"jolt.png\",\"team\":\"Froakie|||Protean|HydroPump,Uturn,IceBeam,GrassKnot|Modest|||||13|]Hattrem|||MagicBounce|Psychic,DrainingKiss,MysticalFire,Nuzzle|Modest|||||13|]Doduo|||EarlyBird|DoubleEdge,BraveBird,KnockOff,QuickAttack|Adamant|||||13|]Helioptile|||DrySkin|Thunderbolt,Glare,Surf,DarkPulse|Modest|||||13|]Nuzleaf|||Chlorophyll|MerchantsCall,LeafBlade,SwordsDance,SuckerPunch|Adamant||||S|13|]Fletchling|||GaleWings|DoubleEdge,SwordsDance,QuickAttack,BraveBird|Adamant|||||13|\",\"rating\":0}\n>p1 team 2, 1\n>p2 team 3, 2, 1, 4, 5, 6\n>p1 move vinewhip\n>p2 move bravebird\n>p1 switch 2\n>p1 move absorb\n>p2 move bravebird",
+	"uploadtime": 1790433427
+}
