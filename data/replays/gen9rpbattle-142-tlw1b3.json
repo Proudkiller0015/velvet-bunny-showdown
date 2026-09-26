@@ -1,0 +1,12 @@
+{
+	"id": "gen9rpbattle-142-tlw1b3",
+	"format": "[Gen 9] RP Battle",
+	"players": [
+		"Youngster Dan",
+		"StaleThunder126"
+	],
+	"rating": null,
+	"log": "|j|☆Youngster Dan\n|j|☆StaleThunder126\n|t:|1790440103\n|gametype|singles\n|player|p1|Youngster Dan|youngster-gen4|\n|player|p2|StaleThunder126|jolt.png|\n|gen|9\n|tier|[Gen 9] RP Battle\n|clearpoke\n|poke|p1|Sizzlipede, L10, F|\n|poke|p1|Munchlax, L13, M|\n|poke|p2|Ariados, L13, M|\n|poke|p2|Froakie, L13, F|\n|poke|p2|Doduo, L13, M|\n|poke|p2|Hattrem, L13, F|\n|poke|p2|Sawsbuck, L13, F|\n|poke|p2|Vivillon, L13, F|\n|teampreview\n|inactive|Battle timer is ON: inactive players will automatically lose when time's up. (requested by Youngster Dan)\n|n|☆Youngster Dan|youngsterdan\n|\n|t:|1790440122\n|teamsize|p1|2\n|teamsize|p2|6\n|start\n|switch|p1a: Sizzlipede|Sizzlipede, L10, F|100/100\n|switch|p2a: Froakie|Froakie, L13, F|100/100\n|turn|1\n|\n|t:|1790440129\n|move|p2a: Froakie|Hydro Pump|p1a: Sizzlipede\n|-supereffective|p1a: Sizzlipede\n|-damage|p1a: Sizzlipede|0 fnt\n|faint|p1a: Sizzlipede\n|\n|upkeep\n|\n|t:|1790440129\n|switch|p1a: Munchlax|Munchlax, L13, M|100/100\n|turn|2\n|\n|t:|1790440136\n|move|p2a: Froakie|Hydro Pump|p1a: Munchlax\n|-damage|p1a: Munchlax|68/100\n|move|p1a: Munchlax|Tackle|p2a: Froakie\n|-damage|p2a: Froakie|68/100\n|\n|upkeep\n|turn|3\n|\n|t:|1790440146\n|move|p2a: Froakie|Grass Knot|p1a: Munchlax\n|-start|p2a: Froakie|typechange|Grass|[from] ability: Protean\n|-damage|p1a: Munchlax|36/100\n|move|p1a: Munchlax|Tackle|p2a: Froakie\n|-damage|p2a: Froakie|41/100\n|\n|upkeep\n|turn|4\n|\n|t:|1790440155\n|move|p2a: Froakie|Hydro Pump|p1a: Munchlax\n|-start|p2a: Froakie|typechange|Water|[from] ability: Protean\n|-damage|p1a: Munchlax|4/100\n|move|p1a: Munchlax|Tackle|p2a: Froakie\n|-damage|p2a: Froakie|9/100\n|\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1790440163
+}
