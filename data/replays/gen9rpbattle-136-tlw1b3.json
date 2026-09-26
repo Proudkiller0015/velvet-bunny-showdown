@@ -1,0 +1,12 @@
+{
+	"id": "gen9rpbattle-136-tlw1b3",
+	"format": "[Gen 9] RP Battle",
+	"players": [
+		"Bug Catcher Sora",
+		"StaleThunder126"
+	],
+	"rating": null,
+	"log": "|j|☆Bug Catcher Sora\n|j|☆StaleThunder126\n|t:|1790439484\n|gametype|singles\n|player|p1|Bug Catcher Sora|bugcatcher-gen4dp|\n|player|p2|StaleThunder126|jolt.png|\n|gen|9\n|tier|[Gen 9] RP Battle\n|clearpoke\n|poke|p1|Dwebble, L12, F|\n|poke|p1|Volbeat, L13, M|\n|poke|p2|Ariados, L13, F|\n|poke|p2|Froakie, L13, M|\n|poke|p2|Doduo, L13, F|\n|poke|p2|Hattrem, L13, F|\n|poke|p2|Sawsbuck, L13, F|\n|poke|p2|Vivillon, L13, M|\n|teampreview\n|inactive|Battle timer is ON: inactive players will automatically lose when time's up. (requested by Bug Catcher Sora)\n|n|☆Bug Catcher Sora|bugcatchersora\n|\n|t:|1790439496\n|teamsize|p1|2\n|teamsize|p2|6\n|start\n|switch|p1a: Volbeat|Volbeat, L13, M|100/100\n|switch|p2a: Froakie|Froakie, L13, M|100/100\n|turn|1\n|\n|t:|1790439502\n|move|p1a: Volbeat|Tackle|p2a: Froakie\n|-damage|p2a: Froakie|79/100\n|move|p2a: Froakie|Ice Beam|p1a: Volbeat\n|-start|p2a: Froakie|typechange|Ice|[from] ability: Protean\n|-damage|p1a: Volbeat|53/100\n|\n|upkeep\n|turn|2\n|\n|t:|1790439515\n|move|p1a: Volbeat|Tackle|p2a: Froakie\n|-damage|p2a: Froakie|57/100\n|move|p2a: Froakie|Ice Beam|p1a: Volbeat\n|-damage|p1a: Volbeat|5/100\n|-status|p1a: Volbeat|frz\n|\n|upkeep\n|turn|3\n|\n|t:|1790439525\n|cant|p1a: Volbeat|frz\n|move|p2a: Froakie|Grass Knot|p1a: Volbeat\n|-start|p2a: Froakie|typechange|Grass|[from] ability: Protean\n|-resisted|p1a: Volbeat\n|-damage|p1a: Volbeat|0 fnt\n|faint|p1a: Volbeat\n|\n|upkeep\n|\n|t:|1790439525\n|switch|p1a: Dwebble|Dwebble, L12, F|100/100\n|turn|4\n|\n|t:|1790439537\n|move|p2a: Froakie|Hydro Pump|p1a: Dwebble|[miss]\n|-start|p2a: Froakie|typechange|Water|[from] ability: Protean\n|-miss|p2a: Froakie|p1a: Dwebble\n|move|p1a: Dwebble|Fury Cutter|p2a: Froakie\n|-damage|p2a: Froakie|33/100\n|\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1790439543
+}
