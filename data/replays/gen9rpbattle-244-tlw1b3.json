@@ -1,0 +1,12 @@
+{
+	"id": "gen9rpbattle-244-tlw1b3",
+	"format": "[Gen 9] RP Battle",
+	"players": [
+		"Cyclist Tom",
+		"StaleThunder126"
+	],
+	"rating": null,
+	"log": "|j|☆Cyclist Tom\n|j|☆StaleThunder126\n|t:|1790473149\n|gametype|singles\n|player|p1|Cyclist Tom|cyclist-gen4|\n|player|p2|StaleThunder126|jolt.png|\n|gen|9\n|tier|[Gen 9] RP Battle\n|clearpoke\n|poke|p1|Slakoth, L9, F|\n|poke|p1|Dunsparce, L13, M|\n|poke|p2|Liepard, L13, M|\n|poke|p2|Ariados, L13, F|\n|poke|p2|Larvesta, L13, F|\n|poke|p2|Squawkabilly-Yellow, L13, M|\n|poke|p2|Hattrem, L13, F|\n|poke|p2|Sawsbuck, L13, M|\n|teampreview\n|inactive|Battle timer is ON: inactive players will automatically lose when time's up. (requested by Cyclist Tom)\n|n|☆Cyclist Tom|cyclisttom\n|\n|t:|1790473166\n|teamsize|p1|2\n|teamsize|p2|6\n|start\n|switch|p1a: Dunsparce|Dunsparce, L13, M|100/100\n|switch|p2a: Larvesta|Larvesta, L13, F|100/100\n|turn|1\n|\n|t:|1790473184\n|move|p2a: Larvesta|Giga Drain|p1a: Dunsparce\n|-damage|p1a: Dunsparce|76/100\n|move|p1a: Dunsparce|Glare|p2a: Larvesta\n|-status|p2a: Larvesta|par\n|\n|upkeep\n|turn|2\n|\n|t:|1790473191\n|move|p1a: Dunsparce|Mud-Slap|p2a: Larvesta\n|-damage|p2a: Larvesta|93/100 par\n|-unboost|p2a: Larvesta|accuracy|1\n|move|p2a: Larvesta|Fire Blast|p1a: Dunsparce\n|-damage|p1a: Dunsparce|32/100\n|\n|upkeep\n|turn|3\n|\n|t:|1790473200\n|move|p1a: Dunsparce|Mud-Slap|p2a: Larvesta\n|-damage|p2a: Larvesta|86/100 par\n|-unboost|p2a: Larvesta|accuracy|1\n|move|p2a: Larvesta|Fire Blast|p1a: Dunsparce|[miss]\n|-miss|p2a: Larvesta|p1a: Dunsparce\n|\n|upkeep\n|turn|4\n|\n|t:|1790473208\n|move|p1a: Dunsparce|Rollout|p2a: Larvesta|[miss]\n|-miss|p1a: Dunsparce|p2a: Larvesta\n|move|p2a: Larvesta|Fire Blast|p1a: Dunsparce\n|-damage|p1a: Dunsparce|0 fnt\n|faint|p1a: Dunsparce\n|\n|upkeep\n|\n|t:|1790473208\n|switch|p1a: Slakoth|Slakoth, L9, F|100/100\n|turn|5\n|\n|t:|1790473218\n|cant|p2a: Larvesta|par\n|move|p1a: Slakoth|Scratch|p2a: Larvesta\n|-damage|p2a: Larvesta|76/100 par\n|\n|upkeep\n|turn|6\n|\n|t:|1790473224\n|cant|p2a: Larvesta|par\n|cant|p1a: Slakoth|ability: Truant\n|\n|upkeep\n|turn|7\n",
+	"inputlog": null,
+	"uploadtime": 1790473225
+}
