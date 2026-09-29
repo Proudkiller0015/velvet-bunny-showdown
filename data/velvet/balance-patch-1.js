@@ -1559,7 +1559,7 @@ const SMALL = {
  * isn't a Pokemon born with Unaware. The walls that check sweepers, mostly RU-UU.
  * Not Blissey or Chansey: Unaware on those is a tier review, not a buff.
  */
-const UNAWARE = ['snorlax', 'umbreon', 'florges', 'goodra', 'goodrahisui', 'registeel', 'bronzong', 'hippowdon', 'mandibuzz', 'alomomola', 'slowking', 'slowkinggalar', 'mudsdale', 'avalugg', 'avalugghisui', 'cetitan', 'lapras', 'milotic', 'steelix', 'carbink', 'tangrowth', 'amoonguss', 'gastrodon', 'hariyama', 'cresselia', 'suicune'];
+const UNAWARE = ['snorlax', 'florges', 'goodra', 'goodrahisui', 'registeel', 'bronzong', 'hippowdon', 'mandibuzz', 'alomomola', 'slowking', 'slowkinggalar', 'mudsdale', 'avalugg', 'avalugghisui', 'cetitan', 'lapras', 'milotic', 'steelix', 'carbink', 'tangrowth', 'amoonguss', 'gastrodon', 'hariyama', 'cresselia', 'suicune'];
 
 const ABILITY_GRANTS = {
 	plusle: 'Motor Drive',
@@ -1579,6 +1579,9 @@ const ABILITY_GRANTS = {
 	banette: 'Prankster',
 	seviper: 'Intimidate',
 	stonjourner: 'Sturdy',
+	// For the funny (the owner): the illusion fox that really becomes you. Not the Hisuian ones.
+	zoroark: 'Imposter',
+	zorua: 'Imposter',
 };
 
 /*
@@ -1730,6 +1733,12 @@ const TM_DISTRIBUTION = {
 	chillingmist: ['sandslashalola', 'ninetalesalola', 'dewgong', 'cloyster', 'gengar', 'marowakalola', 'jynx', 'lapras', 'articuno', 'typhlosionhisui', 'delibird', 'sableye', 'banette', 'glalie', 'walrein', 'regice', 'drifblim', 'mismagius', 'spiritomb', 'abomasnow', 'weavile', 'glaceon', 'mamoswine', 'dusknoir', 'froslass', 'rotom', 'cofagrigus', 'zoroarkhisui', 'vanilluxe', 'jellicent', 'chandelure', 'beartic', 'cryogonal', 'golurk', 'kyurem', 'aegislash', 'aurorus', 'trevenant', 'gourgeist', 'avalugg', 'avalugghisui', 'hoopa', 'decidueye', 'crabominable', 'palossand', 'mimikyu', 'dhelmise', 'blacephalon', 'polteageist', 'cursola', 'mrrime', 'runerigus', 'frosmoth', 'eiscue', 'arctozolt', 'arctovish', 'dragapult', 'glastrier', 'basculegion', 'skeledirge', 'ceruledge', 'brambleghast', 'houndstone', 'cetitan', 'gholdengo', 'sinistcha', 'pecharunt',
 		// Cold-water Water types and chilling Dark types (the owner: "like Suicune", "or chilling Dark types").
 		'suicune', 'milotic', 'kingdra', 'lumineon', 'tentacruel', 'lanturn', 'primarina', 'empoleon', 'toxapex', 'absol', 'umbreon', 'honchkrow', 'mandibuzz', 'mightyena', 'liepard', 'zoroark', 'hydreigon', 'crawdaunt', 'thievul', 'grimmsnarl', 'obstagoon'],
+	// The lazy ones (the owner: "give lazy Pokemon Slack Off"), for stall.
+	slackoff: ['snorlax', 'bibarel', 'komala', 'lickilicky', 'hippowdon', 'torkoal', 'pyukumuku', 'dondozo', 'musharna', 'swalot', 'wobbuffet', 'spinda', 'cetitan', 'camerupt', 'stunfisk', 'stunfiskgalar', 'hypno', 'wailord', 'mudsdale', 'mudbray',
+		// Pre-evolutions by name: only our own moves are inherited downward automatically.
+		'munchlax', 'bidoof', 'hippopotas', 'munna', 'gulpin', 'wynaut', 'numel', 'drowzee', 'wailmer',
+		// And every Regi (the owner).
+		'regigigas', 'regirock', 'regice', 'registeel', 'regieleki', 'regidrago'],
 	// Everything that learns Cotton Guard (pre-evolutions follow on their own).
 	// Velvet Guard's partner: everything that learns the Guard, and the special walls
 	// (the owner: "generous with press logic"). Same exclusions as the Guard.
@@ -2178,6 +2187,8 @@ exports.buildBuffs = (Pokedex) => {
 	for (const [id, moves] of Object.entries(SMALL)) add(id, moves, []);
 	for (const [id, ability] of Object.entries(ABILITY_GRANTS)) add(id, [], [ability]);
 	for (const id of UNAWARE) if (Pokedex[id]) add(id, [], ['Unaware']);
+	// Caretaker for the Blissey line (data/velvet/stall.js).
+	for (const id of ['happiny', 'chansey', 'blissey']) if (Pokedex[id]) add(id, [], ['Caretaker']);
 
 	// Coverage for Grass types.
 	for (const [id, moves] of Object.entries(GRASS_COVERAGE)) if (Pokedex[id]) add(id, moves, []);

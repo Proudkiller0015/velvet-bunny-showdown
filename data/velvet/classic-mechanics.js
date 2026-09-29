@@ -43,6 +43,21 @@ exports.moves = (data) => {
 			},
 		};
 	}
+	// Smeargle gets everything new (the owner): every move of ours can be Sketched,
+	// the Balance Patch signatures included. Not Samantha's Queen moves, Nuzleaf-SOLD's
+	// Merchant's Call, or the Halloween event's Witch's Snatch.
+	const NEVER_SKETCH = ['queenbeam', 'queensdance', 'queensheal', 'queensblitz', 'merchantscall', 'witchssnatch'];
+	for (const [id, move] of Object.entries(data)) {
+		if (!move || !(move.num < 0) || move.isNonstandard === 'CAP') continue;
+		// The excluded ones are locked outright: Queen's Blitz had no nosketch flag and
+		// Smeargle could already take it.
+		if (NEVER_SKETCH.includes(id)) { data[id] = { ...move, flags: { ...move.flags, nosketch: 1 } }; continue; }
+		if (move.flags && move.flags.nosketch) {
+			const flags = { ...move.flags };
+			delete flags.nosketch;
+			data[id] = { ...move, flags };
+		}
+	}
 	// Z-Moves of our status moves (the owner): each gets its closest official move's
 	// Z effect, so a Z-Crystal on one of ours does something, the way it would on theirs.
 	for (const [id, zMove] of Object.entries(Z_STATUS)) {

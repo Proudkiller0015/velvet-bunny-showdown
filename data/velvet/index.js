@@ -42,6 +42,8 @@ const Gems = require('./gems.js');
 const NewItems = require('./new-items.js');
 // Old-generation Belly Drum and recharge rules.
 const Classic = require('./classic-mechanics.js');
+// Help for stall: Caretaker.
+const Stall = require('./stall.js');
 
 // The buffed Pokemon are Showdown's own, so they are changed in place rather
 // than added - and the learnsets they need are added when that file is loaded,
@@ -69,7 +71,7 @@ exports.pokedex = data => {
 	buffedPokedex = data;
 	buffWhatWeHave();
 };
-exports.abilities = data => AbyssShrine.abilities(Halloween.abilities(require('./balance-patch-1.js').patchAbsorbers(patchAbilities(unnerfAbilities(Object.assign(data, Abilities))))));
+exports.abilities = data => Stall.abilities(AbyssShrine.abilities(Halloween.abilities(require('./balance-patch-1.js').patchAbsorbers(patchAbilities(unnerfAbilities(Object.assign(data, Abilities)))))));
 let moveTable = null;
 exports.moves = data => {
 	moveTable = Classic.moves(Frostbite.moves(AbyssShrine.moves(Halloween.moves(patchMoves(unnerfMoves(Object.assign(data, Moves)))))));

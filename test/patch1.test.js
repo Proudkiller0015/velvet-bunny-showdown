@@ -168,7 +168,7 @@ check(Object.values(Dex.species.get('stunfiskgalar').abilities).includes('Mudfla
 	const mantle = hit(b), plain = hit(control);
 	check(mantle === null || plain === null || mantle < plain * 0.7, `Rock Slide does about half through Polar Mantle (${mantle} vs ${plain})`);
 }
-check(Dex.moves.get('aurorasquall').target === 'allAdjacentFoes' && Dex.moves.get('aurorasquall').flags.nosketch, 'Aurora Squall: spread, not Sketchable');
+check(Dex.moves.get('aurorasquall').target === 'allAdjacentFoes' && !Dex.moves.get('aurorasquall').flags.nosketch, 'Aurora Squall: spread, Sketchable (Smeargle gets every new move)');
 check(learns('articuno', 'aurorasquall') && !learns('mew', 'aurorasquall'), "Aurora Squall is Articuno's alone");
 check(Dex.species.get('articuno').natDexTier === 'RU', 'Articuno is RU');
 
@@ -344,7 +344,8 @@ function learns(sp, m) {
 }
 check(['hivefrenzy', 'chrysalisveil', 'hustleup', 'carrionfeast', 'sparkscamper', 'undertow', 'solarnectar', 'craghammer', 'hypnowhirl', 'shufflejab'].every(m => learns('mew', m)), 'Mew learns all ten');
 check(!learns('mew', 'continentalheave') && learns('regigigas', 'continentalheave'), "Continental Heave is Regigigas's alone");
-check(Dex.moves.get('continentalheave').flags.nosketch, 'and cannot be Sketched');
+check(!Dex.moves.get('continentalheave').flags.nosketch, 'and Smeargle can Sketch it');
+check(Dex.moves.get('queensblitz').flags.nosketch && Dex.moves.get('witchssnatch').flags.nosketch, "but not Samantha's or the Halloween event's");
 check(!Dex.moves.get('undertow').flags.nosketch, 'the other ten can be Sketched');
 
 // The eeveelutions.
@@ -605,8 +606,8 @@ check(['megahorn', 'shoreup', 'rapidspin'].every(m => learns('golisopod', m)) &&
 	}
 	const kit = ['greatsagestrike', 'pyrestrike', 'hustleup', 'craghammer', 'sparkscamper', 'explosion', 'copycat', 'screech', 'doublehit', 'tickle', 'highjumpkick', 'bounce'];
 	const gaps = kit.filter(m => !learns('infernape', m));
-	check(!gaps.length && !learns('monferno', 'pyrestrike') && !learns('mew', 'greatsagestrike') && Dex.moves.get('pyrestrike').flags.nosketch,
-		`Infernape learns its kit, signatures its own (not Monferno, Mew or Sketch)${gaps.length ? ` missing ${gaps.join(', ')}` : ''}`);
+	check(!gaps.length && !learns('monferno', 'pyrestrike') && !learns('mew', 'greatsagestrike') && !Dex.moves.get('pyrestrike').flags.nosketch,
+		`Infernape learns its kit, signatures its own (not Monferno or Mew; Smeargle may Sketch them)${gaps.length ? ` missing ${gaps.join(', ')}` : ''}`);
 	check(!learns('simisear', 'explosion'), 'the Simi monkeys do not get Explosion');
 }
 
@@ -683,7 +684,7 @@ check(['megahorn', 'shoreup', 'rapidspin'].every(m => learns('golisopod', m)) &&
 	check(near(ratios[0][1], 1, 1.2) && near(ratios[1][1], 1, 1.2) && near(ratios[2][1], 1, 1.32),
 		`lesser abilities: ${ratios.map(([sp, r]) => `${sp} x${r.toFixed(2)}`).join(', ')} (Mach Punch gets the punch bonus too)`);
 }
-check(learns('luxray', 'gleamstalk') && !learns('luxio', 'gleamstalk') && !learns('mew', 'gleamstalk') && Dex.moves.get('gleamstalk').flags.nosketch, "Gleamstalk is Luxray's alone");
+check(learns('luxray', 'gleamstalk') && !learns('luxio', 'gleamstalk') && !learns('mew', 'gleamstalk') && !Dex.moves.get('gleamstalk').flags.nosketch, "Gleamstalk is Luxray's alone (Smeargle may Sketch it)");
 
 // The client's signature-move table is generated (scripts/build-signature-moves.js) and has to be rebuilt
 // when a signature is added: Gleamstalk once shipped without it and showed as an ordinary Awakened move.
@@ -780,7 +781,7 @@ check(['walkingwake', 'dragapult', 'dragonitemega', 'lucariomegaz', 'deoxysspeed
 	const m = Object.assign({}, move);
 	move.onModifyMove.call(b, m, b.p1.active[0], b.p2.active[0]);
 	check(m.category === 'Special', 'a Sp. Atk Spiritomb tolls on the special side');
-	check(learns('spiritomb', 'soultoll') && !learns('mew', 'soultoll') && move.flags.nosketch, "Soul Toll is Spiritomb's alone");
+	check(learns('spiritomb', 'soultoll') && !learns('mew', 'soultoll') && !move.flags.nosketch, "Soul Toll is Spiritomb's alone (Smeargle may Sketch it)");
 	// +1 priority while the foe is cursed: a slow Spiritomb outspeeds a Weavile only then.
 	const first = cursedFoe => {
 		const bb = battle([{ species: 'Spiritomb', ability: 'Pressure', moves: ['soultoll'] }], [{ species: 'Weavile', ability: 'Pressure', moves: ['swordsdance'] }]);
@@ -826,7 +827,7 @@ check(['walkingwake', 'dragapult', 'dragonitemega', 'lucariomegaz', 'deoxysspeed
 	check(!!foe.volatiles['taunt'], 'and taunts the foe');
 	check(Object.values(Dex.species.get('roserade').abilities).includes('Masquerade') && !Object.values(Dex.species.get('roserade').abilities).includes('Venom Garden') &&
 		Dex.species.get('roserade').baseStats.hp === 75 && Dex.species.get('roserade').baseStats.spe === 101 && Dex.species.get('roserade').natDexTier === 'UU' &&
-		['thornedbouquet', 'strengthsap', 'mortalspin', 'nastyplot'].every(x => learns('roserade', x)) && !learns('roselia', 'thornedbouquet') && Dex.moves.get('thornedbouquet').flags.nosketch,
+		['thornedbouquet', 'strengthsap', 'mortalspin', 'nastyplot'].every(x => learns('roserade', x)) && !learns('roselia', 'thornedbouquet') && !Dex.moves.get('thornedbouquet').flags.nosketch,
 		'Roserade: Masquerade, 75 HP, 101 Speed, Thorned Bouquet (its own), Strength Sap, Mortal Spin, Nasty Plot, UU');
 	check(learns('togekiss', 'uturn') && Dex.species.get('togekiss').baseStats.spe === 101, 'Togekiss learns U-turn and has 101 Speed');
 }
