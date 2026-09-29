@@ -440,9 +440,10 @@
 		var usefulIn = installMoveUsefulness();
 		var frbIn = installFrostbite();
 		var sureIn = installSureHit();
+		var gemIn = installGemItems();
 		var switchIn = installRpSwitch();
 		return switchIn && tableIn && orderIn && spritesIn && iconIn && builderIn && tipsIn && rpIn &&
-			cutIn && listIn && buffsIn && abilitiesIn && itemIn && sigItemIn && powerIn && dmaxIn && awakenedIn && textIn && zMaxIn && defaultIn && bagIn && usefulIn && frbIn && sureIn;
+			cutIn && listIn && buffsIn && abilitiesIn && itemIn && sigItemIn && powerIn && dmaxIn && awakenedIn && textIn && zMaxIn && defaultIn && bagIn && usefulIn && frbIn && sureIn && gemIn;
 	}
 
 	/*
@@ -2514,6 +2515,31 @@
 				if (move.category === 'Special' && stats.atk - stats.spa >= 40) return false;
 			} catch (e) { /* keep Showdown's answer */ }
 			return verdict;
+		};
+		return true;
+	}
+
+	/*
+	 * Type Gems, legal again in RP (data/velvet/gems.js). The builder's item list is
+	 * Showdown's table for the format, which has no Gems in National Dex, and anything
+	 * typed that is not in that list is shown as illegal. In RP mode the list gets a
+	 * Gems section; official formats keep Showdown's own.
+	 */
+	var GEM_IDS = ['normal', 'fire', 'water', 'electric', 'grass', 'ice', 'fighting', 'poison', 'ground', 'flying', 'psychic', 'bug', 'rock', 'ghost', 'dragon', 'dark', 'steel', 'fairy'].map(function (t) { return t + 'gem'; });
+	function installGemItems() {
+		var search = window.BattleItemSearch;
+		if (!search || !search.prototype || !search.prototype.getDefaultResults) return false;
+		if (search.__velvetGems) return true;
+		search.__velvetGems = true;
+		var original = search.prototype.getDefaultResults;
+		search.prototype.getDefaultResults = function () {
+			var out = original.apply(this, arguments);
+			if (!RP.on || !out || (this.dex && this.dex.gen < 2)) return out;
+			var have = {};
+			for (var i = 0; i < out.length; i++) if (out[i][0] === 'item') have[out[i][1]] = true;
+			var add = [];
+			for (var g = 0; g < GEM_IDS.length; g++) if (!have[GEM_IDS[g]] && window.BattleItems && window.BattleItems[GEM_IDS[g]]) add.push(['item', GEM_IDS[g]]);
+			return add.length ? out.concat([['header', 'Gems']], add) : out;
 		};
 		return true;
 	}

@@ -292,6 +292,11 @@ function levelFreeMoves(move, species, setSources, set) {
 // Eternal Floette is what Mega Floette (a Z-A Mega this server unlocked) evolves from;
 // National Dex calls it nonexistent and refused every Floettite team on the RP ladders.
 const RP_RULES = ['!Obtainable Misc', '+Floette-Eternal'];
+// Type Gems in every RP format (the owner: "unban in all formats, let the chaos begin").
+// An unban rather than '!Gems Clause': removing a rule a format lacks throws (see
+// UNBAN_TERA), while Gems Clause itself steps aside for '+item:<gem>'. Not Gen 1,
+// which has no held items. data/velvet/rp-mod.js makes them exist in every generation.
+const RP_GEMS = ['normal', 'fire', 'water', 'electric', 'grass', 'ice', 'fighting', 'poison', 'ground', 'flying', 'psychic', 'bug', 'rock', 'ghost', 'dragon', 'dark', 'steel', 'fairy'].map(t => `+item:${t}gem`);
 
 /**
  * The tiers below RU, National Dex style.
@@ -357,7 +362,7 @@ function rpTier(name, base, { gen = 9, rules = [], ...extra } = {}) {
 	return {
 		name: `[Gen ${gen}] RP ${name}`,
 		mod: `gen${gen}`,
-		ruleset: [base, ...RP_RULES, ...rules],
+		ruleset: [base, ...RP_RULES, ...(gen >= 2 ? RP_GEMS : []), ...rules],
 		checkCanLearn: levelFreeMoves,
 		onBegin: allGimmicks,
 		searchShow: true,
