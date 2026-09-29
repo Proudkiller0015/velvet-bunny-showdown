@@ -268,7 +268,8 @@ for (const id of Object.keys(TIERS)) {
 }
 const unlocked = {
 	species: [...Object.keys(za.assigned), ...Object.keys(OUR_TIERS)],
-	items: za.ZA_STONES.slice(),
+	// The Type Gems, legal in RP again (data/velvet/gems.js).
+	items: za.ZA_STONES.slice().concat(require(path.join(PACKAGE, 'dist', 'data', 'velvet', 'gems.js')).GEMS),
 };
 /*
  * Balance Patch 1's evolution levels, for the builder and the dex lookups: the

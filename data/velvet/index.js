@@ -36,6 +36,8 @@ const Halloween = require('./halloween.js');
 const AbyssShrine = require('./abyss-shrine.js');
 // Frostbite, the sixth major status (and the Aspear Berry that cures it).
 const Frostbite = require('./frostbite.js');
+// Type Gems, legal again.
+const Gems = require('./gems.js');
 
 // The buffed Pokemon are Showdown's own, so they are changed in place rather
 // than added - and the learnsets they need are added when that file is loaded,
@@ -126,6 +128,7 @@ exports.items = data => {
 	Halloween.items(data);
 	AbyssShrine.items(data);
 	Frostbite.items(data);
+	Gems.items(data);
 	return data;
 };
 
