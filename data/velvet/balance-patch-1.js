@@ -1553,6 +1553,14 @@ const SMALL = {
  * Existing abilities of the kind a PU Pokemon can build around, never the
  * game-defining ones. Each sits beside what the Pokemon already had.
  */
+/*
+ * Unaware as an Awakened ability (the owner, 29 Sep 2026: "to stop the setup").
+ * The +3 moves, Quiver Dance on a legendary and Grand Feast all want an answer that
+ * isn't a Pokemon born with Unaware. The walls that check sweepers, mostly RU-UU.
+ * Not Blissey or Chansey: Unaware on those is a tier review, not a buff.
+ */
+const UNAWARE = ['snorlax', 'umbreon', 'florges', 'goodra', 'goodrahisui', 'registeel', 'bronzong', 'hippowdon', 'mandibuzz', 'alomomola', 'slowking', 'slowkinggalar', 'mudsdale', 'avalugg', 'avalugghisui', 'cetitan', 'lapras', 'milotic', 'steelix', 'carbink', 'tangrowth', 'amoonguss', 'gastrodon', 'hariyama', 'cresselia', 'suicune'];
+
 const ABILITY_GRANTS = {
 	plusle: 'Motor Drive',
 	minun: 'Motor Drive',
@@ -2169,6 +2177,7 @@ exports.buildBuffs = (Pokedex) => {
 	}
 	for (const [id, moves] of Object.entries(SMALL)) add(id, moves, []);
 	for (const [id, ability] of Object.entries(ABILITY_GRANTS)) add(id, [], [ability]);
+	for (const id of UNAWARE) if (Pokedex[id]) add(id, [], ['Unaware']);
 
 	// Coverage for Grass types.
 	for (const [id, moves] of Object.entries(GRASS_COVERAGE)) if (Pokedex[id]) add(id, moves, []);
@@ -2249,6 +2258,7 @@ exports.NEWER_MOVES = NEWER_MOVES;
 exports.GRASS_COVERAGE = GRASS_COVERAGE;
 exports.SMALL = SMALL;
 exports.ABILITY_GRANTS = ABILITY_GRANTS;
+exports.UNAWARE = UNAWARE;
 exports.EEVEELUTIONS = EEVEELUTIONS;
 
 /**

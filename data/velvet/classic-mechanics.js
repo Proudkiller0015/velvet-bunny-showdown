@@ -43,8 +43,29 @@ exports.moves = (data) => {
 			},
 		};
 	}
+	// Z-Moves of our status moves (the owner): each gets its closest official move's
+	// Z effect, so a Z-Crystal on one of ours does something, the way it would on theirs.
+	for (const [id, zMove] of Object.entries(Z_STATUS)) {
+		if (data[id] && !data[id].zMove) data[id] = { ...data[id], zMove };
+	}
 	return data;
 };
+
+const Z_STATUS = {
+	queensdance: { effect: 'clearnegativeboost' },   // Dragon Dance
+	queensheal: { effect: 'clearnegativeboost' },    // Recover
+	hustleup: { effect: 'clearnegativeboost' },      // Dragon Dance
+	chrysalisveil: { effect: 'clearnegativeboost' }, // Recover
+	velvetguard: { effect: 'clearnegativeboost' },   // Cotton Guard
+	sovereignrite: { effect: 'clearnegativeboost' }, // Tail Glow
+	twilightexit: { effect: 'healreplacement' },     // Parting Shot: a pivot heals who comes in
+	grandfeast: { boost: { atk: 1, def: 1, spa: 1, spd: 1, spe: 1 } }, // Geomancy
+	chillingmist: { boost: { spa: 1 } },             // Will-O-Wisp's +1 Atk, for the special burn
+	gleamstalk: { boost: { spd: 1 } },               // Thunder Wave
+	tectonicshell: { boost: { def: 1 } },            // Stealth Rock
+	royaldecree: { boost: { def: 1 } },              // Roar
+};
+exports.Z_STATUS = Z_STATUS;
 
 // For the client's move descriptions (scripts/build-buffs.js): every move this file changes.
 exports.CHANGED_MOVES = ['bellydrum', 'hyperbeam', 'gigaimpact', 'blastburn', 'frenzyplant', 'hydrocannon', 'rockwrecker', 'roaroftime', 'prismaticlaser', 'eternabeam', 'meteorassault'];
