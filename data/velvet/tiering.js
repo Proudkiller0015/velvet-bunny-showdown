@@ -113,6 +113,37 @@ const TIERS = {
 	deoxys: 'OU',
 	// Sneasler too, Ubers to OU (the owner, same day).
 	sneasler: 'OU',
+
+	/*
+	 * 29 Sep 2026, the owner's calls:
+	 *   Suspect tests in OU: Reshiram, Solgaleo, Lugia (announced in the Lobby).
+	 *   Unbanned to OU: Mega Metagross (Melmetal and Rapid Strike Urshifu above).
+	 *   Every UUBL dropped to UU.
+	 */
+	reshiram: 'OU',
+	solgaleo: 'OU',
+	lugia: 'OU',
+	metagrossmega: 'OU',
+	charizardmegax: 'UU',
+	pinsirmega: 'UU',
+	gyarados: 'UU',
+	gyaradosmega: 'UU',
+	mawilemega: 'UU',
+	medichammega: 'UU',
+	latiosmega: 'UU',
+	gallademega: 'UU',
+	manaphy: 'UU',
+	thundurustherian: 'UU',
+	greninja: 'UU',
+	xurkitree: 'UU',
+	dondozo: 'UU',
+	ironhands: 'UU',
+	ironmoth: 'UU',
+	okidogi: 'UU',
+	ogerponcornerstone: 'UU',
+	ogerponcornerstonetera: 'UU',
+	ironcrown: 'UU',
+	pecharunt: 'UU',
 	// Magearna, both colours, unbanned by the owner's call (Patch 1.5). Its Mega stays Uber.
 	magearna: 'OU',
 	magearnaoriginal: 'OU',
@@ -295,12 +326,13 @@ const TIERS = {
 	hawlucha: 'UU',
 	hawluchamega: 'UU',
 
-	// Melmetal: banned to Ubers at the owner's call.
-	melmetal: 'Uber',
+	// Melmetal: banned to Ubers at the owner's call, then unbanned to OU (29 Sep 2026).
+	melmetal: 'OU',
 
-	// Urshifu, both styles: banned to Ubers at the owner's call.
+	// Urshifu, both styles: banned to Ubers at the owner's call. Rapid Strike (the
+	// Water one) unbanned to OU on 29 Sep 2026; Single Strike stays Uber.
 	urshifu: 'Uber',
-	urshifurapidstrike: 'Uber',
+	urshifurapidstrike: 'OU',
 
 	// Reckless Brave Bird and Double-Edge on 110 Speed, and now Hustle Up and
 	// U-turn beside them.
