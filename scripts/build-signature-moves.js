@@ -213,7 +213,7 @@ function build() {
 	// here: on the Halloween 2026 Mega it becomes Witch's Snatch
 	// (data/velvet/halloween.js), so the builder files it under Banette's own.
 	// Makuro, Raishin and Chimai (abyss-shrine.js): their own moves, which nothing else learns.
-	const CHOSEN = { shuppet: ['poltergeist'], makuro: ['abyssalmaw', 'leviathancrash'], raishin: ['shrinebellstrike', 'spiritthunder'], chimai: ['sanctuarypulse', 'hallowedquake'] };
+	const CHOSEN = { shuppet: ['poltergeist'], makuro: ['abyssalmaw', 'leviathancrash', 'sovereignrite'], raishin: ['shrinebellstrike', 'spiritthunder', 'sovereignrite'], chimai: ['sanctuarypulse', 'hallowedquake', 'sovereignrite'] };
 	for (const [family, moves] of Object.entries(CHOSEN)) {
 		signatures[family] = [...new Set([...(TRIO.has(family) ? [] : signatures[family] || []), ...moves])]
 			.sort((a, b) => Dex.moves.get(a).name.localeCompare(Dex.moves.get(b).name));

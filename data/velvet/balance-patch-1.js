@@ -457,6 +457,21 @@ exports.MOVES = {
 	 * 29 Sep 2026, with Chimai). Vacuum Wave's shape for Ground: 40 power, +1,
 	 * special. Flying types and Levitate are still immune.
 	 */
+	/*
+	 * Velvet Guard - Cotton Guard for the other side (the owner, 29 Sep 2026): +3
+	 * Special Defense. Handed to everything that learns Cotton Guard, and the trio.
+	 */
+	velvetguard: {
+		num: -49, gen: 9, name: "Velvet Guard", type: "Fairy", category: "Status",
+		basePower: 0, accuracy: true, pp: 10, priority: 0,
+		flags: { snatch: 1, metronome: 1 },
+		boosts: { spd: 3 },
+		secondary: null,
+		target: "self", contestType: "Cute", velvetShared: true,
+		flavor: "The user wraps itself in soft, thick velvet that turns aside energy attacks.",
+		shortDesc: "Raises the user's Sp. Def by 3.",
+		desc: "Raises the user's Special Defense by 3 stages.",
+	},
 	tremorshot: {
 		num: -48, gen: 9, name: "Tremor Shot", type: "Ground", category: "Special",
 		basePower: 40, accuracy: 100, pp: 30, priority: 1,
@@ -1596,6 +1611,8 @@ const TM_DISTRIBUTION = {
 	solarnectar: ['sunflora', 'cherrim', 'maractus', 'jumpluff', 'tropius', 'carnivine', 'shiinotic', 'eldegoss', 'sawsbuck', 'parasect', 'wormadam', 'cacturne', 'venusaur', 'bellossom', 'vileplume', 'roserade', 'florges', 'comfey', 'lilligant', 'whimsicott', 'meganium', 'ribombee', 'victreebel', 'exeggutor', 'exeggutoralola', 'lurantis', 'arboliva', 'scovillain', 'ludicolo', 'breloom', 'appletun', 'sceptile'],
 	// Heavy stone bodies, boulders and hammers. Not Tyranitar, Garganacl or Landorus: reliable Rock STAB or coverage on those tips OU; they keep Stone Edge.
 	craghammer: ['sudowoodo', 'magcargo', 'solrock', 'klawf', 'stonjourner', 'sandslash', 'marowak', 'dugtrio', 'golem', 'golemalola', 'rhyperior', 'aggron', 'rampardos', 'bastiodon', 'probopass', 'gigalith', 'coalossal', 'lycanroc', 'lycanrocmidnight', 'lycanrocdusk', 'tyrantrum', 'barbaracle', 'crustle', 'archeops', 'aerodactyl', 'kabutops', 'armaldo', 'cradily', 'avalugg', 'avalugghisui', 'relicanth', 'steelix', 'tinkaton', 'conkeldurr', 'carbink'],
+	// Everything that learns Cotton Guard (pre-evolutions follow on their own).
+	velvetguard: ['ampharos', 'jumpluff', 'altaria', 'banette', 'whimsicott', 'maractus', 'bouffalant', 'furfrou', 'slurpuff', 'eldegoss', 'dubwool'],
 	// The special Ground attackers (29 Sep 2026, with Chimai). Not Landorus: like
 	// Crag Hammer, Ground priority on it tips a tier; it keeps Earth Power.
 	tremorshot: ['nidoking', 'nidoqueen', 'gastrodon', 'palossand', 'seismitoad', 'stunfisk', 'stunfiskgalar', 'camerupt', 'claydol', 'whiscash', 'flygon', 'sandyshocks'],

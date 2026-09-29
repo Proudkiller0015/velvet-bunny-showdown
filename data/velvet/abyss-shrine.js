@@ -327,6 +327,17 @@ exports.moves = (data) => {
 		shortDesc: "Clears the target's boosts. Hits Flying/Levitate in Sanctuary Terrain. Chimai.",
 		desc: "Removes the target's positive stat stages. While Sanctuary Terrain is active it also hits Flying-type Pokemon and Pokemon with Levitate or an Air Balloon. Chimai's signature move.",
 	});
+	// ---- The trio's shared signature: Tail Glow for the physical side (the owner).
+	data.sovereignrite = {
+		num: -50, gen: 9, name: 'Sovereign Rite', type: 'Normal', category: 'Status',
+		basePower: 0, accuracy: true, pp: 10, priority: 0,
+		flags: { snatch: 1, metronome: 1 },
+		boosts: { atk: 3 },
+		secondary: null,
+		target: 'self',
+		shortDesc: "Raises the user's Attack by 3. Makuro, Raishin and Chimai.",
+		desc: "Raises the user's Attack by 3 stages. The signature move shared by Makuro, Raishin and Chimai, as Tail Glow is to Special Attack.",
+	};
 	return data;
 };
 
@@ -338,7 +349,7 @@ exports.moves = (data) => {
  */
 const MOVES = {
 	makuro: {
-		signature: ['abyssalmaw', 'leviathancrash'],
+		signature: ['abyssalmaw', 'leviathancrash', 'sovereignrite'],
 		moves: [
 			// Water
 			'wavecrash', 'liquidation', 'waterfall', 'aquajet', 'aquatail', 'razorshell', 'aquacutter', 'flipturn', 'dive',
@@ -353,7 +364,7 @@ const MOVES = {
 			'bodyslam', 'doubleedge', 'gigaimpact', 'hyperbeam', 'terablast',
 			// Setup and utility
 			'swordsdance', 'dragondance', 'bulkup', 'curse', 'haze', 'roar', 'whirlwind', 'yawn', 'encore', 'toxic', 'snowscape',
-			'recover', 'protect', 'detect', 'rest', 'sleeptalk', 'substitute', 'endure', 'facade', 'helpinghand', 'scaryface',
+			'cottonguard', 'velvetguard', 'tailglow', 'recover', 'protect', 'detect', 'rest', 'sleeptalk', 'substitute', 'endure', 'facade', 'helpinghand', 'scaryface',
 			// This server's own shared moves (balance-patch-1.js), where they fit.
 			'wavecharge', 'carrionfeast', 'rimecleaver', 'craghammer', 'hustleup', 'twilightexit', 'shufflejab', 'undertow',
 			// Utility and pivots (the owner: "more utility, Knock Off etc, ways to rotate").
@@ -361,7 +372,7 @@ const MOVES = {
 		],
 	},
 	raishin: {
-		signature: ['shrinebellstrike', 'spiritthunder'],
+		signature: ['shrinebellstrike', 'spiritthunder', 'sovereignrite'],
 		moves: [
 			// Electric
 			'supercellslam', 'wildcharge', 'thunderfang', 'voltswitch', 'nuzzle', 'thunderbolt', 'thunder', 'risingvoltage',
@@ -376,7 +387,7 @@ const MOVES = {
 			'terablast',
 			// Setup and utility
 			'swordsdance', 'agility', 'bulkup', 'safeguard', 'reflect', 'lightscreen', 'roar', 'taunt', 'encore', 'toxic', 'trick',
-			'recover', 'protect', 'detect', 'rest', 'sleeptalk', 'substitute', 'endure', 'facade', 'helpinghand', 'scaryface',
+			'cottonguard', 'velvetguard', 'tailglow', 'recover', 'protect', 'detect', 'rest', 'sleeptalk', 'substitute', 'endure', 'facade', 'helpinghand', 'scaryface',
 			// This server's own shared moves (balance-patch-1.js), where they fit.
 			'voltaiclance', 'sparkscamper', 'carrionfeast', 'rimecleaver', 'craghammer', 'hivefrenzy', 'shufflejab', 'hustleup', 'twilightexit',
 			// Utility and pivots (the owner: "more utility, Knock Off etc, ways to rotate").
@@ -384,7 +395,7 @@ const MOVES = {
 		],
 	},
 	chimai: {
-		signature: ['sanctuarypulse', 'hallowedquake'],
+		signature: ['sanctuarypulse', 'hallowedquake', 'sovereignrite'],
 		moves: [
 			// Ground
 			'earthpower', 'scorchingsands', 'mudshot', 'sandtomb', 'earthquake', 'bulldoze', 'highhorsepower', 'stompingtantrum',
@@ -397,7 +408,7 @@ const MOVES = {
 			'hypervoice', 'icebeam', 'thunderbolt', 'darkpulse', 'dragonpulse', 'bodypress', 'hyperbeam', 'terablast',
 			// Setup and utility
 			'calmmind', 'nastyplot', 'irondefense', 'amnesia', 'wish', 'healbell', 'safeguard', 'reflect', 'lightscreen', 'trickroom',
-			'gravity', 'sunnyday', 'roar', 'whirlwind', 'taunt', 'encore', 'toxic', 'yawn', 'trick', 'recover', 'protect', 'detect', 'rest',
+			'gravity', 'sunnyday', 'roar', 'whirlwind', 'taunt', 'encore', 'toxic', 'yawn', 'trick', 'cottonguard', 'velvetguard', 'tailglow', 'recover', 'protect', 'detect', 'rest',
 			'sleeptalk', 'substitute', 'endure', 'facade', 'helpinghand',
 			// This server's own shared moves (balance-patch-1.js), where they fit.
 			// A dancer (the owner): every dance there is, Quiver Dance for its Speed first.
@@ -421,7 +432,7 @@ exports.learnsets = (data) => {
 };
 
 exports.SPECIES = ['makuro', 'raishin', 'chimai'];
-exports.MOVE_IDS = ['abyssalmaw', 'leviathancrash', 'shrinebellstrike', 'spiritthunder', 'sanctuarypulse', 'hallowedquake'];
+exports.MOVE_IDS = ['abyssalmaw', 'leviathancrash', 'shrinebellstrike', 'spiritthunder', 'sanctuarypulse', 'hallowedquake', 'sovereignrite'];
 exports.ABILITY_IDS = ['calloftheabyss', 'calloftheshrine', 'callofthesanctuary'];
 exports.TERRAINS = ['abyssalterrain', 'shrineterrain', 'sanctuaryterrain'];
 exports.LEARNSETS = MOVES;
