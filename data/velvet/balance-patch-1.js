@@ -912,6 +912,32 @@ exports.ABILITIES = {
 		desc: "This Pokemon takes half damage from Fire-type and Fighting-type moves, and cannot be burned or frozen.",
 	},
 	/*
+	 * Bedrock Core - Regirock's (the owner, 29 Sep 2026: "wasn't given as much love as
+	 * Regice"). Permafrost Core's mirror: half damage from Water and Grass, its two
+	 * commonest weaknesses, and it can't be poisoned.
+	 */
+	bedrockcore: {
+		name: "Bedrock Core",
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.type === 'Water' || move.type === 'Grass') {
+				this.debug('Bedrock Core halves');
+				return this.chainModify(0.5);
+			}
+		},
+		onSetStatus(status, target, source, effect) {
+			if (status.id !== 'psn' && status.id !== 'tox') return;
+			if (effect && effect.status) this.add('-immune', target, '[from] ability: Bedrock Core');
+			return false;
+		},
+		flags: { breakable: 1 },
+		rating: 3.5,
+		num: -35,
+		gen: 9,
+		flavor: "Stone older than the sea itself shrugs off water and roots alike.",
+		shortDesc: "Takes half damage from Water and Grass moves. Can't be poisoned.",
+		desc: "This Pokemon takes half damage from Water-type and Grass-type moves, and cannot be poisoned or badly poisoned.",
+	},
+	/*
 	 * Mind Keeper - Uxie's. Knowledge as armour: it ignores every foe's stat
 	 * changes (Unaware) and takes 3/4 damage from super-effective hits (Filter).
 	 */
@@ -2273,6 +2299,8 @@ exports.buildBuffs = (Pokedex) => {
 	out.articuno = { moves: ['aurorasquall', 'freezedry', 'hurricane', 'calmmind', 'roost', 'uturn'], abilities: ['Polar Mantle'] };
 	// The Legends Rise: each keeps what it had and gains its own. Uxie and Mesprit get
 	// signature abilities, each letting Psychic moves hit Dark types.
+	// Regirock, brought level with Regice: its own ability and a real kit.
+	out.regirock = { moves: ['headsmash', 'rockwrecker', 'craghammer', 'shoreup', 'spikes', 'knockoff', 'rapidspin'], abilities: ['Bedrock Core'] };
 	out.regice = { moves: ['freezedry', 'recover', 'aurorabeam', 'chillingwater', 'auroraveil'], abilities: ['Permafrost Core'] };
 	out.uxie = { moves: ['memorywipe', 'slackoff', 'teleport', 'healbell'], abilities: ['Mind Keeper'] };
 	out.mesprit = { moves: ['soulresonance', 'moonblast', 'calmmind', 'wish'], abilities: ['Heartfelt Resolve'] };
@@ -2281,7 +2309,7 @@ exports.buildBuffs = (Pokedex) => {
 	// them earlier (Velvet Press never reached Regice or the lake trio). Hand the
 	// shared moves out again on top; add() merges, so nothing is lost either way.
 	for (const [move, ids] of Object.entries(TM_DISTRIBUTION)) {
-		for (const id of ids) if (Pokedex[id] && ['regigigas', 'articuno', 'regice', 'uxie', 'mesprit', 'azelf'].includes(id)) add(id, [move], []);
+		for (const id of ids) if (Pokedex[id] && ['regigigas', 'articuno', 'regice', 'regirock', 'uxie', 'mesprit', 'azelf'].includes(id)) add(id, [move], []);
 	}
 	return out;
 };
