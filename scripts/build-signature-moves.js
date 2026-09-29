@@ -78,6 +78,9 @@ function movesOf(species) {
 	return { all, gens };
 }
 
+// Makuro, Raishin and Chimai (data/velvet/abyss-shrine.js).
+const TRIO = new Set(['makuro', 'raishin', 'chimai']);
+
 function build() {
 	const familyMoves = new Map();     // family id -> Set of move ids it can get at all
 	const everyOwner = new Map();      // move id -> Set of families, events included
@@ -88,6 +91,10 @@ function build() {
 		// learns every move in the game, so counting her as an owner made every
 		// move in the dex shared and left the whole table with three entries.
 		if (species.isNonstandard === 'CAP' || species.isNonstandard === 'Custom') continue;
+		// The legendary trio learns other Pokemon's moves on purpose (every dance,
+		// Pursuit...): counting them took Victory Dance from Quaquaval and filed Aqua
+		// Step as Chimai's. Their signatures are named in CHOSEN below instead.
+		if (TRIO.has(species.id)) continue;
 		const family = familyOf(species);
 		const { all, gens } = movesOf(species);
 		for (const moveid of all) {
@@ -208,7 +215,7 @@ function build() {
 	// Makuro, Raishin and Chimai (abyss-shrine.js): their own moves, which nothing else learns.
 	const CHOSEN = { shuppet: ['poltergeist'], makuro: ['abyssalmaw', 'leviathancrash'], raishin: ['shrinebellstrike', 'spiritthunder'], chimai: ['sanctuarypulse', 'hallowedquake'] };
 	for (const [family, moves] of Object.entries(CHOSEN)) {
-		signatures[family] = [...new Set([...(signatures[family] || []), ...moves])]
+		signatures[family] = [...new Set([...(TRIO.has(family) ? [] : signatures[family] || []), ...moves])]
 			.sort((a, b) => Dex.moves.get(a).name.localeCompare(Dex.moves.get(b).name));
 	}
 

@@ -353,7 +353,7 @@ const MOVES = {
 			'bodyslam', 'doubleedge', 'gigaimpact', 'hyperbeam', 'terablast',
 			// Setup and utility
 			'swordsdance', 'dragondance', 'bulkup', 'curse', 'haze', 'roar', 'whirlwind', 'yawn', 'encore', 'toxic', 'snowscape',
-			'protect', 'detect', 'rest', 'sleeptalk', 'substitute', 'endure', 'facade', 'helpinghand', 'scaryface',
+			'recover', 'protect', 'detect', 'rest', 'sleeptalk', 'substitute', 'endure', 'facade', 'helpinghand', 'scaryface',
 			// This server's own shared moves (balance-patch-1.js), where they fit.
 			'wavecharge', 'carrionfeast', 'rimecleaver', 'craghammer', 'hustleup', 'twilightexit', 'shufflejab', 'undertow',
 		],
@@ -374,7 +374,7 @@ const MOVES = {
 			'terablast',
 			// Setup and utility
 			'swordsdance', 'agility', 'bulkup', 'safeguard', 'reflect', 'lightscreen', 'roar', 'taunt', 'encore', 'toxic', 'trick',
-			'protect', 'detect', 'rest', 'sleeptalk', 'substitute', 'endure', 'facade', 'helpinghand', 'scaryface',
+			'recover', 'protect', 'detect', 'rest', 'sleeptalk', 'substitute', 'endure', 'facade', 'helpinghand', 'scaryface',
 			// This server's own shared moves (balance-patch-1.js), where they fit.
 			'voltaiclance', 'sparkscamper', 'carrionfeast', 'rimecleaver', 'craghammer', 'hivefrenzy', 'shufflejab', 'hustleup', 'twilightexit',
 		],
@@ -393,7 +393,7 @@ const MOVES = {
 			'hypervoice', 'icebeam', 'thunderbolt', 'darkpulse', 'dragonpulse', 'bodypress', 'hyperbeam', 'terablast',
 			// Setup and utility
 			'calmmind', 'nastyplot', 'irondefense', 'amnesia', 'wish', 'healbell', 'safeguard', 'reflect', 'lightscreen', 'trickroom',
-			'gravity', 'sunnyday', 'roar', 'whirlwind', 'taunt', 'encore', 'toxic', 'yawn', 'trick', 'protect', 'detect', 'rest',
+			'gravity', 'sunnyday', 'roar', 'whirlwind', 'taunt', 'encore', 'toxic', 'yawn', 'trick', 'recover', 'protect', 'detect', 'rest',
 			'sleeptalk', 'substitute', 'endure', 'facade', 'helpinghand',
 			// This server's own shared moves (balance-patch-1.js), where they fit.
 			// A dancer (the owner): every dance there is, Quiver Dance for its Speed first.
