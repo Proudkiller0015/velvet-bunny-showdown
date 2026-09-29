@@ -43,6 +43,18 @@ exports.moves = (data) => {
 			},
 		};
 	}
+	// Punishment, buffed (the owner): 75 base instead of 60, +20 per target boost, max 200.
+	// Penance (balance-patch-1.js) is its Fairy, special twin on the same numbers.
+	if (data.punishment) {
+		data.punishment = {
+			...data.punishment,
+			basePowerCallback(pokemon, target) {
+				return Math.min(200, 75 + 20 * target.positiveBoosts());
+			},
+			shortDesc: "75 power +20 for each of the target's stat boosts (max 200).",
+			desc: "Power is 75, plus 20 for each of the target's positive stat stage changes, up to 200.",
+		};
+	}
 	// Smeargle gets everything new (the owner): every move of ours can be Sketched,
 	// the Balance Patch signatures included. Not Samantha's Queen moves, Nuzleaf-SOLD's
 	// Merchant's Call, or the Halloween event's Witch's Snatch.
@@ -83,4 +95,4 @@ const Z_STATUS = {
 exports.Z_STATUS = Z_STATUS;
 
 // For the client's move descriptions (scripts/build-buffs.js): every move this file changes.
-exports.CHANGED_MOVES = ['bellydrum', 'hyperbeam', 'gigaimpact', 'blastburn', 'frenzyplant', 'hydrocannon', 'rockwrecker', 'roaroftime', 'prismaticlaser', 'eternabeam', 'meteorassault'];
+exports.CHANGED_MOVES = ['punishment', 'bellydrum', 'hyperbeam', 'gigaimpact', 'blastburn', 'frenzyplant', 'hydrocannon', 'rockwrecker', 'roaroftime', 'prismaticlaser', 'eternabeam', 'meteorassault'];

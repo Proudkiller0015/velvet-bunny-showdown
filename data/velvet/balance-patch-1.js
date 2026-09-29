@@ -564,6 +564,24 @@ exports.MOVES = {
 		shortDesc: "Uses user's Sp. Def stat as Sp. Atk in damage calculation.",
 		desc: "Damage is calculated using the user's Special Defense stat as its Special Attack, including stat stage changes. Other effects that modify the Special Attack stat are used as normal. The special counterpart of Body Press.",
 	},
+	/*
+	 * Penance - Punishment for the Fairy side (the owner, 29 Sep 2026): special, 75
+	 * power +20 for each of the target's stat boosts, up to 200. Another answer to
+	 * the setup this patch added; the Fairy types and Chimai learn it.
+	 */
+	penance: {
+		num: -56, gen: 9, name: "Penance", type: "Fairy", category: "Special",
+		basePower: 0, accuracy: 100, pp: 5, priority: 0,
+		basePowerCallback(pokemon, target) {
+			return Math.min(200, 75 + 20 * target.positiveBoosts());
+		},
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		secondary: null,
+		target: "normal", contestType: "Cool", velvetShared: true,
+		flavor: "A radiant judgment that grows harsher the prouder the target has made itself.",
+		shortDesc: "75 power +20 for each of the target's stat boosts (max 200).",
+		desc: "Power is 75, plus 20 for each of the target's positive stat stage changes, up to 200. The Fairy, special counterpart of Punishment.",
+	},
 	velvetguard: {
 		num: -49, gen: 9, name: "Velvet Guard", type: "Fairy", category: "Status",
 		basePower: 0, accuracy: true, pp: 10, priority: 0,
@@ -1739,6 +1757,8 @@ const TM_DISTRIBUTION = {
 		'munchlax', 'bidoof', 'hippopotas', 'munna', 'gulpin', 'wynaut', 'numel', 'drowzee', 'wailmer',
 		// And every Regi (the owner).
 		'regigigas', 'regirock', 'regice', 'registeel', 'regieleki', 'regidrago'],
+	// Penance: the Fairy types (as Velvet Guard's, same exclusions) and Chimai.
+	penance: ['clefable', 'ninetalesalola', 'wigglytuff', 'rapidashgalar', 'weezinggalar', 'mrmime', 'azumarill', 'granbull', 'gardevoir', 'mawile', 'togekiss', 'florges', 'aromatisse', 'sylveon', 'dedenne', 'carbink', 'klefki', 'diancie', 'primarina', 'ribombee', 'shiinotic', 'comfey', 'mimikyu', 'tapukoko', 'tapulele', 'tapubulu', 'tapufini', 'hatterene', 'grimmsnarl', 'alcremie', 'enamorus', 'dachsbun', 'tinkaton', 'screamtail', 'ironvaliant', 'fezandipiti', 'whimsicott', 'slurpuff', 'chimai'],
 	// Everything that learns Cotton Guard (pre-evolutions follow on their own).
 	// Velvet Guard's partner: everything that learns the Guard, and the special walls
 	// (the owner: "generous with press logic"). Same exclusions as the Guard.
