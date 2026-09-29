@@ -98,7 +98,7 @@
 }
 
 /*
- * Makuro's and Raishin's terrains (data/velvet/abyss-shrine.js), drawn where the
+ * The trio's terrains (data/velvet/abyss-shrine.js), drawn where the
  * client draws Psychic Terrain's: it gives the backdrop the class
  * "<terrain id>weather". The pictures are ours, in client/fx.
  */
@@ -111,4 +111,9 @@
 	background: #2a0f4a url(../fx/weather-shrineterrain.png) no-repeat scroll left top;
 	color: #f1e4ff;
 	text-shadow: #16052a 1px 1px 0, #16052a 1px -1px 0, #16052a -1px 1px 0, #16052a -1px -1px 0;
+}
+.sanctuaryterrainweather {
+	background: #3a1d24 url(../fx/weather-sanctuaryterrain.png) no-repeat scroll left top;
+	color: #ffe6f3;
+	text-shadow: #2a0d18 1px 1px 0, #2a0d18 1px -1px 0, #2a0d18 -1px 1px 0, #2a0d18 -1px -1px 0;
 }

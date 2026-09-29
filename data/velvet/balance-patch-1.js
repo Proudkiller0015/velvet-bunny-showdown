@@ -453,6 +453,21 @@ exports.MOVES = {
 		desc: "A corrosive mist. This move's type effectiveness against Steel is changed to be super effective no matter what this move's type is, and Steel-types are not immune to it. Has a 10% chance to confuse the target. It cannot poison.",
 	},
 	/*
+	 * Tremor Shot - the special Ground priority the game never had (the owner,
+	 * 29 Sep 2026, with Chimai). Vacuum Wave's shape for Ground: 40 power, +1,
+	 * special. Flying types and Levitate are still immune.
+	 */
+	tremorshot: {
+		num: -48, gen: 9, name: "Tremor Shot", type: "Ground", category: "Special",
+		basePower: 40, accuracy: 100, pp: 30, priority: 1,
+		flags: { protect: 1, mirror: 1, metronome: 1, nonsky: 1 },
+		secondary: null,
+		target: "normal", contestType: "Tough", velvetShared: true,
+		flavor: "A sharp jolt through the earth that reaches the target before it can move.",
+		shortDesc: "Usually goes first.",
+		desc: "No additional effect. A special Ground-type move with +1 priority.",
+	},
+	/*
 	 * Gleamstalk - Luxray's. It locks eyes with its prey through any wall, and
 	 * the prey freezes: the target is paralyzed (through a Substitute), Luxray's
 	 * Speed rises by 2 whether or not the paralysis takes, and its next Electric
@@ -1581,6 +1596,9 @@ const TM_DISTRIBUTION = {
 	solarnectar: ['sunflora', 'cherrim', 'maractus', 'jumpluff', 'tropius', 'carnivine', 'shiinotic', 'eldegoss', 'sawsbuck', 'parasect', 'wormadam', 'cacturne', 'venusaur', 'bellossom', 'vileplume', 'roserade', 'florges', 'comfey', 'lilligant', 'whimsicott', 'meganium', 'ribombee', 'victreebel', 'exeggutor', 'exeggutoralola', 'lurantis', 'arboliva', 'scovillain', 'ludicolo', 'breloom', 'appletun', 'sceptile'],
 	// Heavy stone bodies, boulders and hammers. Not Tyranitar, Garganacl or Landorus: reliable Rock STAB or coverage on those tips OU; they keep Stone Edge.
 	craghammer: ['sudowoodo', 'magcargo', 'solrock', 'klawf', 'stonjourner', 'sandslash', 'marowak', 'dugtrio', 'golem', 'golemalola', 'rhyperior', 'aggron', 'rampardos', 'bastiodon', 'probopass', 'gigalith', 'coalossal', 'lycanroc', 'lycanrocmidnight', 'lycanrocdusk', 'tyrantrum', 'barbaracle', 'crustle', 'archeops', 'aerodactyl', 'kabutops', 'armaldo', 'cradily', 'avalugg', 'avalugghisui', 'relicanth', 'steelix', 'tinkaton', 'conkeldurr', 'carbink'],
+	// The special Ground attackers (29 Sep 2026, with Chimai). Not Landorus: like
+	// Crag Hammer, Ground priority on it tips a tier; it keeps Earth Power.
+	tremorshot: ['nidoking', 'nidoqueen', 'gastrodon', 'palossand', 'seismitoad', 'stunfisk', 'stunfiskgalar', 'camerupt', 'claydol', 'whiscash', 'flygon', 'sandyshocks'],
 	// Hypnotists and spinning psychic lights. Not Espathra, Hatterene or Starmie.
 	hypnowhirl: ['chimecho', 'grumpig', 'meowstic', 'meowsticf', 'swoobat', 'lunatone', 'mrmime', 'mrrime', 'jynx', 'indeedee', 'indeedeef', 'rabsca', 'unown', 'hypno', 'xatu', 'girafarig', 'farigiraf', 'bronzong', 'claydol', 'gothitelle', 'reuniclus', 'beheeyem', 'malamar', 'musharna', 'gardevoir', 'sigilyph', 'delphox', 'orbeetle', 'oranguru', 'bruxish', 'alakazam'],
 	// Boxers and fighters light on their feet. Not Annihilape (Uber) or Quaquaval, which already has a Speed-raising signature.

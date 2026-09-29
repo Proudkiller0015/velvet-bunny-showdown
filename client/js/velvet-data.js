@@ -184,7 +184,7 @@
 	// Makuro and Raishin (data/velvet/abyss-shrine.js): pixelized from the owner's art
 	// onto standard 96x96 canvases, standing where a gen 5 sprite stands. The back is
 	// the front turned round until a real back view is drawn.
-	['makuro', 'raishin'].forEach(function (id) {
+	['makuro', 'raishin', 'chimai'].forEach(function (id) {
 		ART[id] = {
 			standard: true,
 			still: { front: [id + '.png', 96, 96], back: [id + '-back.png', 96, 96] },
@@ -923,6 +923,13 @@
 				end: '  The shrine\'s lightning faded away.',
 				activate: '  {POKEMON} is warded by the Shrine Terrain!',
 				shortDesc: 'Electric and Ghost moves 1.3x; other Pokemon\'s status moves fail against Ghost types.',
+			},
+			sanctuaryterrain: {
+				name: 'Sanctuary Terrain',
+				start: '  A sanctuary rose from the earth, glowing pink!',
+				end: '  The sanctuary sank back into the earth.',
+				activate: '  {POKEMON} is sheltered by the Sanctuary Terrain!',
+				shortDesc: 'Ground and Fairy moves 1.3x; other Pokemon cannot lower a Fairy type\'s stats.',
 			},
 		};
 		for (var tid in TERRAIN_TEXT) if (!en.Moves[tid]) en.Moves[tid] = TERRAIN_TEXT[tid];
@@ -2435,16 +2442,12 @@
 				if (moveId === 'solarnectar' && (weather === 'sunnyday' || weather === 'desolateland') && out && out.modify) {
 					out.modify(135 / 80, 'Sunlight');
 				}
-				// Makuro's and Raishin's terrains: 1.3x for their two types, grounded or not.
+				// Makuro's, Raishin's and Chimai's terrains: 1.3x for their two types, grounded or not.
 				var has = this.battle && this.battle.hasPseudoWeather ? this.battle.hasPseudoWeather.bind(this.battle) : null;
 				if (has && out && out.modify) {
 					if (has('Abyssal Terrain') && (moveType === 'Water' || moveType === 'Dark')) out.modify(5325 / 4096, 'Abyssal Terrain');
 					if (has('Shrine Terrain') && (moveType === 'Electric' || moveType === 'Ghost')) out.modify(5325 / 4096, 'Shrine Terrain');
-				}
-				// Abyssal Maw: 1.5x against a target that has not moved yet - which the
-				// tooltip cannot know before the turn, so it shows the range, like Fishious Rend.
-				if (moveId === 'abyssalmaw' && out && out.setRange && out.value && !out.maxValue) {
-					out.setRange(out.value, out.value * 1.5, '1.5&times; if the target has not moved yet');
+					if (has('Sanctuary Terrain') && (moveType === 'Ground' || moveType === 'Fairy')) out.modify(5325 / 4096, 'Sanctuary Terrain');
 				}
 			} catch (e) {
 				// A tooltip is never worth throwing over.
