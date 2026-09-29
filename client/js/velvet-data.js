@@ -184,12 +184,16 @@
 	// Makuro and Raishin (data/velvet/abyss-shrine.js): pixelized from the owner's art
 	// onto standard 96x96 canvases, standing where a gen 5 sprite stands. The back is
 	// the front turned round until a real back view is drawn.
+	// SPRITE_V is bumped whenever the pictures are redrawn: the static server caches
+	// sprites for an hour under the same name, so the ChatGPT redraws otherwise showed
+	// the old converted ones until the cache ran out.
+	var SPRITE_V = '?v=3';
 	['makuro', 'raishin', 'chimai'].forEach(function (id) {
 		ART[id] = {
 			standard: true,
-			still: { front: [id + '.png', 96, 96], back: [id + '-back.png', 96, 96] },
-			icon: id + '-icon.png',
-			builder: 'background-image:url(#SPRITES#' + id + '.png);background-position:10px 5px;background-repeat:no-repeat;image-rendering:pixelated;',
+			still: { front: [id + '.png' + SPRITE_V, 96, 96], back: [id + '-back.png' + SPRITE_V, 96, 96] },
+			icon: id + '-icon.png' + SPRITE_V,
+			builder: 'background-image:url(#SPRITES#' + id + '.png' + SPRITE_V + ');background-position:10px 5px;background-repeat:no-repeat;image-rendering:pixelated;',
 		};
 	});
 	Object.keys(MEGA_SPRITES).forEach(function (id) {
