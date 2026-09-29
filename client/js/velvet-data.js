@@ -2584,7 +2584,8 @@
 
 			var hoisted = [];
 			if (mine.length) {
-				hoisted.push(['header', mine.length === 1 ? 'Signature item' : 'Signature items']);
+				// Showdown's own wording for an item that belongs to one Pokemon (Light Ball, Rusted Sword).
+				hoisted.push(['header', 'Specific to ' + ((species && species.name) || speciesName)]);
 				for (var k = 0; k < mine.length; k++) hoisted.push(['item', mine[k]]);
 			}
 			if (stones.length) {
