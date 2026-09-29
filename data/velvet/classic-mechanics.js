@@ -43,7 +43,7 @@ exports.moves = (data) => {
 			},
 		};
 	}
-	// Punishment, buffed (the owner): 75 base instead of 60, +30 per target boost, max 200,
+	// Punishment, buffed (the owner): 75 base instead of 60, +20 per target boost, no cap,
 	// and back in the current generation (it was cut from Scarlet and Violet).
 	// Penance (balance-patch-1.js) is its Fairy, special twin on the same numbers.
 	if (data.punishment) {
@@ -51,10 +51,10 @@ exports.moves = (data) => {
 			...data.punishment,
 			isNonstandard: null,
 			basePowerCallback(pokemon, target) {
-				return Math.min(200, 75 + 30 * target.positiveBoosts());
+				return 75 + 20 * target.positiveBoosts();
 			},
-			shortDesc: "75 power +30 for each of the target's stat boosts (max 200).",
-			desc: "Power is 75, plus 30 for each of the target's positive stat stage changes, up to 200.",
+			shortDesc: "75 power +20 for each of the target's stat boosts. No cap.",
+			desc: "Power is 75, plus 20 for each of the target's positive stat stage changes, with no cap.",
 		};
 	}
 	// Smeargle gets everything new (the owner): every move of ours can be Sketched,

@@ -573,14 +573,14 @@ exports.MOVES = {
 		num: -56, gen: 9, name: "Penance", type: "Fairy", category: "Special",
 		basePower: 0, accuracy: 100, pp: 5, priority: 0,
 		basePowerCallback(pokemon, target) {
-			return Math.min(200, 75 + 30 * target.positiveBoosts());
+			return 75 + 20 * target.positiveBoosts();
 		},
 		flags: { protect: 1, mirror: 1, metronome: 1 },
 		secondary: null,
 		target: "normal", contestType: "Cool", velvetShared: true,
 		flavor: "A radiant judgment that grows harsher the prouder the target has made itself.",
-		shortDesc: "75 power +30 for each of the target's stat boosts (max 200).",
-		desc: "Power is 75, plus 30 for each of the target's positive stat stage changes, up to 200. The Fairy, special counterpart of Punishment.",
+		shortDesc: "75 power +20 for each of the target's stat boosts. No cap.",
+		desc: "Power is 75, plus 20 for each of the target's positive stat stage changes, with no cap. The Fairy, special counterpart of Punishment.",
 	},
 	velvetguard: {
 		num: -49, gen: 9, name: "Velvet Guard", type: "Fairy", category: "Status",
