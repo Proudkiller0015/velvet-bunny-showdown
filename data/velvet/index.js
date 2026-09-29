@@ -40,6 +40,8 @@ const Frostbite = require('./frostbite.js');
 const Gems = require('./gems.js');
 // New items for every Pokemon (Ultra Shard).
 const NewItems = require('./new-items.js');
+// Old-generation Belly Drum and recharge rules.
+const Classic = require('./classic-mechanics.js');
 
 // The buffed Pokemon are Showdown's own, so they are changed in place rather
 // than added - and the learnsets they need are added when that file is loaded,
@@ -70,7 +72,7 @@ exports.pokedex = data => {
 exports.abilities = data => AbyssShrine.abilities(Halloween.abilities(require('./balance-patch-1.js').patchAbsorbers(patchAbilities(unnerfAbilities(Object.assign(data, Abilities))))));
 let moveTable = null;
 exports.moves = data => {
-	moveTable = Frostbite.moves(AbyssShrine.moves(Halloween.moves(patchMoves(unnerfMoves(Object.assign(data, Moves))))));
+	moveTable = Classic.moves(Frostbite.moves(AbyssShrine.moves(Halloween.moves(patchMoves(unnerfMoves(Object.assign(data, Moves)))))));
 	teachHerEverything();
 	return moveTable;
 };
