@@ -181,6 +181,17 @@
 		// and kept pixel-sharp; squeezing it to half size made it unreadable.
 		builder: 'background-image:url(#SPRITES#banette-megahalloween.png);background-size:96px 91px;background-position:10px 8px;background-repeat:no-repeat;image-rendering:pixelated;',
 	};
+	// Makuro and Raishin (data/velvet/abyss-shrine.js): pixelized from the owner's art
+	// onto standard 96x96 canvases, standing where a gen 5 sprite stands. The back is
+	// the front turned round until a real back view is drawn.
+	['makuro', 'raishin'].forEach(function (id) {
+		ART[id] = {
+			standard: true,
+			still: { front: [id + '.png', 96, 96], back: [id + '-back.png', 96, 96] },
+			icon: id + '-icon.png',
+			builder: 'background-image:url(#SPRITES#' + id + '.png);background-position:10px 5px;background-repeat:no-repeat;image-rendering:pixelated;',
+		};
+	});
 	Object.keys(MEGA_SPRITES).forEach(function (id) {
 		var file = MEGA_SPRITES[id];
 		ART[id] = {
@@ -369,6 +380,10 @@
 		if (typeof window.BattlePokedex === 'undefined') return false;
 
 		for (var id in SPECIES) if (!window.BattlePokedex[id]) window.BattlePokedex[id] = SPECIES[id];
+		// Whole new Pokemon (Makuro, Raishin): their rows are generated from the server's
+		// dex by scripts/build-buffs.js, like everything else that is ours.
+		var fresh = (window.VelvetBuffs && window.VelvetBuffs.newSpecies) || {};
+		for (var ns in fresh) if (!window.BattlePokedex[ns]) window.BattlePokedex[ns] = fresh[ns];
 		// Mini icons: a forme with no icon of its own borrows the one it is a skin of
 		// (the witch Mega Banette shows Mega Banette's, not plain Banette's).
 		var ICON_OF = { banettemegahalloween: 'banettemega' };
@@ -891,6 +906,26 @@
 		for (var it in (buffs.items || {})) ourItems[it] = buffs.items[it];
 		for (var ov in (over.items || {})) ourItems[ov] = over.items[ov];
 		fill('Items', window.BattleItems, ourItems);
+		// The battle lines for Makuro's and Raishin's terrains (data/velvet/abyss-shrine.js).
+		// The server sends `-fieldstart|move: Abyssal Terrain`, and the log looks its
+		// words up here by the effect's id, the way it finds Psychic Terrain's.
+		var TERRAIN_TEXT = {
+			abyssalterrain: {
+				name: 'Abyssal Terrain',
+				start: '  The battlefield sank into the abyss!',
+				end: '  The abyss receded from the battlefield.',
+				activate: '  {POKEMON} is shielded by the Abyssal Terrain!',
+				shortDesc: 'Water and Dark moves 1.3x; priority moves fail against Dark types.',
+			},
+			shrineterrain: {
+				name: 'Shrine Terrain',
+				start: '  Purple lightning crackles over a shrine!',
+				end: '  The shrine\'s lightning faded away.',
+				activate: '  {POKEMON} is warded by the Shrine Terrain!',
+				shortDesc: 'Electric and Ghost moves 1.3x; other Pokemon\'s status moves fail against Ghost types.',
+			},
+		};
+		for (var tid in TERRAIN_TEXT) if (!en.Moves[tid]) en.Moves[tid] = TERRAIN_TEXT[tid];
 		en.__velvetDescriptions = true;
 		return true;
 	}
@@ -906,8 +941,21 @@
 			wrapped.__velvet = true;
 			window.getTextEntry = wrapped;
 		}
+		// The battle log reads the same table without going through getTextEntry, so a
+		// battle that starts before any tooltip was opened needs the fill here too.
+		var Parser = window.BattleTextParser;
+		if (Parser && Parser.prototype && Parser.prototype.textField && !Parser.prototype.textField.__velvet) {
+			var textField = Parser.prototype.textField;
+			var wrappedField = function () {
+				fillDescriptions();
+				return textField.apply(this, arguments);
+			};
+			wrappedField.__velvet = true;
+			Parser.prototype.textField = wrappedField;
+		}
 		fillDescriptions();
-		return true;
+		// Not done until the battle log's parser has been wrapped as well.
+		return !!Parser;
 	}
 
 	/**
@@ -2031,6 +2079,10 @@
 		// nineteen moves we added and nothing it was born with.
 		var table = window.BattleTeambuilderTable;
 		if (table && table.learnsets) {
+			// The new Pokemon's whole movepools: the client has no entry for them at all.
+			for (var fresh in (buffs.newLearnsets || {})) {
+				if (!table.learnsets[fresh]) table.learnsets[fresh] = Object.assign({}, buffs.newLearnsets[fresh]);
+			}
 			for (var id2 in buffs.bySpecies) {
 				var learnset = table.learnsets[id2] || (table.learnsets[id2] = {});
 				var added = buffs.bySpecies[id2].moves;
@@ -2382,6 +2434,17 @@
 				var weather = this.battle && window.toID(this.battle.weather || '');
 				if (moveId === 'solarnectar' && (weather === 'sunnyday' || weather === 'desolateland') && out && out.modify) {
 					out.modify(135 / 80, 'Sunlight');
+				}
+				// Makuro's and Raishin's terrains: 1.3x for their two types, grounded or not.
+				var has = this.battle && this.battle.hasPseudoWeather ? this.battle.hasPseudoWeather.bind(this.battle) : null;
+				if (has && out && out.modify) {
+					if (has('Abyssal Terrain') && (moveType === 'Water' || moveType === 'Dark')) out.modify(5325 / 4096, 'Abyssal Terrain');
+					if (has('Shrine Terrain') && (moveType === 'Electric' || moveType === 'Ghost')) out.modify(5325 / 4096, 'Shrine Terrain');
+				}
+				// Abyssal Maw: 1.5x against a target that has not moved yet - which the
+				// tooltip cannot know before the turn, so it shows the range, like Fishious Rend.
+				if (moveId === 'abyssalmaw' && out && out.setRange && out.value && !out.maxValue) {
+					out.setRange(out.value, out.value * 1.5, '1.5&times; if the target has not moved yet');
 				}
 			} catch (e) {
 				// A tooltip is never worth throwing over.

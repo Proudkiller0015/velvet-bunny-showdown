@@ -60,6 +60,10 @@ const LABEL = 'Awakened';
 const OUR_ITEMS = ['elementalbanana', 'brokenpact', 'banettitehalloween'];
 const OUR_MOVES = ['witchssnatch'];
 const OUR_ABILITIES = ['witchinghour'];
+// Makuro and Raishin (data/velvet/abyss-shrine.js): their signature moves and abilities.
+const abyssShrine = require(path.join(PACKAGE, 'dist', 'data', 'velvet', 'abyss-shrine.js'));
+OUR_MOVES.push(...abyssShrine.MOVE_IDS);
+OUR_ABILITIES.push(...abyssShrine.ABILITY_IDS);
 for (const buff of Object.values(Buffs)) {
 	for (const name of buff.moves || []) {
 		const move = Dex.moves.get(name);
@@ -236,6 +240,8 @@ const OUR_MEGAS = { [Dex.species.get(halloween.FORME).id]: Dex.species.get(hallo
 // Species this server made legal and tiered in its own formats-data (Eternamax: AG).
 const OUR_FORMATS = require(path.join(PACKAGE, 'dist', 'data', 'velvet', 'formats-data.js')).FormatsData;
 const OUR_TIERS = {};
+// Our own new Pokemon are tiered in their own file, and listed under their heading the same way.
+for (const id of abyssShrine.SPECIES) OUR_TIERS[id] = Dex.species.get(id).natDexTier;
 for (const [id, row] of Object.entries(OUR_FORMATS)) if ((row.tier && row.tier !== 'Illegal' && row.isNonstandard === null) || (isMegaForme(id) && row.natDexTier && row.natDexTier !== 'Illegal')) OUR_TIERS[id] = row.natDexTier || row.tier;
 for (const [id, tier] of Object.entries(Object.assign({}, za.assigned, OUR_MEGAS, OUR_TIERS, TIERS))) {
 	if (isMegaForme(id) || id in OUR_TIERS) megaTiers[id] = tier;
@@ -320,6 +326,29 @@ for (const file of EVENT_FILES) {
 	const mod = require(path.join(PACKAGE, 'dist', 'data', 'velvet', file));
 	for (const id of mod.EVENT_SPECIES || []) if (!events.includes(id)) events.push(id);
 }
+/*
+ * Whole new Pokemon (Makuro, Raishin): the client has no dex row and no builder
+ * learnset for them at all, so both ship from here - the row from the server's own
+ * species, the learnset in the builder's string form ('9a', see
+ * showdown-learnset-source-letters: generation 9 plus the region-born letter).
+ */
+const newSpecies = {};
+const newLearnsets = {};
+for (const id of abyssShrine.SPECIES) {
+	const sp = Dex.species.get(id);
+	newSpecies[id] = {
+		num: sp.num, name: sp.name, types: sp.types.slice(), gender: sp.gender || undefined,
+		baseStats: Object.assign({}, sp.baseStats), abilities: Object.assign({}, sp.abilities),
+		heightm: sp.heightm, weightkg: sp.weightkg, color: sp.color, eggGroups: sp.eggGroups.slice(),
+		tags: sp.tags.slice(), tier: sp.natDexTier, gen: 9,
+	};
+	const learnset = Dex.species.getLearnsetData(id).learnset || {};
+	// Signatures first: the builder lists moves in the order the keys were added.
+	const order = Object.keys(learnset).sort((a, b) => (learnset[b][0].includes('L') ? 1 : 0) - (learnset[a][0].includes('L') ? 1 : 0));
+	newLearnsets[id] = {};
+	for (const move of order) newLearnsets[id][move] = '9a';
+	search.push([id, 'pokemon', offsetsFor(sp.name)]);
+}
 for (const [id, row] of Object.entries(moves)) search.push([id, 'move', offsetsFor(row.name)]);
 for (const [id, row] of Object.entries(abilities)) search.push([id, 'ability', offsetsFor(row.name)]);
 for (const [id, row] of Object.entries(items)) search.push([id, 'item', offsetsFor(row.name)]);
@@ -382,6 +411,8 @@ window.VelvetBuffs = {
 \tawakened: ${JSON.stringify(awakened)},
 \tevents: ${JSON.stringify(events)},
 \tsearchAliases: ${JSON.stringify(searchAliases)},
+\tnewSpecies: ${JSON.stringify(newSpecies)},
+\tnewLearnsets: ${JSON.stringify(newLearnsets)},
 
 \t/** What this Pokemon gained, or an empty record. */
 \tget: function (speciesid) {

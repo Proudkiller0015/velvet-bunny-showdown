@@ -32,6 +32,8 @@ const { applyTiers } = require('./tiering.js');
 const { unnerfMoves, unnerfAbilities, unnerfSpecies } = require('./unnerfs.js');
 // Halloween 2026: the Witching Hour Mega Banette skin, its stone, ability and signature.
 const Halloween = require('./halloween.js');
+// Makuro and Raishin, the Abyss and the Shrine: two legendaries and their terrains.
+const AbyssShrine = require('./abyss-shrine.js');
 
 // The buffed Pokemon are Showdown's own, so they are changed in place rather
 // than added - and the learnsets they need are added when that file is loaded,
@@ -55,25 +57,28 @@ exports.pokedex = data => {
 	Object.assign(data, Pokedex);
 	unnerfSpecies(data);
 	Halloween.pokedex(data);
+	AbyssShrine.pokedex(data);
 	buffedPokedex = data;
 	buffWhatWeHave();
 };
-exports.abilities = data => Halloween.abilities(require('./balance-patch-1.js').patchAbsorbers(patchAbilities(unnerfAbilities(Object.assign(data, Abilities)))));
+exports.abilities = data => AbyssShrine.abilities(Halloween.abilities(require('./balance-patch-1.js').patchAbsorbers(patchAbilities(unnerfAbilities(Object.assign(data, Abilities))))));
 let moveTable = null;
 exports.moves = data => {
-	moveTable = Halloween.moves(patchMoves(unnerfMoves(Object.assign(data, Moves))));
+	moveTable = AbyssShrine.moves(Halloween.moves(patchMoves(unnerfMoves(Object.assign(data, Moves)))));
 	teachHerEverything();
 	return moveTable;
 };
 exports.formatsData = data => {
 	Object.assign(data, FormatsData);
 	Halloween.formatsData(data);
+	AbyssShrine.formatsData(data);
 	tierTable = data;
 	buffWhatWeHave();
 };
 exports.learnsets = data => {
 	Object.assign(data, Learnsets);
 	Halloween.learnsets(data);
+	AbyssShrine.learnsets(data);
 	buffedLearnsets = data;
 	teachHerEverything();
 	buffWhatWeHave();
@@ -119,3 +124,6 @@ exports.items = data => {
 	Halloween.items(data);
 	return data;
 };
+
+// Field conditions: the Abyss's and the Shrine's terrains (a table no other file here touches).
+exports.conditions = data => AbyssShrine.conditions(data);

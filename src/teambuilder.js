@@ -1,4 +1,6 @@
 'use strict';
+// The usage weight our own new Pokemon are drafted at (see rank()): a Pokemon a few per cent of teams bring.
+const NEW_SPECIES_USAGE = 0.03;
 /**
  * Legal team generation for ANY Pokemon Showdown format.
  *
@@ -754,6 +756,17 @@ class TeamBuilder {
 	 * Missing is not an error: on a plain checkout with no buffs installed this
 	 * is an empty object and everything below it quietly does nothing.
 	 */
+	/** Whole new Pokemon this server added (data/velvet/abyss-shrine.js), by id. */
+	newSpecies() {
+		if (this._newSpecies) return this._newSpecies;
+		try {
+			this._newSpecies = new Set(require('pokemon-showdown/dist/data/velvet/abyss-shrine.js').SPECIES);
+		} catch (e) {
+			this._newSpecies = new Set();
+		}
+		return this._newSpecies;
+	}
+
 	buffed() {
 		if (this._buffed) return this._buffed;
 		try {
@@ -1465,9 +1478,17 @@ class TeamBuilder {
 		const stats = this.usage.get(ctx.id);
 
 		const has = (table, s) => table && (table[s.name] !== undefined || table[s.baseSpecies] !== undefined);
+		/*
+		 * Our own new Pokemon (Makuro, Raishin) have no usage anywhere and no Smogon
+		 * analysis, so on the numbers alone they are never drawn. They are drafted
+		 * like a staple instead, at the weight of a Pokemon a few per cent of teams
+		 * bring - in the conversation, not on every team.
+		 */
+		const ours = this.newSpecies();
 		const usageOf = s => {
 			const e = stats && (stats[s.name] || stats[s.baseSpecies]);
-			return e && e.usage ? (e.usage.weighted || e.usage.raw || 0) : 0;
+			const u = e && e.usage ? (e.usage.weighted || e.usage.raw || 0) : 0;
+			return ours.has(s.id) ? Math.max(u, NEW_SPECIES_USAGE) : u;
 		};
 
 		/*
@@ -1493,7 +1514,7 @@ class TeamBuilder {
 		const localOf = s => { const row = here && (here[s.name] || here[s.baseSpecies]); return row ? row.score * (row.breadth ?? 1) : 0; };
 		const analysed = [], used = [], rest = [];
 		for (const s of pool) {
-			if (has(sets, s) || localOf(s) > 0) analysed.push(s);
+			if (has(sets, s) || localOf(s) > 0 || ours.has(s.id)) analysed.push(s);
 			else if (usageOf(s) > 0 || buffed[s.id]) used.push(s);
 			else rest.push(s);
 		}

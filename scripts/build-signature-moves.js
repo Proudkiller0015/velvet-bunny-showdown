@@ -205,7 +205,8 @@ function build() {
 	// Signatures by decision rather than by learnset. Poltergeist is Banette's
 	// here: on the Halloween 2026 Mega it becomes Witch's Snatch
 	// (data/velvet/halloween.js), so the builder files it under Banette's own.
-	const CHOSEN = { shuppet: ['poltergeist'] };
+	// Makuro and Raishin (abyss-shrine.js): their own moves, which nothing else learns.
+	const CHOSEN = { shuppet: ['poltergeist'], makuro: ['abyssalmaw'], raishin: ['shrinebellstrike'] };
 	for (const [family, moves] of Object.entries(CHOSEN)) {
 		signatures[family] = [...new Set([...(signatures[family] || []), ...moves])]
 			.sort((a, b) => Dex.moves.get(a).name.localeCompare(Dex.moves.get(b).name));

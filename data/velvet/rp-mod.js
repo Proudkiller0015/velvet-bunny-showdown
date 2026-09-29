@@ -28,10 +28,12 @@ const TABLES = [
 	['Items', 'items'],
 	['FormatsData', 'formats-data'],
 	['Learnsets', 'learnsets'],
+	// Only for the terrains Makuro and Raishin summon (abyss-shrine.js).
+	['Conditions', 'conditions'],
 ];
 // The order the dex loads them in; data/velvet/index.js copes with any order,
 // but the same one keeps its logs reading the same.
-const HOOK = { Abilities: 'abilities', FormatsData: 'formatsData', Items: 'items', Learnsets: 'learnsets', Moves: 'moves', Pokedex: 'pokedex' };
+const HOOK = { Abilities: 'abilities', FormatsData: 'formatsData', Items: 'items', Learnsets: 'learnsets', Moves: 'moves', Pokedex: 'pokedex', Conditions: 'conditions' };
 
 function clone(v) {
 	if (Array.isArray(v)) return v.map(clone);
@@ -66,7 +68,7 @@ function diff() {
 		for (const id of Object.keys(pristine[table])) patched[table][id] = clone(pristine[table][id]);
 	}
 	const velvet = require('./index.js');
-	for (const table of ['Abilities', 'FormatsData', 'Items', 'Learnsets', 'Moves', 'Pokedex']) {
+	for (const table of ['Abilities', 'Conditions', 'FormatsData', 'Items', 'Learnsets', 'Moves', 'Pokedex']) {
 		velvet[HOOK[table]](patched[table]);
 	}
 
