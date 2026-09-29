@@ -566,7 +566,7 @@ exports.MOVES = {
 	},
 	/*
 	 * Penance - Punishment for the Fairy side (the owner, 29 Sep 2026): special, 75
-	 * power +30 for each of the target's stat boosts, up to 200. Another answer to
+	 * power +20 for each of the target's stat boosts, no cap. Another answer to
 	 * the setup this patch added; the Fairy types and Chimai learn it.
 	 */
 	penance: {
