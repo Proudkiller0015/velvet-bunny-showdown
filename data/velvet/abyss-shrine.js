@@ -221,111 +221,101 @@ exports.abilities = (data) => {
 	return data;
 };
 
-/*
- * Two signatures each, all 120 power and 100% accurate with a side effect worth
- * having and no drawback (the owner's rule), each one better in its own terrain -
- * the way Behemoth Blade is the whole of Zacian, these are the whole of the trio.
- */
 exports.moves = (data) => {
+	/*
+	 * The six signatures, reworked to be equal (the owner: crits "too broken", heal and
+	 * Speed drops "unoriginal"). Every one: 120 power, 100% accurate, ignores the
+	 * target's stat changes, and in its own terrain goes through Protect and
+	 * Substitute. Each keeps exactly one effect of its own, all of them disruption.
+	 */
+	const OWN = { abyssalmaw: 'abyssalterrain', leviathancrash: 'abyssalterrain', shrinebellstrike: 'shrineterrain', spiritthunder: 'shrineterrain', sanctuarypulse: 'sanctuaryterrain', hallowedquake: 'sanctuaryterrain' };
 	const sig = (id, row) => {
-		data[id] = { gen: 9, accuracy: 100, basePower: 120, pp: 10, priority: 0, target: 'normal', ...row };
+		data[id] = {
+			gen: 9, accuracy: 100, basePower: 120, pp: 10, priority: 0, target: 'normal',
+			ignoreDefensive: true, ignoreEvasion: true,
+			onModifyMove(move) {
+				if (!this.field.isTerrain(OWN[move.id])) return;
+				// Through Protect (the flag the protections check) and through Substitute.
+				move.flags = { ...move.flags };
+				delete move.flags['protect'];
+				move.infiltrates = true;
+			},
+			secondary: null,
+			...row,
+		};
 	};
+	const TERRAIN_NOTE = "Ignores the target's stat stage changes. In its own terrain it also goes through Protect and Substitute.";
 	// ---- Makuro
 	sig('abyssalmaw', {
 		num: -42, name: 'Abyssal Maw', type: 'Dark', category: 'Physical',
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, bite: 1 },
-		// Dragged into the deep: Spirit Shackle's trap, for as long as the user stays in -
-		// and in the Abyss the jaws hold on hard enough to draw strength back out.
-		onModifyMove(move) {
-			if (this.field.isTerrain('abyssalterrain')) move.drain = [1, 4];
+		// The abyss swallows its power: Gastro Acid for as long as the target stays in.
+		onHit(target) {
+			if (target.hp && !target.getAbility().flags['cantsuppress'] && !target.volatiles['gastroacid']) target.addVolatile('gastroacid');
 		},
-		secondary: {
-			chance: 100,
-			onHit(target, source, move) {
-				if (source.isActive) target.addVolatile('trapped', source, move, 'trapper');
-			},
-		},
-		shortDesc: "Traps the target. In Abyssal Terrain, heals 1/4 of the damage. Makuro.",
-		desc: "Prevents the target from switching out while the user remains active (a Ghost type, or a Pokemon holding Shed Shell, still can). While Abyssal Terrain is active the user also recovers 1/4 of the HP lost by the target. Makes contact; boosted by Strong Jaw. Makuro's signature move.",
+		shortDesc: "Suppresses the target's ability while it stays in. Makuro.",
+		desc: "The target's Ability is suppressed until it switches out, as Gastro Acid does. " + TERRAIN_NOTE + " Boosted by Strong Jaw. Makuro's signature move.",
 	});
 	sig('leviathancrash', {
 		num: -45, name: 'Leviathan Crash', type: 'Water', category: 'Physical',
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
-		// The weight of the deep: the target is dragged down (Speed), always in the Abyss.
-		secondary: { chance: 50, boosts: { spe: -1 } },
-		onModifyMove(move) {
-			if (this.field.isTerrain('abyssalterrain') && move.secondaries) {
-				for (const s of move.secondaries) if (s.boosts) s.chance = 100;
+		// A tidal wave: the foe's screens are torn down and Makuro's side is washed clean.
+		onAfterHit(target, source) {
+			if (!source.hp) return;
+			for (const screen of ['reflect', 'lightscreen', 'auroraveil']) {
+				if (target.side.removeSideCondition(screen)) this.add('-sideend', target.side, this.dex.conditions.get(screen).name, '[from] move: Leviathan Crash', `[of] ${source}`);
+			}
+			for (const hazard of ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge']) {
+				if (source.side.removeSideCondition(hazard)) this.add('-sideend', source.side, this.dex.conditions.get(hazard).name, '[from] move: Leviathan Crash', `[of] ${source}`);
 			}
 		},
-		shortDesc: "50% chance to lower Speed by 1; always in Abyssal Terrain. No recoil. Makuro.",
-		desc: "Has a 50% chance to lower the target's Speed by 1 stage, raised to 100% while Abyssal Terrain is active. No recoil. Makes contact. Makuro's signature move.",
+		shortDesc: "Removes the target side's screens and the user side's hazards. Makuro.",
+		desc: "After hitting, removes Reflect, Light Screen and Aurora Veil from the target's side, and Spikes, Toxic Spikes, Stealth Rock, Sticky Web and G-Max Steelsurge from the user's side. " + TERRAIN_NOTE + " Makuro's signature move.",
 	});
 	// ---- Raishin
 	sig('shrinebellstrike', {
 		num: -43, name: 'Shrine Bell Strike', type: 'Ghost', category: 'Physical',
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
-		// The shrine bell reaches every spirit: super effective on Normal types, which a
-		// Ghost move would otherwise not touch at all.
+		// The bell silences: Taunt, three turns. It reaches Normal types, as a bell would.
 		ignoreImmunity: { Ghost: true },
-		onEffectiveness(typeMod, target, type) {
-			if (type === 'Normal') return 1;
+		onHit(target) {
+			if (target.hp && !target.volatiles['taunt']) target.addVolatile('taunt');
 		},
-		// Rung in its own shrine, it always finds the weak spot.
-		onModifyMove(move) {
-			if (this.field.isTerrain('shrineterrain')) move.willCrit = true;
-		},
-		secondary: { chance: 30, status: 'par' },
-		shortDesc: "30% par. Super effective on Normal. Always crits in Shrine Terrain. Raishin.",
-		desc: "Has a 30% chance to paralyze the target. Super effective against Normal-type Pokemon, which are not immune to it. Always results in a critical hit while Shrine Terrain is active. Makes contact. Raishin's signature move.",
+		shortDesc: "Taunts the target for 3 turns. Hits Normal types. Raishin.",
+		desc: "The target is Taunted for 3 turns: it can only use attacking moves. Normal-type Pokemon are not immune to it. " + TERRAIN_NOTE + " Raishin's signature move.",
 	});
 	sig('spiritthunder', {
 		num: -46, name: 'Spirit Thunder', type: 'Electric', category: 'Physical',
 		flags: { protect: 1, mirror: 1, metronome: 1 },
-		// No guard counts against it (Sacred Sword's rule), and in its own shrine the
-		// paralysis always takes.
-		ignoreDefensive: true,
-		ignoreEvasion: true,
-		secondary: { chance: 30, status: 'par' },
-		onModifyMove(move) {
-			if (this.field.isTerrain('shrineterrain') && move.secondaries) {
-				for (const s of move.secondaries) if (s.status === 'par') s.chance = 100;
-			}
+		// The spirit seals what it just saw: the target's last move is Disabled.
+		onHit(target, source) {
+			if (target.hp && target.lastMove && !target.volatiles['disable']) target.addVolatile('disable', source);
 		},
-		shortDesc: "Ignores the target's stat changes. 30% par; always in Shrine Terrain. Raishin.",
-		desc: "Ignores the target's stat stage changes, except Speed. Has a 30% chance to paralyze the target, raised to 100% while Shrine Terrain is active. Raishin's signature move.",
+		shortDesc: "Disables the target's last used move. Raishin.",
+		desc: "The last move the target used is Disabled for 4 turns, as Disable does. " + TERRAIN_NOTE + " Raishin's signature move.",
 	});
 	// ---- Chimai
 	sig('sanctuarypulse', {
 		num: -44, name: 'Sanctuary Pulse', type: 'Fairy', category: 'Special',
-		flags: { protect: 1, mirror: 1, metronome: 1, pulse: 1, heal: 1 },
-		// The sanctuary gives back: a third of the damage, half inside its walls.
-		drain: [1, 3],
-		onModifyMove(move) {
-			if (this.field.isTerrain('sanctuaryterrain')) move.drain = [1, 2];
+		flags: { protect: 1, mirror: 1, metronome: 1, pulse: 1 },
+		// Purification: every status on Chimai's side is cured, as Heal Bell does.
+		onAfterHit(target, source) {
+			let cured = false;
+			for (const ally of source.side.pokemon) if (ally.status && ally.hp) { ally.cureStatus(true); cured = true; }
+			if (cured) this.add('-cureteam', source, '[from] move: Sanctuary Pulse');
 		},
-		secondary: null,
-		shortDesc: "User heals 1/3 of the damage dealt; 1/2 in Sanctuary Terrain. Chimai.",
-		desc: "The user recovers 1/3 of the HP lost by the target, or 1/2 while Sanctuary Terrain is active, rounded half up. Boosted by Mega Launcher. Chimai's signature move.",
+		shortDesc: "Cures the status of every Pokemon on the user's side. Chimai.",
+		desc: "After hitting, every Pokemon on the user's side, in battle or not, is cured of its non-volatile status condition, as Heal Bell does. " + TERRAIN_NOTE + " Boosted by Mega Launcher. Chimai's signature move.",
 	});
 	sig('hallowedquake', {
 		num: -47, name: 'Hallowed Quake', type: 'Ground', category: 'Special',
 		flags: { protect: 1, mirror: 1, metronome: 1, nonsky: 1 },
-		// Shakes loose whatever the target built up; within the sanctuary the ground
-		// reaches everyone, Flying types and Levitate included.
-		onModifyMove(move) {
-			if (this.field.isTerrain('sanctuaryterrain')) move.ignoreImmunity = { Ground: true };
-		},
+		// The sacred ground seals the target's item: Embargo, five turns.
 		onHit(target) {
-			if (!target.hp) return;
-			if (Object.values(target.boosts).some(b => b > 0)) {
-				for (const stat in target.boosts) if (target.boosts[stat] > 0) target.boosts[stat] = 0;
-				this.add('-clearpositiveboost', target, target, 'move: Hallowed Quake');
-			}
+			if (target.hp && !target.volatiles['embargo']) target.addVolatile('embargo');
 		},
-		secondary: null,
-		shortDesc: "Clears the target's boosts. Hits Flying/Levitate in Sanctuary Terrain. Chimai.",
-		desc: "Removes the target's positive stat stages. While Sanctuary Terrain is active it also hits Flying-type Pokemon and Pokemon with Levitate or an Air Balloon. Chimai's signature move.",
+		shortDesc: "Embargoes the target's item for 5 turns. Chimai.",
+		desc: "The target can't use its held item for 5 turns, as Embargo does. " + TERRAIN_NOTE + " Chimai's signature move.",
 	});
 	// Warped Hourglass: the room lasts 8 turns when its holder sets it.
 	if (data.trickroom && data.trickroom.condition) {
