@@ -5103,6 +5103,12 @@ window.VelvetBuffs = {
 			],
 			"abilities": []
 		},
+		"yveltal": {
+			"moves": [
+				"punishment"
+			],
+			"abilities": []
+		},
 		"mukalola": {
 			"moves": [
 				"punishment",
