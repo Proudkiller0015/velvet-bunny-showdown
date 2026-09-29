@@ -2420,6 +2420,16 @@
 		clearsmog: 1, dragontail: 1, circlethrow: 1, snarl: 1, icywind: 1, electroweb: 1, pursuit: 1, trailblaze: 1,
 		photongeyser: 1, shellsidearm: 1, tripledive: 1,
 	};
+	// Setup moves and the ones that do the same job better.
+	var OUTCLASSED = {
+		calmmind: ['quiverdance'],
+		nastyplot: ['tailglow'],
+		swordsdance: ['sovereignrite'],
+		irondefense: ['cottonguard'],
+		acidarmor: ['cottonguard'],
+		barrier: ['cottonguard'],
+		amnesia: ['velvetguard'],
+	};
 	function installMoveUsefulness() {
 		var search = window.BattleMoveSearch;
 		if (!search || !search.prototype || !search.prototype.moveIsNotUseless) return false;
@@ -2434,6 +2444,10 @@
 				if (!move || !move.exists) return verdict;
 				// Ours: a priority attack or one of our boosting moves is a real option.
 				if (move.num < 0 && (move.priority > 0 || (move.category === 'Status' && move.boosts))) verdict = true;
+				// A setup move is useless beside a strictly better one the Pokemon also learns
+				// (the owner: "Calm Mind is worse than Quiver so it's useless").
+				var better = OUTCLASSED[id];
+				if (better && moves) for (var b = 0; b < better.length; b++) if (moves.indexOf(better[b]) >= 0) return false;
 				if (move.category === 'Status' || ANY_SIDE[id] || /^hiddenpower/.test(id)) return verdict;
 				var stats = species && species.baseStats;
 				if (!stats) return verdict;
