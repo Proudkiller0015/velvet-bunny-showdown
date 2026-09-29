@@ -43,6 +43,7 @@ function unparen(tier) {
 function currentTier(dex, species) {
 	const nd = unparen(species.natDexTier);
 	if (LOW_LADDER.indexOf(nd) >= 0 && LOW_LADDER.indexOf(nd) < LOW_LADDER.indexOf('RU')) return nd;
+	if (species.rpLowTier && LOW_LADDER.includes(species.rpLowTier)) return species.rpLowTier;
 	for (let g = 9; g >= 1; g--) {
 		let s;
 		try { s = g === dex.gen ? species : dex.mod(`gen${g}`).species.get(species.id); } catch (e) { s = null; }

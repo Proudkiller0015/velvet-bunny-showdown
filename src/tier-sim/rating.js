@@ -169,7 +169,7 @@ function isotonic(values, weights) {
  * Per-appearance contribution, standardised field by field over all appearances,
  * then averaged per Pokemon. Returns { index: Map(name -> {u, support, n, means}), fieldStats }.
  */
-function contributions(records) {
+function contributions(records, weights = UTILITY_WEIGHTS) {
 	const k = FIELDS.length;
 	const sum = new Float64Array(k), sq = new Float64Array(k);
 	let count = 0;
@@ -187,7 +187,7 @@ function contributions(records) {
 				let u = 0, s = 0;
 				FIELDS.forEach((f, j) => {
 					const z = ((row[j] || 0) - mean[j]) / sd[j];
-					u += (UTILITY_WEIGHTS[f] || 0) * z;
+					u += (weights[f] || 0) * z;
 					if (SUPPORT_FIELDS.includes(f)) s += z;
 				});
 				const e = per.get(name) || { u: 0, support: 0, n: 0, raw: new Float64Array(k) };
@@ -210,7 +210,7 @@ function contributions(records) {
  * ({ a, b, w: 'a'|'b'|'t', sa, sb }). Options: tau (prior spread within a tier),
  * step (initial gap per tier rank), rounds (empirical-Bayes rounds).
  */
-function rate(pool, records, { tau = 0.3, step = 0.18, rounds = 3 } = {}) {
+function rate(pool, records, { tau = 0.3, step = 0.18, rounds = 3, weights = UTILITY_WEIGHTS, betaFloor = 0, precScale = null } = {}) {
 	const n = pool.length;
 	const at = new Map(pool.map((e, i) => [e.name, i]));
 	const games = [];
@@ -224,10 +224,10 @@ function rate(pool, records, { tau = 0.3, step = 0.18, rounds = 3 } = {}) {
 		for (const i of a) { apps[i]++; wins[i] += y; }
 		for (const i of b) { apps[i]++; wins[i] += 1 - y; }
 	}
-	const contrib = contributions(records.filter(r => r.sa && r.sb && ['a', 'b', 't'].includes(r.w)));
+	const contrib = contributions(records.filter(r => r.sa && r.sb && ['a', 'b', 't'].includes(r.w)), weights);
 	const tiers = [...new Set(pool.map(e => e.tier))].sort((x, y) => RANK[x] - RANK[y]);
 	let tierMean = Object.fromEntries(tiers.map(t => [t, step * RANK[t]]));
-	let beta = 0;
+	let beta = betaFloor;
 	const util = pool.map(e => (contrib.index.get(e.name) || { u: 0 }).u);
 	const utilN = pool.map(e => (contrib.index.get(e.name) || { n: 0 }).n);
 	let fit = null;
@@ -240,7 +240,8 @@ function rate(pool, records, { tau = 0.3, step = 0.18, rounds = 3 } = {}) {
 		}
 		const relUtil = pool.map((e, i) => (utilN[i] ? (util[i] - tierUtil[e.tier]) * utilN[i] / (utilN[i] + 10) : 0));
 		const mean = Float64Array.from(pool, (e, i) => tierMean[e.tier] + beta * relUtil[i]);
-		const prec = Float64Array.from(pool, () => 1 / (tau * tau));
+		// precScale: trust a Pokemon's games less (its prior more) - for the kinds the bots misplay.
+		const prec = Float64Array.from(pool, e => (precScale ? precScale(e) || 1 : 1) / (tau * tau));
 		fit = fitBT(n, games, { mean, prec });
 		// Empirical Bayes: tier means from the fitted strengths (isotonic in tier order)...
 		const raw = tiers.map(t => {
@@ -260,7 +261,7 @@ function rate(pool, records, { tau = 0.3, step = 0.18, rounds = 3 } = {}) {
 			sxy += w * relUtil[i] * (fit.theta[i] - tierMean[e.tier]);
 			sxx += w * relUtil[i] * relUtil[i];
 		});
-		beta = sxx > 0 ? Math.max(0, Math.min(1, sxy / sxx)) : 0;
+		beta = Math.max(betaFloor, sxx > 0 ? Math.max(0, Math.min(1, sxy / sxx)) : 0);
 	}
 	const rows = pool.map((e, i) => {
 		const c = contrib.index.get(e.name);

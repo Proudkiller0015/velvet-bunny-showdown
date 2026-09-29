@@ -378,6 +378,15 @@ const TIERS = {
 	banette: 'PU',
 	granbull: 'PU',
 	venusaur: 'PU',
+
+	// The owner's confirmed RU tier simulation (29 Sep 2026, 1,617 bot games).
+	delphoxmega: 'OU',
+	scovillainmega: 'OU',
+	golisopodmega: 'OU',
+	sharpedo: 'PU',
+	articunogalar: 'PU',
+	slurpuff: 'PU',
+	drednaw: 'PU',
 };
 
 /**
@@ -438,6 +447,10 @@ exports.applyTiers = (FormatsData, Pokedex, log = () => {}) => {
 		if (data.tier !== 'Illegal') data.tier = tier;
 		// National Dex stops at RU, so a tier below it only moves the SV list.
 		const belowRU = LADDER.indexOf(tier) > LADDER.indexOf('RU');
+		// ...and a Pokemon that is not in SV (Sharpedo, Slurpuff) has no SV list to
+		// move: the RP ladders would fall back to its old Gen 8 tier. rpLowTier is
+		// read first by lowTierOf() (config/custom-formats.js) and the tier sim.
+		if (belowRU && data.tier === 'Illegal') data.rpLowTier = tier;
 		data.natDexTier = belowRU ? (data.natDexTier || 'RU') : tier;
 		applied[id] = tier;
 	}

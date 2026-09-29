@@ -1758,6 +1758,9 @@
 		 * sections have to be there before it goes looking for one.
 		 */
 		var ninth = smogonSections(table, [table.gen7, table.gen8, table]);
+		// Ours first: this server's own tiers below RU (data/velvet/tiering.js).
+		var lowTiers = (window.VelvetBuffs || {}).lowTiers || {};
+		for (var lowId in lowTiers) ninth[lowId] = lowTiers[lowId];
 		var eighth = smogonSections(table, [table.gen7, table.gen8]);
 		// Every National Dex table gets its lower tiers, whichever generation it
 		// is: the missing headings are the same missing headings there.

@@ -267,6 +267,14 @@ for (const id of Object.keys(TIERS)) {
 		if (forme !== species.id && inThisGen(forme)) tiers[forme] = Dex.species.get(forme).tier;
 	}
 }
+// Our tiers below RU, for the builder's NU/PU/ZU headings: they come from Smogon's
+// tables otherwise, which still hold Gen 8 tiers for Pokemon not in SV (Sharpedo).
+const LOW = ['NUBL', 'NU', 'PUBL', 'PU', 'ZUBL', 'ZU'];
+const lowTiers = {};
+for (const [id, tier] of Object.entries(TIERS)) if (LOW.includes(tier)) lowTiers[id] = tier;
+// National Dex has nothing below RU, so its label for these is "RU" - which pinned
+// them under the RU heading. The sectioning places them from lowTiers instead.
+for (const id of Object.keys(lowTiers)) delete natdexTiers[id];
 const unlocked = {
 	species: [...Object.keys(za.assigned), ...Object.keys(OUR_TIERS)],
 	// The Type Gems, legal in RP again (data/velvet/gems.js).
@@ -410,6 +418,7 @@ window.VelvetBuffs = {
 \ttiers: ${JSON.stringify(tiers)},
 \tmegaTiers: ${JSON.stringify(megaTiers)},
 \tnatdexTiers: ${JSON.stringify(natdexTiers)},
+\tlowTiers: ${JSON.stringify(lowTiers)},
 \tcutMoves: ${JSON.stringify(cutMoves)},
 \tcutMoveSources: ${JSON.stringify(cutMoveSources)},
 \tunlocked: ${JSON.stringify(unlocked)},

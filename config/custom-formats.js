@@ -315,6 +315,8 @@ const LOW_LADDER = ['AG', 'Uber', 'OU', 'UUBL', 'UU', 'RUBL', 'RU', 'NUBL', 'NU'
 function lowTierOf(dex, species) {
 	const nd = LOW_LADDER.indexOf(species.natDexTier);
 	if (nd >= 0 && nd < LOW_LADDER.indexOf('RU')) return species.natDexTier;
+	// Our own lower tier for a Pokemon not in Scarlet/Violet (data/velvet/tiering.js).
+	if (species.rpLowTier && LOW_LADDER.includes(species.rpLowTier)) return species.rpLowTier;
 	for (let g = 9; g >= 1; g--) {
 		const s = g === dex.gen ? species : dex.mod(`gen${g}`).species.get(species.id);
 		if (!s || !s.exists) continue;
