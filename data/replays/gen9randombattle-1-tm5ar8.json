@@ -1,0 +1,12 @@
+{
+	"id": "gen9randombattle-1-tm5ar8",
+	"format": "[Gen 9] Random Battle",
+	"players": [
+		"TestTrainer925",
+		"Velvet Bunny"
+	],
+	"rating": null,
+	"log": "|j|☆TestTrainer925\n|j|☆Velvet Bunny\n|t:|1790717946\n|gametype|singles\n|player|p1|TestTrainer925|169|\n|player|p2|Velvet Bunny|bunny.png|\n|gen|9\n|tier|[Gen 9] Random Battle\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1790717946\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Clawitzer|Clawitzer, L87, F|100/100\n|switch|p2a: Kleavor|Kleavor, L78, F|100/100\n|turn|1\n|c|☆Velvet Bunny|Good luck! Playing on **champion**. (PM me to change it.)\n|\n|t:|1790717947\n|switch|p2a: Clawitzer|Clawitzer, L87, F|100/100\n|move|p1a: Clawitzer|Dark Pulse|p2a: Clawitzer\n|-damage|p2a: Clawitzer|65/100\n|\n|upkeep\n|turn|2\n|\n|t:|1790717948\n|-terastallize|p2a: Clawitzer|Dragon\n|move|p1a: Clawitzer|Dark Pulse|p2a: Clawitzer\n|-damage|p2a: Clawitzer|24/100\n|move|p2a: Clawitzer|Dragon Pulse|p1a: Clawitzer\n|-damage|p1a: Clawitzer|44/100\n|\n|upkeep\n|turn|3\n|\n|t:|1790717948\n|move|p1a: Clawitzer|Dark Pulse|p2a: Clawitzer\n|-damage|p2a: Clawitzer|0 fnt\n|faint|p2a: Clawitzer\n|\n|upkeep\n|\n|t:|1790717948\n|switch|p2a: Iron Leaves|Iron Leaves, L80|100/100\n|turn|4\n|\n|t:|1790717949\n|move|p2a: Iron Leaves|Leaf Blade|p1a: Clawitzer\n|-supereffective|p1a: Clawitzer\n|-damage|p1a: Clawitzer|0 fnt\n|faint|p1a: Clawitzer\n|\n|upkeep\n|\n|t:|1790717949\n|switch|p1a: Annihilape|Annihilape, L76, M|100/100\n|turn|5\n|\n|t:|1790717949\n|move|p2a: Iron Leaves|Leaf Blade|p1a: Annihilape\n|-damage|p1a: Annihilape|36/100\n|move|p1a: Annihilape|Bulk Up|p1a: Annihilape\n|-boost|p1a: Annihilape|atk|1\n|-boost|p1a: Annihilape|def|1\n|\n|-heal|p1a: Annihilape|42/100|[from] item: Leftovers\n|upkeep\n|turn|6\n|\n|t:|1790717949\n|move|p2a: Iron Leaves|Leaf Blade|p1a: Annihilape\n|-damage|p1a: Annihilape|0 fnt\n|faint|p1a: Annihilape\n|\n|upkeep\n|\n|t:|1790717949\n|switch|p1a: Flamigo|Flamigo, L82, F|100/100\n|turn|7\n|\n|t:|1790717950\n|-end|p2a: Iron Leaves|Quark Drive|[silent]\n|switch|p2a: Oricorio|Oricorio-Pa'u, L87, M|100/100\n|move|p1a: Flamigo|Close Combat|p2a: Oricorio\n|-resisted|p2a: Oricorio\n|-damage|p2a: Oricorio|81/100\n|-unboost|p1a: Flamigo|def|1\n|-unboost|p1a: Flamigo|spd|1\n|-damage|p1a: Flamigo|91/100|[from] item: Life Orb\n|\n|upkeep\n|turn|8\n",
+	"inputlog": null,
+	"uploadtime": 1790717950
+}
