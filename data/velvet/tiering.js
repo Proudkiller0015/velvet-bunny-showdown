@@ -123,6 +123,9 @@ const TIERS = {
 	reshiram: 'OU',
 	solgaleo: 'OU',
 	lugia: 'OU',
+	// And from AG down to Ubers, as suspects (the owner, same day).
+	xerneas: 'Uber',
+	koraidon: 'Uber',
 	metagrossmega: 'OU',
 	charizardmegax: 'UU',
 	pinsirmega: 'UU',
