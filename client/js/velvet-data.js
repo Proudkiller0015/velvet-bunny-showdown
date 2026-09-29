@@ -2027,7 +2027,10 @@
 		window.Dex.getPokemonIcon = function (pokemon, facingLeft) {
 			var ours = oursFor(pokemon);
 			if (ours && ours.icon) {
-				return 'background:transparent url(' + SPRITES + ours.icon + ') no-repeat scroll 0px 0px';
+				// Greyed out when fainted, exactly as Showdown does it for its own icons -
+				// returning early skipped that, so ours stayed bright after fainting.
+				var fainted = pokemon && typeof pokemon === 'object' && pokemon.fainted ? ';opacity:.3;filter:grayscale(100%) brightness(.5)' : '';
+				return 'background:transparent url(' + SPRITES + ours.icon + ') no-repeat scroll 0px 0px' + fainted;
 			}
 			try {
 				return original.call(this, pokemon, facingLeft);
