@@ -437,9 +437,10 @@
 		var zMaxIn = installZAndMax();
 		var defaultIn = installDefaultFormat();
 		var bagIn = installBagMenu();
+		var usefulIn = installMoveUsefulness();
 		var switchIn = installRpSwitch();
 		return switchIn && tableIn && orderIn && spritesIn && iconIn && builderIn && tipsIn && rpIn &&
-			cutIn && listIn && buffsIn && abilitiesIn && itemIn && sigItemIn && powerIn && dmaxIn && awakenedIn && textIn && zMaxIn && defaultIn && bagIn;
+			cutIn && listIn && buffsIn && abilitiesIn && itemIn && sigItemIn && powerIn && dmaxIn && awakenedIn && textIn && zMaxIn && defaultIn && bagIn && usefulIn;
 	}
 
 	/*
@@ -2396,6 +2397,51 @@
 				return NAMES[id] ? html.replace('(egg group)', LABELS[id]) : html;
 			};
 		}
+		return true;
+	}
+
+	/*
+	 * "Usually useful" / "Usually useless" in the move list, made to know which side
+	 * a Pokemon attacks from (the owner, 29 Sep 2026: "special moves on physical is
+	 * troll, vice versa").
+	 *
+	 * Showdown's rule never compares a move's category with the Pokemon's stats, so
+	 * Makuro (160 Atk / 50 SpA) was offered Hydro Pump as useful. And it calls every
+	 * attack under 75 power useless unless it is on its own short list, which knows
+	 * nothing of ours - Spark Scamper, a real priority move, sank to the bottom.
+	 *
+	 * RP formats only. Grouping only: legality is untouched.
+	 */
+	// Attacks worth having whatever the stats: fixed damage, another stat, utility, flexible category.
+	var ANY_SIDE = {
+		terablast: 1, bodypress: 1, foulplay: 1, seismictoss: 1, nightshade: 1, superfang: 1, ruination: 1,
+		naturesmadness: 1, finalgambit: 1, endeavor: 1, counter: 1, mirrorcoat: 1, metalburst: 1, comeuppance: 1,
+		knockoff: 1, uturn: 1, voltswitch: 1, flipturn: 1, rapidspin: 1, mortalspin: 1, nuzzle: 1, fakeout: 1,
+		clearsmog: 1, dragontail: 1, circlethrow: 1, snarl: 1, icywind: 1, electroweb: 1, pursuit: 1, trailblaze: 1,
+		photongeyser: 1, shellsidearm: 1, tripledive: 1,
+	};
+	function installMoveUsefulness() {
+		var search = window.BattleMoveSearch;
+		if (!search || !search.prototype || !search.prototype.moveIsNotUseless) return false;
+		if (search.__velvetUseful) return true;
+		search.__velvetUseful = true;
+		var original = search.prototype.moveIsNotUseless;
+		search.prototype.moveIsNotUseless = function (id, species, moves, set) {
+			var verdict = original.apply(this, arguments);
+			if (!RP.on) return verdict;
+			try {
+				var move = this.dex.moves.get(id);
+				if (!move || !move.exists) return verdict;
+				// Ours: a priority attack or one of our boosting moves is a real option.
+				if (move.num < 0 && (move.priority > 0 || (move.category === 'Status' && move.boosts))) verdict = true;
+				if (move.category === 'Status' || ANY_SIDE[id] || /^hiddenpower/.test(id)) return verdict;
+				var stats = species && species.baseStats;
+				if (!stats) return verdict;
+				if (move.category === 'Physical' && stats.spa - stats.atk >= 40) return false;
+				if (move.category === 'Special' && stats.atk - stats.spa >= 40) return false;
+			} catch (e) { /* keep Showdown's answer */ }
+			return verdict;
+		};
 		return true;
 	}
 
