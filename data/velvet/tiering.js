@@ -259,7 +259,8 @@ const TIERS = {
 	// Balance Patch 1's second legend, aimed low on purpose: Polar Mantle halves
 	// the Rock damage that kept Articuno out of every tier and sets snow, and
 	// Aurora Squall gives it a spread Ice attack. A solid RU pick, no more.
-	articuno: 'RU',
+	// Raised to UU in the second tier review (Calm Mind + Velvet Press, Chilling Mist).
+	articuno: 'UU',
 
 	// The rest of Balance Patch 1's "Legends Rise": each got a signature (Regice's
 	// Permafrost Core, the lake trio's Memory Wipe, Soul Resonance and Resolute
@@ -319,7 +320,7 @@ const TIERS = {
 	 * Kartana, Latios, Galarian Zapdos, Meowscarada - plus Kommo-o and Hawlucha,
 	 * which this patch gave Shuffle Jab. The niche UUBL Pokemon stay UUBL.
 	 */
-	weavile: 'OU',
+	weavile: 'UUBL', // back to UUBL in the second tier review (29 Sep 2026)
 	blaziken: 'OU',
 	hoopaunbound: 'OU',
 	kartana: 'OU',
@@ -334,8 +335,9 @@ const TIERS = {
 	 */
 	latios: 'UU',
 	ceruledge: 'UU',
-	// Archaludon: Uber in the ninth generation's own tiers, brought back to UU by the owner's call.
-	archaludon: 'UU',
+	// Archaludon: Uber in the ninth generation's own tiers, brought back to UU by the owner's call,
+	// then up to OU (29 Sep 2026).
+	archaludon: 'OU',
 	// Regieleki: Uber for its Speed and Transistor; the owner brought it straight to OU.
 	regieleki: 'OU',
 	zapdosgalar: 'UU',
@@ -356,6 +358,26 @@ const TIERS = {
 	// Quiver Dance and Sleep Powder already made it ZU's best sweeper; Earth
 	// Power, Sludge Bomb and Solar Nectar remove what used to wall it.
 	lilligant: 'PU',
+
+	// The owner's confirmed second tier review (29 Sep 2026, on paper).
+	hatterene: 'UU',
+	latias: 'OU',
+	donphan: 'RU',
+	swampert: 'RU',
+	alakazam: 'UU',
+	gengar: 'UU',
+	regidrago: 'RUBL',
+	reuniclus: 'RU',
+	milotic: 'NU',
+	grimmsnarl: 'NU',
+	pawmot: 'NU',
+	kingdra: 'PU',
+	venomoth: 'PU',
+	bellossom: 'PU',
+	lapras: 'PU',
+	banette: 'PU',
+	granbull: 'PU',
+	venusaur: 'PU',
 };
 
 /**

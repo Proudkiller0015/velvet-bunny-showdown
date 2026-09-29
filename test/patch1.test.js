@@ -170,7 +170,7 @@ check(Object.values(Dex.species.get('stunfiskgalar').abilities).includes('Mudfla
 }
 check(Dex.moves.get('aurorasquall').target === 'allAdjacentFoes' && !Dex.moves.get('aurorasquall').flags.nosketch, 'Aurora Squall: spread, Sketchable (Smeargle gets every new move)');
 check(learns('articuno', 'aurorasquall') && !learns('mew', 'aurorasquall'), "Aurora Squall is Articuno's alone");
-check(Dex.species.get('articuno').natDexTier === 'RU', 'Articuno is RU');
+check(Dex.species.get('articuno').natDexTier === 'UU', 'Articuno is UU (second tier review)');
 
 // The rest of the legends.
 {
@@ -214,7 +214,7 @@ check(Dex.species.get('articuno').natDexTier === 'RU', 'Articuno is RU');
 	move.onModifyMove.call(b, m, b.p1.active[0]);
 	check(m.category === 'Physical', 'Resolute Strike goes physical for a physical Azelf');
 }
-check(Dex.species.get('regice').natDexTier === 'RU' && ['uxie', 'mesprit', 'azelf'].every(id => Dex.species.get(id).natDexTier === 'UU'), 'Regice RU; the lake trio UU');
+check(Dex.species.get('regice').natDexTier === 'UU' && ['uxie', 'mesprit', 'azelf'].every(id => Dex.species.get(id).natDexTier === 'UU'), 'Regice and the lake trio UU');
 check(['memorywipe', 'soulresonance', 'resolutestrike'].every(id => Dex.moves.get(id).basePower === 110 && !Dex.moves.get(id).secondary), 'lake trio signatures: 110 power, guaranteed effects only');
 check(Dex.moves.get('soulresonance').drain[0] === Dex.moves.get('soulresonance').drain[1] && Dex.moves.get('resolutestrike').ignoreDefensive, 'Soul Resonance heals 100%; Resolute Strike ignores defensive boosts');
 check(Object.values(Dex.species.get('uxie').abilities).includes('Mind Keeper') && Object.values(Dex.species.get('mesprit').abilities).includes('Heartfelt Resolve'), 'Uxie has Mind Keeper, Mesprit has Heartfelt Resolve');
@@ -408,7 +408,7 @@ check(!Dex.moves.get('undertow').flags.nosketch, 'the other ten can be Sketched'
 check(learns('glaceon', 'earthpower') && learns('flareon', 'closecombat') && learns('leafeon', 'stoneedge') && learns('leafeon', 'solarblade') && learns('flareon', 'facade'), 'Eeveelution coverage: Glaceon Earth Power, Flareon Close Combat, Leafeon Stone Edge');
 check(!learns('eevee', 'closecombat') && !Object.values(Dex.species.get('eevee').abilities).includes('Kindled Fury'), 'Eevee is not given any of it');
 check(['Leafeon:Solstice', 'Flareon:Kindled Fury', 'Glaceon:Diamond Dust'].every(x => Object.values(Dex.species.get(x.split(':')[0]).abilities).includes(x.split(':')[1])), 'each keeps its old abilities and gains its signature');
-check(['leafeon', 'flareon', 'umbreon', 'vaporeon'].every(id => Dex.species.get(id).natDexTier === 'UU') && Dex.species.get('glaceon').natDexTier === 'OU' && Dex.species.get('espeon').natDexTier === 'UU' && Dex.species.get('melmetal').natDexTier === 'Uber' && Dex.species.get('weavile').natDexTier === 'OU' && Dex.species.get('luxray').natDexTier === 'OU' && Dex.species.get('urshifu').natDexTier === 'Uber' && Dex.species.get('urshifurapidstrike').natDexTier === 'Uber', 'Tier review: four eeveelutions UU, Glaceon (snow sweeper), Luxray and Weavile OU, Espeon down to UU, both Urshifu and Melmetal Uber');
+check(['leafeon', 'flareon', 'umbreon', 'vaporeon'].every(id => Dex.species.get(id).natDexTier === 'UU') && Dex.species.get('glaceon').natDexTier === 'OU' && Dex.species.get('espeon').natDexTier === 'UU' && Dex.species.get('melmetal').natDexTier === 'OU' && Dex.species.get('weavile').natDexTier === 'UUBL' && Dex.species.get('luxray').natDexTier === 'OU' && Dex.species.get('urshifu').natDexTier === 'Uber' && Dex.species.get('urshifurapidstrike').natDexTier === 'OU', 'Tier review: four eeveelutions UU, Glaceon and Luxray OU, Weavile UUBL, Espeon UU, Urshifu Uber, Rapid Strike and Melmetal OU');
 
 // Umbreon: Moonlit Venom.
 {

@@ -799,6 +799,26 @@ exports.MOVES = {
 		shortDesc: "Ignores Protect. Breaks screens. Regigigas's signature move.",
 		desc: "The strength that dragged continents across the sea. Hits through Protect, Detect and similar moves, and destroys Reflect, Light Screen and Aurora Veil on the target's side before dealing damage.",
 	},
+	/*
+	 * Bulldog Maul - Granbull's (29 Sep 2026, the owner: "BUFF this man"). The
+	 * bulldog bites down and does not let go: a Fairy bite that traps, and with
+	 * Bulldog Grip (Strong Jaw) behind it, 80 power plays like 120.
+	 */
+	bulldogmaul: {
+		num: -57, gen: 9, name: "Bulldog Maul", type: "Fairy", category: "Physical",
+		basePower: 80, accuracy: 100, pp: 10, priority: 0,
+		flags: { contact: 1, protect: 1, mirror: 1, bite: 1, metronome: 1 },
+		secondary: {
+			chance: 100,
+			onHit(target, source, move) {
+				if (source.isActive) target.addVolatile('trapped', source, move, 'trapper');
+			},
+		},
+		target: "normal", contestType: "Tough",
+		flavor: "The bulldog clamps its jaws shut and simply refuses to let go.",
+		shortDesc: "Prevents the target from switching out. Biting move.",
+		desc: "The user bites down and will not let go. The target cannot switch out while the user stays on the field (Ghost types still can). Boosted by Strong Jaw and Bulldog Grip.",
+	},
 };
 
 /*
@@ -1519,6 +1539,40 @@ exports.ABILITIES = {
 		shortDesc: "Survives a KO hit at 1 HP and curses the attacker. Recharges when another Pokemon faints.",
 		desc: "When an attack would knock this Pokemon out, it survives with 1 HP instead, and the attacker is cursed (it loses 1/4 of its maximum HP at the end of each turn until it switches out), as if by Curse. Works at any HP. After it triggers it cannot trigger again, even across switches, until any other Pokemon on either side faints. Mold Breaker and similar abilities ignore it.",
 	},
+	/*
+	 * Bulldog Grip - Granbull's (29 Sep 2026): Intimidate and Strong Jaw together.
+	 * The Attack drop is passed as Intimidate, so whatever blocks or answers
+	 * Intimidate (Inner Focus, Guard Dog, Defiant, Adrenaline Orb) still does.
+	 */
+	bulldoggrip: {
+		name: "Bulldog Grip",
+		onStart(pokemon) {
+			let activated = false;
+			const intimidate = this.dex.abilities.get('intimidate');
+			for (const target of pokemon.adjacentFoes()) {
+				if (!activated) {
+					this.add('-ability', pokemon, 'Bulldog Grip', 'boost');
+					activated = true;
+				}
+				if (target.volatiles['substitute']) {
+					this.add('-immune', target);
+				} else {
+					this.boost({ atk: -1 }, target, pokemon, intimidate, true);
+				}
+			}
+		},
+		onBasePowerPriority: 19,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.flags['bite']) return this.chainModify(1.5);
+		},
+		flags: {},
+		rating: 4,
+		num: -36,
+		gen: 9,
+		flavor: "All bark and, it turns out, a great deal of bite.",
+		shortDesc: "Intimidate + Strong Jaw: lowers foes' Attack on entry; biting moves 1.5x.",
+		desc: "On switch-in, lowers the Attack of adjacent foes by 1 stage exactly as Intimidate does, and counts as Intimidate for anything that blocks or reacts to it. This Pokemon's biting moves have 1.5x power.",
+	},
 };
 
 /*
@@ -1710,6 +1764,9 @@ const TRIO_BABIES = {
  * Strength Sap is recovery that needs no weather, Mortal Spin clears hazards and
  * spreads poison. HP 60 to 75 in unnerfs.js. Aimed at UU.
  */
+// Granbull (29 Sep 2026, "BUFF this man"): Bulldog Grip (Intimidate + Strong Jaw) behind its
+// fangs, a trapping Fairy bite, a draining bite for recovery, and Swords Dance.
+const GRANBULL = { ability: 'Bulldog Grip', moves: ['bulldogmaul', 'carrionfeast', 'jawlock', 'swordsdance'] };
 const ROSERADE = { ability: 'Masquerade', moves: ['thornedbouquet', 'strengthsap', 'mortalspin', 'nastyplot'] };
 
 // Togekiss (Patch 1.5, the owner's call): a pivot.
@@ -2253,7 +2310,7 @@ exports.buildBuffs = (Pokedex) => {
 	}
 
 	// Pre-evolutions: the new move (not the coverage) and the ability.
-	const SIGNATURES = ['continentalheave', 'aurorasquall', 'memorywipe', 'soulresonance', 'resolutestrike', 'gleamstalk', 'greatsagestrike', 'pyrestrike', 'eldertimber', 'tectonicshell', 'imperialtorrent', 'royaldecree', 'soultoll', 'thornedbouquet', 'grandfeast', 'devour', 'endlesshunger'];
+	const SIGNATURES = ['continentalheave', 'aurorasquall', 'memorywipe', 'soulresonance', 'resolutestrike', 'gleamstalk', 'greatsagestrike', 'pyrestrike', 'eldertimber', 'tectonicshell', 'imperialtorrent', 'royaldecree', 'soultoll', 'thornedbouquet', 'bulldogmaul', 'grandfeast', 'devour', 'endlesshunger'];
 	const newMove = m => exports.MOVES[m] && !SIGNATURES.includes(m);
 	for (const id of Object.keys(out)) {
 		let species = Pokedex[id];
@@ -2285,6 +2342,7 @@ exports.buildBuffs = (Pokedex) => {
 	if (Pokedex.infernape) add('infernape', INFERNAPE.moves, [INFERNAPE.ability]);
 	if (Pokedex.spiritomb) add('spiritomb', SPIRITOMB.moves, [SPIRITOMB.ability]);
 	if (Pokedex.roserade) add('roserade', ROSERADE.moves, [ROSERADE.ability]);
+	if (Pokedex.granbull) add('granbull', GRANBULL.moves, [GRANBULL.ability]);
 	if (Pokedex.togekiss) add('togekiss', TOGEKISS, []);
 	if (Pokedex.torterra) add('torterra', TORTERRA.moves, [TORTERRA.ability]);
 	if (Pokedex.empoleon) add('empoleon', EMPOLEON.moves, [EMPOLEON.ability]);
@@ -2348,6 +2406,7 @@ exports.EEVEE = EEVEE;
 exports.INFERNAPE = INFERNAPE;
 exports.SPIRITOMB = SPIRITOMB;
 exports.ROSERADE = ROSERADE;
+exports.GRANBULL = GRANBULL;
 exports.TOGEKISS = TOGEKISS;
 exports.TORTERRA = TORTERRA;
 exports.EMPOLEON = EMPOLEON;

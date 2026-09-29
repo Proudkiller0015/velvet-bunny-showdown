@@ -2895,6 +2895,7 @@
 		royaldecree: ['roar', 'whirlwind'],                    // Roar (+ Spikes)
 		thornedbouquet: ['petalblizzard', 'gigadrain'],        // flowers, drained
 		soultoll: ['hex', 'shadowclaw'],                       // Hex's rule, physical
+		bulldogmaul: ['crunch', 'playrough'],               // a Fairy bite
 		witchssnatch: ['spectralthief', 'knockoff', 'shadowclaw'], // a Ghost that takes
 	};
 	function installMoveAnims() {
