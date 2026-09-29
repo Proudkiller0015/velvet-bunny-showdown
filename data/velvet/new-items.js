@@ -1,10 +1,11 @@
 'use strict';
 /**
- * New items for every Pokemon (the owner, 29 Sep 2026).
+ * New items (the owner, 29 Sep 2026).
  *
- *   Ultra Shard   one use: the first time the holder knocks out a Pokemon with a
- *                 move, Beast Boost triggers (its highest stat +1) and the shard
- *                 shatters.
+ *   Ultra Shard   the Ultra Beasts' Booster Energy: consumed when the holder comes
+ *                 in, and its Beast Boost goes off at once (highest stat +1) instead
+ *                 of waiting for a knockout. Does nothing without Beast Boost, and
+ *                 can't be taken from an Ultra Beast.
  *
  * Positive numbers past the Z-A stones and the trio's items, and no 'Past' flag:
  * National Dex treats a negative or nonstandard item as not existing.
@@ -14,17 +15,26 @@ exports.items = (data) => {
 	data.ultrashard = {
 		num: 3005, gen: 9, name: 'Ultra Shard', spritenum: 687, isNonstandard: null,
 		fling: { basePower: 30 },
-		// Beast Boost's own handler, then the shard is used up.
-		onSourceAfterFaint(length, target, source, effect) {
-			if (!effect || effect.effectType !== 'Move' || !source || source.item !== 'ultrashard') return;
-			const bestStat = source.getBestStat(true, true);
-			if (source.useItem()) {
-				this.add('-message', `${source.name}'s Ultra Shard shattered, unleashing its power!`);
-				this.boost({ [bestStat]: length }, source, source, this.dex.items.get('ultrashard'));
+		// Booster Energy's timing: once the holder is in, and not on a transformed copy.
+		onSwitchInPriority: -2,
+		onStart(pokemon) {
+			this.effectState.started = true;
+			this.effect.onUpdate.call(this, pokemon);
+		},
+		onUpdate(pokemon) {
+			if (!this.effectState.started || pokemon.transformed || !pokemon.hasAbility('beastboost')) return;
+			const bestStat = pokemon.getBestStat(true, true);
+			if (pokemon.useItem()) {
+				this.add('-activate', pokemon, 'ability: Beast Boost');
+				this.boost({ [bestStat]: 1 }, pokemon, pokemon, this.dex.abilities.get('beastboost'));
 			}
 		},
-		desc: "Single use. The first time the holder knocks out a Pokemon with a move, its highest stat is raised by 1 stage (as Beast Boost), then this item is used up.",
-		shortDesc: "Single use: after the holder KOs with a move, its highest stat +1 (Beast Boost).",
+		// Like Booster Energy on a Paradox Pokemon: it stays with an Ultra Beast.
+		onTakeItem(item, source) {
+			return !source.baseSpecies.tags.includes('Ultra Beast');
+		},
+		desc: "If the holder has Beast Boost, this item is used up when it enters the battle, and Beast Boost raises its highest stat by 1 stage right away. Can't be removed from an Ultra Beast. No effect on anything else.",
+		shortDesc: "Beast Boost: used on entry, raises the holder's highest stat by 1 at once.",
 	};
 	return data;
 };
