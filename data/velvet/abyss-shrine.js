@@ -356,6 +356,8 @@ const MOVES = {
 			'recover', 'protect', 'detect', 'rest', 'sleeptalk', 'substitute', 'endure', 'facade', 'helpinghand', 'scaryface',
 			// This server's own shared moves (balance-patch-1.js), where they fit.
 			'wavecharge', 'carrionfeast', 'rimecleaver', 'craghammer', 'hustleup', 'twilightexit', 'shufflejab', 'undertow',
+			// Utility and pivots (the owner: "more utility, Knock Off etc, ways to rotate").
+			'uturn', 'stealthrock', 'rapidspin', 'defog', 'courtchange', 'trick',
 		],
 	},
 	raishin: {
@@ -377,6 +379,8 @@ const MOVES = {
 			'recover', 'protect', 'detect', 'rest', 'sleeptalk', 'substitute', 'endure', 'facade', 'helpinghand', 'scaryface',
 			// This server's own shared moves (balance-patch-1.js), where they fit.
 			'voltaiclance', 'sparkscamper', 'carrionfeast', 'rimecleaver', 'craghammer', 'hivefrenzy', 'shufflejab', 'hustleup', 'twilightexit',
+			// Utility and pivots (the owner: "more utility, Knock Off etc, ways to rotate").
+			'partingshot', 'teleport', 'batonpass', 'defog', 'healbell', 'memento',
 		],
 	},
 	chimai: {
@@ -400,6 +404,8 @@ const MOVES = {
 			'quiverdance', 'dragondance', 'victorydance', 'clangoroussoul', 'fierydance', 'revelationdance', 'aquastep', 'petaldance',
 			'featherdance', 'teeterdance', 'lunardance', 'swordsdance', 'raindance',
 			'tremorshot', 'oxidize', 'undertow', 'hypnowhirl', 'solarnectar', 'chrysalisveil', 'twilightexit',
+			// Utility and pivots (the owner: "more utility, Knock Off etc, ways to rotate").
+			'knockoff', 'uturn', 'teleport', 'batonpass', 'healingwish', 'memento', 'toxicspikes', 'defog', 'courtchange', 'thunderwave',
 		],
 	},
 };
