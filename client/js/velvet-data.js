@@ -2666,9 +2666,14 @@
 			}
 
 			var stones = megaStonesFor(this, species);
-			if (!mine.length && !stones.length) return results;
+			// The Ultra Shard is the Ultra Beasts' Booster Energy, and is shown the way Showdown
+			// shows Booster Energy to a Paradox Pokemon: under its ability, at the top.
+			var abilityItems = [];
+			var abilities = species && species.abilities ? Object.keys(species.abilities).map(function (k) { return species.abilities[k]; }) : [];
+			if (abilities.indexOf('Beast Boost') >= 0 && buffs.items.ultrashard) abilityItems.push('ultrashard');
+			if (!mine.length && !stones.length && !abilityItems.length) return results;
 
-			var taken = mine.concat(stones);
+			var taken = mine.concat(stones, abilityItems);
 			var rest = [];
 			for (var i = 0; i < results.length; i++) {
 				var row = results[i];
@@ -2684,7 +2689,11 @@
 			}
 			if (stones.length) {
 				hoisted.push(['header', stones.length === 1 ? 'Mega Stone' : 'Mega Stones']);
-				for (var s = 0; s < stones.length; s++) hoisted.push(['item', stones[s]]);
+				for (var st = 0; st < stones.length; st++) hoisted.push(['item', stones[st]]);
+			}
+			if (abilityItems.length) {
+				hoisted.push(['header', 'Specific to Beast Boost']);
+				for (var ai = 0; ai < abilityItems.length; ai++) hoisted.push(['item', abilityItems[ai]]);
 			}
 			return hoisted.concat(rest);
 		};

@@ -218,6 +218,9 @@ const TIERS = {
 	mesprit: 'UU',
 	azelf: 'UU',
 
+	// Guzzlord's buff (29 Sep 2026: Grand Feast, Devour, Endless Hunger): RU to UU, the owner's call.
+	guzzlord: 'UU',
+
 	/*
 	 * Balance Patch 1's tier review: the few that the patch lifted out of the tier
 	 * below RU they were in. These only move the ninth-generation tier (the NU,

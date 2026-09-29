@@ -472,6 +472,69 @@ exports.MOVES = {
 	 * (data/velvet/frostbite.js). Fire types are immune to the move itself, not to
 	 * frostbite from elsewhere; Ice types can't be frostbitten at all.
 	 */
+	/*
+	 * Guzzlord's kit (the owner, 29 Sep 2026: "a massive Guzzlord buff" - Beast Boost
+	 * and its stats stay). Grand Feast is a one-turn Geomancy for the physical and
+	 * special sides alike that also sets Trick Room, which a 43-Speed Pokemon wants;
+	 * Devour and Endless Hunger are its two attacks. Guzzlord only.
+	 */
+	grandfeast: {
+		num: -53, gen: 9, name: "Grand Feast", type: "Dark", category: "Status",
+		basePower: 0, accuracy: true, pp: 5, priority: 0,
+		flags: { metronome: 1 },
+		boosts: { atk: 2, def: 2, spa: 2, spd: 2 },
+		// Sets Trick Room if it is not already up (it never ends one).
+		onHit(target, source) {
+			if (!this.field.pseudoWeather['trickroom']) this.field.addPseudoWeather('trickroom', source);
+		},
+		secondary: null,
+		target: "self", type: "Dark", contestType: "Tough",
+		shortDesc: "Raises Atk, Def, SpA, SpD by 2 and sets Trick Room. Guzzlord.",
+		desc: "Raises the user's Attack, Defense, Special Attack and Special Defense by 2 stages each, in one turn, and sets Trick Room for 5 turns if it is not already active. Guzzlord's signature move.",
+	},
+	devour: {
+		num: -54, gen: 9, name: "Devour", type: "Dark", category: "Physical",
+		basePower: 100, accuracy: 100, pp: 10, priority: 0,
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, bite: 1 },
+		drain: [1, 2],
+		// Hits from whichever of Attack and Special Attack is higher (Photon Geyser's rule).
+		onModifyMove(move, pokemon) {
+			move.category = pokemon.getStat('atk', false, true) > pokemon.getStat('spa', false, true) ? 'Physical' : 'Special';
+		},
+		secondary: null,
+		target: "normal", contestType: "Tough",
+		shortDesc: "Uses the higher of Atk/SpA. Heals 50% of the damage dealt. Guzzlord.",
+		desc: "Physical or special, whichever of the user's Attack and Special Attack is higher (counting stat stages). The user recovers 1/2 the HP lost by the target, rounded half up. Makes contact; boosted by Strong Jaw. Guzzlord's signature move.",
+	},
+	endlesshunger: {
+		num: -55, gen: 9, name: "Endless Hunger", type: "Dragon", category: "Special",
+		basePower: 100, accuracy: 100, pp: 10, priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		// Hits from whichever of Attack and Special Attack is higher (Photon Geyser's rule).
+		onModifyMove(move, pokemon) {
+			move.category = pokemon.getStat('atk', false, true) > pokemon.getStat('spa', false, true) ? 'Physical' : 'Special';
+		},
+		// Everything goes in: a Berry is eaten (Bug Bite's rule), anything else is swallowed whole.
+		onAfterHit(target, source, move) {
+			if (!source.hp) return;
+			const item = target.getItem();
+			if (!item.id) return;
+			if (item.isBerry) {
+				if (target.takeItem(source)) {
+					this.add("-enditem", target, item.name, "[from] stealeat", "[move] Endless Hunger", `[of] ${source}`);
+					if (this.singleEvent("Eat", item, target.itemState, source, source, move)) this.runEvent("EatItem", source, source, move, item);
+					if (item.onEat) source.ateBerry = true;
+				}
+				return;
+			}
+			const taken = target.takeItem(source);
+			if (taken) this.add("-enditem", target, taken.name, "[from] move: Endless Hunger", `[of] ${source}`);
+		},
+		secondary: null,
+		target: "normal", contestType: "Tough",
+		shortDesc: "Uses the higher of Atk/SpA. Swallows the target's item; eats a Berry. Guzzlord.",
+		desc: "Physical or special, whichever of the user's Attack and Special Attack is higher (counting stat stages). After hitting, the target loses its held item if it can be removed. If it was a Berry, the user eats it and gains its effect, as Bug Bite does. Guzzlord's signature move.",
+	},
 	chillingmist: {
 		num: -52, gen: 9, name: "Chilling Mist", type: "Ice", category: "Status",
 		basePower: 0, accuracy: 85, pp: 15, priority: 0,
@@ -1605,6 +1668,8 @@ const INFERNAPE = {
 		'explosion', 'copycat', 'screech', 'doublehit', 'tickle', 'highjumpkick', 'bounce'],
 };
 
+// Guzzlord: its three signatures and the Dragon and Dark moves it was missing.
+const GUZZLORD = { moves: ['grandfeast', 'devour', 'endlesshunger', 'suckerpunch', 'throatchop', 'foulplay', 'nightslash', 'jawlock', 'powertrip', 'nastyplot', 'partingshot', 'taunt', 'dragondance', 'scaleshot', 'breakingswipe'] };
 const LUXRAY = { ability: 'Prankster', moves: ['gleamstalk', 'knockoff', 'suckerpunch', 'taunt', 'partingshot', 'encore', 'yawn', 'swagger', 'swordsdance'] };
 
 const EEVEELUTIONS = {
@@ -2119,7 +2184,7 @@ exports.buildBuffs = (Pokedex) => {
 	}
 
 	// Pre-evolutions: the new move (not the coverage) and the ability.
-	const SIGNATURES = ['continentalheave', 'aurorasquall', 'memorywipe', 'soulresonance', 'resolutestrike', 'gleamstalk', 'greatsagestrike', 'pyrestrike', 'eldertimber', 'tectonicshell', 'imperialtorrent', 'royaldecree', 'soultoll', 'thornedbouquet'];
+	const SIGNATURES = ['continentalheave', 'aurorasquall', 'memorywipe', 'soulresonance', 'resolutestrike', 'gleamstalk', 'greatsagestrike', 'pyrestrike', 'eldertimber', 'tectonicshell', 'imperialtorrent', 'royaldecree', 'soultoll', 'thornedbouquet', 'grandfeast', 'devour', 'endlesshunger'];
 	const newMove = m => exports.MOVES[m] && !SIGNATURES.includes(m);
 	for (const id of Object.keys(out)) {
 		let species = Pokedex[id];
@@ -2136,6 +2201,7 @@ exports.buildBuffs = (Pokedex) => {
 	// Luxray, now Electric/Dark (see unnerfs.js): Dark attacks for the new STAB and
 	// Prankster with the stalker's support moves. Luxray only, not Shinx or Luxio.
 	if (Pokedex.luxray) add('luxray', LUXRAY.moves, [LUXRAY.ability]);
+	if (Pokedex.guzzlord) add('guzzlord', GUZZLORD.moves, []);
 
 	// Golisopod only, not Wimpod: after the pre-evolution pass.
 	if (Pokedex.golisopod) add('golisopod', GOLISOPOD, []);
@@ -2204,6 +2270,7 @@ exports.patchAbsorbers = Abilities => {
 	return Abilities;
 };
 exports.LUXRAY = LUXRAY;
+exports.GUZZLORD = GUZZLORD;
 exports.GOLISOPOD = GOLISOPOD;
 exports.EEVEE = EEVEE;
 exports.INFERNAPE = INFERNAPE;
