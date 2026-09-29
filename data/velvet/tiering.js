@@ -126,27 +126,40 @@ const TIERS = {
 	// And from AG down to Ubers, as suspects (the owner, same day).
 	xerneas: 'Uber',
 	koraidon: 'Uber',
+
+	// The owner's confirmed tier review (29 Sep 2026, on paper).
+	blissey: 'OU',
+	mew: 'OU',
+	tapufini: 'OU',
+	regirock: 'UU',
+	registeel: 'RUBL',
+	suicune: 'UU',
+	cresselia: 'RUBL',
+	mudsdale: 'RUBL',
+	sylveon: 'UU',
+	primarina: 'UU',
+	enamorus: 'UU',
 	metagrossmega: 'OU',
 	charizardmegax: 'UU',
 	pinsirmega: 'UU',
 	gyarados: 'UU',
-	gyaradosmega: 'UU',
+	gyaradosmega: 'UUBL',
 	mawilemega: 'UU',
 	medichammega: 'UU',
 	latiosmega: 'UU',
 	gallademega: 'UU',
 	manaphy: 'UU',
 	thundurustherian: 'UU',
-	greninja: 'UU',
+	greninja: 'UUBL',
 	xurkitree: 'UU',
-	dondozo: 'UU',
+	dondozo: 'OU',
 	ironhands: 'UU',
-	ironmoth: 'UU',
+	ironmoth: 'UUBL',
 	okidogi: 'UU',
 	ogerponcornerstone: 'UU',
 	ogerponcornerstonetera: 'UU',
 	ironcrown: 'UU',
-	pecharunt: 'UU',
+	pecharunt: 'UUBL',
 	// Magearna, both colours, unbanned by the owner's call (Patch 1.5). Its Mega stays Uber.
 	magearna: 'OU',
 	magearnaoriginal: 'OU',
@@ -251,13 +264,13 @@ const TIERS = {
 	// The rest of Balance Patch 1's "Legends Rise": each got a signature (Regice's
 	// Permafrost Core, the lake trio's Memory Wipe, Soul Resonance and Resolute
 	// Strike) aimed at RU; after the lake trio's rework (110 power, guaranteed effects, Mind Keeper and Heartfelt Resolve) all three are UU.
-	regice: 'RU',
+	regice: 'UU',
 	uxie: 'UU',
 	mesprit: 'UU',
 	azelf: 'UU',
 
-	// Guzzlord's buff (29 Sep 2026: Grand Feast, Devour, Endless Hunger): RU to UU, the owner's call.
-	guzzlord: 'UU',
+	// Guzzlord's buff (29 Sep 2026: Grand Feast, Devour, Endless Hunger): RU to UU, then UUBL in the tier review.
+	guzzlord: 'UUBL',
 
 	/*
 	 * Balance Patch 1's tier review: the few that the patch lifted out of the tier
