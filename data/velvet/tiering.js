@@ -109,6 +109,10 @@ const TIERS = {
 	dragonitemega: 'OU',
 	// Deoxys-Speed, unbanned by the owner's call (Patch 1.5).
 	deoxysspeed: 'OU',
+	// Regular Deoxys, unbanned from Ubers to OU (the owner, 29 Sep 2026). Attack Forme stays Uber.
+	deoxys: 'OU',
+	// Sneasler too, Ubers to OU (the owner, same day).
+	sneasler: 'OU',
 	// Magearna, both colours, unbanned by the owner's call (Patch 1.5). Its Mega stays Uber.
 	magearna: 'OU',
 	magearnaoriginal: 'OU',
