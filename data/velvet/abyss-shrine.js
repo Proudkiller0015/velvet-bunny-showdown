@@ -368,7 +368,7 @@ const MOVES = {
 			// This server's own shared moves (balance-patch-1.js), where they fit.
 			'wavecharge', 'carrionfeast', 'rimecleaver', 'craghammer', 'hustleup', 'twilightexit', 'shufflejab', 'undertow',
 			// Utility and pivots (the owner: "more utility, Knock Off etc, ways to rotate").
-			'uturn', 'stealthrock', 'rapidspin', 'defog', 'courtchange', 'trick',
+			'uturn', 'stealthrock', 'rapidspin', 'defog', 'courtchange', 'trick', 'trickroom',
 		],
 	},
 	raishin: {
@@ -391,7 +391,7 @@ const MOVES = {
 			// This server's own shared moves (balance-patch-1.js), where they fit.
 			'voltaiclance', 'sparkscamper', 'carrionfeast', 'rimecleaver', 'craghammer', 'hivefrenzy', 'shufflejab', 'hustleup', 'twilightexit',
 			// Utility and pivots (the owner: "more utility, Knock Off etc, ways to rotate").
-			'partingshot', 'teleport', 'batonpass', 'defog', 'healbell', 'memento',
+			'partingshot', 'teleport', 'batonpass', 'defog', 'healbell', 'memento', 'trickroom',
 		],
 	},
 	chimai: {
@@ -430,6 +430,63 @@ exports.learnsets = (data) => {
 	}
 	return data;
 };
+
+/*
+ * The signature items (the owner: "invert their Speed and worst attacking stat, for
+ * Trick Room, 1.2 power on all their moves"). Held by its owner, each swaps the
+ * Pokemon's Speed with its weaker attacking stat - Makuro becomes a 50-Speed Trick
+ * Room attacker with 120 Sp. Atk - and powers every move it uses by 1.2x.
+ *
+ * The swap is done in the stat hooks rather than by trading storedStats (as Power
+ * Trick does), because stored stats outlive a switch and a swap on every entry
+ * would undo itself on the second one. Each hook takes the other stat's stored
+ * value and keeps whatever boosts and modifiers were applied to its own.
+ * Positive numbers, like the Z-A stones: National Dex treats a negative item as
+ * not existing.
+ */
+const ITEMS = {
+	abyssalpearl: { num: 3001, name: 'Abyssal Pearl', owner: 'makuro', worst: 'spa', spritenum: 94 },
+	shrinebell: { num: 3002, name: 'Shrine Bell', owner: 'raishin', worst: 'spa', spritenum: 461 },
+	sanctuarylotus: { num: 3003, name: 'Sanctuary Lotus', owner: 'chimai', worst: 'atk', spritenum: 610 },
+};
+const STAT_NAMES = { atk: 'Attack', spa: 'Sp. Atk' };
+
+exports.items = (data) => {
+	for (const [id, it] of Object.entries(ITEMS)) {
+		const mine = pokemon => pokemon && pokemon.baseSpecies.id === it.owner;
+		const swapped = (value, pokemon, from, to) => {
+			const own = pokemon.storedStats[from];
+			return own ? Math.floor(pokemon.storedStats[to] * value / own) : value;
+		};
+		const owner = it.owner.charAt(0).toUpperCase() + it.owner.slice(1);
+		const item = {
+			num: it.num, gen: 9, name: it.name, spritenum: it.spritenum, isNonstandard: null,
+			itemUser: [owner],
+			fling: { basePower: 30 },
+			onModifySpePriority: 1,
+			onModifySpe(spe, pokemon) {
+				if (mine(pokemon)) return swapped(spe, pokemon, 'spe', it.worst);
+			},
+			onBasePowerPriority: 15,
+			onBasePower(basePower, user) {
+				if (mine(user)) return this.chainModify([4915, 4096]);
+			},
+			// Like Rusted Sword: it never leaves its owner, and nobody takes it from one.
+			onTakeItem(item, pokemon, source) {
+				return !(mine(pokemon) || mine(source));
+			},
+			desc: `If held by ${owner}, its Speed and ${STAT_NAMES[it.worst]} are swapped (for Trick Room), and the power of all its moves is multiplied by 1.2. Can't be removed from ${owner} or stolen by one.`,
+			shortDesc: `${owner}: swaps Speed and ${STAT_NAMES[it.worst]}; all its moves 1.2x power.`,
+		};
+		item[it.worst === 'spa' ? 'onModifySpAPriority' : 'onModifyAtkPriority'] = 1;
+		item[it.worst === 'spa' ? 'onModifySpA' : 'onModifyAtk'] = function (value, pokemon) {
+			if (mine(pokemon)) return swapped(value, pokemon, it.worst, 'spe');
+		};
+		data[id] = item;
+	}
+	return data;
+};
+exports.ITEM_IDS = Object.keys(ITEMS);
 
 exports.SPECIES = ['makuro', 'raishin', 'chimai'];
 exports.MOVE_IDS = ['abyssalmaw', 'leviathancrash', 'shrinebellstrike', 'spiritthunder', 'sanctuarypulse', 'hallowedquake', 'sovereignrite'];

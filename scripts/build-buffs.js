@@ -64,6 +64,7 @@ const OUR_ABILITIES = ['witchinghour'];
 const abyssShrine = require(path.join(PACKAGE, 'dist', 'data', 'velvet', 'abyss-shrine.js'));
 OUR_MOVES.push(...abyssShrine.MOVE_IDS);
 OUR_ABILITIES.push(...abyssShrine.ABILITY_IDS);
+OUR_ITEMS.push(...abyssShrine.ITEM_IDS);
 for (const buff of Object.values(Buffs)) {
 	for (const name of buff.moves || []) {
 		const move = Dex.moves.get(name);

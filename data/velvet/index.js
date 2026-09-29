@@ -122,6 +122,7 @@ exports.items = data => {
 	// marked 'Future' is refused however legal the Mega holding it is.
 	applyZaStones(data, msg => console.log('[velvet] ' + msg));
 	Halloween.items(data);
+	AbyssShrine.items(data);
 	return data;
 };
 

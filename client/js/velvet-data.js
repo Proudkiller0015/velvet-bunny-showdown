@@ -1931,6 +1931,15 @@
 			if (ability === 'diamonddust' && (weather === 'snowscape' || weather === 'hail')) stats.spe *= 2;
 			if (ability === 'solstice' && (weather === 'sunnyday' || weather === 'desolateland') && item !== 'utilityumbrella') stats.spe *= 2;
 
+			// The trio's signature items: Speed and the weaker attacking stat change places.
+			var SWAP = { abyssalpearl: ['makuro', 'spa'], shrinebell: ['raishin', 'spa'], sanctuarylotus: ['chimai', 'atk'] };
+			if (SWAP[item] && speciesid === SWAP[item][0]) {
+				var other = SWAP[item][1];
+				var keep = stats.spe;
+				stats.spe = stats[other];
+				stats[other] = keep;
+			}
+
 			if (ability === 'colossusunbound') {
 				var hp = clientPokemon ? clientPokemon.hp : serverPokemon && serverPokemon.hp;
 				var maxhp = clientPokemon ? clientPokemon.maxhp : serverPokemon && serverPokemon.maxhp;
@@ -2443,7 +2452,8 @@
 				var move = this.dex.moves.get(id);
 				if (!move || !move.exists) return verdict;
 				// Ours: a priority attack or one of our boosting moves is a real option.
-				if (move.num < 0 && (move.priority > 0 || (move.category === 'Status' && move.boosts))) verdict = true;
+				// (The client's rows of ours carry no `boosts` field, so every status move of ours counts.)
+				if (move.num < 0 && (move.priority > 0 || move.category === 'Status')) verdict = true;
 				// A setup move is useless beside a strictly better one the Pokemon also learns
 				// (the owner: "Calm Mind is worse than Quiver so it's useless").
 				var better = OUTCLASSED[id];

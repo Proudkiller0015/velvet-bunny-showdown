@@ -50,7 +50,7 @@ const SPECIES = ['samantha', 'nuzleafsold', 'banettemegahalloween', 'makuro', 'r
 const MOVES = Dex.moves.all().filter(m => m.exists && m.num < 0 && m.isNonstandard !== 'CAP').map(m => m.id);
 const ABILITIES = Dex.abilities.all().filter(a => a.exists && a.num < 0 && a.isNonstandard !== 'CAP').map(a => a.id);
 // Banettite-Halloween (24 Sep 2026): its stone, so a set holding it is not refused.
-const ITEMS = ['elementalbanana', 'brokenpact', 'banettitehalloween'];
+const ITEMS = ['elementalbanana', 'brokenpact', 'banettitehalloween', 'abyssalpearl', 'shrinebell', 'sanctuarylotus'];
 
 /**
  * The calculator's own field names, which are not Showdown's.
