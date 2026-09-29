@@ -65,6 +65,7 @@ const abyssShrine = require(path.join(PACKAGE, 'dist', 'data', 'velvet', 'abyss-
 OUR_MOVES.push(...abyssShrine.MOVE_IDS);
 OUR_ABILITIES.push(...abyssShrine.ABILITY_IDS);
 OUR_ITEMS.push(...abyssShrine.ITEM_IDS);
+OUR_ITEMS.push(...require(path.join(PACKAGE, 'dist', 'data', 'velvet', 'new-items.js')).ITEM_IDS);
 for (const buff of Object.values(Buffs)) {
 	for (const name of buff.moves || []) {
 		const move = Dex.moves.get(name);

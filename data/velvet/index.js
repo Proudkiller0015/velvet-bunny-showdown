@@ -38,6 +38,8 @@ const AbyssShrine = require('./abyss-shrine.js');
 const Frostbite = require('./frostbite.js');
 // Type Gems, legal again.
 const Gems = require('./gems.js');
+// New items for every Pokemon (Ultra Shard).
+const NewItems = require('./new-items.js');
 
 // The buffed Pokemon are Showdown's own, so they are changed in place rather
 // than added - and the learnsets they need are added when that file is loaded,
@@ -129,6 +131,7 @@ exports.items = data => {
 	AbyssShrine.items(data);
 	Frostbite.items(data);
 	Gems.items(data);
+	NewItems.items(data);
 	return data;
 };
 
