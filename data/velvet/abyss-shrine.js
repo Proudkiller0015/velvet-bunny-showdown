@@ -327,6 +327,14 @@ exports.moves = (data) => {
 		shortDesc: "Clears the target's boosts. Hits Flying/Levitate in Sanctuary Terrain. Chimai.",
 		desc: "Removes the target's positive stat stages. While Sanctuary Terrain is active it also hits Flying-type Pokemon and Pokemon with Levitate or an Air Balloon. Chimai's signature move.",
 	});
+	// Warped Hourglass: the room lasts 8 turns when its holder sets it.
+	if (data.trickroom && data.trickroom.condition) {
+		const original = data.trickroom.condition.durationCallback;
+		data.trickroom = { ...data.trickroom, condition: { ...data.trickroom.condition, durationCallback(source, effect) {
+			if (source?.hasItem('warpedhourglass')) return 8;
+			return original ? original.call(this, source, effect) : 5;
+		} } };
+	}
 	// ---- The trio's shared signature: Tail Glow for the physical side (the owner).
 	data.sovereignrite = {
 		num: -50, gen: 9, name: 'Sovereign Rite', type: 'Normal', category: 'Status',
@@ -364,7 +372,7 @@ const MOVES = {
 			'bodyslam', 'doubleedge', 'gigaimpact', 'hyperbeam', 'terablast',
 			// Setup and utility
 			'swordsdance', 'dragondance', 'bulkup', 'curse', 'haze', 'roar', 'whirlwind', 'yawn', 'encore', 'toxic', 'snowscape',
-			'cottonguard', 'velvetguard', 'tailglow', 'recover', 'protect', 'detect', 'rest', 'sleeptalk', 'substitute', 'endure', 'facade', 'helpinghand', 'scaryface',
+			'cottonguard', 'velvetguard', 'velvetpress', 'tailglow', 'recover', 'protect', 'detect', 'rest', 'sleeptalk', 'substitute', 'endure', 'facade', 'helpinghand', 'scaryface',
 			// This server's own shared moves (balance-patch-1.js), where they fit.
 			'wavecharge', 'carrionfeast', 'rimecleaver', 'craghammer', 'hustleup', 'twilightexit', 'shufflejab', 'undertow',
 			// Utility and pivots (the owner: "more utility, Knock Off etc, ways to rotate").
@@ -387,7 +395,7 @@ const MOVES = {
 			'terablast',
 			// Setup and utility
 			'swordsdance', 'agility', 'bulkup', 'safeguard', 'reflect', 'lightscreen', 'roar', 'taunt', 'encore', 'toxic', 'trick',
-			'cottonguard', 'velvetguard', 'tailglow', 'recover', 'protect', 'detect', 'rest', 'sleeptalk', 'substitute', 'endure', 'facade', 'helpinghand', 'scaryface',
+			'cottonguard', 'velvetguard', 'velvetpress', 'tailglow', 'recover', 'protect', 'detect', 'rest', 'sleeptalk', 'substitute', 'endure', 'facade', 'helpinghand', 'scaryface',
 			// This server's own shared moves (balance-patch-1.js), where they fit.
 			'voltaiclance', 'sparkscamper', 'carrionfeast', 'rimecleaver', 'craghammer', 'hivefrenzy', 'shufflejab', 'hustleup', 'twilightexit',
 			// Utility and pivots (the owner: "more utility, Knock Off etc, ways to rotate").
@@ -408,7 +416,7 @@ const MOVES = {
 			'hypervoice', 'icebeam', 'thunderbolt', 'darkpulse', 'dragonpulse', 'bodypress', 'hyperbeam', 'terablast',
 			// Setup and utility
 			'calmmind', 'nastyplot', 'irondefense', 'amnesia', 'wish', 'healbell', 'safeguard', 'reflect', 'lightscreen', 'trickroom',
-			'gravity', 'sunnyday', 'roar', 'whirlwind', 'taunt', 'encore', 'toxic', 'yawn', 'trick', 'cottonguard', 'velvetguard', 'tailglow', 'recover', 'protect', 'detect', 'rest',
+			'gravity', 'sunnyday', 'roar', 'whirlwind', 'taunt', 'encore', 'toxic', 'yawn', 'trick', 'cottonguard', 'velvetguard', 'velvetpress', 'tailglow', 'recover', 'protect', 'detect', 'rest',
 			'sleeptalk', 'substitute', 'endure', 'facade', 'helpinghand',
 			// This server's own shared moves (balance-patch-1.js), where they fit.
 			// A dancer (the owner): every dance there is, Quiver Dance for its Speed first.
@@ -484,9 +492,18 @@ exports.items = (data) => {
 		};
 		data[id] = item;
 	}
+	// Warped Hourglass (the owner): Light Clay for Trick Room - any Pokemon, 8 turns
+	// instead of 5 when the holder sets the room (Twilight Exit included). The turns
+	// are decided by Trick Room's own durationCallback, patched in moves() below.
+	data.warpedhourglass = {
+		num: 3004, gen: 9, name: 'Warped Hourglass', spritenum: 717, isNonstandard: null,
+		fling: { basePower: 10 },
+		desc: "If the holder sets Trick Room, it lasts 8 turns instead of 5 (Persistent still makes it 7 on a holder without this item).",
+		shortDesc: "Holder's Trick Room lasts 8 turns instead of 5.",
+	};
 	return data;
 };
-exports.ITEM_IDS = Object.keys(ITEMS);
+exports.ITEM_IDS = [...Object.keys(ITEMS), 'warpedhourglass'];
 
 exports.SPECIES = ['makuro', 'raishin', 'chimai'];
 exports.MOVE_IDS = ['abyssalmaw', 'leviathancrash', 'shrinebellstrike', 'spiritthunder', 'sanctuarypulse', 'hallowedquake', 'sovereignrite'];

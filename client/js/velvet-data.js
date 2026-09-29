@@ -438,9 +438,11 @@
 		var defaultIn = installDefaultFormat();
 		var bagIn = installBagMenu();
 		var usefulIn = installMoveUsefulness();
+		var frbIn = installFrostbite();
+		var sureIn = installSureHit();
 		var switchIn = installRpSwitch();
 		return switchIn && tableIn && orderIn && spritesIn && iconIn && builderIn && tipsIn && rpIn &&
-			cutIn && listIn && buffsIn && abilitiesIn && itemIn && sigItemIn && powerIn && dmaxIn && awakenedIn && textIn && zMaxIn && defaultIn && bagIn && usefulIn;
+			cutIn && listIn && buffsIn && abilitiesIn && itemIn && sigItemIn && powerIn && dmaxIn && awakenedIn && textIn && zMaxIn && defaultIn && bagIn && usefulIn && frbIn && sureIn;
 	}
 
 	/*
@@ -936,6 +938,16 @@
 				activate: '  {POKEMON} is sheltered by the Sanctuary Terrain!',
 				shortDesc: 'Ground and Fairy moves 1.3x; other Pokemon cannot lower a Fairy type\'s stats.',
 			},
+		};
+		// Frostbite ('frb'): the log looks a status's lines up by its id, like 'brn'.
+		TERRAIN_TEXT.frb = {
+			name: 'Frostbite',
+			start: '  {POKEMON} got frostbite!',
+			startFromItem: '  {POKEMON} got frostbite from the {ITEM}!',
+			alreadyStarted: '  {POKEMON} is already frostbitten!',
+			end: "  {POKEMON}'s frostbite was healed.",
+			endFromItem: "  {POKEMON}'s {ITEM} healed its frostbite.",
+			damage: '  {POKEMON} was hurt by its frostbite!',
 		};
 		for (var tid in TERRAIN_TEXT) if (!en.Moves[tid]) en.Moves[tid] = TERRAIN_TEXT[tid];
 		en.__velvetDescriptions = true;
@@ -1927,6 +1939,8 @@
 			 */
 			var status = (clientPokemon && clientPokemon.status) || (serverPokemon && serverPokemon.status) || '';
 			if (ability === 'kindledfury' && status && status !== 'fnt') stats.atk = Math.floor(stats.atk * 1.5);
+			// Frostbite halves Special Attack, the way burn halves Attack.
+			if (status === 'frb') stats.spa = Math.floor(stats.spa / 2);
 			var weather = window.toID((this.battle && this.battle.weather) || '');
 			if (ability === 'diamonddust' && (weather === 'snowscape' || weather === 'hail')) stats.spe *= 2;
 			if (ability === 'solstice' && (weather === 'sunnyday' || weather === 'desolateland') && item !== 'utilityumbrella') stats.spe *= 2;
@@ -2429,6 +2443,41 @@
 		clearsmog: 1, dragontail: 1, circlethrow: 1, snarl: 1, icywind: 1, electroweb: 1, pursuit: 1, trailblaze: 1,
 		photongeyser: 1, shellsidearm: 1, tripledive: 1,
 	};
+	/*
+	 * Frostbite ('frb'), the sixth major status (data/velvet/frostbite.js).
+	 *
+	 * The client knows five statuses by name and ignores anything else: parseHealth
+	 * drops an unknown one from "225/332 frb", and the HP bar has no tag for it. So the
+	 * status is read, tagged FRB beside the HP bar, and worded in the battle log
+	 * (fillDescriptions adds its lines), and the stat tooltip halves Special Attack.
+	 */
+	function installFrostbite() {
+		var B = window.Battle, S = window.PokemonSprite;
+		if (!B || !B.prototype || !B.prototype.parseHealth || !S || !S.prototype || !S.prototype.updateStatbar) return false;
+		if (B.prototype.parseHealth.__velvetFrb) return true;
+		var parse = B.prototype.parseHealth;
+		var parseFrb = function (hpstring, output) {
+			var out = parse.apply(this, arguments);
+			var parts = String(hpstring || '').split(' ');
+			if (out && parts[1] === 'frb') out.status = 'frb';
+			return out;
+		};
+		parseFrb.__velvetFrb = true;
+		B.prototype.parseHealth = parseFrb;
+		var bar = S.prototype.updateStatbar;
+		S.prototype.updateStatbar = function (pokemon) {
+			var out = bar.apply(this, arguments);
+			try {
+				if (pokemon && pokemon.status === 'frb' && this.$statbar) {
+					var $status = this.$statbar.find('.status');
+					if (!$status.find('.frb').length) $status.prepend('<span class="frb">FRB</span> ');
+				}
+			} catch (e) { /* the bar stays as drawn */ }
+			return out;
+		};
+		return true;
+	}
+
 	// Setup moves and the ones that do the same job better.
 	var OUTCLASSED = {
 		calmmind: ['quiverdance'],
@@ -2465,6 +2514,25 @@
 				if (move.category === 'Special' && stats.atk - stats.spa >= 40) return false;
 			} catch (e) { /* keep Showdown's answer */ }
 			return verdict;
+		};
+		return true;
+	}
+
+	// Toxic's rule for Will-O-Wisp, Thunder Wave and Chilling Mist, in the accuracy tooltip.
+	var SURE_HIT = { willowisp: 'Fire', thunderwave: 'Electric', chillingmist: 'Ice' };
+	function installSureHit() {
+		var tips = window.BattleTooltips;
+		if (!tips || !tips.prototype || !tips.prototype.getMoveAccuracy) return false;
+		if (tips.__velvetSureHit) return true;
+		tips.__velvetSureHit = true;
+		var original = tips.prototype.getMoveAccuracy;
+		tips.prototype.getMoveAccuracy = function (move, value) {
+			var out = original.apply(this, arguments);
+			try {
+				var type = RP.on && move && SURE_HIT[move.id];
+				if (type && this.pokemonHasType(value.pokemon, type)) out.set(0, type + ' type');
+			} catch (e) {}
+			return out;
 		};
 		return true;
 	}

@@ -461,6 +461,46 @@ exports.MOVES = {
 	 * Velvet Guard - Cotton Guard for the other side (the owner, 29 Sep 2026): +3
 	 * Special Defense. Handed to everything that learns Cotton Guard, and the trio.
 	 */
+	/*
+	 * Velvet Press - Body Press for the special side (the owner, 29 Sep 2026): Fairy,
+	 * 80 power, uses the user's Special Defense in place of its Special Attack.
+	 * Velvet Guard's partner, and handed out generously to special walls.
+	 */
+	/*
+	 * Chilling Mist - Will-O-Wisp for the cold (the owner, 29 Sep 2026): Ice, status,
+	 * 85% accurate, frostbites the target - the new special-side burn
+	 * (data/velvet/frostbite.js). Fire types are immune to the move itself, not to
+	 * frostbite from elsewhere; Ice types can't be frostbitten at all.
+	 */
+	chillingmist: {
+		num: -52, gen: 9, name: "Chilling Mist", type: "Ice", category: "Status",
+		basePower: 0, accuracy: 85, pp: 15, priority: 0,
+		flags: { protect: 1, reflectable: 1, mirror: 1, metronome: 1 },
+		status: 'frb',
+		// Toxic's rule: an Ice-type user can't miss.
+		onModifyMove(move, pokemon) {
+			if (pokemon.hasType('Ice')) move.accuracy = true;
+		},
+		onTryImmunity(target) {
+			return !target.hasType('Fire');
+		},
+		secondary: null,
+		target: "normal", contestType: "Beautiful", velvetShared: true,
+		flavor: "A biting, ghostly mist that numbs whatever it settles on.",
+		shortDesc: "Frostbites the target. Fire immune. Ice-type user: never misses.",
+		desc: "Frostbites the target: its Special Attack is halved and it loses 1/16 of its maximum HP at the end of each turn. Ice types cannot be frostbitten, and Fire-type Pokemon are immune to this move. If the user is an Ice type, this move can't miss.",
+	},
+	velvetpress: {
+		num: -51, gen: 9, name: "Velvet Press", type: "Fairy", category: "Special",
+		basePower: 80, accuracy: 100, pp: 10, priority: 0,
+		overrideOffensiveStat: 'spd',
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		secondary: null,
+		target: "normal", contestType: "Tough", velvetShared: true,
+		flavor: "The user presses its soft, unyielding bulk against the target.",
+		shortDesc: "Uses user's Sp. Def stat as Sp. Atk in damage calculation.",
+		desc: "Damage is calculated using the user's Special Defense stat as its Special Attack, including stat stage changes. Other effects that modify the Special Attack stat are used as normal. The special counterpart of Body Press.",
+	},
 	velvetguard: {
 		num: -49, gen: 9, name: "Velvet Guard", type: "Fairy", category: "Status",
 		basePower: 0, accuracy: true, pp: 10, priority: 0,
@@ -1611,8 +1651,24 @@ const TM_DISTRIBUTION = {
 	solarnectar: ['sunflora', 'cherrim', 'maractus', 'jumpluff', 'tropius', 'carnivine', 'shiinotic', 'eldegoss', 'sawsbuck', 'parasect', 'wormadam', 'cacturne', 'venusaur', 'bellossom', 'vileplume', 'roserade', 'florges', 'comfey', 'lilligant', 'whimsicott', 'meganium', 'ribombee', 'victreebel', 'exeggutor', 'exeggutoralola', 'lurantis', 'arboliva', 'scovillain', 'ludicolo', 'breloom', 'appletun', 'sceptile'],
 	// Heavy stone bodies, boulders and hammers. Not Tyranitar, Garganacl or Landorus: reliable Rock STAB or coverage on those tips OU; they keep Stone Edge.
 	craghammer: ['sudowoodo', 'magcargo', 'solrock', 'klawf', 'stonjourner', 'sandslash', 'marowak', 'dugtrio', 'golem', 'golemalola', 'rhyperior', 'aggron', 'rampardos', 'bastiodon', 'probopass', 'gigalith', 'coalossal', 'lycanroc', 'lycanrocmidnight', 'lycanrocdusk', 'tyrantrum', 'barbaracle', 'crustle', 'archeops', 'aerodactyl', 'kabutops', 'armaldo', 'cradily', 'avalugg', 'avalugghisui', 'relicanth', 'steelix', 'tinkaton', 'conkeldurr', 'carbink'],
+	// Chilling Mist: the Ice and Ghost types (the owner). Not the Uber/AG ones (Giratina,
+	// Lunala, Flutter Mane, Iron Bundle, Chien-Pao, Baxcalibur, Annihilape, Spectrier,
+	// Marshadow, Shedinja, Galarian Darmanitan) - a status-spreading STAB there is a tier review.
+	chillingmist: ['sandslashalola', 'ninetalesalola', 'dewgong', 'cloyster', 'gengar', 'marowakalola', 'jynx', 'lapras', 'articuno', 'typhlosionhisui', 'delibird', 'sableye', 'banette', 'glalie', 'walrein', 'regice', 'drifblim', 'mismagius', 'spiritomb', 'abomasnow', 'weavile', 'glaceon', 'mamoswine', 'dusknoir', 'froslass', 'rotom', 'cofagrigus', 'zoroarkhisui', 'vanilluxe', 'jellicent', 'chandelure', 'beartic', 'cryogonal', 'golurk', 'kyurem', 'aegislash', 'aurorus', 'trevenant', 'gourgeist', 'avalugg', 'avalugghisui', 'hoopa', 'decidueye', 'crabominable', 'palossand', 'mimikyu', 'dhelmise', 'blacephalon', 'polteageist', 'cursola', 'mrrime', 'runerigus', 'frosmoth', 'eiscue', 'arctozolt', 'arctovish', 'dragapult', 'glastrier', 'basculegion', 'skeledirge', 'ceruledge', 'brambleghast', 'houndstone', 'cetitan', 'gholdengo', 'sinistcha', 'pecharunt',
+		// Cold-water Water types and chilling Dark types (the owner: "like Suicune", "or chilling Dark types").
+		'suicune', 'milotic', 'kingdra', 'lumineon', 'tentacruel', 'lanturn', 'primarina', 'empoleon', 'toxapex', 'absol', 'umbreon', 'honchkrow', 'mandibuzz', 'mightyena', 'liepard', 'zoroark', 'hydreigon', 'crawdaunt', 'thievul', 'grimmsnarl', 'obstagoon'],
 	// Everything that learns Cotton Guard (pre-evolutions follow on their own).
-	velvetguard: ['ampharos', 'jumpluff', 'altaria', 'banette', 'whimsicott', 'maractus', 'bouffalant', 'furfrou', 'slurpuff', 'eldegoss', 'dubwool'],
+	// Velvet Guard's partner: everything that learns the Guard, and the special walls
+	// (the owner: "generous with press logic"). Same exclusions as the Guard.
+	velvetpress: [...new Set([
+		'ampharos', 'jumpluff', 'altaria', 'banette', 'whimsicott', 'maractus', 'bouffalant', 'furfrou', 'slurpuff', 'eldegoss', 'dubwool',
+		'clefable', 'ninetalesalola', 'wigglytuff', 'rapidashgalar', 'weezinggalar', 'mrmime', 'azumarill', 'granbull', 'gardevoir', 'mawile', 'togekiss', 'florges', 'aromatisse', 'sylveon', 'dedenne', 'carbink', 'klefki', 'diancie', 'primarina', 'ribombee', 'shiinotic', 'comfey', 'mimikyu', 'tapukoko', 'tapulele', 'tapubulu', 'tapufini', 'hatterene', 'grimmsnarl', 'alcremie', 'enamorus', 'dachsbun', 'tinkaton', 'screamtail', 'ironvaliant', 'fezandipiti',
+		'blissey', 'chansey', 'regice', 'cresselia', 'deoxysdefense', 'suicune', 'latias', 'latios', 'slowking', 'slowkinggalar', 'goodra', 'goodrahisui', 'milotic', 'lapras', 'alomomola', 'snorlax', 'umbreon', 'mandibuzz', 'registeel', 'toxapex', 'amoonguss', 'porygon2', 'hippowdon', 'tangrowth', 'dragonite', 'gastrodon', 'quagsire', 'clodsire', 'dondozo', 'garganacl', 'tinglu', 'regidrago', 'mew', 'celebi', 'jirachi', 'manaphy', 'uxie', 'azelf', 'mesprit', 'articuno', 'articunogalar', 'zapdosgalar', 'moltresgalar', 'glimmora', 'corviknight', 'bronzong', 'ferrothorn', 'mudsdale',
+	])],
+	velvetguard: ['ampharos', 'jumpluff', 'altaria', 'banette', 'whimsicott', 'maractus', 'bouffalant', 'furfrou', 'slurpuff', 'eldegoss', 'dubwool',
+		// And the Fairy types (the owner). Not Xerneas, Zacian, Flutter Mane or Magearna:
+		// +3 Sp. Def on an Uber or AG Fairy is a tier review, not a TM.
+		'clefable', 'ninetalesalola', 'wigglytuff', 'rapidashgalar', 'weezinggalar', 'mrmime', 'azumarill', 'granbull', 'gardevoir', 'mawile', 'togekiss', 'florges', 'aromatisse', 'sylveon', 'dedenne', 'carbink', 'klefki', 'diancie', 'primarina', 'ribombee', 'shiinotic', 'comfey', 'mimikyu', 'tapukoko', 'tapulele', 'tapubulu', 'tapufini', 'hatterene', 'grimmsnarl', 'alcremie', 'enamorus', 'dachsbun', 'tinkaton', 'screamtail', 'ironvaliant', 'fezandipiti'],
 	// The special Ground attackers (29 Sep 2026, with Chimai). Not Landorus: like
 	// Crag Hammer, Ground priority on it tips a tier; it keeps Earth Power.
 	tremorshot: ['nidoking', 'nidoqueen', 'gastrodon', 'palossand', 'seismitoad', 'stunfisk', 'stunfiskgalar', 'camerupt', 'claydol', 'whiscash', 'flygon', 'sandyshocks'],
@@ -2112,6 +2168,12 @@ exports.buildBuffs = (Pokedex) => {
 	out.uxie = { moves: ['memorywipe', 'slackoff', 'teleport', 'healbell'], abilities: ['Mind Keeper'] };
 	out.mesprit = { moves: ['soulresonance', 'moonblast', 'calmmind', 'wish'], abilities: ['Heartfelt Resolve'] };
 	out.azelf = { moves: ['resolutestrike', 'closecombat', 'swordsdance', 'knockoff'], abilities: ['Unbending Will'] };
+	// Those five are written whole, which wiped whatever the shared moves had given
+	// them earlier (Velvet Press never reached Regice or the lake trio). Hand the
+	// shared moves out again on top; add() merges, so nothing is lost either way.
+	for (const [move, ids] of Object.entries(TM_DISTRIBUTION)) {
+		for (const id of ids) if (Pokedex[id] && ['regigigas', 'articuno', 'regice', 'uxie', 'mesprit', 'azelf'].includes(id)) add(id, [move], []);
+	}
 	return out;
 };
 

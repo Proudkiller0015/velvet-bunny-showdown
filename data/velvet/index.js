@@ -34,6 +34,8 @@ const { unnerfMoves, unnerfAbilities, unnerfSpecies } = require('./unnerfs.js');
 const Halloween = require('./halloween.js');
 // Makuro and Raishin, the Abyss and the Shrine: two legendaries and their terrains.
 const AbyssShrine = require('./abyss-shrine.js');
+// Frostbite, the sixth major status (and the Aspear Berry that cures it).
+const Frostbite = require('./frostbite.js');
 
 // The buffed Pokemon are Showdown's own, so they are changed in place rather
 // than added - and the learnsets they need are added when that file is loaded,
@@ -64,7 +66,7 @@ exports.pokedex = data => {
 exports.abilities = data => AbyssShrine.abilities(Halloween.abilities(require('./balance-patch-1.js').patchAbsorbers(patchAbilities(unnerfAbilities(Object.assign(data, Abilities))))));
 let moveTable = null;
 exports.moves = data => {
-	moveTable = AbyssShrine.moves(Halloween.moves(patchMoves(unnerfMoves(Object.assign(data, Moves)))));
+	moveTable = Frostbite.moves(AbyssShrine.moves(Halloween.moves(patchMoves(unnerfMoves(Object.assign(data, Moves))))));
 	teachHerEverything();
 	return moveTable;
 };
@@ -123,8 +125,9 @@ exports.items = data => {
 	applyZaStones(data, msg => console.log('[velvet] ' + msg));
 	Halloween.items(data);
 	AbyssShrine.items(data);
+	Frostbite.items(data);
 	return data;
 };
 
 // Field conditions: the Abyss's and the Shrine's terrains (a table no other file here touches).
-exports.conditions = data => AbyssShrine.conditions(data);
+exports.conditions = data => Frostbite.conditions(AbyssShrine.conditions(data));

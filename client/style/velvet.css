@@ -117,3 +117,16 @@
 	color: #ffe6f3;
 	text-shadow: #2a0d18 1px 1px 0, #2a0d18 1px -1px 0, #2a0d18 -1px 1px 0, #2a0d18 -1px -1px 0;
 }
+
+/* Frostbite ('frb'), the sixth status (data/velvet/frostbite.js): an icy tag beside FRZ's teal. */
+.statbar span.frb {
+	padding: 1px 2px;
+	border: 0;
+	border-radius: 3px;
+	background: #6AB7E8;
+	color: #FFFFFF;
+	font-size: 7pt;
+}
+.status.frb {
+	background: #6AB7E8;
+}

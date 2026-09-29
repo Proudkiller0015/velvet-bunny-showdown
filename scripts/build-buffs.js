@@ -287,6 +287,8 @@ for (const id of CHANGED.species || []) {
 	overrides.species[id] = { baseStats: Object.assign({}, Dex.species.get(id).baseStats), types: Dex.species.get(id).types.slice(), abilities: Object.assign({}, Dex.species.get(id).abilities) };
 }
 for (const id of CHANGED.moves) overrides.moves[id] = moveRow(Dex.moves.get(id));
+// Will-O-Wisp and Thunder Wave never miss for their own type (data/velvet/frostbite.js).
+for (const id of Object.keys(require(path.join(PACKAGE, 'dist', 'data', 'velvet', 'frostbite.js')).SURE_HIT)) if (id !== 'chillingmist') overrides.moves[id] = moveRow(Dex.moves.get(id));
 for (const id of CHANGED.abilities) overrides.abilities[id] = abilityRow(Dex.abilities.get(id));
 const items = {};
 for (const id of OUR_ITEMS) items[id] = itemRow(Dex.items.get(id));
