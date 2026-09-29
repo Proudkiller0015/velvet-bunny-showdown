@@ -40,7 +40,7 @@ exports.items = (data) => {
 	// Chilling Orb (the owner): Flame Orb for frostbite. At the end of each turn it
 	// frostbites its holder (Ice types can't be) - Guts, Marvel Scale and Facade users.
 	data.chillingorb = {
-		num: 3006, gen: 9, name: 'Chilling Orb', spritenum: 221, isNonstandard: null,
+		num: 3006, gen: 9, name: 'Chilling Orb', spritenum: 606, isNonstandard: null,
 		fling: { basePower: 30, status: 'frb' },
 		onResidualOrder: 28,
 		onResidualSubOrder: 3,

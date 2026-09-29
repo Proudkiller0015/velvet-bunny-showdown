@@ -2552,6 +2552,7 @@
 	 * Gems section; official formats keep Showdown's own.
 	 */
 	var GEM_IDS = ['normal', 'fire', 'water', 'electric', 'grass', 'ice', 'fighting', 'poison', 'ground', 'flying', 'psychic', 'bug', 'rock', 'ghost', 'dragon', 'dark', 'steel', 'fairy'].map(function (t) { return t + 'gem'; });
+	var NEW_ITEMS = ['chillingorb', 'warpedhourglass', 'ultrashard'];
 	function installGemItems() {
 		var search = window.BattleItemSearch;
 		if (!search || !search.prototype || !search.prototype.getDefaultResults) return false;
@@ -2565,6 +2566,11 @@
 			for (var i = 0; i < out.length; i++) if (out[i][0] === 'item') have[out[i][1]] = true;
 			var add = [];
 			for (var g = 0; g < GEM_IDS.length; g++) if (!have[GEM_IDS[g]] && window.BattleItems && window.BattleItems[GEM_IDS[g]]) add.push(['item', GEM_IDS[g]]);
+			// And this server's own items for everyone (Chilling Orb, Warped Hourglass,
+			// Ultra Shard), which Showdown's list has never heard of either.
+			var ours = [];
+			for (var n = 0; n < NEW_ITEMS.length; n++) if (!have[NEW_ITEMS[n]] && window.BattleItems && window.BattleItems[NEW_ITEMS[n]]) ours.push(['item', NEW_ITEMS[n]]);
+			if (ours.length) out = out.concat([['header', 'New items']], ours);
 			return add.length ? out.concat([['header', 'Gems']], add) : out;
 		};
 		return true;
