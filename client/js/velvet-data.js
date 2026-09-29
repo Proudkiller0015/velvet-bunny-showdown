@@ -2035,6 +2035,29 @@
 				return '';
 			}
 		};
+		/*
+		 * And the number the icon sheet is indexed by. Ours are past the sheet (Makuro is
+		 * 2001, Samantha -1), which the client turns into 0 - and the team editor skips
+		 * drawing any icon whose number is 0. The number is only ever a truthiness check
+		 * for ours, since getPokemonIcon above answers for them first.
+		 */
+		var originalNum = window.Dex.getPokemonIconNum;
+		if (originalNum) {
+			window.Dex.getPokemonIconNum = function (id) {
+				var num = originalNum.apply(this, arguments);
+				if (!num && ART[window.toID(id || '')] && ART[window.toID(id || '')].icon) return 1;
+				return num;
+			};
+		}
+		// The launcher caches each team's icon row the first time it draws it; drop what
+		// was cached before these hooks were in, so ours are drawn.
+		try {
+			var teams = window.PS && window.PS.teams && window.PS.teams.list;
+			if (teams) {
+				for (var t = 0; t < teams.length; t++) teams[t].iconCache = null;
+				if (window.PS.update) window.PS.update();
+			}
+		} catch (e) { /* the next team change redraws them anyway */ }
 		return true;
 	}
 	/**
