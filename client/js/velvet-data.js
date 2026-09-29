@@ -1400,6 +1400,33 @@
 			index.splice(spot, 0, [aliases[a][0], aliases[a][1], target, aliases[a][3]]);
 			if (offsets) offsets.splice(spot, 0, '');
 		}
+
+		/*
+		 * "recharge" finds every recharge move (the owner): Hyper Beam and all the others
+		 * that get Gen 1's no-recharge-after-a-KO rule. One alias row per move, all under
+		 * the same word, so the search lists them together. Worked out from the flag, so a
+		 * recharge move added later comes along.
+		 */
+		var recharge = [];
+		for (var mid in (window.BattleMovedex || {})) {
+			var mv = window.BattleMovedex[mid];
+			if (mv && mv.flags && mv.flags.recharge && !mv.isZ && !mv.isMax) recharge.push(mid);
+		}
+		recharge.sort();
+		for (var r2 = 0; r2 < recharge.length; r2++) {
+			var tgt = rowOf(recharge[r2]);
+			if (!index[tgt] || index[tgt][0] !== recharge[r2]) continue;
+			// After any 'recharge' rows already in, so each move gets its own.
+			var at = rowOf('recharge');
+			while (index[at] && index[at][0] === 'recharge') at++;
+			for (var k2 = 0; k2 < index.length; k2++) {
+				var row2 = index[k2];
+				if (row2.length > 2 && typeof row2[2] === 'number' && row2[2] >= at) row2[2]++;
+			}
+			if (tgt >= at) tgt++;
+			index.splice(at, 0, ['recharge', 'move', tgt, 0]);
+			if (offsets) offsets.splice(at, 0, '');
+		}
 	}
 
 	/**
