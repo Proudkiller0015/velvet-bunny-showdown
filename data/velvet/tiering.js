@@ -132,7 +132,7 @@ const TIERS = {
 	mew: 'OU',
 	tapufini: 'OU',
 	regirock: 'UU',
-	registeel: 'RUBL',
+	registeel: 'OU', // straight to OU (the owner, 30 Sep 2026)
 	suicune: 'UU',
 	cresselia: 'RUBL',
 	mudsdale: 'RUBL',
