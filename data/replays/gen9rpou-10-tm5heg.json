@@ -1,0 +1,12 @@
+{
+	"id": "gen9rpou-10-tm5heg",
+	"format": "[Gen 9] RP OU",
+	"players": [
+		"Bunny Stockfish",
+		"SlimeQueenSamantha"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Stockfish\n|j|☆SlimeQueenSamantha\n|t:|1790731499\n|gametype|singles\n|badge|p1|bronze|gen9rpou|3-3\n|badge|p2|gold|gen9rpou|1-1\n|player|p1|Bunny Stockfish|bunny.png|1332\n|player|p2|SlimeQueenSamantha|queen.png|1504\n|gen|9\n|tier|[Gen 9] RP OU\n|rated|\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Endless Battle Clause: Forcing endless battles is banned\n|rule|Species Clause: Limit one of each Pokémon\n|rule|OHKO Clause: OHKO moves are banned\n|rule|Evasion Clause: Evasion abilities, items, and moves are banned\n|rule|Evasion Abilities Clause: Evasion abilities are banned\n|rule|Evasion Items Clause: Evasion items are banned\n|rule|Evasion Moves Clause: Evasion moves are banned\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|clearpoke\n|poke|p1|Clodsire|\n|poke|p1|Pawmot|\n|poke|p1|Dragonite|\n|poke|p1|Vaporeon|\n|poke|p1|Gholdengo|\n|poke|p1|Espeon|\n|poke|p2|Lugia|\n|poke|p2|Blissey|\n|poke|p2|Registeel|\n|poke|p2|Umbreon|\n|poke|p2|Spiritomb|\n|poke|p2|Clodsire|\n|teampreview\n|c|☆Bunny Stockfish|Good luck! Playing on **stockfish**.\n|\n|t:|1790731504\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Clodsire|Clodsire|100/100\n|switch|p2a: Blissey|Blissey|100/100\n|turn|1\n|\n|t:|1790731506\n|move|p2a: Blissey|Stealth Rock|p1a: Clodsire\n|-sidestart|p1: Bunny Stockfish|move: Stealth Rock\n|move|p1a: Clodsire|Stealth Rock|p2a: Blissey\n|-sidestart|p2: SlimeQueenSamantha|move: Stealth Rock\n|\n|upkeep\n|turn|2\n|\n|t:|1790731535\n|move|p2a: Blissey|Seismic Toss|p1a: Clodsire\n|-damage|p1a: Clodsire|79/100\n|move|p1a: Clodsire|Earthquake|p2a: Blissey\n|-crit|p2a: Blissey\n|-damage|p2a: Blissey|67/100\n|\n|upkeep\n|turn|3\n|\n|t:|1790731539\n|switch|p2a: Umbreon|Umbreon|100/100\n|-damage|p2a: Umbreon|88/100|[from] Stealth Rock\n|move|p1a: Clodsire|Earthquake|p2a: Umbreon\n|-damage|p2a: Umbreon|68/100\n|\n|-heal|p2a: Umbreon|74/100|[from] item: Leftovers\n|upkeep\n|turn|4\n|\n|t:|1790731541\n|move|p2a: Umbreon|Knock Off|p1a: Clodsire\n|-damage|p1a: Clodsire|53/100\n|-enditem|p1a: Clodsire|Heavy-Duty Boots|[from] move: Knock Off|[of] p2a: Umbreon\n|move|p1a: Clodsire|Earthquake|p2a: Umbreon\n|-damage|p2a: Umbreon|50/100\n|\n|-heal|p2a: Umbreon|56/100|[from] item: Leftovers\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1790731542
+}
