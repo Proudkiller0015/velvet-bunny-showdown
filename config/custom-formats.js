@@ -1338,10 +1338,13 @@ exports.Formats = [
 
 	// Above Ubers: the tier with nothing taken out of it.
 	rpTier('AG', '[Gen 9] National Dex AG'),
-	rpTier('Ubers', '[Gen 9] National Dex Ubers'),
-	rpTier('OU', '[Gen 9] National Dex', { rules: UNBAN_TERA, ...UBERS_ONLY_ITEM }),
-	rpTier('UU', '[Gen 9] National Dex UU', { rules: UNBAN_TERA, ...UBERS_ONLY_ITEM }),
-	rpTier('RU', '[Gen 9] National Dex RU', { rules: UNBAN_TERA, ...UBERS_ONLY_ITEM }),
+	// Every RP tier checks our own tier table (lowTierOf, species and Mega), not only National Dex's
+	// banlists: the owner (30 Sep 2026) "RP tier should be independent". It caught Mega Floette (Uber)
+	// passing RP OU, and Shedinja (Uber here) refused by National Dex Ubers' own ban.
+	rpTier('Ubers', '[Gen 9] National Dex Ubers', { rules: ['+Shedinja'], onValidateSet: lowTierRule('Uber') }),
+	rpTier('OU', '[Gen 9] National Dex', { rules: UNBAN_TERA, ...UBERS_ONLY_ITEM, onValidateSet: lowTierRule('OU') }),
+	rpTier('UU', '[Gen 9] National Dex UU', { rules: UNBAN_TERA, ...UBERS_ONLY_ITEM, onValidateSet: lowTierRule('UU') }),
+	rpTier('RU', '[Gen 9] National Dex RU', { rules: UNBAN_TERA, ...UBERS_ONLY_ITEM, onValidateSet: lowTierRule('RU') }),
 
 	/**
 	 * Below RU, where National Dex stops.

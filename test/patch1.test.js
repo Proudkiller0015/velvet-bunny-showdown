@@ -299,7 +299,7 @@ check(!['memorywipe', 'soulresonance', 'resolutestrike', 'aurorasquall'].some(mv
 	const neutral = hitOn('Snorlax', 'Thick Fat');
 	check(!/\|-supereffective\|/.test(neutral) && !/\|-immune\|/.test(neutral), 'and neutral on Snorlax');
 	const m = Dex.moves.get('oxidize');
-	check(m.basePower === 70 && m.secondary.volatileStatus === 'confusion' && m.secondary.chance === 10 && !m.secondary.status, 'Oxidize: 70 power, 10% confusion, never poisons');
+	check(m.basePower === 85 && m.secondary.volatileStatus === 'confusion' && m.secondary.chance === 10 && !m.secondary.status, 'Oxidize: 85 power (buffed 30 Sep), 10% confusion, never poisons');
 	check(learns('nidoking', 'oxidize') && learns('mew', 'oxidize') && !learns('gengar', 'oxidize'), 'Oxidize: Nidoking and Mew yes, Gengar no');
 }
 check(learns('sunflora', 'fireblast') && learns('carnivine', 'gunkshot') && learns('exeggutoralola', 'dragonpulse'), 'Grass coverage: Sunflora Fire Blast, Carnivine Gunk Shot, Alolan Exeggutor Dragon Pulse');
@@ -311,7 +311,7 @@ check(learns('scizor', 'hivefrenzy') && !learns('scolipede', 'hivefrenzy'), 'Hiv
 check(!learns('volcarona', 'chrysalisveil') && !learns('diggersby', 'hustleup'), 'Volcarona and Diggersby left out');
 
 // Secondary effects exist as written.
-check(Dex.moves.get('undertow').secondary.boosts.spe === -1 && Dex.moves.get('undertow').secondary.chance === 50 && Dex.moves.get('undertow').basePower === 85, 'Undertow is 85 power with a 50% chance to lower Speed');
+check(Dex.moves.get('undertow').secondary.boosts.spe === -1 && Dex.moves.get('undertow').secondary.chance === 50 && Dex.moves.get('undertow').basePower === 90, 'Undertow is 90 power with a 50% chance to lower Speed');
 check(Dex.moves.get('craghammer').secondary.boosts.def === -1, 'Crag Hammer can lower Defense');
 check(Dex.moves.get('hypnowhirl').secondary.volatileStatus === 'confusion', 'Hypno Whirl can confuse');
 check(Dex.moves.get('hivefrenzy').secondary.self.boosts.atk === 1 && Dex.moves.get('hivefrenzy').secondary.chance === 50, 'Hive Frenzy has a 50% chance to raise Attack');
@@ -408,7 +408,7 @@ check(!Dex.moves.get('undertow').flags.nosketch, 'the other ten can be Sketched'
 check(learns('glaceon', 'earthpower') && learns('flareon', 'closecombat') && learns('leafeon', 'stoneedge') && learns('leafeon', 'solarblade') && learns('flareon', 'facade'), 'Eeveelution coverage: Glaceon Earth Power, Flareon Close Combat, Leafeon Stone Edge');
 check(!learns('eevee', 'closecombat') && !Object.values(Dex.species.get('eevee').abilities).includes('Kindled Fury'), 'Eevee is not given any of it');
 check(['Leafeon:Solstice', 'Flareon:Kindled Fury', 'Glaceon:Diamond Dust'].every(x => Object.values(Dex.species.get(x.split(':')[0]).abilities).includes(x.split(':')[1])), 'each keeps its old abilities and gains its signature');
-check(['leafeon', 'flareon', 'umbreon', 'vaporeon'].every(id => Dex.species.get(id).natDexTier === 'UU') && Dex.species.get('glaceon').natDexTier === 'OU' && Dex.species.get('espeon').natDexTier === 'UU' && Dex.species.get('melmetal').natDexTier === 'OU' && Dex.species.get('weavile').natDexTier === 'UUBL' && Dex.species.get('luxray').natDexTier === 'OU' && Dex.species.get('urshifu').natDexTier === 'Uber' && Dex.species.get('urshifurapidstrike').natDexTier === 'OU', 'Tier review: four eeveelutions UU, Glaceon and Luxray OU, Weavile UUBL, Espeon UU, Urshifu Uber, Rapid Strike and Melmetal OU');
+check(['leafeon', 'flareon', 'vaporeon'].every(id => Dex.species.get(id).natDexTier === 'UU') && Dex.species.get('umbreon').natDexTier === 'OU' && Dex.species.get('glaceon').natDexTier === 'OU' && Dex.species.get('espeon').natDexTier === 'UU' && Dex.species.get('melmetal').natDexTier === 'OU' && Dex.species.get('weavile').natDexTier === 'UUBL' && Dex.species.get('luxray').natDexTier === 'UU' && Dex.species.get('urshifu').natDexTier === 'OU' && Dex.species.get('urshifurapidstrike').natDexTier === 'OU', 'Tier review: three eeveelutions UU, Umbreon and Glaceon OU, Luxray UU, Weavile UUBL, Espeon UU, both Urshifu and Melmetal OU');
 
 // Umbreon: Moonlit Venom.
 {
@@ -713,7 +713,7 @@ check(learns('luxray', 'gleamstalk') && !learns('luxio', 'gleamstalk') && !learn
 	const client = require('fs').readFileSync(require('path').join(__dirname, '..', 'client', 'js', 'velvet-data.js'), 'utf8');
 	check(/installDescriptions\(\)/.test(client) && /BattleText/.test(client), 'and the client writes them into its language table');
 }
-check(['walkingwake', 'dragapult', 'dragonitemega', 'lucariomegaz', 'deoxysspeed', 'greninjabond', 'magearna', 'magearnaoriginal', 'roaringmoon', 'ursalunabloodmoon', 'zeraoramega', 'heatranmega', 'blazikenmega', 'gliscor', 'pheromosa', 'genesect', 'genesectdouse', 'genesectshock', 'genesectburn', 'genesectchill', 'zygarde', 'garchompmegaz', 'absolmegaz'].every(id => Dex.species.get(id).natDexTier === 'OU'), 'Walking Wake, Dragapult, Mega Dragonite, Mega Lucario Z, Deoxys-Speed, Ash-Greninja, Magearna, Roaring Moon, Bloodmoon Ursaluna, Mega Zeraora, Mega Heatran, Mega Blaziken, Gliscor, Pheromosa, Genesect, Zygarde-50%, Mega Garchomp Z and Mega Absol Z are unbanned (OU)');
+check(['walkingwake', 'dragapult', 'dragonitemega', 'lucariomegaz', 'greninjabond', 'magearna', 'magearnaoriginal', 'roaringmoon', 'ursalunabloodmoon', 'zeraoramega', 'heatranmega', 'blazikenmega', 'gliscor', 'pheromosa', 'genesect', 'genesectdouse', 'genesectshock', 'genesectburn', 'genesectchill', 'zygarde', 'garchompmegaz', 'absolmegaz'].every(id => Dex.species.get(id).natDexTier === 'OU'), 'Walking Wake, Dragapult, Mega Dragonite, Mega Lucario Z, Ash-Greninja, Magearna, Roaring Moon, Bloodmoon Ursaluna, Mega Zeraora, Mega Heatran, Mega Blaziken, Gliscor, Pheromosa, Genesect, Zygarde-50%, Mega Garchomp Z and Mega Absol Z are unbanned (OU)');
 {
 	const vm = require('vm');
 	const ctx = { window: {} };

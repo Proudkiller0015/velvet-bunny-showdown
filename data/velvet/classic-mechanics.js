@@ -77,6 +77,8 @@ exports.moves = (data) => {
 	for (const [id, zMove] of Object.entries(Z_STATUS)) {
 		if (data[id] && !data[id].zMove) data[id] = { ...data[id], zMove };
 	}
+	// Wicked Blow: the Gen 9 nerf undone, 75 back to 80 (the owner, 30 Sep 2026, with Urshifu unbanned).
+	if (data.wickedblow) data.wickedblow = { ...data.wickedblow, basePower: 80 };
 	// Magma Storm: 75% accuracy up to 85% (the owner, 30 Sep 2026).
 	if (data.magmastorm) data.magmastorm = { ...data.magmastorm, accuracy: 85 };
 	return data;
@@ -99,4 +101,4 @@ const Z_STATUS = {
 exports.Z_STATUS = Z_STATUS;
 
 // For the client's move descriptions (scripts/build-buffs.js): every move this file changes.
-exports.CHANGED_MOVES = ['punishment', 'bellydrum', 'hyperbeam', 'gigaimpact', 'blastburn', 'frenzyplant', 'hydrocannon', 'rockwrecker', 'roaroftime', 'prismaticlaser', 'eternabeam', 'meteorassault', 'magmastorm'];
+exports.CHANGED_MOVES = ['punishment', 'bellydrum', 'hyperbeam', 'gigaimpact', 'blastburn', 'frenzyplant', 'hydrocannon', 'rockwrecker', 'roaroftime', 'prismaticlaser', 'eternabeam', 'meteorassault', 'magmastorm', 'wickedblow'];

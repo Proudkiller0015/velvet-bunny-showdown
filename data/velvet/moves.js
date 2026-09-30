@@ -421,7 +421,7 @@ exports.Moves = {
 		name: "Wave Charge",
 		type: "Water",
 		category: "Physical",
-		basePower: 50,
+		basePower: 70,
 		accuracy: 100,
 		pp: 20,
 		priority: 0,

@@ -1,6 +1,8 @@
 'use strict';
 // The usage weight our own new Pokemon are drafted at (see rank()): a Pokemon a few per cent of teams bring.
 const NEW_SPECIES_USAGE = 0.03;
+// The weight Pokemon our tier table moved into a format are drafted at (see rank()).
+const MOVED_USAGE = 0.08;
 /**
  * Legal team generation for ANY Pokemon Showdown format.
  *
@@ -77,6 +79,32 @@ const REMOTE = 'https://data.pkmn.cc';
 const CACHE_TTL = 7 * 24 * 3600 * 1000;
 
 const STAT_ORDER = ['hp', 'atk', 'def', 'spa', 'spd', 'spe'];
+
+/*
+ * The RP tier of a Pokemon, as the RP ladders enforce it (config/custom-formats.js
+ * lowTierOf): our own tier table, not National Dex's opinion (the owner, 30 Sep 2026).
+ */
+const RP_RANK = { AG: 8, Uber: 7, OU: 6, UUBL: 5.5, UU: 5, RUBL: 4.5, RU: 4, NUBL: 3.5, NU: 3, PUBL: 2.5, PU: 2, ZUBL: 1.5, ZU: 1, NFE: 0, LC: 0 };
+const PLAYED_IN = { UUBL: 'OU', RUBL: 'UU', NUBL: 'RU', PUBL: 'NU', ZUBL: 'PU' };
+function rpTierOf(species) {
+	const nd = String(species.natDexTier || '').replace(/[()]/g, '');
+	if (RP_RANK[nd] !== undefined && RP_RANK[nd] > RP_RANK.RU) return nd;
+	if (species.rpLowTier) return species.rpLowTier;
+	const sv = String(species.tier || '').replace(/[()]/g, '');
+	return RP_RANK[sv] !== undefined && RP_RANK[sv] <= RP_RANK.RU ? sv : (RP_RANK[nd] !== undefined ? nd : sv);
+}
+/** The tier an RP format id plays ("gen9rpuu" -> "UU"), or null for anything else. */
+function formatTierOf(id) {
+	const m = /rp(ubers|ou|uu|ru|nu|pu|zu)$/.exec(String(id || ''));
+	return m ? (m[1] === 'ubers' ? 'Uber' : m[1].toUpperCase()) : null;
+}
+// Who our tier table moved (data/velvet/tiering.js): their usage was measured in another tier.
+let MOVED = null;
+function movedByUs() {
+	if (MOVED) return MOVED;
+	try { MOVED = new Set(Object.keys(require('../data/velvet/tiering.js').TIERS)); } catch (e) { MOVED = new Set(); }
+	return MOVED;
+}
 
 /** Weighted pick from a {key: weight} usage table. */
 function pickWeighted(rng, table, reject) {
@@ -960,10 +988,11 @@ class TeamBuilder {
 		 * Garchomp that is fine either way, not for a base form two tiers below the
 		 * format. Those take the stone nine times in ten.
 		 */
-		const RANK = { Uber: 7, AG: 8, OU: 6, UUBL: 5.5, UU: 5, RUBL: 4.5, RU: 4, NUBL: 3.5, NU: 3, PUBL: 2.5, PU: 2, ZUBL: 1.5, ZU: 1, NFE: 0, LC: 0 };
+		const RANK = RP_RANK;
 		const m = /(ubers|ou|uu|ru|nu|pu|zu)$/.exec(String(ctx.id || ''));
 		const formatRank = m ? RANK[m[1] === 'ubers' ? 'Uber' : m[1].toUpperCase()] : RANK.OU;
-		const baseRank = RANK[String(species.tier || '').replace(/[()]/g, '')];
+		// The RP tier, not Scarlet/Violet's: that is the tier this server plays it in.
+		const baseRank = RANK[rpTierOf(species)];
 		const onlyForTheMega = baseRank !== undefined && baseRank <= formatRank - 2;
 		if (rng() > (onlyForTheMega ? 0.9 : 0.33)) return;
 		const stone = this.megaStoneFor(ctx, species);
@@ -1512,10 +1541,27 @@ class TeamBuilder {
 		// Weighted by how many different people play it (scripts/rp-usage.js breadth): one
 		// player's favourite team, played seventy times, is not the server's meta.
 		const localOf = s => { const row = here && (here[s.name] || here[s.baseSpecies]); return row ? row.score * (row.breadth ?? 1) : 0; };
+		/*
+		 * Moved into this tier by our table (Meowscarada down to RP UU, Mega Lucario
+		 * unbanned to RP OU): their usage was measured in the tier they left, so here
+		 * they have none and sank to the leftovers. They join the used band at a new
+		 * Pokemon's weight. Only where they now belong - a UU Pokemon is still legal in
+		 * OU, and the anti-meta picks OU's own usage finds (Clefable) keep their place.
+		 */
+		const here9 = formatTierOf(ctx.id);
+		const moved = movedByUs();
+		const movedHere = s => !!here9 && (moved.has(s.id) || moved.has(toID(s.baseSpecies))) &&
+			(PLAYED_IN[rpTierOf(s)] || rpTierOf(s)) === here9;
+		// ...or a Mega of it was (Mega Kangaskhan, Mega Lucario unbanned to OU): the base is drafted to carry the stone.
+		const megaMovedHere = s => !!here9 && [...moved].some(m => m.startsWith(s.id + 'mega') &&
+			(PLAYED_IN[rpTierOf(ctx.dex.species.get(m))] || rpTierOf(ctx.dex.species.get(m))) === here9);
+		const movedOrMega = s => movedHere(s) || megaMovedHere(s);
+		// About an ordinary staple's usage: a new Pokemon's 3% left them at one team in sixty.
+		const usageOrMoved = s => usageOf(s) || (movedOrMega(s) ? MOVED_USAGE : 0);
 		const analysed = [], used = [], rest = [];
 		for (const s of pool) {
-			if (has(sets, s) || localOf(s) > 0 || ours.has(s.id)) analysed.push(s);
-			else if (usageOf(s) > 0 || buffed[s.id]) used.push(s);
+			if (has(sets, s) || localOf(s) > 0 || ours.has(s.id) || movedOrMega(s)) analysed.push(s);
+			else if (usageOrMoved(s) > 0 || buffed[s.id]) used.push(s);
 			else rest.push(s);
 		}
 		// Within each band, draw without replacement proportional to usage so the
@@ -1524,7 +1570,7 @@ class TeamBuilder {
 			const remaining = list.slice();
 			const out = [];
 			while (remaining.length) {
-				const weights = remaining.map(s => usageOf(s) + 3 * localOf(s) + 0.001);
+				const weights = remaining.map(s => usageOrMoved(s) + 3 * localOf(s) + 0.001);
 				const total = weights.reduce((a, b) => a + b, 0);
 				let r = rng() * total, i = 0;
 				for (; i < remaining.length; i++) { r -= weights[i]; if (r <= 0) break; }

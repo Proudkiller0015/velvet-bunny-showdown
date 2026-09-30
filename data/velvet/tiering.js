@@ -108,7 +108,7 @@ const TIERS = {
 	// Derived Uber from its 700 base stats; unbanned by the owner's call (Patch 1.5).
 	dragonitemega: 'OU',
 	// Deoxys-Speed, unbanned by the owner's call (Patch 1.5).
-	deoxysspeed: 'OU',
+	deoxysspeed: 'UU', // the owner, 30 Sep 2026
 	// Regular Deoxys, unbanned from Ubers to OU (the owner, 29 Sep 2026). Attack Forme stays Uber.
 	deoxys: 'OU',
 	// Sneasler too, Ubers to OU (the owner, same day).
@@ -133,9 +133,9 @@ const TIERS = {
 	tapufini: 'OU',
 	regirock: 'UU',
 	registeel: 'OU', // straight to OU (the owner, 30 Sep 2026)
-	suicune: 'UU',
+	suicune: 'UUBL', // the owner, 30 Sep 2026
 	cresselia: 'RUBL',
-	mudsdale: 'RUBL',
+	mudsdale: 'UU', // the owner, 30 Sep 2026
 	sylveon: 'UU',
 	primarina: 'UU',
 	enamorus: 'UU',
@@ -146,13 +146,13 @@ const TIERS = {
 	gyaradosmega: 'UUBL',
 	mawilemega: 'UU',
 	medichammega: 'UU',
-	latiosmega: 'UU',
+	latiosmega: 'UUBL', // the owner, 30 Sep 2026
 	gallademega: 'UU',
 	manaphy: 'UU',
 	thundurustherian: 'UU',
 	greninja: 'UUBL',
 	xurkitree: 'UU',
-	dondozo: 'OU',
+	dondozo: 'UU', // the owner, 30 Sep 2026
 	ironhands: 'UU',
 	ironmoth: 'UUBL',
 	okidogi: 'UU',
@@ -215,7 +215,7 @@ const TIERS = {
 
 	// Huge Power. That is the ability that put Mega Mawile in Ubers, on 120
 	// Speed rather than 50.
-	starmiemega: 'Uber',
+	starmiemega: 'OU', // the owner, 30 Sep 2026
 
 	// Adaptability on 164 Special Attack at 151 Speed. It was Uber for that; the
 	// owner unbanned it (Patch 1.5), along with Mega Dragonite below.
@@ -237,7 +237,7 @@ const TIERS = {
 	// Protean, un-nerfed back to changing type on every move, on 630 base stats
 	// at 142 Speed. The OU tier it was derived into assumed the Generation 9
 	// once-per-switch-in version.
-	greninjamega: 'Uber',
+	greninjamega: 'OU', // the owner, 30 Sep 2026
 
 	// Battle Bond, un-nerfed back to becoming Ash-Greninja: 640 base stats, 153
 	// Special Attack, 132 Speed and a Water Shuriken that hits three times.
@@ -297,13 +297,13 @@ const TIERS = {
 	// in practice, raised by the owner's call.
 	glaceon: 'OU',
 	flareon: 'UU',
-	umbreon: 'UU',
+	umbreon: 'OU', // the owner, 30 Sep 2026
 	vaporeon: 'UU',
 
 	// Luxray, Electric/Dark with Prankster and Gleamstalk: a Prankster paralysis
 	// that also gives +2 Speed and a Charge. The charged Life Orb Supercell Slam
 	// after it removes a full-health physically defensive Toxapex. Tested in OU.
-	luxray: 'OU',
+	luxray: 'UU', // the owner, 30 Sep 2026
 
 	// Pikachu with its Let's Go partner stats (45/80/50/75/60/120): a Light Ball
 	// doubles both attacks on 120 Speed, which is not ZU. Eevee keeps its LC tier
@@ -321,11 +321,11 @@ const TIERS = {
 	 * which this patch gave Shuffle Jab. The niche UUBL Pokemon stay UUBL.
 	 */
 	weavile: 'UUBL', // back to UUBL in the second tier review (29 Sep 2026)
-	blaziken: 'OU',
+	blaziken: 'UU', // the owner, 30 Sep 2026
 	hoopaunbound: 'OU',
 	kartana: 'OU',
-	meowscarada: 'OU',
-	kommoo: 'OU',
+	meowscarada: 'UU', // the owner, 30 Sep 2026
+	kommoo: 'UUBL', // the owner, 30 Sep 2026
 
 	/*
 	 * And back down again, by the owner's call, after they had been played with:
@@ -333,7 +333,7 @@ const TIERS = {
 	 * the same tier as what it Mega Evolves from, or the tier below it is the
 	 * tier the Mega really plays in).
 	 */
-	latios: 'UU',
+	latios: 'UU', // the owner, 30 Sep 2026
 	ceruledge: 'UU',
 	// Archaludon: Uber in the ninth generation's own tiers, brought back to UU by the owner's call,
 	// then up to OU (29 Sep 2026).
@@ -349,7 +349,7 @@ const TIERS = {
 
 	// Urshifu, both styles: banned to Ubers at the owner's call. Rapid Strike (the
 	// Water one) unbanned to OU on 29 Sep 2026; Single Strike stays Uber.
-	urshifu: 'Uber',
+	urshifu: 'OU', // Single Strike unbanned to OU with its Gen 9 nerf undone (the owner, 30 Sep 2026)
 	urshifurapidstrike: 'OU',
 
 	// Reckless Brave Bird and Double-Edge on 110 Speed, and now Hustle Up and
@@ -361,9 +361,9 @@ const TIERS = {
 
 	// The owner's confirmed second tier review (29 Sep 2026, on paper).
 	hatterene: 'UU',
-	latias: 'OU',
+	latias: 'UU', // the owner, 30 Sep 2026
 	donphan: 'RU',
-	swampert: 'RU',
+	swampert: 'NU', // the owner, 30 Sep 2026
 	alakazam: 'UU',
 	gengar: 'UU',
 	regidrago: 'RUBL',
@@ -390,6 +390,44 @@ const TIERS = {
 	articunogalar: 'NU',
 	slurpuff: 'NU',
 	drednaw: 'NU',
+
+	// The owner's calls, 30 Sep 2026: unbanned to OU, and OU Pokemon dropped to UU.
+	lucariomega: 'OU',
+	shayminsky: 'OU',
+	palafin: 'OU',
+	palafinhero: 'OU',
+	ogerponhearthflame: 'OU',
+	kangaskhanmega: 'OU',
+	darmanitangalar: 'OU',
+	darmanitangalarzen: 'OU',
+	alakazammega: 'OU',
+	landorus: 'OU',
+	espathra: 'OU',
+	slowkinggalar: 'UU',
+	zapdos: 'UU',
+	tyranitarmega: 'UU',
+	tornadustherian: 'UU',
+	rillaboom: 'UU',
+	moltres: 'UU',
+
+	// The owner's calls, 30 Sep 2026: unbanned to OU, and OU Pokemon dropped to UU.
+	froslassmega: 'UU',
+	porygonz: 'UU',
+	scizormega: 'UUBL',
+	latiasmega: 'UUBL',
+	swampertmega: 'RU',
+
+	// The owner's calls, 30 Sep 2026: unbanned to OU, and OU Pokemon dropped to UU.
+	staraptormega: 'UU',
+
+	// The owner's calls, 30 Sep 2026: unbanned to OU, and OU Pokemon dropped to UU.
+	weezinggalar: 'UU',
+
+	// The owner's calls, 30 Sep 2026: unbanned to OU, and OU Pokemon dropped to UU.
+	darkrai: 'OU',
+	darkraimega: 'OU',
+	spectrier: 'OU',
+	gougingfire: 'OU',
 };
 
 /**
@@ -453,8 +491,12 @@ exports.applyTiers = (FormatsData, Pokedex, log = () => {}) => {
 		// ...and a Pokemon that is not in SV (Sharpedo, Slurpuff) has no SV list to
 		// move: the RP ladders would fall back to its old Gen 8 tier. rpLowTier is
 		// read first by lowTierOf() (config/custom-formats.js) and the tier sim.
-		if (belowRU && data.tier === 'Illegal') data.rpLowTier = tier;
-		data.natDexTier = belowRU ? (data.natDexTier || 'RU') : tier;
+		// RU itself too: Mega Swampert set to RU fell back to its Gen 7 OU.
+		if (LADDER.indexOf(tier) >= LADDER.indexOf('RU') && data.tier === 'Illegal') data.rpLowTier = tier;
+		// A tier below RU with a National Dex tier above it (Swampert was UU there) would still be read as
+		// that higher tier by the RP ladders, which check National Dex first: cap it at RU.
+		const ndAbove = LADDER.indexOf(data.natDexTier) >= 0 && LADDER.indexOf(data.natDexTier) < LADDER.indexOf('RU');
+		data.natDexTier = belowRU ? (ndAbove ? 'RU' : (data.natDexTier || 'RU')) : tier;
 		applied[id] = tier;
 	}
 	return applied;

@@ -207,7 +207,7 @@ exports.MOVES = {
 	},
 	hivefrenzy: {
 		num: -10, gen: 9, name: "Hive Frenzy", type: "Bug", category: "Physical",
-		basePower: 75, accuracy: 100, pp: 15, priority: 0,
+		basePower: 80, accuracy: 100, pp: 15, priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
 		secondary: { chance: 50, self: { boosts: { atk: 1 } } },
 		target: "normal", contestType: "Tough", velvetShared: true,
@@ -219,15 +219,15 @@ exports.MOVES = {
 		num: -11, gen: 9, name: "Chrysalis Veil", type: "Bug", category: "Status",
 		basePower: 0, accuracy: true, pp: 10, priority: 0,
 		onHit(target, source, move) {
-			const healed = this.heal(Math.ceil(target.baseMaxhp / 3), target, target);
+			const healed = this.heal(Math.ceil(target.baseMaxhp / 2), target, target);
 			const boosted = this.boost({ spd: 1 }, target, target, move);
 			if (!healed && !boosted) return this.NOT_FAIL;
 		},
 		flags: { snatch: 1, heal: 1, metronome: 1 },
 		secondary: null, target: "self", contestType: "Beautiful", velvetShared: true,
 		flavor: "The user wraps itself in shimmering silk, mending inside a cocoon that shrugs off attacks.",
-		shortDesc: "Heals 1/3 of max HP and raises Sp. Def by 1.",
-		desc: "The user wraps itself in shimmering silk. Restores 1/3 of its maximum HP, rounded up, and raises its Special Defense by 1 stage.",
+		shortDesc: "Heals 1/2 of max HP and raises Sp. Def by 1.",
+		desc: "The user wraps itself in shimmering silk. Restores 1/2 of its maximum HP, rounded up, and raises its Special Defense by 1 stage.",
 	},
 	hustleup: {
 		num: -12, gen: 9, name: "Hustle Up", type: "Normal", category: "Status",
@@ -241,7 +241,7 @@ exports.MOVES = {
 	},
 	carrionfeast: {
 		num: -13, gen: 9, name: "Carrion Feast", type: "Dark", category: "Physical",
-		basePower: 70, accuracy: 100, pp: 15, priority: 0,
+		basePower: 80, accuracy: 100, pp: 15, priority: 0,
 		drain: [1, 2],
 		flags: { contact: 1, protect: 1, mirror: 1, bite: 1, metronome: 1 },
 		secondary: null, target: "normal", contestType: "Tough", velvetShared: true,
@@ -260,7 +260,7 @@ exports.MOVES = {
 	},
 	undertow: {
 		num: -15, gen: 9, name: "Undertow", type: "Water", category: "Special",
-		basePower: 85, accuracy: 100, pp: 20, priority: 0,
+		basePower: 90, accuracy: 100, pp: 20, priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
 		secondary: { chance: 50, boosts: { spe: -1 } },
 		target: "normal", contestType: "Beautiful", velvetShared: true,
@@ -297,7 +297,7 @@ exports.MOVES = {
 	},
 	hypnowhirl: {
 		num: -18, gen: 9, name: "Hypno Whirl", type: "Psychic", category: "Special",
-		basePower: 75, accuracy: 100, pp: 15, priority: 0,
+		basePower: 90, accuracy: 100, pp: 15, priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
 		secondary: { chance: 20, volatileStatus: 'confusion' },
 		target: "normal", contestType: "Clever", velvetShared: true,
@@ -307,7 +307,7 @@ exports.MOVES = {
 	},
 	shufflejab: {
 		num: -19, gen: 9, name: "Shuffle Jab", type: "Fighting", category: "Physical",
-		basePower: 60, accuracy: 100, pp: 15, priority: 0,
+		basePower: 70, accuracy: 100, pp: 15, priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, punch: 1, metronome: 1 },
 		secondary: { chance: 100, self: { boosts: { spe: 1 } } },
 		target: "normal", contestType: "Cool", velvetShared: true,
@@ -440,7 +440,7 @@ exports.MOVES = {
 	 */
 	oxidize: {
 		num: -27, gen: 9, name: "Oxidize", type: "Poison", category: "Special",
-		basePower: 70, accuracy: 100, pp: 20, priority: 0,
+		basePower: 85, accuracy: 100, pp: 20, priority: 0,
 		ignoreImmunity: { Poison: true },
 		onEffectiveness(typeMod, target, type) {
 			if (type === 'Steel') return 1;
@@ -2224,7 +2224,8 @@ const GRASS_COVERAGE = {
 	],
 	'meganium': [
 		'earthquake',
-		'knockoff'
+		'knockoff',
+		'earthpower' // the owner, 30 Sep 2026
 	],
 	'arboliva': [
 		'earthpower',
