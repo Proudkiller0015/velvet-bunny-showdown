@@ -171,6 +171,8 @@ function profile(dex, species, { learn, mega = null, eviolite = true } = {}) {
 	const selfHeal = SELF_HEAL_ABILITIES.includes(toID(ability)) && (toID(ability) !== 'poisonheal' || !body.types.some(t => t === 'Poison' || t === 'Steel'));
 	const jobs = {};
 	for (const [job, ids] of Object.entries(JOBS)) jobs[job] = ids.filter(can);
+	// Caretaker already cures the party: Heal Bell on the same Pokemon is a dead slot.
+	if (toID(ability) === 'caretaker') jobs.cleric = jobs.cleric.filter(id => !['healbell', 'aromatherapy'].includes(id));
 	// Attacks: the best few by stall worth. Unlearnable ones are skipped before the costly check.
 	const attacks = [...pool].map(id => dex.moves.get(id))
 		.filter(m => m.exists && !m.isNonstandard && !m.isZ && !m.isMax && m.category !== 'Status' && (m.basePower >= 50 || FIXED_DAMAGE.includes(m.id)) && !RS.selfDrop(m) && !m.id.startsWith('hiddenpower'))
@@ -188,6 +190,8 @@ function profile(dex, species, { learn, mega = null, eviolite = true } = {}) {
 		protect: can('protect'),
 		unaware: ['unaware', 'keystonelegion'].includes(toID(mega ? abilities[0] : ability)),
 		magicBounce: ['magicbounce', 'prescience'].includes(toID(mega ? abilities[0] : ability)),
+		// Caretaker cures the party on every switch-out: the cleric job without spending a slot on Heal Bell.
+		caretaker: toID(mega ? abilities[0] : ability) === 'caretaker',
 		ghost: body.types.includes('Ghost'),
 		nfe: !mega && species.nfe,
 	};
@@ -254,7 +258,7 @@ function assign(members, rng = Math.random) {
 		removal: () => plan.some(x => JOBS.removal.some(id => x.moves.includes(id)) || x.p.magicBounce),
 		toxic: () => has('toxic'),
 		wisp: () => has('willowisp'),
-		cleric: () => plan.some(x => JOBS.cleric.some(id => x.moves.includes(id))),
+		cleric: () => plan.some(x => x.p.caretaker || JOBS.cleric.some(id => x.moves.includes(id))),
 		answer: () => answers(plan) >= 1,
 		answer2: () => answers(plan) >= 2,
 		wincon: () => plan.some(x => x.wincon || (x.p.fixed && WINCONS.some(w => x.moves.includes(w.setup)))),
@@ -315,7 +319,7 @@ function teamValue(dex, members, rng) {
 	if (moveIn(JOBS.wisp)) v += 5;
 	if (setupAnswers >= 1) v += 12;
 	if (setupAnswers >= 2) v += 4;
-	if (moveIn(JOBS.cleric)) v += 4;
+	if (moveIn(JOBS.cleric) || plan.some(x => x.p.caretaker)) v += 4;
 	if (plan.some(x => x.wincon) || members.some(p => p.fixed && WINCONS.some(w => p.fixed.moves.map(toID).includes(w.setup)))) v += 6;
 	else if (moveIn(JOBS.toxic) && (moveIn(JOBS.sr) || moveIn(JOBS.spikes))) v += 3;
 	v += members.reduce((n, p) => n + 2 * Math.max(-1, Math.min(3, p.quality)) + 3 * (p.prior || 0) + (p.taste || 0), 0);
@@ -414,7 +418,7 @@ function shortlist(all, rng, size = 45, perJob = 5) {
 	const out = new Set(ranked.slice(0, size));
 	const jobTests = [
 		p => p.jobs.sr.length, p => p.jobs.spikes.length, p => p.jobs.tspikes.length, p => p.jobs.removal.length || p.magicBounce,
-		p => p.jobs.haze.length || p.jobs.phaze.length, p => p.unaware, p => p.ghost && heals(p), p => p.wincons.length, p => p.jobs.cleric.length,
+		p => p.jobs.haze.length || p.jobs.phaze.length, p => p.unaware, p => p.ghost && heals(p), p => p.wincons.length, p => p.jobs.cleric.length || p.caretaker,
 	];
 	for (const test of jobTests) {
 		let added = 0;

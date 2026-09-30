@@ -74,7 +74,9 @@ function stallChecks(dex, team, label) {
 			const ids = team.flatMap(s => s.moves.map(toID));
 			if (ids.includes('toxic')) toxic++;
 			if (team.some(s => s.moves.map(toID).some(id => ['calmmind', 'irondefense', 'curse', 'bulkup', 'swordsdance', 'quiverdance', 'acidarmor', 'cosmicpower'].includes(id)))) wincon++;
-			if (ids.some(id => ['healbell', 'aromatherapy', 'wish', 'junglehealing', 'lunarblessing'].includes(id))) cleric++;
+			// Caretaker (the Blissey line) cures the whole party on every switch-out: a cleric without the move.
+			if (ids.some(id => ['healbell', 'aromatherapy', 'wish', 'junglehealing', 'lunarblessing'].includes(id)) ||
+				team.some(s => toID(s.ability) === 'caretaker')) cleric++;
 			for (const s of team) species.set(s.species, (species.get(s.species) || 0) + 1);
 			for (const h of c.hard) { const key = h.replace(/\(.*\)/g, '').slice(0, 40); hardCount.set(key, (hardCount.get(key) || 0) + 1); }
 		}

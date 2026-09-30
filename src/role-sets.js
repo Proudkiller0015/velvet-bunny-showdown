@@ -160,8 +160,22 @@ function synthesize(dex, species, moves) {
 	}];
 }
 
+/** Moves an ability makes pointless: pickMoves drops them from that set's pool. */
+const ABILITY_COVERS = { caretaker: ['healbell', 'aromatherapy'] };
+/** ...and what takes the freed slot: stall Blissey's Toxic (Thunder Wave read as speed control and a setup answer, and teams built round it stopped adding a breaker). */
+const ABILITY_ADDS = { caretaker: { swap: ['thunderwave'], add: ['toxic'] } };
+
 function attackValue(species, move, stat) {
-	const power = move.basePower || (['seismictoss', 'nightshade'].includes(move.id) ? 75 : 0);
+	/*
+	 * Seismic Toss and Night Shade deal 100 at level 100 whatever the user's stats,
+	 * so they are worth most to the Pokemon that attack worst. A flat 75 let Hyper
+	 * Voice (90, STAB) beat Seismic Toss on Blissey, whose Sp. Atk is 75 - the bot
+	 * ran the weaker attack on three Blisseys out of five (30 Sep 2026). Scaled by how
+	 * far the user's better attacking stat falls short of 130, squared.
+	 */
+	const fixed = ['seismictoss', 'nightshade'].includes(move.id);
+	const best = Math.max(species.baseStats.atk, species.baseStats.spa, 1);
+	const power = move.basePower || (fixed ? 75 * Math.max(1, (130 / best) ** 2) : 0);
 	/*
 	 * Accuracy counts more than its share: a miss loses the turn as well as the damage.
 	 * Scored as (0.5 + 0.5 * acc), Zap Cannon (120, 50%) tied Thunderbolt (90, 100%) and
@@ -394,7 +408,15 @@ function weighted(rng, entries) {
  * favoured. `rng` adds variety between sets of the same role.
  */
 function pickMoves(dex, species, set, rng = Math.random, { threats = null, archetype = null } = {}) {
-	const pool = set.movepool.map(n => dex.moves.get(n)).filter(m => m.exists);
+	/*
+	 * Moves the set's ability already does. Caretaker (the Blissey line) cures the
+	 * whole party on every switch-out, so Heal Bell on the same Blissey is a dead slot;
+	 * the owner caught the bot running both on every Blissey (30 Sep 2026).
+	 */
+	const covered = ABILITY_COVERS[toID((set.abilities || [])[0] || '')] || [];
+	const adds = ABILITY_ADDS[toID((set.abilities || [])[0] || '')];
+	const names = adds ? set.movepool.filter(n => !adds.swap.includes(toID(n))).concat(adds.add.filter(id => learnable(dex, species).has(id))) : set.movepool;
+	const pool = names.map(n => dex.moves.get(n)).filter(m => m.exists && !covered.includes(m.id));
 	const b = species.baseStats;
 	const statCount = { Physical: 0, Special: 0 };
 	for (const m of pool) if (m.category !== 'Status') statCount[m.category]++;

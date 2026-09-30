@@ -464,7 +464,8 @@ function moreFacts(dex, sets, report, threats) {
 	report.defogOwnWork = sets.some(s => has(s, ['defog'])) &&
 		(sets.some(s => has(s, layers)) || sets.some(s => has(s, ['reflect', 'lightscreen', 'auroraveil'])));
 	// A2: a cleric for stall (Heal Bell, Aromatherapy, or Wish support).
-	report.clerics = who(s => has(s, ['healbell', 'aromatherapy', 'wish', 'junglehealing', 'lunarblessing']));
+	// Caretaker (the Blissey line) cures the whole party on every switch-out: a cleric without the move.
+	report.clerics = who(s => has(s, ['healbell', 'aromatherapy', 'wish', 'junglehealing', 'lunarblessing']) || toID(s.ability || '') === 'caretaker');
 	/*
 	 * A1: a cleaner for hyper offense - something that picks off what the
 	 * breakers leave without setting up first: a Scarf, a naturally fast
