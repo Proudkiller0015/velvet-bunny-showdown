@@ -1,0 +1,12 @@
+{
+	"id": "gen9rpbattle-7-tm78iv",
+	"format": "[Gen 9] RP Battle",
+	"players": [
+		"Youngster Ben",
+		"lavit"
+	],
+	"rating": null,
+	"log": "|j|☆Youngster Ben\n|j|☆lavit\n|t:|1790811412\n|gametype|singles\n|player|p1|Youngster Ben|youngster-gen4|\n|player|p2|lavit|lavit.png|\n|gen|9\n|tier|[Gen 9] RP Battle\n|clearpoke\n|poke|p1|Rufflet, L9, M|\n|poke|p1|Squawkabilly, L13, M|\n|poke|p2|Froakie, L13, M|\n|poke|p2|Banette, L13, F|\n|poke|p2|Nuzleaf, L13, F|\n|poke|p2|Hatenna, L13, F|\n|teampreview\n|inactive|Battle timer is ON: inactive players will automatically lose when time's up. (requested by Youngster Ben)\n|n|☆Youngster Ben|youngsterben\n|c|☆Youngster Ben|Hey! Our eyes met! That means we battle!\n|\n|t:|1790811418\n|teamsize|p1|2\n|teamsize|p2|4\n|start\n|switch|p1a: Squawkabilly|Squawkabilly, L13, M|100/100\n|switch|p2a: Froakie|Froakie, L13, M|100/100\n|turn|1\n|\n|t:|1790811420\n|move|p1a: Squawkabilly|Peck|p2a: Froakie\n|-damage|p2a: Froakie|52/100\n|move|p2a: Froakie|Ice Beam|p1a: Squawkabilly\n|-start|p2a: Froakie|typechange|Ice|[from] ability: Protean\n|-supereffective|p1a: Squawkabilly\n|-damage|p1a: Squawkabilly|0 fnt\n|faint|p1a: Squawkabilly\n|\n|upkeep\n|\n|t:|1790811420\n|switch|p1a: Rufflet|Rufflet, L9, M|100/100\n|turn|2\n|\n|t:|1790811423\n|move|p2a: Froakie|Ice Beam|p1a: Rufflet\n|-supereffective|p1a: Rufflet\n|-damage|p1a: Rufflet|0 fnt\n|faint|p1a: Rufflet\n|\n|win|lavit\n",
+	"inputlog": ">start {\"formatid\":\"gen9rpbattle\",\"seed\":\"sodium,d238f0f7dab8f3f438befba2e7b527ed\"}\n>player p1 {\"name\":\"Youngster Ben\",\"avatar\":\"youngster-gen4\",\"team\":\"Rufflet|||SheerForce|WingAttack,HoneClaws,Leer,Peck|Hardy|||8,8,8,8,8,8||9|]Squawkabilly|||Hustle|AerialAce,QuickAttack,Peck,Torment|Bashful|||8,8,8,8,8,8||13|\",\"rating\":0}\n>player p2 {\"name\":\"lavit\",\"avatar\":\"lavit.png\",\"team\":\"Froakie|||Protean|HydroPump,Uturn,IceBeam,GrassKnot|Modest|||||13|]Banette|||CursedBody|Poltergeist,GunkShot,SwordsDance,ThunderWave|Adamant||||S|13|]Nuzleaf|||Chlorophyll|MerchantsCall,LeafBlade,SwordsDance,SuckerPunch|Adamant||||S|13|]Hatenna|||MagicBounce|Psyshock,CalmMind,MysticalFire,DrainingKiss|Modest|||||13|\",\"rating\":0}\n>chat ☆Youngster Ben|Hey! Our eyes met! That means we battle!\n>p1 team 2, 1\n>p2 team 1, 2, 3, 4\n>p1 move peck\n>p2 move icebeam\n>p1 switch 2\n>p1 move wingattack\n>p2 move icebeam",
+	"uploadtime": 1790811423
+}
