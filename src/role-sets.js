@@ -781,11 +781,19 @@ function isStab(species, move, ability = '') {
  * Never "the first type in the list" - which, for a set that came with none,
  * was Showdown's default of the Pokemon's own primary type.
  */
+/** The owner's own Tera calls (30 Sep 2026): these win outright. */
+const OWNER_TERA = { garganacl: ['Fairy', 'Water'], corviknight: ['Dragon', 'Water', 'Fairy'] };
+
+/** The Tera types walls are really run with (the owner: "Fairy/Water, or Steel"). */
+const DEFENSIVE_TERA = ['Fairy', 'Water', 'Steel', 'Dragon', 'Ghost'];
+
 /** How common each attacking type is, roughly, in RP and Smogon play. */
 const ATTACK_WEIGHT = { Ground: 1.6, Fire: 1.3, Fighting: 1.3, Water: 1.2, Ice: 1.1, Electric: 1.1, Dark: 1.2, Fairy: 1.2, Dragon: 1.2, Ghost: 1.1, Steel: 0.9, Rock: 0.9, Flying: 0.9, Psychic: 0.9, Grass: 0.9, Poison: 0.8, Bug: 0.6, Normal: 0.7 };
 const TYPES = ['Normal', 'Fire', 'Water', 'Electric', 'Grass', 'Ice', 'Fighting', 'Poison', 'Ground', 'Flying', 'Psychic', 'Bug', 'Rock', 'Ghost', 'Dragon', 'Dark', 'Steel', 'Fairy'];
 function chooseTera(dex, species, set, listed) {
 	species = typeof species === 'string' ? dex.species.get(species) : species;
+	const mine = OWNER_TERA[species.id] || OWNER_TERA[toID(species.baseSpecies)];
+	if (mine) return mine[Math.floor(Math.random() * mine.length)];
 	const moves = (set.moves || []).map(m => dex.moves.get(typeof m === 'string' ? m : m.name || m.id)).filter(m => m.exists);
 	let list = (listed || []).filter(t => TYPES.includes(t));
 	// None given (Smogon's National Dex sets carry no Tera: Tera is banned there): borrow the
@@ -793,8 +801,11 @@ function chooseTera(dex, species, set, listed) {
 	const expert = () => { try { return [...new Set(roleSets(dex, species.name).filter(r => !r.synthetic).flatMap(r => r.teraTypes || []))].filter(t => TYPES.includes(t)); } catch (e) { return []; } };
 	if (!list.length) list = expert();
 	const role = set.role || inferRole(dex, { species: species.name, moves: moves.map(m => m.name), ability: set.ability });
-	const setup = moves.some(m => SETUP.includes(m.id));
-	const walls = !setup && (SUPPORT_ROLES.includes(role) || role === 'AV Pivot' || moves.filter(m => m.category !== 'Status').length <= 2);
+	// Slow or bulky goes defensive, always - setup or not (the owner: Garganacl wants Fairy or
+	// Water, Curse Dondozo is still a wall). Otherwise by role and attack count.
+	const b = species.baseStats;
+	const slowOrBulky = b.spe <= 60 || (b.hp + b.def + b.spd >= 300 && b.spe < 90);
+	const walls = slowOrBulky || SUPPORT_ROLES.includes(role) || role === 'AV Pivot' || moves.filter(m => m.category !== 'Status').length <= 2;
 	if (walls) {
 		// How hard each attacking type hits a typing, as a power of two (an immunity counts as a double resistance).
 		const hit = (atk, types) => (!dex.getImmunity(atk, types) ? -2 : dex.getEffectiveness(atk, types));
@@ -813,12 +824,22 @@ function chooseTera(dex, species, set, listed) {
 		// A wall gains nothing from its own type: drop it, and fall back on the expert list.
 		let preferred = list.filter(t => !own.includes(t));
 		if (!preferred.length) preferred = expert().filter(t => !own.includes(t));
-		const pool = preferred.length ? preferred : candidates;
-		return pool.map(t => [t, gain(t)]).sort((x, y) => y[1] - x[1])[0][0];
+		// Every type is scored; the listed ones get a head start, not the only say (the expert
+		// list has Garganacl Dragon/Ghost; the owner runs it Fairy or Water). The best two, when
+		// close, share the pick, so the same wall does not always Tera the same way.
+		// A Tera type with many weaknesses of its own is a poor wall type whatever it sheds
+		// (Flying has three; Water and Fairy two).
+		const ownWeak = t => TYPES.filter(atk => dex.getImmunity(atk, [t]) && dex.getEffectiveness(atk, [t]) > 0).reduce((n, atk) => n + (ATTACK_WEIGHT[atk] || 1), 0);
+		// The types walls are actually run with get a head start, and the expert list more of one.
+		const ranked = candidates.map(t => [t, gain(t) - 1.5 * ownWeak(t) + (DEFENSIVE_TERA.includes(t) ? 3 : 0) + (preferred.includes(t) ? 6 : 0)]).sort((x, y) => y[1] - x[1]);
+		if (ranked.length > 1 && ranked[1][1] >= ranked[0][1] * 0.85 && Math.random() < 0.4) return ranked[1][0];
+		return ranked[0][0];
 	}
 	const attacks = moves.filter(m => m.category !== 'Status' && m.basePower > 0).sort((a, b) => b.basePower - a.basePower);
 	const stab = attacks.filter(m => species.types.includes(m.type));
-	const fromList = list.find(t => stab.some(m => m.type === t)) || list.find(t => attacks.some(m => m.type === t));
+	// The list's STAB boost first, then any listed type it attacks with, then whatever the list
+	// names (an attacker's defensive Tera, like Steel), and only then its own best STAB.
+	const fromList = list.find(t => stab.some(m => m.type === t)) || list.find(t => attacks.some(m => m.type === t)) || list[0];
 	if (fromList) return fromList;
 	return (stab[0] || attacks[0] || { type: species.types[0] }).type;
 }
