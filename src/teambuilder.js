@@ -1215,7 +1215,20 @@ class TeamBuilder {
 			// No IVs from the source: sane() gives the ones the final moves call for (RS.ivsFor).
 			else this.ownIvs.add(set);
 		}
-		if (gen >= 9 && raw.teraType && !constraints.noTera) set.teraType = raw.teraType;
+		// The given Tera type is the preference; chooseTera keeps it where it fits (an attacker's
+		// attack type) and replaces a wall's own type (Corviknight to Flying, Blissey to Normal).
+		if (gen >= 9 && raw.teraType && !constraints.noTera) {
+			try { set.teraType = require('./role-sets').chooseTera(ctx.dex, species, set, [raw.teraType]); } catch (e) { set.teraType = raw.teraType; }
+		}
+		/*
+		 * A set with no Tera type (Smogon's National Dex sets have none: Tera is banned
+		 * there) used to go out without one, and Showdown then Terastallizes into the
+		 * Pokemon's own first type - Corviknight to Flying (the owner, 30 Sep 2026).
+		 * Choose one that fits the set instead (role-sets chooseTera).
+		 */
+		else if (gen >= 9 && !constraints.noTera) {
+			try { set.teraType = require('./role-sets').chooseTera(ctx.dex, species, set, []); } catch (e) { /* leave it to Showdown */ }
+		}
 		// After the set is otherwise decided, and before it is checked: anything
 		// of ours it gets has to survive the same validation as the rest.
 		if (!constraints.onlyMove) this.considerOurMoves(ctx, species, set, rng);

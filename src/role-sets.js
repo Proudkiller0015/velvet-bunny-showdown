@@ -769,6 +769,60 @@ function isStab(species, move, ability = '') {
  * come with one (a Smogon analysis, usage statistics, a factory set). The
  * names are role-sets.js's own, so itemFor() can be asked about any set.
  */
+/**
+ * A Tera type that fits the set (the owner, 30 Sep 2026: "the tera the bot runs are
+ * so flawed... Corviknight ran Flying over Dragon, Water or Fairy").
+ *
+ * A wall terastallizes to shed its weaknesses: every type is scored against the
+ * eighteen attacking types (a weakness costs double, a resistance or immunity
+ * earns), the set's own listed types get a small head start, and the best wins.
+ * An attacker terastallizes to hit harder: the listed type that one of its
+ * attacks uses (STAB first), else the type of its strongest STAB attack.
+ * Never "the first type in the list" - which, for a set that came with none,
+ * was Showdown's default of the Pokemon's own primary type.
+ */
+/** How common each attacking type is, roughly, in RP and Smogon play. */
+const ATTACK_WEIGHT = { Ground: 1.6, Fire: 1.3, Fighting: 1.3, Water: 1.2, Ice: 1.1, Electric: 1.1, Dark: 1.2, Fairy: 1.2, Dragon: 1.2, Ghost: 1.1, Steel: 0.9, Rock: 0.9, Flying: 0.9, Psychic: 0.9, Grass: 0.9, Poison: 0.8, Bug: 0.6, Normal: 0.7 };
+const TYPES = ['Normal', 'Fire', 'Water', 'Electric', 'Grass', 'Ice', 'Fighting', 'Poison', 'Ground', 'Flying', 'Psychic', 'Bug', 'Rock', 'Ghost', 'Dragon', 'Dark', 'Steel', 'Fairy'];
+function chooseTera(dex, species, set, listed) {
+	species = typeof species === 'string' ? dex.species.get(species) : species;
+	const moves = (set.moves || []).map(m => dex.moves.get(typeof m === 'string' ? m : m.name || m.id)).filter(m => m.exists);
+	let list = (listed || []).filter(t => TYPES.includes(t));
+	// None given (Smogon's National Dex sets carry no Tera: Tera is banned there): borrow the
+	// Pokemon's own expert list from its role sets, when they are real ones, not synthesized.
+	const expert = () => { try { return [...new Set(roleSets(dex, species.name).filter(r => !r.synthetic).flatMap(r => r.teraTypes || []))].filter(t => TYPES.includes(t)); } catch (e) { return []; } };
+	if (!list.length) list = expert();
+	const role = set.role || inferRole(dex, { species: species.name, moves: moves.map(m => m.name), ability: set.ability });
+	const setup = moves.some(m => SETUP.includes(m.id));
+	const walls = !setup && (SUPPORT_ROLES.includes(role) || role === 'AV Pivot' || moves.filter(m => m.category !== 'Status').length <= 2);
+	if (walls) {
+		// How hard each attacking type hits a typing, as a power of two (an immunity counts as a double resistance).
+		const hit = (atk, types) => (!dex.getImmunity(atk, types) ? -2 : dex.getEffectiveness(atk, types));
+		const own = species.types;
+		// What a defensive Tera is for: its current weaknesses. Each step one of those improves
+		// earns 3, each new weakness costs 2, each resistance or immunity earns a little.
+		// Weighted by how often each type is attacked with: trading a Fire weakness for a
+		// Ground one is no trade (Corviknight read Tera Electric as an upgrade).
+		const gain = t => TYPES.reduce((v, atk) => {
+			const before = hit(atk, own), after = hit(atk, [t]);
+			const w = ATTACK_WEIGHT[atk] || 1;
+			if (before > 0) return v + w * 3 * (before - after);
+			return v - w * 2 * Math.max(0, after - Math.max(0, before)) - (before < 0 && after >= 0 ? w * 0.5 : 0) + (after < 0 ? 0.5 : 0);
+		}, 0);
+		const candidates = TYPES.filter(t => !own.includes(t));
+		// A wall gains nothing from its own type: drop it, and fall back on the expert list.
+		let preferred = list.filter(t => !own.includes(t));
+		if (!preferred.length) preferred = expert().filter(t => !own.includes(t));
+		const pool = preferred.length ? preferred : candidates;
+		return pool.map(t => [t, gain(t)]).sort((x, y) => y[1] - x[1])[0][0];
+	}
+	const attacks = moves.filter(m => m.category !== 'Status' && m.basePower > 0).sort((a, b) => b.basePower - a.basePower);
+	const stab = attacks.filter(m => species.types.includes(m.type));
+	const fromList = list.find(t => stab.some(m => m.type === t)) || list.find(t => attacks.some(m => m.type === t));
+	if (fromList) return fromList;
+	return (stab[0] || attacks[0] || { type: species.types[0] }).type;
+}
+
 function inferRole(dex, set) {
 	if (set.role) return set.role;
 	const species = dex.species.get(set.species);
@@ -1113,13 +1167,13 @@ function buildSet(dex, name, { role = null, rng = Math.random, level = 100, allo
 		nature,
 		evs,
 		level,
-		teraType: (set.teraTypes || species.types)[0],
+		teraType: chooseTera(dex, species, { role: set.role, moves }, set.teraTypes),
 		...(ivs ? { ivs } : {}),
 	};
 }
 
 module.exports = {
-	roleSets, buildSet, pickMoves, itemFor, spreadFor, learnable, attackValue, coverageGain,
+	roleSets, buildSet, pickMoves, chooseTera, itemFor, spreadFor, learnable, attackValue, coverageGain,
 	threatGain, priorityValue, selfDrop, hitOn, STRONG_PRIORITY, ONE_USE,
 	setProblems, repairSet, usefulMove, isStab, inferRole, sideOf, archetypeFit, ivsFor, scarfPays, CHOICE_ITEMS, TRAP_ITEMS,
 	SETUP, RECOVERY, HAZARDS, PIVOTS, STATUS, UTILITY, BULKY_ROLES, SETUP_ROLES, SUPPORT_ROLES,
