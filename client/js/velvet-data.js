@@ -1391,7 +1391,13 @@
 			var target = rowOf(aliases[a][2]);
 			if (!index[target] || index[target][0] !== aliases[a][2]) continue;
 			var spot = rowOf(aliases[a][0]);
-			if (index[spot] && index[spot][0] === aliases[a][0] && index[spot].length > 2) continue;
+			// Several things share a later word ("orb": Flame Orb, Life Orb, Chilling Orb):
+			// skip only an alias row with this key that already points at this target.
+			var dup = false;
+			for (var d = spot; d < index.length && index[d][0] === aliases[a][0]; d++) {
+				if (index[d].length > 2 && index[index[d][2]] && index[index[d][2]][0] === aliases[a][2]) { dup = true; break; }
+			}
+			if (dup) continue;
 			for (var k = 0; k < index.length; k++) {
 				var row = index[k];
 				if (row.length > 2 && typeof row[2] === 'number' && row[2] >= spot) row[2]++;
@@ -2582,7 +2588,10 @@
 	 * Gems section; official formats keep Showdown's own.
 	 */
 	var GEM_IDS = ['normal', 'fire', 'water', 'electric', 'grass', 'ice', 'fighting', 'poison', 'ground', 'flying', 'psychic', 'bug', 'rock', 'ghost', 'dragon', 'dark', 'steel', 'fairy'].map(function (t) { return t + 'gem'; });
-	var NEW_ITEMS = ['chillingorb', 'warpedhourglass', 'ultrashard'];
+	// Our items anyone can hold, listed first (the owner, 30 Sep 2026: "all custom items at the
+	// top except mon-specific ones"). Ultra Shard is Beast Boost's and signature items are their
+	// Pokemon's: those stay in their "Specific to" sections.
+	var NEW_ITEMS = ['chillingorb', 'warpedhourglass'];
 	function installGemItems() {
 		var search = window.BattleItemSearch;
 		if (!search || !search.prototype || !search.prototype.getDefaultResults) return false;
@@ -2600,8 +2609,10 @@
 			// Ultra Shard), which Showdown's list has never heard of either.
 			var ours = [];
 			for (var n = 0; n < NEW_ITEMS.length; n++) if (!have[NEW_ITEMS[n]] && window.BattleItems && window.BattleItems[NEW_ITEMS[n]]) ours.push(['item', NEW_ITEMS[n]]);
-			if (ours.length) out = out.concat([['header', 'New items']], ours);
-			return add.length ? out.concat([['header', 'Gems']], add) : out;
+			var top = [];
+			if (ours.length) top = top.concat([['header', 'New items']], ours);
+			if (add.length) top = top.concat([['header', 'Gems']], add);
+			return top.concat(out);
 		};
 		return true;
 	}

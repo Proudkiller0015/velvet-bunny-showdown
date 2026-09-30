@@ -367,6 +367,22 @@ for (const id of abyssShrine.SPECIES) {
 for (const [id, row] of Object.entries(moves)) search.push([id, 'move', offsetsFor(row.name)]);
 for (const [id, row] of Object.entries(abilities)) search.push([id, 'ability', offsetsFor(row.name)]);
 for (const [id, row] of Object.entries(items)) search.push([id, 'item', offsetsFor(row.name)]);
+/*
+ * Later words, the way Showdown's own index has them ("orb" finds Flame Orb). Ours had
+ * none: typing "orb" never found Chilling Orb (the owner, 30 Sep 2026), only "chilling"
+ * did. One alias per later word of every multi-word name of ours: [the id from that
+ * word on, type, id, where in the id it starts].
+ */
+for (const [type, table] of [['item', items], ['move', moves], ['ability', abilities]]) {
+	for (const [id, row] of Object.entries(table)) {
+		const words = String(row.name || '').split(/[^a-z0-9]+/i).map(w => w.toLowerCase()).filter(Boolean);
+		let at = 0;
+		for (let w = 0; w < words.length; w++) {
+			if (w > 0 && id.slice(at).startsWith(words[w])) searchAliases.push([id.slice(at), type, id, at]);
+			at += words[w].length;
+		}
+	}
+}
 
 // The abilities a buff added, by name, plus every slot the species already had:
 // the client reads abilities off its own dex entry, which still has three.
