@@ -379,14 +379,17 @@ const TIERS = {
 	granbull: 'PU',
 	venusaur: 'PU',
 
-	// The owner's confirmed RU tier simulation (29 Sep 2026, 1,617 bot games).
+	// The owner's confirmed RU tier simulation (29 Sep 2026, 1,617 bot games), then the
+	// owner's rule: an RU sim moves a Pokemon one step (overperformers to UU, lower tiers to
+	// RU, underperformers to NU) - the teams only met RU-level opponents. Mega Delphox is
+	// the owner's exception and goes to OU.
 	delphoxmega: 'OU',
-	scovillainmega: 'OU',
-	golisopodmega: 'OU',
-	sharpedo: 'PU',
-	articunogalar: 'PU',
-	slurpuff: 'PU',
-	drednaw: 'PU',
+	scovillainmega: 'UU',
+	golisopodmega: 'UU',
+	sharpedo: 'NU',
+	articunogalar: 'NU',
+	slurpuff: 'NU',
+	drednaw: 'NU',
 };
 
 /**
