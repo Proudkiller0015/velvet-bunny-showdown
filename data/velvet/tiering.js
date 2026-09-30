@@ -428,6 +428,9 @@ const TIERS = {
 	darkraimega: 'OU',
 	spectrier: 'OU',
 	gougingfire: 'OU',
+
+	// The owner's calls, 30 Sep 2026: unbanned to OU, and OU Pokemon dropped to UU.
+	annihilape: 'OU',
 };
 
 /**

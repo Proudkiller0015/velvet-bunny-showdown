@@ -1634,6 +1634,10 @@ const GROUPS = {
  * suits it - a touch of flavour, not a promotion.
  */
 const SMALL = {
+	// The legendary beasts get Recover (the owner, 30 Sep 2026).
+	raikou: ['recover'],
+	entei: ['recover'],
+	suicune: ['recover'],
 	unown: ['hypnowhirl'],
 	luvdisc: ['undertow'],
 	wishiwashi: ['undertow'],

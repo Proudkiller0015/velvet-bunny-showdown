@@ -24,6 +24,9 @@
  */
 
 const Dex = require('./rp-dex')();
+// Every Pokemon's RP ladder tier (scripts/build-rp-tiers.js writes it here and into the RP bot).
+let RP_TIERS = {};
+try { RP_TIERS = require('./rp-tiers.json'); } catch (e) { /* no file: Smogon's tiers only */ }
 
 const STARTERS = new Set(['bulbasaur', 'charmander', 'squirtle', 'chikorita', 'cyndaquil', 'totodile', 'treecko',
 	'torchic', 'mudkip', 'turtwig', 'chimchar', 'piplup', 'snivy', 'tepig', 'oshawott', 'chespin', 'fennekin',
@@ -119,6 +122,16 @@ function classOf(name) {
 	else {
 		const power = Math.max(...lineOf(s).map(bst));
 		c = power >= RARE_FROM ? 'rare' : power >= MEDIUM_FROM ? 'medium' : 'common';
+		/*
+		 * The RP tier lifts an ordinary line (the owner, 30 Sep 2026: "tier shifts
+		 * should help rarity for Pokemon that aren't overwritten"): UU and above is
+		 * at least rare, NUBL and above at least medium. Never lowers a class, and
+		 * never touches the classes set by hand above (pseudos, Spiritomb, starters,
+		 * UBs, Paradoxes, legendaries).
+		 */
+		const usage = usageOf(s);
+		if (usage >= TIER_VALUE.UU) c = 'rare';
+		else if (usage >= TIER_VALUE.NUBL && c === 'common') c = 'medium';
 	}
 	classCache.set(s.id, c);
 	return c;
@@ -141,6 +154,13 @@ function usageOf(name) {
 	if (!s || !s.exists) return 0;
 	if (usageCache.has(s.id)) return usageCache.get(s.id);
 	let best = null;
+	// The RP tier first: our own tier list (scripts/build-rp-tiers.js), so a tier
+	// shift reaches rarity (the owner, 30 Sep 2026). Smogon's columns are the fallback.
+	for (const x of lineOf(s)) {
+		const v = tierValue(RP_TIERS[x.id]);
+		if (v !== null && (best === null || v > best)) best = v;
+	}
+	if (best !== null) { usageCache.set(s.id, best); return best; }
 	for (const x of lineOf(s)) {
 		// The ninth-generation tier first, natDexTier for lines Scarlet and Violet
 		// left out. The tier review (data/velvet/tiering.js) stamps "RU" into
