@@ -160,10 +160,13 @@ function synthesize(dex, species, moves) {
 	}];
 }
 
+/** Pairs of attacks that are each other's alternative: neither is "the" right pick. */
+const ALTERNATIVES = [['seismictoss', 'velvetpress']];
+
 /** Moves an ability makes pointless: pickMoves drops them from that set's pool. */
 const ABILITY_COVERS = { caretaker: ['healbell', 'aromatherapy'] };
 /** ...and what takes the freed slot: stall Blissey's Toxic (Thunder Wave read as speed control and a setup answer, and teams built round it stopped adding a breaker). */
-const ABILITY_ADDS = { caretaker: { swap: ['thunderwave'], add: ['toxic'] } };
+const ABILITY_ADDS = { caretaker: { swap: ['thunderwave'], add: ['toxic', 'velvetpress'] } };
 
 function attackValue(species, move, stat) {
 	/*
@@ -175,7 +178,13 @@ function attackValue(species, move, stat) {
 	 */
 	const fixed = ['seismictoss', 'nightshade'].includes(move.id);
 	const best = Math.max(species.baseStats.atk, species.baseStats.spa, 1);
-	const power = move.basePower || (fixed ? 75 * Math.max(1, (130 / best) ** 2) : 0);
+	let power = move.basePower || (fixed ? 75 * Math.max(1, (130 / best) ** 2) : 0);
+	// Body Press and Velvet Press hit with Defense / Sp. Def: worth more to a wall whose
+	// defence dwarfs its attack (Blissey's 135 Sp. Def against 75 Sp. Atk).
+	// Only where that stat far outstrips its attacks (1.4x): Corviknight (105/87) giving up U-turn for
+	// Body Press cost teams their pivot.
+	const pressRatio = move.overrideOffensiveStat ? (species.baseStats[move.overrideOffensiveStat] || 0) / best : 0;
+	if (pressRatio >= 1.4) power *= pressRatio;
 	/*
 	 * Accuracy counts more than its share: a miss loses the turn as well as the damage.
 	 * Scored as (0.5 + 0.5 * acc), Zap Cannon (120, 50%) tied Thunderbolt (90, 100%) and
@@ -429,6 +438,9 @@ function pickMoves(dex, species, set, rng = Math.random, { threats = null, arche
 		if (!options.length) return null;
 		// Mostly the best, sometimes the next: variety without nonsense.
 		options.sort((x, y) => weight(y) - weight(x));
+		// Interchangeable attacks (the owner, 30 Sep 2026: Velvet Press is the Blissey line's
+		// alternative to Seismic Toss): when they are the top two, either one, evenly.
+		if (options.length > 1 && ALTERNATIVES.some(p => p.includes(options[0].id) && p.includes(options[1].id))) return rng() < 0.5 ? options[0] : options[1];
 		// A wall has one right answer more often than an attacker does, so it wanders less.
 		const spread = defensive ? [1, 0.12, 0.04] : [1, 0.35, 0.15];
 		return weighted(rng, options.slice(0, 3).map((m, i) => [m, weight(m) * spread[i]]));
