@@ -431,6 +431,10 @@ const TIERS = {
 
 	// The owner's calls, 30 Sep 2026: unbanned to OU, and OU Pokemon dropped to UU.
 	annihilape: 'OU',
+
+	// The owner's calls, 30 Sep 2026: unbanned to OU, and OU Pokemon dropped to UU.
+	tapubulu: 'OU',
+	whimsicott: 'UU',
 };
 
 /**

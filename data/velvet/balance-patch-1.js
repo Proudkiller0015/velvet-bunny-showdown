@@ -819,6 +819,69 @@ exports.MOVES = {
 		shortDesc: "Prevents the target from switching out. Biting move.",
 		desc: "The user bites down and will not let go. The target cannot switch out while the user stays on the field (Ghost types still can). Boosted by Strong Jaw and Bulldog Grip.",
 	},
+	/*
+	 * The Tapus' signatures (the owner, 30 Sep 2026): one each, built on the terrain
+	 * each one sets on entry.
+	 */
+	// Koko: a Rising Voltage with a higher base (85 vs 70) and a smaller terrain boost
+	// (1.5x, 127 vs 140), hitting with Koko's better attacking stat.
+	uilasurge: {
+		num: -58, gen: 9, name: "Uila Surge", type: "Electric", category: "Special",
+		basePower: 85, accuracy: 100, pp: 15, priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		onModifyMove(move, pokemon) {
+			if (pokemon.getStat('atk', false, true) > pokemon.getStat('spa', false, true)) move.category = 'Physical';
+		},
+		onBasePower(basePower, source, target) {
+			if (this.field.isTerrain('electricterrain') && target && target.isGrounded()) return this.chainModify(1.5);
+		},
+		secondary: null, target: "normal", contestType: "Cool",
+		flavor: "The guardian of Melemele calls down its own storm.",
+		shortDesc: "Uses the user's better attacking stat. 1.5x power on Electric Terrain.",
+		desc: "Uses whichever of the user's Attack or Special Attack is higher, before any boosts. Power is multiplied by 1.5 if the target is grounded while Electric Terrain is active.",
+	},
+	// Lele: hits whichever of the target's defences is lower, boosts included.
+	manapierce: {
+		num: -59, gen: 9, name: "Mana Pierce", type: "Psychic", category: "Special",
+		basePower: 100, accuracy: 100, pp: 10, priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		onModifyMove(move, pokemon, target) {
+			if (!target) return;
+			// Stat stages included: a Sp. Def boost sends it at Defense instead.
+			move.overrideDefensiveStat = target.getStat('def', false, true) < target.getStat('spd', false, true) ? 'def' : 'spd';
+		},
+		secondary: null, target: "normal", contestType: "Clever",
+		flavor: "The guardian of Akala reads where the target is weakest, and strikes there.",
+		shortDesc: "Hits the target's lower defence (Def or Sp. Def), boosts included.",
+		desc: "Deals damage against whichever of the target's Defense or Special Defense is lower, counting stat stages. Uses the user's Special Attack.",
+	},
+	// Bulu: a Grassy Glide a touch harder than the Simi monkeys' Jungle Rush with the
+	// Elemental Banana (80 x 1.3 = 104).
+	nahelerush: {
+		num: -60, gen: 9, name: "Nahele Rush", type: "Grass", category: "Physical",
+		basePower: 105, accuracy: 100, pp: 10, priority: 0,
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		onModifyPriority(priority, source) {
+			if (this.field.isTerrain('grassyterrain') && source.isGrounded()) return priority + 1;
+		},
+		secondary: null, target: "normal", contestType: "Tough",
+		flavor: "The guardian of Ula'ula charges through its own forest.",
+		shortDesc: "User on Grassy Terrain: +1 priority.",
+		desc: "Gains +1 priority while Grassy Terrain is active and the user is grounded.",
+	},
+	// Fini: a Fairy Rising Voltage for Misty Terrain.
+	ohuwave: {
+		num: -61, gen: 9, name: "Ohu Wave", type: "Fairy", category: "Special",
+		basePower: 80, accuracy: 100, pp: 15, priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		onBasePower(basePower) {
+			if (this.field.isTerrain('mistyterrain')) return this.chainModify(2);
+		},
+		secondary: null, target: "normal", contestType: "Beautiful",
+		flavor: "The guardian of Poni rides its own mist in.",
+		shortDesc: "2x power on Misty Terrain.",
+		desc: "Power doubles while Misty Terrain is active.",
+	},
 };
 
 /*
@@ -1634,6 +1697,9 @@ const GROUPS = {
  * suits it - a touch of flavour, not a promotion.
  */
 const SMALL = {
+	// Cottonee gets Spore, and keeps it as Whimsicott (the owner, 30 Sep 2026).
+	cottonee: ['spore'],
+	whimsicott: ['spore'],
 	// The legendary beasts get Recover (the owner, 30 Sep 2026).
 	raikou: ['recover'],
 	entei: ['recover'],
@@ -1770,6 +1836,8 @@ const TRIO_BABIES = {
  */
 // Granbull (29 Sep 2026, "BUFF this man"): Bulldog Grip (Intimidate + Strong Jaw) behind its
 // fangs, a trapping Fairy bite, a draining bite for recovery, and Swords Dance.
+// The Tapus (30 Sep 2026): a signature each; Bulu also gets Play Rough and U-turn.
+const TAPUS = { tapukoko: ['uilasurge'], tapulele: ['manapierce'], tapubulu: ['nahelerush', 'playrough', 'uturn'], tapufini: ['ohuwave'] };
 const GRANBULL = { ability: 'Bulldog Grip', moves: ['bulldogmaul', 'carrionfeast', 'jawlock', 'swordsdance'] };
 const ROSERADE = { ability: 'Masquerade', moves: ['thornedbouquet', 'strengthsap', 'mortalspin', 'nastyplot'] };
 
@@ -2315,7 +2383,7 @@ exports.buildBuffs = (Pokedex) => {
 	}
 
 	// Pre-evolutions: the new move (not the coverage) and the ability.
-	const SIGNATURES = ['continentalheave', 'aurorasquall', 'memorywipe', 'soulresonance', 'resolutestrike', 'gleamstalk', 'greatsagestrike', 'pyrestrike', 'eldertimber', 'tectonicshell', 'imperialtorrent', 'royaldecree', 'soultoll', 'thornedbouquet', 'bulldogmaul', 'grandfeast', 'devour', 'endlesshunger'];
+	const SIGNATURES = ['continentalheave', 'aurorasquall', 'memorywipe', 'soulresonance', 'resolutestrike', 'gleamstalk', 'greatsagestrike', 'pyrestrike', 'eldertimber', 'tectonicshell', 'imperialtorrent', 'royaldecree', 'soultoll', 'thornedbouquet', 'bulldogmaul', 'uilasurge', 'manapierce', 'nahelerush', 'ohuwave', 'grandfeast', 'devour', 'endlesshunger'];
 	const newMove = m => exports.MOVES[m] && !SIGNATURES.includes(m);
 	for (const id of Object.keys(out)) {
 		let species = Pokedex[id];
@@ -2348,6 +2416,7 @@ exports.buildBuffs = (Pokedex) => {
 	if (Pokedex.spiritomb) add('spiritomb', SPIRITOMB.moves, [SPIRITOMB.ability]);
 	if (Pokedex.roserade) add('roserade', ROSERADE.moves, [ROSERADE.ability]);
 	if (Pokedex.granbull) add('granbull', GRANBULL.moves, [GRANBULL.ability]);
+	for (const [id, moves] of Object.entries(TAPUS)) if (Pokedex[id]) add(id, moves, []);
 	if (Pokedex.togekiss) add('togekiss', TOGEKISS, []);
 	if (Pokedex.torterra) add('torterra', TORTERRA.moves, [TORTERRA.ability]);
 	if (Pokedex.empoleon) add('empoleon', EMPOLEON.moves, [EMPOLEON.ability]);
@@ -2412,6 +2481,7 @@ exports.INFERNAPE = INFERNAPE;
 exports.SPIRITOMB = SPIRITOMB;
 exports.ROSERADE = ROSERADE;
 exports.GRANBULL = GRANBULL;
+exports.TAPUS = TAPUS;
 exports.TOGEKISS = TOGEKISS;
 exports.TORTERRA = TORTERRA;
 exports.EMPOLEON = EMPOLEON;

@@ -2910,6 +2910,10 @@
 		thornedbouquet: ['petalblizzard', 'gigadrain'],        // flowers, drained
 		soultoll: ['hex', 'shadowclaw'],                       // Hex's rule, physical
 		bulldogmaul: ['crunch', 'playrough'],               // a Fairy bite
+		uilasurge: ['risingvoltage', 'thunderbolt'],        // Koko's Rising Voltage
+		manapierce: ['psyshock', 'psychic'],             // Lele's, at the weaker defence
+		nahelerush: ['grassyglide', 'woodhammer'],       // Bulu's Grassy Glide
+		ohuwave: ['moonblast', 'dazzlinggleam'],        // Fini's misty Fairy wave
 		witchssnatch: ['spectralthief', 'knockoff', 'shadowclaw'], // a Ghost that takes
 	};
 	function installMoveAnims() {
