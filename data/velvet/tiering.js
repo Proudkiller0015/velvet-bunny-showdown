@@ -102,7 +102,7 @@ const TIERS = {
 	empoleon: 'OU',
 
 	// Walking Wake, unbanned by the owner's call (Patch 1.5) "for the funny".
-	walkingwake: 'OU',
+	walkingwake: 'UUBL', // the owner, 30 Sep 2026
 	// Dragapult too (Patch 1.5), by the owner's call.
 	dragapult: 'OU',
 	// Derived Uber from its 700 base stats; unbanned by the owner's call (Patch 1.5).
