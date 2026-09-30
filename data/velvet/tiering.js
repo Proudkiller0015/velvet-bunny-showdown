@@ -168,7 +168,7 @@ const TIERS = {
 	// Bloodmoon Ursaluna too (Patch 1.5).
 	ursalunabloodmoon: 'OU',
 	// Mega Zeraora (base Zeraora was already UU), unbanned by the owner's call (Patch 1.5).
-	zeraoramega: 'OU',
+	zeraoramega: 'UUBL', // the owner, 30 Sep 2026
 	// Mega Heatran, now with Earth Eater (unnerfs.js), unbanned by the owner's call (Patch 1.5).
 	heatranmega: 'OU',
 	// Mega Blaziken, unbanned by the owner's call (Patch 1.5).
