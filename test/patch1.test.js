@@ -299,7 +299,7 @@ check(!['memorywipe', 'soulresonance', 'resolutestrike', 'aurorasquall'].some(mv
 	const neutral = hitOn('Snorlax', 'Thick Fat');
 	check(!/\|-supereffective\|/.test(neutral) && !/\|-immune\|/.test(neutral), 'and neutral on Snorlax');
 	const m = Dex.moves.get('oxidize');
-	check(m.basePower === 85 && m.secondary.volatileStatus === 'confusion' && m.secondary.chance === 10 && !m.secondary.status, 'Oxidize: 85 power (buffed 30 Sep), 10% confusion, never poisons');
+	check(m.basePower === 70 && m.secondary.volatileStatus === 'confusion' && m.secondary.chance === 10 && !m.secondary.status, 'Oxidize: 70 power, 10% confusion, never poisons');
 	check(learns('nidoking', 'oxidize') && learns('mew', 'oxidize') && !learns('gengar', 'oxidize'), 'Oxidize: Nidoking and Mew yes, Gengar no');
 }
 check(learns('sunflora', 'fireblast') && learns('carnivine', 'gunkshot') && learns('exeggutoralola', 'dragonpulse'), 'Grass coverage: Sunflora Fire Blast, Carnivine Gunk Shot, Alolan Exeggutor Dragon Pulse');

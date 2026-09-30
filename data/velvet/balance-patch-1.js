@@ -440,7 +440,7 @@ exports.MOVES = {
 	 */
 	oxidize: {
 		num: -27, gen: 9, name: "Oxidize", type: "Poison", category: "Special",
-		basePower: 85, accuracy: 100, pp: 20, priority: 0,
+		basePower: 70, accuracy: 100, pp: 20, priority: 0,
 		ignoreImmunity: { Poison: true },
 		onEffectiveness(typeMod, target, type) {
 			if (type === 'Steel') return 1;
