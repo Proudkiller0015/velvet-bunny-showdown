@@ -438,8 +438,11 @@ function serveHealth(url, res) {
 		}
 	} catch (e) { /* no rooms here */ }
 
+	let deployHold = null;
+	try { const h = require('./deploy-hold').state; deployHold = { held: h.held, until: h.until }; } catch (e) { /* not loaded */ }
 	const body = {
 		battles,
+		deployHold,
 		container,
 		wrapper,
 		bots,
@@ -505,6 +508,8 @@ function addRoute(route) {
 function hookServer(server, log) {
 	if (server.velvetHttpHooks) return;
 	server.velvetHttpHooks = true;
+	// Hold new battles while a deploy is pending (src/deploy-hold.js).
+	try { require('./deploy-hold').start(); } catch (e) { log && log(`deploy hold not started: ${e.message}`); }
 	const emit = server.emit;
 	server.emit = function (event, ...args) {
 		if (event === 'request' && args[0] && args[0].url) {

@@ -86,6 +86,23 @@ function playersOnline() {
 
 const wait = ms => new Promise(r => setTimeout(r, ms));
 
+/*
+ * The deploy hold's flag (src/deploy-hold.js reads it from the repository). Only a flag
+ * newer than the running server counts, so the new build ignores it and needs no clearing;
+ * {} releases the hold when a deploy is abandoned.
+ */
+const HOLD_MS = Number(process.env.DEPLOY_HOLD_MS || 25 * 60 * 1000);
+function writeFlag(flag) {
+	const { execSync } = require('child_process');
+	const root = path.join(__dirname, '..');
+	fs.writeFileSync(path.join(root, 'data', 'deploy-pending.json'), JSON.stringify(flag) + '\n');
+	const run = cmd => execSync(cmd, { cwd: root, stdio: 'pipe' });
+	run('git add data/deploy-pending.json');
+	try { run(`git commit -q -m "deploy hold: ${flag.at ? 'pending' : 'released'}"`); } catch (e) { /* nothing changed */ }
+	run('git pull -q --rebase --autostash');
+	run('git push -q');
+}
+
 (async () => {
 	const force = process.argv.includes('--force');
 	/*
@@ -114,13 +131,43 @@ const wait = ms => new Promise(r => setTimeout(r, ms));
 	 * counts its unfinished battles on the health page; read that right before the
 	 * hook fires. (An older server without the count reports nothing and passes.)
 	 */
-	const health = await get(SITE + '/velvet/health.json').catch(() => null);
-	let battles = [];
-	try { battles = JSON.parse(health.body).battles || []; } catch (e) { /* no count */ }
-	if (battles.length && !force) {
-		console.error(`[deploy] ${battles.length} battle(s) in progress: ${battles.map(b => `${b.players.join(' vs ')} (${b.format}, turn ${b.turn})`).join('; ')}.
-` +
-			'A deploy would end them. Wait, or pass --force.');
+	const readHealth = async () => {
+		const h = await get(SITE + '/velvet/health.json').catch(() => null);
+		try { return JSON.parse(h.body) || {}; } catch (e) { return {}; }
+	};
+	let health = await readHealth();
+	const running = () => health.battles || [];
+	const describe = list => list.map(b => `${b.players.join(' vs ')} (${b.format}, turn ${b.turn})`).join('; ');
+	if (!force && health.deployHold !== undefined) {
+		/*
+		 * Hold new battles, then wait for the running ones (src/deploy-hold.js). Checking
+		 * once and firing cut a battle that started during the build (30 Sep 2026).
+		 */
+		writeFlag({ at: Date.now(), until: Date.now() + HOLD_MS });
+		console.log('[deploy] asked the server to hold new battles');
+		const asked = Date.now();
+		while (!(health.deployHold && health.deployHold.held) && Date.now() - asked < 3 * 60 * 1000) { await wait(15000); health = await readHealth(); }
+		if (!(health.deployHold && health.deployHold.held)) {
+			writeFlag({});
+			console.error('[deploy] the server never confirmed the hold; nothing deployed');
+			process.exit(1);
+		}
+		console.log('[deploy] new battles are held');
+		const deadline = asked + HOLD_MS - 2 * 60 * 1000;
+		while (running().length && Date.now() < deadline) {
+			console.log(`[deploy] waiting for ${running().length} battle(s) to finish: ${describe(running())}`);
+			await wait(20000);
+			health = await readHealth();
+		}
+		if (running().length) {
+			writeFlag({});
+			console.error(`[deploy] still ${running().length} battle(s) in progress after the hold: ${describe(running())}. Hold released; try again later.`);
+			process.exit(1);
+		}
+	} else if (running().length && !force) {
+		// An older server without the hold: the old rule, refuse.
+		console.error(`[deploy] ${running().length} battle(s) in progress: ${describe(running())}.
+A deploy would end them. Wait, or pass --force.`);
 		process.exit(1);
 	}
 
