@@ -2858,6 +2858,110 @@
 		return true;
 	}
 
+	/*
+	 * The avatar picker in Settings showed only Showdown's 293 numbered avatars (owner,
+	 * 1 Oct 2026: "an outdated avatar list"). Below them now: every other official one,
+	 * with a search box. Pictures load as they scroll into view. The names come from the
+	 * server package (scripts/build-avatars.js); Showdown's personal custom avatars are
+	 * not official and never listed.
+	 */
+	/* AVATAR-DATA-START: written by scripts/build-avatars.js */
+	var OFFICIAL_AVATARS = ["aarune","acerola","acerola-masters","acerola-masters2","acerola-masters3","acetrainer-gen1","acetrainer-gen1rb","acetrainer-gen2","acetrainer-gen3","acetrainer-gen3jp","acetrainer-gen3rs","acetrainer-gen6","acetrainer-gen6xy","acetrainer-gen7","acetrainercouple-gen3","acetrainerf-gen1","acetrainerf-gen1rb","acetrainerf-gen2","acetrainerf-gen3","acetrainerf-gen3rs","acetrainerf-gen6","acetrainerf-gen6xy","acetrainerf-gen7","adaman","adaman-masters","adaman-masters2","aetheremployee","aetheremployeef","aetherfoundation","aetherfoundation2","aetherfoundationf","agatha-gen1","agatha-gen1rb","agatha-gen3","agatha-lgpe","akari","akari-isekai","alain","alec-anime","allister","allister-masters","allister-unmasked","amarys","amelia-shuffle","anabel","anabel-gen3","anabel-gen7","ansha","ansha-cook","anthe","anthea","anvin","aquagrunt","aquagrunt-rse","aquagruntf","aquagruntf-rse","aquasuit","archie-gen3","archie-gen6","archie-usum","arezu","arlo","aromalady-gen3","aromalady-gen3rs","aromalady-gen6","artist-gen6","artist-gen8","artist-gen9","artistf-gen6","arven-masters","arven-s","arven-v","ash-alola","ash-capbackward","ash-hoenn","ash-johto","ash-kalos","ash-sinnoh","ash-unova","atticus","avery","az","az-lza","backpacker-gen6","backpacker-gen8","backpacker-gen9","ballguy","ballguy-masters","baoba","barry-masters","battlegirl-gen3","battlegirl-gen6","battlegirl-gen6xy","bea","bea-masters","beauty-gen1","beauty-gen1rb","beauty-gen2","beauty-gen2jp","beauty-gen3","beauty-gen3rs","beauty-gen6","beauty-gen6xy","beauty-gen7","beauty-gen8","beauty-gen9","beauty-masters","becca","bede","bede-leader","bede-masters","bede-masters2","bellhop","bellis","beni","beni-ninja","bianca-masters","bianca-pwt","biker-gen1","biker-gen1rb","biker-gen2","biker-gen3","bill","bill-gen3","birch","birch-gen3","birdkeeper-gen1","birdkeeper-gen1rb","birdkeeper-gen2","birdkeeper-gen3","birdkeeper-gen3rs","birdkeeper-gen6","blackbelt-gen1","blackbelt-gen1rb","blackbelt-gen2","blackbelt-gen3","blackbelt-gen3rs","blackbelt-gen6","blackbelt-gen7","blackbelt-gen8","blackbelt-gen9","blaine-gen1","blaine-gen1rb","blaine-gen2","blaine-gen3","blaine-lgpe","blanche","blanche-casual","blue-gen1","blue-gen1champion","blue-gen1rb","blue-gen1rbchampion","blue-gen1rbtwo","blue-gen1two","blue-gen2","blue-gen3","blue-gen3champion","blue-gen3two","blue-gen7","blue-lgpe","blue-masters","blue-masters2","boarder-gen2","bodybuilder-gen9","bodybuilderf-gen9","brandon","brandon-gen3","brassius","brawly-gen3","brawly-gen6","brendan","brendan-contest","brendan-e","brendan-gen3","brendan-gen3rs","brendan-masters","brendan-masters2","brendan-masters3","brendan-rs","briar","brigette","brock-gen1","brock-gen1rb","brock-gen2","brock-gen3","brock-lgpe","brock-masters","bruno-gen1","bruno-gen1rb","bruno-gen2","bruno-gen3","bryony","bugcatcher","bugcatcher-gen1","bugcatcher-gen1rb","bugcatcher-gen2","bugcatcher-gen3","bugcatcher-gen3rs","bugcatcher-gen6","bugmaniac-gen3","bugmaniac-gen6","bugsy-gen2","bugsy-masters","burgh-masters","burglar-gen1","burglar-gen1rb","burglar-gen2","burglar-gen3","burglar-lgpe","burnet","burnet-radar","butler","cabbie","cabbie-gen9","cafemaster","caitlin-gen4","caitlin-masters","calaba","calem","calem-masters","cameraman-gen6","cameraman-gen8","camper-gen2","camper-gen3","camper-gen3rs","camper-gen6","canari","candela","candela-casual","candice-masters","caraliss","caretaker","carmine","carmine-festival","carmine-masters","cedricjuniper","celio","channeler-gen1","channeler-gen1rb","channeler-gen3","channeler-lgpe","charm","charon","chase","chef","cheren-masters","choy","christoph","chuck-gen2","clair-gen2","clair-masters","clavell-s","clerk-gen8","clerk-unite","clerkf-gen8","cliff","clive-v","clover","cogita","coin","collector-gen3","collector-gen6","collector-gen7","collector-masters","colress-gen7","colza","concordia","cook","cook-gen7","cook-gen9","corbeau","courier","courtney","courtney-gen3","crispin","crushgirl-gen3","crushkin-gen3","cueball-gen1","cueball-gen1rb","cueball-gen3","curtis","cyllene","cynthia-anime","cynthia-anime2","cynthia-gen7","cynthia-masters","cynthia-masters2","cynthia-masters3","cynthia-masters4","cynthia-masters5","cyrano","cyrus-masters","dagero","daisy","daisy-gen3","dana","dancer-gen7","dancer-gen8","darach","dawn-contest","dawn-masters","dawn-masters2","dawn-masters3","delinquent","delinquent-gen9","delinquentf-gen9","delinquentf2-gen9","dendra","dexio","dexio-gen6","diamondclanmember","diantha","diantha-masters","diantha-masters2","doctor-gen8","doctorf-gen8","dragontamer-gen3","dragontamer-gen6","dragontamer-gen9","drake-gen3","drasna","drayton","dulse","elaine","elesa-masters","elesa-masters2","elesa-masters3","elio","elio-masters","elio-usum","elm","emma","emma-lza","emmet-masters","engineer-gen1","engineer-gen1rb","engineer-gen3","erbie-unite","eri","erika-gen1","erika-gen1rb","erika-gen2","erika-gen3","erika-lgpe","erika-masters","erika-masters2","erika-masters3","essentia","ethan-gen2","ethan-gen2c","ethan-masters","ethan-pokeathlon","eusine-gen2","evelyn","expert-gen3","expert-gen6","expertf-gen3","expertf-gen6","faba","fairytalegirl","falkner-gen2","fennel","firebreather-gen2","firefighter","fisher-gen8","fisherman-gen1","fisherman-gen1rb","fisherman-gen2jp","fisherman-gen3","fisherman-gen3rs","fisherman-gen6","fisherman-gen6xy","fisherman-gen7","flannery-gen3","flannery-gen6","flaregrunt","flaregruntf","florian-bb","florian-festival","florian-masters","florian-s","freediver","furisodegirl-black","furisodegirl-blue","furisodegirl-pink","furisodegirl-white","gaeric","gambler-gen1","gambler-gen1rb","gamer-gen3","garcon","gardener","gardenia-masters","geeta","gentleman-gen1","gentleman-gen1rb","gentleman-gen2","gentleman-gen3","gentleman-gen3rs","gentleman-gen6","gentleman-gen6xy","gentleman-gen7","gentleman-gen8","gentleman-lgpe","giacomo","ginchiyo-conquest","ginter","giovanni-gen1","giovanni-gen1rb","giovanni-gen3","giovanni-lgpe","giovanni-masters","giovanni-masters2","glacia","glacia-gen3","gladion","gladion-masters","gladion-masters2","gladion-stance","gloria","gloria-dojo","gloria-league","gloria-masters","gloria-masters2","gloria-tundra","golfer","gordie","grace","grant","green","greta","greta-gen3","grimsley-gen7","grimsley-masters","grisham","grusha","guitarist-gen2","guitarist-gen3","guitarist-gen6","gurkinn","guzma","guzma-masters","gwynn","hala","hanbei-conquest","hapu","harmony","hassel","hau","hau-masters","hau-stance","hayley","heath","hero-conquest","hero2-conquest","heroine-conquest","heroine2-conquest","hexmaniac-gen3","hexmaniac-gen3jp","hexmaniac-gen6","hiker-gen1","hiker-gen1rb","hiker-gen2","hiker-gen3","hiker-gen3rs","hiker-gen6","hiker-gen7","hiker-gen8","hiker-gen9","hilbert-masters","hilbert-masters2","hilbert-masters3","hilda-masters","hilda-masters2","hilda-masters3","hilda-masters4","hop","hop-masters","hugh-masters","hyde","ilima","ingo-hisui","ingo-masters","interviewers-gen3","interviewers-gen6","iono","iono-masters","iono-masters2","irida","irida-masters","irida-masters2","iris-masters","iris-masters2","iscan","ivor","jacinthe","jacq","jamie","janine-gen2","janitor-gen7","janitor-gen9","jasmine-contest","jasmine-gen2","jasmine-masters","jasmine-masters2","jasmine-masters3","jessiejames-gen1","johanna","johanna-contest","jrtrainer-gen1","jrtrainer-gen1rb","jrtrainerf-gen1","jrtrainerf-gen1rb","juan-gen3","juggler-gen1","juggler-gen1rb","juggler-gen2","juggler-gen3","juliana-bb","juliana-festival","juliana-masters","juliana-s","juniper","kabu","kabu-masters","kahili","kamado","kamado-armor","karen-gen2","katy","kiawe","kieran","kieran-champion","kieran-festival","kieran-masters","kimonogirl-gen2","kindler-gen3","kindler-gen6","klara","kofu","koga-gen1","koga-gen1rb","koga-gen2","koga-gen3","koga-lgpe","korrina","korrina-masters","kris","kris-gen2","kris-masters","kris-masters2","kukui","kukui-stand","kunoichi-conquest","kunoichi2-conquest","kurt","lacey","lacey-masters","lady-gen3","lady-gen3rs","lady-gen6","lady-gen6oras","lana","lana-masters","lana-masters2","lance-gen1","lance-gen1rb","lance-gen2","lance-gen3","lance-lgpe","lance-masters","lance-masters2","lanette","larry","larry-masters","larry-masters2","lass-gen1","lass-gen1rb","lass-gen2","lass-gen3","lass-gen3rs","lass-gen6","lass-gen6oras","lass-gen7","lass-gen8","laventon","laventon2","leaf-gen3","leaf-masters","leaf-masters2","leaguestaff","leaguestafff","lebanne","leon","leon-masters","leon-masters2","leon-tower","lian","lida","liko","lillie","lillie-masters","lillie-masters2","lillie-masters3","lillie-masters4","lillie-masters5","lillie-z","lisia","lisia-masters","liza-gen6","liza-masters","lorelei-gen1","lorelei-gen1rb","lorelei-gen3","lorelei-lgpe","ltsurge-gen1","ltsurge-gen1rb","ltsurge-gen2","ltsurge-gen3","lucas-contest","lucy","lucy-gen3","lusamine","lusamine-masters","lusamine-nihilego","lyra-masters","lyra-masters2","lyra-pokeathlon","lysandre","lysandre-masters","mable","madame-gen6","madame-gen7","madame-gen8","magmagrunt","magmagrunt-rse","magmagruntf","magmagruntf-rse","magmasuit","magnolia","magnus","mai","maid-gen4","maid-gen6","mallow","mallow-masters","malva","marley-masters","marnie","marnie-league","marnie-masters","marnie-masters2","marnie-masters3","marnie-masters4","masamune-conquest","mateo","matt","matt-gen3","maxie-gen3","maxie-gen6","may","may-contest","may-e","may-gen3","may-gen3rs","may-masters","may-masters2","may-masters3","may-masters4","may-rs","medium-gen2jp","mela","melli","melony","miku-fairy","miku-fire","miku-flying","miku-ghost","miku-grass","miku-ground","miku-ice","miku-psychic","miku-water","milo","mina","mina-lgpe","mina-masters","miriam","mirror","misty-gen1","misty-gen1rb","misty-gen2","misty-gen3","misty-lgpe","misty-masters","model-gen8","mohn","mohn-anime","molayne","mom-alola","mom-hoenn","mom-johto","mom-paldea","mom-unova","mom-unova2","morgan","morty-gen2","morty-masters","morty-masters2","morty-masters3","mrbriney","mrfuji-gen3","mrstone","musician-gen8","musician-gen9","mustard","mustard-champion","mustard-master","n-masters","n-masters2","n-masters3","nancy","nanu","nate-masters","nate-pokestar","nate-pokestar3","naveen","nemona-masters","nemona-s","nemona-v","neroli","nessa","nessa-masters","ninjaboy-gen3","ninjaboy-gen6","nita","nobunaga-conquest","noland","noland-gen3","norman-gen3","norman-gen6","oak","oak-gen1","oak-gen1rb","oak-gen2","oak-gen3","officer-gen2","officeworker","officeworker-gen9","officeworkerf","officeworkerf-gen9","ogreclan","oichi-conquest","oldcouple-gen3","oleana","olivia","olympia","opal","ortega","owner","painter-gen3","palina","parasollady-gen3","parasollady-gen6","paulo-masters","paxton","pearlclanmember","penny","peonia","peony","peony-league","perrin","perrin-masters","pesselle","phil","phillipe","phoebe-gen3","phoebe-gen6","phoebe-masters","phorus-unite","phyco","picnicker-gen2","picnicker-gen3","picnicker-gen3rs","picnicker-gen6","piers","piers-league","piers-masters","player-go","playerf-go","plumeria","plumeria-league","pokefan-gen2","pokefan-gen3","pokefan-gen6","pokefan-gen6xy","pokefanf-gen2","pokefanf-gen3","pokefanf-gen6","pokefanf-gen6xy","pokekid-gen8","pokekidf-gen8","pokemaniac-gen1","pokemaniac-gen1rb","pokemaniac-gen2","pokemaniac-gen3","pokemaniac-gen3rs","pokemaniac-gen6","pokemaniac-gen9","pokemonbreeder-gen3","pokemonbreeder-gen6","pokemonbreeder-gen6xy","pokemonbreeder-gen7","pokemonbreeder-gen8","pokemonbreederf-gen3","pokemonbreederf-gen3frlg","pokemonbreederf-gen6","pokemonbreederf-gen6xy","pokemonbreederf-gen7","pokemonbreederf-gen8","pokemoncenterlady","pokemonranger-gen3","pokemonranger-gen3rs","pokemonranger-gen6","pokemonranger-gen6xy","pokemonrangerf-gen3","pokemonrangerf-gen3rs","pokemonrangerf-gen6","pokemonrangerf-gen6xy","policeman-gen7","policeman-gen8","poppy","poppy-masters","postman","preschooler-gen6","preschooler-gen7","preschoolerf-gen6","preschoolerf-gen7","preschoolers","pryce-gen2","psychic-gen1","psychic-gen1rb","psychic-gen2","psychic-gen3","psychic-gen3rs","psychic-gen6","psychic-lgpe","psychicf-gen3","psychicf-gen3rs","psychicfjp-gen3","punkgirl","punkgirl-gen7","punkgirl-masters","punkguy","punkguy-gen7","raifort","raihan","raihan-masters","railstaff","rainbowrocketgrunt","rainbowrocketgruntf","ramos","ranmaru-conquest","red-gen1","red-gen1main","red-gen1rb","red-gen1title","red-gen2","red-gen3","red-gen7","red-lgpe","red-masters","red-masters2","red-masters3","red-masters4","rei","rei-isekai","rei-masters","reporter-gen6","reporter-gen8","rhi","richboy-gen3","richboy-gen6","richboy-gen6xy","rika","rika-masters","risingstar","risingstar-gen6","risingstarf","risingstarf-gen6","rita","river","rocker-gen1","rocker-gen1rb","rocker-gen3","rocket-gen1","rocket-gen1rb","rocketexecutive-gen2","rocketexecutivef-gen2","rocketgrunt-gen2","rocketgruntf-gen2","rollerskater","rollerskaterf","rosa-masters","rosa-masters2","rosa-masters3","rosa-masters4","rosa-pokestar","rosa-pokestar2","rosa-pokestar3","rose","rose-zerosuit","rowan","roxanne-gen3","roxanne-gen6","roxanne-masters","roxie-masters","roy","ruffian","ruinmaniac-gen3","ruinmaniac-gen3rs","ruinmaniac-gen6","rye","ryme","ryuki","sabi","sabrina-frlg","sabrina-gen1","sabrina-gen1rb","sabrina-gen2","sabrina-gen3","sabrina-lgpe","sabrina-masters","sada","sada-ai","sage-gen2","sage-gen2jp","saguaro","sailor-gen1","sailor-gen1rb","sailor-gen2","sailor-gen3","sailor-gen3jp","sailor-gen3rs","sailor-gen6","salvatore","samsonoak","sanqua","sbcmember","schoolboy","schoolboy-gen2","schoolgirl","schoolkid-gen3","schoolkid-gen6","schoolkid-gen8","schoolkidf-gen3","schoolkidf-gen6","schoolkidf-gen8","scientist-gen1","scientist-gen1rb","scientist-gen2","scientist-gen3","scientist-gen6","scientist-gen7","scientist-gen9","scientistf-gen6","scott","scottie-masters","scubadiver","securitycorps","securitycorpsf","selene","selene-masters","selene-masters2","selene-usum","serena","serena-anime","serena-masters","serena-masters2","serena-masters3","shauna","shauna-masters","shauntal-masters","shelly","shelly-gen3","shielbert","sidney","sidney-gen3","siebold","siebold-masters","sierra","sightseer","sightseerf","silver-gen2","silver-gen2kanto","silver-masters","silver-masters2","sina","sina-gen6","sisandbro-gen3","sisandbro-gen3rs","skier-gen2","skullgrunt","skullgruntf","skyla-masters","skyla-masters2","skyla-masters3","skytrainer","skytrainerf","soliera","sonia","sonia-masters","sonia-masters2","sonia-professor","sophocles","sordward","sordward-shielbert","spark","spark-casual","spenser","spenser-gen3","srandjr-gen3","stargrunt-s","stargrunt-v","stargruntf-s","stargruntf-v","steven-gen3","steven-gen6","steven-masters","steven-masters2","steven-masters3","steven-masters4","steven-masters5","streetthug","streetthug-masters","supernerd-gen1","supernerd-gen1rb","supernerd-gen2","supernerd-gen3","surfer","swimmer-gen1","swimmer-gen1rb","swimmer-gen4jp","swimmer-gen6","swimmer-gen7","swimmer-gen8","swimmer-masters","swimmerf-gen2","swimmerf-gen3","swimmerf-gen3rs","swimmerf-gen6","swimmerf-gen7","swimmerf-gen8","swimmerf2-gen6","swimmerf2-gen7","swimmerfjp-gen2","swimmerm-gen2","swimmerm-gen3","swimmerm-gen3rs","sycamore","sycamore-masters","tabitha","tabitha-gen3","tamer-gen1","tamer-gen1rb","tamer-gen3","taohua","tarragon","tate-gen6","tate-masters","tateandliza-gen3","tateandliza-gen6","taunie","teacher-gen2","teacher-gen7","teamaquabeta-gen3","teamaquagruntf-gen3","teamaquagruntm-gen3","teammagmagruntf-gen3","teammagmagruntm-gen3","teammates","teamrocketgruntf-gen3","teamrocketgruntm-gen3","theroyal","tierno","tina-masters","toddsnap","toddsnap2","tourist","touristf","touristf2","trace","trevor","trialguide","trialguidef","triathletebiker-gen6","triathletebikerf-gen3","triathletebikerm-gen3","triathleterunner-gen6","triathleterunnerf-gen3","triathleterunnerm-gen3","triathleteswimmer-gen6","triathleteswimmerf-gen3","triathleteswimmerm-gen3","tricia-masters","trinnia-masters","trista-masters","tuber-gen3","tuber-gen6","tuberf-gen3","tuberf-gen3rs","tuberf-gen6","tucker","tucker-gen3","tuli","tulip","turo","turo-ai","twins-gen2","twins-gen3","twins-gen3rs","twins-gen6","tyme","ultraforestkartenvoy","urbain","valerie","vessa","veteran-gen6","veteran-gen7","veteranf-gen6","veteranf-gen7","victor","victor-dojo","victor-league","victor-masters","victor-tundra","vince","viola","viola-masters","volkner-masters","volo","volo-ginkgo","waiter-gen9","waitress-gen6","waitress-gen9","wallace-gen3","wallace-gen3rs","wallace-gen6","wallace-masters","wally-gen3","wally-masters","wally-rse","wattson-gen3","whitney-gen2","whitney-masters","wicke","wikstrom","will-gen2","willem","willow","willow-casual","winona-gen3","winona-gen6","worker-gen6","worker-gen7","worker-gen8","worker-gen9","worker-lgpe","worker2-gen6","workerf-gen8","wulfric","xerosic","yancy","yellgrunt","yellgruntf","youngathlete","youngathletef","youngcouple-gen3","youngcouple-gen3rs","youngcouple-gen6","youngn","youngster-gen1","youngster-gen1rb","youngster-gen2","youngster-gen3","youngster-gen3rs","youngster-gen4","youngster-gen6","youngster-gen6xy","youngster-gen7","youngster-gen8","youngster-gen9","youngster-masters","yukito-hideko","zinnia-masters","zirco-unite","zisu","zossie"];
+	/* AVATAR-DATA-END */
+	/*
+	 * The old client (what the site serves): its popup is HTML built in initialize, and a
+	 * button named setAvatar sends its value as /avatar. The list goes in the same way.
+	 */
+	function installOldAvatarList() {
+		var P = window.AvatarsPopup;
+		if (!P || !P.prototype || !P.prototype.initialize || !window.jQuery) return false;
+		if (P.__velvetAll) return true;
+		P.__velvetAll = true;
+		var initialize = P.prototype.initialize;
+		P.prototype.initialize = function () {
+			var out = initialize.apply(this, arguments);
+			try {
+				var cur = window.app && app.user && String(app.user.get('avatar'));
+				var buf = '<div class="velvet-avatars" style="clear:left;padding-top:6px"><p><strong>All official avatars</strong> ' +
+					'<input type="search" class="textbox" placeholder="Search (cynthia, ace trainer, gen4...)" style="width:250px;margin-left:6px" /> ' +
+					'<small class="velvet-avatar-count" style="color:#888"></small></p>' +
+					'<div class="velvet-avatar-grid" style="max-height:380px;overflow-y:auto">';
+				for (var i = 0; i < OFFICIAL_AVATARS.length; i++) {
+					var name = OFFICIAL_AVATARS[i];
+					var src = window.Dex ? Dex.resolveAvatar(name) : 'https://play.pokemonshowdown.com/sprites/trainers/' + name + '.png';
+					buf += '<button name="setAvatar" value="' + name + '" data-search="' + name.replace(/[^a-z0-9]/g, '') + '" title="/avatar ' + name + '" class="button' + (name === cur ? ' cur' : '') + '" style="width:84px;height:84px;padding:1px;margin:2px;vertical-align:top">' +
+						'<img src="' + src + '" loading="lazy" width="80" height="80" alt="" style="image-rendering:pixelated;object-fit:contain" /></button>';
+				}
+				buf += '</div></div>';
+				var $section = jQuery(buf);
+				var $last = this.$el.children('p').last();
+				if ($last.length) $section.insertBefore($last); else this.$el.append($section);
+				this.$el.css('max-width', 900);
+				var $count = $section.find('.velvet-avatar-count').text(OFFICIAL_AVATARS.length + ' avatars');
+				$section.find('input').on('input', function () {
+					var q = String(this.value || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+					var shown = 0;
+					$section.find('button').each(function () {
+						var hit = !q || this.getAttribute('data-search').indexOf(q) >= 0;
+						this.style.display = hit ? '' : 'none';
+						if (hit) shown++;
+					});
+					$count.text(shown + ' shown');
+				});
+			} catch (e) { /* the numbered grid still works */ }
+			return out;
+		};
+		return true;
+	}
+	function installAvatarList() {
+		var old = installOldAvatarList();
+		var P = window.AvatarsPanel;
+		if (!P || !P.prototype || !P.prototype.render || !window.preact) return old;
+		if (P.__velvetAll) return true;
+		P.__velvetAll = true;
+		var render = P.prototype.render;
+		P.prototype.render = function () {
+			var tree = render.apply(this, arguments);
+			try {
+				var h = preact.h;
+				var self = this;
+				var filter = String((this.state && this.state.velvetFilter) || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+				var list = OFFICIAL_AVATARS.filter(function (n) { return !filter || n.replace(/[^a-z0-9]/g, '').indexOf(filter) >= 0; });
+				var current = window.PS && PS.user && PS.user.avatar;
+				var section = h('div', { 'class': 'velvet-avatars', style: 'clear:left;padding-top:8px' },
+					h('label', { 'class': 'optlabel' }, h('strong', null, 'All official avatars '),
+						h('input', {
+							type: 'search', 'class': 'textbox', placeholder: 'Search (cynthia, ace trainer, gen4...)', style: 'width:260px;margin-left:6px',
+							value: (this.state && this.state.velvetFilter) || '',
+							onInput: function (e) { self.setState({ velvetFilter: e.currentTarget.value }); },
+						}),
+						h('small', { style: 'margin-left:8px;color:#888' }, list.length + ' shown')),
+					h('div', { style: 'max-height:420px;overflow-y:auto;margin-top:6px' },
+						list.map(function (name) {
+							return h('button', {
+								key: name, 'data-cmd': '/closeand /avatar ' + name, title: '/avatar ' + name,
+								'class': 'button' + (name === current ? ' cur' : ''),
+								style: 'width:84px;height:84px;padding:1px;margin:2px;vertical-align:top;' + (name === current ? 'outline:2px solid #4a8;' : ''),
+							}, h('img', {
+								src: window.Dex ? Dex.resolveAvatar(name) : 'https://play.pokemonshowdown.com/sprites/trainers/' + name + '.png',
+								loading: 'lazy', width: 80, height: 80, alt: name, style: 'image-rendering:pixelated;object-fit:contain',
+							}));
+						})));
+				// Into the panel, after the numbered grid.
+				var pad = tree && tree.props && tree.props.children;
+				pad = Array.isArray(pad) ? pad[0] : pad;
+				if (pad && pad.props) {
+					var kids = [].concat(pad.props.children);
+					var at = kids.length - 1;   // before the closing Cancel button
+					kids.splice(at, 0, section);
+					pad.props.children = kids;
+				}
+			} catch (e) { /* the numbered grid still works */ }
+			return tree;
+		};
+		return true;
+	}
+
 	// Toxic's rule for Will-O-Wisp, Thunder Wave and Chilling Mist, in the accuracy tooltip.
 	var SURE_HIT = { willowisp: 'Fire', thunderwave: 'Electric', chillingmist: 'Ice' };
 	function installSureHit() {
@@ -3206,6 +3310,12 @@
 
 	// The event music hooks the battle engine, which only arrives when a battle or a
 	// replay opens: the same patient install as the animations.
+	// The avatar picker lives in the panels script, which loads with the client.
+	var avatarTries = 0;
+	var avatarTimer = setInterval(function () {
+		if (installAvatarList() || ++avatarTries > 600) clearInterval(avatarTimer);
+	}, 250);
+
 	var musicTries = 0;
 	var musicTimer = setInterval(function () {
 		if (installEventMusic() || ++musicTries > 2400) clearInterval(musicTimer);
