@@ -1,0 +1,12 @@
+{
+	"id": "gen9rpbattle-24-tm78iv",
+	"format": "[Gen 9] RP Battle",
+	"players": [
+		"Camper Jin",
+		"lavit"
+	],
+	"rating": null,
+	"log": "|j|☆Camper Jin\n|j|☆lavit\n|t:|1790821842\n|gametype|singles\n|player|p1|Camper Jin|camper-gen6|\n|player|p2|lavit|lavit.png|\n|gen|9\n|tier|[Gen 9] RP Battle\n|clearpoke\n|poke|p1|Morelull, L9, M|\n|poke|p1|Swablu, L13, M|\n|poke|p2|Pansage, L13, F|\n|poke|p2|Darumaka-Galar, L13, M|\n|poke|p2|Greavard, L13, M|\n|poke|p2|Banette, L13, M|\n|poke|p2|Sneasel-Hisui, L13, F|\n|poke|p2|Pawniard, L13, F|\n|teampreview\n|inactive|Battle timer is ON: inactive players will automatically lose when time's up. (requested by Camper Jin)\n|n|☆Camper Jin|camperjin\n|\n|t:|1790821849\n|teamsize|p1|2\n|teamsize|p2|6\n|start\n|switch|p1a: Swablu|Swablu, L13, M|100/100\n|switch|p2a: Pawniard|Pawniard, L13, F|100/100\n|turn|1\n|\n|t:|1790821850\n|move|p2a: Pawniard|Iron Head|p1a: Swablu\n|-damage|p1a: Swablu|20/100\n|move|p1a: Swablu|Disarming Voice|p2a: Pawniard\n|-damage|p2a: Pawniard|87/100\n|\n|upkeep\n|turn|2\n|\n|t:|1790821851\n|move|p2a: Pawniard|Iron Head|p1a: Swablu\n|-damage|p1a: Swablu|0 fnt\n|faint|p1a: Swablu\n|\n|upkeep\n|\n|t:|1790821851\n|switch|p1a: Morelull|Morelull, L9, M|100/100\n|turn|3\n|\n|t:|1790821860\n|move|p2a: Pawniard|Iron Head|p1a: Morelull\n|-supereffective|p1a: Morelull\n|-damage|p1a: Morelull|0 fnt\n|faint|p1a: Morelull\n|\n|win|lavit\n",
+	"inputlog": ">start {\"formatid\":\"gen9rpbattle\",\"seed\":\"sodium,24ff3c60eb23315c5fe946a922d4e261\"}\n>player p1 {\"name\":\"Camper Jin\",\"avatar\":\"camper-gen6\",\"team\":\"Morelull|||EffectSpore|Absorb,Astonish,ConfuseRay,Ingrain|Naive|||8,8,8,8,8,8||9|]Swablu|||NaturalCure|Peck,FuryAttack,DisarmingVoice,Growl|Quirky|||8,8,8,8,8,8||13|\",\"rating\":0}\n>player p2 {\"name\":\"lavit\",\"avatar\":\"lavit.png\",\"team\":\"Pansage|||VerdantSurge|JungleRush,Uturn,CloseCombat,KnockOff|Adamant|||||13|]Darumaka-Galar|||Hustle|IcePunch,Uturn,Superpower,FlareBlitz|Adamant|||||13|]Greavard|||Fluffy|Poltergeist,PlayRough,Roar,Trick|Adamant|||||13|]Banette|||CursedBody|Poltergeist,GunkShot,SwordsDance,ThunderWave|Adamant||||S|13|]Sneasel-Hisui|||InnerFocus|BrickBreak,ShadowBall,DoubleEdge,SwordsDance|Jolly|||||13|]Pawniard|||Defiant|IronHead,SuckerPunch,StealthRock,SwordsDance|Adamant|||||13|\",\"rating\":0}\n>p1 team 2, 1\n>p2 team 6, 2, 3, 4, 5, 1\n>p1 move disarmingvoice\n>p2 move ironhead\n>p1 move peck\n>p2 move ironhead\n>p1 switch 2\n>p1 move absorb\n>p2 move ironhead",
+	"uploadtime": 1790821860
+}
