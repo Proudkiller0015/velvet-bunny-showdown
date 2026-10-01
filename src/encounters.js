@@ -718,12 +718,7 @@ const isPrized = root => Rarity.classOf(root) === 'prized';
 
 function rollWild({ place, badges, levelCap = null, rng = Math.random, double = null, shiny = {}, now = Date.now(), ace = null }) {
 	badges = clampBadges(badges);
-	let [lo, hi] = levelRange(realBadges, levelCap, ace);
-	// Around the player's own levels: the ace at their best, the rest near their average.
-	if (grown) {
-		hi = Math.max(hi, Math.round(grown.max));
-		lo = Math.min(hi, Math.max(lo, Math.round(grown.avg) - 2));
-	}
+	const [lo, hi] = levelRange(badges, levelCap, ace);
 	const rootsOf = list => (list || []).map(n => Dex.species.get(n)).filter(s => s.exists && !isLegendary(s)).map(rootOf);
 	// A prized Pokemon a place lists as common is one of its rare finds instead (PRIZED).
 	const listed = rootsOf(place.common);
@@ -873,7 +868,13 @@ function rollTrainer({ place, badges, levelCap = null, rng = Math.random, classI
 
 	// The ace pulls a trainer down the same way it pulls the wild: somebody whose best
 	// Pokemon is far under their cap is not handed a full-cap team to lose to.
-	const [lo, hi] = levelRange(badges, levelCap, ace);
+	let [lo, hi] = levelRange(realBadges, levelCap, ace);
+	// Around the player's own levels: the ace at their best, the rest near their average.
+	// (These lines sat in rollWild by mistake for a day, 1 Oct 2026: every wild roll threw.)
+	if (grown) {
+		hi = Math.max(hi, Math.round(grown.max));
+		lo = Math.min(hi, Math.max(lo, Math.round(grown.avg) - 2));
+	}
 	/*
 	 * A trainer has a theme, not a class's whole list (24 Sep 2026). A Kimono
 	 * Girl's six types or a Youngster's four made a team of six unrelated
