@@ -2981,6 +2981,31 @@
 		return true;
 	}
 
+	// The multipliers the server applies (data/velvet/balance-patch-1.js, halloween.js), as shown.
+	var ABILITY_POWER = {
+		crownofflame: { name: 'Crown of Flame', types: { Fire: 1.3, Fighting: 1.3 }, flags: { punch: 1.2 } },
+		kindlingcrown: { name: 'Kindling Crown', types: { Fire: 1.2, Fighting: 1.2 }, flags: { punch: 1.1 } },
+		worldturtle: { name: 'World Turtle', types: { Grass: 1.3, Ground: 1.3 } },
+		saplingshell: { name: 'Sapling Shell', types: { Grass: 1.2, Ground: 1.2 } },
+		emperorspride: { name: "Emperor's Pride", types: { Water: 1.3, Steel: 1.3 } },
+		proudchick: { name: 'Proud Chick', types: { Water: 1.2, Steel: 1.2 } },
+		bulldoggrip: { name: 'Bulldog Grip', flags: { bite: 1.5 } },
+		witchinghour: { name: 'Witching Hour', types: { Ghost: 1.5 } },
+	};
+	// How a move type does against a target's types: 2, 4 (super effective), 1, 0.5, 0...
+	function superEffectiveness(moveType, target, move) {
+		var types = target.getTypeList ? target.getTypeList() : (target.getTypes ? target.getTypes()[0] : []);
+		var total = 1;
+		for (var i = 0; i < (types || []).length; i++) {
+			if (move && move.id === 'freezedry' && types[i] === 'Water') { total *= 2; continue; }
+			var taken = window.Dex && Dex.types && Dex.types.get(types[i]).damageTaken;
+			var code = taken ? taken[moveType] : 0;
+			if (code === 1) total *= 2;
+			else if (code === 2) total *= 0.5;
+			else if (code === 3) total = 0;
+		}
+		return total;
+	}
 	function installBuffedBasePower() {
 		var tips = window.BattleTooltips;
 		if (!tips || !tips.prototype || !tips.prototype.getMoveBasePower) return false;
@@ -3021,6 +3046,35 @@
 				// Ribbon Hymn (Sylveon) is Pixilate: 1.2x on the Normal moves it turns Fairy.
 				if (ability === 'ribbonhymn' && move && move.type === 'Normal' && moveType === 'Fairy' && out && out.modify) {
 					out.modify(4915 / 4096, 'Ribbon Hymn');
+				}
+				/*
+				 * Our abilities that raise a move's power by its type or kind (data/velvet,
+				 * onBasePower). The battle always applied them; the tooltip showed nothing, so
+				 * Infernape's Ice Punch read 75 with Crown of Flame (owner, 1 Oct 2026). Type
+				 * and kind stack, as on the server. Crown of Flame's 1.2x on super effective
+				 * hits is damage, not power, so it is not part of this number.
+				 */
+				var boost = ABILITY_POWER[ability];
+				if (boost && move && out && out.modify) {
+					if (boost.types && boost.types[moveType]) out.modify(boost.types[moveType], boost.name);
+					var flags = move.flags || {};
+					for (var flag in (boost.flags || {})) {
+						if (flags[flag]) out.modify(boost.flags[flag], boost.name + (boost.types ? ' (' + flag + ')' : ''));
+					}
+				}
+				/*
+				 * Super effective against the Pokemon in front of you: Expert Belt's 1.2x, and
+				 * Crown of Flame's own (its built-in belt), shown in the power (owner, 1 Oct 2026).
+				 * They are damage boosts on the server, which comes to the same number. Only
+				 * with a target to measure against, and never for a status move.
+				 */
+				if (target && move && move.category !== 'Status' && out && out.modify && out.value) {
+					var eff = superEffectiveness(moveType, target, move);
+					if (eff > 1) {
+						var held = window.toID((serverPokemon && serverPokemon.item) || (pokemon && pokemon.item) || '');
+						if (held === 'expertbelt') out.modify(1.2, 'Expert Belt');
+						if (ability === 'crownofflame') out.modify(1.2, 'Crown of Flame (super effective)');
+					}
 				}
 				// Solar Nectar: 135 power in harsh sunlight (Balance Patch 1).
 				var moveId = move && (move.id || window.toID(move.name || ''));
