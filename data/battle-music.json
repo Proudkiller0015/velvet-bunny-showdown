@@ -1,0 +1,9 @@
+{
+  "note": "Battle music for RP events (the owner's files, 30 Sep 2026). source = the owner's download it is cut from; file = what scripts/build-battle-music.js writes to client/audio/events/. Wild legendaries play their own theme instead (data/legend-music.json).",
+  "events": {
+    "wild": { "file": "wild-bw", "source": "Pokémon Black & White - Wild Pokemon Battle Music (HQ) - Pokeli.mp3", "plays": "a wild Pokemon" },
+    "rarewild": { "file": "rare-wild-bw", "source": "Pokémon Black & White - Rare Wild Pokemon Battle Music (HQ) - Pokeli.mp3", "plays": "a wild Pokemon that is shiny, or rare or better on the rarity ladder (rare, starter, pseudo, Ultra Beast, paradox, or a legendary with no theme of its own)" },
+    "trainer": { "file": "trainer-rse", "source": "Pokémon Ruby, Sapphire & Emerald - Trainer Battle Music (HQ) - Pokeli.mp3", "plays": "an NPC trainer (a rolled route trainer or a story trainer below gym level)" },
+    "gym": { "file": "gym-leader-dppt", "source": "Pokémon Diamond, Pearl & Platinum - Gym Leader Battle Music (HQ) - Pokeli.mp3", "plays": "a gym leader" }
+  }
+}

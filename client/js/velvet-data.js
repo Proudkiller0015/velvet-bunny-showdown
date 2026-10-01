@@ -2618,67 +2618,97 @@
 	}
 
 	/*
-	 * Legendary themes (the owner, 30 Sep 2026): when a wild legendary appears, its own
-	 * battle theme replaces the usual music - in the battle and in its replay, so the
-	 * moment is remembered the way it sounded. Only for the wild side of a wild
-	 * encounter: a legendary on a trainer or player team plays the normal music.
-	 * Tracks: client/audio/legends (cut by scripts/cut-legend-music.js from
-	 * data/legend-music.json), with their length in ms. Each loops from its start to
-	 * just before its fade-out.
+	 * Battle music for RP events (the owner, 30 Sep 2026), live and in replays:
+	 *   a wild legendary            its own theme (trios share one)
+	 *   a rare or shiny wild         Black & White's rare wild theme
+	 *   any other wild Pokemon       Black & White's wild theme
+	 *   a gym leader                 Diamond & Pearl's gym leader theme
+	 *   an NPC trainer               Ruby & Sapphire's trainer theme
+	 * Player-vs-player battles, the Elite Four and the Champion keep Showdown's music.
+	 * The tables come from scripts/build-battle-music.js; the tracks are in client/audio.
+	 *
+	 * Who is who is read from the battle itself, so a replay sounds like the battle did:
+	 * the wild side is named "Wild ...", and an NPC trainer battles with their class's
+	 * avatar AND under its title ("Leader Lana" in brock-gen4) - a player who merely
+	 * picked a trainer avatar is not mistaken for one.
 	 */
-	var LEGEND_FILES = {"mew":82000,"raikou":107000,"entei":98000,"suicune":180000,"hooh":119000,"lugia":81000,"weather-trio":98000,"deoxys":164000,"regis":100000,"sinnoh-legendary":67000,"lake-trio":116000,"dialga-palkia":160000,"giratina":227000,"unova-legendary":201000,"reshiram-zekrom":269000,"kyurem":269000,"kyurem-black-white":235000,"mewtwo":186000,"xerneas-yveltal":160000,"solgaleo-lunala":198000,"tapu":176000,"ultra-necrozma":192000,"necrozma":177000,"ultra-beast":168000,"mysterious-being":127000,"zacian-zamazenta":250000,"eternatus":623000,"arceus":182000,"primal":105070};
-	var LEGEND_OF = {"mew":"mew","raikou":"raikou","entei":"entei","suicune":"suicune","hooh":"hooh","lugia":"lugia","groudon":"weather-trio","kyogre":"weather-trio","rayquaza":"weather-trio","rayquazamega":"weather-trio","deoxys":"deoxys","deoxysattack":"deoxys","deoxysdefense":"deoxys","deoxysspeed":"deoxys","regirock":"regis","regice":"regis","registeel":"regis","rotom":"sinnoh-legendary","heatran":"sinnoh-legendary","darkrai":"sinnoh-legendary","cresselia":"sinnoh-legendary","manaphy":"sinnoh-legendary","phione":"sinnoh-legendary","shaymin":"sinnoh-legendary","shayminsky":"sinnoh-legendary","regigigas":"sinnoh-legendary","uxie":"lake-trio","azelf":"lake-trio","mesprit":"lake-trio","dialga":"dialga-palkia","palkia":"dialga-palkia","dialgaorigin":"dialga-palkia","palkiaorigin":"dialga-palkia","giratina":"giratina","giratinaorigin":"giratina","cobalion":"unova-legendary","virizion":"unova-legendary","terrakion":"unova-legendary","victini":"unova-legendary","keldeo":"unova-legendary","landorus":"unova-legendary","thundurus":"unova-legendary","tornadus":"unova-legendary","landorustherian":"unova-legendary","thundurustherian":"unova-legendary","tornadustherian":"unova-legendary","meloetta":"unova-legendary","genesect":"unova-legendary","reshiram":"reshiram-zekrom","zekrom":"reshiram-zekrom","kyurem":"kyurem","kyuremblack":"kyurem-black-white","kyuremwhite":"kyurem-black-white","mewtwo":"mewtwo","mewtwomegax":"mewtwo","mewtwomegay":"mewtwo","xerneas":"xerneas-yveltal","yveltal":"xerneas-yveltal","zygarde":"xerneas-yveltal","zygarde10":"xerneas-yveltal","zygardecomplete":"xerneas-yveltal","diancie":"xerneas-yveltal","hoopa":"xerneas-yveltal","hoopaunbound":"xerneas-yveltal","volcanion":"xerneas-yveltal","solgaleo":"solgaleo-lunala","lunala":"solgaleo-lunala","cosmog":"solgaleo-lunala","cosmoem":"solgaleo-lunala","tapukoko":"tapu","tapulele":"tapu","tapubulu":"tapu","tapufini":"tapu","necrozmaultra":"ultra-necrozma","necrozma":"necrozma","necrozmaduskmane":"necrozma","necrozmadawnwings":"necrozma","nihilego":"ultra-beast","buzzwole":"ultra-beast","pheromosa":"ultra-beast","xurkitree":"ultra-beast","celesteela":"ultra-beast","kartana":"ultra-beast","guzzlord":"ultra-beast","poipole":"ultra-beast","naganadel":"ultra-beast","stakataka":"ultra-beast","blacephalon":"ultra-beast","calyrex":"mysterious-being","calyrexice":"mysterious-being","calyrexshadow":"mysterious-being","glastrier":"mysterious-being","spectrier":"mysterious-being","regieleki":"mysterious-being","regidrago":"mysterious-being","kubfu":"mysterious-being","urshifu":"mysterious-being","urshifurapidstrike":"mysterious-being","zacian":"zacian-zamazenta","zamazenta":"zacian-zamazenta","zaciancrowned":"zacian-zamazenta","zamazentacrowned":"zacian-zamazenta","eternatus":"eternatus","eternatuseternamax":"eternatus","arceus":"arceus","groudonprimal":"primal","kyogreprimal":"primal"};
-	function legendTrack(pokemon) {
+	/* MUSIC-DATA-START: written by scripts/build-battle-music.js - edit the data files, not this. */
+	var MUSIC_LOOP = {"legends/mew":79500,"legends/raikou":104500,"legends/entei":95500,"legends/suicune":177500,"legends/hooh":116500,"legends/lugia":78500,"legends/weather-trio":95500,"legends/deoxys":161500,"legends/regis":97500,"legends/sinnoh-legendary":64500,"legends/lake-trio":113500,"legends/dialga-palkia":157500,"legends/giratina":224500,"legends/unova-legendary":198500,"legends/reshiram-zekrom":266500,"legends/kyurem":266500,"legends/kyurem-black-white":232500,"legends/mewtwo":183500,"legends/xerneas-yveltal":157500,"legends/solgaleo-lunala":195500,"legends/tapu":173500,"legends/ultra-necrozma":189500,"legends/necrozma":174500,"legends/ultra-beast":165500,"legends/mysterious-being":124500,"legends/zacian-zamazenta":247500,"legends/eternatus":620500,"legends/arceus":179500,"legends/primal":102570,"events/wild-bw":174869,"events/rare-wild-bw":174845,"events/trainer-rse":175015,"events/gym-leader-dppt":174620};
+	var MUSIC_EVENT = {"wild":"events/wild-bw","rarewild":"events/rare-wild-bw","trainer":"events/trainer-rse","gym":"events/gym-leader-dppt"};
+	var LEGEND_OF = {"mew":"legends/mew","raikou":"legends/raikou","entei":"legends/entei","suicune":"legends/suicune","hooh":"legends/hooh","lugia":"legends/lugia","groudon":"legends/weather-trio","kyogre":"legends/weather-trio","rayquaza":"legends/weather-trio","rayquazamega":"legends/weather-trio","deoxys":"legends/deoxys","deoxysattack":"legends/deoxys","deoxysdefense":"legends/deoxys","deoxysspeed":"legends/deoxys","regirock":"legends/regis","regice":"legends/regis","registeel":"legends/regis","rotom":"legends/sinnoh-legendary","heatran":"legends/sinnoh-legendary","darkrai":"legends/sinnoh-legendary","cresselia":"legends/sinnoh-legendary","manaphy":"legends/sinnoh-legendary","phione":"legends/sinnoh-legendary","shaymin":"legends/sinnoh-legendary","shayminsky":"legends/sinnoh-legendary","regigigas":"legends/sinnoh-legendary","uxie":"legends/lake-trio","azelf":"legends/lake-trio","mesprit":"legends/lake-trio","dialga":"legends/dialga-palkia","palkia":"legends/dialga-palkia","dialgaorigin":"legends/dialga-palkia","palkiaorigin":"legends/dialga-palkia","giratina":"legends/giratina","giratinaorigin":"legends/giratina","cobalion":"legends/unova-legendary","virizion":"legends/unova-legendary","terrakion":"legends/unova-legendary","victini":"legends/unova-legendary","keldeo":"legends/unova-legendary","landorus":"legends/unova-legendary","thundurus":"legends/unova-legendary","tornadus":"legends/unova-legendary","landorustherian":"legends/unova-legendary","thundurustherian":"legends/unova-legendary","tornadustherian":"legends/unova-legendary","meloetta":"legends/unova-legendary","genesect":"legends/unova-legendary","reshiram":"legends/reshiram-zekrom","zekrom":"legends/reshiram-zekrom","kyurem":"legends/kyurem","kyuremblack":"legends/kyurem-black-white","kyuremwhite":"legends/kyurem-black-white","mewtwo":"legends/mewtwo","mewtwomegax":"legends/mewtwo","mewtwomegay":"legends/mewtwo","xerneas":"legends/xerneas-yveltal","yveltal":"legends/xerneas-yveltal","zygarde":"legends/xerneas-yveltal","zygarde10":"legends/xerneas-yveltal","zygardecomplete":"legends/xerneas-yveltal","diancie":"legends/xerneas-yveltal","hoopa":"legends/xerneas-yveltal","hoopaunbound":"legends/xerneas-yveltal","volcanion":"legends/xerneas-yveltal","solgaleo":"legends/solgaleo-lunala","lunala":"legends/solgaleo-lunala","cosmog":"legends/solgaleo-lunala","cosmoem":"legends/solgaleo-lunala","tapukoko":"legends/tapu","tapulele":"legends/tapu","tapubulu":"legends/tapu","tapufini":"legends/tapu","necrozmaultra":"legends/ultra-necrozma","necrozma":"legends/necrozma","necrozmaduskmane":"legends/necrozma","necrozmadawnwings":"legends/necrozma","nihilego":"legends/ultra-beast","buzzwole":"legends/ultra-beast","pheromosa":"legends/ultra-beast","xurkitree":"legends/ultra-beast","celesteela":"legends/ultra-beast","kartana":"legends/ultra-beast","guzzlord":"legends/ultra-beast","poipole":"legends/ultra-beast","naganadel":"legends/ultra-beast","stakataka":"legends/ultra-beast","blacephalon":"legends/ultra-beast","calyrex":"legends/mysterious-being","calyrexice":"legends/mysterious-being","calyrexshadow":"legends/mysterious-being","glastrier":"legends/mysterious-being","spectrier":"legends/mysterious-being","regieleki":"legends/mysterious-being","regidrago":"legends/mysterious-being","kubfu":"legends/mysterious-being","urshifu":"legends/mysterious-being","urshifurapidstrike":"legends/mysterious-being","zacian":"legends/zacian-zamazenta","zamazenta":"legends/zacian-zamazenta","zaciancrowned":"legends/zacian-zamazenta","zamazentacrowned":"legends/zacian-zamazenta","eternatus":"legends/eternatus","eternatuseternamax":"legends/eternatus","arceus":"legends/arceus","groudonprimal":"legends/primal","kyogreprimal":"legends/primal"};
+	var RARE_WILD = {"abomasnowmega":1,"abra":1,"absolmega":1,"absolmegaz":1,"aegislash":1,"aegislashblade":1,"aerodactylmega":1,"aggronmega":1,"alakazam":1,"alakazammega":1,"alomomola":1,"altariamega":1,"amoonguss":1,"ampharosmega":1,"annihilape":1,"appletun":1,"applin":1,"arcanine":1,"arcaninehisui":1,"arceusbug":1,"arceusdark":1,"arceusdragon":1,"arceuselectric":1,"arceusfairy":1,"arceusfighting":1,"arceusfire":1,"arceusflying":1,"arceusghost":1,"arceusgrass":1,"arceusground":1,"arceusice":1,"arceuspoison":1,"arceuspsychic":1,"arceusrock":1,"arceussteel":1,"arceuswater":1,"archaludon":1,"archen":1,"archeops":1,"arctibax":1,"arctozolt":1,"armarouge":1,"articuno":1,"articunogalar":1,"audinomega":1,"axew":1,"bagon":1,"banettemega":1,"banettemegahalloween":1,"barbaraclemega":1,"baxcalibur":1,"baxcaliburmega":1,"bayleef":1,"beedrillmega":1,"beldum":1,"bisharp":1,"blastoise":1,"blastoisegmax":1,"blastoisemega":1,"blaziken":1,"blazikenmega":1,"blissey":1,"braixen":1,"brionne":1,"brutebonnet":1,"budew":1,"bulbasaur":1,"cameruptmega":1,"celebi":1,"ceruledge":1,"chandeluremega":1,"chansey":1,"charcadet":1,"charizard":1,"charizardgmax":1,"charizardmegax":1,"charizardmegay":1,"charmander":1,"charmeleon":1,"chesnaught":1,"chesnaughtmega":1,"chespin":1,"chienpao":1,"chikorita":1,"chimai":1,"chimchar":1,"chimechomega":1,"chiyu":1,"cinderace":1,"cinderacegmax":1,"clefable":1,"clefablemega":1,"clefairy":1,"cleffa":1,"clodsire":1,"combusken":1,"corviknight":1,"corvisquire":1,"cottonee":1,"crabominablemega":1,"crocalor":1,"croconaw":1,"cyndaquil":1,"darkraimega":1,"darmanitan":1,"darmanitangalar":1,"darmanitangalarzen":1,"darmanitanzen":1,"dartrix":1,"darumaka":1,"darumakagalar":1,"decidueye":1,"decidueyehisui":1,"deino":1,"delphox":1,"delphoxmega":1,"dewott":1,"dianciemega":1,"dipplin":1,"dondozo":1,"doublade":1,"dracovish":1,"dracozolt":1,"dragalgemega":1,"dragapult":1,"dragonair":1,"dragonite":1,"dragonitemega":1,"drakloak":1,"drampamega":1,"dratini":1,"dreepy":1,"drilbur":1,"drizzile":1,"duraludon":1,"eelektrossmega":1,"eevee":1,"eeveegmax":1,"eeveestarter":1,"electabuzz":1,"electivire":1,"elekid":1,"emboar":1,"emboarmega":1,"empoleon":1,"enamorus":1,"enamorustherian":1,"espathra":1,"espeon":1,"excadrill":1,"excadrillmega":1,"falinksmega":1,"feebas":1,"fennekin":1,"feraligatr":1,"feraligatrmega":1,"ferroseed":1,"ferrothorn":1,"fezandipiti":1,"finizen":1,"flabebe":1,"flapple":1,"flareon":1,"fletchinder":1,"fletchling":1,"flittle":1,"floette":1,"floetteeternal":1,"floettemega":1,"floragato":1,"florges":1,"fluttermane":1,"foongus":1,"fraxure":1,"frigibax":1,"froakie":1,"frogadier":1,"froslassmega":1,"fuecoco":1,"gabite":1,"gallademega":1,"garchomp":1,"garchompmega":1,"garchompmegaz":1,"gardevoirmega":1,"garganacl":1,"gastly":1,"genesectburn":1,"genesectchill":1,"genesectdouse":1,"genesectshock":1,"gengar":1,"gengarmega":1,"gholdengo":1,"gible":1,"gimmighoul":1,"gimmighoulroaming":1,"glaceon":1,"glaliemega":1,"gligar":1,"glimmet":1,"glimmora":1,"glimmoramega":1,"gliscor":1,"golisopodmega":1,"golurkmega":1,"goodra":1,"goodrahisui":1,"goomy":1,"gougingfire":1,"greattusk":1,"greninja":1,"greninjaash":1,"greninjabond":1,"greninjamega":1,"grookey":1,"grotle":1,"grovyle":1,"growlithe":1,"growlithehisui":1,"gyarados":1,"gyaradosmega":1,"hakamoo":1,"happiny":1,"hatenna":1,"hatterene":1,"hattrem":1,"haunter":1,"hawlucha":1,"hawluchamega":1,"haxorus":1,"heatranmega":1,"heracrossmega":1,"hippopotas":1,"hippowdon":1,"honedge":1,"horsea":1,"houndoommega":1,"hydrapple":1,"hydreigon":1,"incineroar":1,"infernape":1,"inteleon":1,"inteleongmax":1,"ironboulder":1,"ironbundle":1,"ironcrown":1,"ironhands":1,"ironjugulis":1,"ironleaves":1,"ironmoth":1,"ironthorns":1,"irontreads":1,"ironvaliant":1,"ivysaur":1,"jangmoo":1,"jirachi":1,"jolteon":1,"kadabra":1,"kangaskhanmega":1,"keldeoresolute":1,"kingambit":1,"kingdra":1,"kleavor":1,"koffing":1,"kommoo":1,"kommoototem":1,"koraidon":1,"larvesta":1,"larvitar":1,"latias":1,"latiasmega":1,"latios":1,"latiosmega":1,"leafeon":1,"linoonegalar":1,"litten":1,"lokix":1,"lopunnymega":1,"lucariomega":1,"lucariomegaz":1,"luxio":1,"luxray":1,"magby":1,"magearna":1,"magearnamega":1,"magearnaoriginal":1,"magearnaoriginalmega":1,"magikarp":1,"magmar":1,"magmortar":1,"makuro":1,"malamarmega":1,"mandibuzz":1,"manectricmega":1,"mankey":1,"mareanie":1,"marshadow":1,"marshtomp":1,"mawilemega":1,"medichammega":1,"meganium":1,"meganiummega":1,"melmetal":1,"melmetalgmax":1,"meloettapirouette":1,"meltan":1,"meowscarada":1,"meowsticfmega":1,"meowsticmmega":1,"metagross":1,"metagrossmega":1,"metang":1,"milotic":1,"miraidon":1,"moltres":1,"moltresgalar":1,"monferno":1,"mudbray":1,"mudkip":1,"mudsdale":1,"munchlax":1,"munkidori":1,"nacli":1,"naclstack":1,"nidoking":1,"nidoranm":1,"nidorino":1,"nincada":1,"ninjask":1,"nymble":1,"obstagoon":1,"ogerpon":1,"ogerponcornerstone":1,"ogerponcornerstonetera":1,"ogerponhearthflame":1,"ogerponhearthflametera":1,"ogerpontealtera":1,"ogerponwellspring":1,"ogerponwellspringtera":1,"okidogi":1,"oshawott":1,"palafin":1,"palafinhero":1,"panpour":1,"pansage":1,"pansear":1,"pawniard":1,"pecharunt":1,"pelipper":1,"pichu":1,"pichuspikyeared":1,"pidgeotmega":1,"pignite":1,"pikachu":1,"pikachualola":1,"pikachubelle":1,"pikachucosplay":1,"pikachugmax":1,"pikachuhoenn":1,"pikachukalos":1,"pikachulibre":1,"pikachuoriginal":1,"pikachupartner":1,"pikachuphd":1,"pikachupopstar":1,"pikachurockstar":1,"pikachusinnoh":1,"pikachustarter":1,"pikachuunova":1,"pikachuworld":1,"pinsirmega":1,"piplup":1,"poltchageist":1,"poltchageistartisan":1,"polteageistantique":1,"popplio":1,"porygon":1,"porygon2":1,"porygonz":1,"primarina":1,"primeape":1,"prinplup":1,"pupitar":1,"pyroarmega":1,"quaquaval":1,"quaxly":1,"quaxwell":1,"quilava":1,"quilladin":1,"raboot":1,"ragingbolt":1,"raichu":1,"raichualola":1,"raichumegax":1,"raichumegay":1,"raishin":1,"revavroom":1,"rillaboom":1,"rillaboomgmax":1,"roaringmoon":1,"rookidee":1,"roselia":1,"roserade":1,"rotomwash":1,"rowlet":1,"sableyemega":1,"salamence":1,"salamencemega":1,"samurott":1,"samurotthisui":1,"sandyshocks":1,"sceptile":1,"sceptilemega":1,"scizor":1,"scizormega":1,"scolipedemega":1,"scorbunny":1,"scovillainmega":1,"scraftymega":1,"screamtail":1,"scyther":1,"seadra":1,"serperior":1,"servine":1,"sharpedomega":1,"shedinja":1,"shelgon":1,"shinx":1,"silvally":1,"silvallybug":1,"silvallydark":1,"silvallydragon":1,"silvallyelectric":1,"silvallyfairy":1,"silvallyfighting":1,"silvallyfire":1,"silvallyflying":1,"silvallyghost":1,"silvallygrass":1,"silvallyground":1,"silvallyice":1,"silvallypoison":1,"silvallypsychic":1,"silvallyrock":1,"silvallysteel":1,"silvallywater":1,"simipour":1,"simisage":1,"simisear":1,"sinistcha":1,"sinistchamasterpiece":1,"sinisteaantique":1,"skarmory":1,"skarmorymega":1,"skeledirge":1,"slaking":1,"slakoth":1,"sliggoo":1,"sliggoohisui":1,"slitherwing":1,"slowbro":1,"slowbrogalar":1,"slowbromega":1,"slowking":1,"slowkinggalar":1,"slowpoke":1,"slowpokegalar":1,"sneasel":1,"sneaselhisui":1,"sneasler":1,"snivy":1,"snorlax":1,"snorlaxgmax":1,"sobble":1,"spiritomb":1,"sprigatito":1,"squirtle":1,"staraptormega":1,"starmiemega":1,"steelixmega":1,"swampert":1,"swampertmega":1,"sylveon":1,"talonflame":1,"tangela":1,"tangrowth":1,"tatsugiricurlymega":1,"tatsugiridroopymega":1,"tatsugiristretchymega":1,"teddiursa":1,"tepig":1,"terapagos":1,"terapagosstellar":1,"terapagosterastal":1,"thwackey":1,"tinglu":1,"tinkatink":1,"tinkaton":1,"tinkatuff":1,"togekiss":1,"togepi":1,"togetic":1,"torchic":1,"torracat":1,"torterra":1,"totodile":1,"toxapex":1,"treecko":1,"turtwig":1,"typenull":1,"typhlosion":1,"typhlosionhisui":1,"tyranitar":1,"tyranitarmega":1,"umbreon":1,"ursaluna":1,"ursalunabloodmoon":1,"ursaring":1,"urshifugmax":1,"urshifurapidstrikegmax":1,"vaporeon":1,"varoom":1,"venusaur":1,"venusaurgmax":1,"venusaurmega":1,"victreebelmega":1,"vigoroth":1,"volcarona":1,"vullaby":1,"walkingwake":1,"wartortle":1,"weavile":1,"weezing":1,"weezinggalar":1,"whimsicott":1,"wingull":1,"wishiwashischool":1,"wochien":1,"wooperpaldea":1,"xerneasneutral":1,"zapdos":1,"zapdosgalar":1,"zarude":1,"zarudedada":1,"zeraora":1,"zeraoramega":1,"zigzagoongalar":1,"zweilous":1,"zygardemega":1};
+	var NPC_TRAINERS = {"youngster-gen4":{"role":"trainer","titles":["Youngster"]},"lass-gen4":{"role":"trainer","titles":["Lass"]},"bugcatcher-gen4dp":{"role":"trainer","titles":["Bug Catcher"]},"hiker-gen4":{"role":"trainer","titles":["Hiker"]},"camper-gen6":{"role":"trainer","titles":["Camper"]},"picnicker-gen6":{"role":"trainer","titles":["Picnicker"]},"fisherman-gen4":{"role":"trainer","titles":["Fisherman","Fisher"]},"swimmer-gen4":{"role":"trainer","titles":["Swimmer"]},"swimmerf-gen4":{"role":"trainer","titles":["Swimmer"]},"tuber-gen6":{"role":"trainer","titles":["Tuber"]},"sailor-gen6":{"role":"trainer","titles":["Sailor"]},"birdkeeper-gen4dp":{"role":"trainer","titles":["Bird Keeper"]},"blackbelt-gen4":{"role":"trainer","titles":["Black Belt"]},"battlegirl-gen4":{"role":"trainer","titles":["Battle Girl"]},"psychic-gen4":{"role":"trainer","titles":["Psychic"]},"psychicf-gen4":{"role":"trainer","titles":["Psychic"]},"hexmaniac-gen6":{"role":"trainer","titles":["Hex Maniac"]},"channeler-gen3":{"role":"trainer","titles":["Channeler"]},"sage-gen2":{"role":"trainer","titles":["Sage"]},"kimonogirl-gen2":{"role":"trainer","titles":["Kimono Girl","Kimono"]},"firebreather-gen2":{"role":"trainer","titles":["Fire Breather","Firebreather"]},"kindler-gen6":{"role":"trainer","titles":["Kindler"]},"skierf-gen4dp":{"role":"trainer","titles":["Skier"]},"pokemonranger-gen4":{"role":"trainer","titles":["Ranger"]},"pokemonrangerf-gen4":{"role":"trainer","titles":["Ranger"]},"pokemonbreederf-gen4":{"role":"trainer","titles":["Breeder"]},"backpacker-gen6":{"role":"trainer","titles":["Backpacker"]},"acetrainer-gen4dp":{"role":"trainer","titles":["Ace Trainer","Ace"]},"acetrainerf-gen4dp":{"role":"trainer","titles":["Ace Trainer","Ace"]},"veteran-gen6":{"role":"trainer","titles":["Veteran"]},"dragontamer-gen6":{"role":"trainer","titles":["Dragon Tamer","Tamer"]},"scientist-gen4":{"role":"trainer","titles":["Scientist"]},"worker-gen6":{"role":"trainer","titles":["Worker"]},"guitarist-gen4":{"role":"trainer","titles":["Guitarist"]},"beauty-gen4dp":{"role":"trainer","titles":["Beauty"]},"gentleman-gen4dp":{"role":"trainer","titles":["Gentleman"]},"lady-gen4":{"role":"trainer","titles":["Lady"]},"richboy-gen4":{"role":"trainer","titles":["Rich Boy"]},"pokefan-gen4":{"role":"trainer","titles":["Poke Fan"]},"artist-gen4":{"role":"trainer","titles":["Artist"]},"cyclist-gen4":{"role":"trainer","titles":["Cyclist"]},"ruinmaniac-gen6":{"role":"trainer","titles":["Ruin Maniac","Ruin Fan"]},"ninjaboy-gen6":{"role":"trainer","titles":["Ninja Boy","Ninja"]},"punkguy-gen7":{"role":"trainer","titles":["Punk"]},"delinquentf-gen9":{"role":"trainer","titles":["Delinquent"]},"schoolkid-gen4":{"role":"trainer","titles":["School Kid","Student"]},"teacher-gen7":{"role":"trainer","titles":["Teacher"]},"nurse":{"role":"trainer","titles":["Nurse"]},"policeman-gen4":{"role":"trainer","titles":["Officer"]},"aquagrunt":{"role":"trainer","titles":["Abyssal Grunt","Grunt"]},"galacticgrunt":{"role":"trainer","titles":["Galactic Grunt","Grunt"]},"cynthia":{"role":"league","titles":["Champion"]},"lance-gen3":{"role":"league","titles":["Elite Four","E4"]},"brock-gen4":{"role":"gym","titles":["Leader"]},"blue-gen3":{"role":"trainer","titles":["Rival"]},"twins-gen4":{"role":"trainer","titles":["Twins"]},"youngcouple-gen4dp":{"role":"trainer","titles":["Young Couple","Couple"]}};
+	/* MUSIC-DATA-END */
+	// Stronger music replaces weaker within a battle, never the other way.
+	var MUSIC_RANK = { trainer: 1, wild: 1, rarewild: 2, gym: 3, legend: 4 };
+	function speciesIdsOf(pokemon) {
 		var id = window.toID(pokemon.speciesForme || pokemon.species || '');
 		var species = window.Dex && Dex.species && Dex.species.get ? Dex.species.get(id) : null;
-		var base = window.toID((species && species.baseSpecies) || '');
-		return LEGEND_OF[id] || LEGEND_OF[base] || null;
+		return [id, window.toID((species && species.baseSpecies) || '')];
 	}
-	// The wild side is named for what is on it ("Wild Arceus", "Wild Pokemon").
-	function isWildSide(side) {
-		return !!side && /^wild\b/i.test(String(side.name || ''));
+	function npcRole(side) {
+		var npc = side && NPC_TRAINERS[String(side.avatar || '').replace(/\.png$/, '')];
+		if (!npc) return null;
+		var name = String(side.name || '');
+		var titled = npc.titles.some(function (t) { return name.toLowerCase().indexOf(t.toLowerCase() + ' ') === 0; });
+		return titled ? npc.role : null;
 	}
-	function installLegendMusic() {
+	// What the scene should play for this Pokemon coming out, or null for no change.
+	function musicFor(pokemon) {
+		var side = pokemon && pokemon.side;
+		if (!side) return null;
+		if (/^wild\b/i.test(String(side.name || ''))) {
+			var ids = speciesIdsOf(pokemon);
+			var legend = LEGEND_OF[ids[0]] || LEGEND_OF[ids[1]];
+			if (legend) return { kind: 'legend', file: legend };
+			if (pokemon.shiny || RARE_WILD[ids[0]] || RARE_WILD[ids[1]]) return { kind: 'rarewild', file: MUSIC_EVENT.rarewild };
+			return { kind: 'wild', file: MUSIC_EVENT.wild };
+		}
+		var role = npcRole(side);
+		if (role === 'gym') return { kind: 'gym', file: MUSIC_EVENT.gym };
+		if (role === 'trainer') return { kind: 'trainer', file: MUSIC_EVENT.trainer };
+		return null;
+	}
+	function playEventMusic(scene, pick) {
+		if (!pick || !pick.file || !MUSIC_LOOP[pick.file] || !scene.updateBgm) return;
+		var now = scene.velvetMusic;
+		if (now && (now.file === pick.file || MUSIC_RANK[now.kind] >= MUSIC_RANK[pick.kind])) return;
+		scene.velvetMusic = pick;
+		scene.bgmNum = 'velvet-' + pick.file;
+		scene.bgm = BattleSound.loadBgm('/audio/' + pick.file + '.mp3', 0, Math.max(5000, MUSIC_LOOP[pick.file]), scene.bgm);
+		scene.updateBgm();
+	}
+	function installEventMusic() {
 		// The scene's animSummon runs whenever a Pokemon is sent out, in a live battle and in a
 		// replay alike (the replay page's newer engine has no Battle.switchIn).
 		var S = window.BattleScene;
 		if (!S || !S.prototype || !S.prototype.animSummon || !window.BattleSound) return false;
-		if (S.__velvetLegendMusic) return true;
-		S.__velvetLegendMusic = true;
+		if (S.__velvetEventMusic) return true;
+		S.__velvetEventMusic = true;
 		var animSummon = S.prototype.animSummon;
 		S.prototype.animSummon = function (pokemon) {
 			var out = animSummon.apply(this, arguments);
-			try {
-				var file = pokemon && isWildSide(pokemon.side) ? legendTrack(pokemon) : null;
-				if (file && this.updateBgm && this.velvetLegend !== file) {
-					var ms = LEGEND_FILES[file] || 120000;
-					this.velvetLegend = file;
-					this.bgmNum = 'legend-' + file;
-					this.bgm = BattleSound.loadBgm('/audio/legends/' + file + '.mp3', 0, Math.max(5000, ms - 2500), this.bgm);
-					this.updateBgm();
-				}
-			} catch (e) { /* the battle goes on with its own music */ }
+			try { playEventMusic(this, musicFor(pokemon)); } catch (e) { /* the battle goes on with its own music */ }
 			return out;
 		};
-		// Keep the theme once it plays: the scene picks music again at moments of its own.
+		// Keep the event's music once it plays: the scene picks music again at moments of its own.
 		var setBgm = S.prototype.setBgm;
 		if (setBgm) {
 			S.prototype.setBgm = function () {
-				if (this.velvetLegend) return;
+				if (this.velvetMusic) return;
 				return setBgm.apply(this, arguments);
 			};
 		}
-		// A replay rewinds by resetting the scene: let it pick the theme again.
+		// A replay rewinds by resetting the scene: let it pick again.
 		var reset = S.prototype.resetBgm;
 		if (reset) {
 			S.prototype.resetBgm = function () {
-				this.velvetLegend = null;
+				this.velvetMusic = null;
 				return reset.apply(this, arguments);
 			};
 		}
 		return true;
 	}
-
 
 	// Toxic's rule for Will-O-Wisp, Thunder Wave and Chilling Mist, in the accuracy tooltip.
 	var SURE_HIT = { willowisp: 'Fire', thunderwave: 'Electric', chillingmist: 'Ice' };
@@ -3026,14 +3056,14 @@
 	}, true);
 	installMoveAnims();
 
-	// The legendary themes hook the battle engine, which only arrives when a battle or a
+	// The event music hooks the battle engine, which only arrives when a battle or a
 	// replay opens: the same patient install as the animations.
 	var musicTries = 0;
 	var musicTimer = setInterval(function () {
-		if (installLegendMusic() || ++musicTries > 2400) clearInterval(musicTimer);
+		if (installEventMusic() || ++musicTries > 2400) clearInterval(musicTimer);
 	}, 250);
 	document.addEventListener('click', function () {
-		if (musicTries > 2400) installLegendMusic();
+		if (musicTries > 2400) installEventMusic();
 	}, true);
 
 	// The data files come from a CDN and arrive in their own time, so each piece
