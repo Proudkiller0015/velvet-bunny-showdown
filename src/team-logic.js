@@ -104,10 +104,10 @@ const ONE_SHOT_MOVES = ['explosion', 'selfdestruct', 'memento', 'healingwish', '
  * weathers undo each other.
  */
 const WEATHER = {
-	rain: { setters: ['drizzle', 'primordialsea'], setMoves: ['raindance'], abusers: ['swiftswim', 'raindish', 'hydration'] },
-	sun: { setters: ['drought', 'desolateland', 'orichalcumpulse'], setMoves: ['sunnyday'], abusers: ['chlorophyll', 'solarpower', 'flowergift', 'harvest'] },
+	rain: { setters: ['drizzle', 'primordialsea', 'tidalsurge'], setMoves: ['raindance'], abusers: ['swiftswim', 'raindish', 'hydration'] },
+	sun: { setters: ['drought', 'desolateland', 'orichalcumpulse', 'solarsurge', 'solstice'], setMoves: ['sunnyday'], abusers: ['chlorophyll', 'solarpower', 'flowergift', 'harvest'] },
 	sand: { setters: ['sandstream'], setMoves: ['sandstorm'], abusers: ['sandrush', 'sandforce'] },
-	snow: { setters: ['snowwarning'], setMoves: ['snowscape', 'chillyreception'], abusers: ['slushrush', 'icebody'] },
+	snow: { setters: ['snowwarning', 'diamonddust', 'polarmantle'], setMoves: ['snowscape', 'chillyreception'], abusers: ['slushrush', 'icebody'] },
 };
 /** Moves that only work in a weather (Aurora Veil in snow, Solar Beam in sun without the charge). */
 const WEATHER_MOVES = { snow: ['auroraveil'], sun: ['solarbeam', 'solarblade'] };

@@ -36,6 +36,9 @@ const { Dex, TeamValidator, Teams } = PS;
 const TeamLogic = require('./team-logic');
 // How often a format's bot teams are dedicated stall (see stallTeam).
 const { stallShare } = require('./ladder-defaults');
+const WeatherPlan = require('./weather-plan');
+// About one built team in seven is a weather team, where the format can field one.
+const WEATHER_SHARE = 0.15;
 
 /**
  * The cut-Pokemon machine moves, read once from the installed copy.
@@ -1688,25 +1691,120 @@ class TeamBuilder {
 		const TeamAssembler = require('./team-assembler');
 		const here = this.local(ctx.id);
 		const candidates = [];
-		for (const species of this.candidates(ctx, constraints, rng)) {
-			if (candidates.length >= 18) break;
-			if (candidates.some(c => ctx.dex.species.get(c.species).baseSpecies === species.baseSpecies)) continue;
+		const strengthOf = species => {
 			const bst = Object.values(species.baseStats).reduce((a, b) => a + b, 0);
 			const row = here && (here[species.name] || here[species.baseSpecies]);
 			// What has won games here is worth more than its stat total says.
-			candidates.push({ species: species.name, level: ctx.level, strength: bst * (1 + Math.min(0.3, ((row && row.score) || 0) * ((row && row.breadth) ?? 1))) });
+			return bst * (1 + Math.min(0.3, ((row && row.score) || 0) * ((row && row.breadth) ?? 1)));
+		};
+		/*
+		 * A weather team (src/weather-plan.js): its setter and two of its users are on the
+		 * team whatever else is, each with the ability that makes it one; nothing that would
+		 * set another weather is considered; and the weather's own types count for a little
+		 * more. The search then fills the rest as it always does - hazards, a pivot, checks.
+		 */
+		const weather = constraints.weather || null;
+		const fixed = [];
+		const forced = new Map();   // species name -> ability it must run
+		if (weather) {
+			const taken = new Set();
+			const draw = (list, n) => {
+				const left = list.filter(x => !taken.has(x.species.baseSpecies));
+				for (let i = 0; i < n && left.length; i++) {
+					// Weighted by strength, so the best setter is likelier but not certain.
+					// Strength to the eighth: the top few share nearly all of it, the weak almost none.
+					const weigh = x => Math.pow(strengthOf(x.species) * (x.worth || 1), 8);
+					const total = left.reduce((sum, x) => sum + weigh(x), 0);
+					let r = rng() * total, k = 0;
+					while (k < left.length - 1 && (r -= weigh(left[k])) > 0) k++;
+					const [got] = left.splice(k, 1);
+					taken.add(got.species.baseSpecies);
+					forced.set(got.species.name, { ability: got.ability, move: got.move || null });
+					const c = { species: got.species.name, level: ctx.level, strength: strengthOf(got.species) };
+					candidates.push(c);
+					fixed.push(c);
+					for (let j = left.length - 1; j >= 0; j--) if (taken.has(left[j].species.baseSpecies)) left.splice(j, 1);
+				}
+			};
+			draw(weather.setters, 1);
+			draw(weather.users, weather.half ? 1 : 2);
+			if (fixed.length < (weather.half ? 2 : 3)) return null;
+		}
+		const boosted = weather ? [...WeatherPlan.WEATHERS[weather.name].types, ...WeatherPlan.TEMPLATES[weather.name].partners] : [];
+		for (const species of this.candidates(ctx, constraints, rng)) {
+			if (candidates.length >= 18) break;
+			if (candidates.some(c => ctx.dex.species.get(c.species).baseSpecies === species.baseSpecies)) continue;
+			if (weather && WeatherPlan.clashes(ctx.dex, species, weather.name)) continue;
+			// A third user is welcome, and so is the weather's own type.
+			const part = weather ? WeatherPlan.rolesOf(ctx.dex, species)[weather.name] : null;
+			if (part && part.user && !weather.half) forced.set(species.name, { ability: part.user, move: null });
+			const lift = part && part.user && !weather.half ? 1.12 : species.types.some(t => boosted.includes(t)) ? 1.06 : 1;
+			candidates.push({ species: species.name, level: ctx.level, strength: strengthOf(species) * lift });
 		}
 		if (candidates.length < ctx.size) return null;
 
 		const bag = {};
 		for (const name of ctx.items) bag[toID(name)] = 1;
 		const built = TeamAssembler.assemble(ctx.dex, candidates, {
-			size: ctx.size, stage: 'full', rng, items: { bag }, maxEvaluations: 2500, threats: this.threats(ctx),
+			size: ctx.size, stage: 'full', rng, items: { bag }, maxEvaluations: 2500, threats: this.threats(ctx), fixed,
+			// A weather team attacks: its users take their attacking sets, not their support ones.
+			...(weather ? { archetype: 'bulky offense' } : {}),
 		});
 		if (built.length < ctx.size) return null;
 		// A bag with one of each can run out before the last Pokemon; an empty
 		// item slot is worse than a second Leftovers, so anything left holding
 		// nothing takes whatever the format still has.
+		if (weather) {
+			const TeamAssembler = require('./team-assembler');
+			const RS = require('./role-sets');
+			const template = WeatherPlan.TEMPLATES[weather.name];
+			const moveName = id => ctx.dex.moves.get(id).name;
+			for (const set of built) {
+				const want = forced.get(set.species);
+				if (want && want.ability) set.ability = want.ability;
+				// The better attack the weather allows, for anyone who has the lesser one - first, so
+				// nobody ends up with Thunderbolt and Thunder.
+				const can = RS.learnable(ctx.dex, ctx.dex.species.get(set.species));
+				for (const [lesser, better] of Object.entries(template.upgrades)) {
+					const at = set.moves.findIndex(m => toID(m) === lesser);
+					if (at < 0 || !can.has(better)) continue;
+					if (set.moves.some(m => toID(m) === better)) set.moves.splice(at, 1);
+					else set.moves[at] = moveName(better);
+				}
+				// The move that makes it a user of this weather (Thunder, Blizzard, Hydro Steam).
+				if (want && want.move) TeamAssembler.teach(ctx.dex, set, [want.move]);
+				/*
+				 * Sand and hail break a Focus Sash on anything they chip, so those members take
+				 * another item (Smogon's sand teams run no sashes outside Rock, Ground and Steel).
+				 */
+				if (['sand', 'snow'].includes(weather.name) && toID(set.item) === 'focussash') {
+					const sp = ctx.dex.species.get(set.species);
+					const safe = weather.name === 'sand' ? sp.types.some(t => ['Rock', 'Ground', 'Steel'].includes(t)) : true;
+					const guarded = ['magicguard', 'overcoat', 'sandveil', 'sandrush', 'sandforce'].includes(toID(set.ability));
+					if (!safe && !guarded) set.item = ctx.items.find(n => toID(n) !== 'focussash' && !built.some(x => toID(x.item) === toID(n))) || 'Leftovers';
+				}
+			}
+			/*
+			 * The setter, as Smogon plays it: its template move (a pivot out of rain, Aurora
+			 * Veil in hail, Stealth Rock in sand) and the item that stretches it - Light Clay
+			 * with Aurora Veil, else the weather's rock - eight turns instead of five. These
+			 * are not on the bots' short item list, so they are handed out here; a Choice set
+			 * or a Mega keeps its own item.
+			 */
+			const setter = built.find(set => fixed[0] && set.species === fixed[0].species);
+			if (setter) {
+				// Not a second Stealth Rock when a teammate already lays it.
+				const wanted = template.setterMoves.filter(id => id !== 'stealthrock' || !built.some(x => x !== setter && x.moves.some(m => toID(m) === 'stealthrock')));
+				if (wanted.length) TeamAssembler.teach(ctx.dex, setter, wanted);
+				const veil = setter.moves.some(m => toID(m) === 'auroraveil');
+				const stretch = ctx.dex.items.get(template.clay && veil ? 'Light Clay' : WeatherPlan.WEATHERS[weather.name].rock);
+				const held = ctx.dex.items.get(setter.item);
+				if (stretch.exists && !held.megaStone && !held.zMove) {
+					// A Choice item would lock it out of the very move it is here for.
+					setter.item = stretch.name;
+				}
+			}
+		}
 		const spare = ctx.items.filter(name => !built.some(s => toID(s.item) === toID(name)));
 		for (const set of built) if (!set.item && spare.length) set.item = spare.shift();
 		return built.map(set => ({
@@ -1950,6 +2048,26 @@ class TeamBuilder {
 	 * not in Monotype (one type is not a stall core) and not in Little Cup
 	 * (level 5 Pokemon learn next to no recovery); those keep the usual draft.
 	 */
+	/**
+	 * The weather this build is planned around, or null: about one team in seven where the
+	 * assembler builds (RP formats) and the pool has a setter and two users for some weather.
+	 * `options.weather` names one ('sun', 'rain', 'sand', 'snow'), or 'any' for whichever
+	 * the pool allows; a named archetype rules it out.
+	 */
+	pickWeather(ctx, constraints, rng, options = {}) {
+		if (!this.assembles(ctx, constraints)) return null;
+		if (ctx.ruleTable.has('sametypeclause') || ctx.ruleTable.has('littlecup')) return null;
+		const asked = options.weather || null;
+		if (!asked && (options.archetype !== undefined || rng() >= WEATHER_SHARE)) return null;
+		if (!ctx.weathers) ctx.weathers = WeatherPlan.available(ctx.dex, ctx.pool, species => require('./role-sets').learnable(ctx.dex, species));
+		const names = Object.keys(ctx.weathers).filter(n => !asked || asked === 'any' || asked === n);
+		if (!names.length) return null;
+		const name = names[Math.floor(rng() * names.length)];
+		// Half weather: the setter and one user on an otherwise ordinary team.
+		const half = options.half === undefined ? rng() < WeatherPlan.HALF_SHARE : !!options.half;
+		return { name, half, ...ctx.weathers[name] };
+	}
+
 	wantsStall(ctx, constraints, rng, options = {}) {
 		const share = options.archetype === undefined ? stallShare(ctx.id) : options.archetype === 'stall' ? 1 : 0;
 		if (share <= 0 || !this.drafts(ctx, constraints) || ctx.gen < 4) return false;
@@ -2069,11 +2187,15 @@ class TeamBuilder {
 		 * falls back to the usual draft rather than drawing again. Only where the
 		 * checklist applies (six-Pokemon singles, see drafts()).
 		 */
-		if (this.wantsStall(ctx, constraints, rng, options)) {
+		if (!options.weather && this.wantsStall(ctx, constraints, rng, options)) {
 			const team = this.stallTeam(ctx, constraints, rng);
 			if (team) return Teams.pack(team);
 		}
+		// A weather team, some of the time (src/weather-plan.js). Drawn once per build.
+		constraints.weather = this.pickWeather(ctx, constraints, rng, options);
 		for (let pass = 0; pass < 8; pass++) {
+			// A weather core that will not validate after three tries gives way to an ordinary team.
+			if (pass >= 3) constraints.weather = null;
 			// The assembler first where it applies; anything it cannot make legal
 			// falls through to the draw below rather than failing the build.
 			if (this.assembles(ctx, constraints)) {
