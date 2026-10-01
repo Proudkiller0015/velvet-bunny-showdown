@@ -43,18 +43,40 @@ if (cutAt > -1) {
 const lengthMs = file => Math.round(1000 * Number(execFileSync('ffprobe',
 	['-v', 'error', '-show_entries', 'format=duration', '-of', 'default=nw=1:nk=1', file]).toString().trim()));
 
-// Each track loops from its start to a little before its end, skipping the fade-out.
+/*
+ * Where a track stops being full volume, in ms: the loop end. The tracks fade out over
+ * their last few seconds - some go silent ten seconds early (Primal, Mewtwo) - and the
+ * client's loop (BattleBGM.updateTime) jumps back to the start 1 s before the loop end,
+ * so a fixed margin either clipped music or looped through a fade and silence. Reads the
+ * loudness of each second of the last 30, takes the usual level from the first ten, and
+ * ends the loop after the last second within 2.5 dB of it.
+ */
+function loopEndMs(file) {
+	const length = lengthMs(file);
+	const rate = Number(execFileSync('ffprobe', ['-v', 'error', '-show_entries', 'stream=sample_rate', '-of', 'csv=p=0', file]).toString().trim()) || 44100;
+	const tail = Math.min(30, Math.floor(length / 1000) - 1);
+	const out = require('child_process').spawnSync('ffmpeg', ['-v', 'info', '-sseof', String(-tail), '-i', file,
+		'-af', `asetnsamples=n=${rate},astats=metadata=1:reset=1,ametadata=mode=print:key=lavfi.astats.Overall.RMS_level`,
+		'-f', 'null', '-'], { encoding: 'utf8' }).stderr;
+	const levels = [...out.matchAll(/RMS_level=(-?[\d.]+|-inf)/g)].map(m => (m[1] === '-inf' ? -120 : Number(m[1])));
+	if (levels.length < 12) return length - 6000;
+	const usual = [...levels.slice(0, 10)].sort((a, b) => a - b)[5];
+	let last = 0;
+	levels.forEach((db, i) => { if (db >= usual - 2.5) last = i; });
+	return Math.round(length - (levels.length - (last + 1)) * 1000);
+}
+
 const files = {};
 for (const t of tracks) {
 	const f = path.join(LEGENDS_DIR, `${t.file}.mp3`);
 	if (t.species.length && !fs.existsSync(f)) throw new Error(`legend track ${t.file} is not cut yet (scripts/cut-legend-music.js)`);
-	if (t.species.length) files[`legends/${t.file}`] = lengthMs(f) - 2500;
+	if (t.species.length) files[`legends/${t.file}`] = loopEndMs(f);
 }
 const EVENT_OF = {};
 for (const [id, e] of Object.entries(events)) {
 	const f = path.join(EVENTS_DIR, `${e.file}.mp3`);
 	if (!fs.existsSync(f)) throw new Error(`event song ${e.file} is not cut yet (--cut <folder>)`);
-	files[`events/${e.file}`] = lengthMs(f) - 4000;
+	files[`events/${e.file}`] = loopEndMs(f);
 	EVENT_OF[id] = `events/${e.file}`;
 }
 
