@@ -1,0 +1,12 @@
+{
+	"id": "gen9rpbattle-21-tm78iv",
+	"format": "[Gen 9] RP Battle",
+	"players": [
+		"Youngster Taro",
+		"lavit"
+	],
+	"rating": null,
+	"log": "|j|☆Youngster Taro\n|j|☆lavit\n|t:|1790821699\n|gametype|singles\n|player|p1|Youngster Taro|youngster-gen4|\n|player|p2|lavit|lavit.png|\n|gen|9\n|tier|[Gen 9] RP Battle\n|clearpoke\n|poke|p1|Lillipup, L12, M|\n|poke|p1|Castform, L13, M|\n|poke|p2|Pansage, L13, M|\n|poke|p2|Darumaka-Galar, L13, M|\n|poke|p2|Greavard, L13, F|\n|poke|p2|Banette, L13, M|\n|poke|p2|Sneasel-Hisui, L13, F|\n|poke|p2|Pawniard, L13, F|\n|teampreview\n|inactive|Battle timer is ON: inactive players will automatically lose when time's up. (requested by Youngster Taro)\n|n|☆Youngster Taro|youngstertaro\n|\n|t:|1790821702\n|teamsize|p1|2\n|teamsize|p2|6\n|start\n|switch|p1a: Castform|Castform, L13, M|100/100\n|switch|p2a: Sneasel|Sneasel-Hisui, L13, F|100/100\n|turn|1\n|\n|t:|1790821703\n|move|p2a: Sneasel|Brick Break|p1a: Castform\n|-supereffective|p1a: Castform\n|-damage|p1a: Castform|0 fnt\n|faint|p1a: Castform\n|\n|upkeep\n|\n|t:|1790821703\n|switch|p1a: Lillipup|Lillipup, L12, M|100/100\n|turn|2\n|\n|t:|1790821704\n|move|p2a: Sneasel|Brick Break|p1a: Lillipup\n|-supereffective|p1a: Lillipup\n|-damage|p1a: Lillipup|0 fnt\n|faint|p1a: Lillipup\n|\n|win|lavit\n",
+	"inputlog": ">start {\"formatid\":\"gen9rpbattle\",\"seed\":\"sodium,117342efb58e1fc52ee864fe335d8fe0\"}\n>player p1 {\"name\":\"Youngster Taro\",\"avatar\":\"youngster-gen4\",\"team\":\"Lillipup|||VitalSpirit|Tackle,Bite,Retaliate,WorkUp|Rash|||8,8,8,8,8,8||12|]Castform|||Forecast|Tackle,PowderSnow,Ember,WaterGun|Hardy|||8,8,8,8,8,8||13|\",\"rating\":0}\n>player p2 {\"name\":\"lavit\",\"avatar\":\"lavit.png\",\"team\":\"Pansage|||VerdantSurge|JungleRush,Uturn,CloseCombat,KnockOff|Adamant|||||13|]Darumaka-Galar|||Hustle|IcePunch,Uturn,Superpower,FlareBlitz|Adamant|||||13|]Greavard|||Fluffy|Poltergeist,PlayRough,Roar,Trick|Adamant|||||13|]Banette|||CursedBody|Poltergeist,GunkShot,SwordsDance,ThunderWave|Adamant||||S|13|]Sneasel-Hisui|||InnerFocus|BrickBreak,ShadowBall,DoubleEdge,SwordsDance|Jolly|||||13|]Pawniard|||Defiant|IronHead,SuckerPunch,StealthRock,SwordsDance|Adamant|||||13|\",\"rating\":0}\n>p1 team 2, 1\n>p2 team 5, 2, 3, 4, 1, 6\n>p1 move ember\n>p2 move brickbreak\n>p1 switch 2\n>p1 move bite\n>p2 move brickbreak",
+	"uploadtime": 1790821704
+}
