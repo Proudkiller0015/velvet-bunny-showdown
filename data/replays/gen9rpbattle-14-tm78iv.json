@@ -1,0 +1,12 @@
+{
+	"id": "gen9rpbattle-14-tm78iv",
+	"format": "[Gen 9] RP Battle",
+	"players": [
+		"Worker Ned",
+		"lavit"
+	],
+	"rating": null,
+	"log": "|j|☆Worker Ned\n|j|☆lavit\n|t:|1790821433\n|gametype|singles\n|player|p1|Worker Ned|worker-gen6|\n|player|p2|lavit|lavit.png|\n|gen|9\n|tier|[Gen 9] RP Battle\n|clearpoke\n|poke|p1|Aron, L10, F|\n|poke|p1|Elekid, L13, M|\n|poke|p2|Pansage, L13, F|\n|poke|p2|Darumaka-Galar, L13, M|\n|poke|p2|Greavard, L13, F|\n|poke|p2|Banette, L13, M|\n|poke|p2|Sneasel-Hisui, L13, F|\n|poke|p2|Pawniard, L13, F|\n|teampreview\n|inactive|Battle timer is ON: inactive players will automatically lose when time's up. (requested by Worker Ned)\n|n|☆Worker Ned|workerned\n|\n|t:|1790821439\n|teamsize|p1|2\n|teamsize|p2|6\n|start\n|switch|p1a: Elekid|Elekid, L13, M|100/100\n|switch|p2a: Banette|Banette, L13, M, shiny|100/100\n|turn|1\n|\n|t:|1790821442\n|move|p1a: Elekid|Quick Attack|p2a: Banette\n|-immune|p2a: Banette\n|move|p2a: Banette|Gunk Shot|p1a: Elekid\n|-damage|p1a: Elekid|0 fnt\n|faint|p1a: Elekid\n|\n|upkeep\n|\n|t:|1790821442\n|switch|p1a: Aron|Aron, L10, F|100/100\n|turn|2\n|\n|t:|1790821444\n|move|p2a: Banette|Poltergeist||[still]\n|-fail|p2a: Banette\n|move|p1a: Aron|Metal Claw|p2a: Banette\n|-damage|p2a: Banette|84/100\n|\n|upkeep\n|turn|3\n|\n|t:|1790821446\n|switch|p2a: Greavard|Greavard, L13, F|100/100\n|move|p1a: Aron|Roar|p2a: Greavard\n|drag|p2a: Pansage|Pansage, L13, F|100/100\n|-fieldstart|move: Grassy Terrain|[from] ability: Verdant Surge|[of] p2a: Pansage\n|\n|upkeep\n|turn|4\n|\n|t:|1790821449\n|move|p2a: Pansage|Jungle Rush|p1a: Aron\n|-damage|p1a: Aron|27/100\n|move|p1a: Aron|Metal Claw|p2a: Pansage\n|-damage|p2a: Pansage|83/100\n|\n|-heal|p2a: Pansage|88/100|[from] Grassy Terrain\n|-heal|p1a: Aron|30/100|[from] Grassy Terrain\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1790821450
+}
