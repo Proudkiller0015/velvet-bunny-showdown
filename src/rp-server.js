@@ -268,6 +268,12 @@ function requestEncounter(payload, deps) {
 		status: 'waiting',
 		result: null,
 	};
+	/*
+	 * "Not for catching" with the summon itself, from the moment it exists. Set afterwards
+	 * (allowCatch), a summon the bot had to send again - the player was offline - lost it
+	 * and arrived catchable (1 Oct 2026).
+	 */
+	if (payload.summon && payload.summon.catchable === false) enc.catchable = false;
 	encounters.set(enc.id, enc);
 	if (deps.spawn(enc) === false) return notSpawned(enc);
 	return { ok: true, encounter: publicView(enc) };
