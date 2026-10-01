@@ -718,7 +718,12 @@ const isPrized = root => Rarity.classOf(root) === 'prized';
 
 function rollWild({ place, badges, levelCap = null, rng = Math.random, double = null, shiny = {}, now = Date.now(), ace = null }) {
 	badges = clampBadges(badges);
-	const [lo, hi] = levelRange(badges, levelCap, ace);
+	let [lo, hi] = levelRange(realBadges, levelCap, ace);
+	// Around the player's own levels: the ace at their best, the rest near their average.
+	if (grown) {
+		hi = Math.max(hi, Math.round(grown.max));
+		lo = Math.min(hi, Math.max(lo, Math.round(grown.avg) - 2));
+	}
 	const rootsOf = list => (list || []).map(n => Dex.species.get(n)).filter(s => s.exists && !isLegendary(s)).map(rootOf);
 	// A prized Pokemon a place lists as common is one of its rare finds instead (PRIZED).
 	const listed = rootsOf(place.common);
@@ -829,15 +834,42 @@ function gymPlace(place, channel) {
 	return { ...place, gymType: type, types: [type], trainers: [...new Set([...fits, 'acetrainer', 'acetrainerf'])] };
 }
 
-function rollTrainer({ place, badges, levelCap = null, rng = Math.random, classId = null, double = null, ace = null }) {
+/*
+ * Trainers meet the player's team, not just their badges (owner, 1 Oct 2026: "trainers
+ * arent nearly hard enough... for new trainer its cool but once u have more pokemons").
+ * Out of 71 route trainer battles the trainers had won none: they brought 2-3 Pokemon
+ * at or under the player's levels against a full six. Now a player bringing three or
+ * more meets that many (a full six meets five or six), around their own levels, with
+ * Pokemon and a brain as strong as the badge tier their levels belong to. Badges stay
+ * the floor, so a new trainer's first battles are as gentle as before.
+ *
+ * party: { size, avg, max } of what the player brings (rp-server partyOf), or null.
+ */
+const AI_ORDER = ['easy', 'normal', 'hard', 'champion'];
+function tierForLevel(level) {
+	let t = 0;
+	for (let i = 0; i < BADGE_TIERS.length; i++) if (BADGE_TIERS[i].levels[0] <= level) t = i;
+	return t;
+}
+/*
+ * Variety: what each place's trainers brought lately, so the next one there brings
+ * something else (a sea town sent Wailmer five times in a row). Kept per place for
+ * the last 30 Pokemon; a repeat is a quarter as likely.
+ */
+const recentAt = new Map();
+
+function rollTrainer({ place, badges, levelCap = null, rng = Math.random, classId = null, double = null, ace = null, party = null }) {
 	badges = clampBadges(badges);
+	const realBadges = badges;
+	const grown = party && party.size >= 3 ? party : null;
+	if (grown) badges = Math.max(badges, tierForLevel(grown.avg));
 	const classes = (place && place.trainers && place.trainers.length ? place.trainers : ['youngster', 'lass', 'hiker', 'backpacker'])
 		.map(findClass).filter(c => c && !c.story);   // a route never sends a Champion at random
 	const cls = (classId && findClass(classId)) || pick(classes, rng);
 	const tier = BADGE_TIERS[badges];
 	// The stall Ace Trainer battles single unless a double is asked for: stall is a singles game.
 	const isDouble = cls.pair || (double === null ? !cls.stall && badges >= 1 && rng() < 0.15 : !!double);
-	const size = Math.max(isDouble ? 2 : 1, tier.size);
+	const size = Math.min(6, Math.max(isDouble ? 2 : 1, tier.size, grown ? (grown.size >= 6 ? (rng() < 0.5 ? 5 : 6) : grown.size) : 0));
 
 	// The ace pulls a trainer down the same way it pulls the wild: somebody whose best
 	// Pokemon is far under their cap is not handed a full-cap team to lose to.
@@ -855,10 +887,14 @@ function rollTrainer({ place, badges, levelCap = null, rng = Math.random, classI
 	// The place still counts: a Backpacker on a volcano brings fire types more
 	// often than one at the harbour.
 	const placeTypes = (place && place.types) || [];
+	const placeKey = (place && place.name) || '';
+	const recentList = recentAt.get(placeKey) || [];
+	const recent = new Set(recentList);
 	const entries = allRoots().map(item => {
 		let w = lineWeight(item, ctx);
 		if (w > 0 && placeTypes.length && lineOf(item).some(s => s.types.some(t => placeTypes.includes(t)))) w *= 1.5;
 		if (w > 0 && focus.length && lineOf(item).some(s => s.types.some(t => focus.includes(t)))) w *= 4;
+		if (w > 0 && recent.has(item.id)) w *= 0.25;
 		return { item, w };
 	}).filter(e => e.w > 0)
 		// In a gym, only the gym's type (while there are enough lines of it at these badges).
@@ -894,7 +930,7 @@ function rollTrainer({ place, badges, levelCap = null, rng = Math.random, classI
 		if (team) {
 			return {
 				kind: 'trainer', double: false, name: trainerName(cls, rng), avatar: cls.avatar, className: cls.title, classId: cls.id,
-				team, ai: tier.ai, format: TRAINER_FORMAT, badges, style: 'stall',
+				team, ai: tier.ai, format: TRAINER_FORMAT, badges: realBadges, style: 'stall',
 			};
 		}
 		levels.length = 0;
@@ -922,6 +958,14 @@ function rollTrainer({ place, badges, levelCap = null, rng = Math.random, classI
 			team.push(trainerSet(stageFor(rolled[i], level, rng, { behind: 0.1 }), level, badges, rng));
 		}
 	}
+	// Remember them, for the next trainer here.
+	for (const set of team) {
+		try { recentList.push(rootOf(Dex.species.get(set.species)).id); } catch (e) { /* unknown: skip */ }
+	}
+	recentAt.set(placeKey, recentList.slice(-30));
+	// A bigger team plays smarter: one step up from four, two from a full six.
+	let ai = tier.ai;
+	if (grown) ai = AI_ORDER[Math.min(AI_ORDER.length - 1, AI_ORDER.indexOf(ai) + (grown.size >= 6 ? 2 : grown.size >= 4 ? 1 : 0))] || ai;
 	return {
 		kind: 'trainer',
 		double: isDouble,
@@ -930,9 +974,9 @@ function rollTrainer({ place, badges, levelCap = null, rng = Math.random, classI
 		className: cls.title,
 		classId: cls.id,
 		team,
-		ai: tier.ai,
+		ai,
 		format: isDouble ? TRAINER_DOUBLE_FORMAT : TRAINER_FORMAT,
-		badges,
+		badges: realBadges,
 	};
 }
 

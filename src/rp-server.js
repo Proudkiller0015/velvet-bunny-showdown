@@ -229,7 +229,7 @@ function requestEncounter(payload, deps) {
 	} else {
 		rolled = kind === 'wild'
 			? E.rollWild({ place: wildPlace, badges, levelCap, shiny: payload.shiny || {}, ace })
-			: E.rollTrainer({ place: E.gymPlace(place, found.channel), badges, levelCap, ace });
+			: E.rollTrainer({ place: E.gymPlace(place, found.channel), badges, levelCap, ace, party: partyOf(payload) });
 	}
 	if (!rolled.team.length) return { ok: false, code: 'empty', message: 'Nothing turned up. Try again.' };
 	// An arranged encounter can decide its first throws miss (rp-bot rigs.js failBalls). Never shown.
@@ -788,6 +788,24 @@ function publicView(enc) {
  * (each box Pokémon counts once), at or below its box level. A form that only
  * exists in battle, or a cosmetic one, counts as its base Pokémon.
  */
+/*
+ * What the player brings, for a trainer to meet (encounters.js rollTrainer): the team
+ * picked on Discord, or else the six strongest on hand in the box.
+ */
+function partyOf(payload) {
+	const box = normaliseBox(payload.box) || [];
+	let levels = [];
+	if (Array.isArray(payload.playerTeam) && payload.playerTeam.length) {
+		for (const m of payload.playerTeam.slice(0, 6)) {
+			const own = Number(m && m.level) || (box.find(b => b.species === (m && m.species) && !b.away) || {}).level;
+			if (own) levels.push(Number(own));
+		}
+	}
+	if (!levels.length) levels = box.filter(m => !m.away && m.level).map(m => m.level).sort((a, b) => b - a).slice(0, 6);
+	if (!levels.length) return null;
+	return { size: levels.length, avg: levels.reduce((a, b) => a + b, 0) / levels.length, max: Math.max(...levels) };
+}
+
 function normaliseBox(box) {
 	if (!Array.isArray(box)) return null;
 	return box.slice(0, 500).map(m => ({
@@ -1229,7 +1247,7 @@ function httpRoute(deps, log) {
 }
 
 module.exports = {
-	freeCatch, FREE_CATCHES, allowCatch, summoned, chosenSet, musicFor,
+	freeCatch, FREE_CATCHES, allowCatch, summoned, chosenSet, musicFor, partyOf,
 	pvpCheck, pvpNotice, friendlyNotice, isAgreed, verify, placeFor, requestEncounter, requestTutorial, completeEncounter, canUseItem, usedInLog, setBags, bagFor, pvpItemsFor, canUsePvpItem, NPC_ITEMS_EACH, publicView, canThrow, thrownInLog, resultFromLog, openFor, encounterAccount, isEncounterName, isLocalOnly, LOOPBACK,
 	checkTeam, gimmickIn, GIMMICK_ITEM, GIMMICK_NAME, sidesInLog, startMatch,
 	httpRoute, encounters, RP_ROOM, CHALLENGE_MS, recordFinished, finishedSince,
