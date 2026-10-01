@@ -91,13 +91,23 @@ function learnable(dex, species) {
 			if (m.exists && !m.isNonstandard && !m.isZ && !m.isMax && !m.flags.nosketch) out.add(m.id);
 		}
 	}
-	let s = species;
-	for (let i = 0; i < 5 && s && s.exists; i++) {
+	/*
+	 * Everything the form inherits: what it changes from (a Mega), its own pre-evolution AND
+	 * its base species. Arcanine-Hisui needs Growlithe-Hisui (Head Smash - a gym was refused
+	 * over it, 1 Oct 2026); Lycanroc-Dusk needs Lycanroc. Following only one of the two lost
+	 * the other's moves.
+	 */
+	const seen = new Set();
+	const queue = [species];
+	while (queue.length && seen.size < 12) {
+		const s = queue.shift();
+		if (!s || !s.exists || seen.has(s.id)) continue;
+		seen.add(s.id);
 		const data = dex.data.Learnsets[s.id];
 		for (const id of Object.keys((data && data.learnset) || {})) out.add(id);
-		s = s.changesFrom ? dex.species.get(s.changesFrom)
-			: s.baseSpecies && s.baseSpecies !== s.name ? dex.species.get(s.baseSpecies)
-				: s.prevo ? dex.species.get(s.prevo) : null;
+		if (s.changesFrom) queue.push(dex.species.get(s.changesFrom));
+		if (s.prevo) queue.push(dex.species.get(s.prevo));
+		if (s.baseSpecies && s.baseSpecies !== s.name) queue.push(dex.species.get(s.baseSpecies));
 	}
 	return out;
 }

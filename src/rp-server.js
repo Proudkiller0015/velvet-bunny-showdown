@@ -343,7 +343,13 @@ function cutFor(species) {
  * anything before it in its line, whatever the level, plus the machine moves a
  * cut Pokemon never had the chance at. The ability has to be one of its own.
  */
-function chosenSet(Dex, species, summon) {
+/*
+ * `fit`: the bot scaled this Pokemon down a stage to meet the challenger (a gym Tyranitar
+ * met as a Larvitar). The leader wrote the set for the final stage, so whatever the
+ * earlier stage cannot have is dropped instead of refusing the whole battle - "Larvitar
+ * can't learn Ice Punch" blocked a gym on 1 Oct 2026. The caller fills the moves back up.
+ */
+function chosenSet(Dex, species, summon, fit = false) {
 	const out = {};
 	const wanted = Array.isArray(summon.moves) ? summon.moves : String(summon.moves || '').split(',');
 	const names = wanted.map(m => String(m).trim()).filter(Boolean).slice(0, 4);
@@ -355,10 +361,13 @@ function chosenSet(Dex, species, summon) {
 		for (const name of names) {
 			const move = Dex.moves.get(name);
 			if (!move.exists) return { error: `There's no move called "${name}".` };
-			if (!pool.has(move.id) && !cut.has(move.id)) return { error: `${species.name} can't learn ${move.name}.` };
+			if (!pool.has(move.id) && !cut.has(move.id)) {
+				if (fit) continue;
+				return { error: `${species.name} can't learn ${move.name}.` };
+			}
 			if (!moves.includes(move.name)) moves.push(move.name);
 		}
-		out.moves = moves;
+		if (moves.length || !fit) out.moves = moves;
 	}
 	if (summon.ability) {
 		const want = toID(summon.ability);
@@ -374,6 +383,8 @@ function chosenSet(Dex, species, summon) {
 		const base = species.changesFrom || (species.requiredItem && species.baseSpecies);
 		const beforeMega = base ? Object.values(Dex.species.get(base).abilities || {}).filter(Boolean) : [];
 		if (!found && beforeMega.some(a => toID(a) === want)) {
+			out.ability = own[0];
+		} else if (!found && fit) {
 			out.ability = own[0];
 		} else if (!found) {
 			return { error: `${species.name} can't have ${Dex.abilities.get(summon.ability).name || summon.ability}. It can have: ${own.join(', ')}.` };
@@ -433,9 +444,14 @@ function summoned(summon, { place, badges, levelCap, ace = null }) {
 				wish.level ? E.clampLevel(wish.level) :
 				rolled.team.length ? Math.max(...rolled.team.map(m => m.level)) : E.clampLevel(levelCap || 5);
 			const set = E.trainerSet(species, level, badges, Math.random);
-			const custom = chosenSet(Dex2, species, wish);
+			const custom = chosenSet(Dex2, species, wish, !!wish.fitted);
 			if (custom.error) return custom;
+			const rolledMoves = set.moves || [];
 			Object.assign(set, custom.set);
+			// Moves a scaled-down stage could not keep are replaced by its own rolled ones.
+			if (wish.fitted && set.moves && set.moves.length < 4) {
+				for (const m of rolledMoves) if (set.moves.length < 4 && !set.moves.some(x => toID(x) === toID(m))) set.moves.push(m);
+			}
 			if (wish.shiny) set.shiny = true;
 			if (wish.nickname) set.name = String(wish.nickname).slice(0, 18);
 			if (wish.item) {

@@ -2695,9 +2695,33 @@
 		// The scene's animSummon runs whenever a Pokemon is sent out, in a live battle and in a
 		// replay alike (the replay page's newer engine has no Battle.switchIn).
 		var S = window.BattleScene;
+		var B = window.Battle;
 		if (!S || !S.prototype || !S.prototype.animSummon || !window.BattleSound) return false;
+		if (!B || !B.prototype || !B.prototype.runMajor) return false;
 		if (S.__velvetEventMusic) return true;
 		S.__velvetEventMusic = true;
+		/*
+		 * Team preview: the music starts before anything is sent out, so the battle's own
+		 * lines pick it there - "|player|" names the trainer, "|poke|" shows the wild
+		 * Pokemon. Without this the preview played Showdown's music and the theme only
+		 * came in on the first switch (owner, 1 Oct 2026).
+		 */
+		var runMajor = B.prototype.runMajor;
+		B.prototype.runMajor = function (args) {
+			var out = runMajor.apply(this, arguments);
+			try {
+				var cmd = args && args[0];
+				if ((cmd === 'poke' || cmd === 'player') && this.scene && this.getSide) {
+					var side = this.getSide(args[1]);
+					if (cmd === 'player') playEventMusic(this.scene, musicFor({ side: side }));
+					else {
+						var details = String(args[2] || '');
+						playEventMusic(this.scene, musicFor({ side: side, speciesForme: details.split(',')[0], shiny: /,\s*shiny\b/.test(details) }));
+					}
+				}
+			} catch (e) { /* the battle goes on with its own music */ }
+			return out;
+		};
 		var animSummon = S.prototype.animSummon;
 		S.prototype.animSummon = function (pokemon) {
 			var out = animSummon.apply(this, arguments);
