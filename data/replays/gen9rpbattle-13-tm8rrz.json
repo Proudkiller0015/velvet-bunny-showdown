@@ -1,0 +1,12 @@
+{
+	"id": "gen9rpbattle-13-tm8rrz",
+	"format": "[Gen 9] RP Battle",
+	"players": [
+		"Bird Keeper Jin",
+		"Stalethunder126"
+	],
+	"rating": null,
+	"log": "|velvetmusic|trainer|events/trainer-rse\n|j|☆Bird Keeper Jin\n|j|☆Stalethunder126\n|t:|1790883207\n|gametype|singles\n|player|p1|Bird Keeper Jin|birdkeeper-gen4dp|\n|player|p2|Stalethunder126|jolt.png|\n|gen|9\n|tier|[Gen 9] RP Battle\n|clearpoke\n|poke|p1|Archen, L9, F|\n|poke|p1|Chatot, L9, M|\n|poke|p1|Gligar, L10, M|\n|poke|p1|Tropius, L10, F|\n|poke|p1|Cramorant, L11, M|\n|poke|p1|Butterfree, L13, M|\n|poke|p2|Liepard, L13, F|\n|poke|p2|Grimer-Alola, L13, F|\n|poke|p2|Froakie, L13, M|\n|poke|p2|Helioptile, L13, F|\n|poke|p2|Bounsweet, L13, F|\n|poke|p2|Fletchling, L13, M|\n|teampreview\n|inactive|Battle timer is ON: inactive players will automatically lose when time's up. (requested by Bird Keeper Jin)\n|n|☆Bird Keeper Jin|birdkeeperjin\n|inactive|Stalethunder126 has 270 seconds left.\n|\n|t:|1790883258\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Tropius|Tropius, L10, F|100/100\n|switch|p2a: Helioptile|Helioptile, L13, F|100/100\n|turn|1\n|\n|t:|1790883277\n|move|p2a: Helioptile|Thunderbolt|p1a: Tropius\n|-damage|p1a: Tropius|54/100\n|move|p1a: Tropius|Growth|p1a: Tropius\n|-boost|p1a: Tropius|atk|1\n|-boost|p1a: Tropius|spa|1\n|\n|upkeep\n|turn|2\n|\n|t:|1790883296\n|move|p2a: Helioptile|Thunderbolt|p1a: Tropius\n|-damage|p1a: Tropius|8/100\n|move|p1a: Tropius|Leaf Storm|p2a: Helioptile\n|-damage|p2a: Helioptile|6/100\n|-unboost|p1a: Tropius|spa|2\n|\n|upkeep\n|turn|3\n|\n|t:|1790883305\n|move|p2a: Helioptile|Thunderbolt|p1a: Tropius\n|-damage|p1a: Tropius|0 fnt\n|faint|p1a: Tropius\n|\n|upkeep\n|\n|t:|1790883306\n|switch|p1a: Gligar|Gligar, L10, M|100/100\n|turn|4\n|\n|t:|1790883329\n|switch|p2a: Froakie|Froakie, L13, M|100/100\n|move|p1a: Gligar|Quick Attack|p2a: Froakie\n|-damage|p2a: Froakie|84/100\n|\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1790883336
+}
