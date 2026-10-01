@@ -2617,6 +2617,69 @@
 		return true;
 	}
 
+	/*
+	 * Legendary themes (the owner, 30 Sep 2026): when a wild legendary appears, its own
+	 * battle theme replaces the usual music - in the battle and in its replay, so the
+	 * moment is remembered the way it sounded. Only for the wild side of a wild
+	 * encounter: a legendary on a trainer or player team plays the normal music.
+	 * Tracks: client/audio/legends (cut by scripts/cut-legend-music.js from
+	 * data/legend-music.json), with their length in ms. Each loops from its start to
+	 * just before its fade-out.
+	 */
+	var LEGEND_FILES = {"mew":82000,"raikou":107000,"entei":98000,"suicune":180000,"hooh":119000,"lugia":81000,"weather-trio":98000,"deoxys":164000,"regis":100000,"sinnoh-legendary":67000,"lake-trio":116000,"dialga-palkia":160000,"giratina":227000,"unova-legendary":201000,"reshiram-zekrom":269000,"kyurem":269000,"kyurem-black-white":235000,"mewtwo":186000,"xerneas-yveltal":160000,"solgaleo-lunala":198000,"tapu":176000,"ultra-necrozma":192000,"necrozma":177000,"ultra-beast":168000,"mysterious-being":127000,"zacian-zamazenta":250000,"eternatus":623000,"arceus":182000,"primal":105070};
+	var LEGEND_OF = {"mew":"mew","raikou":"raikou","entei":"entei","suicune":"suicune","hooh":"hooh","lugia":"lugia","groudon":"weather-trio","kyogre":"weather-trio","rayquaza":"weather-trio","rayquazamega":"weather-trio","deoxys":"deoxys","deoxysattack":"deoxys","deoxysdefense":"deoxys","deoxysspeed":"deoxys","regirock":"regis","regice":"regis","registeel":"regis","rotom":"sinnoh-legendary","heatran":"sinnoh-legendary","darkrai":"sinnoh-legendary","cresselia":"sinnoh-legendary","manaphy":"sinnoh-legendary","phione":"sinnoh-legendary","shaymin":"sinnoh-legendary","shayminsky":"sinnoh-legendary","regigigas":"sinnoh-legendary","uxie":"lake-trio","azelf":"lake-trio","mesprit":"lake-trio","dialga":"dialga-palkia","palkia":"dialga-palkia","dialgaorigin":"dialga-palkia","palkiaorigin":"dialga-palkia","giratina":"giratina","giratinaorigin":"giratina","cobalion":"unova-legendary","virizion":"unova-legendary","terrakion":"unova-legendary","victini":"unova-legendary","keldeo":"unova-legendary","landorus":"unova-legendary","thundurus":"unova-legendary","tornadus":"unova-legendary","landorustherian":"unova-legendary","thundurustherian":"unova-legendary","tornadustherian":"unova-legendary","meloetta":"unova-legendary","genesect":"unova-legendary","reshiram":"reshiram-zekrom","zekrom":"reshiram-zekrom","kyurem":"kyurem","kyuremblack":"kyurem-black-white","kyuremwhite":"kyurem-black-white","mewtwo":"mewtwo","mewtwomegax":"mewtwo","mewtwomegay":"mewtwo","xerneas":"xerneas-yveltal","yveltal":"xerneas-yveltal","zygarde":"xerneas-yveltal","zygarde10":"xerneas-yveltal","zygardecomplete":"xerneas-yveltal","diancie":"xerneas-yveltal","hoopa":"xerneas-yveltal","hoopaunbound":"xerneas-yveltal","volcanion":"xerneas-yveltal","solgaleo":"solgaleo-lunala","lunala":"solgaleo-lunala","cosmog":"solgaleo-lunala","cosmoem":"solgaleo-lunala","tapukoko":"tapu","tapulele":"tapu","tapubulu":"tapu","tapufini":"tapu","necrozmaultra":"ultra-necrozma","necrozma":"necrozma","necrozmaduskmane":"necrozma","necrozmadawnwings":"necrozma","nihilego":"ultra-beast","buzzwole":"ultra-beast","pheromosa":"ultra-beast","xurkitree":"ultra-beast","celesteela":"ultra-beast","kartana":"ultra-beast","guzzlord":"ultra-beast","poipole":"ultra-beast","naganadel":"ultra-beast","stakataka":"ultra-beast","blacephalon":"ultra-beast","calyrex":"mysterious-being","calyrexice":"mysterious-being","calyrexshadow":"mysterious-being","glastrier":"mysterious-being","spectrier":"mysterious-being","regieleki":"mysterious-being","regidrago":"mysterious-being","kubfu":"mysterious-being","urshifu":"mysterious-being","urshifurapidstrike":"mysterious-being","zacian":"zacian-zamazenta","zamazenta":"zacian-zamazenta","zaciancrowned":"zacian-zamazenta","zamazentacrowned":"zacian-zamazenta","eternatus":"eternatus","eternatuseternamax":"eternatus","arceus":"arceus","groudonprimal":"primal","kyogreprimal":"primal"};
+	function legendTrack(pokemon) {
+		var id = window.toID(pokemon.speciesForme || pokemon.species || '');
+		var species = window.Dex && Dex.species && Dex.species.get ? Dex.species.get(id) : null;
+		var base = window.toID((species && species.baseSpecies) || '');
+		return LEGEND_OF[id] || LEGEND_OF[base] || null;
+	}
+	// The wild side is named for what is on it ("Wild Arceus", "Wild Pokemon").
+	function isWildSide(side) {
+		return !!side && /^wild\b/i.test(String(side.name || ''));
+	}
+	function installLegendMusic() {
+		// The scene's animSummon runs whenever a Pokemon is sent out, in a live battle and in a
+		// replay alike (the replay page's newer engine has no Battle.switchIn).
+		var S = window.BattleScene;
+		if (!S || !S.prototype || !S.prototype.animSummon || !window.BattleSound) return false;
+		if (S.__velvetLegendMusic) return true;
+		S.__velvetLegendMusic = true;
+		var animSummon = S.prototype.animSummon;
+		S.prototype.animSummon = function (pokemon) {
+			var out = animSummon.apply(this, arguments);
+			try {
+				var file = pokemon && isWildSide(pokemon.side) ? legendTrack(pokemon) : null;
+				if (file && this.updateBgm && this.velvetLegend !== file) {
+					var ms = LEGEND_FILES[file] || 120000;
+					this.velvetLegend = file;
+					this.bgmNum = 'legend-' + file;
+					this.bgm = BattleSound.loadBgm('/audio/legends/' + file + '.mp3', 0, Math.max(5000, ms - 2500), this.bgm);
+					this.updateBgm();
+				}
+			} catch (e) { /* the battle goes on with its own music */ }
+			return out;
+		};
+		// Keep the theme once it plays: the scene picks music again at moments of its own.
+		var setBgm = S.prototype.setBgm;
+		if (setBgm) {
+			S.prototype.setBgm = function () {
+				if (this.velvetLegend) return;
+				return setBgm.apply(this, arguments);
+			};
+		}
+		// A replay rewinds by resetting the scene: let it pick the theme again.
+		var reset = S.prototype.resetBgm;
+		if (reset) {
+			S.prototype.resetBgm = function () {
+				this.velvetLegend = null;
+				return reset.apply(this, arguments);
+			};
+		}
+		return true;
+	}
+
+
 	// Toxic's rule for Will-O-Wisp, Thunder Wave and Chilling Mist, in the accuracy tooltip.
 	var SURE_HIT = { willowisp: 'Fire', thunderwave: 'Electric', chillingmist: 'Ice' };
 	function installSureHit() {
@@ -2962,6 +3025,16 @@
 		if (animTries > 2400) installMoveAnims();
 	}, true);
 	installMoveAnims();
+
+	// The legendary themes hook the battle engine, which only arrives when a battle or a
+	// replay opens: the same patient install as the animations.
+	var musicTries = 0;
+	var musicTimer = setInterval(function () {
+		if (installLegendMusic() || ++musicTries > 2400) clearInterval(musicTimer);
+	}, 250);
+	document.addEventListener('click', function () {
+		if (musicTries > 2400) installLegendMusic();
+	}, true);
 
 	// The data files come from a CDN and arrive in their own time, so each piece
 	// is installed as soon as the thing it extends turns up rather than all at
