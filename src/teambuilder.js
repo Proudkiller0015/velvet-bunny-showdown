@@ -1726,9 +1726,16 @@ class TeamBuilder {
 					for (let j = left.length - 1; j >= 0; j--) if (taken.has(left[j].species.baseSpecies)) left.splice(j, 1);
 				}
 			};
-			draw(weather.setters, 1);
+			/*
+			 * Sometimes two setters on a full weather team, as the owner's sun (Torkoal and Leafeon)
+			 * and sand (Tyranitar and Hippowdon) run them: the weather comes back after the first
+			 * is gone or its turns run out. More often for sand and sun, whose setters are bulky.
+			 */
+			const double = !weather.half && weather.setters.length > 1 && rng() < (['sand', 'sun'].includes(weather.name) ? 0.35 : 0.2);
+			draw(weather.setters, double ? 2 : 1);
+			const setterCount = fixed.length;
 			draw(weather.users, weather.half ? 1 : 2);
-			if (fixed.length < (weather.half ? 2 : 3)) return null;
+			if (!setterCount || fixed.length - setterCount < (weather.half ? 1 : 2)) return null;
 		}
 		const boosted = weather ? [...WeatherPlan.WEATHERS[weather.name].types, ...WeatherPlan.TEMPLATES[weather.name].partners] : [];
 		for (const species of this.candidates(ctx, constraints, rng)) {

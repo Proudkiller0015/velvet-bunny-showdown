@@ -31,6 +31,17 @@ const { loadBrain } = require('./brain');
 const { presetsFor } = require('./presets');
 
 const GENS = new Generations(PkmnDex);
+// Moves whose damage the calculator cannot give from two Pokemon alone (they answer a hit, or always KO).
+const NO_CALC_POWER = new Set(['Counter', 'Mirror Coat', 'Metal Burst', 'Comeuppance', 'Bide', 'Fissure', 'Guillotine', 'Horn Drill', 'Sheer Cold', 'Beat Up', 'Present', 'Fling', 'Spit Up', 'Final Gambit']);
+let velvetDex = null;
+/** This server's own data for a move, for what the calculator has never heard of. */
+function velvetMove(name) {
+	try {
+		if (!velvetDex) velvetDex = require('./rp-dex')();
+		const m = velvetDex.moves.get(name);
+		return m && m.exists ? m : null;
+	} catch (e) { return null; }
+}
 
 /**
  * A copy of a calc Pokemon with different types. Setting `types` on a clone is
@@ -660,6 +671,7 @@ class BattleAI {
 			if (foe.maxhp === 100 && foe.hp < 100) mon.originalCurHP = Math.max(1, Math.round(mon.maxHP() * foe.hp / 100));
 			// No item shown and none knocked off: it probably holds one (Witch's Snatch in damagePct).
 			if (!foe.item && !foe.itemGone) mon.velvetItemUnknown = true;
+			mon.velvetFoe = true;
 			if (guess && !bare) {
 				const scale = this.foeScale(foe, guess);
 				if (scale) mon.velvetScale = scale;
@@ -1031,7 +1043,20 @@ class BattleAI {
 	/** Percent of the target's remaining HP a move is expected to remove. */
 	damagePct(gen, attacker, defender, moveName, field) {
 		try {
-			const move = new calc.Move(gen, moveName);
+			let move = new calc.Move(gen, moveName);
+			/*
+			 * A move the calculator has no data for (1 Oct 2026): 110 of them in formats that
+			 * allow what Scarlet and Violet cut - Bolt Beak, Fishious Rend, Hidden Power, Return.
+			 * It answered 0, so a Dondozo sat in front of a Dracozolt reading Bolt Beak as
+			 * harmless and took 92%. Power, type and category come from this server's own dex;
+			 * the calculator still applies what it knows by name (Bolt Beak doubling first).
+			 */
+			if (!move.bp && !this.cfg.naive && this.cfg.variablePower !== false) {
+				const known = velvetMove(moveName);
+				// Return and Frustration are 102 at the friendship anyone runs them at.
+				if (known && !known.basePower && /^(return|frustration)$/.test(known.id)) known.basePower = 102;
+				if (known && known.basePower > 0) move = new calc.Move(gen, moveName, { overrides: { basePower: known.basePower, type: known.type, category: known.category, flags: { ...(known.flags || {}) }, priority: known.priority || 0, target: known.target || 'normal' } });
+			}
 			/*
 			 * Fixed damage: Seismic Toss, Night Shade, Super Fang, Ruination... have no
 			 * base power, and returning 0 for them made a Blissey or a Ting-Lu think it
@@ -1048,7 +1073,22 @@ class BattleAI {
 				const dealt = fixed(attacker, defender, hp);
 				return Math.max(0, Math.min(100, (dealt / hp) * 100));
 			}
-			if (!move.bp) return 0;
+			/*
+			 * No fixed power is not no damage: Gyro Ball, Heavy Slam, Heat Crash, Low Kick, Grass
+			 * Knot, Electro Ball, Reversal and the like are worked out by the calculator from the
+			 * two Pokemon. They all read 0 here, so a Fezandipiti set up twice in front of a
+			 * Ferrothorn and died to one Gyro Ball. Only what really has none stops here.
+			 */
+			if (!move.bp && (this.cfg.naive || this.cfg.variablePower === false || move.category === 'Status' || NO_CALC_POWER.has(move.name))) return 0;
+			// Gyro Ball is run at minimum Speed by anything slow enough to want it.
+			if (move.name === 'Gyro Ball' && !this.cfg.naive && attacker.species && attacker.species.baseStats && attacker.species.baseStats.spe <= 60 && attacker.velvetFoe) {
+				attacker = attacker.clone();
+				attacker.ivs = { ...attacker.ivs, spe: 0 };
+				attacker.evs = { ...attacker.evs, spe: 0 };
+				attacker.nature = 'Brave';
+				attacker.rawStats = { ...attacker.rawStats, spe: Math.floor((Math.floor((2 * attacker.species.baseStats.spe) * attacker.level / 100) + 5) * 0.9) };
+				attacker.stats = { ...attacker.stats, spe: attacker.rawStats.spe };
+			}
 			// A Charge doubles the next Electric move; the calculator has no idea.
 			const charged = attacker.velvetCharged && move.type === 'Electric' ? 2 : 1;
 			// A foe's likely damage item, or what its hits have shown (foeModel: foeScale()).
@@ -2393,8 +2433,63 @@ class BattleAI {
 		}
 	}
 
+	/*
+	 * Weather, as a plan the bot plays (1 Oct 2026, the weather bootcamp). The mechanics
+	 * were already read - damage, the Speed doublers, Thunder and Blizzard's accuracy - but
+	 * not the strategy: a weather team leads with its setter, and brings it back when the
+	 * weather has run out or been replaced while its users are still alive.
+	 */
+	weatherRoles(request) {
+		const WP = require('./weather-plan');
+		const maps = WP.abilityMaps(velvetDex || (velvetDex = require('./rp-dex')()));
+		const idOf = x => String(x || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+		return request.side.pokemon.map((p, i) => {
+			const ability = idOf(p.baseAbility || p.ability);
+			const moves = (p.moves || []).map(idOf);
+			let uses = maps.userOf[ability] || null;
+			if (!uses) {
+				for (const [name, t] of Object.entries(WP.TEMPLATES)) {
+					if (t.moveUsers.some(m => moves.includes(m)) || Object.values(t.upgrades).some(m => moves.includes(m))) { uses = name; break; }
+				}
+			}
+			return { i: i + 1, p, sets: maps.setterOf[ability] || null, uses, alive: !/fnt/.test(p.condition || '') };
+		});
+	}
+
+	/** The weather the battle is in, as one of sun / rain / sand / snow, or ''. */
+	weatherNow(state) {
+		const w = String((state && state.weather) || '').toLowerCase().replace(/[^a-z]/g, '');
+		return /sunnyday|desolateland/.test(w) ? 'sun' : /raindance|primordialsea/.test(w) ? 'rain' : /sandstorm/.test(w) ? 'sand' : /snow|hail/.test(w) ? 'snow' : '';
+	}
+
+	/** What a bench Pokemon is worth for the weather: see benchScore. */
+	weatherBonus(entry, state, request) {
+		try {
+			const roles = this.weatherRoles(request);
+			const mine = roles.find(r => r.p === entry);
+			if (!mine) return 0;
+			const now = this.weatherNow(state);
+			// A setter whose weather is not up, with someone alive to use it: bring it back.
+			if (mine.sets && now !== mine.sets) {
+				const users = roles.filter(r => r !== mine && r.alive && r.uses === mine.sets).length;
+				if (users) return 22 + 6 * Math.min(2, users - 1);
+			}
+			// A user of the weather that is up right now: this is its moment.
+			if (mine.uses && now === mine.uses) return 14;
+			return 0;
+		} catch (e) { return 0; }
+	}
+
 	teamOrder(request, state) {
 		const gen = this.gen(state.gen);
+		// A weather team leads with its setter, as Smogon's rain, sand and hail teams do.
+		if (!this.cfg.naive && this.cfg.weatherPlay !== false && request.side.pokemon.length > 1) {
+			try {
+				const roles = this.weatherRoles(request);
+				const setter = roles.find(r => r.sets && roles.some(u => u !== r && u.uses === r.sets));
+				if (setter) return `team ${[setter.i, ...roles.filter(r => r !== setter).map(r => r.i)].join('')}`;
+			} catch (e) { /* the usual lead */ }
+		}
 		const mons = request.side.pokemon.map((p, i) => {
 			const mon = this.myPokemon(gen, p, state);
 			return { i: i + 1, p, mon, spe: mon.stats ? mon.stats.spe : 0, lead: 0 };
@@ -2634,6 +2729,8 @@ class BattleAI {
 			// send in whatever it cared least about after every knockout.
 			if (costEntry) score -= (worst / 100) * TEMPO.entry * (0.4 + 0.6 * rank);
 		}
+		// Weather play: the setter comes back to renew its weather; its users come in while it is up.
+		if (!this.cfg.naive && this.cfg.weatherPlay !== false) score += this.weatherBonus(entry, state, request);
 		return score;
 	}
 
@@ -3480,6 +3577,9 @@ class BattleAI {
 		if (!stallKeeps && (!planned || guarded) && this.cfg.switching && request.side.pokemon.length > 1 && !active.trapped && !active.maybeTrapped) {
 			const myHpPct = (me.originalCurHP / me.maxHP()) * 100;
 			const doomed = incoming >= myHpPct;
+			// VELVET_AI_TRACE=1: the numbers behind the choice (scripts/replay-ai.js --turns=...).
+			const trace = process.env.VELVET_AI_TRACE ? (...a) => this.log('trace:', ...a) : null;
+			if (trace) trace(`hp ${myHpPct.toFixed(0)}% incoming ${Number(incoming).toFixed(0)}% outsped ${!!outsped} own ${Number(own).toFixed(0)} best ${best.name} | ` + ranked.map(r => `${r.name}:${Number(r.score).toFixed(0)}${r.damage ? '(' + Number(r.damage).toFixed(0) + '%)' : ''}`).join(' '));
 			// Stuck with a self-dropped attacking stat and nothing that kills: switching resets it.
 			const bestData = PkmnDex.forGen(gen.num).moves.get(best.name);
 			const drained = bestData && bestData.category !== 'Status' && this.droppedFor(bestData, me) <= -2 && own < 70;
@@ -3512,6 +3612,33 @@ class BattleAI {
 				// Outsped and dying, with nothing lethal of our own to fire back:
 				// staying is a free knockout for them.
 				(outsped && own < 100);
+			/*
+			 * Badly poisoned and the poison is ramping (1 Oct 2026): Toxic takes 1/16 more each
+			 * turn and starts again at 1/16 on leaving. A Spiritomb sat in clicking Strength Sap
+			 * five turns running while the tick grew past what the Sap healed, and died to it at
+			 * 21%. From the third tick on (3/16 a turn and rising), with something on the bench
+			 * that takes the foe comfortably, it leaves - unless this turn knocks the foe out.
+			 */
+			if (!this.cfg.naive && this.cfg.sanity !== false && this.cfg.toxicExit !== false && !guarded) {
+				const ident = String(entry.ident || '');
+				this.toxSince = this.toxSince || {};
+				if (/ tox/.test(entry.condition || '')) { if (this.toxSince[ident] === undefined) this.toxSince[ident] = state.turn; } else delete this.toxSince[ident];
+				const ticks = this.toxSince[ident] === undefined ? 0 : state.turn - this.toxSince[ident] + 1;
+				const immuneToIt = /^(poisonheal|magicguard)$/.test(String(entry.ability || entry.baseAbility || '').toLowerCase().replace(/[^a-z]/g, ''));
+				const kills = ranked.some(r => r.kind === 'move' && r.damage >= 100);
+				const maxed = state.mine && state.mine['abc'[index]] && state.mine['abc'[index]].dynamaxed;   // a Dynamax is not thrown away for it
+				if (ticks >= 3 && !immuneToIt && !kills && !maxed) {
+					let refuge = null;
+					for (const [i, p] of request.side.pokemon.entries()) {
+						if (p.active || /fnt/.test(p.condition)) continue;
+						const takes = this.worstIncoming(gen, p, state, field);
+						if (takes <= 45 && (!refuge || takes < refuge.takes)) refuge = { takes, i: i + 1 };
+					}
+					if (trace) trace(`toxic: tick ${ticks} refuge ${refuge ? refuge.i + ' takes ' + refuge.takes.toFixed(0) + '%' : '-'}`);
+					if (refuge) { this.log(`toxic: tick ${ticks} -> switch ${refuge.i}`); return `switch ${refuge.i}`; }
+				}
+			}
+			if (trace) trace(`losing ${!!losing} (drained ${!!drained} crippled ${!!crippled} walled ${!!walled} choiceLocked ${!!choiceLocked} doomed ${!!doomed}) stallKeeps ${!!stallKeeps} planned ${planned ? planned.kind : '-'}`);
 			if (losing) {
 				const bench = request.side.pokemon
 					.map((p, i) => ({ p, i: i + 1 }))
@@ -3595,6 +3722,7 @@ class BattleAI {
 				// its second turn of three): stay unless this turn kills it.
 				const liveMe = state.mine && state.mine['abc'[index]];
 				if (this.cfg.sanity !== false && liveMe && liveMe.dynamaxed && !doomed) margin += 45;
+				if (trace) trace(`losing: margin ${margin} alt ${alt ? alt.i + ':' + alt.score.toFixed(0) : '-'} safest ${safest ? safest.i + ' takes ' + Number(safest.takes).toFixed(0) + '%' : '-'} | ` + bench.map(o => `${o.i} ${o.p.details.split(',')[0]}`).join(', '));
 				if (alt && alt.score > own + margin) return `switch ${alt.i}`;
 			}
 		}
