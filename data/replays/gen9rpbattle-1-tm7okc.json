@@ -1,0 +1,12 @@
+{
+	"id": "gen9rpbattle-1-tm7okc",
+	"format": "[Gen 9] RP Battle",
+	"players": [
+		"Leader rock hard c",
+		"simia ignis"
+	],
+	"rating": null,
+	"log": "|velvetmusic|gym|events/gym-leader-dppt\n|j|☆Leader rock hard c\n|j|☆simia ignis\n|t:|1790829121\n|gametype|singles\n|player|p1|Leader rock hard c|169|\n|player|p2|simia ignis|simia-ignis.png|\n|gen|9\n|tier|[Gen 9] RP Battle\n|clearpoke\n|poke|p1|Pupitar, L34, M|\n|poke|p1|Rockruff, L34, M|\n|poke|p1|Barbaracle-Mega, L34, M|\n|poke|p1|Naclstack, L34, F|\n|poke|p1|Growlithe-Hisui, L34, F|\n|poke|p1|Iron Boulder, L36|\n|poke|p2|Flutter Mane, L34|\n|poke|p2|Banette, L34, M|\n|poke|p2|Roaring Moon, L34|\n|poke|p2|Monferno, L34, M|\n|poke|p2|Whimsicott, L34, M|\n|poke|p2|Smeargle, L34, F|\n|teampreview\n|inactive|Battle timer is ON: inactive players will automatically lose when time's up. (requested by Leader rock hard c)\n|n|☆Leader rock hard c|leaderrockhardc\n|\n|t:|1790829127\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Barbaracle|Barbaracle-Mega, L34, M|100/100\n|switch|p2a: Whimsicott|Whimsicott, L34, M|100/100\n|turn|1\n|\n|t:|1790829130\n|move|p2a: Whimsicott|Spore|p1a: Barbaracle\n|-status|p1a: Barbaracle|slp|[from] move: Spore\n|cant|p1a: Barbaracle|slp\n|\n|upkeep\n|turn|2\n|\n|t:|1790829131\n|move|p2a: Whimsicott|Moonblast|p1a: Barbaracle\n|-supereffective|p1a: Barbaracle\n|-damage|p1a: Barbaracle|32/100 slp\n|-unboost|p1a: Barbaracle|spa|1\n|cant|p1a: Barbaracle|slp\n|\n|upkeep\n|turn|3\n|\n|t:|1790829133\n|move|p2a: Whimsicott|Moonblast|p1a: Barbaracle\n|-supereffective|p1a: Barbaracle\n|-damage|p1a: Barbaracle|0 fnt\n|faint|p1a: Barbaracle\n|\n|upkeep\n|\n|t:|1790829134\n|switch|p1a: Growlithe|Growlithe-Hisui, L34, F|100/100\n|turn|4\n|\n|t:|1790829136\n|move|p2a: Whimsicott|Spore|p1a: Growlithe\n|-status|p1a: Growlithe|slp|[from] move: Spore\n|cant|p1a: Growlithe|slp\n|\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1790829136
+}
