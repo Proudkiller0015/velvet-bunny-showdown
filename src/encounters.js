@@ -752,6 +752,7 @@ function rollWild({ place, badges, levelCap = null, rng = Math.random, double = 
 	 */
 	const rarePool = pool(rare, []);
 	const rareMean = rarePool.length ? rarePool.reduce((n, e) => n + e.w, 0) / rarePool.length : 0;
+	const fromRare = new Set(rarePool.map(e => e.item.id));
 	const entries = [
 		...scale(pool(common, []), common.length ? 0.55 : 0),
 		...scale(rarePool, 0.04 * Math.min(1, rareMean * 25)),
@@ -769,6 +770,8 @@ function rollWild({ place, badges, levelCap = null, rng = Math.random, double = 
 		const species = stageFor(root, level, rng, { ahead: 0.04 });
 		const set = wildSet(species, level, rng);
 		if (rng() < shinyChance(shiny)) set.shiny = true;
+		// Met from the place's rare list: the battle plays the rare wild theme (rp-server musicFor).
+		if (fromRare.has(root.id)) set.rare = true;
 		if (rng() < 0.05) set.item = pick(['Oran Berry', 'Sitrus Berry', 'Pecha Berry', 'Nugget', 'Big Mushroom', 'Pearl', 'Stardust'], rng);
 		team.push(set);
 	}

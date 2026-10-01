@@ -155,7 +155,7 @@ for (const t of tracks) for (const s of t.species) LEGEND_OF[s] = `legends/${t.f
 // Rare wild: what the rarity ladder puts at rare or above, and anything shiny (the client checks that).
 const Dex = require(path.join(ROOT, 'src', 'rp-dex'))();
 const Rarity = require(path.join(ROOT, 'src', 'rarity'));
-const RARE = new Set(['rare', 'starter', 'pseudo', 'ub', 'paradox', 'legendary', 'mythical', 'boxart']);
+const RARE = new Set(['starter', 'pseudo', 'ub', 'paradox', 'legendary', 'mythical', 'boxart']);
 const rare = [];
 for (const s of Dex.species.all()) {
 	if (s.num <= 0 || LEGEND_OF[s.id]) continue;

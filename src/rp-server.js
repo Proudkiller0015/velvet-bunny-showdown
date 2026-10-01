@@ -729,7 +729,12 @@ function musicTables() {
 	MUSIC = { legendOf, event };
 	return MUSIC;
 }
-const RARE_CLASSES = new Set(['rare', 'starter', 'pseudo', 'ub', 'paradox', 'legendary', 'mythical', 'boxart']);
+/*
+ * Rare wild music: shiny, met from the place's rare list (rollWild marks it), or a headliner
+ * met anywhere. Not the ladder's plain "rare" class: that is lifted by tier, and played the
+ * rare theme for one wild Pokemon in five - Pelipper, Horsea, Wingull (1 Oct 2026).
+ */
+const RARE_CLASSES = new Set(['starter', 'pseudo', 'ub', 'paradox', 'legendary', 'mythical', 'boxart']);
 function musicFor(enc) {
 	if (!enc || !Array.isArray(enc.team)) return null;
 	const { legendOf, event } = musicTables();
@@ -742,7 +747,7 @@ function musicFor(enc) {
 			if (legend) return { kind: 'legend', file: legend };
 			let cls = null;
 			try { cls = require('./rarity').classOf(species.name); } catch (e) { /* unknown: not rare */ }
-			if (set.shiny || RARE_CLASSES.has(cls)) rare = true;
+			if (set.shiny || set.rare || RARE_CLASSES.has(cls)) rare = true;
 		}
 		return rare ? { kind: 'rarewild', file: event.rarewild } : { kind: 'wild', file: event.wild };
 	}
