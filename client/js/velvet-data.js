@@ -2844,6 +2844,8 @@
 		if (setBgm) {
 			S.prototype.setBgm = function () {
 				if (this.velvetMusic) return;
+				// The player's own pick, for battles the server named no music for (ladder, challenges).
+				try { if (playChosenMusic(this)) return; } catch (e) { /* Showdown's own, then */ }
 				return setBgm.apply(this, arguments);
 			};
 		}
@@ -2958,6 +2960,125 @@
 				}
 			} catch (e) { /* the numbered grid still works */ }
 			return tree;
+		};
+		return true;
+	}
+
+	/*
+	 * The battle music picker (owner, 1 Oct 2026: "add a battle music player for ladder and
+	 * custom challenges"). In the sound menu (the speaker): Auto keeps Showdown's random
+	 * pick; otherwise one track, or a shuffle, plays in every battle the server did not
+	 * name music for - ladder and challenges. RP encounters keep their own themes.
+	 * Saved in this browser. Showdown's own tracks play from Showdown's server, as they
+	 * always have (they are not copied here); ours play from this one.
+	 */
+	var NATIVE_MUSIC = [
+		['dpp-trainer', 'Diamond & Pearl: Trainer', 13440, 96959], ['dpp-rival', 'Diamond & Pearl: Rival', 13888, 66352],
+		['hgss-johto-trainer', 'HeartGold & SoulSilver: Johto Trainer', 23731, 125086], ['hgss-kanto-trainer', 'HeartGold & SoulSilver: Kanto Trainer', 13003, 94656],
+		['bw-trainer', 'Black & White: Trainer', 14629, 110109], ['bw-rival', 'Black & White: Rival', 19180, 57373],
+		['bw-subway-trainer', 'Black & White: Subway Trainer', 15503, 110984], ['bw2-kanto-gym-leader', 'Black 2 & White 2: Kanto Gym Leader', 14626, 58986],
+		['bw2-rival', 'Black 2 & White 2: Rival', 7152, 68708], ['bw2-homika-dogars', 'Black 2 & White 2: Homika (Dogars)', 1661, 68131],
+		['xy-trainer', 'X & Y: Trainer', 7802, 82469], ['xy-rival', 'X & Y: Rival', 7802, 58634],
+		['oras-trainer', 'Omega Ruby & Alpha Sapphire: Trainer', 13579, 91548], ['oras-rival', 'Omega Ruby & Alpha Sapphire: Rival', 14303, 69149],
+		['sm-trainer', 'Sun & Moon: Trainer', 8323, 89230], ['sm-rival', 'Sun & Moon: Rival', 11389, 62158],
+		['spl-elite4', 'Elite Four (SPL)', 3962, 152509], ['xd-miror-b', 'XD: Miror B.', 9000, 57815], ['colosseum-miror-b', 'Colosseum: Miror B.', 896, 47462],
+	];
+	var OUR_MUSIC_NAMES = {
+		'events/wild-bw': 'Black & White: Wild Pokemon', 'events/rare-wild-bw': 'Black & White: Rare Wild Pokemon',
+		'events/trainer-rse': 'Ruby & Sapphire: Trainer', 'events/gym-leader-dppt': 'Diamond & Pearl: Gym Leader',
+		'events/elite-four-dppt': 'Diamond & Pearl: Elite Four', 'events/champion-cynthia': 'Champion Cynthia',
+	};
+	var MUSIC_PREF = 'velvetBattleMusic';
+	function musicChoice() {
+		try { return localStorage.getItem(MUSIC_PREF) || 'auto'; } catch (e) { return 'auto'; }
+	}
+	function ourMusicName(file) {
+		if (OUR_MUSIC_NAMES[file]) return OUR_MUSIC_NAMES[file];
+		return 'Legendary: ' + file.replace(/^legends\//, '').replace(/-/g, ' ').replace(/\b[a-z]/g, function (c) { return c.toUpperCase(); });
+	}
+	// Every track the picker offers: id -> how to load it.
+	function musicLibrary() {
+		var lib = {};
+		for (var file in MUSIC_LOOP) lib['ours:' + file] = { name: ourMusicName(file), ours: file };
+		for (var i = 0; i < NATIVE_MUSIC.length; i++) lib['ps:' + NATIVE_MUSIC[i][0]] = { name: NATIVE_MUSIC[i][1], native: NATIVE_MUSIC[i] };
+		return lib;
+	}
+	function loadTrack(scene, id, track) {
+		if (scene.bgmNum === 'picked-' + id) return true;
+		scene.bgmNum = 'picked-' + id;
+		if (track.ours) {
+			var key = 'audio/' + track.ours + '.mp3';
+			if (BattleSound.soundCache && !BattleSound.soundCache[key]) {
+				var audio = document.createElement('audio');
+				audio.src = location.origin + '/' + key;
+				BattleSound.soundCache[key] = audio;
+			}
+			var loop = MUSIC_LOOP[track.ours];
+			scene.bgm = BattleSound.loadBgm(key, loop[0], Math.max(loop[0] + 5000, loop[1]), scene.bgm);
+		} else {
+			scene.bgm = BattleSound.loadBgm('audio/' + track.native[0] + '.mp3', track.native[2], track.native[3], scene.bgm);
+		}
+		scene.updateBgm();
+		return true;
+	}
+	// True when the player's pick is now playing; false leaves it to Showdown.
+	function playChosenMusic(scene) {
+		var choice = musicChoice();
+		if (choice === 'auto' || scene.velvetMusic) return false;
+		var lib = musicLibrary();
+		if (choice === 'shuffle' || choice === 'shuffle-ours') {
+			if (scene.velvetShuffled && lib[scene.velvetShuffled]) return loadTrack(scene, scene.velvetShuffled, lib[scene.velvetShuffled]);
+			var ids = Object.keys(lib).filter(function (id) { return choice === 'shuffle' || id.indexOf('ours:') === 0; });
+			scene.velvetShuffled = ids[Math.floor(Math.random() * ids.length)];
+			return loadTrack(scene, scene.velvetShuffled, lib[scene.velvetShuffled]);
+		}
+		return lib[choice] ? loadTrack(scene, choice, lib[choice]) : false;
+	}
+	// A new pick takes effect in the battles already open.
+	function applyMusicChoice() {
+		try {
+			var rooms = (window.app && app.rooms) || {};
+			for (var id in rooms) {
+				var scene = rooms[id] && rooms[id].battle && rooms[id].battle.scene;
+				if (!scene || !scene.setBgm || scene.velvetMusic) continue;
+				scene.velvetShuffled = null;
+				scene.bgmNum = -1;
+				if (scene.rollBgm) scene.rollBgm();
+			}
+		} catch (e) { /* the next battle picks it up */ }
+	}
+	function installMusicPlayer() {
+		var P = window.SoundsPopup;
+		if (!P || !P.prototype || !P.prototype.initialize || !window.jQuery) return false;
+		if (P.__velvetMusic) return true;
+		P.__velvetMusic = true;
+		var initialize = P.prototype.initialize;
+		P.prototype.initialize = function () {
+			var out = initialize.apply(this, arguments);
+			try {
+				var lib = musicLibrary();
+				var cur = musicChoice();
+				var opt = function (id, name) { return '<option value="' + id + '"' + (id === cur ? ' selected' : '') + '>' + name + '</option>'; };
+				var by = function (prefix) {
+					return Object.keys(lib).filter(function (id) { return id.indexOf(prefix) === 0; })
+						.sort(function (a, b) { return lib[a].name < lib[b].name ? -1 : 1; })
+						.map(function (id) { return opt(id, lib[id].name); }).join('');
+				};
+				var buf = '<p class="velvet-music"><label class="optlabel">Battle music:</label>' +
+					'<select name="velvetmusic" class="button" style="max-width:230px">' +
+					opt('auto', 'Auto (Showdown picks)') + opt('shuffle', 'Shuffle everything') + opt('shuffle-ours', 'Shuffle Velvet tracks') +
+					'<optgroup label="Velvet Bunny">' + by('ours:') + '</optgroup>' +
+					'<optgroup label="Showdown">' + by('ps:') + '</optgroup>' +
+					'</select><br /><small style="color:#888">Ladder and challenge battles. RP encounters keep their own themes.</small></p>';
+				var $section = jQuery(buf);
+				var $mute = this.$el.find('input[name=muted]').closest('p');
+				if ($mute.length) $section.insertBefore($mute); else this.$el.append($section);
+				$section.find('select').on('change', function () {
+					try { localStorage.setItem(MUSIC_PREF, this.value); } catch (e) { /* this session only */ }
+					applyMusicChoice();
+				});
+			} catch (e) { /* the volume sliders still work */ }
+			return out;
 		};
 		return true;
 	}
@@ -3367,7 +3488,8 @@
 	// The avatar picker lives in the panels script, which loads with the client.
 	var avatarTries = 0;
 	var avatarTimer = setInterval(function () {
-		if (installAvatarList() || ++avatarTries > 600) clearInterval(avatarTimer);
+		var playerIn = installMusicPlayer();
+		if ((installAvatarList() && playerIn) || ++avatarTries > 600) clearInterval(avatarTimer);
 	}, 250);
 
 	var musicTries = 0;
