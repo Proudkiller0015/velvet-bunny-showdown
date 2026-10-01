@@ -807,8 +807,8 @@ const TYPE_ITEMS = {
  */
 const GYM_TYPES = {
 	// Kagura
-	'harbour-gym': 'Water', 'glasshouse-gym': 'Grass', 'woods-gym': 'Ghost', 'stones-gym': 'Psychic',
-	'ember-gym': 'Fire', 'shelf-gym': 'Electric', 'tidecall-gym': 'Rock', 'grotto-gym': 'Dark',
+	'tide-gym': 'Water', 'harvest-gym': 'Grass', 'lantern-gym': 'Ghost', 'crown-gym': 'Psychic',
+	'caldera-gym': 'Fire', 'storm-gym': 'Electric', 'stack-gym': 'Rock', 'moonless-gym': 'Dark',
 	// Sinnoh
 	'oreburgh-gym': 'Rock', 'eterna-gym': 'Grass', 'veilstone-gym': 'Fighting', 'pastoria-gym': 'Water',
 	'hearthome-gym': 'Ghost', 'canalave-gym': 'Steel', 'snowpoint-gym': 'Ice', 'sunyshore-gym': 'Electric',

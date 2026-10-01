@@ -54,7 +54,7 @@ module.exports = {
     },
     'amber': {
       name: 'Amber Fields',
-      channels: ['the-fields', 'glasshouse-gym', 'farm-shop', 'mill-pond', 'the-barns', 'scarecrow-lane'],
+      channels: ['the-fields', 'harvest-gym', 'farm-shop', 'mill-pond', 'the-barns', 'scarecrow-lane'],
       types: ['Grass', 'Bug', 'Ground', 'Normal'],
       wild: ['the-fields', 'mill-pond', 'the-barns', 'scarecrow-lane'],
       trainers: ['picnicker', 'camper', 'bugcatcher', 'breeder', 'worker', 'youngster'],
@@ -69,7 +69,7 @@ module.exports = {
     },
     'minato': {
       name: 'Minato Harbour',
-      channels: ['docks', 'ferry-terminal', 'fish-market', 'harbour-mart', 'harbour-gym', 'poke-center-minato', 'the-breakwater', 'warehouse-row', 'harbour-inn'],
+      channels: ['docks', 'ferry-terminal', 'fish-market', 'harbour-mart', 'tide-gym', 'poke-center-minato', 'the-breakwater', 'warehouse-row', 'harbour-inn'],
       types: ['Water', 'Flying', 'Poison', 'Normal'],
       wild: ['docks', 'the-breakwater', 'warehouse-row'],
       trainers: ['sailor', 'fisherman', 'swimmer', 'swimmerf', 'tuber', 'worker', 'abyssalgrunt'],
@@ -199,7 +199,7 @@ module.exports = {
     'ruins': {
       name: 'The Standing Stones',
       // The Psychic gym meets here (moved from N's Castle). Like the other gyms, its channel has trainers but no wild Pokémon.
-      channels: ['the-standing-stones', 'stones-gym', 'the-fallen-ninth'],
+      channels: ['the-standing-stones', 'crown-gym', 'the-fallen-ninth'],
       types: ['Psychic', 'Rock', 'Ghost', 'Fairy'],
       wild: ['the-standing-stones', 'the-fallen-ninth'],
       trainers: ['ruinmaniac', 'psychic', 'psychicf', 'hexmaniac', 'sage'],
@@ -226,7 +226,7 @@ module.exports = {
     },
     'ghost': {
       name: 'Ghost Woods',
-      channels: ['the-treeline', 'deep-woods', 'lantern-clearing', 'woods-gym', 'the-shrine-ruin', 'where-the-paths-move'],
+      channels: ['the-treeline', 'deep-woods', 'lantern-clearing', 'lantern-gym', 'the-shrine-ruin', 'where-the-paths-move'],
       types: ['Ghost', 'Dark', 'Poison', 'Grass'],
       wild: ['the-treeline', 'deep-woods', 'lantern-clearing', 'the-shrine-ruin', 'where-the-paths-move'],
       trainers: ['hexmaniac', 'channeler', 'psychic', 'bugcatcher', 'punk', 'ninjaboy'],
@@ -337,7 +337,7 @@ module.exports = {
     },
     'ember': {
       name: 'Ember Hollow',
-      channels: ['caldera-town', 'ash-flats', 'ember-gym', 'poke-center-ember', 'ember-mart', 'hot-springs', 'the-vents', 'obsidian-works'],
+      channels: ['caldera-town', 'ash-flats', 'caldera-gym', 'poke-center-ember', 'ember-mart', 'hot-springs', 'the-vents', 'obsidian-works'],
       types: ['Fire', 'Ground', 'Rock', 'Poison'],
       wild: ['ash-flats', 'the-vents', 'hot-springs'],
       trainers: ['firebreather', 'kindler', 'worker', 'hiker', 'scientist', 'artist'],
@@ -352,7 +352,7 @@ module.exports = {
     },
     'shelf': {
       name: 'Thunder Shelf',
-      channels: ['storm-watch', 'shelf-gym', 'cliff-stairs', 'the-pylons'],
+      channels: ['storm-watch', 'storm-gym', 'cliff-stairs', 'the-pylons'],
       types: ['Electric', 'Flying', 'Steel', 'Rock'],
       wild: ['storm-watch', 'cliff-stairs', 'the-pylons'],
       trainers: ['guitarist', 'scientist', 'birdkeeper', 'worker', 'hiker', 'acetrainerf'],
@@ -427,7 +427,7 @@ module.exports = {
     },
     'tidecall': {
       name: 'Tidecall Town',
-      channels: ['the-stacks', 'tidecall-gym', 'poke-center-tsuki', 'tidecall-mart', 'the-causeway', 'stilt-houses', 'tidecall-ferry'],
+      channels: ['the-stacks', 'stack-gym', 'poke-center-tsuki', 'tidecall-mart', 'the-causeway', 'stilt-houses', 'tidecall-ferry'],
       types: ['Rock', 'Water', 'Ground', 'Flying'],
       wild: ['the-stacks', 'the-causeway'],
       trainers: ['sailor', 'swimmer', 'fisherman', 'hiker', 'birdkeeper', 'tuber'],
@@ -437,7 +437,7 @@ module.exports = {
     },
     'grotto': {
       name: 'Moonlit Grotto',
-      channels: ['grotto-mouth', 'deep-grotto', 'grotto-gym', 'the-tide-gate'],
+      channels: ['grotto-mouth', 'deep-grotto', 'moonless-gym', 'the-tide-gate'],
       types: ['Dark', 'Water', 'Ghost', 'Poison'],
       wild: ['grotto-mouth', 'deep-grotto', 'the-tide-gate'],
       trainers: ['hexmaniac', 'punk', 'delinquent', 'swimmer', 'channeler', 'acetrainer'],
