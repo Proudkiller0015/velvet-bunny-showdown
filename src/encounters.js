@@ -799,6 +799,28 @@ const TYPE_ITEMS = {
  * Pokemon are - so low badges mean mostly low-tier Pokemon, with the odd
  * surprise - and a trainer who could have evolved something has.
  */
+/*
+ * The type of every gym, by its channel. A trainer met inside a gym is one of the
+ * gym's own: a class that fits its type (or an Ace Trainer), with a team of that
+ * type. Before (1 Oct 2026) a gym channel rolled its town's route trainers, so the
+ * Rock gym at Tidecall was full of Swimmers and Sailors with Water teams.
+ */
+const GYM_TYPES = {
+	// Kagura
+	'harbour-gym': 'Water', 'glasshouse-gym': 'Grass', 'woods-gym': 'Ghost', 'stones-gym': 'Psychic',
+	'ember-gym': 'Fire', 'shelf-gym': 'Electric', 'tidecall-gym': 'Rock', 'grotto-gym': 'Dark',
+	// Sinnoh
+	'oreburgh-gym': 'Rock', 'eterna-gym': 'Grass', 'veilstone-gym': 'Fighting', 'pastoria-gym': 'Water',
+	'hearthome-gym': 'Ghost', 'canalave-gym': 'Steel', 'snowpoint-gym': 'Ice', 'sunyshore-gym': 'Electric',
+};
+/** The place as a gym's trainers see it, or the place unchanged outside a gym. */
+function gymPlace(place, channel) {
+	const type = GYM_TYPES[String(channel || '').replace(/^#/, '').toLowerCase()];
+	if (!type) return place;
+	const fits = TRAINER_CLASSES.filter(c => !c.story && !c.pair && (c.types || [])[0] === type).map(c => c.id);
+	return { ...place, gymType: type, types: [type], trainers: [...new Set([...fits, 'acetrainer', 'acetrainerf'])] };
+}
+
 function rollTrainer({ place, badges, levelCap = null, rng = Math.random, classId = null, double = null, ace = null }) {
 	badges = clampBadges(badges);
 	const classes = (place && place.trainers && place.trainers.length ? place.trainers : ['youngster', 'lass', 'hiker', 'backpacker'])
@@ -819,8 +841,9 @@ function rollTrainer({ place, badges, levelCap = null, rng = Math.random, classI
 	 * first types listed are the class's own, so they are the likelier focus;
 	 * the rest of the list still turns up, less often.
 	 */
-	const focus = themeOf(cls.types || [], rng);
-	const ctx = { badges, types: cls.types, maxLevel: hi };
+	const gymType = place && place.gymType;
+	const focus = gymType ? [gymType] : themeOf(cls.types || [], rng);
+	const ctx = { badges, types: gymType ? [gymType] : cls.types, maxLevel: hi };
 	// The place still counts: a Backpacker on a volcano brings fire types more
 	// often than one at the harbour.
 	const placeTypes = (place && place.types) || [];
@@ -829,7 +852,10 @@ function rollTrainer({ place, badges, levelCap = null, rng = Math.random, classI
 		if (w > 0 && placeTypes.length && lineOf(item).some(s => s.types.some(t => placeTypes.includes(t)))) w *= 1.5;
 		if (w > 0 && focus.length && lineOf(item).some(s => s.types.some(t => focus.includes(t)))) w *= 4;
 		return { item, w };
-	}).filter(e => e.w > 0);
+	}).filter(e => e.w > 0)
+		// In a gym, only the gym's type (while there are enough lines of it at these badges).
+		.filter((e, i, all) => !gymType || all.filter(x => lineOf(x.item).some(s => s.types.includes(gymType))).length < 4 ||
+			lineOf(e.item).some(s => s.types.includes(gymType)));
 
 	/*
 	 * Patch 1.5: a trainer brings a *team*. More Pokemon are rolled than fit,
@@ -1214,7 +1240,7 @@ module.exports = {
 	toID, LEGEND_TAGS, isLegendary, encounterable, findSpecies,
 	levelUpMoves, wildSet, wildName, clampLevel, clampBadges, levelRange, shinyChance,
 	catchRate, BALLS, findBall, catchChance, shakesFor, CATCH_BOOST, PITY_PER_MISS,
-	TRAINER_CLASSES, findClass, trainerName, minLevel, rootOf, lineOf, lineWeight, BADGE_TIERS, Rarity,
+	TRAINER_CLASSES, GYM_TYPES, gymPlace, findClass, trainerName, minLevel, rootOf, lineOf, lineWeight, BADGE_TIERS, Rarity,
 	stageFor, BABIES, babyWeight, clock, clockWeight, TIME_OF_DAY, DAY_OF_WEEK, SEASONS, EVENTS, eventOn, aceAdjusted, aceLevel,
 	rollWild, rollTrainer, trainerSet, describe, stallTrainerTeam, ACE_CLASSES, ACE_STALL_CHANCE,
 	WILD_FORMAT, WILD_DOUBLE_FORMAT, TUTORIAL_FORMAT, TUTORIAL_PIKACHU, TUTORIAL_RATTATA, TUTORIAL_BAG, TRAINER_FORMAT, TRAINER_DOUBLE_FORMAT,

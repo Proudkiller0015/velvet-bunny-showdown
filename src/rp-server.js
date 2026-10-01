@@ -229,7 +229,7 @@ function requestEncounter(payload, deps) {
 	} else {
 		rolled = kind === 'wild'
 			? E.rollWild({ place: wildPlace, badges, levelCap, shiny: payload.shiny || {}, ace })
-			: E.rollTrainer({ place, badges, levelCap, ace });
+			: E.rollTrainer({ place: E.gymPlace(place, found.channel), badges, levelCap, ace });
 	}
 	if (!rolled.team.length) return { ok: false, code: 'empty', message: 'Nothing turned up. Try again.' };
 	// An arranged encounter can decide its first throws miss (rp-bot rigs.js failBalls). Never shown.
