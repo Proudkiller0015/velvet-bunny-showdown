@@ -704,6 +704,49 @@ function normaliseBalls(balls) {
 	return out;
 }
 
+/*
+ * The music an RP battle plays (owner, 1 Oct 2026: "only fetch showdown when nothing is
+ * found"). The server knows what the battle is, so it says so in the log -
+ * "|velvetmusic|<kind>|<track>" at the start, which no client shows - and the client
+ * plays that track (client/js/velvet-data.js). Guessing from names failed whenever a
+ * name was cut to 18 characters. Nothing named (PvP, a story rival with no class):
+ * Showdown's own music. Tracks: data/legend-music.json and data/battle-music.json.
+ */
+let MUSIC = null;
+function musicTables() {
+	if (MUSIC) return MUSIC;
+	const read = f => JSON.parse(require('fs').readFileSync(require('path').join(__dirname, '..', 'data', f), 'utf8'));
+	const legendOf = {};
+	for (const t of read('legend-music.json').tracks) for (const s of t.species) legendOf[s] = `legends/${t.file}`;
+	const event = {};
+	for (const [id, e] of Object.entries(read('battle-music.json').events)) event[id] = `events/${e.file}`;
+	MUSIC = { legendOf, event };
+	return MUSIC;
+}
+const RARE_CLASSES = new Set(['rare', 'starter', 'pseudo', 'ub', 'paradox', 'legendary', 'mythical', 'boxart']);
+function musicFor(enc) {
+	if (!enc || !Array.isArray(enc.team)) return null;
+	const { legendOf, event } = musicTables();
+	if (enc.kind === 'wild') {
+		const Dex = require('./rp-dex')();
+		let rare = false;
+		for (const set of enc.team) {
+			const species = Dex.species.get(set.species);
+			const legend = legendOf[species.id] || legendOf[toID(species.baseSpecies)];
+			if (legend) return { kind: 'legend', file: legend };
+			let cls = null;
+			try { cls = require('./rarity').classOf(species.name); } catch (e) { /* unknown: not rare */ }
+			if (set.shiny || RARE_CLASSES.has(cls)) rare = true;
+		}
+		return rare ? { kind: 'rarewild', file: event.rarewild } : { kind: 'wild', file: event.wild };
+	}
+	if (enc.kind === 'trainer') {
+		if (['elitefour', 'champion'].includes(enc.classId)) return event[enc.classId] ? { kind: enc.classId, file: event[enc.classId] } : null;
+		return enc.classId === 'gymleader' ? { kind: 'gym', file: event.gym } : { kind: 'trainer', file: event.trainer };
+	}
+	return null;
+}
+
 /** What Discord gets told: enough to announce it, nothing about its moves. */
 function publicView(enc) {
 	return {
@@ -1175,7 +1218,7 @@ function httpRoute(deps, log) {
 }
 
 module.exports = {
-	freeCatch, FREE_CATCHES, allowCatch, summoned, chosenSet,
+	freeCatch, FREE_CATCHES, allowCatch, summoned, chosenSet, musicFor,
 	pvpCheck, pvpNotice, friendlyNotice, isAgreed, verify, placeFor, requestEncounter, requestTutorial, completeEncounter, canUseItem, usedInLog, setBags, bagFor, pvpItemsFor, canUsePvpItem, NPC_ITEMS_EACH, publicView, canThrow, thrownInLog, resultFromLog, openFor, encounterAccount, isEncounterName, isLocalOnly, LOOPBACK,
 	checkTeam, gimmickIn, GIMMICK_ITEM, GIMMICK_NAME, sidesInLog, startMatch,
 	httpRoute, encounters, RP_ROOM, CHALLENGE_MS, recordFinished, finishedSince,

@@ -66,17 +66,75 @@ function loopEndMs(file) {
 	return Math.round(length - (levels.length - (last + 1)) * 1000);
 }
 
+/*
+ * Where the song repeats: most tracks are an intro, then the main part twice (Cynthia's
+ * piano intro, then the battle). Compares the loudness of every quarter second with the
+ * same moment one repeat later; the best-matching repeat length, and the first moment
+ * the match holds for 20 s, give a loop that skips the intro and never plays the fade.
+ * [startMs, endMs], or null when nothing repeats clearly enough to trust.
+ */
+function refineMs(file, rate, startMs, roughMs) {
+	const out = require('child_process').spawnSync('ffmpeg', ['-v', 'info', '-ss', String(startMs / 1000), '-t', String(roughMs / 1000 + 25), '-i', file,
+		'-af', `asetnsamples=n=${Math.round(rate / 100)},astats=metadata=1:reset=1,ametadata=mode=print:key=lavfi.astats.Overall.RMS_level`,
+		'-f', 'null', '-'], { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 }).stderr;
+	const v = [...out.matchAll(/RMS_level=(-?[d.]+|-inf)/g)].map(m => (m[1] === '-inf' ? -90 : Number(m[1])));
+	const rough = Math.round(roughMs / 10);
+	let best = { s: Infinity, L: rough };
+	for (let L = rough - 50; L <= rough + 50; L++) {
+		let s = 0;
+		for (let t = 0; t < 2000 && t + L < v.length; t++) s += Math.abs(v[t] - v[t + L]);
+		if (s < best.s) best = { s, L };
+	}
+	return best.L * 10;
+}
+
+function repeatLoop(file, loudEnd) {
+	const rate = Number(execFileSync('ffprobe', ['-v', 'error', '-show_entries', 'stream=sample_rate', '-of', 'csv=p=0', file]).toString().trim()) || 44100;
+	const out = require('child_process').spawnSync('ffmpeg', ['-v', 'info', '-i', file,
+		'-af', `asetnsamples=n=${Math.round(rate / 4)},astats=metadata=1:reset=1,ametadata=mode=print:key=lavfi.astats.Overall.RMS_level`,
+		'-f', 'null', '-'], { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 }).stderr;
+	const v = [...out.matchAll(/RMS_level=(-?[\d.]+|-inf)/g)].map(m => (m[1] === '-inf' ? -90 : Number(m[1])));
+	const step = 0.25;
+	const n = v.length;
+	const usable = Math.floor(loudEnd / 1000 / step);
+	let best = null;
+	for (let L = Math.round(30 / step); L < Math.min(Math.round(150 / step), Math.floor(usable * 0.6)); L++) {
+		let s = 0, c = 0;
+		for (let t = 0; t + L < usable; t++) { s += Math.abs(v[t] - v[t + L]); c++; }
+		if (c > 80 && (!best || s / c < best.score)) best = { score: s / c, L };
+	}
+	if (!best || best.score > 2.2) return null;
+	for (let t = 0; t + best.L + 80 < usable; t++) {
+		let s = 0;
+		for (let k = 0; k < 80; k++) s += Math.abs(v[t + k] - v[t + k + best.L]);
+		if (s / 80 < 1.2) {
+			// One second in, so the jump (1 s before the end) lands inside the repeat; the
+			// repeat length is then refined to 10 ms, or the jump lands off the beat.
+			const start = Math.round((t * step + 1) * 1000);
+			const end = start + refineMs(file, rate, start, best.L * step * 1000);
+			return end <= loudEnd ? [start, end] : null;
+		}
+	}
+	return null;
+}
+/*
+ * Only for tracks marked loop: "repeat" (Cynthia: her piano intro once, then the battle).
+ * Loudness finds where a song repeats but not whether the melody does, so a short phrase
+ * can pass for the loop; every other track loops from its start, which is always clean.
+ */
+const loopOf = (f, repeat) => { const end = loopEndMs(f); return (repeat && repeatLoop(f, end)) || [0, end]; };
+
 const files = {};
 for (const t of tracks) {
 	const f = path.join(LEGENDS_DIR, `${t.file}.mp3`);
 	if (t.species.length && !fs.existsSync(f)) throw new Error(`legend track ${t.file} is not cut yet (scripts/cut-legend-music.js)`);
-	if (t.species.length) files[`legends/${t.file}`] = loopEndMs(f);
+	if (t.species.length) files[`legends/${t.file}`] = loopOf(f, t.loop === 'repeat');
 }
 const EVENT_OF = {};
 for (const [id, e] of Object.entries(events)) {
 	const f = path.join(EVENTS_DIR, `${e.file}.mp3`);
 	if (!fs.existsSync(f)) throw new Error(`event song ${e.file} is not cut yet (--cut <folder>)`);
-	files[`events/${e.file}`] = loopEndMs(f);
+	files[`events/${e.file}`] = loopOf(f, e.loop === 'repeat');
 	EVENT_OF[id] = `events/${e.file}`;
 }
 
@@ -100,7 +158,7 @@ const E = require(path.join(ROOT, 'src', 'encounters'));
 const TRAINERS = {};
 for (const c of E.TRAINER_CLASSES) {
 	if (!c.avatar) continue;
-	const role = c.id === 'gymleader' ? 'gym' : ['elitefour', 'champion'].includes(c.id) ? 'league' : 'trainer';
+	const role = c.id === 'gymleader' ? 'gym' : ['elitefour', 'champion'].includes(c.id) ? c.id : 'trainer';
 	const t = TRAINERS[c.avatar] = TRAINERS[c.avatar] || { role, titles: [] };
 	for (const title of [c.title, c.short].filter(Boolean)) if (!t.titles.includes(title)) t.titles.push(title);
 }

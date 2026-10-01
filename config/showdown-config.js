@@ -2313,6 +2313,11 @@ function roleplay() {
 				enc.status = 'battling';
 				enc.roomid = this.room.roomid;
 				this.rpEncounter = enc.id;
+				// The battle's music, for the client to play (rp.musicFor). In the log, so replays have it.
+				try {
+					const music = rp.musicFor(enc);
+					if (music && music.file) this.room.add(`|velvetmusic|${music.kind}|${music.file}`);
+				} catch (e) { console.log(`[roleplay] music: ${e.message}`); }
 
 				// A team that doesn't match the character's box calls the battle off
 				// before a turn is played. The encounter stays open, so fixing the team
