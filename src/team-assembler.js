@@ -102,7 +102,7 @@ function untrain(dex, set, moveIds, legal) {
 function assemble(dex, candidates, options = {}) {
 	const {
 		size = 6, stage = 'full', themed = false, rng = Math.random, items = true,
-		strengthWeight = 25, roles = 3, fixed = [], maxEvaluations = 4000, threats = null, archetype = null,
+		strengthWeight = 25, roles = 3, fixed = [], maxEvaluations = 4000, threats = null, archetype = null, planWeight = 3,
 	} = options;
 	const usable = candidates.filter(c => dex.species.get(c.species).exists);
 	if (!usable.length) return [];
@@ -117,8 +117,14 @@ function assemble(dex, candidates, options = {}) {
 		 * hyper offense, the other way round on stall. The sort is stable, so with
 		 * no plan the order is the data's, as before.
 		 */
-		const found = RS.roleSets(dex, c.species, c.legal || null)
-			.sort((a, b) => (archetype ? RS.archetypeFit(b.role, archetype) - RS.archetypeFit(a.role, archetype) : 0)).slice(0, roles);
+		let found = RS.roleSets(dex, c.species, c.legal || null)
+			.sort((a, b) => (archetype ? RS.archetypeFit(b.role, archetype) - RS.archetypeFit(a.role, archetype) : 0));
+		// With a plan that counts (planWeight above the default), a Pokemon with a role that
+		// suits it does not also offer the ones that fight it: no wall set on hyper offense.
+		if (archetype && planWeight > 3 && found.some(r => RS.archetypeFit(r.role, archetype) >= 1)) {
+			found = found.filter(r => RS.archetypeFit(r.role, archetype) >= 0.75);
+		}
+		found = found.slice(0, roles);
 		const built = [];
 		for (const r of found) {
 			const set = RS.buildSet(dex, c.species, { role: r.role, rng, level: c.level || 100, items: false, legal: c.legal || null, threats, archetype });
@@ -144,7 +150,7 @@ function assemble(dex, candidates, options = {}) {
 		 * soft rule, where the Pokemon has anything better to be swapped for.
 		 */
 		const thin = sets.reduce((n, s) => n + Math.max(0, 3 - s.moves.length) * 4, 0);
-		const plan = archetype && stage !== 'movesets' && TL.analyze(dex, sets).style === archetype ? 3 : 0;
+		const plan = archetype && stage !== 'movesets' && TL.analyze(dex, sets).style === archetype ? planWeight : 0;
 		return logic + strengthWeight * power - crowding - thin + core(picks, sets) + plan + rng() * 0.01;
 	};
 

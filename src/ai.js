@@ -2463,7 +2463,7 @@ class BattleAI {
 	}
 
 	/** What a bench Pokemon is worth for the weather: see benchScore. */
-	weatherBonus(entry, state, request) {
+	weatherBonus(entry, state, request, voluntary = false) {
 		try {
 			const roles = this.weatherRoles(request);
 			const mine = roles.find(r => r.p === entry);
@@ -2472,10 +2472,13 @@ class BattleAI {
 			// A setter whose weather is not up, with someone alive to use it: bring it back.
 			if (mine.sets && now !== mine.sets) {
 				const users = roles.filter(r => r !== mine && r.alive && r.uses === mine.sets).length;
-				if (users) return 22 + 6 * Math.min(2, users - 1);
+				// Less on a switch made by choice: it costs the turn and takes the hit coming in.
+				if (users) return (22 + 6 * Math.min(2, users - 1)) * (voluntary ? 0.5 : 1);
 			}
 			// A user of the weather that is up right now: this is its moment.
-			if (mine.uses && now === mine.uses) return 14;
+			// Only when the way in is free (after a knockout, behind a pivot): a Golduck switched
+			// straight into Garchomp for this and died on turn one.
+			if (mine.uses && now === mine.uses && !voluntary) return 14;
 			return 0;
 		} catch (e) { return 0; }
 	}
@@ -2730,7 +2733,7 @@ class BattleAI {
 			if (costEntry) score -= (worst / 100) * TEMPO.entry * (0.4 + 0.6 * rank);
 		}
 		// Weather play: the setter comes back to renew its weather; its users come in while it is up.
-		if (!this.cfg.naive && this.cfg.weatherPlay !== false) score += this.weatherBonus(entry, state, request);
+		if (!this.cfg.naive && this.cfg.weatherPlay !== false) score += this.weatherBonus(entry, state, request, !!costEntry);
 		return score;
 	}
 

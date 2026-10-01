@@ -1713,7 +1713,10 @@ class TeamBuilder {
 				for (let i = 0; i < n && left.length; i++) {
 					// Weighted by strength, so the best setter is likelier but not certain.
 					// Strength to the eighth: the top few share nearly all of it, the weak almost none.
-					const weigh = x => Math.pow(strengthOf(x.species) * (x.worth || 1), 8);
+					// A user is there to hit: its attacking stat counts, not its total (Barraskewda over
+					// Golduck). A setter is judged whole.
+					const punch = x => (list === weather.users ? 0.6 + Math.max(x.species.baseStats.atk, x.species.baseStats.spa) / 250 : 1);
+					const weigh = x => Math.pow(strengthOf(x.species) * (x.worth || 1) * punch(x), 8);
 					const total = left.reduce((sum, x) => sum + weigh(x), 0);
 					let r = rng() * total, k = 0;
 					while (k < left.length - 1 && (r -= weigh(left[k])) > 0) k++;
@@ -1734,7 +1737,11 @@ class TeamBuilder {
 			const double = !weather.half && weather.setters.length > 1 && rng() < (['sand', 'sun'].includes(weather.name) ? 0.35 : 0.2);
 			draw(weather.setters, double ? 2 : 1);
 			const setterCount = fixed.length;
-			draw(weather.users, weather.half ? 1 : 2);
+			// The first user is one by ability - a Swift Swim sweeper, a Sand Rush one: a rain team
+			// of Thunder users and no Water sweeper is not a rain team. The second may be either.
+			const byAbility = weather.users.filter(x => x.ability);
+			draw(byAbility.length ? byAbility : weather.users, 1);
+			if (!weather.half) draw(weather.users, 1);
 			if (!setterCount || fixed.length - setterCount < (weather.half ? 1 : 2)) return null;
 		}
 		const boosted = weather ? [...WeatherPlan.WEATHERS[weather.name].types, ...WeatherPlan.TEMPLATES[weather.name].partners] : [];
@@ -1742,6 +1749,16 @@ class TeamBuilder {
 			if (candidates.length >= 18) break;
 			if (candidates.some(c => ctx.dex.species.get(c.species).baseSpecies === species.baseSpecies)) continue;
 			if (weather && WeatherPlan.clashes(ctx.dex, species, weather.name)) continue;
+			/*
+			 * Hyper offense has no room for a Pokemon that can only wall (Smogon: "no passive
+			 * Pokemon"; Pinkacross: mixing archetypes is the first mistake). A Blissey has no
+			 * role that suits it, so it is not a candidate - it made ten "hyper offense" teams in
+			 * thirty come out as stall.
+			 */
+			if (!weather && constraints.archetype === 'hyper offense' && !constraints.plainPlan) {
+				const RSx = require('./role-sets');
+				if (!RSx.roleSets(ctx.dex, species.name).some(r => RSx.archetypeFit(r.role, 'hyper offense') >= 1)) continue;
+			}
 			// A third user is welcome, and so is the weather's own type.
 			const part = weather ? WeatherPlan.rolesOf(ctx.dex, species)[weather.name] : null;
 			if (part && part.user && !weather.half) forced.set(species.name, { ability: part.user, move: null });
@@ -1755,7 +1772,10 @@ class TeamBuilder {
 		const built = TeamAssembler.assemble(ctx.dex, candidates, {
 			size: ctx.size, stage: 'full', rng, items: { bag }, maxEvaluations: 2500, threats: this.threats(ctx), fixed,
 			// A weather team attacks: its users take their attacking sets, not their support ones.
-			...(weather ? { archetype: 'bulky offense' } : {}),
+			// Otherwise the plan this build drew (hyper offense, bulky offense, balance): the
+			// assembler used to be handed none, so a team asked to be hyper offense came out as
+			// one 6 times in 30 (1 Oct 2026).
+			...(weather ? { archetype: 'bulky offense' } : constraints.archetype && !constraints.plainPlan ? { archetype: constraints.archetype, planWeight: constraints.archetype === 'hyper offense' ? 30 : 12 } : {}),
 		});
 		if (built.length < ctx.size) return null;
 		// A bag with one of each can run out before the last Pokemon; an empty
@@ -1779,7 +1799,12 @@ class TeamBuilder {
 					else set.moves[at] = moveName(better);
 				}
 				// The move that makes it a user of this weather (Thunder, Blizzard, Hydro Steam).
-				if (want && want.move) TeamAssembler.teach(ctx.dex, set, [want.move]);
+				// Only onto a set that attacks from that side: no Thunder on a Choice Band Thundurus.
+				if (want && want.move) {
+					const mv = ctx.dex.moves.get(want.move);
+					const side = TeamLogic.attackSide(ctx.dex, set);
+					if (!side || (mv.category === 'Special') === (side === 'special')) TeamAssembler.teach(ctx.dex, set, [want.move]);
+				}
 				/*
 				 * Sand and hail break a Focus Sash on anything they chip, so those members take
 				 * another item (Smogon's sand teams run no sashes outside Rock, Ground and Steel).
@@ -2200,9 +2225,16 @@ class TeamBuilder {
 		}
 		// A weather team, some of the time (src/weather-plan.js). Drawn once per build.
 		constraints.weather = this.pickWeather(ctx, constraints, rng, options);
+		// `options.plain`: build as before the plan reached the assembler (for comparing the two).
+		constraints.plainPlan = !!options.plain;
 		for (let pass = 0; pass < 8; pass++) {
 			// A weather core that will not validate after three tries gives way to an ordinary team.
 			if (pass >= 3) constraints.weather = null;
+			// The plan, before the assembler as well as the draft.
+			{
+				const wanted = ARCHETYPE_ODDS.some(([name]) => name === options.archetype) ? options.archetype : null;
+				constraints.archetype = this.drafts(ctx, constraints) ? wanted || this.pickArchetype(rng) : null;
+			}
 			// The assembler first where it applies; anything it cannot make legal
 			// falls through to the draw below rather than failing the build.
 			if (this.assembles(ctx, constraints)) {

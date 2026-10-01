@@ -77,7 +77,7 @@ const USERS = {
 const USER_WORTH = {
 	chlorophyll: 1.3, swiftswim: 1.3, sandrush: 1.3, slushrush: 1.3,
 	protosynthesis: 1.25, solarpower: 1.15, sandforce: 1.1,
-	flowergift: 0.9, harvest: 0.85, dryskin: 0.85, hydration: 0.85, raindish: 0.75, icebody: 0.75, iceface: 0.8,
+	flowergift: 0.85, harvest: 0.7, dryskin: 0.7, hydration: 0.6, raindish: 0.6, icebody: 0.6, iceface: 0.7,
 };
 
 const cache = new WeakMap();
