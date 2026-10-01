@@ -734,7 +734,7 @@ function musicTables() {
  * met anywhere. Not the ladder's plain "rare" class: that is lifted by tier, and played the
  * rare theme for one wild Pokemon in five - Pelipper, Horsea, Wingull (1 Oct 2026).
  */
-const RARE_CLASSES = new Set(['starter', 'pseudo', 'ub', 'paradox', 'legendary', 'mythical', 'boxart']);
+const RARE_CLASSES = new Set(['prized', 'starter', 'pseudo', 'ub', 'paradox', 'legendary', 'mythical', 'boxart']);
 function musicFor(enc) {
 	if (!enc || !Array.isArray(enc.team)) return null;
 	const { legendOf, event } = musicTables();

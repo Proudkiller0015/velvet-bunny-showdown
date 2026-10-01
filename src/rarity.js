@@ -55,12 +55,30 @@ const PARADOXES = new Set(['greattusk', 'screamtail', 'brutebonnet', 'flutterman
 	'ironmoth', 'ironthorns', 'ironvaliant', 'ironleaves', 'ironboulder', 'ironcrown']);
 
 /** Lowest first. The index is the class's rank. */
-const CLASSES = ['common', 'medium', 'rare', 'starter', 'pseudo', 'ub', 'paradox', 'legendary', 'mythical', 'boxart'];
+/*
+ * Prized: each generation's unofficial "identity" Pokemon - the special find of its gen
+ * (owner, 1 Oct 2026: "zorua should be rarer... lucario and friends", "star system should
+ * also agree"). Between rare and starter: three stars, a standard-priced board, and in
+ * the wild a headliner - met only where a place lists it, from its rare finds. By the
+ * line's first stage. Starters and pseudos are already above it.
+ */
+const PRIZED = new Set([
+	'eevee', 'lapras', 'munchlax',   // Gen 1 (Snorlax's line starts at Munchlax)
+	'togepi',                        // Gen 2
+	'absol', 'feebas',               // Gen 3
+	'riolu', 'rotom',                // Gen 4
+	'zorua', 'zoruahisui',           // Gen 5
+	'honedge',                       // Gen 6
+	'mimikyu',                       // Gen 7
+	'toxel',                         // Gen 8
+	'gimmighoul',                    // Gen 9
+]);
+const CLASSES = ['common', 'medium', 'rare', 'prized', 'starter', 'pseudo', 'ub', 'paradox', 'legendary', 'mythical', 'boxart'];
 const RANK = Object.fromEntries(CLASSES.map((c, i) => [c, i]));
 /** Classes that are never met in the wild: story events and the Legendary Signal only. */
 const NEVER_WILD = new Set(['legendary', 'mythical', 'boxart']);
 /** Classes that only appear at a place that lists them. */
-const HEADLINERS = new Set(['starter', 'pseudo', 'ub', 'paradox', 'legendary', 'mythical', 'boxart']);
+const HEADLINERS = new Set(['prized', 'starter', 'pseudo', 'ub', 'paradox', 'legendary', 'mythical', 'boxart']);
 
 /** Ordinary lines, by the base stat total of what they become. */
 const RARE_FROM = 540;
@@ -81,7 +99,7 @@ function tierValue(tier) {
  * quarters the odds - still possible on day one, as it should be in an open
  * world, just not likely.
  */
-const BADGE_HOME = { common: 0, medium: 0, rare: 0, starter: 0, pseudo: 2, ub: 4, paradox: 5 };
+const BADGE_HOME = { common: 0, medium: 0, rare: 0, prized: 0, starter: 0, pseudo: 2, ub: 4, paradox: 5 };
 
 const species = s => (typeof s === 'string' ? Dex.species.get(s) : s);
 const bst = s => Object.values(s.baseStats).reduce((a, b) => a + b, 0);
@@ -119,6 +137,7 @@ function classOf(name) {
 	else if (tags.has('Ultra Beast')) c = 'ub';
 	else if (PSEUDOS.has(root.id)) c = 'pseudo';
 	else if (STARTERS.has(root.id)) c = 'starter';
+	else if (PRIZED.has(root.id)) c = 'prized';
 	else {
 		const power = Math.max(...lineOf(s).map(bst));
 		c = power >= RARE_FROM ? 'rare' : power >= MEDIUM_FROM ? 'medium' : 'common';
@@ -189,7 +208,7 @@ const compare = (a, b) => score(b) - score(a);
  * a class, every usage step above ZU takes a little more off, so a Garchomp line
  * is rarer than a Goodra line and a Flutter Mane rarer than a Sandy Shocks.
  */
-const WILD_WEIGHT = { common: 1, medium: 1, rare: 1, starter: 0.03, pseudo: 0.02, ub: 0.012, paradox: 0.01 };
+const WILD_WEIGHT = { common: 1, medium: 1, rare: 1, prized: 1, starter: 0.03, pseudo: 0.02, ub: 0.012, paradox: 0.01 };
 function wildWeight(name, badges = 8) {
 	const c = classOf(name);
 	if (NEVER_WILD.has(c)) return 0;
@@ -201,6 +220,6 @@ function wildWeight(name, badges = 8) {
 }
 
 module.exports = {
-	STARTERS, PSEUDOS, PSEUDO_LINES, isPseudoLine, PARADOXES, CLASSES, RANK, NEVER_WILD, HEADLINERS, BADGE_HOME, WILD_WEIGHT, RARE_FROM, MEDIUM_FROM,
+	STARTERS, PSEUDOS, PSEUDO_LINES, PRIZED, isPseudoLine, PARADOXES, CLASSES, RANK, NEVER_WILD, HEADLINERS, BADGE_HOME, WILD_WEIGHT, RARE_FROM, MEDIUM_FROM,
 	tierValue, classOf, usageOf, score, compare, wildWeight,
 };

@@ -713,12 +713,17 @@ function shinyChance({ charm = false, spray = false } = {}) {
 	return (1 / 1024) * (charm ? 3 : 1) * (spray ? 10 : 1);
 }
 
+// Prized Pokemon (rarity.js PRIZED): a place that lists one as common gets it as a rare find.
+const isPrized = root => Rarity.classOf(root) === 'prized';
+
 function rollWild({ place, badges, levelCap = null, rng = Math.random, double = null, shiny = {}, now = Date.now(), ace = null }) {
 	badges = clampBadges(badges);
 	const [lo, hi] = levelRange(badges, levelCap, ace);
 	const rootsOf = list => (list || []).map(n => Dex.species.get(n)).filter(s => s.exists && !isLegendary(s)).map(rootOf);
-	const common = rootsOf(place.common);
-	const rare = rootsOf(place.rare);
+	// A prized Pokemon a place lists as common is one of its rare finds instead (PRIZED).
+	const listed = rootsOf(place.common);
+	const common = listed.filter(r => !isPrized(r));
+	const rare = [...rootsOf(place.rare), ...listed.filter(isPrized)].filter((r, i, all) => all.findIndex(x => x.id === r.id) === i);
 	const special = new Set([...common, ...rare].map(r => r.id));
 
 	/*
@@ -741,7 +746,7 @@ function rollWild({ place, badges, levelCap = null, rng = Math.random, double = 
 	};
 	// Starters, pseudos, Ultra Beasts and Paradox forms live where a place lists
 	// them and nowhere else: "anything of the right type" never includes them.
-	const typed = pool(allRoots().filter(r => !special.has(r.id) && !Rarity.HEADLINERS.has(Rarity.classOf(r))), place.types || []);
+	const typed = pool(allRoots().filter(r => !special.has(r.id) && !isPrized(r) && !Rarity.HEADLINERS.has(Rarity.classOf(r))), place.types || []);
 	/*
 	 * The surprises get up to 4%, shrunk by how rare they really are. Scaling
 	 * them to a flat share let a route whose list is only Bagon and Frigibax
