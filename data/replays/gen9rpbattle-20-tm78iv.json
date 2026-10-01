@@ -1,0 +1,12 @@
+{
+	"id": "gen9rpbattle-20-tm78iv",
+	"format": "[Gen 9] RP Battle",
+	"players": [
+		"Youngster Otto",
+		"lavit"
+	],
+	"rating": null,
+	"log": "|j|☆Youngster Otto\n|j|☆lavit\n|t:|1790821654\n|gametype|singles\n|player|p1|Youngster Otto|youngster-gen4|\n|player|p2|lavit|lavit.png|\n|gen|9\n|tier|[Gen 9] RP Battle\n|clearpoke\n|poke|p1|Meowth, L11, F|\n|poke|p1|Cutiefly, L13, M|\n|poke|p2|Pansage, L13, M|\n|poke|p2|Darumaka-Galar, L13, M|\n|poke|p2|Greavard, L13, M|\n|poke|p2|Banette, L13, F|\n|poke|p2|Sneasel-Hisui, L13, F|\n|poke|p2|Pawniard, L13, F|\n|teampreview\n|inactive|Battle timer is ON: inactive players will automatically lose when time's up. (requested by Youngster Otto)\n|n|☆Youngster Otto|youngsterotto\n|\n|t:|1790821659\n|teamsize|p1|2\n|teamsize|p2|6\n|start\n|switch|p1a: Meowth|Meowth, L11, F|100/100\n|switch|p2a: Pawniard|Pawniard, L13, F|100/100\n|turn|1\n|\n|t:|1790821660\n|move|p1a: Meowth|Pay Day|p2a: Pawniard\n|-resisted|p2a: Pawniard\n|-damage|p2a: Pawniard|95/100\n|move|p2a: Pawniard|Iron Head|p1a: Meowth\n|-damage|p1a: Meowth|0 fnt\n|faint|p1a: Meowth\n|\n|upkeep\n|\n|t:|1790821660\n|switch|p1a: Cutiefly|Cutiefly, L13, M|100/100\n|turn|2\n|\n|t:|1790821661\n|move|p1a: Cutiefly|Fairy Wind|p2a: Pawniard\n|-damage|p2a: Pawniard|72/100\n|move|p2a: Pawniard|Iron Head|p1a: Cutiefly\n|-supereffective|p1a: Cutiefly\n|-crit|p1a: Cutiefly\n|-damage|p1a: Cutiefly|0 fnt\n|faint|p1a: Cutiefly\n|\n|win|lavit\n",
+	"inputlog": ">start {\"formatid\":\"gen9rpbattle\",\"seed\":\"sodium,298e0ea56573a2e0eda1a295a13e06dd\"}\n>player p1 {\"name\":\"Youngster Otto\",\"avatar\":\"youngster-gen4\",\"team\":\"Meowth|||Pickup|FakeOut,Scratch,PayDay,Feint|Quirky|||8,8,8,8,8,8||11|]Cutiefly|||ShieldDust|FairyWind,Absorb,StunSpore,SweetScent|Sassy|||8,8,8,8,8,8||13|\",\"rating\":0}\n>player p2 {\"name\":\"lavit\",\"avatar\":\"lavit.png\",\"team\":\"Pansage|||VerdantSurge|JungleRush,Uturn,CloseCombat,KnockOff|Adamant|||||13|]Darumaka-Galar|||Hustle|IcePunch,Uturn,Superpower,FlareBlitz|Adamant|||||13|]Greavard|||Fluffy|Poltergeist,PlayRough,Roar,Trick|Adamant|||||13|]Banette|||CursedBody|Poltergeist,GunkShot,SwordsDance,ThunderWave|Adamant||||S|13|]Sneasel-Hisui|||InnerFocus|BrickBreak,ShadowBall,DoubleEdge,SwordsDance|Jolly|||||13|]Pawniard|||Defiant|IronHead,SuckerPunch,StealthRock,SwordsDance|Adamant|||||13|\",\"rating\":0}\n>p1 team 1, 2\n>p2 team 6, 2, 3, 4, 5, 1\n>p1 move payday\n>p2 move ironhead\n>p1 switch 2\n>p1 move fairywind\n>p2 move ironhead",
+	"uploadtime": 1790821661
+}
