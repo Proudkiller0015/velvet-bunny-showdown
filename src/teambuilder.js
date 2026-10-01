@@ -1691,7 +1691,9 @@ class TeamBuilder {
 		const TeamAssembler = require('./team-assembler');
 		const here = this.local(ctx.id);
 		const candidates = [];
-		const strengthOf = species => {
+		const megaOf = new Map();   // base species name -> the Mega it is on this team as
+		const strengthOf = given => {
+			const species = megaOf.get(given.name) || given;
 			const bst = Object.values(species.baseStats).reduce((a, b) => a + b, 0);
 			const row = here && (here[species.name] || here[species.baseSpecies]);
 			// What has won games here is worth more than its stat total says.
@@ -1709,7 +1711,8 @@ class TeamBuilder {
 		if (weather) {
 			const taken = new Set();
 			const draw = (list, n) => {
-				const left = list.filter(x => !taken.has(x.species.baseSpecies));
+				const left = list.filter(x => !taken.has(x.species.baseSpecies) && !(x.mega && megaOf.size));
+				for (const x of left) if (x.mega) megaOf.set(x.species.name, x.mega);
 				for (let i = 0; i < n && left.length; i++) {
 					// Weighted by strength, so the best setter is likelier but not certain.
 					// Strength to the eighth: the top few share nearly all of it, the weak almost none.
@@ -1722,7 +1725,11 @@ class TeamBuilder {
 					while (k < left.length - 1 && (r -= weigh(left[k])) > 0) k++;
 					const [got] = left.splice(k, 1);
 					taken.add(got.species.baseSpecies);
-					forced.set(got.species.name, { ability: got.ability, move: got.move || null });
+					forced.set(got.species.name, { ability: got.ability, move: got.move || null, item: got.item || null, megaSet: got.mega ? WeatherPlan.MEGA_SETS[got.mega.id] || null : null });
+					// One Mega a team: once one is in, the other Megas stop being options (and stop
+					// lending their stats to their base Pokemon).
+					if (got.mega) { megaOf.clear(); megaOf.set(got.species.name, got.mega); megaOf.locked = true; }
+					for (let j = left.length - 1; j >= 0; j--) if (megaOf.locked && left[j].mega) left.splice(j, 1);
 					const c = { species: got.species.name, level: ctx.level, strength: strengthOf(got.species) };
 					candidates.push(c);
 					fixed.push(c);
@@ -1789,6 +1796,20 @@ class TeamBuilder {
 			for (const set of built) {
 				const want = forced.get(set.species);
 				if (want && want.ability) set.ability = want.ability;
+				if (want && want.item) set.item = want.item;
+				// A weather Mega's own set (weather-plan MEGA_SETS), as far as it can learn it here.
+				if (want && want.megaSet) {
+					const pool = RS.learnable(ctx.dex, ctx.dex.species.get(set.species));
+					const moves = want.megaSet.moves.filter(m => pool.has(toID(m)));
+					if (moves.length >= 3) {
+						for (const m of set.moves) if (moves.length < 4 && !moves.some(x => toID(x) === toID(m))) moves.push(m);
+						set.moves = moves.slice(0, 4);
+						set.nature = want.megaSet.nature;
+						set.evs = { ...want.megaSet.evs };
+					}
+				}
+				// One Mega a team: a second stone becomes an ordinary item.
+				if (megaOf.locked && !(want && want.item) && ctx.dex.items.get(set.item).megaStone) set.item = 'Leftovers';
 				// The better attack the weather allows, for anyone who has the lesser one - first, so
 				// nobody ends up with Thunderbolt and Thunder.
 				const can = RS.learnable(ctx.dex, ctx.dex.species.get(set.species));
@@ -2091,7 +2112,20 @@ class TeamBuilder {
 		if (ctx.ruleTable.has('sametypeclause') || ctx.ruleTable.has('littlecup')) return null;
 		const asked = options.weather || null;
 		if (!asked && (options.archetype !== undefined || rng() >= WEATHER_SHARE)) return null;
-		if (!ctx.weathers) ctx.weathers = WeatherPlan.available(ctx.dex, ctx.pool, species => require('./role-sets').learnable(ctx.dex, species));
+		if (!ctx.weathers) {
+			// Whether this format takes a Mega: asked of its own validator, on a bare set.
+			const legalMega = (species, mega) => {
+				try {
+					const move = [...require('./role-sets').learnable(ctx.dex, species)].map(id => ctx.dex.moves.get(id)).find(m => m.exists && !m.isNonstandard && m.category !== 'Status');
+					const problems = ctx.validator.validateSet({
+						name: species.name, species: species.name, item: mega.requiredItem, ability: Object.values(species.abilities)[0],
+						moves: [move ? move.name : 'Tackle'], nature: 'Hardy', evs: { hp: 252, atk: 252, def: 4, spa: 0, spd: 0, spe: 0 }, level: ctx.level, gender: '',
+					}, {});
+					return !problems || !problems.length;
+				} catch (e) { return false; }
+			};
+			ctx.weathers = WeatherPlan.available(ctx.dex, ctx.pool, species => require('./role-sets').learnable(ctx.dex, species), legalMega);
+		}
 		const names = Object.keys(ctx.weathers).filter(n => !asked || asked === 'any' || asked === n);
 		if (!names.length) return null;
 		const name = names[Math.floor(rng() * names.length)];

@@ -54,6 +54,17 @@ const TEMPLATES = {
 	sand: { setterMoves: ['stealthrock'], upgrades: {}, moveUsers: [], partners: ['Rock', 'Ground', 'Steel'] },
 	snow: { setterMoves: ['auroraveil'], upgrades: { icebeam: 'blizzard' }, moveUsers: ['blizzard'], partners: ['Ice'], clay: true },
 };
+/*
+ * The weather Megas' own sets, after Smogon's. The set generator only knows them as their
+ * base Pokemon plays - a Careful Swampert with Stealth Rock - and a Swift Swim Mega Swampert
+ * is on a rain team to sweep. Moves it cannot learn here are left as the generator had them.
+ */
+const MEGA_SETS = {
+	swampertmega: { moves: ['Waterfall', 'Earthquake', 'Ice Punch', 'Flip Turn'], nature: 'Adamant', evs: { hp: 0, atk: 252, def: 4, spa: 0, spd: 0, spe: 252 } },
+	charizardmegay: { moves: ['Flamethrower', 'Solar Beam', 'Focus Blast', 'Roost'], nature: 'Timid', evs: { hp: 0, atk: 0, def: 0, spa: 252, spd: 4, spe: 252 } },
+	houndoommega: { moves: ['Fire Blast', 'Dark Pulse', 'Solar Beam', 'Nasty Plot'], nature: 'Timid', evs: { hp: 0, atk: 0, def: 0, spa: 252, spd: 4, spe: 252 } },
+	abomasnowmega: { moves: ['Blizzard', 'Giga Drain', 'Earthquake', 'Aurora Veil'], nature: 'Quiet', evs: { hp: 252, atk: 4, def: 0, spa: 252, spd: 0, spe: 0 } },
+};
 // One team in three planned around a weather is a "half" one.
 const HALF_SHARE = 0.35;
 
@@ -116,7 +127,7 @@ function rolesOf(dex, species) {
  *   { sun: { setters: [{ species, ability }], users: [{ species, ability }] }, ... }
  * Only weathers with at least one setter and two users are worth planning around.
  */
-function available(dex, pool, learnable = null) {
+function available(dex, pool, learnable = null, legalMega = null) {
 	const found = {};
 	for (const species of pool) {
 		// Fully evolved only: a Panpour sets rain as well as a Simipour and does nothing else.
@@ -125,6 +136,30 @@ function available(dex, pool, learnable = null) {
 			const w = found[weather] = found[weather] || { setters: [], users: [] };
 			if (part.setter) w.setters.push({ species, ability: part.setter, worth: 1 });
 			else if (part.user) w.users.push({ species, ability: part.user, worth: USER_WORTH[toID(part.user)] || 1 });
+		}
+	}
+	/*
+	 * Megas whose ability is the weather's (owner, 1 Oct 2026: "mega swampert is exclusive to
+	 * rain"). The bots' pool holds no Megas, so this is the only way one is built - which is
+	 * the point: a Swift Swim Mega Swampert belongs on rain and nowhere else, like Mega
+	 * Charizard Y on sun, Mega Tyranitar on sand, Mega Abomasnow on hail. Entered as the base
+	 * Pokemon holding its stone; `legalMega` (the builder's validator) says whether this
+	 * format allows it. At most one per team (teambuilder).
+	 */
+	if (legalMega) {
+		for (const species of pool) {
+			for (const formeName of species.otherFormes || []) {
+				const mega = dex.species.get(formeName);
+				if (!mega.exists || !mega.isMega || !mega.requiredItem) continue;
+				for (const [weather, part] of Object.entries(rolesOf(dex, mega))) {
+					if (!found[weather] && !part.setter) continue;
+					if (!legalMega(species, mega)) continue;
+					const w = found[weather] = found[weather] || { setters: [], users: [] };
+					const entry = { species, mega, item: mega.requiredItem, ability: Object.values(species.abilities)[0], megaAbility: part.setter || part.user };
+					if (part.setter) w.setters.push({ ...entry, worth: 1 });
+					else w.users.push({ ...entry, worth: USER_WORTH[toID(part.user)] || 1 });
+				}
+			}
 		}
 	}
 	/*
@@ -159,4 +194,4 @@ function clashes(dex, species, weather) {
 	return Object.entries(rolesOf(dex, species)).some(([name, part]) => name !== weather && part.setter);
 }
 
-module.exports = { WEATHERS, TEMPLATES, HALF_SHARE, abilityMaps, rolesOf, available, clashes };
+module.exports = { WEATHERS, TEMPLATES, MEGA_SETS, HALF_SHARE, abilityMaps, rolesOf, available, clashes };

@@ -2444,7 +2444,15 @@ class BattleAI {
 		const maps = WP.abilityMaps(velvetDex || (velvetDex = require('./rp-dex')()));
 		const idOf = x => String(x || '').toLowerCase().replace(/[^a-z0-9]/g, '');
 		return request.side.pokemon.map((p, i) => {
-			const ability = idOf(p.baseAbility || p.ability);
+			let ability = idOf(p.baseAbility || p.ability);
+			// Holding its Mega Stone: what counts is the ability it will have (a Swampert with
+			// Swampertite is a Swift Swim sweeper before it has Mega Evolved).
+			try {
+				const stone = velvetDex.items.get(p.item || '');
+				const megaName = stone && stone.megaStone && (typeof stone.megaStone === 'string' ? stone.megaStone : Object.values(stone.megaStone)[0]);
+				const mega = megaName ? velvetDex.species.get(megaName) : null;
+				if (mega && mega.exists) ability = idOf(Object.values(mega.abilities)[0]);
+			} catch (e) { /* its own ability, then */ }
 			const moves = (p.moves || []).map(idOf);
 			let uses = maps.userOf[ability] || null;
 			if (!uses) {
