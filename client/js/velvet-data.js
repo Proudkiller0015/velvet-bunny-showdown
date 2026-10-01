@@ -3083,6 +3083,35 @@
 		return true;
 	}
 
+	/*
+	 * A search you can always cancel (owner, 1 Oct 2026: "relogin doesnt offer the cancel").
+	 * Showdown adds the Cancel button only when you click Battle!. A search the server tells
+	 * the page about - one still running when you log back in, or from another tab - showed
+	 * "Searching..." with no way out but typing /cancelsearch. Whenever the menu shows a
+	 * running search now, the button is there.
+	 */
+	function installSearchCancel() {
+		var M = window.MainMenuRoom;
+		if (!M || !M.prototype || !M.prototype.updateSearch || !window.jQuery) return false;
+		if (M.__velvetCancel) return true;
+		M.__velvetCancel = true;
+		var updateSearch = M.prototype.updateSearch;
+		M.prototype.updateSearch = function () {
+			var out = updateSearch.apply(this, arguments);
+			try {
+				var searching = this.searching && (!jQuery.isArray(this.searching) || this.searching.length);
+				var $form = jQuery('.mainmenu button.big').closest('form');
+				if (searching && $form.length && !$form.find('p.cancel').length) {
+					$form.append('<p class="cancel buttonbar"><button name="cancelSearch" class="button">Cancel</button></p>');
+				}
+			} catch (e) { /* the menu as Showdown draws it */ }
+			return out;
+		};
+		// A search announced before this was installed: draw it again.
+		try { if (window.app && app.rooms && app.rooms[''] && app.rooms[''].updateSearch) app.rooms[''].updateSearch(); } catch (e) {}
+		return true;
+	}
+
 	// Toxic's rule for Will-O-Wisp, Thunder Wave and Chilling Mist, in the accuracy tooltip.
 	var SURE_HIT = { willowisp: 'Fire', thunderwave: 'Electric', chillingmist: 'Ice' };
 	function installSureHit() {
@@ -3488,7 +3517,7 @@
 	// The avatar picker lives in the panels script, which loads with the client.
 	var avatarTries = 0;
 	var avatarTimer = setInterval(function () {
-		var playerIn = installMusicPlayer();
+		var playerIn = installMusicPlayer() && installSearchCancel();
 		if ((installAvatarList() && playerIn) || ++avatarTries > 600) clearInterval(avatarTimer);
 	}, 250);
 
