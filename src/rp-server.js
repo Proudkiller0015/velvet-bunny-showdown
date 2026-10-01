@@ -419,7 +419,13 @@ function summoned(summon, { place, badges, levelCap, ace = null }) {
 			const titles = cls ? [cls.title, cls.short].filter(Boolean) : [];
 			const already = titles.some(t => name.toLowerCase().startsWith(`${t.toLowerCase()} `));
 			const titled = already ? null : titles.map(t => `${t} ${name}`).find(full => full.length <= 18);
-			rolled.name = titled || name;
+			/*
+			 * A Leader, the Elite Four and the Champion keep the title even when the name has to
+			 * be cut for it: the client plays the gym music by it, and "rock hard cock har"
+			 * battled untitled and silent (1 Oct 2026).
+			 */
+			const mustTitle = cls && ['gymleader', 'elitefour', 'champion'].includes(cls.id) && !already && !titled && titles.length;
+			rolled.name = titled || (mustTitle ? `${titles[titles.length - 1]} ${name}`.slice(0, 18).trim() : name);
 		}
 		// How well they play, when the scene wants a pushover or a wall. Left out,
 		// the badge count decides it, as it does for any trainer on the route.

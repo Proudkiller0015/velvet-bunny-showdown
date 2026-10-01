@@ -2651,7 +2651,11 @@
 		if (!npc) return null;
 		var name = String(side.name || '');
 		var titled = npc.titles.some(function (t) { return name.toLowerCase().indexOf(t.toLowerCase() + ' ') === 0; });
-		return titled ? npc.role : null;
+		if (titled) return npc.role;
+		// A leader whose name was too long for the title ("rock hard cock har", 1 Oct 2026):
+		// the gym avatar alone, in an RP battle.
+		var format = String((side.battle && (side.battle.tier || side.battle.id)) || '').toLowerCase();
+		return npc.role === 'gym' && /rp/.test(format) ? 'gym' : null;
 	}
 	// What the scene should play for this Pokemon coming out, or null for no change.
 	function musicFor(pokemon) {
