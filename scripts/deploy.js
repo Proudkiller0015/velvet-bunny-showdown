@@ -114,7 +114,10 @@ function writeFlag(flag) {
 	const owner = everyone.filter(name => OWNER.has(name.toLowerCase().replace(/[^a-z0-9]/g, '')));
 	const players = everyone.filter(name => !owner.includes(name));
 	if (owner.length) console.log(`[deploy] owner online (${owner.join(', ')}): not waiting for them`);
-	if (players.length && !force) {
+	// --ignore-online: players who are only online (not mid-battle) do not hold a deploy up; the
+	// battle hold below still waits for every running battle. --force skips both.
+	const ignoreOnline = process.argv.includes('--ignore-online');
+	if (players.length && !force && !ignoreOnline) {
 		console.error(
 			`[deploy] ${players.length} player(s) on the server right now: ${players.join(', ')}.
 ` +
