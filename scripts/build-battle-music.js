@@ -22,7 +22,7 @@ const { execFileSync } = require('child_process');
 const ROOT = path.join(__dirname, '..');
 const read = f => JSON.parse(fs.readFileSync(path.join(ROOT, f), 'utf8'));
 const { tracks } = read('data/legend-music.json');
-const { events } = read('data/battle-music.json');
+const { events, sounds = {} } = read('data/battle-music.json');
 const EVENTS_DIR = path.join(ROOT, 'client', 'audio', 'events');
 const LEGENDS_DIR = path.join(ROOT, 'client', 'audio', 'legends');
 
@@ -37,6 +37,17 @@ if (cutAt > -1) {
 			'-af', 'silenceremove=start_periods=1:start_threshold=-45dB:start_silence=0.05',
 			'-c:a', 'libmp3lame', '-q:a', '5', path.join(EVENTS_DIR, `${e.file}.mp3`)]);
 		console.log(`cut ${id}: ${e.file}.mp3`);
+	}
+	// Sound effects: just the sound, from..to, a little louder (the shiny sparkle was quiet).
+	const SFX = path.join(ROOT, 'client', 'audio', 'sfx');
+	fs.mkdirSync(SFX, { recursive: true });
+	for (const [id, e] of Object.entries(sounds)) {
+		const src = path.join(from, e.source);
+		if (!fs.existsSync(src)) throw new Error(`${id}: no ${src}`);
+		execFileSync('ffmpeg', ['-y', '-v', 'error', '-ss', String(e.from || 0), ...(e.to ? ['-to', String(e.to)] : []), '-i', src, '-vn',
+			'-af', `volume=${e.gainDb || 0}dB,afade=t=out:st=${Math.max(0, (e.to || 1) - (e.from || 0) - 0.15)}:d=0.15`,
+			'-c:a', 'libmp3lame', '-q:a', '4', path.join(SFX, `${e.file}.mp3`)]);
+		console.log(`cut sound ${id}: ${e.file}.mp3`);
 	}
 }
 

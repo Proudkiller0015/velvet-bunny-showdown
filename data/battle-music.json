@@ -32,5 +32,15 @@
       "plays": "the Champion (the piano intro plays once, then the battle part loops)",
       "loop": "repeat"
     }
+  },
+  "sounds": {
+    "shiny": {
+      "file": "shiny",
+      "source": "(HD) Pokémon Generation 3 Shiny Sparkles Green Screen_Blue Screen + Shiny Sound Effect - NotJFlash.mp3",
+      "from": 0.55,
+      "to": 1.5,
+      "gainDb": 8,
+      "plays": "a shiny Pokemon sent out, in any battle or replay"
+    }
   }
 }

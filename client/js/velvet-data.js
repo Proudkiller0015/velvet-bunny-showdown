@@ -2698,6 +2698,66 @@
 		scene.bgm = BattleSound.loadBgm(key, loop[0], Math.max(loop[0] + 5000, loop[1]), scene.bgm);
 		scene.updateBgm();
 	}
+	/*
+	 * Shiny sparkle (owner, 1 Oct 2026): a shiny sent out sparkles like the games - two
+	 * rings of stars bursting from it, with the shiny sound - in every battle and replay.
+	 * Drawn with the scene's own effect system, so it waits its turn like any animation,
+	 * and skipped while a replay fast-forwards (no sound of a dozen shinies at once).
+	 */
+	var SPARKLE = { url: "data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'32'%20height%3D'32'%20viewBox%3D'0%200%2032%2032'%3E%3Cpath%20d%3D'M16%200%20L19%2013%20L32%2016%20L19%2019%20L16%2032%20L13%2019%20L0%2016%20L13%2013%20Z'%20fill%3D'%23fff8c8'%20stroke%3D'%23ffe060'%20stroke-width%3D'1'%2F%3E%3Ccircle%20cx%3D'16'%20cy%3D'16'%20r%3D'3'%20fill%3D'%23fff'%2F%3E%3C%2Fsvg%3E", w: 32, h: 32 };
+	var SHINY_SOUND = 'audio/sfx/shiny.mp3';
+	function shinySparkle(scene, pokemon, instant) {
+		if (!pokemon || !pokemon.shiny || instant || !scene.showEffect) return;
+		var battle = scene.battle;
+		if (battle && (battle.seeking !== null && battle.seeking !== undefined)) return;
+		var sprite = pokemon.sprite;
+		if (!sprite || typeof sprite.x !== 'number') return;
+		/*
+		 * On a layer of our own: Showdown empties its effects layer (startAnimations) about
+		 * 100 ms after a switch-in, before anything delayed can show - it wiped these stars
+		 * and its own shiny "shine" alike. Positions come from the scene's own maths (pos).
+		 */
+		var layer = scene.velvetSparkleLayer;
+		if (!layer || !document.contains(layer[0])) {
+			layer = scene.velvetSparkleLayer = jQuery('<div style="position:absolute;left:0;top:0;width:0;height:0;pointer-events:none;z-index:5"></div>');
+			scene.$battle.append(layer);
+		}
+		var speed = Math.max(1, scene.acceleration || 1);
+		var burst = function (start, end, delay, duration) {
+			var sp = scene.pos(start, SPARKLE);
+			var ep = scene.pos(end, SPARKLE);
+			var el = jQuery('<img src="' + SPARKLE.url + '" style="display:block;position:absolute" />');
+			layer.append(el);
+			el.css(Object.assign({}, sp, { opacity: 0 })).delay(delay / speed).animate({ opacity: sp.opacity }, 1)
+				.animate(ep, duration / speed).animate({ opacity: 0 }, 120 / speed, function () { el.remove(); });
+		};
+		var at = 650;   // after the Poke Ball opens
+		var base = { x: sprite.x, y: sprite.y + 10, z: sprite.z };
+		var rings = [[8, 0, 0], [8, Math.PI / 8, 220]];
+		for (var r = 0; r < rings.length; r++) {
+			for (var i = 0; i < rings[r][0]; i++) {
+				var angle = rings[r][1] + (i * 2 * Math.PI) / rings[r][0];
+				burst(Object.assign({}, base, { scale: 0.2, opacity: 1 }),
+					Object.assign({}, base, { x: base.x + Math.cos(angle) * 55, y: base.y + Math.sin(angle) * 45, scale: 0.7, opacity: 0.3 }),
+					at + rings[r][2], 480);
+			}
+		}
+		// A last twinkle on the Pokemon itself.
+		burst(Object.assign({}, base, { scale: 0.3, opacity: 1 }), Object.assign({}, base, { scale: 1.3, opacity: 0 }), at + 500, 400);
+		if (window.BattleSound && BattleSound.soundCache) {
+			if (!BattleSound.soundCache[SHINY_SOUND]) {
+				var audio = document.createElement('audio');
+				audio.src = location.origin + '/' + SHINY_SOUND;   // not Showdown's host (see playEventMusic)
+				BattleSound.soundCache[SHINY_SOUND] = audio;
+			}
+			setTimeout(function () {
+				try {
+					BattleSound.soundCache[SHINY_SOUND].currentTime = 0;
+					BattleSound.playEffect(SHINY_SOUND);
+				} catch (e) { /* silent sparkle */ }
+			}, at / Math.max(1, (scene.acceleration || 1)));
+		}
+	}
 	function installEventMusic() {
 		// The scene's animSummon runs whenever a Pokemon is sent out, in a live battle and in a
 		// replay alike (the replay page's newer engine has no Battle.switchIn).
@@ -2748,8 +2808,18 @@
 			return out;
 		};
 		var animSummon = S.prototype.animSummon;
-		S.prototype.animSummon = function (pokemon) {
+		// Sent out by a switch or dragged in (Roar, Whirlwind, Dragon Tail): a shiny sparkles.
+		var animDragIn = S.prototype.animDragIn;
+		if (animDragIn) {
+			S.prototype.animDragIn = function (pokemon) {
+				var out = animDragIn.apply(this, arguments);
+				try { shinySparkle(this, pokemon, false); } catch (e) { /* no sparkle, the battle goes on */ }
+				return out;
+			};
+		}
+		S.prototype.animSummon = function (pokemon, slot, instant) {
 			var out = animSummon.apply(this, arguments);
+			try { shinySparkle(this, pokemon, instant); } catch (e) { /* no sparkle, the battle goes on */ }
 			try { if (!(this.battle && this.battle.velvetMusicSaid)) playEventMusic(this, musicFor(pokemon)); } catch (e) { /* the battle goes on with its own music */ }
 			return out;
 		};
