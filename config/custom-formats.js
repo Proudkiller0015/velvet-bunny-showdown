@@ -720,7 +720,7 @@ const RP_TURN_ACTIONS = {
 		if (!ball || ball.turn !== this.turn) return;
 		if (!ball.thrown) {
 			ball.thrown = true;
-			throwBall(this, pokemon, ball.id, ball.sure);
+			throwBall(this, pokemon, ball.id, ball.sure, ball.fail);
 		}
 		return false;
 	},
@@ -813,9 +813,12 @@ function installCatching(battle) {
 			let words = String(m[1] || '').trim().split(/\s+/);
 			let sure = false;
 			let allow = false;
+			// fail: a throw an arranged encounter decided would miss (rigs.js failBalls). Nothing is said.
+			let fail = false;
 			while (words.length > 1) {
 				const last = words[words.length - 1].toLowerCase();
 				if (last === 'sure') { sure = true; words.pop(); continue; }
+				if (last === 'fail') { fail = true; words.pop(); continue; }
 				if (last === 'allow') { allow = true; words.pop(); continue; }
 				break;
 			}
@@ -863,7 +866,7 @@ function installCatching(battle) {
 				return this.emitChoiceError(`Can't throw a ball this turn`);
 			}
 			if (!choose.call(this, fillers.join(', '))) return false;
-			this.rpPendingBall = { id: ball.id, turn: battle.turn, thrown: false, sure };
+			this.rpPendingBall = { id: ball.id, turn: battle.turn, thrown: false, sure, fail };
 			return true;
 		};
 	}
@@ -911,7 +914,7 @@ function tryRun(battle, pokemon) {
 	battle.tie();
 }
 
-function throwBall(battle, pokemon, ballId, sure = false) {
+function throwBall(battle, pokemon, ballId, sure = false, fail = false) {
 	const E = encounters();
 	const side = pokemon.side;
 	const raid = raidBossSide(battle);
@@ -946,8 +949,9 @@ function throwBall(battle, pokemon, ballId, sure = false) {
 	const raidChance = raid ? chance * (isGmax(wild) ? RAID_CATCH_GMAX : RAID_CATCH_DMAX) : chance;
 
 	const rng = () => battle.random();
-	const caught = sure || rng() < raidChance;
-	const shakes = caught ? 3 : E.shakesFor(raidChance, rng);
+	const caught = !fail && (sure || rng() < raidChance);
+	// A rigged miss looks like a close one: two or three wobbles, never a clean bounce.
+	const shakes = caught ? 3 : fail ? 2 + (rng() < 0.5 ? 1 : 0) : E.shakesFor(raidChance, rng);
 
 	battle.add('-message', `${side.name} threw ${aOrAn(ball.name)}!`);
 	// A ball arcing onto the target: Weather Ball's animation, which is a ball thrown up and down onto it.

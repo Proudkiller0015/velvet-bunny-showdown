@@ -584,8 +584,11 @@ exports.commands = {
 		const sure = rp.freeCatch(enc, wildSpecies) ? ' sure' : '';
 		// A legendary the owner has unlocked for this one encounter (rp-server allowCatch).
 		const allow = enc && enc.catchable ? ' allow' : '';
+		// An arranged miss (an encounter rig's failBalls): the ball is thrown and spent as usual, it just never lands.
+		const fail = enc && enc.failBalls > 0 ? ' fail' : '';
+		if (fail) enc.failBalls--;
 		try {
-			game.choose(user, `ball ${ball.id}${sure}${allow}`);
+			game.choose(user, `ball ${ball.id}${sure}${allow}${fail}`);
 		} finally {
 			game.rpBallFrom = null;
 		}

@@ -232,6 +232,8 @@ function requestEncounter(payload, deps) {
 			: E.rollTrainer({ place, badges, levelCap, ace });
 	}
 	if (!rolled.team.length) return { ok: false, code: 'empty', message: 'Nothing turned up. Try again.' };
+	// An arranged encounter can decide its first throws miss (rp-bot rigs.js failBalls). Never shown.
+	const failBalls = payload.summon && Number(payload.summon.failBalls) > 0 ? Math.min(10, Math.floor(Number(payload.summon.failBalls))) : 0;
 
 	const enc = {
 		id: crypto.randomBytes(8).toString('hex'),
@@ -244,6 +246,7 @@ function requestEncounter(payload, deps) {
 		placeName: place.name,
 		channel: found.channel,
 		balls: payload.balls && typeof payload.balls === 'object' ? normaliseBalls(payload.balls) : null,
+		failBalls,
 		items: payload.items && typeof payload.items === 'object' ? normaliseItems(payload.items) : null,
 		badges,
 		warning: String(payload.warning || '').slice(0, 300),
