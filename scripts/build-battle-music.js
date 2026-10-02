@@ -21,7 +21,7 @@ const { execFileSync } = require('child_process');
 
 const ROOT = path.join(__dirname, '..');
 const read = f => JSON.parse(fs.readFileSync(path.join(ROOT, f), 'utf8'));
-const { tracks } = read('data/legend-music.json');
+const { tracks, own = [] } = read('data/legend-music.json');
 const { events, sounds = {} } = read('data/battle-music.json');
 const EVENTS_DIR = path.join(ROOT, 'client', 'audio', 'events');
 const LEGENDS_DIR = path.join(ROOT, 'client', 'audio', 'legends');
@@ -141,6 +141,12 @@ for (const t of tracks) {
 	if (t.species.length && !fs.existsSync(f)) throw new Error(`legend track ${t.file} is not cut yet (scripts/cut-legend-music.js)`);
 	if (t.species.length) files[`legends/${t.file}`] = loopOf(f, t.loop === 'repeat');
 }
+// Themes written for this server (tools/music): their loop is set by hand from the score.
+for (const t of own) {
+	const f = path.join(LEGENDS_DIR, `${t.file}.mp3`);
+	if (!fs.existsSync(f)) throw new Error(`our own theme ${t.file}.mp3 is missing from client/audio/legends`);
+	files[`legends/${t.file}`] = t.loop;
+}
 const EVENT_OF = {};
 for (const [id, e] of Object.entries(events)) {
 	const f = path.join(EVENTS_DIR, `${e.file}.mp3`);
@@ -150,7 +156,7 @@ for (const [id, e] of Object.entries(events)) {
 }
 
 const LEGEND_OF = {};
-for (const t of tracks) for (const s of t.species) LEGEND_OF[s] = `legends/${t.file}`;
+for (const t of [...tracks, ...own]) for (const s of t.species) LEGEND_OF[s] = `legends/${t.file}`;
 
 // Rare wild: what the rarity ladder puts at rare or above, and anything shiny (the client checks that).
 const Dex = require(path.join(ROOT, 'src', 'rp-dex'))();

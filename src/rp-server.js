@@ -723,7 +723,9 @@ function musicTables() {
 	if (MUSIC) return MUSIC;
 	const read = f => JSON.parse(require('fs').readFileSync(require('path').join(__dirname, '..', 'data', f), 'utf8'));
 	const legendOf = {};
-	for (const t of read('legend-music.json').tracks) for (const s of t.species) legendOf[s] = `legends/${t.file}`;
+	const legends = read('legend-music.json');
+	// `own`: themes written for this server (tools/music), beside the ones cut from the compilation.
+	for (const t of [...legends.tracks, ...(legends.own || [])]) for (const s of t.species) legendOf[s] = `legends/${t.file}`;
 	const event = {};
 	for (const [id, e] of Object.entries(read('battle-music.json').events)) event[id] = `events/${e.file}`;
 	MUSIC = { legendOf, event };

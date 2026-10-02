@@ -1,0 +1,5 @@
+fluidsynth/
+GeneralUser.sf2
+out/*.wav
+ref/
+out/

@@ -38,5 +38,18 @@
     { "file": "eternatus", "start": "1:28:59", "species": ["eternatus", "eternatuseternamax"] },
     { "file": "arceus", "start": "1:39:22", "species": ["arceus"] },
     { "file": "primal", "start": "1:42:24", "species": ["groudonprimal", "kyogreprimal"] }
+  ],
+  "ownNote": "Themes written for this server (tools/music): not cut from the compilation. loop = [start ms, end ms] set by hand from the score: the client jumps back one second before the end, so both points sit one second after the bar line they mean.",
+  "own": [
+    {
+      "file": "makuro",
+      "loop": [
+        18663,
+        152610
+      ],
+      "species": [
+        "makuro"
+      ]
+    }
   ]
 }
