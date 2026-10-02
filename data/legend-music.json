@@ -50,6 +50,16 @@
       "species": [
         "makuro"
       ]
+    },
+    {
+      "file": "raishin",
+      "loop": [
+        9000,
+        137000
+      ],
+      "species": [
+        "raishin"
+      ]
     }
   ]
 }

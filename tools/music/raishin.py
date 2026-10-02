@@ -36,7 +36,6 @@ shami = s.part('shamisen', SHAMISEN, volume=124, pan=52, reverb=25)
 choir = s.part('choir', CHOIR, volume=88, pan=64, reverb=90)
 taiko = s.part('taiko', TAIKO, volume=127, pan=64, reverb=30)
 bell = s.part('temple bell', BELLS, volume=118, pan=64, reverb=110)
-piano = s.part('piano', 1, volume=104, pan=60, reverb=30)
 drums = s.part('drums', 0, volume=127, drums=True, reverb=30)
 FLOOR_TOM_2 = 43
 SCALE = [4, 6, 8, 9, 11, 1, 2]     # E F# G# A B C# D, as pitch classes
@@ -65,12 +64,12 @@ def hammer(bar, root='E', level=1.0, top=True):
     """2. The figure: root and fifth struck on every eighth across three octaves, leaning on
     1 and 4. Shamisen in the middle, koto above it, piano an octave under."""
     r = n(root + '4')
-    row = [(0, 7), (12,), (7,), (0, 7), (12,), (7,)]
+    row = [(0, 7), (12,), (7,), (0, 7), (12,), (13,)]       # ...and the semitone above, flicked at the end of the bar
     for k, steps in enumerate(row):
         v = int((116 if k in (0, 3) else 92) * level)
         for st in steps:
             s.note(shami, bar, k, r + st, 0.7, v)
-            s.note(piano, bar, k, r + st - 12, 0.7, v - 18)
+            s.note(shami, bar, k, r + st - 12, 0.7, v - 18)
         if top:
             s.note(koto, bar, k, r + (24 if k in (0, 3) else 19 if k in (2, 5) else 12), 0.7, v - 10)
     for k, p in enumerate([r - 24, r - 12, r - 24, r - 24, r - 12, r - 13]):     # the bass runs with it
@@ -98,26 +97,55 @@ def kit(bar, level=1.0, crash=False, fill=False):
 
 
 def sing(bar, phrase, up=0, big=False, vel=118):
-    """4. The melody: trumpets and shakuhachi in unison, the strings a third below and an octave
-    below that. Big: flute an octave above, horns an octave under."""
+    """The slow melody - the second voice now. Shakuhachi and flute an octave apart, tremolo
+    strings a hollow fourth below; in the big statements trombones and horns carry it too."""
     for k, notes in enumerate(phrase):
         b = bar + k
-        line = [(n(p) + up - 12 if p else None, d) for p, d in notes]      # an octave down: around G4, where the real ones sit
-        s.line(trumpet, b, line, vel=vel, legato=1.0)
-        s.line(shaku, b, line, vel=vel - 6, legato=1.0)
-        s.line(bones, b, [(p - 12 if p else None, d) for p, d in line], vel=vel - 14, legato=1.0)
-        low = [(third_below(p, up) if p else None, d) for p, d in line]
-        s.line(strings, b, low, vel=vel - 16, legato=1.0)
-        s.line(strings, b, [(p + 12 if p else None, d) for p, d in line], vel=vel - 24, legato=1.0)
+        line = [(n(p) + up - 12 if p else None, d) for p, d in notes]
+        hollow = [(p - 5 if p else None, d) for p, d in line]
+        s.line(shaku, b, line, vel=vel, legato=1.0)
+        s.line(flute, b, [(p + 12 if p else None, d) for p, d in line], vel=vel - 4, legato=1.0)
+        s.line(trem, b, hollow, vel=vel - 30, legato=1.0)
         if big:
-            s.line(flute, b, [(p + 12 if p else None, d) for p, d in line], vel=vel - 14, legato=1.0)
-            s.line(horn, b, low, vel=vel - 14, legato=1.0)
+            s.line(bones, b, line, vel=vel - 4, legato=1.0)
+            s.line(horn, b, [(p - 12 if p else None, d) for p, d in line], vel=vel - 12, legato=1.0)
+            s.line(strings, b, hollow, vel=vel - 18, legato=1.0)
+
+
+IN_SCALE = (0, 1, 5, 7, 8)        # the in scale above its root
+
+
+def lead_line(bar, phrase, root='E', up=0, vel=112, big=False):
+    """The lead (owner: "add a fast pace higher pitch lead on top of this (current lead stays
+    as a secondary lead)"; then, of the first try: "too fast/high pitch/synthetic"). So:
+    TRUMPETS, not a synth; one octave over the slow melody, not two; eighths, not sixteenths.
+    It leans on the melody's note and flicks to the scale note above it - a semitone, on E and
+    on B - and at the end of a long note it drops away under it. Violins double it when big."""
+    base = n(root + '0') % 12
+    ladder = [o * 12 + base + st for o in range(3, 9) for st in IN_SCALE]
+    short = [0, 1, 0]
+    long_ = [0, 0, 1, 0, 2, 1]
+    for k, notes in enumerate(phrase):
+        t = 0.0
+        for p, d in notes:
+            if p is None:
+                t += d
+                continue
+            i = min(range(len(ladder)), key=lambda j: abs(ladder[j] - (n(p) + up)))
+            shape = long_ if d >= 5 else short
+            for j in range(int(round(d))):
+                pitch = ladder[max(0, min(len(ladder) - 1, i + shape[j % len(shape)]))]
+                accent = vel if j % 3 == 0 else vel - 12
+                s.note(trumpet, bar + k, t + j, pitch, 0.92, accent)
+                if big:
+                    s.note(strings, bar + k, t + j, pitch + 12, 0.92, accent - 22)
+            t += d
 
 
 def sparkle(bar, root='E', vel=84):
     """5. A handful of koto notes far above, falling."""
     r = n(root + '6')
-    for k, st in enumerate((12, 7, 4, 0, -5, 0)):
+    for k, st in enumerate((12, 8, 7, 5, 1, 0)):
         s.note(koto, bar, k, r + st, 0.9, vel - k * 3)
 
 
@@ -145,7 +173,7 @@ def strike(bar, beat, pitches, vel=124):
     s.note(drums, bar, beat, KICK, 0.5, vel)
     s.note(drums, bar, beat, LOW_TOM, 0.5, vel)
     for p in pitches:
-        for part, sh in ((trumpet, 12), (bones, 0), (horn, 0), (shami, 12), (strings, 12), (piano, 0)):
+        for part, sh in ((trumpet, 12), (bones, 0), (horn, 0), (shami, 12), (strings, 12), (shami, 0)):
             s.note(part, bar, beat, n(p) + sh, 0.9, vel)
     s.note(cb, bar, beat, n(pitches[0]) - 24, 0.9, vel)
 
@@ -168,21 +196,20 @@ def lightning(bar, root='E'):
 
 # ---------------------------------------------------------------- the notes
 # Long notes, by step, B4 to B5. (pitch, eighths); a bar is six.
-# From the study of all thirty themes (study.py): the held melody notes last about half a second
-# (the long ones 0.6 s) and sit around G4 - an octave under where the first draft of this was.
-# So: mostly half-second notes here, and sing() plays the trumpets an octave below what is written.
+# The dark Japanese scale on E - E F A B C, the in scale - whose semitones (E-F, B-C) and tritone
+# (F to B) make a shrine at night sound haunted (owner: "the notes sound adventure not ghosty").
+# Half-second notes around G4 (study.py); sing() plays them an octave below what is written.
 MEL_A = [
-    [('B4', 3), ('E5', 3)], [('F#5', 3), ('G#5', 3)], [('F#5', 6)], [('E5', 3), ('D5', 3)],
-    [('E5', 3), ('B4', 3)], [('D5', 3), ('E5', 3)], [('B4', 6)], [('B4', 4), (None, 2)],
-    [('E5', 3), ('G#5', 3)], [('A5', 3), ('B5', 3)], [('A5', 6)], [('G#5', 3), ('F#5', 3)],
-    [('E5', 3), ('F#5', 3)], [('G#5', 3), ('E5', 3)], [('F#5', 3), ('D#5', 3)], [('E5', 5), (None, 1)],
+    [('B4', 3), ('C5', 3)], [('E5', 6)], [('F5', 3), ('E5', 3)], [('C5', 3), ('B4', 3)],
+    [('A4', 3), ('B4', 3)], [('C5', 3), ('E5', 3)], [('F5', 6)], [('E5', 4), (None, 2)],
+    [('E5', 3), ('F5', 3)], [('A5', 3), ('B5', 3)], [('C6', 6)], [('B5', 3), ('A5', 3)],
+    [('F5', 3), ('E5', 3)], [('C5', 3), ('B4', 3)], [('F5', 3), ('B4', 3)], [('E5', 5), (None, 1)],
 ]
-# The middle: the lift to A that Ho-Oh's own middle makes; the second half climbs a staircase.
 MEL_B = [
-    [('A4', 6)], [('C#5', 6)], [('D5', 3), ('E5', 3)], [('F#5', 6)],
-    [('E5', 6)], [('D5', 3), ('C#5', 3)], [('B4', 6)], [('B4', 4), (None, 2)],
-    [('C#5', 3), ('D5', 3)], [('E5', 3), ('F#5', 3)], [('G#5', 3), ('A5', 3)], [('B5', 6)],
-    [('A5', 3), ('G#5', 3)], [('F#5', 6)], [('D#5', 6)], [('F#5', 3), ('B5', 3)],
+    [('A4', 3), ('A#4', 3)], [('D5', 6)], [('E5', 3), ('F5', 3)], [('E5', 6)],
+    [('D5', 3), ('A#4', 3)], [('A4', 6)], [('E5', 3), ('F5', 3)], [('E5', 4), (None, 2)],
+    [('A5', 3), ('A#5', 3)], [('A5', 3), ('F5', 3)], [('E5', 3), ('D5', 3)], [('E5', 6)],
+    [('F5', 3), ('E5', 3)], [('D5', 3), ('A#4', 3)], [('B4', 6)], [('C5', 3), ('B4', 3)],
 ]
 
 
@@ -210,8 +237,9 @@ def tune(bar, phrase, root='E', up=0, big=False, drone_root=None):
             sparkle(b, root)
         if big:
             s.note(choir, b, 0, n((drone_root or root) + '3'), 6.0, 70)
-            s.note(choir, b, 0, n((drone_root or root) + '3') + 7, 6.0, 66)
+            s.note(choir, b, 0, n((drone_root or root) + '3') + 6, 6.0, 60)    # the tritone, held in the voices
     sing(bar, phrase, up=up, big=big)
+    lead_line(bar, phrase, root=drone_root or root, up=up, big=big)
 
 
 def ghost(bar):

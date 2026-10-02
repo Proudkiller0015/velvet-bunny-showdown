@@ -15,6 +15,9 @@ FLUID = os.path.join(HERE, 'fluidsynth', 'fluidsynth-v2.6.1-win10-x64-cpp11', 'b
 # family of sounds the GBA and DS games were written on. GAIN scales it (gm.dls is much louder).
 SF2 = os.environ.get('SF2') or os.path.join(HERE, 'GeneralUser.sf2')
 GAIN = float(os.environ.get('GAIN', '0.9'))
+# DRY=1 turns FluidSynth's own reverb and chorus off: a hall around every note is what a film score has
+# and a handheld's sound chip does not.
+FX = ['-R', '0', '-C', '0'] if os.environ.get('DRY') else []
 TPB = 480
 NOTE = {'C': 0, 'D': 2, 'E': 4, 'F': 5, 'G': 7, 'A': 9, 'B': 11}
 
@@ -44,9 +47,20 @@ class Song:
         self.bpm, self.bpb = bpm, beats_per_bar
         self.parts = {}     # name -> dict(channel, program, events)
         self.next_channel = 0
+        # No two notes exactly alike (owner: "sounds ai"): each is moved by up to `humanize` ticks and its
+        # loudness by a few steps. Drums get a third of the timing play. 0 turns it off.
+        self.humanize = 7
+        import random
+        self._rng = random.Random(11)
         self.offset_bars = 0   # shift every bar number (a cut opening); what lands before zero is dropped
 
     def part(self, name, program, volume=100, pan=64, drums=False, reverb=40):
+        # REMAP='48:50,0:80' swaps General MIDI programs at render time (for trying instrument sets by ear.py);
+        # KIT=<n> picks the drum kit (0 standard, 16 power, 24 electronic, 25 analog on a GS set).
+        remap = dict(tuple(int(x) for x in pair.split(':')) for pair in os.environ.get('REMAP', '').split(',') if pair)
+        program = remap.get(program, program)
+        if drums and os.environ.get('KIT'):
+            program = int(os.environ['KIT'])
         if drums:
             ch = 9
         else:
@@ -64,6 +78,10 @@ class Song:
             return
         d = max(1, int(round(dur * TPB)) - 8)
         p = self.parts[part]
+        if self.humanize:
+            wobble = self.humanize if p['ch'] != 9 else self.humanize // 3
+            t = max(0, t + self._rng.randint(-wobble, wobble))
+            vel = vel + self._rng.randint(-5, 5)
         p['events'].append((t, 'on', n(pitch), int(max(1, min(127, vel)))))
         p['events'].append((t + d, 'off', n(pitch), 0))
 
@@ -98,7 +116,7 @@ class Song:
             tr = mido.MidiTrack()
             tr.append(mido.MetaMessage('track_name', name=name, time=0))
             ch = p['ch']
-            if ch != 9:
+            if ch != 9 or p['program']:
                 tr.append(mido.Message('program_change', channel=ch, program=p['program'], time=0))
             tr.append(mido.Message('control_change', channel=ch, control=7, value=p['volume'], time=0))
             tr.append(mido.Message('control_change', channel=ch, control=10, value=p['pan'], time=0))
@@ -130,19 +148,31 @@ class Song:
         wav = stem + '.wav'
         loud = getattr(self, 'loud', None)
         if not loud:
-            subprocess.run([FLUID, '-ni', '-g', str(gain), '-r', '44100', '-F', wav, SF2, mid], check=True, capture_output=True)
+            subprocess.run([FLUID, '-ni', *FX, '-g', str(gain), '-r', '44100', '-F', wav, SF2, mid], check=True, capture_output=True)
             return wav
-        parts = []
-        for tag, kw in (('rest', {'skip': loud}), ('loud', {'only': loud})):
-            m, w = f'{stem}.{tag}.mid', f'{stem}.{tag}.wav'
-            self.save(m, **kw)
-            subprocess.run([FLUID, '-ni', '-g', str(gain), '-r', '44100', '-F', w, SF2, m], check=True, capture_output=True)
-            parts.append((m, w))
-        db = getattr(self, 'loud_db', 6)
-        subprocess.run(['ffmpeg', '-y', '-v', 'error', '-i', parts[0][1], '-i', parts[1][1], '-filter_complex',
-                        f'[0:a]volume=-{getattr(self, "bed_db", 0)}dB[r];[1:a]highpass=f={getattr(self, "loud_hp", 20)}:poles=2,volume={db}dB[d];[r][d]amix=inputs=2:normalize=0:duration=longest[out]',
-                        '-map', '[out]', wav], check=True)
-        for m, w in parts:
+        # More layers with their own level: self.layers = [(set of part names, dB, high-pass Hz), ...]
+        layers = [(set(loud), getattr(self, 'loud_db', 6), getattr(self, 'loud_hp', 20))] + list(getattr(self, 'layers', []))
+        everything = set().union(*[names for names, _, _ in layers])
+        files = []
+        m, w = f'{stem}.rest.mid', f'{stem}.rest.wav'
+        self.save(m, skip=everything)
+        subprocess.run([FLUID, '-ni', *FX, '-g', str(gain), '-r', '44100', '-F', w, SF2, m], check=True, capture_output=True)
+        files.append((m, w))
+        chain = [f'[0:a]volume=-{getattr(self, "bed_db", 0)}dB[r]']
+        mix = '[r]'
+        for i, (names, db, hp) in enumerate(layers, 1):
+            m, w = f'{stem}.l{i}.mid', f'{stem}.l{i}.wav'
+            self.save(m, only=names)
+            subprocess.run([FLUID, '-ni', *FX, '-g', str(gain), '-r', '44100', '-F', w, SF2, m], check=True, capture_output=True)
+            files.append((m, w))
+            chain.append(f'[{i}:a]highpass=f={hp}:poles=2,volume={db}dB[l{i}]')
+            mix += f'[l{i}]'
+        chain.append(f'{mix}amix=inputs={len(layers) + 1}:normalize=0:duration=longest[out]')
+        cmd = ['ffmpeg', '-y', '-v', 'error']
+        for _, w in files:
+            cmd += ['-i', w]
+        subprocess.run(cmd + ['-filter_complex', ';'.join(chain), '-map', '[out]', wav], check=True)
+        for m, w in files:
             os.remove(m)
             os.remove(w)
         return wav
