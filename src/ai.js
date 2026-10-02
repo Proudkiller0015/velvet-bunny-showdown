@@ -1045,6 +1045,29 @@ class BattleAI {
 		try {
 			let move = new calc.Move(gen, moveName);
 			/*
+			 * Bird, MissingNo.'s glitch type (data/velvet/missingno.js). The calculator has no
+			 * such type and threw, which read as 0: every hit on MissingNo. and every hit from
+			 * it looked harmless. Bird is neutral both ways, so the Pokemon is its other type
+			 * alone, and a Bird move is run as a Normal move into a plain Water type: neutral whatever the
+			 * target really is, and boosted by the user's own Normal half as Bird would be.
+			 */
+			const wasBird = mon => (mon.types || []).includes('Bird');
+			const birdUser = wasBird(attacker);
+			const unbird = mon => {
+				const rest = (mon.types || []).filter(t => t !== 'Bird');
+				const copy = retype(mon, rest.length ? rest : ['Normal']);
+				if (copy.teraType === 'Bird') copy.teraType = undefined;
+				return copy;
+			};
+			if (birdUser) attacker = unbird(attacker);
+			if (wasBird(defender)) defender = unbird(defender);
+			let birdStab = 1;
+			let birdMove = false;
+			if (move.type === 'Bird') {
+				birdMove = true;
+				move = new calc.Move(gen, moveName, { overrides: { type: 'Normal' } });
+			}
+			/*
 			 * A move the calculator has no data for (1 Oct 2026): 110 of them in formats that
 			 * allow what Scarlet and Violet cut - Bolt Beak, Fishious Rend, Hidden Power, Return.
 			 * It answered 0, so a Dondozo sat in front of a Dracozolt reading Bolt Beak as
@@ -1055,7 +1078,8 @@ class BattleAI {
 				const known = velvetMove(moveName);
 				// Return and Frustration are 102 at the friendship anyone runs them at.
 				if (known && !known.basePower && /^(return|frustration)$/.test(known.id)) known.basePower = 102;
-				if (known && known.basePower > 0) move = new calc.Move(gen, moveName, { overrides: { basePower: known.basePower, type: known.type, category: known.category, flags: { ...(known.flags || {}) }, priority: known.priority || 0, target: known.target || 'normal' } });
+				if (known && known.type === 'Bird') birdMove = true;
+				if (known && known.basePower > 0) move = new calc.Move(gen, moveName, { overrides: { basePower: known.basePower, type: known.type === 'Bird' ? 'Normal' : known.type, category: known.category, flags: { ...(known.flags || {}) }, priority: known.priority || 0, target: known.target || 'normal' } });
 			}
 			/*
 			 * Fixed damage: Seismic Toss, Night Shade, Super Fang, Ruination... have no
@@ -1140,15 +1164,37 @@ class BattleAI {
 			 * holding the move written to kill it. The immune type comes off a
 			 * copy of the defender, which is exactly what the battle will do.
 			 */
+			/*
+			 * An item the calculator's own list lacks: every Mega Stone and Z-Crystal in a
+			 * Gen 9 format, and every item of ours. It looks the defender's item up to see
+			 * whether Knock Off is resisted and reads a field of the answer without checking
+			 * there was one, so the whole calculation threw - and a throw here is a 0. Every
+			 * attack into a Mega holding its stone read as harmless (2 Oct 2026, found by
+			 * the trace line below; Dondozo, Clodsire and Torterra all "did nothing" to a
+			 * Mega Tyranitar). The item comes off a copy; the Mega's stats are already its own.
+			 */
+			const unknownItem = mon => mon.item && !gen.items.get(String(mon.item).toLowerCase().replace(/[^a-z0-9]/g, ''));
+			if (this.cfg.itemSafe !== false && unknownItem(defender)) { defender = defender.clone(); defender.item = undefined; }
+			if (this.cfg.itemSafe !== false && unknownItem(attacker)) { attacker = attacker.clone(); attacker.item = undefined; }
 			defender = seeingPastImmunity(gen, move, defender);
+			if (birdMove) {
+				defender = retype(defender, ['Water']);
+				defender.teraType = undefined;
+				if (!(attacker.types || []).includes('Normal') && birdUser) birdStab = 1.5;
+			}
 			const result = calc.calculate(gen, attacker, defender, move, field);
 			const dmg = result.damage;
 			const rolls = Array.isArray(dmg) ? dmg.flat().filter(n => typeof n === 'number') : [dmg];
 			if (!rolls.length) return 0;
-			const avg = charged * scale * rolls.reduce((a, b) => a + b, 0) / rolls.length;
+			let avg = birdStab * charged * scale * rolls.reduce((a, b) => a + b, 0) / rolls.length;
+			// Glitched Data: a hit takes at most a quarter of its maximum HP, unless the attacker ignores abilities.
+			if (String(defender.ability || '') === 'Glitched Data' && !/^(Mold Breaker|Teravolt|Turboblaze)$/.test(String(attacker.ability || ''))) {
+				avg = Math.min(avg, Math.floor(defender.maxHP() / 4));
+			}
 			const hp = defender.originalCurHP || defender.maxHP();
 			return Math.max(0, (avg / hp) * 100);
 		} catch (e) {
+			if (process.env.VELVET_AI_TRACE) console.log(`      trace: damagePct ${moveName} (${attacker && attacker.name} [${attacker && attacker.item}] -> ${defender && defender.name} [${defender && defender.item}]): ${String(e.stack).split('\n').slice(0, 3).join(' | ').slice(0, 300)}`);
 			return 0;
 		}
 	}
@@ -3497,6 +3543,23 @@ class BattleAI {
 					// Draco Meteor, Overheat, Leaf Storm...: fired again from -2 or lower
 					// they hit like wet paper. Anyone past Easy notices and looks elsewhere.
 					if (!this.cfg.naive && pct < 100 && this.droppedFor(data, me) <= -2) s -= 12 + 4 * Math.abs(this.droppedFor(data, me));
+					/*
+					 * Rapid Spin and Mortal Spin are attacks, so they were scored on their damage
+					 * and nothing else: hazard removal was only ever valued for status moves
+					 * (Defog). A Torterra with Rapid Spin stood on three layers of Spikes for four
+					 * turns clicking its attack while its team took a quarter on every entry
+					 * (owner's replay gen9rpou-3-tm81yx). The same value Defog gets, when it lands.
+					 */
+					if (!this.cfg.naive && this.cfg.spinSense !== false && data && /^(rapidspin|mortalspin)$/.test(data.id) && pct > 0) {
+						const mine = HAZARDS.reduce((n, h) => n + (Number((state.hazards[state.myPlayer] || {})[h]) || 0), 0);
+						if (mine) {
+							const myHp = (me.originalCurHP / me.maxHP()) * 100;
+							const worth = stallCtx && stallCtx.rules && stallCtx.rules.removal
+								? this.stallRemoval(gen, data, state, request, myHp, incoming)
+								: (20 + mine * 10) * (incoming >= myHp * 0.5 ? 0.5 : 1);
+							if (worth > 0) s += worth;
+						}
+					}
 					/*
 					 * Salt Cure is its residual, not its hit: an eighth of their HP every turn (a
 					 * quarter on Water and Steel) for as long as they stay. Scored on the 8% hit
