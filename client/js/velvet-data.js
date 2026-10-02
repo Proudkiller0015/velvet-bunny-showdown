@@ -187,7 +187,7 @@
 	// SPRITE_V is bumped whenever the pictures are redrawn: the static server caches
 	// sprites for an hour under the same name, so the ChatGPT redraws otherwise showed
 	// the old converted ones until the cache ran out.
-	var SPRITE_V = '?v=5';
+	var SPRITE_V = '?v=6';
 	// MissingNo. (Halloween 2026) too: Showdown has its front sprite and nothing else,
 	// so the back (the front turned round) and the icon are ours.
 	['makuro', 'raishin', 'chimai', 'missingno'].forEach(function (id) {
@@ -200,8 +200,17 @@
 	});
 	// The Shrine Trio's shinies (owner, 2 Oct 2026): their own colours, not a tint - Makuro
 	// black and red, Raishin midnight violet with gold lightning, Chimai white with blue flames.
+	var HD = { makuro: [208, 140], raishin: [200, 129], chimai: [168, 154] };
 	['makuro', 'raishin', 'chimai'].forEach(function (id) {
-		ART[id].shiny = { front: [id + '-shiny.png' + SPRITE_V, 96, 96], back: [id + '-back-shiny.png' + SPRITE_V, 96, 96] };
+		ART[id].shiny = {
+			still: { front: [id + '-shiny.png' + SPRITE_V, 96, 96], back: [id + '-back-shiny.png' + SPRITE_V, 96, 96] },
+			animated: { front: [id + '-shiny-ani.webp' + SPRITE_V, 96, 96], back: [id + '-back-shiny-ani.webp' + SPRITE_V, 96, 96] },
+		};
+		// Animated in battle (owner, 2 Oct 2026: "lack animation, super pixelated compared to native ones").
+		// The front is the creature's own artwork, smooth, with an idle loop (scripts/animate-sprite.py);
+		// a fourth entry of true marks a smooth picture with its own size. The backs and the shinies
+		// are the pixel sprites given the same loop until there is artwork of those views.
+		ART[id].animated = { front: [id + '-ani.webp' + SPRITE_V, HD[id][0], HD[id][1], true], back: [id + '-back-ani.webp' + SPRITE_V, 96, 96] };
 		ART[id].shinyBuilder = ART[id].builder.replace(id + '.png', id + '-shiny.png');
 	});
 	Object.keys(MEGA_SPRITES).forEach(function (id) {
@@ -1899,7 +1908,7 @@
 
 				var set = (animated && ours.animated) || ours.still;
 				var shiny = !!(data.shiny || (pokemon && pokemon.shiny) || (options && options.shiny));
-				if (shiny && ours.shiny) set = ours.shiny;
+				if (shiny && ours.shiny) set = (animated && ours.shiny.animated) || ours.shiny.still;
 				var art = isFront ? set.front : set.back;
 
 				data.url = SPRITES + art[0];
@@ -1907,12 +1916,12 @@
 				// client computed for a sprite it could not find is exactly right
 				// for one of these, and overriding it is how a sprite ends up
 				// drawn at the wrong size in one place and not another.
-				if (!ours.standard) {
+				if (!ours.standard || art[3]) {
 					data.w = art[1];
 					data.h = art[2];
 					data.y = (ours.y && (isFront ? ours.y.front : ours.y.back)) || 0;
 				}
-				data.pixelated = true;
+				data.pixelated = !art[3];
 				// Whatever it is drawn from, it is one file - there is no sprite sheet
 				// for the client to index into and no cry to play.
 				data.isBackSprite = !isFront;

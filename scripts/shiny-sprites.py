@@ -76,7 +76,7 @@ RAMPS = {
 }
 
 
-def classify(img, name):
+def classify(img, name, reach=3):
     """A family for every opaque pixel, including the two that need the neighbours to tell."""
     w, h = img.size
     px = img.load()
@@ -116,7 +116,7 @@ def classify(img, name):
             pieces.append(piece)
         pieces.sort(key=len)
         for piece in pieces[:-1]:
-            if len(piece) < 120:
+            if len(piece) < 120 * (reach / 3) ** 2:
                 for p in piece:
                     fam[p] = 'keep'
 
@@ -126,7 +126,7 @@ def classify(img, name):
         for (x, y), f in fam.items():
             if f not in ('body', 'line'):
                 continue
-            near = [fam.get((x + dx, y + dy)) for dx in range(-3, 4) for dy in range(-3, 4)]
+            near = [fam.get((x + dx, y + dy)) for dx in range(-reach, reach + 1, max(1, reach // 3)) for dy in range(-reach, reach + 1, max(1, reach // 3))]
             if sum(1 for n in near if n == 'flame') >= 0.42 * len(near):
                 holes.append((x, y))
         for p in holes:
@@ -134,9 +134,9 @@ def classify(img, name):
     return fam
 
 
-def recolour(img, name):
+def recolour(img, name, reach=3):
     img = img.convert('RGBA')
-    fam = classify(img, name)
+    fam = classify(img, name, reach)
     px = img.load()
     span = {}
     for p, f in fam.items():
