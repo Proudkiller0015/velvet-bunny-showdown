@@ -31,6 +31,38 @@ exports.moves = (data) => {
 			},
 		};
 	}
+	/*
+	 * The same gap, found by scripts/audit-messages.js: text the client has and the move
+	 * never asks for. Brick Break, Psychic Fangs and Raging Bull took the screens down in
+	 * silence ("Reflect wore off", as if it had run out); they say they shattered them now.
+	 */
+	for (const id of ['brickbreak', 'psychicfangs', 'ragingbull']) {
+		const breaker = data[id];
+		if (!breaker || !breaker.onTryHit) continue;
+		const shatter = breaker.onTryHit;
+		data[id] = {
+			...breaker,
+			onTryHit(target, source, move) {
+				if (['reflect', 'lightscreen', 'auroraveil'].some(c => target.side.getSideCondition(c))) {
+					this.add('-activate', source, 'move: Brick Break', `[of] ${target}`);
+				}
+				return shatter.call(this, target, source, move);
+			},
+		};
+	}
+	// Beat Up: each hit is one of the party's, and says whose.
+	const beatUp = data.beatup;
+	if (beatUp && beatUp.basePowerCallback) {
+		const power = beatUp.basePowerCallback;
+		data.beatup = {
+			...beatUp,
+			basePowerCallback(pokemon, target, move) {
+				const ally = move.allies && move.allies[0];
+				if (ally && ally.name) this.add('-activate', pokemon, 'move: Beat Up', `[of] ${ally.name}`);
+				return power.call(this, pokemon, target, move);
+			},
+		};
+	}
 	const belly = data.bellydrum;
 	if (belly) {
 		data.bellydrum = {
