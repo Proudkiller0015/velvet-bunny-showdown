@@ -152,20 +152,41 @@ function abilityFor(species, rng, hiddenChance) {
 
 const clampLevel = n => Math.max(1, Math.min(100, Math.round(Number(n) || 0)));
 
+/*
+ * What a legendary that brings its own weather or terrain holds in the wild (owner, 2 Oct
+ * 2026: "make it so legendary that summon weather have a way to extend it by default in the
+ * wild: terrain extender/smooth rock etc"). Eight turns of it instead of five. Legendaries
+ * only - a wild Pelipper keeps nothing - and never over an item already chosen. Primal
+ * weather does not run out, so there is nothing to extend.
+ */
+const ROCK = { sun: 'Heat Rock', rain: 'Damp Rock', sand: 'Smooth Rock', snow: 'Icy Rock' };
+const TERRAIN_SETTERS = new Set(['electricsurge', 'grassysurge', 'mistysurge', 'psychicsurge', 'hadronengine', 'seedsower',
+	'calloftheabyss', 'calloftheshrine', 'callofthesanctuary']);
+function weatherItem(species, ability) {
+	if (!isLegendary(species)) return '';
+	const id = String(ability || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+	if (TERRAIN_SETTERS.has(id)) return 'Terrain Extender';
+	if (id === 'orichalcumpulse') return ROCK.sun;
+	let weather = null;
+	try { weather = require('./weather-plan').abilityMaps(Dex).setterOf[id]; } catch (e) { /* no plan: no item */ }
+	return ROCK[weather] || '';
+}
+
 /** One wild Pokemon, as the games would roll it. */
 function wildSet(species, level, rng = Math.random) {
 	level = clampLevel(level);
 	const iv = () => randInt(0, 31, rng);
+	const ability = abilityFor(species, rng, 0.05);
 	return {
 		name: species.baseSpecies === species.name ? species.name : species.name,
 		species: species.name,
 		level,
 		moves: levelUpMoves(species, level),
-		ability: abilityFor(species, rng, 0.05),
+		ability,
 		nature: pick(NATURES, rng),
 		ivs: { hp: iv(), atk: iv(), def: iv(), spa: iv(), spd: iv(), spe: iv() },
 		evs: { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 },
-		item: '',
+		item: weatherItem(species, ability),
 	};
 }
 
@@ -1289,6 +1310,7 @@ function describe(enc) {
 }
 
 module.exports = {
+	weatherItem,
 	BATTLE_ITEMS, findBattleItem, itemHelps,
 	toID, LEGEND_TAGS, isLegendary, encounterable, findSpecies,
 	levelUpMoves, wildSet, wildName, clampLevel, clampBadges, levelRange, shinyChance,

@@ -503,6 +503,8 @@ function summoned(summon, { place, badges, levelCap, ace = null }) {
 	const custom = chosenSet(Dex, species, summon);
 	if (custom.error) return custom;
 	Object.assign(set, custom.set);
+	// A chosen ability can change what it summons: the extending item follows the ability it ends up with.
+	set.item = E.weatherItem(species, set.ability);
 	if (summon.nickname) set.name = String(summon.nickname).slice(0, 18);
 	if (summon.item) {
 		const item = Dex.items.get(summon.item);
