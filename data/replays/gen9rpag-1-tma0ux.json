@@ -1,0 +1,12 @@
+{
+	"id": "gen9rpag-1-tma0ux",
+	"format": "[Gen 9] RP AG",
+	"players": [
+		"Bunny Stockfish",
+		"SlimeQueenSamantha"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Stockfish\n|j|☆SlimeQueenSamantha\n|t:|1790938486\n|gametype|singles\n|player|p1|Bunny Stockfish|bunny.png|1000\n|player|p2|SlimeQueenSamantha|queen.png|1000\n|gen|9\n|tier|[Gen 9] RP AG\n|rated|\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Endless Battle Clause: Forcing endless battles is banned\n|clearpoke\n|poke|p1|Blissey|\n|poke|p1|Mandibuzz|\n|poke|p1|Lunala|\n|poke|p1|Empoleon|\n|poke|p1|Eternatus-Eternamax|\n|poke|p1|Musharna|\n|poke|p2|Makuro|\n|poke|p2|Makuro|\n|poke|p2|Raishin|\n|poke|p2|Raishin|\n|poke|p2|Chimai|\n|poke|p2|Chimai|\n|teampreview\n|c|☆Bunny Stockfish|Good luck! Playing on **stockfish**.\n|\n|t:|1790938492\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Lunala|Lunala|100/100\n|switch|p2a: Makuro|Makuro|100/100\n|-fieldstart|move: Abyssal Terrain|[from] ability: Call of the Abyss|[of] p2a: Makuro\n|-message|Water and Dark moves grow stronger, and Dark types are shielded from priority moves.\n|turn|1\n|\n|t:|1790938495\n|switch|p2a: Makuro|Makuro|100/100\n|switch|p1a: Mandibuzz|Mandibuzz|100/100\n|\n|upkeep\n|turn|2\n|\n|t:|1790938498\n|switch|p2a: Raishin|Raishin|100/100\n|-fieldstart|move: Shrine Terrain|[from] ability: Call of the Shrine|[of] p2a: Raishin\n|-message|Electric and Ghost moves grow stronger, and Ghost types are warded from status moves.\n|move|p1a: Mandibuzz|Toxic|p2a: Raishin\n|-activate|p2a: Raishin|move: Shrine Terrain\n|\n|upkeep\n|turn|3\n|\n|t:|1790938501\n|switch|p2a: Raishin|Raishin, shiny|100/100\n|-terastallize|p1a: Mandibuzz|Fairy\n|move|p1a: Mandibuzz|Toxic|p2a: Raishin\n|-activate|p2a: Raishin|move: Shrine Terrain\n|\n|upkeep\n|turn|4\n|\n|t:|1790938516\n|switch|p2a: Chimai|Chimai|100/100\n|-fieldstart|move: Sanctuary Terrain|[from] ability: Call of the Sanctuary|[of] p2a: Chimai\n|-message|Ground and Fairy moves grow stronger, and Fairy types are sheltered from having their stats lowered.\n|move|p1a: Mandibuzz|Toxic|p2a: Chimai\n|-status|p2a: Chimai|tox\n|\n|-damage|p2a: Chimai|94/100 tox|[from] psn\n|upkeep\n|turn|5\n|\n|t:|1790938519\n|switch|p2a: Chimai|Chimai, shiny|100/100\n|switch|p1a: Lunala|Lunala|100/100\n|\n|upkeep\n|turn|6\n",
+	"inputlog": null,
+	"uploadtime": 1790938523
+}
