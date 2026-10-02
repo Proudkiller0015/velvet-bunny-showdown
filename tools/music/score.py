@@ -11,7 +11,10 @@ import mido
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 FLUID = os.path.join(HERE, 'fluidsynth', 'fluidsynth-v2.6.1-win10-x64-cpp11', 'bin', 'fluidsynth.exe')
-SF2 = os.path.join(HERE, 'GeneralUser.sf2')
+# The sample set. SF2=<path> picks another: Windows' own gm.dls is the Roland Sound Canvas set, the
+# family of sounds the GBA and DS games were written on. GAIN scales it (gm.dls is much louder).
+SF2 = os.environ.get('SF2') or os.path.join(HERE, 'GeneralUser.sf2')
+GAIN = float(os.environ.get('GAIN', '0.9'))
 TPB = 480
 NOTE = {'C': 0, 'D': 2, 'E': 4, 'F': 5, 'G': 7, 'A': 9, 'B': 11}
 
@@ -117,7 +120,8 @@ class Song:
         mid.save(path)
         return path
 
-    def render(self, stem, gain=0.9):
+    def render(self, stem, gain=None):
+        gain = GAIN if gain is None else gain
         """stem.mid -> stem.wav (FluidSynth). If `self.loud` names parts and `self.loud_db` a
         gain, those parts are rendered on their own and mixed back in that much louder: a
         MIDI velocity only goes to 127, and Arceus's drums are as loud as the rest of the
