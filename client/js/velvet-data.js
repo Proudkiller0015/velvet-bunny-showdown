@@ -187,7 +187,7 @@
 	// SPRITE_V is bumped whenever the pictures are redrawn: the static server caches
 	// sprites for an hour under the same name, so the ChatGPT redraws otherwise showed
 	// the old converted ones until the cache ran out.
-	var SPRITE_V = '?v=6';
+	var SPRITE_V = '?v=7';
 	// MissingNo. (Halloween 2026) too: Showdown has its front sprite and nothing else,
 	// so the back (the front turned round) and the icon are ours.
 	['makuro', 'raishin', 'chimai', 'missingno'].forEach(function (id) {
@@ -201,6 +201,8 @@
 	// The Shrine Trio's shinies (owner, 2 Oct 2026): their own colours, not a tint - Makuro
 	// black and red, Raishin midnight violet with gold lightning, Chimai white with blue flames.
 	var HD = { makuro: [208, 140], raishin: [200, 129], chimai: [168, 154] };
+	// Their cries (tools/music/cries.py), played when one is sent out like anyone else's.
+	['makuro', 'raishin', 'chimai'].forEach(function (id) { ART[id].cry = 'audio/cries/' + id + '.mp3'; });
 	['makuro', 'raishin', 'chimai'].forEach(function (id) {
 		ART[id].shiny = {
 			still: { front: [id + '-shiny.png' + SPRITE_V, 96, 96], back: [id + '-back-shiny.png' + SPRITE_V, 96, 96] },
@@ -1926,6 +1928,17 @@
 				// for the client to index into and no cry to play.
 				data.isBackSprite = !isFront;
 				data.cryurl = '';
+				if (ours.cry) {
+					// The client would fetch a cry from Showdown's host; hand it ours, already loaded.
+					data.cryurl = ours.cry;
+					try {
+						if (window.BattleSound && BattleSound.soundCache && !BattleSound.soundCache[ours.cry]) {
+							var cry = document.createElement('audio');
+							cry.src = location.origin + '/' + ours.cry;
+							BattleSound.soundCache[ours.cry] = cry;
+						}
+					} catch (e) { /* no sound: it comes out silently, as before */ }
+				}
 			}
 			return data;
 		};

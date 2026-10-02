@@ -52,7 +52,7 @@ def pulse(rgba, mask, k, bloom_radius):
 def hd(src, width, floats=False):
     art = Image.open(src).convert('RGBA')
     art = art.crop(art.getbbox())
-    scale = 2                                                    # work at twice the size, shrink at the end
+    scale = 2                                                    # twice the size the client draws it at
     w = width * scale
     h = round(art.height * w / art.width)
     art = art.resize((w, h), Image.LANCZOS)
@@ -75,8 +75,8 @@ def hd(src, width, floats=False):
             # output (x, y) takes from input ((x - cx) / sx + cx, (y - foot) / sy + foot)
             frame = frame.transform((cw, ch), Image.AFFINE,
                                     (1 / sx, 0, cw / 2 - cw / 2 / sx, 0, 1 / sy, foot - foot / sy), resample=Image.BICUBIC)
-        out.append(frame.resize((cw // scale, ch // scale), Image.LANCZOS))
-    return out
+        out.append(frame)        # kept at twice the size it is drawn at: sharp on a scaled display and when the
+    return out                   # battle enlarges it (owner: "resolution suck for 3d standards" at 1x)
 
 
 def pixel(src):
@@ -99,7 +99,7 @@ def pixel(src):
 
 def save(frames, dst, lossless):
     frames[0].save(dst, save_all=True, append_images=frames[1:], duration=MS, loop=0,
-                   lossless=lossless, quality=88, method=6, exact=False)
+                   lossless=lossless, quality=92, method=6, exact=False)
     import os
     print(dst, frames[0].size, os.path.getsize(dst) // 1024, 'KB')
 
