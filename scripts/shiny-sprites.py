@@ -92,9 +92,17 @@ def classify(img, name):
     if name == 'raishin':
         # The paper charms hang from the halo: joined to the rest only through gold. So with the gold
         # taken out, everything that is not the biggest piece is a charm, and stays white.
+        # (The outline that runs along the gold would join them up again, so it is a wall too.)
+        gold = {p for p, f in fam.items() if f == 'gold'}
+        wall = set(gold)
+        for (x, y) in gold:
+            for dx in (-1, 0, 1):
+                for dy in (-1, 0, 1):
+                    if fam.get((x + dx, y + dy)) == 'line':
+                        wall.add((x + dx, y + dy))
         seen, pieces = set(), []
         for start in fam:
-            if start in seen or fam[start] == 'gold':
+            if start in seen or start in wall:
                 continue
             piece, todo = [], deque([start])
             seen.add(start)
@@ -102,7 +110,7 @@ def classify(img, name):
                 x, y = todo.popleft()
                 piece.append((x, y))
                 for q in ((x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)):
-                    if q in fam and q not in seen and fam[q] != 'gold':
+                    if q in fam and q not in seen and q not in wall:
                         seen.add(q)
                         todo.append(q)
             pieces.append(piece)

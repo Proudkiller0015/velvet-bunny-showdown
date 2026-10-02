@@ -187,7 +187,7 @@
 	// SPRITE_V is bumped whenever the pictures are redrawn: the static server caches
 	// sprites for an hour under the same name, so the ChatGPT redraws otherwise showed
 	// the old converted ones until the cache ran out.
-	var SPRITE_V = '?v=4';
+	var SPRITE_V = '?v=5';
 	// MissingNo. (Halloween 2026) too: Showdown has its front sprite and nothing else,
 	// so the back (the front turned round) and the icon are ours.
 	['makuro', 'raishin', 'chimai', 'missingno'].forEach(function (id) {
