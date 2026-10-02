@@ -1331,8 +1331,9 @@ exports.Formats = [
 		 */
 		mod: 'gen9',
 		team: 'random',
-		// Team Preview everywhere (owner, 23 Sep 2026): the lead is always the player's pick.
-		ruleset: ['Team Preview', 'Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Illusion Level Mod'],
+		// No Team Preview here (owner, 2 Oct 2026): a random battle is played blind, as on the
+		// main server. Every other RP format keeps it.
+		ruleset: ['Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Illusion Level Mod'],
 
 		searchShow: true,
 		challengeShow: true,
