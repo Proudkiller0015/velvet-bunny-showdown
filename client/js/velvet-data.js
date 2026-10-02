@@ -187,7 +187,7 @@
 	// SPRITE_V is bumped whenever the pictures are redrawn: the static server caches
 	// sprites for an hour under the same name, so the ChatGPT redraws otherwise showed
 	// the old converted ones until the cache ran out.
-	var SPRITE_V = '?v=3';
+	var SPRITE_V = '?v=4';
 	// MissingNo. (Halloween 2026) too: Showdown has its front sprite and nothing else,
 	// so the back (the front turned round) and the icon are ours.
 	['makuro', 'raishin', 'chimai', 'missingno'].forEach(function (id) {
@@ -197,6 +197,12 @@
 			icon: id + '-icon.png' + SPRITE_V,
 			builder: 'background-image:url(#SPRITES#' + id + '.png' + SPRITE_V + ');background-position:10px 5px;background-repeat:no-repeat;image-rendering:pixelated;',
 		};
+	});
+	// The Shrine Trio's shinies (owner, 2 Oct 2026): their own colours, not a tint - Makuro
+	// black and red, Raishin midnight violet with gold lightning, Chimai white with blue flames.
+	['makuro', 'raishin', 'chimai'].forEach(function (id) {
+		ART[id].shiny = { front: [id + '-shiny.png' + SPRITE_V, 96, 96], back: [id + '-back-shiny.png' + SPRITE_V, 96, 96] };
+		ART[id].shinyBuilder = ART[id].builder.replace(id + '.png', id + '-shiny.png');
 	});
 	Object.keys(MEGA_SPRITES).forEach(function (id) {
 		var file = MEGA_SPRITES[id];
@@ -1892,6 +1898,8 @@
 				} catch (e) { /* no prefs yet; animation is the default */ }
 
 				var set = (animated && ours.animated) || ours.still;
+				var shiny = !!(data.shiny || (pokemon && pokemon.shiny) || (options && options.shiny));
+				if (shiny && ours.shiny) set = ours.shiny;
 				var art = isFront ? set.front : set.back;
 
 				data.url = SPRITES + art[0];
@@ -2044,6 +2052,7 @@
 		var original = window.Dex.getTeambuilderSprite;
 		window.Dex.getTeambuilderSprite = function (set, gen) {
 			var ours = oursFor(set);
+			if (ours && ours.shinyBuilder && set && set.shiny) return ours.shinyBuilder.split('#SPRITES#').join(SPRITES);
 			if (ours && ours.builder) return ours.builder.split('#SPRITES#').join(SPRITES);
 			return original.call(this, set, gen);
 		};
