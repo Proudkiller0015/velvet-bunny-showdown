@@ -65,6 +65,12 @@ const abyssShrine = require(path.join(PACKAGE, 'dist', 'data', 'velvet', 'abyss-
 OUR_MOVES.push(...abyssShrine.MOVE_IDS);
 OUR_ABILITIES.push(...abyssShrine.ABILITY_IDS);
 OUR_ITEMS.push(...abyssShrine.ITEM_IDS);
+// MissingNo. (data/velvet/missingno.js): Showdown's own Custom species, made standard here.
+const missingno = require(path.join(PACKAGE, 'dist', 'data', 'velvet', 'missingno.js'));
+OUR_MOVES.push(...missingno.MOVE_IDS);
+OUR_ABILITIES.push(...missingno.ABILITY_IDS);
+// Whole Pokemon the client has no usable row for: shipped from here (newSpecies below).
+const NEW_SPECIES = [...abyssShrine.SPECIES, ...missingno.SPECIES];
 OUR_ITEMS.push(...require(path.join(PACKAGE, 'dist', 'data', 'velvet', 'new-items.js')).ITEM_IDS);
 for (const buff of Object.values(Buffs)) {
 	for (const name of buff.moves || []) {
@@ -243,7 +249,7 @@ const OUR_MEGAS = { [Dex.species.get(halloween.FORME).id]: Dex.species.get(hallo
 const OUR_FORMATS = require(path.join(PACKAGE, 'dist', 'data', 'velvet', 'formats-data.js')).FormatsData;
 const OUR_TIERS = {};
 // Our own new Pokemon are tiered in their own file, and listed under their heading the same way.
-for (const id of abyssShrine.SPECIES) OUR_TIERS[id] = Dex.species.get(id).natDexTier;
+for (const id of NEW_SPECIES) OUR_TIERS[id] = Dex.species.get(id).natDexTier;
 for (const [id, row] of Object.entries(OUR_FORMATS)) if ((row.tier && row.tier !== 'Illegal' && row.isNonstandard === null) || (isMegaForme(id) && row.natDexTier && row.natDexTier !== 'Illegal')) OUR_TIERS[id] = row.natDexTier || row.tier;
 for (const [id, tier] of Object.entries(Object.assign({}, za.assigned, OUR_MEGAS, OUR_TIERS, TIERS))) {
 	if (isMegaForme(id) || id in OUR_TIERS) megaTiers[id] = tier;
@@ -333,9 +339,10 @@ for (const id of Object.keys(OUR_MEGAS)) search.push([id, 'pokemon', offsetsFor(
 // Alias rows for our Megas ("halloween", "mega banette halloween"...): [alias, type, target, at].
 const searchAliases = [];
 for (const [alias, at] of halloween.SEARCH_ALIASES || []) searchAliases.push([alias, 'pokemon', Dex.species.get(halloween.FORME).id, at]);
+for (const [alias, at] of missingno.SEARCH_ALIASES || []) searchAliases.push([alias, 'pokemon', missingno.ID, at]);
 
 // Event Pokemon, for "event" in the search: every event file lists its own.
-const EVENT_FILES = ['halloween.js'];
+const EVENT_FILES = ['halloween.js', 'missingno.js'];
 const events = [];
 for (const file of EVENT_FILES) {
 	const mod = require(path.join(PACKAGE, 'dist', 'data', 'velvet', file));
@@ -349,13 +356,13 @@ for (const file of EVENT_FILES) {
  */
 const newSpecies = {};
 const newLearnsets = {};
-for (const id of abyssShrine.SPECIES) {
+for (const id of NEW_SPECIES) {
 	const sp = Dex.species.get(id);
 	newSpecies[id] = {
 		num: sp.num, name: sp.name, types: sp.types.slice(), gender: sp.gender || undefined,
 		baseStats: Object.assign({}, sp.baseStats), abilities: Object.assign({}, sp.abilities),
 		heightm: sp.heightm, weightkg: sp.weightkg, color: sp.color, eggGroups: sp.eggGroups.slice(),
-		tags: sp.tags.slice(), tier: sp.natDexTier, gen: 9,
+		tags: sp.tags.slice(), tier: sp.natDexTier, gen: sp.gen || 9,
 	};
 	const learnset = Dex.species.getLearnsetData(id).learnset || {};
 	// Signatures first: the builder lists moves in the order the keys were added.

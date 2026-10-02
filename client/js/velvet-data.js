@@ -188,7 +188,9 @@
 	// sprites for an hour under the same name, so the ChatGPT redraws otherwise showed
 	// the old converted ones until the cache ran out.
 	var SPRITE_V = '?v=3';
-	['makuro', 'raishin', 'chimai'].forEach(function (id) {
+	// MissingNo. (Halloween 2026) too: Showdown has its front sprite and nothing else,
+	// so the back (the front turned round) and the icon are ours.
+	['makuro', 'raishin', 'chimai', 'missingno'].forEach(function (id) {
 		ART[id] = {
 			standard: true,
 			still: { front: [id + '.png' + SPRITE_V, 96, 96], back: [id + '-back.png' + SPRITE_V, 96, 96] },
@@ -387,7 +389,9 @@
 		// Whole new Pokemon (Makuro, Raishin): their rows are generated from the server's
 		// dex by scripts/build-buffs.js, like everything else that is ours.
 		var fresh = (window.VelvetBuffs && window.VelvetBuffs.newSpecies) || {};
-		for (var ns in fresh) if (!window.BattlePokedex[ns]) window.BattlePokedex[ns] = fresh[ns];
+		// Ours replaces a row the client already has: it ships MissingNo. as a typeless
+		// curiosity with no ability, and the server's version is the one that is played.
+		for (var ns in fresh) if (window.BattlePokedex[ns] !== fresh[ns]) window.BattlePokedex[ns] = fresh[ns];
 		// Mini icons: a forme with no icon of its own borrows the one it is a skin of
 		// (the witch Mega Banette shows Mega Banette's, not plain Banette's).
 		var ICON_OF = { banettemegahalloween: 'banettemega' };
@@ -2179,7 +2183,8 @@
 		if (table && table.learnsets) {
 			// The new Pokemon's whole movepools: the client has no entry for them at all.
 			for (var fresh in (buffs.newLearnsets || {})) {
-				if (!table.learnsets[fresh]) table.learnsets[fresh] = Object.assign({}, buffs.newLearnsets[fresh]);
+				// Merged over whatever is there (MissingNo. has its Gen 1 moves in the client already).
+				table.learnsets[fresh] = Object.assign({}, table.learnsets[fresh] || {}, buffs.newLearnsets[fresh]);
 			}
 			for (var id2 in buffs.bySpecies) {
 				var learnset = table.learnsets[id2] || (table.learnsets[id2] = {});

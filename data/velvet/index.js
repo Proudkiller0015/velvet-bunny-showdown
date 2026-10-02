@@ -32,6 +32,8 @@ const { applyTiers } = require('./tiering.js');
 const { unnerfMoves, unnerfAbilities, unnerfSpecies } = require('./unnerfs.js');
 // Halloween 2026: the Witching Hour Mega Banette skin, its stone, ability and signature.
 const Halloween = require('./halloween.js');
+// Halloween 2026, second board: MissingNo., made standard, with an ability and a move of its own.
+const Missingno = require('./missingno.js');
 // Makuro and Raishin, the Abyss and the Shrine: two legendaries and their terrains.
 const AbyssShrine = require('./abyss-shrine.js');
 // Frostbite, the sixth major status (and the Aspear Berry that cures it).
@@ -67,20 +69,22 @@ exports.pokedex = data => {
 	Object.assign(data, Pokedex);
 	unnerfSpecies(data);
 	Halloween.pokedex(data);
+	Missingno.pokedex(data);
 	AbyssShrine.pokedex(data);
 	buffedPokedex = data;
 	buffWhatWeHave();
 };
-exports.abilities = data => Stall.abilities(AbyssShrine.abilities(Halloween.abilities(require('./balance-patch-1.js').patchAbsorbers(patchAbilities(unnerfAbilities(Object.assign(data, Abilities)))))));
+exports.abilities = data => Stall.abilities(AbyssShrine.abilities(Missingno.abilities(Halloween.abilities(require('./balance-patch-1.js').patchAbsorbers(patchAbilities(unnerfAbilities(Object.assign(data, Abilities))))))));
 let moveTable = null;
 exports.moves = data => {
-	moveTable = Classic.moves(Frostbite.moves(AbyssShrine.moves(Halloween.moves(patchMoves(unnerfMoves(Object.assign(data, Moves)))))));
+	moveTable = Classic.moves(Frostbite.moves(AbyssShrine.moves(Missingno.moves(Halloween.moves(patchMoves(unnerfMoves(Object.assign(data, Moves))))))));
 	teachHerEverything();
 	return moveTable;
 };
 exports.formatsData = data => {
 	Object.assign(data, FormatsData);
 	Halloween.formatsData(data);
+	Missingno.formatsData(data);
 	AbyssShrine.formatsData(data);
 	tierTable = data;
 	buffWhatWeHave();
@@ -88,6 +92,7 @@ exports.formatsData = data => {
 exports.learnsets = data => {
 	Object.assign(data, Learnsets);
 	Halloween.learnsets(data);
+	Missingno.learnsets(data);
 	AbyssShrine.learnsets(data);
 	buffedLearnsets = data;
 	teachHerEverything();

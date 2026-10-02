@@ -29,6 +29,10 @@ const Dex = require(require.resolve('pokemon-showdown/dist/sim/dex.js')).Dex.mod
 // Trick-or-Treat off Gourgeist, since Pumpkaboo is not in Scarlet and Violet.
 const halloween = require(require.resolve('pokemon-showdown/dist/data/velvet/halloween.js'));
 const ADDED_BY_US = { banette: new Set(halloween.DARK_MOVES), banettemegahalloween: new Set(['witchssnatch']) };
+// MissingNo.: its whole modern movepool is ours, and so are its Gen 1 leftovers that no
+// longer exist elsewhere; only Data Corruption is its signature.
+const missingno = require(require.resolve('pokemon-showdown/dist/data/velvet/missingno.js'));
+ADDED_BY_US.missingno = new Set([...missingno.MODERN, ...Object.keys(Dex.species.getLearnsetData('missingno').learnset || {}).filter(m => m !== 'datacorruption')]);
 const OUT = path.join(__dirname, '..', 'client', 'js', 'velvet-signatures.js');
 
 /** The root of an evolution family, which is what "belongs to" means here. */

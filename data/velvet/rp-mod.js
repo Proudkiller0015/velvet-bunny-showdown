@@ -112,6 +112,17 @@ function diff() {
 function apply(dex) {
 	const d = diff();
 	const data = dex.dataCache;
+	/*
+	 * Bird, MissingNo.'s glitch type (missingno.js): the engine throws on a move of a type
+	 * it has no chart row for. Neutral against everything and from everything, and marked
+	 * Custom so nobody can Terastallize into a type with no weaknesses.
+	 */
+	if (data.TypeChart && !data.TypeChart.bird) {
+		const damageTaken = {};
+		for (const row of Object.values(data.TypeChart)) for (const k of Object.keys(row.damageTaken || {})) damageTaken[k] = 0;
+		damageTaken.Bird = 0;
+		data.TypeChart.bird = { damageTaken, isNonstandard: 'Custom' };
+	}
 	for (const [table] of TABLES) {
 		const mine = data[table];
 		if (!mine) continue;

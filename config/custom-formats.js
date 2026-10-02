@@ -1458,4 +1458,14 @@ for (const format of exports.Formats) {
 		const problems = [...((own && own.call(this, set, fmt, setHas, teamHas)) || []), ...witchStoneRule.call(this, set)];
 		return problems.length ? problems : undefined;
 	};
+	/*
+	 * MissingNo. (Halloween 2026): its first type is Bird, which is not a type anything
+	 * can Terastallize into, and an unset Tera type defaults to the first type - so every
+	 * MissingNo. was refused. Unset, or set to Bird, it is Normal: its other half.
+	 */
+	const ownChange = format.onChangeSet;
+	format.onChangeSet = function (set, fmt, setHas, teamHas) {
+		if (this.dex.species.get(set.species).id === 'missingno' && (!set.teraType || this.dex.toID(set.teraType) === 'bird')) set.teraType = 'Normal';
+		return ownChange ? ownChange.call(this, set, fmt, setHas, teamHas) : undefined;
+	};
 }
