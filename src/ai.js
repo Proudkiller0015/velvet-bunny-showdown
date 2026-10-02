@@ -1886,7 +1886,14 @@ class BattleAI {
 		const heal = ranked.filter(r => r.heal > 0 && r.score > -20).sort((a, b) => b.heal - a.heal)[0];
 		const H = heal ? Math.min(heal.heal, 100 - hp) : 0;
 		const boosts = foe.boosts || {};
-		const boosted = ['atk', 'spa', 'spe'].reduce((n, s) => n + Math.max(0, boosts[s] || 0), 0);
+		// Defence is an attacking stat for Body Press, and Special Defence for Velvet Press: a
+		// Registeel behind Iron Defense and Amnesia is as boosted as one behind Swords Dance.
+		const shownIds = [...(foe.moves || [])].map(idOf);
+		// And for anything we cannot dent: it boosts for free until it does have the move.
+		const walledIn = Math.max(0, ...ranked.map(r => r.damage || 0)) < 30;
+		const counted = rules.allBoosts || walledIn ? ['atk', 'def', 'spa', 'spd', 'spe']
+			: ['atk', 'spa', 'spe', ...(shownIds.includes('bodypress') ? ['def'] : []), ...(shownIds.includes('velvetpress') ? ['spd'] : [])];
+		const boosted = counted.reduce((n, s) => n + Math.max(0, boosts[s] || 0), 0);
 		const noPhaze = /^(suctioncups|guarddog)$/.test(idOf(foe.ability));
 		const answers = (ability, moves) => ability === 'unaware' ||
 			moves.some(m => /^(haze|clearsmog)$/.test(m) || (!noPhaze && /^(roar|whirlwind|dragontail|circlethrow)$/.test(m)));
@@ -1916,9 +1923,18 @@ class BattleAI {
 			// damagePct is a share of the HP it has now; everything here is a share of its maximum.
 			const worst = this.worstIncoming(gen, p, state, field);
 			const onLikely = likely ? this.damagePct(gen, them, mon, likely, field) : worst;
-			const hit = (locked ? onLikely : Math.max(onLikely, 0.6 * worst)) * bhp / 100;
+			// Nothing shown yet (it has only set up): the worst it might carry, at the same 60%.
+			const undoes = idOf(p.ability || p.baseAbility) === 'unaware' || (p.moves || []).map(idOf).some(m => /^(haze|clearsmog)$/.test(m));
+			/*
+			 * A foe that has shown no attack at all and only sets up is more likely to set up
+			 * again than to reveal its strongest guess at an attack on the very turn the answer
+			 * walks in (the Registeel boosted five turns running): the worst case counts for a
+			 * third for the Pokemon that undoes the boosts, 60% for anybody else.
+			 */
+			const unseen = undoes && walledIn ? 0.35 : 0.6;
+			const hit = (locked ? onLikely : likely ? Math.max(onLikely, 0.6 * worst) : unseen * worst) * bhp / 100;
 			const takes = hit + this.entryHazards(gen, mon, p, state);
-			return { p, i, bhp, takes, after: bhp - takes, answer: answers(idOf(p.ability || p.baseAbility), (p.moves || []).map(idOf)) };
+			return { p, i, bhp, takes, after: bhp - takes, undoes, answer: answers(idOf(p.ability || p.baseAbility), (p.moves || []).map(idOf)) };
 		});
 		const safe = c => c.after >= 25 && c.takes <= Math.max(30, c.bhp * 0.45);
 		const byBench = list => {
@@ -1941,8 +1957,10 @@ class BattleAI {
 		if (rules.boosted && boosted >= 1) {
 			const mine = (active.moves || []).filter(m => !m.disabled && (m.pp === undefined || m.pp > 0)).map(m => idOf(m.move || m.id));
 			if (!answers(idOf(entry.ability || entry.baseAbility), mine)) {
-				const ans = cands.filter(c => c.answer && c.after > 0).sort((a, b) => b.after - a.after)[0];
-				if (ans && ans.takes < ans.bhp * 0.6) return { switch: ans.i, why: 'answer to a boosted foe' };
+				// Haze, Clear Smog and Unaware undo it outright; a phazer has to live a second hit first.
+				const ans = cands.filter(c => c.answer && c.after > 0).sort((a, b) => (b.undoes ? 1 : 0) - (a.undoes ? 1 : 0) || b.after - a.after)[0];
+				// Walled, every turn spent here is another boost: the answer comes in on a worse hit than it otherwise would.
+				if (ans && ans.takes < ans.bhp * (walledIn && boosted >= 2 ? 0.75 : 0.6)) return { switch: ans.i, why: 'answer to a boosted foe' };
 				if (heal && H > incoming && !dying) return { move: heal.n, why: 'heal vs boosted' };
 				// The answer is there but cannot come in on this: the faint brings it in free.
 				// Humans' sacks into a boosted foe were of worn Pokemon (sacks at a median 28%), not healthy ones.
@@ -2040,6 +2058,21 @@ class BattleAI {
 		}
 		if (move.id === 'rest' && me.status === 'slp') return -30;
 		const heal = Math.min(this.healShare(move, state), 100 - myHpPct);
+		/*
+		 * A heal that goes nowhere (owner's replay gen9rpou-8-tm8rrz: Recover sixteen times,
+		 * poisoned, in front of a Clodsire that out-damaged it by a hair each turn). What we
+		 * heal is set against what the turn takes - their hit and our own poison or burn - and
+		 * the third heal in a row that left us no better off than the first is not clicked.
+		 */
+		if (this.cfg.healLoop !== false && live && move.id !== 'wish') {
+			const run = this.healRun && this.healRun.key === live.ident && this.healRun.move === move.id ? this.healRun : null;
+			const healedLast = live.lastMove && String(live.lastMove).toLowerCase().replace(/[^a-z0-9]/g, '') === move.id && live.lastMoveTurn === state.turn - 1;
+			if (!healedLast) this.healRun = null;
+			else if (!run) this.healRun = { key: live.ident, move: move.id, n: 1, hp: myHpPct, turn: state.turn };
+			else if (run.turn !== state.turn) { run.n++; run.turn = state.turn; }
+			const now = this.healRun;
+			if (now && now.n >= 2 && myHpPct <= now.hp + 8 && !dying) return -12;
+		}
 		// At full health it fails outright (Quagsire, Recover six turns running at 100%).
 		if (myHpPct >= 99.5) return -30;
 		if (heal <= 6) return -15;
@@ -2050,7 +2083,10 @@ class BattleAI {
 		}
 		if (myHpPct > 75) return -10;
 		let score = heal * (myHpPct <= 50 ? 1 : 0.6) * sleeps;
-		if (incoming >= heal) score *= 0.5;
+		// Our own poison or burn comes off the top of every turn spent healing.
+		const residual = this.cfg.healLoop === false ? 0 : me.status === 'tox' ? 12 : me.status === 'psn' ? 12.5 : me.status === 'brn' ? 6.25 : 0;
+		if (incoming + residual >= heal) score *= 0.5;
+		if (residual && incoming + residual >= heal - 5 && move.id !== 'rest') score *= 0.5;
 		return score;
 	}
 
@@ -3462,6 +3498,35 @@ class BattleAI {
 					// they hit like wet paper. Anyone past Easy notices and looks elsewhere.
 					if (!this.cfg.naive && pct < 100 && this.droppedFor(data, me) <= -2) s -= 12 + 4 * Math.abs(this.droppedFor(data, me));
 					/*
+					 * Salt Cure is its residual, not its hit: an eighth of their HP every turn (a
+					 * quarter on Water and Steel) for as long as they stay. Scored on the 8% hit
+					 * alone, Garganacl used Recover sixteen turns running in front of a Clodsire
+					 * and never clicked it (owner's replay gen9rpou-8-tm8rrz). Worth about three
+					 * turns of it the first time; nothing extra while it is already running.
+					 */
+					if (!this.cfg.naive && this.cfg.residualSense !== false && data && data.id === 'saltcure' && pct > 0 && !foe.saltCured &&
+						!/^(magicguard)$/.test(String(foe.ability || '').toLowerCase().replace(/[^a-z]/g, ''))) {
+						const types = (this.foePokemon(gen, foe).types || []).map(String);
+						s += (types.includes('Water') || types.includes('Steel') ? 25 : 12.5) * 3;
+					}
+					/*
+					 * Outrage, Petal Dance, Thrash, Raging Fury: two or three turns of the same move,
+					 * no switching. A Mega Dragonite clicked Outrage with a Registeel in the back of a
+					 * team it had seen at preview; Registeel walked in and it died locked, poisoned
+					 * (owner's replay gen9rpou-8-tm8rrz, 1 Oct 2026). Unless it kills, the lock is
+					 * worth less for every living Pokemon in their back that barely feels it.
+					 */
+					if (!this.cfg.naive && this.cfg.lockSense !== false && pct < 100 && data && data.self && data.self.volatileStatus === 'lockedmove' && typeof state.foeTeam === 'function') {
+						let wall = 100;
+						for (const back of this.foeRemaining(state).list) {
+							if (!back || back.fainted || back === foe || !back.bench) continue;
+							wall = Math.min(wall, this.damageToFoe(gen, me, back, name, field));
+						}
+						if (wall <= 0) s -= 45;
+						else if (wall < 20) s -= 32;
+						else if (wall < 35) s -= 22;
+					}
+					/*
 					 * Close Combat, Superpower, Headlong Rush: the Defence drop only costs
 					 * something when we were going to stay in (owner, 23 Sep 2026). It is free
 					 * when the hit kills, when they outrun us or have priority (we switch or
@@ -3572,6 +3637,26 @@ class BattleAI {
 				const row = ranked.find(r => r.n === verdict.move);
 				if (row) { best = { score: row.score, n: row.n, target: row.target, name: row.name }; stallKeeps = true; }
 				this.log(`stall: ${verdict.why} -> move ${verdict.move}`);
+			}
+		}
+
+		/*
+		 * Every team, not only stall: a foe that has set up and that we cannot hurt is answered
+		 * by the Pokemon that undoes it. A Togekiss (best hit 8%) used Nasty Plot twice into a
+		 * boosting Registeel with a Haze Empoleon and a Dragon Tail Goodra on the bench, because
+		 * the bench was scored on the hit it would take coming in and nothing else (owner's
+		 * replay gen9rpou-8-tm8rrz, 1 Oct 2026). Stall's own rule for it (R11) does the choosing.
+		 */
+		if (!stall && !this.cfg.naive && this.cfg.answerBoosts !== false && this.cfg.switching && request.side.pokemon.length > 1 && !active.trapped && !active.maybeTrapped && foes[0]) {
+			const fb = foes[0].boosts || {};
+			const up = ['atk', 'def', 'spa', 'spd', 'spe'].reduce((n, k) => n + Math.max(0, fb[k] || 0), 0);
+			const topHit = Math.max(0, ...ranked.map(r => r.damage || 0));
+			if (up >= 2 && topHit < 30) {
+				const verdict = this.stallSwitch(gen, active, entry, me, request, state, field, foes, incoming, movesFirst, ranked, index, !!planned, { boosted: true, allBoosts: true });
+				if (verdict && verdict.switch) {
+					this.log(`answer: ${verdict.why} -> switch ${verdict.switch}`);
+					return `switch ${verdict.switch}`;
+				}
 			}
 		}
 

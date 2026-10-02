@@ -217,7 +217,7 @@ class BattleState {
 				this.theirBench = this.theirBench || {};
 				const old = store[id.slot];
 				if (old && !old.fainted && old.species && old.species !== mon.species) {
-					this.theirBench[old.species] = { ...old, boosts: {}, transformed: null, slot: null, bench: true };
+					this.theirBench[old.species] = { ...old, boosts: {}, transformed: null, slot: null, bench: true, saltCured: false };
 				}
 				// Coming back, it still has the moves, item and ability it showed last time.
 				const back = this.theirBench[mon.species];
@@ -470,6 +470,14 @@ class BattleState {
 				const en = this.slotOf(args[0]);
 				const estore = en && (en.side === this.myPlayer ? this.mine : this.opponent);
 				if (estore && estore[en.slot]) estore[en.slot].encored = cmd === '-start';
+				break;
+			}
+			// Salt Cure: an eighth a turn (a quarter on Water and Steel) until it leaves. The AI
+			// counts that once, when it lands, and not again while it is already running.
+			if (/Salt Cure/.test(String(args[1] || ''))) {
+				const sc = this.slotOf(args[0]);
+				const sstore = sc && (sc.side === this.myPlayer ? this.mine : this.opponent);
+				if (sstore && sstore[sc.slot]) sstore[sc.slot].saltCured = cmd === '-start';
 				break;
 			}
 			// No Retreat fails a second time; it lasts until the Pokemon leaves (a switch replaces the entry).
