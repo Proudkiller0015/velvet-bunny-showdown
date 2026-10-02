@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-1-tma0le",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Stockfish",
+		"SlimeQueenSamantha"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Stockfish\n|j|☆SlimeQueenSamantha\n|t:|1790938088\n|gametype|singles\n|badge|p1|gold|gen9rprandombattle|1-1\n|player|p1|Bunny Stockfish|bunny.png|1332\n|player|p2|SlimeQueenSamantha|queen.png|1258\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|clearpoke\n|poke|p1|Carbink, L90|\n|poke|p1|Dunsparce, L86, M|\n|poke|p1|Giratina, L75|\n|poke|p1|Cinderace, L77, M|\n|poke|p1|Alomomola, L87, F|\n|poke|p1|Mewtwo, L72|\n|poke|p2|Annihilape, L76, M|\n|poke|p2|Dunsparce, L86, F|\n|poke|p2|Glaceon, L80, M|\n|poke|p2|Flapple, L88, M|\n|poke|p2|Klawf, L90, M|\n|poke|p2|Ho-Oh, L71|\n|teampreview\n|c|☆Bunny Stockfish|Good luck! Playing on **stockfish**.\n|-message|SlimeQueenSamantha forfeited.\n|\n|win|Bunny Stockfish\n",
+	"inputlog": ">start {\"formatid\":\"gen9rprandombattle\",\"seed\":\"sodium,c0b301995aaa80ec5917a51352b3edb7\",\"rated\":\"Rated battle\"}\n>player p1 {\"name\":\"Bunny Stockfish\",\"avatar\":\"bunny.png\",\"rating\":1332,\"seed\":\"sodium,a2add1baecad567487f545fefeb30f6d\"}\n>player p2 {\"name\":\"SlimeQueenSamantha\",\"avatar\":\"queen.png\",\"rating\":1258,\"seed\":\"sodium,eff892fb5573da4654ff3cc15cb296d5\"}\n>chat ☆Bunny Stockfish|Good luck! Playing on **stockfish**.\n>forcelose p2",
+	"uploadtime": 1790938174
+}
