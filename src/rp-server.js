@@ -884,7 +884,9 @@ function checkTeam(enc, sets) {
 
 /** Which gimmick a battle choice uses, if any: "move 1 terastallize" -> 'tera'. */
 function gimmickIn(choice) {
-	const words = String(choice).toLowerCase();
+	// Only a move can carry one. "ball ultra" is an Ultra Ball, not an Ultra Burst: read as a gimmick it
+	// was refused for want of a Z-Ring, so nobody without one could throw an Ultra Ball (2 Oct 2026).
+	const words = String(choice).toLowerCase().split(',').filter(part => /^\s*move\b/.test(part)).join(',');
 	if (/\bterastall?ize\b/.test(words)) return 'tera';
 	if (/\bmega[xy]?\b/.test(words)) return 'mega';
 	if (/\b(zmove|ultra)\b/.test(words)) return 'zmove';
