@@ -187,7 +187,7 @@
 	// SPRITE_V is bumped whenever the pictures are redrawn: the static server caches
 	// sprites for an hour under the same name, so the ChatGPT redraws otherwise showed
 	// the old converted ones until the cache ran out.
-	var SPRITE_V = '?v=7';
+	var SPRITE_V = '?v=8';
 	// MissingNo. (Halloween 2026) too: Showdown has its front sprite and nothing else,
 	// so the back (the front turned round) and the icon are ours.
 	['makuro', 'raishin', 'chimai', 'missingno'].forEach(function (id) {
@@ -200,19 +200,30 @@
 	});
 	// The Shrine Trio's shinies (owner, 2 Oct 2026): their own colours, not a tint - Makuro
 	// black and red, Raishin midnight violet with gold lightning, Chimai white with blue flames.
-	var HD = { makuro: [208, 140], raishin: [200, 129], chimai: [168, 154] };
+	// The size each animated picture is drawn at (its file is twice that): scripts/animate-sprite.py.
+	var HD = {
+		makuro: {front: [208, 141], back: [248, 169], shinyFront: [208, 140], shinyBack: [248, 168]},
+		raishin: {front: [200, 130], back: [238, 174], shinyFront: [200, 133], shinyBack: [238, 174]},
+		chimai: {front: [168, 154], back: [198, 180], shinyFront: [168, 154], shinyBack: [198, 181]},
+	};
 	// Their cries (tools/music/cries.py), played when one is sent out like anyone else's.
 	['makuro', 'raishin', 'chimai'].forEach(function (id) { ART[id].cry = 'audio/cries/' + id + '.mp3'; });
 	['makuro', 'raishin', 'chimai'].forEach(function (id) {
 		ART[id].shiny = {
 			still: { front: [id + '-shiny.png' + SPRITE_V, 96, 96], back: [id + '-back-shiny.png' + SPRITE_V, 96, 96] },
-			animated: { front: [id + '-shiny-ani.webp' + SPRITE_V, 96, 96], back: [id + '-back-shiny-ani.webp' + SPRITE_V, 96, 96] },
+			animated: {
+				front: [id + '-shiny-ani.webp' + SPRITE_V, HD[id].shinyFront[0], HD[id].shinyFront[1], true],
+				back: [id + '-back-shiny-ani.webp' + SPRITE_V, HD[id].shinyBack[0], HD[id].shinyBack[1], true],
+			},
 		};
 		// Animated in battle (owner, 2 Oct 2026: "lack animation, super pixelated compared to native ones").
 		// The front is the creature's own artwork, smooth, with an idle loop (scripts/animate-sprite.py);
-		// a fourth entry of true marks a smooth picture with its own size. The backs and the shinies
-		// are the pixel sprites given the same loop until there is artwork of those views.
-		ART[id].animated = { front: [id + '-ani.webp' + SPRITE_V, HD[id][0], HD[id][1], true], back: [id + '-back-ani.webp' + SPRITE_V, 96, 96] };
+		// a fourth entry of true marks a smooth picture with its own size. Backs and shinies too: ChatGPT
+		// painted a back view and both shiny views of each (kept, cut out, in art/shrine-trio).
+		ART[id].animated = {
+			front: [id + '-ani.webp' + SPRITE_V, HD[id].front[0], HD[id].front[1], true],
+			back: [id + '-back-ani.webp' + SPRITE_V, HD[id].back[0], HD[id].back[1], true],
+		};
 		ART[id].shinyBuilder = ART[id].builder.replace(id + '.png', id + '-shiny.png');
 	});
 	Object.keys(MEGA_SPRITES).forEach(function (id) {
