@@ -9,6 +9,28 @@
  */
 
 exports.moves = (data) => {
+	/*
+	 * Pursuit catching a switch says so (owner, 2 Oct 2026: "pursuit message missing").
+	 * This version of the move hits the Pokemon on its way out and never announces it, so a
+	 * Dragapult simply took a Pursuit and fainted with no "is being withdrawn..." line - the
+	 * line the client has had text for all along. Sent just before the hit, as it always was.
+	 */
+	const pursuit = data.pursuit;
+	if (pursuit && pursuit.condition && pursuit.condition.onFoeBeforeSwitchOut) {
+		const chase = pursuit.condition.onFoeBeforeSwitchOut;
+		data.pursuit = {
+			...pursuit,
+			condition: {
+				...pursuit.condition,
+				onFoeBeforeSwitchOut(pokemon) {
+					const source = this.effectState.source;
+					const willChase = source && source.hp && source.isAdjacent(pokemon) && !(source.volatiles['encore'] && source.volatiles['encore'].move !== 'pursuit') && this.queue.willMove(source);
+					if (willChase) this.add('-activate', pokemon, 'move: Pursuit');
+					return chase.call(this, pokemon);
+				},
+			},
+		};
+	}
 	const belly = data.bellydrum;
 	if (belly) {
 		data.bellydrum = {
