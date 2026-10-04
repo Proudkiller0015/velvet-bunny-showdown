@@ -812,7 +812,8 @@ function partyOf(payload) {
 
 function normaliseBox(box) {
 	if (!Array.isArray(box)) return null;
-	return box.slice(0, 500).map(m => ({
+	// Whole box: a 500 cap once hid every Pokemon past #500 from the team check (TTR, 2,387).
+	return box.slice(0, 20000).map(m => ({
 		species: String(m.species || ''), level: m.level == null ? null : Number(m.level),
 		// Not on hand: fainted until a Pokémon Centre, or left at the daycare.
 		away: m.fainted ? 'fainted' : m.daycare ? 'daycare' : null,
@@ -1113,7 +1114,7 @@ function finishedSince(seq) {
 // ------------------------------------------------------------------- HTTP
 
 // Big enough for a character's whole box (sent with every encounter, for the team check).
-function readJson(req, limit = 256 * 1024) {
+function readJson(req, limit = 4 * 1024 * 1024) {
 	return new Promise((resolve, reject) => {
 		let size = 0;
 		const chunks = [];
