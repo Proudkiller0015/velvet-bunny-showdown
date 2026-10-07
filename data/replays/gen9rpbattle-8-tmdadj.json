@@ -1,0 +1,12 @@
+{
+	"id": "gen9rpbattle-8-tmdadj",
+	"format": "[Gen 9] RP Battle",
+	"players": [
+		"Ruin Maniac Ned",
+		"simia ignis"
+	],
+	"rating": null,
+	"log": "|velvetmusic|trainer|events/trainer-rse\n|j|☆Ruin Maniac Ned\n|j|☆simia ignis\n|t:|1791396187\n|gametype|singles\n|player|p1|Ruin Maniac Ned|ruinmaniac-gen6|\n|player|p2|simia ignis|simia-ignis.png|\n|gen|9\n|tier|[Gen 9] RP Battle\n|clearpoke\n|poke|p1|Stonjourner, L33, M|\n|poke|p1|Lycanroc-Midnight, L33, M|\n|poke|p1|Kabutops, L34, F|\n|poke|p2|Miraidon, L34|\n|teampreview\n|inactive|Battle timer is ON: inactive players will automatically lose when time's up. (requested by Ruin Maniac Ned)\n|n|☆Ruin Maniac Ned|ruinmaniacned\n|\n|t:|1791396192\n|teamsize|p1|3\n|teamsize|p2|1\n|start\n|switch|p1a: Stonjourner|Stonjourner, L33, M|100/100\n|switch|p2a: Miraidon|Miraidon, L34|100/100\n|-fieldstart|move: Electric Terrain|[from] ability: Hadron Engine|[of] p2a: Miraidon\n|turn|1\n|\n|t:|1791396197\n|move|p2a: Miraidon|Electro Drift|p1a: Stonjourner\n|-crit|p1a: Stonjourner\n|-damage|p1a: Stonjourner|0 fnt\n|faint|p1a: Stonjourner\n|\n|upkeep\n|\n|t:|1791396197\n|switch|p1a: Lycanroc|Lycanroc-Midnight, L33, M|100/100\n|turn|2\n|\n|t:|1791396198\n|move|p2a: Miraidon|Electro Drift|p1a: Lycanroc\n|-damage|p1a: Lycanroc|0 fnt\n|faint|p1a: Lycanroc\n|\n|upkeep\n|\n|t:|1791396198\n|switch|p1a: Kabutops|Kabutops, L34, F|100/100\n|turn|3\n|\n|t:|1791396200\n|move|p2a: Miraidon|Electro Drift|p1a: Kabutops\n|-supereffective|p1a: Kabutops\n|-damage|p1a: Kabutops|0 fnt\n|faint|p1a: Kabutops\n|\n|win|simia ignis\n",
+	"inputlog": ">start {\"formatid\":\"gen9rpbattle\",\"seed\":\"sodium,48a059cab5f4eea0435aeee9fdfb4b3e\"}\n>player p1 {\"name\":\"Ruin Maniac Ned\",\"avatar\":\"ruinmaniac-gen6\",\"team\":\"Stonjourner|||PowerSpot|RockTomb,Stomp,RockPolish,Block|Careful|20,20,20,20,20,20||14,14,14,14,14,14||33|]Lycanroc-Midnight|||KeenEye|RockTomb,SuckerPunch,Tackle,Accelerock|Bashful|20,20,20,20,20,20||14,14,14,14,14,14||33|]Kabutops|||WeakArmor|AquaJet,AncientPower,NightSlash,Slash|Quiet|20,20,20,20,20,20||14,14,14,14,14,14||34|\",\"rating\":0}\n>player p2 {\"name\":\"simia ignis\",\"avatar\":\"simia-ignis.png\",\"team\":\"Miraidon||ChoiceSpecs|HadronEngine|ElectroDrift,DracoMeteor,Overheat,Uturn||||||34|\",\"rating\":0}\n>p1 team 1, 2, 3\n>p2 team 1\n>p1 move rocktomb\n>p2 move electrodrift\n>p1 switch 2\n>p1 move rocktomb\n>p2 move electrodrift\n>p1 switch 3\n>p1 move nightslash\n>p2 move electrodrift",
+	"uploadtime": 1791396200
+}
