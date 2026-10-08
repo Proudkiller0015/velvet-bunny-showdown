@@ -1,0 +1,12 @@
+{
+	"id": "gen9rpbattle-20-tmdadj",
+	"format": "[Gen 9] RP Battle",
+	"players": [
+		"Punk Gus",
+		"simia ignis"
+	],
+	"rating": null,
+	"log": "|velvetmusic|trainer|events/trainer-rse\n|j|☆Punk Gus\n|j|☆simia ignis\n|t:|1791425063\n|gametype|singles\n|player|p1|Punk Gus|punkguy-gen7|\n|player|p2|simia ignis|simia-ignis.png|\n|gen|9\n|tier|[Gen 9] RP Battle\n|clearpoke\n|poke|p1|Meowth-Alola, L32, F|\n|poke|p1|Bombirdier, L32, M|\n|poke|p1|Slowbro-Galar, L33, F|\n|poke|p1|Nidoqueen, L33, F|\n|poke|p1|Muk-Alola, L34, F|\n|poke|p2|Miraidon, L34|\n|poke|p2|Iron Valiant, L34|\n|poke|p2|Gouging Fire, L34|\n|poke|p2|Banette, L34, M|\n|poke|p2|Naganadel, L34|\n|poke|p2|Iron Bundle, L34|\n|teampreview\n|inactive|Battle timer is ON: inactive players will automatically lose when time's up. (requested by Punk Gus)\n|n|☆Punk Gus|punkgus\n|\n|t:|1791425068\n|teamsize|p1|5\n|teamsize|p2|6\n|start\n|switch|p1a: Nidoqueen|Nidoqueen, L33, F|100/100\n|switch|p2a: Naganadel|Naganadel, L34|100/100\n|turn|1\n|\n|t:|1791425072\n|switch|p2a: Iron Bundle|Iron Bundle, L34|100/100\n|move|p1a: Nidoqueen|Earth Power|p2a: Iron Bundle\n|-damage|p2a: Iron Bundle|31/100\n|\n|upkeep\n|turn|2\n|\n|t:|1791425075\n|move|p2a: Iron Bundle|Ice Beam|p1a: Nidoqueen\n|-supereffective|p1a: Nidoqueen\n|-damage|p1a: Nidoqueen|0 fnt\n|faint|p1a: Nidoqueen\n|\n|upkeep\n|\n|t:|1791425076\n|switch|p1a: Muk|Muk-Alola, L34, F|100/100\n|turn|3\n|\n|t:|1791425079\n|-end|p2a: Iron Bundle|Quark Drive|[silent]\n|switch|p2a: Naganadel|Naganadel, L34|100/100\n|move|p1a: Muk|Drain Punch|p2a: Naganadel\n|-resisted|p2a: Naganadel\n|-damage|p2a: Naganadel|84/100\n|\n|upkeep\n|turn|4\n|\n|t:|1791425081\n|move|p2a: Naganadel|Nasty Plot|p2a: Naganadel\n|-boost|p2a: Naganadel|spa|2\n|move|p1a: Muk|Ice Punch|p2a: Naganadel\n|-supereffective|p2a: Naganadel\n|-damage|p2a: Naganadel|23/100\n|\n|upkeep\n|turn|5\n|\n|t:|1791425085\n|move|p2a: Naganadel|Draco Meteor|p1a: Muk\n|-damage|p1a: Muk|0 fnt\n|-unboost|p2a: Naganadel|spa|2\n|faint|p1a: Muk\n|-ability|p2a: Naganadel|Beast Boost|boost\n|-boost|p2a: Naganadel|spa|1\n|\n|upkeep\n|\n|t:|1791425085\n|switch|p1a: Slowbro|Slowbro-Galar, L33, F|100/100\n|turn|6\n",
+	"inputlog": null,
+	"uploadtime": 1791425093
+}
