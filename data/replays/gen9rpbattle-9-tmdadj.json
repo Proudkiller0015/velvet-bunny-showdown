@@ -1,0 +1,12 @@
+{
+	"id": "gen9rpbattle-9-tmdadj",
+	"format": "[Gen 9] RP Battle",
+	"players": [
+		"Ace Trainer Kai",
+		"simia ignis"
+	],
+	"rating": null,
+	"log": "|velvetmusic|trainer|events/trainer-rse\n|j|☆Ace Trainer Kai\n|j|☆simia ignis\n|t:|1791424379\n|gametype|singles\n|player|p1|Ace Trainer Kai|acetrainer-gen4dp|\n|player|p2|simia ignis|simia-ignis.png|\n|gen|9\n|tier|[Gen 9] RP Battle\n|clearpoke\n|poke|p1|Glimmet, L32, M|\n|poke|p1|Klawf, L32, M|\n|poke|p1|Kleavor, L33, M|\n|poke|p1|Probopass, L33, M|\n|poke|p1|Rampardos, L33, F|\n|poke|p1|Golem, L34, M|\n|poke|p2|Miraidon, L34|\n|poke|p2|Iron Valiant, L34|\n|poke|p2|Gouging Fire, L34|\n|poke|p2|Banette, L34, M|\n|poke|p2|Naganadel, L34|\n|poke|p2|Iron Bundle, L34|\n|teampreview\n|inactive|Battle timer is ON: inactive players will automatically lose when time's up. (requested by Ace Trainer Kai)\n|n|☆Ace Trainer Kai|acetrainerkai\n|\n|t:|1791424391\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Rampardos|Rampardos, L33, F|100/100\n|switch|p2a: Iron Bundle|Iron Bundle, L34|100/100\n|turn|1\n|\n|t:|1791424397\n|move|p2a: Iron Bundle|Ice Beam|p1a: Rampardos\n|-damage|p1a: Rampardos|1/100\n|-enditem|p1a: Rampardos|Oran Berry|[eat]\n|-heal|p1a: Rampardos|10/100|[from] item: Oran Berry\n|move|p1a: Rampardos|Crag Hammer|p2a: Iron Bundle\n|-supereffective|p2a: Iron Bundle\n|-damage|p2a: Iron Bundle|0 fnt\n|faint|p2a: Iron Bundle\n|-end|p2a: Iron Bundle|Quark Drive|[silent]\n|\n|upkeep\n|\n|t:|1791424402\n|switch|p2a: Iron Valiant|Iron Valiant, L34, shiny|100/100\n|turn|2\n|\n|t:|1791424405\n|move|p2a: Iron Valiant|Aura Sphere|p1a: Rampardos\n|-supereffective|p1a: Rampardos\n|-damage|p1a: Rampardos|0 fnt\n|faint|p1a: Rampardos\n|\n|upkeep\n|\n|t:|1791424406\n|switch|p1a: Glimmet|Glimmet, L32, M|100/100\n|turn|3\n|\n|t:|1791424408\n|move|p2a: Iron Valiant|Aura Sphere|p1a: Glimmet\n|-damage|p1a: Glimmet|0 fnt\n|faint|p1a: Glimmet\n|\n|upkeep\n|\n|t:|1791424408\n|switch|p1a: Kleavor|Kleavor, L33, M|100/100\n|turn|4\n|\n|t:|1791424410\n|move|p2a: Iron Valiant|Aura Sphere|p1a: Kleavor\n|-damage|p1a: Kleavor|24/100\n|move|p1a: Kleavor|Swords Dance|p1a: Kleavor\n|-boost|p1a: Kleavor|atk|2\n|\n|upkeep\n|turn|5\n|\n|t:|1791424412\n|move|p2a: Iron Valiant|Aura Sphere|p1a: Kleavor\n|-damage|p1a: Kleavor|0 fnt\n|faint|p1a: Kleavor\n|\n|upkeep\n|\n|t:|1791424412\n|switch|p1a: Golem|Golem, L34, M|100/100\n|turn|6\n",
+	"inputlog": null,
+	"uploadtime": 1791424413
+}
