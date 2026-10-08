@@ -1844,6 +1844,13 @@ const ROSERADE = { ability: 'Masquerade', moves: ['thornedbouquet', 'strengthsap
 // Togekiss (Patch 1.5, the owner's call): a pivot.
 const TOGEKISS = ['uturn'];
 
+// Dewgong (7 Oct 2026, the owner's call: "buff it, keep Thick Fat, no signature"): the
+// tools of a defensive Pokemon. Slack Off is the recovery it never had; Wish and Roar
+// support the team and shuffle it; Chilly Reception and Aurora Veil make it the snow
+// team's wall; Freeze-Dry lets its Ice STAB touch the Water types that wall it. Its
+// bulk goes up 50 in unnerfs.js. Dewgong only, not Seel.
+const DEWGONG = ['slackoff', 'wish', 'roar', 'chillyreception', 'auroraveil', 'freezedry'];
+
 const SPIRITOMB = { ability: 'Keystone Legion', moves: ['soultoll', 'strengthsap', 'partingshot', 'knockoff'] };
 
 const INFERNAPE = {
@@ -2418,6 +2425,7 @@ exports.buildBuffs = (Pokedex) => {
 	if (Pokedex.granbull) add('granbull', GRANBULL.moves, [GRANBULL.ability]);
 	for (const [id, moves] of Object.entries(TAPUS)) if (Pokedex[id]) add(id, moves, []);
 	if (Pokedex.togekiss) add('togekiss', TOGEKISS, []);
+	if (Pokedex.dewgong) add('dewgong', DEWGONG, []);
 	if (Pokedex.torterra) add('torterra', TORTERRA.moves, [TORTERRA.ability]);
 	if (Pokedex.empoleon) add('empoleon', EMPOLEON.moves, [EMPOLEON.ability]);
 	for (const [id, ability] of Object.entries(TRIO_BABIES)) if (Pokedex[id]) add(id, [], [ability]);
@@ -2481,6 +2489,7 @@ exports.INFERNAPE = INFERNAPE;
 exports.SPIRITOMB = SPIRITOMB;
 exports.ROSERADE = ROSERADE;
 exports.GRANBULL = GRANBULL;
+exports.DEWGONG = DEWGONG;
 exports.TAPUS = TAPUS;
 exports.TOGEKISS = TOGEKISS;
 exports.TORTERRA = TORTERRA;

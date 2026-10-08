@@ -199,6 +199,9 @@ const SPECIES_STATS = {
 	roserade: { hp: 75, spe: 101 },
 	// Patch 1.5: Togekiss, 80 to 101 Speed.
 	togekiss: { spe: 101 },
+	// Dewgong (7 Oct 2026, the owner's call): +50 BST, all of it bulk - a wall,
+	// not a sweeper. HP 90 to 110, Defense 80 to 100, Sp. Def 95 to 105 (475 to 525).
+	dewgong: { hp: 110, def: 100, spd: 105 },
 };
 
 /*

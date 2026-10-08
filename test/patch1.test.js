@@ -888,5 +888,22 @@ check(['dragapult', 'dragonitemega', 'lucariomegaz', 'greninjabond', 'magearna',
 	check(h.species.name === 'Heatran-Mega' && h.hp === h.maxhp && /Earth Eater/.test(log(b)), `and Earthquake heals it instead of hitting (${h.species.name}, ${h.hp}/${h.maxhp})`);
 }
 
+// Dewgong (7 Oct 2026): +50 bulk, a wall's kit, Thick Fat kept, Seel left alone.
+{
+	const d = Dex.species.get('dewgong');
+	const bst = Object.values(d.baseStats).reduce((a, b) => a + b, 0);
+	check(bst === 525 && d.baseStats.hp === 110 && d.baseStats.def === 100 && d.baseStats.spd === 105 && d.baseStats.spe === 70, `Dewgong is 110/70/100/70/105/70, ${bst} BST`);
+	check(d.abilities[0] === 'Thick Fat', 'and keeps Thick Fat');
+	const learns = id => Object.keys(Dex.species.getLearnsetData(id).learnset || {});
+	const kit = ['slackoff', 'wish', 'roar', 'chillyreception', 'auroraveil', 'freezedry'];
+	check(kit.every(m => learns('dewgong').includes(m)), 'and learns Slack Off, Wish, Roar, Chilly Reception, Aurora Veil, Freeze-Dry');
+	check(!learns('seel').includes('slackoff'), 'Seel does not');
+	const b = battle([{ species: 'Dewgong', ability: 'Thick Fat', moves: ['slackoff', 'chillyreception'] }, { species: 'Lapras', ability: 'Water Absorb', moves: ['splash'] }],
+		[{ species: 'Garchomp', ability: 'Rough Skin', moves: ['earthquake'] }]);
+	b.makeChoices('move 1', 'move 1');
+	const g = b.p1.active[0];
+	check(/\|move\|p1a: Dewgong\|Slack Off/.test(log(b)) && /-heal\|p1a: Dewgong/.test(log(b)), `Slack Off heals it (${g.hp}/${g.maxhp})`);
+}
+
 console.log(failed ? `\n${failed} failed` : '\nall passed');
 process.exit(failed ? 1 : 0);
