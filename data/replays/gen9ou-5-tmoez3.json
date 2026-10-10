@@ -1,0 +1,12 @@
+{
+	"id": "gen9ou-5-tmoez3",
+	"format": "[Gen 9] OU",
+	"players": [
+		"Bunny Normal",
+		"Awther"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Normal\n|j|☆Awther\n|t:|1791653991\n|gametype|singles\n|player|p1|Bunny Normal|bunny.png|1000\n|player|p2|Awther|blue|1000\n|gen|9\n|tier|[Gen 9] OU\n|rated|\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Endless Battle Clause: Forcing endless battles is banned\n|rule|Species Clause: Limit one of each Pokémon\n|rule|OHKO Clause: OHKO moves are banned\n|rule|Evasion Items Clause: Evasion items are banned\n|rule|Evasion Moves Clause: Evasion moves are banned\n|rule|Evasion Abilities Clause: Evasion abilities are banned\n|rule|Sleep Moves Clause: Sleep-inducing moves are banned\n|clearpoke\n|poke|p1|Skeledirge, F|\n|poke|p1|Quagsire, F|\n|poke|p1|Bellossom, F|\n|poke|p1|Corviknight, F|\n|poke|p1|Mandibuzz, F|\n|poke|p1|Blissey, F|\n|poke|p2|Dragonite, F|\n|poke|p2|Great Tusk|\n|poke|p2|Deoxys-Speed|\n|poke|p2|Gholdengo|\n|poke|p2|Zamazenta-*|\n|poke|p2|Iron Valiant|\n|teampreview\n|c|☆Bunny Normal|Good luck! Playing on **normal**.\n|\n|t:|1791653998\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Quagsire|Quagsire, F|100/100\n|switch|p2a: Deoxys|Deoxys-Speed|100/100\n|-ability|p2a: Deoxys|Pressure\n|turn|1\n|\n|t:|1791654006\n|move|p2a: Deoxys|Skill Swap|p1a: Quagsire\n|-activate|p2a: Deoxys|Skill Swap|Unaware|Pressure|[of] p1a: Quagsire\n|-ability|p1a: Quagsire|Pressure\n|move|p1a: Quagsire|Earthquake|p2a: Deoxys\n|-damage|p2a: Deoxys|64/100\n|\n|upkeep\n|turn|2\n|\n|t:|1791654014\n|move|p2a: Deoxys|Stealth Rock|p1a: Quagsire\n|-sidestart|p1: Bunny Normal|move: Stealth Rock\n|move|p1a: Quagsire|Earthquake|p2a: Deoxys\n|-damage|p2a: Deoxys|30/100\n|\n|upkeep\n|turn|3\n|\n|t:|1791654016\n|move|p2a: Deoxys|Spikes|p1a: Quagsire\n|-sidestart|p1: Bunny Normal|Spikes\n|move|p1a: Quagsire|Earthquake|p2a: Deoxys\n|-damage|p2a: Deoxys|0 fnt\n|faint|p2a: Deoxys\n|\n|upkeep\n|\n|t:|1791654035\n|switch|p2a: Dragonite|Dragonite, F|100/100\n|turn|4\n|\n|t:|1791654040\n|move|p2a: Dragonite|Dragon Dance|p2a: Dragonite\n|-boost|p2a: Dragonite|atk|1\n|-boost|p2a: Dragonite|spe|1\n|move|p1a: Quagsire|Toxic Spikes|p2a: Dragonite\n|-sidestart|p2: Awther|move: Toxic Spikes\n|\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1791654043
+}
