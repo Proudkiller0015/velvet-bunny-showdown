@@ -7398,7 +7398,8 @@ window.VelvetBuffs = {
 		"dialga": {
 			"moves": [
 				"meteorbeam",
-				"explosion"
+				"explosion",
+				"shiftgear"
 			],
 			"abilities": [
 				"Timeless"

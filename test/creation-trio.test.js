@@ -119,7 +119,7 @@ for (const id of ['dialga', 'palkia', 'giratina']) check(!!Dex.data.Learnsets[id
 	check(/\|move\|p1a: Dialga\|Meteor Beam\|p2a/.test(log(b)) || /-damage\|p2a: Blissey/.test(log(b)), 'and hits the same turn');
 	b.makeChoices('move 3', 'move 1');
 	check(!b.p1.active[0].volatiles['twoturnmove'], 'Solar Beam without sun: one turn too');
-	check(Object.values(Dex.species.get('dialga').abilities).includes('Timeless') && !!Dex.data.Learnsets.dialga.learnset.meteorbeam, 'Dialga learns Meteor Beam');
+	check(!!Dex.data.Learnsets.dialga.learnset.meteorbeam && !!Dex.data.Learnsets.dialga.learnset.shiftgear, 'Dialga learns Meteor Beam and Shift Gear');
 }
 
 // Rending Space: Spacial Rend always crits, a normal move crits more than usual, crits are 2x.
