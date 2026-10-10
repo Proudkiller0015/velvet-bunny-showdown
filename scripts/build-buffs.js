@@ -305,6 +305,8 @@ for (const id of CHANGED.species || []) {
 for (const id of CHANGED.moves) overrides.moves[id] = moveRow(Dex.moves.get(id));
 // Old-generation Belly Drum and recharge rules (data/velvet/classic-mechanics.js).
 for (const id of require(path.join(PACKAGE, 'dist', 'data', 'velvet', 'classic-mechanics.js')).CHANGED_MOVES) overrides.moves[id] = moveRow(Dex.moves.get(id));
+// The creation trio's Shadow Force (data/velvet/creation-trio.js).
+for (const id of require(path.join(PACKAGE, 'dist', 'data', 'velvet', 'creation-trio.js')).CHANGED_MOVES) overrides.moves[id] = moveRow(Dex.moves.get(id));
 // Will-O-Wisp and Thunder Wave never miss for their own type (data/velvet/frostbite.js).
 for (const id of Object.keys(require(path.join(PACKAGE, 'dist', 'data', 'velvet', 'frostbite.js')).SURE_HIT)) if (id !== 'chillingmist') overrides.moves[id] = moveRow(Dex.moves.get(id));
 for (const id of CHANGED.abilities) overrides.abilities[id] = abilityRow(Dex.abilities.get(id));
