@@ -905,5 +905,15 @@ check(['dragapult', 'dragonitemega', 'lucariomegaz', 'greninjabond', 'magearna',
 	check(/\|move\|p1a: Dewgong\|Slack Off/.test(log(b)) && /-heal\|p1a: Dewgong/.test(log(b)), `Slack Off heals it (${g.hp}/${g.maxhp})`);
 }
 
+// ZU move buffs (9 Oct 2026): moves only, final stages only, no ability or signature touched.
+{
+	const { ZU_MOVES } = require('../data/velvet/balance-patch-1.js');
+	const learns = id => Object.keys(Dex.species.getLearnsetData(id).learnset || {});
+	for (const [id, moves] of Object.entries(ZU_MOVES)) check(moves.every(m => learns(id).includes(m)), `${Dex.species.get(id).name} learns ${moves.join(', ')}`);
+	check(!learns('jigglypuff').includes('boomburst'), 'Jigglypuff does not get Wigglytuff\'s buff');
+	check(!learns('finneon').includes('tailglow'), 'nor Finneon Lumineon\'s');
+	check(JSON.stringify(Dex.species.get('ampharos').abilities) === '{"0":"Static","H":"Plus"}', 'abilities untouched (Ampharos)');
+}
+
 console.log(failed ? `\n${failed} failed` : '\nall passed');
 process.exit(failed ? 1 : 0);

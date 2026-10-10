@@ -1851,6 +1851,26 @@ const TOGEKISS = ['uturn'];
 // bulk goes up 50 in unnerfs.js. Dewgong only, not Seel.
 const DEWGONG = ['slackoff', 'wish', 'roar', 'chillyreception', 'auroraveil', 'freezedry'];
 
+/*
+ * ZU move buffs (9 Oct 2026, the owner: "buff some ZU pokemon with moves (no ability or
+ * signature since i wanna monitor buffs) ... make sure it makes sense in their lore").
+ * Moves only, final stages only, each from its own Pokédex lore. Kept as one list so the
+ * owner can watch these eleven and take any back.
+ */
+const ZU_MOVES = {
+  ampharos: ['tailglow'],                        // its tail's light is a beacon seen from far away
+  ariados: ['silktrap', 'firstimpression'],      // spins webs, strikes from ambush
+  bibarel: ['woodhammer', 'shoreup'],            // gnaws trees, builds dams
+  beartic: ['mountaingale'],                     // the frozen north; swings slabs of ice
+  lumineon: ['tailglow'],                        // its glowing fins lure prey in the deep sea
+  seaking: ['wavecrash', 'hornleech'],           // swims up waterfalls, drills with its horn
+  whiscash: ['shoreup'],                         // buries itself in the riverbed mud
+  wigglytuff: ['boomburst', 'moonblast'],        // balloons up and sings; a Fairy without a Fairy attack
+  ledian: ['cosmicpower', 'meteormash'],         // draws power from starlight, fights with its fists
+  mightyena: ['jawlock'],                        // a pack hunter that never lets go once it bites
+  relicanth: ['shoreup', 'wavecrash'],           // unchanged for a hundred million years in the deep
+};
+
 const SPIRITOMB = { ability: 'Keystone Legion', moves: ['soultoll', 'strengthsap', 'partingshot', 'knockoff'] };
 
 const INFERNAPE = {
@@ -2426,6 +2446,7 @@ exports.buildBuffs = (Pokedex) => {
 	for (const [id, moves] of Object.entries(TAPUS)) if (Pokedex[id]) add(id, moves, []);
 	if (Pokedex.togekiss) add('togekiss', TOGEKISS, []);
 	if (Pokedex.dewgong) add('dewgong', DEWGONG, []);
+	for (const [id, moves] of Object.entries(ZU_MOVES)) if (Pokedex[id]) add(id, moves, []);
 	if (Pokedex.torterra) add('torterra', TORTERRA.moves, [TORTERRA.ability]);
 	if (Pokedex.empoleon) add('empoleon', EMPOLEON.moves, [EMPOLEON.ability]);
 	for (const [id, ability] of Object.entries(TRIO_BABIES)) if (Pokedex[id]) add(id, [], [ability]);
@@ -2490,6 +2511,7 @@ exports.SPIRITOMB = SPIRITOMB;
 exports.ROSERADE = ROSERADE;
 exports.GRANBULL = GRANBULL;
 exports.DEWGONG = DEWGONG;
+exports.ZU_MOVES = ZU_MOVES;
 exports.TAPUS = TAPUS;
 exports.TOGEKISS = TOGEKISS;
 exports.TORTERRA = TORTERRA;

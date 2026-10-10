@@ -182,7 +182,9 @@ window.VelvetBuffs = {
 		"seaking": {
 			"moves": [
 				"wavecharge",
-				"undertow"
+				"undertow",
+				"wavecrash",
+				"hornleech"
 			],
 			"abilities": []
 		},
@@ -543,7 +545,8 @@ window.VelvetBuffs = {
 				"wavecharge",
 				"undertow",
 				"flipturn",
-				"tremorshot"
+				"tremorshot",
+				"shoreup"
 			],
 			"abilities": [
 				"Water Absorb"
@@ -661,7 +664,9 @@ window.VelvetBuffs = {
 			"moves": [
 				"wavecharge",
 				"undertow",
-				"craghammer"
+				"craghammer",
+				"shoreup",
+				"wavecrash"
 			],
 			"abilities": []
 		},
@@ -744,7 +749,9 @@ window.VelvetBuffs = {
 				"knockoff",
 				"suckerpunch",
 				"bodyslam",
-				"slackoff"
+				"slackoff",
+				"woodhammer",
+				"shoreup"
 			],
 			"abilities": []
 		},
@@ -804,7 +811,8 @@ window.VelvetBuffs = {
 			"moves": [
 				"wavecharge",
 				"undertow",
-				"chillingmist"
+				"chillingmist",
+				"tailglow"
 			],
 			"abilities": []
 		},
@@ -1838,7 +1846,9 @@ window.VelvetBuffs = {
 		"ariados": {
 			"moves": [
 				"hivefrenzy",
-				"uturn"
+				"uturn",
+				"silktrap",
+				"firstimpression"
 			],
 			"abilities": []
 		},
@@ -1852,7 +1862,9 @@ window.VelvetBuffs = {
 		"ledian": {
 			"moves": [
 				"hivefrenzy",
-				"leechlife"
+				"leechlife",
+				"cosmicpower",
+				"meteormash"
 			],
 			"abilities": []
 		},
@@ -2164,7 +2176,8 @@ window.VelvetBuffs = {
 				"knockoff",
 				"twilightexit",
 				"chillingmist",
-				"punishment"
+				"punishment",
+				"jawlock"
 			],
 			"abilities": []
 		},
@@ -3391,7 +3404,8 @@ window.VelvetBuffs = {
 		"beartic": {
 			"moves": [
 				"chillingmist",
-				"rimecleaver"
+				"rimecleaver",
+				"mountaingale"
 			],
 			"abilities": []
 		},
@@ -3922,7 +3936,10 @@ window.VelvetBuffs = {
 			"abilities": []
 		},
 		"wigglytuff": {
-			"moves": [],
+			"moves": [
+				"boomburst",
+				"moonblast"
+			],
 			"abilities": []
 		},
 		"togekiss": {
@@ -5274,7 +5291,8 @@ window.VelvetBuffs = {
 		"ampharos": {
 			"moves": [
 				"velvetpress",
-				"velvetguard"
+				"velvetguard",
+				"tailglow"
 			],
 			"abilities": []
 		},
