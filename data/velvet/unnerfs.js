@@ -202,6 +202,10 @@ const SPECIES_STATS = {
 	// Dewgong (7 Oct 2026, the owner's call): +50 BST, all of it bulk - a wall,
 	// not a sweeper. HP 90 to 110, Defense 80 to 100, Sp. Def 95 to 105 (475 to 525).
 	dewgong: { hp: 110, def: 100, spd: 105 },
+	// Aegislash (10 Oct 2026, the owner: "give aegislash 150 back but no move buff"): its Generation 7
+	// stats, before Generation 8 cut each 150 to 140. King's Shield is left as it is now.
+	aegislash: { def: 150, spd: 150 },
+	aegislashblade: { atk: 150, spa: 150 },
 };
 
 /*

@@ -915,5 +915,13 @@ check(['dragapult', 'dragonitemega', 'lucariomegaz', 'greninjabond', 'magearna',
 	check(JSON.stringify(Dex.species.get('ampharos').abilities) === '{"0":"Static","H":"Plus"}', 'abilities untouched (Ampharos)');
 }
 
+// Aegislash (10 Oct 2026): its Generation 7 150s back, no move changes.
+{
+	const shield = Dex.species.get('aegislash').baseStats;
+	const blade = Dex.species.get('aegislashblade').baseStats;
+	check(shield.def === 150 && shield.spd === 150 && blade.atk === 150 && blade.spa === 150, `Aegislash is 150/150 again (Shield ${shield.def}/${shield.spd}, Blade ${blade.atk}/${blade.spa})`);
+	check(Dex.moves.get('kingsshield').desc === require('pokemon-showdown').Dex.moves.get('kingsshield').desc, 'King\'s Shield untouched');
+}
+
 console.log(failed ? `\n${failed} failed` : '\nall passed');
 process.exit(failed ? 1 : 0);
