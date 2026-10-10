@@ -2629,6 +2629,8 @@
 		return true;
 	}
 
+	// Attacks this server buffed into real options (Twister: 85 power, 30% flinch).
+	var BUFFED_USEFUL = { twister: 1 };
 	// Setup moves and the ones that do the same job better.
 	var OUTCLASSED = {
 		calmmind: ['quiverdance'],
@@ -2654,6 +2656,8 @@
 				// Ours: a priority attack or one of our boosting moves is a real option.
 				// (The client's rows of ours carry no `boosts` field, so every status move of ours counts.)
 				if (move.num < 0 && (move.priority > 0 || move.category === 'Status')) verdict = true;
+				// Vanilla attacks we buffed past Showdown's idea of them; the side check below still applies.
+				if (BUFFED_USEFUL[id]) verdict = true;
 				// A setup move is useless beside a strictly better one the Pokemon also learns
 				// (the owner: "Calm Mind is worse than Quiver so it's useless").
 				var better = OUTCLASSED[id];

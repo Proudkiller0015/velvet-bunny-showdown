@@ -135,6 +135,36 @@ exports.moves = (data) => {
 	if (data.wickedblow) data.wickedblow = { ...data.wickedblow, basePower: 80 };
 	// Magma Storm: 75% accuracy up to 85% (the owner, 30 Sep 2026).
 	if (data.magmastorm) data.magmastorm = { ...data.magmastorm, accuracy: 85 };
+	// Twister: 40 power and a 20% flinch up to 85 and 30% (the owner, 10 Oct 2026) - a real Dragon special attack.
+	if (data.twister) {
+		data.twister = {
+			...data.twister,
+			basePower: 85,
+			secondary: { chance: 30, volatileStatus: 'flinch' },
+			shortDesc: "30% chance to make the foe(s) flinch.",
+			desc: "Has a 30% chance to make the target flinch. Power doubles if the target is using Bounce, Fly, or Sky Drop, or is under the effect of Sky Drop.",
+		};
+	}
+	/*
+	 * Explosion and Self-Destruct as in Generations 1-4 (the owner, 10 Oct 2026): the
+	 * target's Defense is halved for the hit. ModifyDef never asks the move itself, so it is
+	 * done as double power, which is the same sum (Defense sits under the power in the formula).
+	 */
+	for (const id of ['explosion', 'selfdestruct']) {
+		const move = data[id];
+		if (!move) continue;
+		const own = move.onBasePower;
+		data[id] = {
+			...move,
+			onBasePower(basePower, pokemon, target, activeMove) {
+				const power = own ? own.call(this, basePower, pokemon, target, activeMove) : undefined;
+				this.chainModify(2);
+				return power;
+			},
+			shortDesc: "Hits adjacent Pokemon. Target's Def halved. The user faints.",
+			desc: "The user faints after using this move, even if this move fails for having no target. The target's Defense is halved during damage calculation, as in Generations 1-4. This move is prevented from executing if any active Pokemon has the Damp Ability.",
+		};
+	}
 	return data;
 };
 
@@ -155,4 +185,4 @@ const Z_STATUS = {
 exports.Z_STATUS = Z_STATUS;
 
 // For the client's move descriptions (scripts/build-buffs.js): every move this file changes.
-exports.CHANGED_MOVES = ['punishment', 'bellydrum', 'hyperbeam', 'gigaimpact', 'blastburn', 'frenzyplant', 'hydrocannon', 'rockwrecker', 'roaroftime', 'prismaticlaser', 'eternabeam', 'meteorassault', 'magmastorm', 'wickedblow'];
+exports.CHANGED_MOVES = ['punishment', 'bellydrum', 'hyperbeam', 'gigaimpact', 'blastburn', 'frenzyplant', 'hydrocannon', 'rockwrecker', 'roaroftime', 'prismaticlaser', 'eternabeam', 'meteorassault', 'magmastorm', 'wickedblow', 'twister', 'explosion', 'selfdestruct'];
