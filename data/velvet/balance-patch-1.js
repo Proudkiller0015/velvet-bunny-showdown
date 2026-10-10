@@ -2451,7 +2451,7 @@ exports.buildBuffs = (Pokedex) => {
 	if (Pokedex.empoleon) add('empoleon', EMPOLEON.moves, [EMPOLEON.ability]);
 	for (const [id, ability] of Object.entries(TRIO_BABIES)) if (Pokedex[id]) add(id, [], [ability]);
 	// The creation trio's normal forms (data/velvet/creation-trio.js).
-	for (const [id, ability] of Object.entries(require('./creation-trio.js').GRANTS)) if (Pokedex[id]) add(id, [], [ability]);
+	for (const [id, g] of Object.entries(require('./creation-trio.js').GRANTS)) if (Pokedex[id]) add(id, g.moves, [g.ability]);
 
 	// Mew learns every machine move there is, and these are handed out like machines.
 	add('mew', Object.keys(exports.MOVES).filter(newMove), []);

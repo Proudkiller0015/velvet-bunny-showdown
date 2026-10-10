@@ -135,6 +135,11 @@ exports.moves = (data) => {
 	if (data.wickedblow) data.wickedblow = { ...data.wickedblow, basePower: 80 };
 	// Magma Storm: 75% accuracy up to 85% (the owner, 30 Sep 2026).
 	if (data.magmastorm) data.magmastorm = { ...data.magmastorm, accuracy: 85 };
+	// Power buffs (the owner, 10 Oct 2026): Dragon Pulse 85 -> 100, Icy Wind 55 -> 60, and the
+	// three all-stat moves - Ancient Power, Ominous Wind, Silver Wind - 60 -> 70.
+	for (const [id, power] of Object.entries({ dragonpulse: 100, icywind: 60, ancientpower: 70, ominouswind: 70, silverwind: 70 })) {
+		if (data[id]) data[id] = { ...data[id], basePower: power };
+	}
 	// Twister: 40 power and a 20% flinch up to 85 and 30% (the owner, 10 Oct 2026) - a real Dragon special attack.
 	if (data.twister) {
 		data.twister = {
@@ -185,4 +190,4 @@ const Z_STATUS = {
 exports.Z_STATUS = Z_STATUS;
 
 // For the client's move descriptions (scripts/build-buffs.js): every move this file changes.
-exports.CHANGED_MOVES = ['punishment', 'bellydrum', 'hyperbeam', 'gigaimpact', 'blastburn', 'frenzyplant', 'hydrocannon', 'rockwrecker', 'roaroftime', 'prismaticlaser', 'eternabeam', 'meteorassault', 'magmastorm', 'wickedblow', 'twister', 'explosion', 'selfdestruct'];
+exports.CHANGED_MOVES = ['punishment', 'bellydrum', 'hyperbeam', 'gigaimpact', 'blastburn', 'frenzyplant', 'hydrocannon', 'rockwrecker', 'roaroftime', 'prismaticlaser', 'eternabeam', 'meteorassault', 'magmastorm', 'wickedblow', 'twister', 'explosion', 'selfdestruct', 'dragonpulse', 'icywind', 'ancientpower', 'ominouswind', 'silverwind'];

@@ -22,10 +22,46 @@ function battle(p1, p2, seed = [1, 2, 3, 4]) {
 }
 const log = b => b.log.join('\n');
 
-// The abilities are on the normal forms only.
-for (const [id, ability] of [['dialga', 'Timeless'], ['palkia', 'Rending Space'], ['giratina', 'Distortion World']]) {
+// Who gets what: the normal forms and Dialga-/Palkia-Origin share; Giratina-Origin has its own.
+for (const [id, ability] of [['dialga', 'Timeless'], ['palkia', 'Rending Space'], ['giratina', 'Distortion World'],
+	['dialgaorigin', 'Timeless'], ['palkiaorigin', 'Rending Space'], ['giratinaorigin', 'Renegade Drift']]) {
 	check(Object.values(Dex.species.get(id).abilities).includes(ability), `${id} can have ${ability}`);
-	check(!Object.values(Dex.species.get(id + 'origin').abilities).includes(ability), `${id}-Origin cannot`);
+}
+for (const id of ['dialga', 'palkia', 'giratina']) check(!!Dex.data.Learnsets[id].learnset.explosion, `${id} learns Explosion`);
+{
+	const v = new (require('pokemon-showdown').TeamValidator)('gen9rpubers');
+	const said = v.validateTeam([{ species: 'Giratina-Origin', ability: 'Renegade Drift', item: 'Griseous Core', moves: ['explosion', 'shadowforce'], evs: { hp: 4 }, level: 100 }]);
+	check(!said, `Giratina-Origin with Renegade Drift and Explosion is legal${said ? ': ' + said.join('; ') : ''}`);
+}
+
+// No recoil for the trio: Steel Beam, Head Smash. Explosion still faints.
+{
+	const b = battle(
+		[{ species: 'Dialga', ability: 'Timeless', moves: ['steelbeam', 'headsmash', 'explosion'] }],
+		[{ species: 'Blissey', ability: 'Natural Cure', moves: ['softboiled'] }],
+	);
+	const d = b.p1.active[0];
+	b.makeChoices('move 1', 'move 1');
+	check(d.hp === d.maxhp, `Steel Beam costs Dialga nothing (${d.hp}/${d.maxhp})`);
+	b.makeChoices('move 2', 'move 1');
+	check(d.hp === d.maxhp, 'Head Smash: no recoil');
+	b.makeChoices('move 3', 'move 1');
+	check(d.fainted, 'Explosion still faints it');
+}
+
+// Renegade Drift: Ground, Fairy and Spikes miss it; nothing inverted.
+{
+	const b = battle(
+		[{ species: 'Garchomp', ability: 'Rough Skin', moves: ['earthquake', 'playrough', 'spikes', 'shadowclaw'] }],
+		[{ species: 'Giratina-Origin', ability: 'Renegade Drift', item: 'Griseous Core', moves: ['splash'] }, { species: 'Blissey', ability: 'Natural Cure', moves: ['splash'] }],
+	);
+	const g = b.p2.active[0];
+	b.makeChoices('move 1', 'move 1');
+	check(g.hp === g.maxhp, 'Earthquake misses it');
+	b.makeChoices('move 2', 'move 1');
+	check(g.hp === g.maxhp, 'Play Rough misses it');
+	check(g.runEffectiveness(b.dex.getActiveMove('shadowclaw')) > 0, 'Ghost still hits it super effectively (no inversion)');
+	check(g.isGrounded() === null, 'it is ungrounded like Levitate');
 }
 
 // Shadow Force: the foe switches on the vanished turn and is hit on its way out.
@@ -68,66 +104,117 @@ for (const [id, ability] of [['dialga', 'Timeless'], ['palkia', 'Rending Space']
 	check(m2.category === 'Physical', 'an Attack-invested Giratina stays physical');
 }
 
-// Timeless: no recharge after Roar of Time.
+// Timeless: no recharge after Roar of Time, and charge moves in one turn. Dialga learns Meteor Beam.
 {
 	const b = battle(
-		[{ species: 'Dialga', ability: 'Timeless', moves: ['roaroftime'] }],
+		[{ species: 'Dialga', ability: 'Timeless', moves: ['roaroftime', 'meteorbeam', 'solarbeam'] }],
 		[{ species: 'Blissey', ability: 'Natural Cure', moves: ['softboiled'] }],
 	);
 	b.makeChoices('move 1', 'move 1');
 	check(!b.p1.active[0].volatiles['mustrecharge'], 'Dialga has no recharge turn');
 	check(/doesn't need to recharge/.test(log(b)), 'and it says so');
+	let hp = b.p2.active[0].hp;
+	b.makeChoices('move 2', 'move 1');
+	check(b.p1.active[0].boosts.spa === 1 && !b.p1.active[0].volatiles['twoturnmove'], 'Meteor Beam fires at once and still raises Sp. Atk');
+	check(/\|move\|p1a: Dialga\|Meteor Beam\|p2a/.test(log(b)) || /-damage\|p2a: Blissey/.test(log(b)), 'and hits the same turn');
+	b.makeChoices('move 3', 'move 1');
+	check(!b.p1.active[0].volatiles['twoturnmove'], 'Solar Beam without sun: one turn too');
+	check(Object.values(Dex.species.get('dialga').abilities).includes('Timeless') && !!Dex.data.Learnsets.dialga.learnset.meteorbeam, 'Dialga learns Meteor Beam');
 }
 
-// Rending Space: Spacial Rend always crits; Hydro Pump does not.
+// Rending Space: Spacial Rend always crits, a normal move crits more than usual, crits are 2x.
 {
 	let crits = 0, pumps = 0;
-	for (let i = 0; i < 20; i++) {
+	const N = 60;
+	for (let i = 0; i < N; i++) {
 		const b = battle(
-			[{ species: 'Palkia', ability: 'Rending Space', moves: ['spacialrend', 'hydropump'] }],
+			[{ species: 'Palkia', ability: 'Rending Space', moves: ['spacialrend'] }],
 			[{ species: 'Blissey', ability: 'Natural Cure', moves: ['softboiled'] }],
 			[i, 7, 9, 11],
 		);
 		b.makeChoices('move 1', 'move 1');
 		if (/\|-crit\|/.test(log(b)) || /\|-miss\|/.test(log(b))) crits++;   // a miss is Spacial Rend's 95%, not the ability
 		const c = battle(
-			[{ species: 'Palkia', ability: 'Rending Space', moves: ['hydropump'] }],
+			[{ species: 'Palkia', ability: 'Rending Space', moves: ['surf'] }],
 			[{ species: 'Blissey', ability: 'Natural Cure', moves: ['softboiled'] }],
 			[i, 7, 9, 11],
 		);
 		c.makeChoices('move 1', 'move 1');
 		if (/\|-crit\|/.test(log(c))) pumps++;
 	}
-	check(crits === 20, `Spacial Rend crit 20/20 (${crits})`);
-	check(pumps < 6, `Hydro Pump crits only by luck (${pumps}/20)`);
-}
-
-// Distortion World: half damage at full HP only.
-{
+	check(crits === N, `Spacial Rend crit ${crits}/${N}`);
+	check(pumps >= 3 && pumps <= 18, `Surf crits about 1 in 8 (${pumps}/${N})`);
 	const dmg = ability => {
 		const b = battle(
-			[{ species: 'Garchomp', ability: 'Rough Skin', moves: ['dragonclaw'] }],
-			[{ species: 'Giratina', ability, moves: ['splash'] }],
+			[{ species: 'Palkia', ability, moves: ['spacialrend'] }],
+			[{ species: 'Blissey', ability: 'Natural Cure', moves: ['softboiled'] }],
 		);
 		b.randomizer = d => d;
-		const g = b.p2.active[0];
-		const full = b.actions.getDamage(b.p1.active[0], g, b.dex.getActiveMove('dragonclaw'), true);
-		g.hp = g.maxhp - 1;
-		const hurt = b.actions.getDamage(b.p1.active[0], g, b.dex.getActiveMove('dragonclaw'), true);
-		return [full, hurt];
+		const m = b.dex.getActiveMove('spacialrend');
+		m.willCrit = true;
+		return b.actions.getDamage(b.p1.active[0], b.p2.active[0], m, true);
 	};
-	const [full, hurt] = dmg('Distortion World');
-	check(Math.abs(full / hurt - 0.5) < 0.02, `Distortion World halves at full HP (${full} vs ${hurt})`);
+	const ours = dmg('Rending Space'), plain = dmg('Pressure');
+	check(Math.abs(ours / plain - 4 / 3) < 0.02, `crits deal 2x instead of 1.5x (${plain} -> ${ours})`);
 }
 
-// Distortion World: Fairy moves do nothing.
+// Distortion World: the chart turns over while Giratina is out.
 {
 	const b = battle(
-		[{ species: 'Sylveon', ability: 'Pixilate', moves: ['moonblast'] }],
+		[{ species: 'Gengar', ability: 'Cursed Body', moves: ['shadowball', 'moonblast'] }, { species: 'Sylveon', ability: 'Pixilate', moves: ['moonblast'] }],
+		[{ species: 'Giratina', ability: 'Distortion World', moves: ['splash', 'dragonpulse'] }, { species: 'Snorlax', ability: 'Thick Fat', moves: ['splash'] }],
+	);
+	check(/The battlefield turned inside out/.test(log(b)), 'it announces itself');
+	const gengar = b.p1.active[0], gira = b.p2.active[0], lax = b.p2.pokemon[1];
+	check(gira.runEffectiveness(b.dex.getActiveMove('shadowball')) < 0, 'Ghost on Giratina: resisted, not super effective');
+	check(gira.runImmunity(b.dex.getActiveMove('tackle')) && gira.runEffectiveness(b.dex.getActiveMove('tackle')) > 0, 'Normal on Giratina: super effective, not immune');
+	{
+		const e = battle(
+			[{ species: 'Snorlax', ability: 'Thick Fat', moves: ['splash'] }],
+			[{ species: 'Giratina', ability: 'Distortion World', moves: ['shadowball'] }],
+		);
+		const target = e.p1.active[0];
+		check(target.runImmunity(e.dex.getActiveMove('shadowball')) && target.runEffectiveness(e.dex.getActiveMove('shadowball')) > 0, 'Ghost on Normal: super effective');
+		e.makeChoices('move 1', 'move 1');
+		check(target.hp < target.maxhp && /supereffective\|p1a: Snorlax/.test(log(e)), 'and Shadow Ball really hits Snorlax for super effective damage');
+	}
+	b.makeChoices('move 2', 'move 1');
+	check(gira.hp === gira.maxhp && /-immune\|p2a: Giratina\|\[from\] ability: Distortion World/.test(log(b)), 'Dragon types are immune to Fairy');
+	b.makeChoices('switch 2', 'switch 2');
+	check(/The battlefield returned to normal/.test(log(b)), 'and it ends when Giratina leaves');
+	check(!b.p2.active[0].runImmunity(b.dex.getActiveMove('shadowball')), 'Normal is immune to Ghost again');
+	// Two Giratinas do not cancel out.
+	const d = battle(
+		[{ species: 'Giratina', ability: 'Distortion World', moves: ['splash'] }],
 		[{ species: 'Giratina', ability: 'Distortion World', moves: ['splash'] }],
 	);
+	check(d.p2.active[0].runEffectiveness(d.dex.getActiveMove('shadowball')) < 0, 'two Distortion Worlds still invert once');
+}
+
+// Shadow Force through Protect and Reflect.
+{
+	const hit = reflect => {
+		const b = battle(
+			[{ species: 'Giratina', ability: 'Pressure', moves: ['shadowforce'] }],
+			[{ species: 'Slowbro', ability: 'Oblivious', moves: ['splash', 'reflect', 'protect'] }],
+		);
+		b.randomizer = d => d;
+		if (reflect) b.p2.addSideCondition('reflect', b.p2.active[0]);
+		const m = b.dex.getActiveMove('shadowforce');
+		b.singleEvent('ModifyMove', m, null, b.p1.active[0], b.p2.active[0], m, m);
+		return b.actions.getDamage(b.p1.active[0], b.p2.active[0], m, true);
+	};
+	check(hit(true) === hit(false), `Reflect does not cut it (${hit(true)} vs ${hit(false)})`);
+	const b = battle(
+		[{ species: 'Giratina', ability: 'Pressure', moves: ['shadowforce'] }],
+		[{ species: 'Slowbro', ability: 'Oblivious', moves: ['splash', 'protect'] }],
+	);
 	b.makeChoices('move 1', 'move 1');
-	check(b.p2.active[0].hp === b.p2.active[0].maxhp && /-immune\|p2a: Giratina\|\[from\] ability: Distortion World/.test(log(b)), 'Moonblast does nothing to Distortion World Giratina');
+	b.makeChoices('move 1', 'move 2');
+	check(b.p2.active[0].hp < b.p2.active[0].maxhp, 'and it goes through Protect');
+}
+for (const [id, bp] of Object.entries({ dragonpulse: 100, icywind: 60, ancientpower: 70, ominouswind: 70, silverwind: 70 })) {
+	check(Dex.moves.get(id).basePower === bp, `${Dex.moves.get(id).name} is ${bp} power`);
 }
 
 if (failed) { console.log(`\n${failed} failed`); process.exit(1); }
