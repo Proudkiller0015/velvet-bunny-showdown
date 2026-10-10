@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-3-tmpgkc",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Normal",
+		"TheRedRecord7"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Normal\n|j|☆TheRedRecord7\n|t:|1791659178\n|gametype|singles\n|player|p1|Bunny Normal|bunny.png|1211\n|player|p2|TheRedRecord7|palmer|1185\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1791659179\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Wigglytuff|Wigglytuff, L96, F|100/100\n|switch|p2a: Shaymin|Shaymin-Sky, L73|100/100\n|turn|1\n|c|☆Bunny Normal|Good luck! Playing on **normal**.\n|\n|t:|1791659208\n|move|p2a: Shaymin|Seed Flare|p1a: Wigglytuff\n|-damage|p1a: Wigglytuff|79/100\n|-unboost|p1a: Wigglytuff|spd|2\n|-ability|p1a: Wigglytuff|Competitive|boost\n|-boost|p1a: Wigglytuff|spa|2\n|move|p1a: Wigglytuff|Fire Blast|p2a: Shaymin\n|-supereffective|p2a: Shaymin\n|-damage|p2a: Shaymin|0 fnt\n|faint|p2a: Shaymin\n|\n|upkeep\n|\n|t:|1791659247\n|switch|p2a: Illumise|Illumise, L91, F|100/100\n|turn|2\n|\n|t:|1791659252\n|move|p2a: Illumise|Thunder Wave|p1a: Wigglytuff\n|-status|p1a: Wigglytuff|par\n|move|p1a: Wigglytuff|Fire Blast|p2a: Illumise\n|-supereffective|p2a: Illumise\n|-damage|p2a: Illumise|0 fnt\n|faint|p2a: Illumise\n|\n|upkeep\n|\n|t:|1791659265\n|switch|p2a: Pachirisu|Pachirisu, L96, F|100/100\n|turn|3\n|\n|t:|1791659279\n|move|p2a: Pachirisu|Voltaic Lance|p1a: Wigglytuff\n|-damage|p1a: Wigglytuff|54/100 par\n|cant|p1a: Wigglytuff|par\n|\n|upkeep\n|turn|4\n|\n|t:|1791659289\n|move|p2a: Pachirisu|Super Fang|p1a: Wigglytuff\n|-damage|p1a: Wigglytuff|27/100 par\n|move|p1a: Wigglytuff|Boomburst|p2a: Pachirisu\n|-damage|p2a: Pachirisu|0 fnt\n|faint|p2a: Pachirisu\n|\n|upkeep\n|\n|t:|1791659297\n|switch|p2a: Regirock|Regirock, L83|100/100\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1791659299
+}
