@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-12-tmoez3",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Easy",
+		"TheRedRecord7"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆TheRedRecord7\n|t:|1791657577\n|gametype|singles\n|player|p1|Bunny Easy|bunny.png|1047\n|player|p2|TheRedRecord7|265|1094\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1791657577\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Zangoose|Zangoose, L85, M|100/100\n|switch|p2a: Iron Hands|Iron Hands, L79|100/100\n|turn|1\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1791657598\n|move|p2a: Iron Hands|Fake Out|p1a: Zangoose\n|-damage|p1a: Zangoose|83/100\n|cant|p1a: Zangoose|flinch\n|\n|-status|p1a: Zangoose|tox|[from] item: Toxic Orb\n|upkeep\n|turn|2\n|\n|t:|1791657610\n|-terastallize|p1a: Zangoose|Normal\n|move|p1a: Zangoose|Facade|p2a: Iron Hands\n|-damage|p2a: Iron Hands|22/100\n|move|p2a: Iron Hands|Drain Punch|p1a: Zangoose\n|-supereffective|p1a: Zangoose\n|-damage|p1a: Zangoose|0 fnt\n|-heal|p2a: Iron Hands|51/100|[from] drain|[of] p1a: Zangoose\n|faint|p1a: Zangoose\n|\n|upkeep\n|\n|t:|1791657610\n|switch|p1a: Typhlosion|Typhlosion, L84, M|100/100\n|turn|3\n|\n|t:|1791657628\n|move|p1a: Typhlosion|Eruption|p2a: Iron Hands\n|-damage|p2a: Iron Hands|9/100\n|move|p2a: Iron Hands|Volt Switch|p1a: Typhlosion\n|-damage|p1a: Typhlosion|84/100\n|\n|t:|1791657639\n|-end|p2a: Iron Hands|Quark Drive|[silent]\n|switch|p2a: Pelipper|Pelipper, L86, M|100/100|[from] Volt Switch\n|-weather|RainDance|[from] ability: Drizzle|[of] p2a: Pelipper\n|\n|-weather|RainDance|[upkeep]\n|upkeep\n|turn|4\n|\n|t:|1791657651\n|move|p1a: Typhlosion|Eruption|p2a: Pelipper\n|-resisted|p2a: Pelipper\n|-damage|p2a: Pelipper|84/100\n|move|p2a: Pelipper|Surf|p1a: Typhlosion\n|-supereffective|p1a: Typhlosion\n|-damage|p1a: Typhlosion|0 fnt\n|faint|p1a: Typhlosion\n|\n|-weather|RainDance|[upkeep]\n|upkeep\n|\n|t:|1791657651\n|switch|p1a: Dialga|Dialga-Origin, L73|100/100\n|-ability|p1a: Dialga|Pressure\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1791657664
+}
