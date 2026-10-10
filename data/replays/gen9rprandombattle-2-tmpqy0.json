@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-2-tmpqy0",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Normal",
+		"Awther"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Normal\n|j|☆Awther\n|t:|1791674109\n|gametype|singles\n|player|p1|Bunny Normal|bunny.png|1211\n|player|p2|Awther|blue|1000\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1791674110\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Vikavolt|Vikavolt, L83, F|263/263\n|switch|p2a: Emboar|Emboar, L84, M|322/322\n|turn|1\n|c|☆Bunny Normal|Good luck! Playing on **normal**.\n|-message|Awther forfeited.\n|\n|win|Bunny Normal\n",
+	"inputlog": ">start {\"formatid\":\"gen9rprandombattle\",\"seed\":\"sodium,e4c31d9da4ad6400388cdf395b35ef31\",\"rated\":\"Rated battle\"}\n>player p1 {\"name\":\"Bunny Normal\",\"avatar\":\"bunny.png\",\"rating\":1211,\"seed\":\"sodium,c29118e0b6d4b95dff77ab5bbde5b666\"}\n>player p2 {\"name\":\"Awther\",\"avatar\":\"blue\",\"rating\":1000,\"seed\":\"sodium,26212ee9b7340a00c34fe0272ba25792\"}\n>chat ☆Bunny Normal|Good luck! Playing on **normal**.\n>forcelose p2",
+	"uploadtime": 1791674114
+}
