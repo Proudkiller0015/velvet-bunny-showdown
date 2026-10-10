@@ -54,6 +54,7 @@ function allGimmicks() {
 		pokemon.canMegaEvoX = null;
 		pokemon.canMegaEvoY = null;
 		pokemon.canTerastallize = null;
+		pokemon.canUltraBurst = null;
 	};
 
 	/*
@@ -124,6 +125,7 @@ function allGimmicks() {
 	}
 
 	const actions = battle.actions;
+	if (hasDynamax) eternamaxGimmick(battle);
 	if (hasMega && actions.runMegaEvo) {
 		const runMegaEvo = actions.runMegaEvo.bind(actions);
 		actions.runMegaEvo = function (pokemon) {
@@ -174,10 +176,46 @@ function allGimmicks() {
 		const runAction = battle.runAction.bind(battle);
 		battle.runAction = function (action) {
 			const result = runAction(action);
-			if (action.choice === 'runDynamax') spend(action.pokemon);
+			if (action.choice === 'runDynamax') {
+				spend(action.pokemon);
+				// The side's Dynamax is gone, and Eternamax is that same button.
+				for (const ally of action.pokemon.side.pokemon) if (ally.m.rpEternamax) ally.canUltraBurst = null;
+			}
 			return result;
 		};
 	}
+}
+
+/**
+ * Eternamax, in place of Eternatus's Dynamax (10 Oct 2026, the owner: "eternamax to replace
+ * eternatus dmax button ... count kinda as a replacement for gmax ... its kinda like ultra burst").
+ *
+ * Eternatus can't Dynamax. One flagged Gigantamax in the builder (allowed where Eternamax is,
+ * AG and up - see the validateSet wrapper) gets the Ultra Burst action instead, and using it
+ * turns it into Eternatus-Eternamax for the rest of the battle: new stats, new HP, ordinary
+ * moves. It is the side's Dynamax - using either spends the other - and, like every gimmick
+ * here, that Pokemon's one gimmick. Eternatus itself is never swapped out of the team.
+ */
+function eternamaxGimmick(battle) {
+	for (const side of battle.sides) {
+		for (const pokemon of side.pokemon) {
+			if (pokemon.baseSpecies.id !== 'eternatus' || !pokemon.set.gigantamax) continue;
+			pokemon.m.rpEternamax = true;
+			pokemon.canUltraBurst = 'Eternatus-Eternamax';
+		}
+	}
+	const actions = battle.actions;
+	const runMegaEvo = actions.runMegaEvo.bind(actions);
+	actions.runMegaEvo = function (pokemon) {
+		if (!pokemon.m.rpEternamax || !pokemon.canUltraBurst || pokemon.canMegaEvo) return runMegaEvo(pokemon);
+		if (!pokemon.side.canDynamaxNow()) { pokemon.canUltraBurst = null; return false; }
+		pokemon.formeChange('Eternatus-Eternamax', null, true);
+		battle.add('-message', `${pokemon.name} unleashed its Eternamax form!`);
+		pokemon.side.dynamaxUsed = true;
+		for (const ally of pokemon.side.pokemon) ally.canUltraBurst = null;
+		battle.runEvent('AfterMega', pokemon);
+		return true;
+	};
 }
 
 /**
@@ -1464,6 +1502,22 @@ for (const format of exports.Formats) {
 	 * can Terastallize into, and an unset Tera type defaults to the first type - so every
 	 * MissingNo. was refused. Unset, or set to Bird, it is Normal: its other half.
 	 */
+	/*
+	 * Eternamax (10 Oct 2026, the owner): Eternatus's Gigantamax flag means "can Eternamax"
+	 * (see eternamaxGimmick). Eternatus has no Gigantamax form, so the engine refuses the
+	 * flag outright; here it passes wherever Eternatus-Eternamax itself would, and is checked
+	 * without it otherwise. The flag stays on the set: the battle reads it.
+	 */
+	const ownValidate = format.validateSet;
+	format.validateSet = function (set, teamHas) {
+		const run = (s, has) => (ownValidate || this.validateSet).call(this, s, has);
+		if (!set.gigantamax || this.dex.species.get(set.species).id !== 'eternatus') return run(set, teamHas);
+		const asEternamax = run({ ...set, species: 'Eternatus-Eternamax', gigantamax: false }, {}) || [];
+		const banned = asEternamax.find(p => /Eternamax/.test(p) && /\b(is|are) (banned|not|unreleased|illegal)|tier|does not exist/i.test(p));
+		if (banned) return [`${set.name || 'Eternatus'} can't Eternamax in ${format.name}: Eternamax is AG only.`];
+		set.gigantamax = false;
+		try { return run(set, teamHas); } finally { set.gigantamax = true; }
+	};
 	const ownChange = format.onChangeSet;
 	format.onChangeSet = function (set, fmt, setHas, teamHas) {
 		if (this.dex.species.get(set.species).id === 'missingno' && (!set.teraType || this.dex.toID(set.teraType) === 'bird')) set.teraType = 'Normal';

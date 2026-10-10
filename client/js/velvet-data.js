@@ -467,6 +467,7 @@
 		var awakenedIn = installAwakenedSearch();
 		var textIn = installDescriptions();
 		var zMaxIn = installZAndMax();
+		var eternaIn = installEternamaxButton();
 		var defaultIn = installDefaultFormat();
 		var bagIn = installBagMenu();
 		var usefulIn = installMoveUsefulness();
@@ -475,7 +476,7 @@
 		var gemIn = installGemItems();
 		var switchIn = installRpSwitch();
 		return switchIn && tableIn && orderIn && spritesIn && iconIn && builderIn && tipsIn && rpIn &&
-			cutIn && listIn && buffsIn && abilitiesIn && itemIn && sigItemIn && powerIn && dmaxIn && awakenedIn && textIn && zMaxIn && defaultIn && bagIn && usefulIn && frbIn && sureIn && gemIn;
+			cutIn && listIn && buffsIn && abilitiesIn && itemIn && sigItemIn && powerIn && dmaxIn && awakenedIn && textIn && zMaxIn && eternaIn && defaultIn && bagIn && usefulIn && frbIn && sureIn && gemIn;
 	}
 
 	/*
@@ -2456,7 +2457,47 @@
 			}
 			buf += '</div></div>';
 		}
+		/*
+		 * Eternamax (10 Oct 2026, the owner): Eternatus has no Gigantamax form, so its
+		 * Gigantamax flag means "can Eternamax" instead - the Eternamax button in battle
+		 * (config/custom-formats.js, eternamaxGimmick). Only where Eternamax is legal: AG,
+		 * RP Battle and Custom Game. The save path reads input[name=gigantamax] as usual.
+		 */
+		if (window.toID(species.name) === 'eternatus' && /^gen9rp(ag|battle|customgame)/.test(String(team.format || ''))) {
+			buf += '<div class="formrow"><label class="formlabel" title="Eternamax in battle, in place of Dynamax">Eternamax:</label><div>' +
+				'<label class="checkbox inline"><input type="radio" name="gigantamax" value="yes"' + (set.gigantamax ? ' checked' : '') + ' /> Yes</label> ' +
+				'<label class="checkbox inline"><input type="radio" name="gigantamax" value="no"' + (!set.gigantamax ? ' checked' : '') + ' /> No</label>' +
+				'</div></div>';
+		}
 		if (buf) $form.append(buf);
+	}
+
+	/*
+	 * Eternamax rides on the engine's Ultra Burst action, so the battle draws an
+	 * "Ultra Burst" checkbox for it. For an Eternatus it says Eternamax.
+	 */
+	function installEternamaxButton() {
+		var R = window.BattleRoom;
+		if (!R || !R.prototype || !R.prototype.updateMoveControls) return false;
+		if (R.prototype.__velvetEternamax) return true;
+		R.prototype.__velvetEternamax = true;
+		var original = R.prototype.updateMoveControls;
+		R.prototype.updateMoveControls = function () {
+			var result = original.apply(this, arguments);
+			try {
+				var req = this.request;
+				var pos = this.choice && this.choice.choices ? this.choice.choices.length : 0;
+				var mon = req && req.side && req.side.pokemon && req.side.pokemon[pos];
+				if (mon && /^Eternatus(,|$)/.test(mon.details || '')) {
+					this.$('input[name=ultraburst]').each(function () {
+						var label = this.parentNode;
+						if (label && label.lastChild && label.lastChild.nodeType === 3) label.lastChild.nodeValue = ' Eternamax';
+					});
+				}
+			} catch (e) { /* the button keeps its own name */ }
+			return result;
+		};
+		return true;
 	}
 
 	/**
