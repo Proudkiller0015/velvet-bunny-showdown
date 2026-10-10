@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-11-tmoez3",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Easy",
+		"TheRedRecord7"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆TheRedRecord7\n|t:|1791657037\n|gametype|singles\n|player|p1|Bunny Easy|bunny.png|1058\n|player|p2|TheRedRecord7|265|1054\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1791657037\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Hitmontop|Hitmontop, L88, M|100/100\n|switch|p2a: Walking Wake|Walking Wake, L79|100/100\n|turn|1\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1791657063\n|move|p2a: Walking Wake|Flip Turn|p1a: Hitmontop\n|-damage|p1a: Hitmontop|78/100\n|\n|t:|1791657074\n|-end|p2a: Walking Wake|Protosynthesis|[silent]\n|switch|p2a: Giratina|Giratina, L75|100/100|[from] Flip Turn\n|-ability|p2a: Giratina|Pressure\n|move|p1a: Hitmontop|Close Combat|p2a: Giratina\n|-immune|p2a: Giratina\n|\n|-heal|p1a: Hitmontop|84/100|[from] item: Leftovers\n|upkeep\n|turn|2\n|\n|t:|1791657098\n|move|p2a: Giratina|Shadow Ball|p1a: Hitmontop\n|-damage|p1a: Hitmontop|61/100\n|move|p1a: Hitmontop|Close Combat|p2a: Giratina\n|-immune|p2a: Giratina\n|\n|-heal|p1a: Hitmontop|67/100|[from] item: Leftovers\n|upkeep\n|turn|3\n|\n|t:|1791657107\n|move|p1a: Hitmontop|Close Combat|p2a: Giratina\n|-immune|p2a: Giratina\n|move|p2a: Giratina|Dragon Tail|p1a: Hitmontop\n|-damage|p1a: Hitmontop|44/100\n|drag|p1a: Mabosstiff|Mabosstiff, L86, M|100/100\n|\n|upkeep\n|turn|4\n|\n|t:|1791657128\n|switch|p2a: Carbink|Carbink, L90|100/100\n|move|p1a: Mabosstiff|Psychic Fangs|p2a: Carbink\n|-damage|p2a: Carbink|64/100\n|\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1791657144
+}
