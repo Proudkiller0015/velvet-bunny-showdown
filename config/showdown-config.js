@@ -101,6 +101,17 @@ if (!exports.grouplist.some(g => g.symbol === '&')) {
 // Render and most hosts hand the port in through the environment.
 exports.port = Number(process.env.PORT) || 8000;
 
+/*
+ * Every player reached the server from 127.0.0.1 (11 Oct 2026, checked with /ip): Render
+ * hands connections in through a local hop, so an IP ban would have banned everyone.
+ * That hop puts the player's address in X-Forwarded-For; trusting it for local
+ * connections makes the server read it. Showdown takes the last address there that
+ * isn't one of these, so a player can't fake one in front of it. Our own bots connect
+ * locally too and send 127.0.0.1 themselves (src/bot.js, src/ladder.js), or they would
+ * come out with no address at all.
+ */
+exports.proxyip = ['127.0.0.1', '::1', '::ffff:127.0.0.1'];
+
 /**
  * The address players actually reach this server on.
  *

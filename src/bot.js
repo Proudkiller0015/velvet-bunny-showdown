@@ -49,7 +49,9 @@ class ShowdownBot {
 	// ------------------------------------------------------------- connection
 	connect() {
 		this.log(`connecting to ${this.url}`);
-		this.ws = new WebSocket(this.url);
+		// Local, and saying so: the server reads the address from this header for local
+		// connections (proxyip in config/showdown-config.js).
+		this.ws = new WebSocket(this.url, { headers: { 'X-Forwarded-For': '127.0.0.1' } });
 		this.ws.on('open', () => { this.log('connected'); this.reconnectDelay = 1000; });
 		// One frame is one room's payload: an optional ">roomid" line followed by
 		// its protocol lines. Splitting on blank lines used to cut the roomid away

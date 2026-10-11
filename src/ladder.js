@@ -87,7 +87,8 @@ class LadderBot {
 
 	connect() {
 		if (this.stopped) return;
-		this.ws = new WebSocket(this.url);
+		// Local, and saying so (see src/bot.js connect()).
+		this.ws = new WebSocket(this.url, { headers: { 'X-Forwarded-For': '127.0.0.1' } });
 		this.ws.on('open', () => { this.reconnectDelay = 2000; });
 		this.ws.on('message', d => this.onData(String(d)));
 		this.ws.on('error', err => {
