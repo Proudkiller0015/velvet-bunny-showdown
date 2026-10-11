@@ -1,0 +1,12 @@
+{
+	"id": "gen9rpbattle-31-tmqcz1",
+	"format": "[Gen 9] RP Battle",
+	"players": [
+		"Youngster Jay",
+		"SlimeQueenSamantha"
+	],
+	"rating": null,
+	"log": "|velvetmusic|trainer|events/trainer-rse\n|j|☆Youngster Jay\n|j|☆SlimeQueenSamantha\n|t:|1791753505\n|gametype|singles\n|player|p1|Youngster Jay|youngster-gen4|\n|player|p2|SlimeQueenSamantha|queen.png|\n|gen|9\n|tier|[Gen 9] RP Battle\n|clearpoke\n|poke|p1|Helioptile, L11, F|\n|poke|p1|Natu, L11, M|\n|poke|p1|Emolga, L12, M|\n|poke|p1|Bouffalant, L13, F|\n|poke|p2|Umbreon, L13, M|\n|poke|p2|Applin, L13, M|\n|poke|p2|Lotad, L13, M|\n|poke|p2|Buneary, L13, F|\n|teampreview\n|inactive|Battle timer is ON: inactive players will automatically lose when time's up. (requested by Youngster Jay)\n|n|☆Youngster Jay|youngsterjay\n|\n|t:|1791753517\n|teamsize|p1|4\n|teamsize|p2|4\n|start\n|switch|p1a: Bouffalant|Bouffalant, L13, F|100/100\n|switch|p2a: Applin|Applin, L13, M|100/100\n|turn|1\n|\n|t:|1791753522\n|move|p1a: Bouffalant|Leer|p2a: Applin\n|-unboost|p2a: Applin|def|1\n|move|p2a: Applin|Draco Meteor|p1a: Bouffalant\n|-damage|p1a: Bouffalant|70/100\n|-unboost|p2a: Applin|spa|2\n|\n|upkeep\n|turn|2\n|\n|t:|1791753531\n|switch|p2a: Umbreon|Umbreon, L13, M|100/100\n|move|p1a: Bouffalant|Tackle|p2a: Umbreon\n|-damage|p2a: Umbreon|87/100\n|\n|upkeep\n|turn|3\n|\n|t:|1791753538\n|move|p2a: Umbreon|Wish|p2a: Umbreon\n|move|p1a: Bouffalant|Focus Energy|p1a: Bouffalant\n|-start|p1a: Bouffalant|move: Focus Energy\n|\n|upkeep\n|turn|4\n|\n|t:|1791753541\n|move|p2a: Umbreon|Toxic|p1a: Bouffalant\n|-status|p1a: Bouffalant|tox\n|move|p1a: Bouffalant|Focus Energy||[still]\n|-fail|p1a: Bouffalant\n|\n|-heal|p2a: Umbreon|100/100|[from] move: Wish|[wisher] Umbreon\n|-damage|p1a: Bouffalant|64/100 tox|[from] psn\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1791753542
+}
