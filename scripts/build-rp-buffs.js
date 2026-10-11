@@ -112,6 +112,7 @@ function shortOf(kind, id) {
 
 // ---- Pokemon ------------------------------------------------------------------
 const newSpecies = [];
+const { LIKE_MEW } = require(path.join(__dirname, '..', 'data', 'velvet', 'legend-kits.js'));
 const allSpecies = Object.keys(D.Pokedex).filter(id => !HIDDEN_SPECIES.includes(id));
 for (const id of allSpecies) {
 	const ours = D.Pokedex[id];
@@ -138,7 +139,12 @@ for (const id of allSpecies) {
 	const oLearn = ((D.Learnsets[id] || {}).learnset) || {};
 	const newMoves = Object.keys(oLearn).filter(m => !vLearn[m] && !HIDDEN_MOVES.includes(m));
 	for (const m of newMoves) (learners[m] = learners[m] || []).push(id);
-	if (newMoves.length) parts.push(`learns ${newMoves.map(moveName).sort().join(', ')}`);
+	// Arceus learns every TM Mew does (legend-kits.js LIKE_MEW): said once, not as 150 names.
+	if (LIKE_MEW.includes(id)) {
+		const mew = ((D.Learnsets.mew || {}).learnset) || {};
+		const rest = newMoves.filter(m => !mew[m]);
+		parts.push(`learns **every TM Mew does**${rest.length ? `, and ${rest.map(moveName).sort().join(', ')}` : ''} ${tag(tagFor('LIKE_MEW', V_(['legend-kits.js'])))}`);
+	} else if (newMoves.length) parts.push(`learns ${newMoves.map(moveName).sort().join(', ')}`);
 	if (!parts.length) continue;
 	speciesLines.push({ num: ours.num, name: speciesName(id), text: `• **${speciesName(id)}**: ${parts.join(' · ')}` });
 }
