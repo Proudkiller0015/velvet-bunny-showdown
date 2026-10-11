@@ -2452,6 +2452,8 @@ exports.buildBuffs = (Pokedex) => {
 	for (const [id, ability] of Object.entries(TRIO_BABIES)) if (Pokedex[id]) add(id, [], [ability]);
 	// The creation trio's normal forms (data/velvet/creation-trio.js).
 	for (const [id, g] of Object.entries(require('./creation-trio.js').GRANTS)) if (Pokedex[id]) add(id, g.moves, [g.ability]);
+	// What the box-art and Uber legendaries were owed (data/velvet/legend-kits.js).
+	for (const [id, moves] of Object.entries(require('./legend-kits.js').GRANTS)) if (Pokedex[id]) add(id, moves, []);
 
 	// Mew learns every machine move there is, and these are handed out like machines.
 	add('mew', Object.keys(exports.MOVES).filter(newMove), []);

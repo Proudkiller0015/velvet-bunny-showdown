@@ -679,7 +679,9 @@ window.VelvetBuffs = {
 		},
 		"kyogre": {
 			"moves": [
-				"wavecharge"
+				"wavecharge",
+				"recover",
+				"undertow"
 			],
 			"abilities": []
 		},
@@ -4655,7 +4657,8 @@ window.VelvetBuffs = {
 		},
 		"kyurem": {
 			"moves": [
-				"chillingmist"
+				"chillingmist",
+				"rimecleaver"
 			],
 			"abilities": []
 		},
@@ -5196,7 +5199,8 @@ window.VelvetBuffs = {
 		},
 		"yveltal": {
 			"moves": [
-				"punishment"
+				"punishment",
+				"carrionfeast"
 			],
 			"abilities": []
 		},
@@ -7446,6 +7450,107 @@ window.VelvetBuffs = {
 				"0": "Levitate",
 				"1": "Renegade Drift"
 			}
+		},
+		"mewtwo": {
+			"moves": [
+				"hypnowhirl"
+			],
+			"abilities": []
+		},
+		"lugia": {
+			"moves": [
+				"undertow"
+			],
+			"abilities": []
+		},
+		"hooh": {
+			"moves": [
+				"morningsun"
+			],
+			"abilities": []
+		},
+		"groudon": {
+			"moves": [
+				"shoreup",
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"rayquaza": {
+			"moves": [
+				"roost"
+			],
+			"abilities": []
+		},
+		"reshiram": {
+			"moves": [
+				"calmmind"
+			],
+			"abilities": []
+		},
+		"zekrom": {
+			"moves": [
+				"voltaiclance"
+			],
+			"abilities": []
+		},
+		"kyuremblack": {
+			"moves": [
+				"rimecleaver",
+				"chillingmist"
+			],
+			"abilities": []
+		},
+		"kyuremwhite": {
+			"moves": [
+				"chillingmist"
+			],
+			"abilities": []
+		},
+		"xerneas": {
+			"moves": [
+				"moonlight",
+				"penance"
+			],
+			"abilities": []
+		},
+		"zygarde": {
+			"moves": [
+				"shoreup",
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"marshadow": {
+			"moves": [
+				"shufflejab"
+			],
+			"abilities": []
+		},
+		"eternatus": {
+			"moves": [
+				"oxidize"
+			],
+			"abilities": []
+		},
+		"chienpao": {
+			"moves": [
+				"rimecleaver",
+				"carrionfeast"
+			],
+			"abilities": []
+		},
+		"koraidon": {
+			"moves": [
+				"shufflejab"
+			],
+			"abilities": []
+		},
+		"terapagos": {
+			"moves": [
+				"slackoff"
+			],
+			"abilities": []
 		},
 		"banettemegahalloween": {
 			"moves": [
