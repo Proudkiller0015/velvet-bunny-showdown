@@ -1,0 +1,12 @@
+{
+	"id": "gen9rpbattle-30-tmqcz1",
+	"format": "[Gen 9] RP Battle",
+	"players": [
+		"Youngster Yuto",
+		"SlimeQueenSamantha"
+	],
+	"rating": null,
+	"log": "|velvetmusic|trainer|events/trainer-rse\n|j|☆Youngster Yuto\n|j|☆SlimeQueenSamantha\n|t:|1791753381\n|gametype|singles\n|player|p1|Youngster Yuto|youngster-gen4|\n|player|p2|SlimeQueenSamantha|queen.png|\n|gen|9\n|tier|[Gen 9] RP Battle\n|clearpoke\n|poke|p1|Shroodle, L10, M|\n|poke|p1|Teddiursa, L11, F|\n|poke|p1|Koffing, L11, M|\n|poke|p1|Mantyke, L13, M|\n|poke|p2|Umbreon, L13, F|\n|poke|p2|Applin, L10, M|\n|poke|p2|Lotad, L11, M|\n|poke|p2|Buneary, L13, M|\n|teampreview\n|inactive|Battle timer is ON: inactive players will automatically lose when time's up. (requested by Youngster Yuto)\n|n|☆Youngster Yuto|youngsteryuto\n|\n|t:|1791753410\n|teamsize|p1|4\n|teamsize|p2|4\n|start\n|switch|p1a: Koffing|Koffing, L11, M|100/100\n|switch|p2a: Buneary|Buneary, L13, M|100/100\n|turn|1\n|\n|t:|1791753415\n|move|p2a: Buneary|Mega Kick|p1a: Koffing\n|-damage|p1a: Koffing|30/100\n|move|p1a: Koffing|Clear Smog|p2a: Buneary\n|-damage|p2a: Buneary|83/100\n|-clearboost|p2a: Buneary\n|\n|upkeep\n|turn|2\n|\n|t:|1791753421\n|move|p2a: Buneary|Quick Attack|p1a: Koffing\n|-damage|p1a: Koffing|0 fnt\n|faint|p1a: Koffing\n|\n|upkeep\n|\n|t:|1791753421\n|switch|p1a: Mantyke|Mantyke, L13, M|100/100\n|turn|3\n|\n|t:|1791753424\n|move|p2a: Buneary|Mega Kick|p1a: Mantyke\n|-damage|p1a: Mantyke|9/100\n|move|p1a: Mantyke|Water Pulse|p2a: Buneary\n|-damage|p2a: Buneary|54/100\n|-start|p2a: Buneary|confusion\n|\n|upkeep\n|turn|4\n|\n|t:|1791753426\n|-activate|p2a: Buneary|confusion\n|move|p2a: Buneary|Quick Attack|p1a: Mantyke\n|-damage|p1a: Mantyke|0 fnt\n|faint|p1a: Mantyke\n|\n|upkeep\n|\n|t:|1791753426\n|switch|p1a: Teddiursa|Teddiursa, L11, F|100/100\n|turn|5\n|\n|t:|1791753431\n|switch|p2a: Umbreon|Umbreon, L13, F|100/100\n|move|p1a: Teddiursa|Scratch|p2a: Umbreon\n|-damage|p2a: Umbreon|89/100\n|\n|upkeep\n|turn|6\n|\n|t:|1791753438\n|move|p2a: Umbreon|Wish|p2a: Umbreon\n|move|p1a: Teddiursa|Fury Swipes|p2a: Umbreon\n|-damage|p2a: Umbreon|83/100\n|-damage|p2a: Umbreon|77/100\n|-damage|p2a: Umbreon|71/100\n|-hitcount|p2a: Umbreon|3\n|\n|upkeep\n|turn|7\n|\n|t:|1791753440\n|switch|p2a: Buneary|Buneary, L13, M|54/100\n|move|p1a: Teddiursa|Covet|p2a: Buneary\n|-damage|p2a: Buneary|22/100\n|\n|-heal|p2a: Buneary|83/100|[from] move: Wish|[wisher] Umbreon\n|upkeep\n|turn|8\n",
+	"inputlog": null,
+	"uploadtime": 1791753442
+}
