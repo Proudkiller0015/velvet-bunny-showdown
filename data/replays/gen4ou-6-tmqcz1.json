@@ -1,0 +1,12 @@
+{
+	"id": "gen4ou-6-tmqcz1",
+	"format": "[Gen 4] OU",
+	"players": [
+		"Bunny Easy",
+		"0p9o9i8"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆0p9o9i8\n|t:|1791731225\n|gametype|singles\n|player|p1|Bunny Easy|bunny.png|1000\n|player|p2|0p9o9i8|1|1000\n|gen|4\n|tier|[Gen 4] OU\n|rated|\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Beat Up Nicknames Mod: Beat Up will not reveal any party members\n|rule|Endless Battle Clause: Forcing endless battles is banned\n|rule|Species Clause: Limit one of each Pokémon\n|rule|OHKO Clause: OHKO moves are banned\n|rule|Evasion Items Clause: Evasion items are banned\n|rule|Evasion Moves Clause: Evasion moves are banned\n|rule|Evasion Abilities Clause: Evasion abilities are banned\n|rule|Baton Pass Stat Trap Clause: No Baton Passer may have a way to boost stats or trap Pokémon\n|rule|Freeze Clause Mod: Limit one foe frozen\n|rule|Sleep Moves Clause: Sleep-inducing moves are banned\n|\n|t:|1791731225\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Scizor|Scizor, F|100/100\n|switch|p2a: Cacique|Azelf|100/100\n|turn|1\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1791731248\n|move|p2a: Cacique|Stealth Rock|p1a: Scizor\n|-sidestart|p1: Bunny Easy|move: Stealth Rock\n|move|p1a: Scizor|Superpower|p2a: Cacique\n|-resisted|p2a: Cacique\n|-damage|p2a: Cacique|54/100\n|-unboost|p1a: Scizor|atk|1\n|-unboost|p1a: Scizor|def|1\n|\n|upkeep\n|turn|2\n|\n|t:|1791731257\n|move|p2a: Cacique|Rain Dance|p2a: Cacique\n|-weather|RainDance\n|move|p1a: Scizor|Superpower|p2a: Cacique\n|-resisted|p2a: Cacique\n|-damage|p2a: Cacique|26/100\n|-unboost|p1a: Scizor|atk|1\n|-unboost|p1a: Scizor|def|1\n|\n|-weather|RainDance|[upkeep]\n|upkeep\n|turn|3\n|\n|t:|1791731265\n|move|p2a: Cacique|U-turn|p1a: Scizor\n|-resisted|p1a: Scizor\n|-damage|p1a: Scizor|81/100\n|\n|t:|1791731290\n|switch|p2a: Cavalo|Kingdra, M|100/100|[from] U-turn\n|move|p1a: Scizor|Superpower|p2a: Cavalo\n|-damage|p2a: Cavalo|56/100\n|-unboost|p1a: Scizor|atk|1\n|-unboost|p1a: Scizor|def|1\n|\n|-weather|RainDance|[upkeep]\n|upkeep\n|turn|4\n|\n|t:|1791731300\n|move|p2a: Cavalo|Hydro Pump|p1a: Scizor\n|-damage|p1a: Scizor|0 fnt\n|faint|p1a: Scizor\n|-damage|p2a: Cavalo|46/100|[from] item: Life Orb\n|\n|-weather|RainDance|[upkeep]\n|upkeep\n|\n|t:|1791731300\n|switch|p1a: Latias|Latias, F|100/100\n|-damage|p1a: Latias|88/100|[from] Stealth Rock\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1791731301
+}
