@@ -502,6 +502,14 @@ function itemPanel(bag, team, active, beenIn) {
 
 exports.commands = {
 	/**
+	 * Sent by our client on every connection (client/js/velvet-data.js), so staff can see
+	 * in /whois which way a player came in. Says nothing back.
+	 */
+	velvetclient() {
+		this.connection.velvetClient = true;
+	},
+
+	/**
 	 * Use a battle item (Potion, Revive...) from the character's bag in an RP
 	 * encounter. Sent by the item panel.
 	 */
@@ -1638,6 +1646,28 @@ function serverHelp() {
 }
 
 /**
+ * Staff's /whois and /ip also say which client the player is on: ours, or anything else
+ * (the psim.us mirror is the usual one). Shown with the same permission as the IP itself.
+ */
+function whoisClient() {
+	const original = Chat.commands && Chat.commands.whois;
+	if (typeof original !== 'function' || original.velvet) return false;
+	const whois = function (target, room, user, connection, cmd, message) {
+		const result = original.call(this, target, room, user, connection, cmd, message);
+		const targetUser = this.getUserOrSelf(target, { exactName: user.tempGroup === ' ' });
+		if (targetUser && targetUser !== user && user.can('ip', targetUser)) {
+			const ours = targetUser.connections.some(c => c.velvetClient);
+			this.sendReplyBox(`<small>Client: ${ours ? 'Velvet Bunny' : 'another (usually the psim.us mirror)'}</small>`);
+		}
+		return result;
+	};
+	whois.velvet = true;
+	for (const [name, command] of Object.entries(Chat.commands)) if (command === original) Chat.commands[name] = whois;
+	return true;
+}
+exports.whoisClient = whoisClient; // test/whois-client.test.js
+
+/**
  * Every bot rung has a plateau it never drops below.
  *
  * Bots can climb, but a run of losses to people used to drag a rung down until
@@ -2641,6 +2671,7 @@ exports.startuphook = function () {
 	rpBuffsRoom();
 	// Chat's commands may not all be loaded yet at startup; try again shortly if not.
 	if (!serverHelp()) setTimeout(serverHelp, 3000).unref();
+	if (!whoisClient()) setTimeout(whoisClient, 3000).unref();
 	if (!rpDataByDefault()) setTimeout(rpDataByDefault, 3000).unref();
 	roleplay();
 	rpBattlesToRoleplay();

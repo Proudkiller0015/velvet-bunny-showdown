@@ -410,6 +410,33 @@
 		return true;
 	}
 
+	/*
+	 * Tell the server this is our client, so staff can see in /whois which way a player
+	 * came in. Sent whenever a new challstr arrives, which is every connection,
+	 * reconnects included.
+	 */
+	function installClientTag() {
+		if (!window.PS || !window.PS.user || !window.PS.send) return false;
+		var user = window.PS.user;
+		if (user.velvetClientTag) return true;
+		var challstr = user.challstr;
+		Object.defineProperty(user, 'challstr', {
+			configurable: true,
+			get: function () { return challstr; },
+			set: function (value) {
+				challstr = value;
+				if (value) window.PS.send('/velvetclient');
+			},
+		});
+		user.velvetClientTag = true;
+		if (challstr) window.PS.send('/velvetclient');
+		return true;
+	}
+	// Not one of install()'s hooks: replay pages have no PS at all and must not wait on it.
+	(function tagWhenReady(tries) {
+		if (!installClientTag() && tries < 120) setTimeout(function () { tagWhenReady(tries + 1); }, 500);
+	})(0);
+
 	function install() {
 		if (typeof window.BattlePokedex === 'undefined') return false;
 
