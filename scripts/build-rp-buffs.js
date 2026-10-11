@@ -227,11 +227,43 @@ function section(title, intro, lines) {
 	parts.push(cur.trimEnd());
 	return parts;
 }
+/*
+ * One line per change, not per Pokemon (the owner: "theres redundancy in rp buffs
+ * channel"). Lines that say the same thing - a whole family learning Solar Nectar, the
+ * forty-five Pokemon given Chilling Mist, the ten recharge moves - become one line naming
+ * them all, where the first of them stood. Long lists are cut into lines that fit.
+ */
+function merge(lines) {
+	const order = [];
+	const byBody = new Map();
+	for (const line of lines) {
+		const m = line.match(/^• \*\*([^*]+)\*\*: (.*)$/);
+		if (!m) { order.push({ raw: line }); continue; }
+		let group = byBody.get(m[2]);
+		if (!group) { group = { body: m[2], names: [] }; byBody.set(m[2], group); order.push(group); }
+		group.names.push(m[1]);
+	}
+	const out = [];
+	for (const g of order) {
+		if (g.raw) { out.push(g.raw); continue; }
+		let names = [];
+		const flush = () => { if (names.length) out.push(`• ${names.map(n => `**${n}**`).join(', ')}: ${g.body}`); names = []; };
+		for (const n of g.names) {
+			if ((names.join(', ').length + n.length + g.body.length) > 1700) flush();
+			names.push(n);
+		}
+		flush();
+	}
+	return out;
+}
+const mergedSpecies = merge(speciesLines.map(l => l.text));
+const mergedChangedMoves = merge(changedMoveLines);
+
 const out = [
 	...section('## 🐾 New Pokémon & forms', null, newSpeciesLines),
-	...section('## 🧬 Pokémon changes', '-# In Pokédex order. "learns" lists moves it gets here that the main games never gave it. Tags are the patch the change came in.', speciesLines.map(l => l.text)),
+	...section('## 🧬 Pokémon changes', '-# In Pokédex order. "learns" lists moves it gets here that the main games never gave it; Pokémon given the same thing share a line. Tags are the patch the change came in.', mergedSpecies),
 	...section('## ⚔️ New moves', null, newMoveLines),
-	...section('## 🔧 Changed moves', null, changedMoveLines),
+	...section('## 🔧 Changed moves', null, mergedChangedMoves),
 	...section('## ✨ New abilities', null, newAbilityLines),
 	...section('## 🔧 Changed abilities', null, changedAbilityLines),
 	...section('## 🎒 New items', null, newItemLines),
@@ -254,14 +286,16 @@ const lists = [];
 function addList(title, lines, listed = true) {
 	const names = [];
 	for (const line of lines) {
-		const m = line.match(/^• \*\*([^*]+)\*\*/);
-		if (!m) continue;
-		let key = toID(m[1]);
-		if (!key) continue;
-		// A name used twice (a Pokemon and a move) keeps both: the second gets its section's word.
-		if (faqs[key]) key += toID(title.split(' ').pop()).slice(0, 8);
-		faqs[key] = line.replace(/^• /, '');
-		names.push([m[1], key]);
+		const head = line.match(/^• ((?:\*\*[^*]+\*\*(?:, )?)+)/);
+		if (!head) continue;
+		for (const [, name] of head[1].matchAll(/\*\*([^*]+)\*\*/g)) {
+			let key = toID(name);
+			if (!key) continue;
+			// A name used twice (a Pokemon and a move) keeps both: the second gets its section's word.
+			if (faqs[key]) key += toID(title.split(' ').pop()).slice(0, 8);
+			faqs[key] = line.replace(/^• /, '');
+			names.push([name, key]);
+		}
 	}
 	lists.push({ title, names: listed ? names : [], count: names.length });
 }
@@ -276,13 +310,13 @@ for (const [id, who] of Object.entries(learners)) {
 }
 addList('New abilities', newAbilityLines);
 addList('New items', newItemLines);
-addList('Changed moves', changedMoveLines);
+addList('Changed moves', mergedChangedMoves);
 addList('Changed abilities', changedAbilityLines);
 addList('Changed items', changedItemLines);
 const mechanics = fs.readFileSync(path.join(GUIDES, 'rp-buffs-mechanics.md'), 'utf8').replace(/\r\n/g, '\n').split('\n').filter(l => /^• \*\*/.test(l));
 addList('Battle mechanics', mechanics);
 addList('New Pokémon & forms', newSpeciesLines);
-addList('Pokémon changes', speciesLines.map(l => l.text), false);
+addList('Pokémon changes', mergedSpecies, false);
 const json = path.join(ROOT, 'data', 'rp-buffs.json');
 fs.writeFileSync(json, JSON.stringify({ built: new Date().toISOString().slice(0, 10), lists, faqs }));
 console.log(`${Object.keys(faqs).length} room FAQs -> ${json}`);
