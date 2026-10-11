@@ -212,10 +212,11 @@ function isDistorter(battle, pokemon) {
 
 exports.GRANTS = {
 	// Meteor Beam for Dialga (the owner): with Timeless it is a one-turn 120 that raises Sp. Atk. Shift Gear too.
-	// Explosion for all three. The Origin forms learn what the normal ones do.
-	dialga: { ability: 'Timeless', moves: ['meteorbeam', 'explosion', 'shiftgear'] },
-	palkia: { ability: 'Rending Space', moves: ['explosion'] },
-	giratina: { ability: 'Distortion World', moves: ['explosion'] },
+	// Explosion and Recover for all three (the owner: "wheres giratina palkia and dialga recovery").
+	// The Origin forms learn what the normal ones do.
+	dialga: { ability: 'Timeless', moves: ['meteorbeam', 'explosion', 'shiftgear', 'recover'] },
+	palkia: { ability: 'Rending Space', moves: ['explosion', 'recover'] },
+	giratina: { ability: 'Distortion World', moves: ['explosion', 'recover'] },
 	// Dialga-Origin and Palkia-Origin share their normal forms' (the owner: "the other 2
 	// origin forms suck so i wont buff em for now... give em the same abilities").
 	dialgaorigin: { ability: 'Timeless', moves: [] },

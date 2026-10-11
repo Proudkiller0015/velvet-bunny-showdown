@@ -826,7 +826,8 @@ window.VelvetBuffs = {
 		"palkia": {
 			"moves": [
 				"wavecharge",
-				"explosion"
+				"explosion",
+				"recover"
 			],
 			"abilities": [
 				"Rending Space"
@@ -7399,7 +7400,8 @@ window.VelvetBuffs = {
 			"moves": [
 				"meteorbeam",
 				"explosion",
-				"shiftgear"
+				"shiftgear",
+				"recover"
 			],
 			"abilities": [
 				"Timeless"
@@ -7412,7 +7414,8 @@ window.VelvetBuffs = {
 		},
 		"giratina": {
 			"moves": [
-				"explosion"
+				"explosion",
+				"recover"
 			],
 			"abilities": [
 				"Distortion World"

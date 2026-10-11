@@ -27,7 +27,7 @@ for (const [id, ability] of [['dialga', 'Timeless'], ['palkia', 'Rending Space']
 	['dialgaorigin', 'Timeless'], ['palkiaorigin', 'Rending Space'], ['giratinaorigin', 'Renegade Drift']]) {
 	check(Object.values(Dex.species.get(id).abilities).includes(ability), `${id} can have ${ability}`);
 }
-for (const id of ['dialga', 'palkia', 'giratina']) check(!!Dex.data.Learnsets[id].learnset.explosion, `${id} learns Explosion`);
+for (const id of ['dialga', 'palkia', 'giratina']) check(!!Dex.data.Learnsets[id].learnset.explosion && !!Dex.data.Learnsets[id].learnset.recover, `${id} learns Explosion and Recover`);
 {
 	const v = new (require('pokemon-showdown').TeamValidator)('gen9rpubers');
 	const said = v.validateTeam([{ species: 'Giratina-Origin', ability: 'Renegade Drift', item: 'Griseous Core', moves: ['explosion', 'shadowforce'], evs: { hp: 4 }, level: 100 }]);

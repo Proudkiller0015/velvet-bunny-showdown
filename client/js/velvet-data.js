@@ -2230,8 +2230,20 @@
 				table.learnsets[fresh] = Object.assign({}, table.learnsets[fresh] || {}, buffs.newLearnsets[fresh]);
 			}
 			for (var id2 in buffs.bySpecies) {
-				var learnset = table.learnsets[id2] || (table.learnsets[id2] = {});
 				var added = buffs.bySpecies[id2].moves;
+				/*
+				 * A form with no row of its own (Dialga-Origin, Giratina-Origin...) reads its
+				 * base form's. An empty row here would replace that with nothing: the creation
+				 * trio's Origin forms, handed only an ability, lost their whole movepool in the
+				 * builder (10 Oct 2026). So no row for no moves, and a new row starts as a copy.
+				 */
+				if (!table.learnsets[id2]) {
+					if (!added.length) continue;
+					var dexRow = window.BattlePokedex && window.BattlePokedex[id2];
+					var baseId = dexRow && dexRow.baseSpecies ? window.toID(dexRow.baseSpecies) : '';
+					table.learnsets[id2] = Object.assign({}, (baseId && baseId !== id2 && table.learnsets[baseId]) || {});
+				}
+				var learnset = table.learnsets[id2];
 				for (var k = 0; k < added.length; k++) {
 					// '9a' is generation 9 plus the region-born letter the builder
 					// insists on before it will list a move in a ninth-generation
