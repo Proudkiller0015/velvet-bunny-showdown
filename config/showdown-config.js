@@ -1722,6 +1722,50 @@ function helpRoom() {
 }
 
 /**
+ * Every RP buff, as a room (the owner, 10 Oct 2026: "a public room with rfaqs on each and
+ * a general list in the showdown client").
+ *
+ * The same lines as the Discord #rp-buffs channel, from data/rp-buffs.json, which
+ * scripts/build-rp-buffs.js writes from the dex. Each buff is a room FAQ under its
+ * name's id (`/rfaq wavecharge`, `/rfaq dewgong`), and the intro is the general list:
+ * a button per entry, by category. The room's FAQs are this file's, rewritten on every
+ * boot, so a FAQ added by hand in the room lasts until the next deploy.
+ */
+function rpBuffsRoom() {
+	let data;
+	try { data = require('../../../data/rp-buffs.json'); } catch (e) { console.log('[rp-buffs] no data/rp-buffs.json'); return; }
+	const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+	const section = list => {
+		const body = list.names.length
+			? list.names.map(([name, key]) => `<button class="button" name="send" value="/rfaq ${key}" style="margin:1px">${esc(name)}</button>`).join(' ')
+			: `${list.count} Pok&eacute;mon. Type <code>/rfaq</code> and the name, e.g. <code>/rfaq dewgong</code>.`;
+		return `<details style="margin:3px 0"><summary><b>${esc(list.title)}</b> (${list.count})</summary><div style="padding:4px 0 4px 8px">${body}</div></details>`;
+	};
+	const room = makeRoom('RP Buffs', {
+		isPrivate: false,
+		modjoin: false,
+		modchat: false,
+		autojoin: false,
+		introMessage: `<div style="padding:4px"><h2 style="margin:0 0 4px">RP Buffs</h2>` +
+			`<p style="margin:0 0 6px">Every buff the RP has ever made: new and changed moves, abilities, items, rules and Pok&eacute;mon. ` +
+			`Click a name, or type <code>/rfaq</code> and the name (<code>/rfaq wavecharge</code>). Each one ends with the patch it came in.</p>` +
+			data.lists.map(section).join('') +
+			`<p style="margin:6px 0 0;font-size:9pt">The same list is in <b>#rp-buffs</b> on the Kagura RP Discord. Updated ${esc(data.built)}.</p></div>`,
+	});
+	if (!room) return;
+	try {
+		const Faqs = require('../dist/server/chat-plugins/room-faqs.js');
+		const table = Faqs.roomFaqs;
+		table[room.roomid] = {};
+		for (const [key, source] of Object.entries(data.faqs)) table[room.roomid][key] = { source };
+		require('../dist/lib').FS(Faqs.ROOMFAQ_FILE).writeUpdate(() => JSON.stringify(table));
+		console.log(`[rp-buffs] the RP Buffs room is open with ${Object.keys(data.faqs).length} FAQs`);
+	} catch (e) {
+		console.log('[rp-buffs] FAQs not loaded: ' + e.message);
+	}
+}
+
+/**
  * A room that keeps every battle, and a file that outlives the room.
  *
  * The lobby announces battles as they start, but a chat room is a scrollback:
@@ -2583,6 +2627,7 @@ exports.startuphook = function () {
 	everyTierLadderable();
 	battleLog();
 	helpRoom();
+	rpBuffsRoom();
 	// Chat's commands may not all be loaded yet at startup; try again shortly if not.
 	if (!serverHelp()) setTimeout(serverHelp, 3000).unref();
 	if (!rpDataByDefault()) setTimeout(rpDataByDefault, 3000).unref();
