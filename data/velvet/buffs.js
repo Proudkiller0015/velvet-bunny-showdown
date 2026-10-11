@@ -421,6 +421,14 @@ exports.applyBuffs = (Pokedex, Learnsets) => {
 				abilities: [...new Set([...(had.abilities || []), ...(patch.abilities || [])])],
 			});
 		}
+		// Every machine move Mew learns, for the Pokemon in legend-kits.js' LIKE_MEW.
+		const mew = Learnsets?.mew?.learnset || {};
+		const machineMoves = Object.keys(mew).filter(move => mew[move].some(source => source.charAt(1) === 'M'));
+		for (const id of require('./legend-kits.js').LIKE_MEW) {
+			if (!Pokedex[id]) continue;
+			const buff = exports.Buffs[id] || (exports.Buffs[id] = { moves: [], abilities: [] });
+			buff.moves = [...new Set([...(buff.moves || []), ...machineMoves, ...(exports.Buffs.mew?.moves || [])])];
+		}
 	}
 	for (const [id, change] of Object.entries(PATCH1.EVOLUTIONS)) {
 		const species = Pokedex[id];

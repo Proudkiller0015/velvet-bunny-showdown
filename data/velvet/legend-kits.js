@@ -32,3 +32,12 @@ exports.GRANTS = {
 	koraidon: ['shufflejab'],
 	terapagos: ['slackoff'],
 };
+
+/**
+ * Learn every machine move Mew does (the owner, 11 Oct 2026: "give all tms to arceus
+ * like mew"): every move Mew's learnset has as a TM in any generation, plus the moves
+ * of ours Mew gets like machines. Read off Mew's learnset when the dex loads, so the
+ * list follows Mew. Arceus' type forms use Arceus' learnset, so they get it too.
+ * Handed out by applyBuffs (buffs.js).
+ */
+exports.LIKE_MEW = ['arceus'];
