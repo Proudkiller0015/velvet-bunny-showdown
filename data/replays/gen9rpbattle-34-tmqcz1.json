@@ -1,0 +1,12 @@
+{
+	"id": "gen9rpbattle-34-tmqcz1",
+	"format": "[Gen 9] RP Battle",
+	"players": [
+		"School Kid Ivan",
+		"SlimeQueenSamantha"
+	],
+	"rating": null,
+	"log": "|velvetmusic|trainer|events/trainer-rse\n|j|☆School Kid Ivan\n|j|☆SlimeQueenSamantha\n|t:|1791753775\n|gametype|singles\n|player|p1|School Kid Ivan|schoolkid-gen4|\n|player|p2|SlimeQueenSamantha|queen.png|\n|gen|9\n|tier|[Gen 9] RP Battle\n|clearpoke\n|poke|p1|Rufflet, L11, M|\n|poke|p1|Farfetch’d, L12, F|\n|poke|p1|Emolga, L12, F|\n|poke|p1|Oricorio-Pom-Pom, L13, F|\n|poke|p2|Umbreon, L13, M|\n|poke|p2|Applin, L13, M|\n|poke|p2|Lotad, L13, F|\n|poke|p2|Buneary, L13, F|\n|teampreview\n|inactive|Battle timer is ON: inactive players will automatically lose when time's up. (requested by School Kid Ivan)\n|n|☆School Kid Ivan|schoolkidivan\n|\n|t:|1791753794\n|teamsize|p1|4\n|teamsize|p2|4\n|start\n|switch|p1a: Oricorio|Oricorio-Pom-Pom, L13, F|100/100\n|switch|p2a: Buneary|Buneary, L13, F|100/100\n|turn|1\n|\n|t:|1791753799\n|move|p2a: Buneary|Mega Kick|p1a: Oricorio|[miss]\n|-miss|p2a: Buneary|p1a: Oricorio\n|move|p1a: Oricorio|Air Cutter|p2a: Buneary\n|-crit|p2a: Buneary\n|-damage|p2a: Buneary|40/100\n|\n|upkeep\n|turn|2\n|\n|t:|1791753807\n|move|p2a: Buneary|Mega Kick|p1a: Oricorio|[miss]\n|-miss|p2a: Buneary|p1a: Oricorio\n|move|p1a: Oricorio|Air Cutter|p2a: Buneary\n|-damage|p2a: Buneary|3/100\n|\n|upkeep\n|turn|3\n|\n|t:|1791753810\n|switch|p2a: Umbreon|Umbreon, L13, M|100/100\n|move|p1a: Oricorio|Air Cutter|p2a: Umbreon|[miss]\n|-miss|p1a: Oricorio|p2a: Umbreon\n|\n|upkeep\n|turn|4\n|\n|t:|1791753814\n|move|p1a: Oricorio|Air Cutter|p2a: Umbreon\n|-damage|p2a: Umbreon|81/100\n|move|p2a: Umbreon|Toxic|p1a: Oricorio\n|-status|p1a: Oricorio|tox\n|\n|-damage|p1a: Oricorio|96/100 tox|[from] psn\n|upkeep\n|turn|5\n|\n|t:|1791753819\n|move|p1a: Oricorio|Air Cutter|p2a: Umbreon|[miss]\n|-miss|p1a: Oricorio|p2a: Umbreon\n|move|p2a: Umbreon|Knock Off|p1a: Oricorio\n|-damage|p1a: Oricorio|66/100 tox\n|\n|-damage|p1a: Oricorio|57/100 tox|[from] psn\n|upkeep\n|turn|6\n",
+	"inputlog": null,
+	"uploadtime": 1791753822
+}
