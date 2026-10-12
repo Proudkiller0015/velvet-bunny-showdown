@@ -175,7 +175,7 @@ const E = require(path.join(ROOT, 'src', 'encounters'));
 const TRAINERS = {};
 for (const c of E.TRAINER_CLASSES) {
 	if (!c.avatar) continue;
-	const role = c.id === 'gymleader' ? 'gym' : ['elitefour', 'champion'].includes(c.id) ? c.id : 'trainer';
+	const role = c.troll ? 'troll' : c.id === 'gymleader' ? 'gym' : ['elitefour', 'champion'].includes(c.id) ? c.id : 'trainer';
 	const t = TRAINERS[c.avatar] = TRAINERS[c.avatar] || { role, titles: [] };
 	for (const title of [c.title, c.short].filter(Boolean)) if (!t.titles.includes(title)) t.titles.push(title);
 }

@@ -758,6 +758,8 @@ function musicFor(enc) {
 	}
 	if (enc.kind === 'trainer') {
 		if (['elitefour', 'champion'].includes(enc.classId)) return event[enc.classId] ? { kind: enc.classId, file: event[enc.classId] } : null;
+		const cls = E.findClass(enc.classId);
+		if (cls && cls.troll && event.troll) return { kind: 'troll', file: event.troll };
 		return enc.classId === 'gymleader' ? { kind: 'gym', file: event.gym } : { kind: 'trainer', file: event.trainer };
 	}
 	return null;
