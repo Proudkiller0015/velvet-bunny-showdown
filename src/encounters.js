@@ -376,6 +376,8 @@ const TRAINER_CLASSES = [
 	 * route from one badge (LARPER_CHANCE) and summonable by name.
 	 */
 	{ id: 'larper', title: 'Larper', avatar: 'harlequin', types: [], sex: 'm', troll: true, aliases: ['larp', 'troll', 'trolltrainer'] },
+	// The Larper's dark-humour cousin (owner, 12 Oct 2026): only ever the Explosion squad.
+	{ id: 'terrorist', title: 'Terrorist', avatar: 'burglar', types: [], sex: 'm', troll: true, trollTheme: 'explosion', bombers: true, aliases: ['bomber', 'bombsquad'] },
 	{ id: 'twins', title: 'Twins', avatar: 'twins-gen4', types: ['Normal', 'Fairy', 'Electric', 'Bug'], sex: 'pair', pair: true },
 	{ id: 'youngcouple', title: 'Young Couple', avatar: 'youngcouple-gen4dp', types: ['Normal', 'Fairy', 'Psychic', 'Water'], sex: 'pair', pair: true, short: 'Couple' },
 ];
@@ -388,8 +390,13 @@ const TRAINER_CLASSES = [
  */
 const ACE_CLASSES = ['acetrainer', 'acetrainerf'];
 const ACE_STALL_CHANCE = 0.25;
-// One trainer in thirty on a route is a Larper, from one badge.
-const LARPER_CHANCE = 1 / 30;
+/*
+ * Outside gyms, one route trainer in ten is a Larper and one in ten a
+ * Terrorist (owner, 12 Oct 2026). Where the place is Fire, the Terrorists are 45%; where
+ * it is Psychic, the Larpers are.
+ */
+const LARPER_CHANCE = 0.1;
+const TROLL_HOME_CHANCE = 0.45;
 
 /**
  * A class staff typed that the list doesn't have ("Team Rocket Grunt"): its own
@@ -901,11 +908,20 @@ function rollTrainer({ place, badges, levelCap = null, rng = Math.random, classI
 	const classes = (place && place.trainers && place.trainers.length ? place.trainers : ['youngster', 'lass', 'hiker', 'backpacker'])
 		.map(findClass).filter(c => c && !c.story);   // a route never sends a Champion at random
 	let cls = givenClass || (classId && findClass(classId)) || pick(classes, rng);
-	if (!givenClass && !classId && badges >= 1 && rng() < LARPER_CHANCE) cls = findClass('larper');
+	// Nobody is safe at any badge count: badges only make the troll's Pokemon stronger.
+	if (!givenClass && !classId && !(place && place.gymType)) {
+		const types = (place && place.types) || [];
+		const bombers = types.includes('Fire') ? TROLL_HOME_CHANCE : LARPER_CHANCE;
+		const larpers = types.includes('Psychic') ? TROLL_HOME_CHANCE : LARPER_CHANCE;
+		const roll = rng();
+		if (roll < bombers) cls = findClass('terrorist');
+		else if (roll < bombers + larpers) cls = findClass('larper');
+	}
 	const tier = BADGE_TIERS[badges];
 	// The stall Ace Trainer battles single unless a double is asked for: stall is a singles game.
 	const isDouble = cls.pair || (double === null ? !cls.stall && !cls.troll && badges >= 1 && rng() < 0.15 : !!double);
-	const size = Math.min(6, Math.max(isDouble ? 2 : 1, tier.size, grown ? (grown.size >= 6 ? (rng() < 0.5 ? 5 : 6) : grown.size) : 0));
+	// A troll always brings six, whatever the badges (owner, 12 Oct 2026).
+	const size = cls.troll ? 6 : Math.min(6, Math.max(isDouble ? 2 : 1, tier.size, grown ? (grown.size >= 6 ? (rng() < 0.5 ? 5 : 6) : grown.size) : 0));
 
 	// The ace pulls a trainer down the same way it pulls the wild: somebody whose best
 	// Pokemon is far under their cap is not handed a full-cap team to lose to.
@@ -980,11 +996,12 @@ function rollTrainer({ place, badges, levelCap = null, rng = Math.random, classI
 	if (cls.troll) {
 		for (let i = 0; i < size; i++) levels.push(i === size - 1 ? hi : randInt(Math.max(lo, hi - 5), Math.max(lo, hi - 1), rng));
 		levels.sort((a, b) => a - b);
-		const troll = trollTrainerTeam(entries, levels, badges, rng);
+		const troll = trollTrainerTeam(entries, levels, badges, rng, cls.trollTheme, { bombers: !!cls.bombers });
 		if (troll) {
 			return {
 				kind: 'trainer', double: isDouble, name: trainerName(cls, rng), avatar: cls.avatar, className: cls.title, classId: cls.id,
-				team: troll.team, ai: tier.ai, format: isDouble ? TRAINER_DOUBLE_FORMAT : TRAINER_FORMAT, badges: realBadges,
+				// Played to annoy, whatever the badges (ai.js trollChoice).
+				team: troll.team, ai: 'troll', format: isDouble ? TRAINER_DOUBLE_FORMAT : TRAINER_FORMAT, badges: realBadges,
 				style: 'troll', theme: troll.theme,
 			};
 		}
@@ -1142,19 +1159,221 @@ function stallTrainerTeam(entries, levels, badges, rng) {
  * badges would have taught it. A theme that can't field the whole team at these
  * badges is passed over for another. Null when none can.
  */
+const PROTECT_SLOT = ['banefulbunker', 'spikyshield', 'kingsshield', 'protect', 'detect'];
+const HEAL_SLOT = ['recover', 'roost', 'softboiled', 'slackoff', 'milkdrink', 'shoreup', 'synthesis', 'moonlight', 'morningsun', 'strengthsap', 'wish', 'rest'];
 const TROLL_THEMES = [
 	{ id: 'explosion', keys: ['explosion', 'selfdestruct', 'mistyexplosion'], extra: ['protect', 'substitute'] },
-	{ id: 'perish', keys: ['perishsong'], extra: ['protect', 'meanlook', 'block', 'spiderweb'] },
+	/*
+	 * Perish Song is only worth anything on something that can't leave (owner, 12 Oct 2026):
+	 * a singer brings its own trap and a Protect to wait the count out behind.
+	 */
+	{ id: 'perish', keys: ['perishsong'], alt: ['meanlook', 'block', 'spiderweb', 'protect', 'destinybond'],
+		slots: [['meanlook', 'block', 'spiderweb'], PROTECT_SLOT], needs: 1, fewest: 3, extra: [] },
 	{ id: 'evasion', keys: ['doubleteam', 'minimize'], extra: ['swagger', 'attract', 'confuseray', 'batonpass'] },
+	/*
+	 * Trapped, then stalled to death: Block, Toxic, Protect and a heal, the Block-Toxapex way.
+	 * A stall Pokemon that can't trap still fits beside the trappers (alt), on Toxic.
+	 */
+	{ id: 'trap', keys: ['meanlook', 'block', 'spiderweb'], alt: ['toxic', 'leechseed'],
+		slots: [['toxic', 'leechseed', 'willowisp'], PROTECT_SLOT, HEAL_SLOT], extra: [] },
 	{ id: 'memento', keys: ['memento', 'healingwish', 'finalgambit', 'destinybond'], extra: ['taunt', 'encore'] },
 	{ id: 'ditto' },
 	{ id: 'splash' },
 ];
 
-function trollTrainerTeam(entries, levels, badges, rng) {
+const ATE = ['Galvanize', 'Aerilate', 'Refrigerate', 'Pixilate'];
+const ateOf = species => Object.values(species.abilities || {}).find(a => ATE.includes(a)) || null;
+const EXPLOSIONS = ['explosion', 'selfdestruct', 'mistyexplosion'];
+/*
+ * Self-Destruct only earns a bomber its place when it averages 80% or more on what this
+ * trainer's route commonly fields at these levels (owner, 12 Oct 2026). Explosion always
+ * does and is taken over it whenever both are learned; so does Misty Explosion, at 200
+ * power with Special Defense halved.
+ */
+const WEAK_BOOM_FLOOR = 80;
+let boomCalc = null;
+const boomCache = new Map();
+function boomAverage(species, moveId, level, ability, targets) {
+	const key = `${species.id}|${moveId}|${level}|${ability}|${targets.map(t => t.id).join(',')}`;
+	if (boomCache.has(key)) return boomCache.get(key);
+	if (!boomCalc) {
+		const calc = require('@smogon/calc');
+		boomCalc = { calc, gen: calc.Generations.get(9) };
+	}
+	const { calc, gen } = boomCalc;
+	let total = 0, counted = 0;
+	for (const target of targets) {
+		try {
+			const result = calc.calculate(gen,
+				new calc.Pokemon(gen, species.name, { level, ability, nature: 'Hardy' }),
+				new calc.Pokemon(gen, target.name, { level, nature: 'Hardy' }),
+				// Our booms halve the defending stat (classic-mechanics.js): the same as double power.
+				new calc.Move(gen, Dex.moves.get(moveId).name, { overrides: { basePower: Dex.moves.get(moveId).basePower * 2 } }));
+			const rolls = [].concat(result.damage).map(Number);
+			const hp = result.defender.maxHP();
+			total += Math.min(100, (rolls.reduce((a, b) => a + b, 0) / rolls.length) / hp * 100);
+			counted++;
+		} catch (e) { /* a Pokemon the calculator doesn't know: left out */ }
+	}
+	const avg = counted ? total / counted : 0;
+	boomCache.set(key, avg);
+	return avg;
+}
+
+const DARK_COVERAGE = ['knockoff', 'crunch', 'suckerpunch', 'darkpulse', 'foulplay', 'throatchop', 'payback', 'nightslash', 'bite', 'assurance', 'feintattack', 'thief', 'snarl'];
+
+/*
+ * The lines whose Explosion comes out another type (Galvanize: Alolan Geodude's; an -ate
+ * only turns Normal moves, so not Misty Explosion).
+ * Out of the battle only: a Mega's ability is not one a set can be given.
+ */
+let ateBomberCache = null;
+function ateBombers() {
+	if (!ateBomberCache) {
+		ateBomberCache = Dex.species.all().filter(sp => sp.exists && !sp.prevo && !sp.battleOnly && !sp.isMega &&
+			lineOf(sp).some(st => ateOf(st) && EXPLOSIONS.some(k => trainerMoves(st, 100, 6).has(k))));
+	}
+	return ateBomberCache;
+}
+
+/*
+ * The Terrorist's kit (owner, 12 Oct 2026): a slow bomber that can't take a hit wears a
+ * Choice Scarf at full Speed, so it goes off first; one with nothing to do but attack wears
+ * a Choice Band (Specs for Misty Explosion) for the bigger boom; one with a job besides
+ * wears Safety Goggles, so a Spore can't stop it, or Endure and a Custap Berry: it lives
+ * through the hit and goes off first on what is left. An -ate ability whenever it has one.
+ * Locked into a choice, Protect and Substitute are only dead moves.
+ */
+const BOMBER_FILLER = new Set(['protect', 'detect', 'substitute', 'endure']);
+function armBombers(team, rng) {
+	for (const set of team) {
+		const species = Dex.species.get(set.species);
+		const ate = ateOf(species);
+		if (ate) set.ability = ate;
+		const b = species.baseStats;
+		const moves = set.moves.map(m => Dex.moves.get(m));
+		const bomb = moves.find(m => EXPLOSIONS.includes(m.id));
+		const job = moves.some(m => m.category === 'Status' && !BOMBER_FILLER.has(m.id));
+		const choice = b.spe < 80 && b.hp + (b.def + b.spd) / 2 < 170 ? 'Choice Scarf' :
+			!job ? (bomb && bomb.category === 'Special' ? 'Choice Specs' : 'Choice Band') : null;
+		if (!choice) {
+			const endure = !set.moves.some(m => toID(m) === 'endure') && trainerMoves(species, set.level, 6).has('endure');
+			if ((endure || set.moves.some(m => toID(m) === 'endure')) && rng() < 0.5) {
+				set.item = 'Custap Berry';
+				if (endure) {
+					const spare = moves.findIndex(m => BOMBER_FILLER.has(m.id)) >= 0 ? moves.findIndex(m => BOMBER_FILLER.has(m.id)) :
+						moves.findIndex(m => m.category === 'Status');
+					if (set.moves.length < 4) set.moves.push('Endure');
+					else set.moves[spare >= 0 ? spare : 3] = 'Endure';
+				}
+			} else {
+				set.item = 'Safety Goggles';
+			}
+			continue;
+		}
+		set.item = choice;
+		set.moves = moves.filter(m => m.category !== 'Status').map(m => m.name);
+		if (choice === 'Choice Scarf') {
+			const rest = Math.floor((510 - 252) / 5);
+			for (const k of ['hp', 'atk', 'def', 'spa', 'spd']) set.evs[k] = Math.min(set.evs[k] || 0, rest);
+			set.evs.spe = 252;
+			set.ivs.spe = 31;
+			set.nature = bomb && bomb.category === 'Special' ? 'Timid' : 'Jolly';
+		}
+	}
+	return team;
+}
+
+/*
+ * A bomb snuck into a Larper team that isn't about bombs (owner, 12 Oct 2026): one Pokemon
+ * that learns it swaps its weakest spare move for the boom.
+ */
+function sneakBomb(team, theme, rng) {
+	const carriers = team.filter(set => {
+		const all = trainerMoves(Dex.species.get(set.species), set.level, 6);
+		return EXPLOSIONS.some(k => all.has(k));
+	});
+	if (!carriers.length) return;
+	const set = carriers[Math.floor(rng() * carriers.length)];
+	const all = trainerMoves(Dex.species.get(set.species), set.level, 6);
+	const bomb = Dex.moves.get(EXPLOSIONS.find(k => all.has(k))).name;
+	const keep = new Set([...(theme.keys || []), ...(theme.slots || []).flat()]);
+	const spare = set.moves.map((m, i) => ({ m: Dex.moves.get(m), i })).filter(x => !keep.has(x.m.id))
+		.sort((a, b) => (a.m.basePower || 0) - (b.m.basePower || 0))[0];
+	if (set.moves.length < 4) set.moves.push(bomb);
+	else if (spare) set.moves[spare.i] = bomb;
+}
+
+/*
+ * A frail Final Gambit or Destiny Bond user wears a Choice Scarf at full Speed: it goes
+ * first and takes the foe with it (owner, 12 Oct 2026).
+ */
+function scarfGamblers(team) {
+	for (const set of team) {
+		const b = Dex.species.get(set.species).baseStats;
+		const ids = set.moves.map(toID);
+		if (!(ids.includes('finalgambit') || ids.includes('destinybond')) || b.hp + (b.def + b.spd) / 2 >= 170) continue;
+		set.item = 'Choice Scarf';
+		set.moves = set.moves.filter(m => toID(m) === 'finalgambit' || toID(m) === 'destinybond' || Dex.moves.get(m).category !== 'Status');
+		const rest = Math.floor((510 - 252) / 5);
+		for (const k of ['hp', 'atk', 'def', 'spa', 'spd']) set.evs[k] = Math.min(set.evs[k] || 0, rest);
+		set.evs.spe = 252;
+		set.ivs.spe = 31;
+		set.nature = 'Timid';
+	}
+}
+
+/*
+ * One troll trainer in twenty brings a box-art legendary as its ace (owner, 12 Oct 2026),
+ * played as a joke: a real troll set when it has one (stall Lugia: Toxic, Protect, Roost),
+ * otherwise (and half the time anyway) its weakest attacks - Water Gun Kyogre. It goes out
+ * as "Wild Lugia": "Larper Ballsack sent out Wild Lugia!".
+ */
+const BOXART_TROLL_CHANCE = 0.05;
+let boxartCache = null;
+function trollLegend(team, rng) {
+	if (!boxartCache) {
+		boxartCache = Dex.species.all().filter(sp => sp.exists && !sp.battleOnly && !sp.isMega && sp.baseSpecies === sp.name &&
+			!sp.isNonstandard && Rarity.classOf(sp.name) === 'boxart');
+	}
+	if (!boxartCache.length) return;
+	const ace = team[team.length - 1];
+	const species = boxartCache[Math.floor(rng() * boxartCache.length)];
+	const all = trainerMoves(species, ace.level, 6);
+	const first = list => list.find(m => all.has(m));
+	const status = first(['toxic', 'leechseed', 'willowisp']);
+	const shield = first(PROTECT_SLOT);
+	const heal = first(HEAL_SLOT);
+	let moves = null;
+	// Half the time the joke set, even when a troll set is there to be had.
+	if (rng() < 0.5) {
+		// left null: the feeble attacks below
+	} else if (status && shield && heal) {
+		moves = [status, shield, heal, first(['meanlook', 'block', 'spiderweb', 'whirlwind', 'roar', 'haze']) || first(['perishsong', 'substitute'])];
+	} else if (first(['perishsong']) && first(['meanlook', 'block', 'spiderweb']) && shield) {
+		moves = ['perishsong', first(['meanlook', 'block', 'spiderweb']), shield, heal];
+	} else if (first(EXPLOSIONS)) {
+		moves = [first(EXPLOSIONS), first(['doubleteam', 'minimize']), shield, first(DARK_COVERAGE)];
+	}
+	if (!moves) {
+		// Its feeblest attacks, its own type first among equals: Water Gun, Tackle, Ember.
+		const weak = [...all].map(id => Dex.moves.get(id))
+			.filter(m => m.category !== 'Status' && m.basePower > 0 && !m.damageCallback && !m.basePowerCallback && !m.multihit)
+			.sort((a, b) => a.basePower - b.basePower || species.types.includes(b.type) - species.types.includes(a.type));
+		moves = weak.slice(0, 4).map(m => m.id);
+	}
+	moves = [...new Set(moves.filter(Boolean))];
+	if (!moves.length) return;
+	team[team.length - 1] = {
+		...ace, name: `Wild ${species.name}`.slice(0, 18), species: species.name, item: '',
+		moves: moves.map(m => Dex.moves.get(m).name), ability: abilityFor(species, rng, 0), nature: pick(NATURES, rng),
+	};
+}
+
+function trollTrainerTeam(entries, levels, badges, rng, only = null, { bombers = false } = {}) {
 	const top = levels[levels.length - 1];
 	const size = levels.length;
-	const themes = TROLL_THEMES.slice().sort(() => rng() - 0.5);
+	const themes = only ? TROLL_THEMES.filter(t => t.id === only) : TROLL_THEMES.slice().sort(() => rng() - 0.5);
 	for (const theme of themes) {
 		let built = null;
 		if (theme.id === 'ditto') {
@@ -1171,32 +1390,77 @@ function trollTrainerTeam(entries, levels, badges, rng) {
 		} else {
 			const picked = [];
 			const taken = new Set();
+			const passed = [];
+			// What this route commonly fields at these levels: what a weaker boom has to hurt.
+			const common = theme.id === 'explosion' ? entries.slice().sort((a, b) => b.w - a.w).slice(0, 10)
+				.map(e => lineOf(e.item).filter(st => !st.isMega && !st.battleOnly && minLevelOf(st) <= top).pop() || e.item) : [];
+			// One whose Explosion comes out another type, at the stage these levels allow.
+			const first = bombers && theme.id === 'explosion' ? ateBombers()
+				.map(root => lineOf(root).filter(st => !st.isMega && !st.battleOnly && minLevelOf(st) <= top && ateOf(st) &&
+					['explosion', 'selfdestruct'].some(k => trainerMoves(st, top, 6).has(k))).pop())
+				.filter(Boolean).sort(() => rng() - 0.5).slice(0, 1) : [];
 			for (let i = 0; i < 200 && picked.length < size; i++) {
-				const root = weightedPick(entries.filter(e => !taken.has(e.item.id)), rng);
+				const root = i < first.length ? first[i] : weightedPick(entries.filter(e => !taken.has(e.item.id)), rng);
 				if (!root) break;
 				taken.add(root.id);
-				const species = stageFor(root, top, rng, { behind: 0 });
+				const species = i < first.length ? root : stageFor(root, top, rng, { behind: 0 });
 				const all = trainerMoves(species, top, 6);
-				const key = theme.keys.find(k => all.has(k));
-				if (!key) continue;
+				if (i < first.length && !theme.keys.some(k => all.has(k))) continue;
+				const ability = (bombers && ateOf(species)) || abilityFor(species, () => 0, 0);
+				const key = theme.keys.find(k => all.has(k) &&
+					(theme.id !== 'explosion' || k !== 'selfdestruct' || boomAverage(species, k, top, ability, common) >= WEAK_BOOM_FLOOR) &&
+					(theme.slots || []).slice(0, theme.needs || 0).every(slot => slot.some(x => all.has(x))));
+				if (!key) {
+					if (theme.alt) passed.push(species);
+					continue;
+				}
+				add(species, key, all);
+			}
+			// Too few singers on this route: the rest of the team keeps them in (alt moves), from three singers.
+			if (theme.alt && picked.length >= (theme.fewest || 2)) {
+				for (const species of passed) {
+					if (picked.length >= size) break;
+					const all = trainerMoves(species, top, 6);
+					const key = theme.alt.find(k => all.has(k));
+					if (key) add(species, key, all);
+				}
+			}
+			if (picked.length >= size) built = picked;
+			function add(species, key, all) {
 				const taught = trainerMoves(species, top, badges);
 				const base = trainerSet(species, top, badges, rng);
 				const moves = [key];
-				for (const m of theme.extra) if (moves.length < 3 && all.has(m) && rng() < 0.6) moves.push(m);
+				for (const slot of theme.slots || []) {
+					const m = slot.find(x => all.has(x) && !moves.includes(x));
+					if (m) moves.push(m);
+				}
+				for (const m of theme.extra.slice().sort(() => rng() - 0.5)) if (moves.length < 3 && !moves.includes(m) && all.has(m) && rng() < 0.6) moves.push(m);
 				// At least one attack, so it isn't a wall of nothing.
 				for (const m of base.moves) {
 					if (moves.length >= 4) break;
 					const move = Dex.moves.get(m);
-					if (!moves.includes(move.id) && !theme.keys.includes(move.id) && (move.category !== 'Status' || taught.has(move.id))) moves.push(move.id);
+					if (!moves.includes(move.id) && !theme.keys.includes(move.id) && move.id !== 'sketch' && (move.category !== 'Status' || taught.has(move.id))) moves.push(move.id);
+				}
+				// A Ghost takes nothing from Explosion: the bomber carries a Dark move for it.
+				if (theme.id === 'explosion' && !moves.some(m => Dex.moves.get(m).type === 'Dark')) {
+					const dark = DARK_COVERAGE.find(m => all.has(m));
+					if (dark) {
+						const spare = moves.findIndex((m, j) => j > 0 && !theme.keys.includes(m) && Dex.moves.get(m).category !== 'Status');
+						if (moves.length < 4) moves.push(dark);
+						else moves[spare > 0 ? spare : 3] = dark;
+					}
 				}
 				picked.push({ species: species.name, moves: moves.map(m => Dex.moves.get(m).name), ability: base.ability, nature: base.nature, item: '' });
 			}
-			if (picked.length >= size) built = picked;
 		}
 		if (!built) continue;
 		const team = dealTrainerTeam(built, levels, badges, rng);
 		// An early trainer's ability is rolled; a Larper's Ditto is always an Imposter.
 		for (const set of team) if (set.species === 'Ditto') set.ability = 'Imposter';
+		if (bombers && theme.id === 'explosion') armBombers(team, rng);
+		if (theme.id === 'memento') scarfGamblers(team);
+		if (!['explosion', 'ditto', 'splash'].includes(theme.id)) sneakBomb(team, theme, rng);
+		if (rng() < BOXART_TROLL_CHANCE) trollLegend(team, rng);
 		return { team, theme: theme.id };
 	}
 	return null;
@@ -1417,6 +1681,6 @@ module.exports = {
 	catchRate, BALLS, findBall, catchChance, shakesFor, CATCH_BOOST, PITY_PER_MISS,
 	TRAINER_CLASSES, GYM_TYPES, gymPlace, findClass, trainerName, minLevel, rootOf, lineOf, lineWeight, BADGE_TIERS, Rarity,
 	stageFor, BABIES, babyWeight, clock, clockWeight, TIME_OF_DAY, DAY_OF_WEEK, SEASONS, EVENTS, eventOn, aceAdjusted, aceLevel,
-	rollWild, rollTrainer, trainerSet, describe, stallTrainerTeam, trollTrainerTeam, customClass, ACE_CLASSES, ACE_STALL_CHANCE, LARPER_CHANCE,
+	rollWild, rollTrainer, trainerSet, describe, stallTrainerTeam, trollTrainerTeam, customClass, boomAverage, ACE_CLASSES, TROLL_HOME_CHANCE, ACE_STALL_CHANCE, LARPER_CHANCE,
 	WILD_FORMAT, WILD_DOUBLE_FORMAT, TUTORIAL_FORMAT, TUTORIAL_PIKACHU, TUTORIAL_RATTATA, TUTORIAL_BAG, TRAINER_FORMAT, TRAINER_DOUBLE_FORMAT,
 };

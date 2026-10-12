@@ -325,7 +325,11 @@ const DIFFICULTIES = {
 	// options against their likely replies, weighted by numbers the trainer tuned
 	// from self-play rather than by hand.
 	stockfish: { blunder: 0,   greedy: false, noise: 0,  switching: true,  tempo: true,  predict: true,  tera: true, switchMargin: 25, knowsSets: true, readsSets: true, search: true, playbook: true, ...PINKACROSS_CHAMPION, ...PINKACROSS_SEARCH, ...STOCKFISH_REVIEW, ...STALL_PLAY },
+	// The troll trainers (Larper, Terrorist): Champion's head, used to annoy rather than to win
+	// (trollChoice). Not offered on the site's bots.
+	troll: { blunder: 0, greedy: false, noise: 0, switching: true, tempo: true, predict: true, tera: true, switchMargin: 25, knowsSets: true, readsSets: true, playbook: true, ...PINKACROSS_CHAMPION, ...STALL_PLAY, troll: true },
 };
+const HIDDEN_DIFFICULTIES = new Set(['troll']);
 const DEFAULT_DIFFICULTY = 'hard';
 
 /**
@@ -405,7 +409,7 @@ class BattleAI {
 		return this.difficultyName;
 	}
 
-	static difficulties() { return Object.keys(DIFFICULTIES); }
+	static difficulties() { return Object.keys(DIFFICULTIES).filter(d => !HIDDEN_DIFFICULTIES.has(d)); }
 
 	jitter() { return this.cfg.noise ? (Math.random() - 0.5) * 2 * this.cfg.noise : 0; }
 
@@ -2574,6 +2578,8 @@ class BattleAI {
 	}
 
 	teamOrder(request, state) {
+		// A troll team comes out in the order it was built: the Magikarp first, the Gyarados last.
+		if (this.cfg.troll) return `team ${request.side.pokemon.map((p, i) => i + 1).join('')}`;
 		const gen = this.gen(state.gen);
 		// A weather team leads with its setter, as Smogon's rain, sand and hail teams do.
 		if (!this.cfg.naive && this.cfg.weatherPlay !== false && request.side.pokemon.length > 1) {
@@ -3036,6 +3042,8 @@ class BattleAI {
 			.map((p, i) => ({ p, i: i + 1 }))
 			.filter(({ p }) => !p.active && !/fnt/.test(p.condition));
 		if (!options.length) return 'default';
+		// A troll sends them out in the order it built them (the ace last).
+		if (this.cfg.troll) return `switch ${options[0].i}`;
 		this.learnFoeScale(gen, state, request);
 		/*
 		 * In the endgame, who comes in is decided by playing the rest out (A16):
@@ -3363,6 +3371,143 @@ class BattleAI {
 		}
 	}
 
+	/*
+	 * The troll trainer's turn (owner, 12 Oct 2026: "larper goal is to faint you not winning;
+	 * or take ur sanity"). Whatever annoys most comes first, every turn it is possible: blow
+	 * up, trap and Perish, trap and heal forever, stack evasion, poison, confuse, Protect
+	 * between the ticks. Only when none of it is on does the ordinary AI play the turn.
+	 */
+	trollChoice(gen, active, legal, me, foes, state, request, index, field, incoming, movesFirst) {
+		const foe = foes[0];
+		if (!foe) return null;
+		const them = this.foePokemon(gen, foe);
+		const mine = (state.mine && state.mine['abc'[index]]) || {};
+		const hp = me.originalCurHP / me.maxHP() * 100;
+		const types = (them && them.types) || [];
+		const fv = foe.volatiles || new Set();
+		const mv = mine.volatiles || new Set();
+		const repeated = id => mine.lastMoveTurn === state.turn - 1 && String(mine.lastMove || '').toLowerCase().replace(/[^a-z0-9]/g, '') === id;
+		const bench = request.side.pokemon.map((p, i) => ({ p, i: i + 1 })).filter(({ p }) => !p.active && !/fnt/.test(p.condition));
+		const canLeave = !active.trapped && !active.maybeTrapped && bench.length;
+		const use = (...ids) => {
+			for (const id of ids) {
+				const m = legal.find(x => x.id === id);
+				if (!m) continue;
+				const target = request.active.length > 1 && NEEDS_TARGET.has(m.target) ? ` ${'abc'.indexOf(foe.slot) + 1}` : '';
+				this.log(`troll: ${m.move || id}`);
+				return `move ${m.n}${target}`;
+			}
+			return null;
+		};
+		const hurts = id => {
+			const m = legal.find(x => x.id === id);
+			return !!m && this.damagePct(gen, me, them, m.move || toName(id, 'moves'), field) > 0;
+		};
+		const shield = repeated('protect') || repeated('detect') || repeated('banefulbunker') || repeated('spikyshield') || repeated('kingsshield') ? null
+			: use('banefulbunker', 'spikyshield', 'kingsshield', 'protect', 'detect');
+		const heal = hp < 60 ? use('recover', 'roost', 'softboiled', 'slackoff', 'milkdrink', 'moonlight', 'morningsun', 'synthesis', 'shoreup', 'strengthsap', 'wish') : null;
+
+		const splash = use('splash');
+		if (splash) return splash;
+
+		// Our own Perish count is about to end: someone else comes in and theirs keeps ticking.
+		if (mine.perish === 1 && canLeave) return `switch ${bench[0].i}`;
+		if (foe.perish) {
+			const wait = shield || heal || (!mv.has('substitute') && hp > 30 ? use('substitute') : null) ||
+				((me.boosts && me.boosts.evasion || 0) < 6 ? use('doubleteam', 'minimize') : null);
+			if (wait) return wait;
+		}
+
+		// Nothing to keep alive: take them with us.
+		if (movesFirst && incoming >= hp * 0.8 && !repeated('destinybond')) {
+			const bond = use('destinybond');
+			if (bond) return bond;
+		}
+		const boom = ['explosion', 'selfdestruct', 'mistyexplosion'].find(hurts);
+		if (boom && String((them && them.ability) || foe.ability || '').toLowerCase() !== 'damp') {
+			// Endure on a Custap Berry: live through the hit, then go off first on what is left.
+			if (/custap/i.test(String(me.item || '')) && hp > 25 && incoming >= hp && !repeated('endure')) {
+				const endure = use('endure');
+				if (endure) return endure;
+			}
+			/*
+			 * A foe that has shown Protect waits for the boom: our own Protect or Substitute
+			 * spends its turn instead, and the next one it can't Protect twice.
+			 */
+			const id = m => String(m || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+			const theyProtect = [...(foe.moves || [])].some(m => PROTECTS.has(id(m)) && id(m) !== 'endure');
+			const protectedLast = foe.lastMoveTurn === state.turn - 1 && PROTECTS.has(id(foe.lastMove));
+			// Unsure, it blows up anyway (owner, 12 Oct 2026): the bait is the exception.
+			if (theyProtect && !protectedLast && Math.random() < 0.25) {
+				const bait = shield || (!mv.has('substitute') && hp > 25 && !repeated('substitute') ? use('substitute') : null);
+				if (bait) return bait;
+			}
+			// A plain hit that surely KOs keeps the bomb for the next one; anything less and it blows.
+			const kills = movesFirst && legal.some(m => !['explosion', 'selfdestruct', 'mistyexplosion', 'finalgambit'].includes(m.id) &&
+				this.damagePct(gen, me, them, m.move || toName(m.id, 'moves'), field) >= 130);
+			if (!kills) return use(boom);
+		}
+		if (hp >= 50 && hurts('finalgambit')) return use('finalgambit');
+		if (bench.length) {
+			const parting = use('memento', 'healingwish', 'lunardance');
+			if (parting) return parting;
+		}
+
+		// Trap it, then Perish it or wear it down.
+		if (!foe.trapped && !types.includes('Ghost')) {
+			const trap = use('meanlook', 'block', 'spiderweb');
+			if (trap) return trap;
+		}
+		// Perish Song on something that can still leave is a wasted turn: only once it's trapped.
+		if (!foe.perish && foe.trapped) {
+			const perish = use('perishsong');
+			if (perish) return perish;
+		}
+
+		if ((me.boosts && me.boosts.evasion || 0) < 6) {
+			const dodge = use('minimize', 'doubleteam');
+			if (dodge) return dodge;
+		} else if (canLeave) {
+			const pass = use('batonpass');
+			if (pass) return pass;
+		}
+
+		if (!foe.status) {
+			const poison = !types.includes('Poison') && !types.includes('Steel') ? use('toxic') : null;
+			const burn = !types.includes('Fire') ? use('willowisp') : null;
+			const para = !types.includes('Electric') && !types.includes('Ground') ? use('thunderwave', 'glare', 'stunspore') : null;
+			const sleep = use('spore', 'sleeppowder', 'hypnosis', 'sing', 'yawn');
+			const status = poison || burn || para || sleep;
+			if (status) return status;
+		}
+		if (!fv.has('leechseed') && !types.includes('Grass')) {
+			const seed = use('leechseed');
+			if (seed) return seed;
+		}
+		if (!fv.has('confusion')) {
+			const confuse = use('swagger', 'flatter', 'confuseray', 'sweetkiss', 'supersonic');
+			if (confuse) return confuse;
+		}
+		if (!fv.has('attract')) {
+			const attract = use('attract');
+			if (attract) return attract;
+		}
+		if (!fv.has('taunt')) {
+			const taunt = use('taunt');
+			if (taunt) return taunt;
+		}
+		if (heal) return heal;
+		// Between the poison ticks, the trap, the seed: one more turn of it. And now and then for nothing.
+		if (foe.status || foe.trapped || fv.has('leechseed') || fv.has('confusion') || Math.random() < 0.3) {
+			if (shield) return shield;
+			if (!mv.has('substitute') && hp > 50) {
+				const sub = use('substitute');
+				if (sub) return sub;
+			}
+		}
+		return null;
+	}
+
 	chooseForSlot(gen, active, entry, index, request, state, field) {
 		if (index === 0) {
 			this.inferScarf(gen, state, request);
@@ -3422,6 +3567,11 @@ class BattleAI {
 			movesFirst = order.every(Boolean);
 			const myHp = (me.originalCurHP / me.maxHP()) * 100;
 			outsped = !order.some(Boolean) && incoming >= myHp;
+		}
+
+		if (this.cfg.troll) {
+			const troll = this.trollChoice(gen, active, legal, me, foes, state, request, index, field, incoming, movesFirst);
+			if (troll) return troll;
 		}
 
 		// The rules our team's style plays (STYLE_RULES; all of them for stall), with what they need to see.

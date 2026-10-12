@@ -39,6 +39,23 @@ for (const id of ['explosion', 'selfdestruct']) {
 	check(Math.abs(ours / vanilla - 2) < 0.05, `${plain.name} hits as if Defense were halved (${vanilla} -> ${ours})`);
 }
 
+// Misty Explosion (12 Oct 2026): 200 power, Special Defense halved.
+{
+	const misty = Dex.moves.get('mistyexplosion');
+	check(misty.basePower === 200, `Misty Explosion is 200 power (${misty.basePower})`);
+	const b = battle(
+		[{ species: 'Slurpuff', ability: 'Unburden', moves: ['mistyexplosion'] }],
+		[{ species: 'Skarmory', ability: 'Sturdy', moves: ['splash'] }],
+	);
+	const [atk, def] = [b.p1.active[0], b.p2.active[0]];
+	b.randomizer = d => d;
+	const ours = b.actions.getDamage(atk, def, b.dex.getActiveMove('mistyexplosion'), true);
+	const plain = b.dex.getActiveMove('mistyexplosion');
+	delete plain.onBasePower;
+	const unhalved = b.actions.getDamage(atk, def, plain, true);
+	check(Math.abs(ours / unhalved - 2) < 0.05, `Misty Explosion hits as if Special Defense were halved (${unhalved} -> ${ours})`);
+}
+
 // Twister flinches about 30% of the time from a faster user.
 {
 	let flinched = 0;

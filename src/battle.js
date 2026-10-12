@@ -200,6 +200,8 @@ class BattleState {
 			 */
 			if (id.side === this.myPlayer) this.mineCameIn = this.turn;
 			else this.foeCameIn = this.turn;
+			// A trap lasts only while the one that set it stays in.
+			for (const other of Object.values(id.side === this.myPlayer ? this.opponent : this.mine)) if (other) other.trapped = false;
 			const store = id.side === this.myPlayer ? this.mine : this.opponent;
 			const mon = this.blank(id.name, args[1]);
 			const cond = parseCondition(args[2]);
@@ -448,6 +450,14 @@ class BattleState {
 			break;
 		}
 		case '-crit': this.critOn = args[0]; break;
+		// Mean Look, Block, Spider Web: it can't leave while the one that did it stays in.
+		case '-activate': {
+			if (!/trapped/i.test(String(args[1] || ''))) break;
+			const id = this.slotOf(args[0]);
+			const mon = id && (id.side === this.myPlayer ? this.mine : this.opponent)[id.slot];
+			if (mon) mon.trapped = true;
+			break;
+		}
 		case '-immune': {
 			// Whatever just bounced off, its type is one this Pokemon is immune to.
 			const id = this.slotOf(args[0]);
@@ -458,6 +468,19 @@ class BattleState {
 			break;
 		}
 		case '-start': case '-end': {
+			/*
+			 * What a troll trainer plays around (ai.js trollChoice): the Perish count, confusion,
+			 * Leech Seed, a Substitute, a Taunt. A switch replaces the entry, so they go with it.
+			 */
+			const vid = this.slotOf(args[0]);
+			const vmon = vid && (vid.side === this.myPlayer ? this.mine : this.opponent)[vid.slot];
+			if (vmon) {
+				const what = String(args[1] || '').replace(/^move: /, '').toLowerCase().replace(/[^a-z0-9]/g, '');
+				const count = /^perish(\d)$/.exec(what);
+				if (count) vmon.perish = cmd === '-start' ? +count[1] : 0;
+				else if (cmd === '-start') (vmon.volatiles || (vmon.volatiles = new Set())).add(what);
+				else if (vmon.volatiles) vmon.volatiles.delete(what);
+			}
 			// Dynamax: three turns a Pokemon should stay in for, once spent.
 			if (/^Dynamax$/.test(String(args[1] || '').trim())) {
 				const dm = this.slotOf(args[0]);

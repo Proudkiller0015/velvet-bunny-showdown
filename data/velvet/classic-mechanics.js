@@ -170,6 +170,25 @@ exports.moves = (data) => {
 			desc: "The user faints after using this move, even if this move fails for having no target. The target's Defense is halved during damage calculation, as in Generations 1-4. This move is prevented from executing if any active Pokemon has the Damp Ability.",
 		};
 	}
+	/*
+	 * Misty Explosion at 200 power with the target's Special Defense halved, the same way
+	 * (the owner, 12 Oct 2026). Misty Terrain still adds its half on top.
+	 */
+	if (data.mistyexplosion) {
+		const move = data.mistyexplosion;
+		const own = move.onBasePower;
+		data.mistyexplosion = {
+			...move,
+			basePower: 200,
+			onBasePower(basePower, pokemon, target, activeMove) {
+				const power = own ? own.call(this, basePower, pokemon, target, activeMove) : undefined;
+				this.chainModify(2);
+				return power;
+			},
+			shortDesc: "User faints. Target's Sp. Def halved. 1.5x on Misty Terrain.",
+			desc: "The user faints after using this move, even if this move fails for having no target. The target's Special Defense is halved during damage calculation. If the current terrain is Misty Terrain and the user is grounded, this move's power is multiplied by 1.5. This move is prevented from executing if any active Pokemon has the Damp Ability.",
+		};
+	}
 	return data;
 };
 
@@ -190,4 +209,4 @@ const Z_STATUS = {
 exports.Z_STATUS = Z_STATUS;
 
 // For the client's move descriptions (scripts/build-buffs.js): every move this file changes.
-exports.CHANGED_MOVES = ['punishment', 'bellydrum', 'hyperbeam', 'gigaimpact', 'blastburn', 'frenzyplant', 'hydrocannon', 'rockwrecker', 'roaroftime', 'prismaticlaser', 'eternabeam', 'meteorassault', 'magmastorm', 'wickedblow', 'twister', 'explosion', 'selfdestruct', 'dragonpulse', 'icywind', 'ancientpower', 'ominouswind', 'silverwind'];
+exports.CHANGED_MOVES = ['punishment', 'bellydrum', 'hyperbeam', 'gigaimpact', 'blastburn', 'frenzyplant', 'hydrocannon', 'rockwrecker', 'roaroftime', 'prismaticlaser', 'eternabeam', 'meteorassault', 'magmastorm', 'wickedblow', 'twister', 'explosion', 'selfdestruct', 'mistyexplosion', 'dragonpulse', 'icywind', 'ancientpower', 'ominouswind', 'silverwind'];
