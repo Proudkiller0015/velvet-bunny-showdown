@@ -1,0 +1,12 @@
+{
+	"id": "gen9rpbattle-2-tmsvy4",
+	"format": "[Gen 9] RP Battle",
+	"players": [
+		"Ranger Max",
+		"SlimeQueenSamantha"
+	],
+	"rating": null,
+	"log": "|velvetmusic|trainer|events/trainer-rse\n|j|☆Ranger Max\n|j|☆SlimeQueenSamantha\n|t:|1791819765\n|gametype|singles\n|player|p1|Ranger Max|pokemonranger-gen4|\n|player|p2|SlimeQueenSamantha|queen.png|\n|gen|9\n|tier|[Gen 9] RP Battle\n|clearpoke\n|poke|p1|Gossifleur, L11, F|\n|poke|p1|Phantump, L11, M|\n|poke|p1|Pansage, L11, F|\n|poke|p1|Lileep, L12, F|\n|poke|p1|Carnivine, L13, F|\n|poke|p2|Umbreon, L13, F|\n|poke|p2|Applin, L13, F|\n|poke|p2|Burmy, L13, F|\n|poke|p2|Lotad, L13, F|\n|poke|p2|Buneary, L13, F|\n|poke|p2|Chatot, L13, M|\n|teampreview\n|inactive|Battle timer is ON: inactive players will automatically lose when time's up. (requested by Ranger Max)\n|n|☆Ranger Max|rangermax\n|\n|t:|1791819774\n|teamsize|p1|5\n|teamsize|p2|6\n|start\n|switch|p1a: Carnivine|Carnivine, L13, F|100/100\n|switch|p2a: Chatot|Chatot, L13, M|100/100\n|turn|1\n|\n|t:|1791819777\n|move|p2a: Chatot|Nasty Plot|p2a: Chatot\n|-boost|p2a: Chatot|spa|2\n|move|p1a: Carnivine|Bite|p2a: Chatot\n|-damage|p2a: Chatot|74/100\n|\n|upkeep\n|turn|2\n|\n|t:|1791819778\n|move|p2a: Chatot|Chatter|p1a: Carnivine\n|-supereffective|p1a: Carnivine\n|-damage|p1a: Carnivine|0 fnt\n|faint|p1a: Carnivine\n|\n|upkeep\n|\n|t:|1791819779\n|switch|p1a: Lileep|Lileep, L12, F|100/100\n|turn|3\n|\n|t:|1791819780\n|move|p2a: Chatot|Chatter|p1a: Lileep\n|-damage|p1a: Lileep|16/100\n|-start|p1a: Lileep|confusion\n|-activate|p1a: Lileep|confusion\n|-damage|p1a: Lileep|6/100|[from] confusion\n|\n|upkeep\n|turn|4\n|\n|t:|1791819783\n|move|p2a: Chatot|Chatter|p1a: Lileep\n|-damage|p1a: Lileep|0 fnt\n|faint|p1a: Lileep\n|\n|upkeep\n|\n|t:|1791819783\n|switch|p1a: Gossifleur|Gossifleur, L11, F|100/100\n|turn|5\n|\n|t:|1791819786\n|move|p2a: Chatot|Boomburst|p1a: Gossifleur\n|-damage|p1a: Gossifleur|0 fnt\n|faint|p1a: Gossifleur\n|\n|upkeep\n|\n|t:|1791819786\n|switch|p1a: Pansage|Pansage, L11, F|100/100\n|turn|6\n|\n|t:|1791819791\n|move|p2a: Chatot|Boomburst|p1a: Pansage\n|-damage|p1a: Pansage|0 fnt\n|faint|p1a: Pansage\n|\n|upkeep\n|\n|t:|1791819791\n|switch|p1a: Phantump|Phantump, L11, M|100/100\n|turn|7\n",
+	"inputlog": null,
+	"uploadtime": 1791819802
+}
