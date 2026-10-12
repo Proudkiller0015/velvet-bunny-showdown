@@ -403,9 +403,10 @@ function chosenSet(Dex, species, summon, fit = false) {
 
 function summoned(summon, { place, badges, levelCap, ace = null }) {
 	if (summon.kind === 'trainer') {
-		const cls = summon.classId ? E.findClass(summon.classId) : null;
-		if (summon.classId && !cls) return { error: `No trainer class called "${summon.classId}".` };
-		const rolled = E.rollTrainer({ place, badges, levelCap, ace, classId: cls && cls.id, double: summon.double === undefined ? null : !!summon.double });
+		// A class the list doesn't have is the one staff typed, under the title they typed.
+		const asked = summon.classTitle || summon.classId;
+		const cls = asked ? (E.findClass(asked) || E.findClass(summon.classId) || E.customClass(asked)) : null;
+		const rolled = E.rollTrainer({ place, badges, levelCap, ace, cls, double: summon.double === undefined ? null : !!summon.double });
 		/*
 		 * A trainer the story has decided about: their name, and a Pokémon they
 		 * must be carrying. The rest of the team is rolled as usual, so they still

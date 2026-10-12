@@ -370,6 +370,12 @@ const TRAINER_CLASSES = [
 	{ id: 'elitefour', title: 'Elite Four', avatar: 'lance-gen3', types: [], sex: 'm', story: true, short: 'E4', aliases: ['e4', 'elite'] },
 	{ id: 'gymleader', title: 'Leader', avatar: 'brock-gen4', types: [], sex: 'm', story: true, aliases: ['gym', 'leader', 'gymleader'] },
 	{ id: 'rival', title: 'Rival', avatar: 'blue-gen3', types: [], sex: 'm', story: true },
+	/*
+	 * The Larper (owner, 12 Oct 2026: "they bring troll teams like full explosion
+	 * squads"). Always a troll team (trollTrainerTeam), met now and then on any
+	 * route from one badge (LARPER_CHANCE) and summonable by name.
+	 */
+	{ id: 'larper', title: 'Larper', avatar: 'harlequin', types: [], sex: 'm', troll: true, aliases: ['larp', 'troll', 'trolltrainer'] },
 	{ id: 'twins', title: 'Twins', avatar: 'twins-gen4', types: ['Normal', 'Fairy', 'Electric', 'Bug'], sex: 'pair', pair: true },
 	{ id: 'youngcouple', title: 'Young Couple', avatar: 'youngcouple-gen4dp', types: ['Normal', 'Fairy', 'Psychic', 'Water'], sex: 'pair', pair: true, short: 'Couple' },
 ];
@@ -382,6 +388,19 @@ const TRAINER_CLASSES = [
  */
 const ACE_CLASSES = ['acetrainer', 'acetrainerf'];
 const ACE_STALL_CHANCE = 0.25;
+// One trainer in thirty on a route is a Larper, from one badge.
+const LARPER_CHANCE = 1 / 30;
+
+/**
+ * A class staff typed that the list doesn't have ("Team Rocket Grunt"): its own
+ * title, a plain trainer sprite and an ordinary team, rather than no battle at all.
+ */
+function customClass(input) {
+	const title = String(input || '').trim().replace(/\s+/g, ' ').slice(0, 18);
+	const id = toID(title);
+	if (!id) return null;
+	return { id, title: title.replace(/^./, c => c.toUpperCase()), avatar: 'acetrainer-gen4dp', types: [], sex: 'm', custom: true };
+}
 
 const NAMES = {
 	m: ['Bob', 'Ken', 'Ryo', 'Taro', 'Joey', 'Mike', 'Leo', 'Sam', 'Dan', 'Jin', 'Kai', 'Ben', 'Tom', 'Ray',
@@ -874,17 +893,18 @@ function tierForLevel(level) {
  */
 const recentAt = new Map();
 
-function rollTrainer({ place, badges, levelCap = null, rng = Math.random, classId = null, double = null, ace = null, party = null }) {
+function rollTrainer({ place, badges, levelCap = null, rng = Math.random, classId = null, cls: givenClass = null, double = null, ace = null, party = null }) {
 	badges = clampBadges(badges);
 	const realBadges = badges;
 	const grown = party && party.size >= 3 ? party : null;
 	if (grown) badges = Math.max(badges, tierForLevel(grown.avg));
 	const classes = (place && place.trainers && place.trainers.length ? place.trainers : ['youngster', 'lass', 'hiker', 'backpacker'])
 		.map(findClass).filter(c => c && !c.story);   // a route never sends a Champion at random
-	const cls = (classId && findClass(classId)) || pick(classes, rng);
+	let cls = givenClass || (classId && findClass(classId)) || pick(classes, rng);
+	if (!givenClass && !classId && badges >= 1 && rng() < LARPER_CHANCE) cls = findClass('larper');
 	const tier = BADGE_TIERS[badges];
 	// The stall Ace Trainer battles single unless a double is asked for: stall is a singles game.
-	const isDouble = cls.pair || (double === null ? !cls.stall && badges >= 1 && rng() < 0.15 : !!double);
+	const isDouble = cls.pair || (double === null ? !cls.stall && !cls.troll && badges >= 1 && rng() < 0.15 : !!double);
 	const size = Math.min(6, Math.max(isDouble ? 2 : 1, tier.size, grown ? (grown.size >= 6 ? (rng() < 0.5 ? 5 : 6) : grown.size) : 0));
 
 	// The ace pulls a trainer down the same way it pulls the wild: somebody whose best
@@ -953,6 +973,19 @@ function rollTrainer({ place, badges, levelCap = null, rng = Math.random, classI
 			return {
 				kind: 'trainer', double: false, name: trainerName(cls, rng), avatar: cls.avatar, className: cls.title, classId: cls.id,
 				team, ai: tier.ai, format: TRAINER_FORMAT, badges: realBadges, style: 'stall',
+			};
+		}
+		levels.length = 0;
+	}
+	if (cls.troll) {
+		for (let i = 0; i < size; i++) levels.push(i === size - 1 ? hi : randInt(Math.max(lo, hi - 5), Math.max(lo, hi - 1), rng));
+		levels.sort((a, b) => a - b);
+		const troll = trollTrainerTeam(entries, levels, badges, rng);
+		if (troll) {
+			return {
+				kind: 'trainer', double: isDouble, name: trainerName(cls, rng), avatar: cls.avatar, className: cls.title, classId: cls.id,
+				team: troll.team, ai: tier.ai, format: isDouble ? TRAINER_DOUBLE_FORMAT : TRAINER_FORMAT, badges: realBadges,
+				style: 'troll', theme: troll.theme,
 			};
 		}
 		levels.length = 0;
@@ -1100,6 +1133,73 @@ function stallTrainerTeam(entries, levels, badges, rng) {
 	});
 	if (!built || built.length < levels.length || !SB.stallReport(Dex, built).ok) return null;
 	return dealTrainerTeam(built, levels, badges, rng, { stall: true });
+}
+
+/*
+ * A Larper's troll team: one gimmick the whole team is built around. The
+ * gimmick move comes from anywhere in the Pokemon's learnset (that is the joke,
+ * and the point of the class); its other moves are what any trainer with these
+ * badges would have taught it. A theme that can't field the whole team at these
+ * badges is passed over for another. Null when none can.
+ */
+const TROLL_THEMES = [
+	{ id: 'explosion', keys: ['explosion', 'selfdestruct', 'mistyexplosion'], extra: ['protect', 'substitute'] },
+	{ id: 'perish', keys: ['perishsong'], extra: ['protect', 'meanlook', 'block', 'spiderweb'] },
+	{ id: 'evasion', keys: ['doubleteam', 'minimize'], extra: ['swagger', 'attract', 'confuseray', 'batonpass'] },
+	{ id: 'memento', keys: ['memento', 'healingwish', 'finalgambit', 'destinybond'], extra: ['taunt', 'encore'] },
+	{ id: 'ditto' },
+	{ id: 'splash' },
+];
+
+function trollTrainerTeam(entries, levels, badges, rng) {
+	const top = levels[levels.length - 1];
+	const size = levels.length;
+	const themes = TROLL_THEMES.slice().sort(() => rng() - 0.5);
+	for (const theme of themes) {
+		let built = null;
+		if (theme.id === 'ditto') {
+			const ditto = Dex.species.get('Ditto');
+			built = levels.map(() => ({ species: ditto.name, moves: ['transform'], ability: 'Imposter', nature: pick(NATURES, rng), item: '' }));
+		} else if (theme.id === 'splash') {
+			// Magikarp that only Splash, and the one at the back has already evolved.
+			const karp = levels.map(() => ({ species: 'Magikarp', moves: ['splash', 'tackle', 'flail'], ability: 'Swift Swim', nature: pick(NATURES, rng), item: '' }));
+			if (top >= minLevelOf(Dex.species.get('Gyarados'))) {
+				const ace = trainerSet(Dex.species.get('Gyarados'), top, badges, rng);
+				karp[karp.length - 1] = { species: 'Gyarados', moves: ace.moves, ability: ace.ability, nature: ace.nature, item: '' };
+			}
+			built = karp;
+		} else {
+			const picked = [];
+			const taken = new Set();
+			for (let i = 0; i < 200 && picked.length < size; i++) {
+				const root = weightedPick(entries.filter(e => !taken.has(e.item.id)), rng);
+				if (!root) break;
+				taken.add(root.id);
+				const species = stageFor(root, top, rng, { behind: 0 });
+				const all = trainerMoves(species, top, 6);
+				const key = theme.keys.find(k => all.has(k));
+				if (!key) continue;
+				const taught = trainerMoves(species, top, badges);
+				const base = trainerSet(species, top, badges, rng);
+				const moves = [key];
+				for (const m of theme.extra) if (moves.length < 3 && all.has(m) && rng() < 0.6) moves.push(m);
+				// At least one attack, so it isn't a wall of nothing.
+				for (const m of base.moves) {
+					if (moves.length >= 4) break;
+					const move = Dex.moves.get(m);
+					if (!moves.includes(move.id) && !theme.keys.includes(move.id) && (move.category !== 'Status' || taught.has(move.id))) moves.push(move.id);
+				}
+				picked.push({ species: species.name, moves: moves.map(m => Dex.moves.get(m).name), ability: base.ability, nature: base.nature, item: '' });
+			}
+			if (picked.length >= size) built = picked;
+		}
+		if (!built) continue;
+		const team = dealTrainerTeam(built, levels, badges, rng);
+		// An early trainer's ability is rolled; a Larper's Ditto is always an Imposter.
+		for (const set of team) if (set.species === 'Ditto') set.ability = 'Imposter';
+		return { team, theme: theme.id };
+	}
+	return null;
 }
 
 /*
@@ -1317,6 +1417,6 @@ module.exports = {
 	catchRate, BALLS, findBall, catchChance, shakesFor, CATCH_BOOST, PITY_PER_MISS,
 	TRAINER_CLASSES, GYM_TYPES, gymPlace, findClass, trainerName, minLevel, rootOf, lineOf, lineWeight, BADGE_TIERS, Rarity,
 	stageFor, BABIES, babyWeight, clock, clockWeight, TIME_OF_DAY, DAY_OF_WEEK, SEASONS, EVENTS, eventOn, aceAdjusted, aceLevel,
-	rollWild, rollTrainer, trainerSet, describe, stallTrainerTeam, ACE_CLASSES, ACE_STALL_CHANCE,
+	rollWild, rollTrainer, trainerSet, describe, stallTrainerTeam, trollTrainerTeam, customClass, ACE_CLASSES, ACE_STALL_CHANCE, LARPER_CHANCE,
 	WILD_FORMAT, WILD_DOUBLE_FORMAT, TUTORIAL_FORMAT, TUTORIAL_PIKACHU, TUTORIAL_RATTATA, TUTORIAL_BAG, TRAINER_FORMAT, TRAINER_DOUBLE_FORMAT,
 };
