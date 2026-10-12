@@ -1,0 +1,12 @@
+{
+	"id": "gen4ou-3-tmsq1r",
+	"format": "[Gen 4] OU",
+	"players": [
+		"Bunny Normal",
+		"0p9o9i8"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Normal\n|j|☆0p9o9i8\n|t:|1791814447\n|gametype|singles\n|badge|p1|gold|gen4ou|1-1\n|badge|p2|silver|gen4ou|2-2\n|player|p1|Bunny Normal|bunny.png|1211\n|player|p2|0p9o9i8|102|1210\n|gen|4\n|tier|[Gen 4] OU\n|rated|\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Beat Up Nicknames Mod: Beat Up will not reveal any party members\n|rule|Endless Battle Clause: Forcing endless battles is banned\n|rule|Species Clause: Limit one of each Pokémon\n|rule|OHKO Clause: OHKO moves are banned\n|rule|Evasion Items Clause: Evasion items are banned\n|rule|Evasion Moves Clause: Evasion moves are banned\n|rule|Evasion Abilities Clause: Evasion abilities are banned\n|rule|Baton Pass Stat Trap Clause: No Baton Passer may have a way to boost stats or trap Pokémon\n|rule|Freeze Clause Mod: Limit one foe frozen\n|rule|Sleep Moves Clause: Sleep-inducing moves are banned\n|\n|t:|1791814447\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Dragonite|Dragonite, M|100/100\n|switch|p2a: Gliscor|Gliscor, M|100/100\n|turn|1\n|c|☆Bunny Normal|Good luck! Playing on **normal**.\n|\n|t:|1791814455\n|move|p1a: Dragonite|Draco Meteor|p2a: Gliscor\n|-damage|p2a: Gliscor|18/100\n|-unboost|p1a: Dragonite|spa|2\n|-damage|p1a: Dragonite|91/100|[from] item: Life Orb\n|move|p2a: Gliscor|Stealth Rock|p1a: Dragonite\n|-sidestart|p1: Bunny Normal|move: Stealth Rock\n|\n|upkeep\n|turn|2\n|\n|t:|1791814465\n|move|p1a: Dragonite|Draco Meteor|p2a: Gliscor\n|-damage|p2a: Gliscor|0 fnt\n|-unboost|p1a: Dragonite|spa|2\n|faint|p2a: Gliscor\n|-damage|p1a: Dragonite|81/100|[from] item: Life Orb\n|\n|upkeep\n|\n|t:|1791814479\n|switch|p2a: Latias|Latias, F|100/100\n|turn|3\n|\n|t:|1791814485\n|switch|p1a: Skarmory|Skarmory, F|100/100\n|-damage|p1a: Skarmory|88/100|[from] Stealth Rock\n|move|p2a: Latias|Ice Beam|p1a: Skarmory\n|-damage|p1a: Skarmory|58/100\n|\n|-heal|p1a: Skarmory|64/100|[from] item: Leftovers\n|upkeep\n|turn|4\n|\n|t:|1791814495\n|move|p2a: Latias|Calm Mind|p2a: Latias\n|-boost|p2a: Latias|spa|1\n|-boost|p2a: Latias|spd|1\n|move|p1a: Skarmory|Brave Bird|p2a: Latias\n|-damage|p2a: Latias|61/100\n|-damage|p1a: Skarmory|52/100|[from] Recoil\n|\n|-heal|p2a: Latias|67/100|[from] item: Leftovers\n|-heal|p1a: Skarmory|58/100|[from] item: Leftovers\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1791814498
+}
