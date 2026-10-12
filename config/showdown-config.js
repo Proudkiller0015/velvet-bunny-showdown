@@ -2126,7 +2126,7 @@ function roleplay() {
 						format: enc.format,
 						players: [
 							{ user: bot, team: spawn.team },
-							{ user: player, team: Teams.pack(enc.playerTeam) },
+							{ user: player, team: rp.packSets(enc.playerTeam) },
 						],
 						rated: 0,
 					});
@@ -2250,7 +2250,7 @@ function roleplay() {
 		}
 		const packed = seats.map(({ side, user }) => {
 			let team;
-			try { team = Teams.pack(side.team); } catch (e) { team = null; }
+			try { team = rp.packSets(side.team); } catch (e) { team = null; }
 			return team ? { user, team } : { user };
 		});
 		if (packed.some(p => !p.team)) return { ok: false, code: 'bad', message: "I couldn't read one of those teams." };

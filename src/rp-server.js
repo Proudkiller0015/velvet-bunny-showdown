@@ -1256,7 +1256,30 @@ function httpRoute(deps, log) {
 	};
 }
 
+/*
+ * A team from Discord, packed for a battle (12 Oct 2026). Build my team writes EVs and
+ * IVs as the teambuilder shows them ("252 Atk / 4 HP / 252 Spe"), and Teams.pack only
+ * reads numbers, so every built team went into battle with no EVs at all.
+ */
+const STAT_NAMES = { hp: 'hp', atk: 'atk', def: 'def', spa: 'spa', spd: 'spd', spe: 'spe', attack: 'atk', defense: 'def', spatk: 'spa', spdef: 'spd', speed: 'spe' };
+function statsOf(value) {
+	if (!value || typeof value !== 'string') return value;
+	const out = {};
+	for (const part of value.split('/')) {
+		const m = /^\s*(\d+)\s+([a-z. ]+?)\s*$/i.exec(part);
+		const stat = m && STAT_NAMES[m[2].toLowerCase().replace(/[^a-z]/g, '')];
+		if (stat) out[stat] = Number(m[1]);
+	}
+	return Object.keys(out).length ? out : undefined;
+}
+function packSets(sets) {
+	const { Teams } = require('pokemon-showdown');
+	if (!Array.isArray(sets)) return Teams.pack(sets);
+	return Teams.pack(sets.map(set => set && typeof set === 'object' ? { ...set, evs: statsOf(set.evs), ivs: statsOf(set.ivs) } : set));
+}
+
 module.exports = {
+	packSets,
 	freeCatch, FREE_CATCHES, allowCatch, summoned, chosenSet, musicFor, partyOf,
 	pvpCheck, pvpNotice, friendlyNotice, isAgreed, verify, placeFor, requestEncounter, requestTutorial, completeEncounter, canUseItem, usedInLog, setBags, bagFor, pvpItemsFor, canUsePvpItem, NPC_ITEMS_EACH, publicView, canThrow, thrownInLog, resultFromLog, openFor, encounterAccount, isEncounterName, isLocalOnly, LOOPBACK,
 	checkTeam, gimmickIn, GIMMICK_ITEM, GIMMICK_NAME, sidesInLog, startMatch,
