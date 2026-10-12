@@ -1,0 +1,12 @@
+{
+	"id": "gen9rpbattle-6-tmsq1r",
+	"format": "[Gen 9] RP Battle",
+	"players": [
+		"Larper Ken",
+		"SlimeQueenSamantha"
+	],
+	"rating": null,
+	"log": "|velvetmusic|troll|events/trololo\n|j|☆Larper Ken\n|j|☆SlimeQueenSamantha\n|t:|1791817296\n|gametype|singles\n|player|p1|Larper Ken|harlequin|\n|player|p2|SlimeQueenSamantha|queen.png|\n|gen|9\n|tier|[Gen 9] RP Battle\n|clearpoke\n|poke|p1|Ditto, L10|\n|poke|p1|Ditto, L10|\n|poke|p1|Ditto, L11|\n|poke|p1|Ditto, L11|\n|poke|p1|Ditto, L11|\n|poke|p1|Ditto, L13|\n|poke|p2|Rattata, L13, M|\n|poke|p2|Umbreon, L13, F|\n|poke|p2|Applin, L13, M|\n|poke|p2|Lotad, L13, M|\n|poke|p2|Buneary, L13, M|\n|poke|p2|Zigzagoon-Galar, L9, M|\n|teampreview\n|inactive|Battle timer is ON: inactive players will automatically lose when time's up. (requested by Larper Ken)\n|n|☆Larper Ken|larperken\n|\n|t:|1791817317\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Ditto|Ditto, L10|100/100\n|switch|p2a: Rattata|Rattata, L13, M|100/100\n|-transform|p1a: Ditto|p2a: Rattata|[from] ability: Imposter\n|turn|1\n|\n|t:|1791817320\n|move|p2a: Rattata|Protect|p2a: Rattata\n|-singleturn|p2a: Rattata|Protect\n|move|p1a: Ditto|Facade|p2a: Rattata\n|-activate|p2a: Rattata|move: Protect\n|\n|upkeep\n|turn|2\n|\n|t:|1791817328\n|move|p2a: Rattata|U-turn|p1a: Ditto\n|-damage|p1a: Ditto|54/100\n|\n|t:|1791817332\n|switch|p2a: Applin|Applin, L13, M|100/100|[from] U-turn\n|move|p1a: Ditto|Facade|p2a: Applin\n|-damage|p2a: Applin|73/100\n|\n|upkeep\n|turn|3\n|\n|t:|1791817341\n|move|p1a: Ditto|Protect|p1a: Ditto\n|-singleturn|p1a: Ditto|Protect\n|move|p2a: Applin|Draco Meteor|p1a: Ditto\n|-activate|p1a: Ditto|move: Protect\n|\n|upkeep\n|turn|4\n|\n|t:|1791817342\n|switch|p1a: Ditto|Ditto, L11|100/100\n|-transform|p1a: Ditto|p2a: Applin|[from] ability: Imposter\n|move|p2a: Applin|Draco Meteor|p1a: Ditto\n|-supereffective|p1a: Ditto\n|-damage|p1a: Ditto|0 fnt\n|-unboost|p2a: Applin|spa|2\n|faint|p1a: Ditto\n|\n|upkeep\n|\n|t:|1791817342\n|switch|p1a: Ditto|Ditto, L10|100/100\n|-transform|p1a: Ditto|p2a: Applin|[from] ability: Imposter\n|turn|5\n|\n|t:|1791817353\n|switch|p2a: Umbreon|Umbreon, L13, F|100/100\n|move|p1a: Ditto|Draco Meteor|p2a: Umbreon\n|-damage|p2a: Umbreon|93/100\n|-unboost|p1a: Ditto|spa|2\n|\n|upkeep\n|turn|6\n",
+	"inputlog": null,
+	"uploadtime": 1791817358
+}
