@@ -26,6 +26,7 @@ const Rarity = require('./rarity');
 const RS = require('./role-sets');
 const TL = require('./team-logic');
 const TeamAssembler = require('./team-assembler');
+const EV = require('./ev-spread');
 
 const toID = s => String(s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
 
@@ -144,6 +145,12 @@ const pick = (list, rng) => list[Math.floor(rng() * list.length)];
 const randInt = (lo, hi, rng) => lo + Math.floor(rng() * (hi - lo + 1));
 
 function abilityFor(species, rng, hiddenChance) {
+	/*
+	 * An ability this server made for it is the reason it was rebuilt (owner, 12 Oct 2026: a
+	 * trainer's Pansage came out with Gluttony instead of Verdant Surge): always that one.
+	 */
+	const own = Object.values(species.abilities).find(name => Dex.abilities.get(name).num < 0);
+	if (own) return own;
 	const normal = ['0', '1'].map(k => species.abilities[k]).filter(Boolean);
 	const hidden = species.abilities.H;
 	if (hidden && rng() < hiddenChance) return hidden;
@@ -1245,7 +1252,7 @@ function ateBombers() {
  * Locked into a choice, Protect and Substitute are only dead moves.
  */
 const BOMBER_FILLER = new Set(['protect', 'detect', 'substitute', 'endure']);
-function armBombers(team, rng) {
+function armBombers(team, rng, badges = 0) {
 	for (const set of team) {
 		const species = Dex.species.get(set.species);
 		const ate = ateOf(species);
@@ -1269,13 +1276,14 @@ function armBombers(team, rng) {
 			} else {
 				set.item = 'Safety Goggles';
 			}
+			set.evs = EV.spreadFor(Dex, set, EV.bomberBudget(badges));
 			continue;
 		}
 		set.item = choice;
 		set.moves = moves.filter(m => m.category !== 'Status').map(m => m.name);
+		// Bombers bring twice a trainer's EVs, the boom stat first (12 Oct 2026); a scarfer then Speed.
+		set.evs = EV.spreadFor(Dex, set, EV.bomberBudget(badges));
 		if (choice === 'Choice Scarf') {
-			const rest = Math.floor((510 - 252) / 5);
-			for (const k of ['hp', 'atk', 'def', 'spa', 'spd']) set.evs[k] = Math.min(set.evs[k] || 0, rest);
 			set.evs.spe = 252;
 			set.ivs.spe = 31;
 			set.nature = bomb && bomb.category === 'Special' ? 'Timid' : 'Jolly';
@@ -1308,16 +1316,16 @@ function sneakBomb(team, theme, rng) {
  * A frail Final Gambit or Destiny Bond user wears a Choice Scarf at full Speed: it goes
  * first and takes the foe with it (owner, 12 Oct 2026).
  */
-function scarfGamblers(team) {
+function scarfGamblers(team, badges = 0) {
 	for (const set of team) {
 		const b = Dex.species.get(set.species).baseStats;
 		const ids = set.moves.map(toID);
 		if (!(ids.includes('finalgambit') || ids.includes('destinybond')) || b.hp + (b.def + b.spd) / 2 >= 170) continue;
 		set.item = 'Choice Scarf';
 		set.moves = set.moves.filter(m => toID(m) === 'finalgambit' || toID(m) === 'destinybond' || Dex.moves.get(m).category !== 'Status');
-		const rest = Math.floor((510 - 252) / 5);
-		for (const k of ['hp', 'atk', 'def', 'spa', 'spd']) set.evs[k] = Math.min(set.evs[k] || 0, rest);
-		set.evs.spe = 252;
+		// Speed to go first, then HP: Final Gambit hits for the HP it has.
+		const budget = EV.bomberBudget(badges);
+		set.evs = { hp: Math.min(252, Math.max(0, budget - 252)), atk: 0, def: 0, spa: 0, spd: 0, spe: Math.min(252, budget) };
 		set.ivs.spe = 31;
 		set.nature = 'Timid';
 	}
@@ -1457,10 +1465,11 @@ function trollTrainerTeam(entries, levels, badges, rng, only = null, { bombers =
 		const team = dealTrainerTeam(built, levels, badges, rng);
 		// An early trainer's ability is rolled; a Larper's Ditto is always an Imposter.
 		for (const set of team) if (set.species === 'Ditto') set.ability = 'Imposter';
-		if (bombers && theme.id === 'explosion') armBombers(team, rng);
-		if (theme.id === 'memento') scarfGamblers(team);
+		if (bombers && theme.id === 'explosion') armBombers(team, rng, badges);
+		if (theme.id === 'memento') scarfGamblers(team, badges);
 		if (!['explosion', 'ditto', 'splash'].includes(theme.id)) sneakBomb(team, theme, rng);
 		if (rng() < BOXART_TROLL_CHANCE) trollLegend(team, rng);
+		for (const set of team) set.evs = EV.fitToLevel(Dex, set);
 		return { team, theme: theme.id };
 	}
 	return null;
@@ -1485,21 +1494,20 @@ function dealTrainerTeam(built, levels, badges, rng, { stall = false } = {}) {
 	const dealt = built.map((set, i) => Math.min(top, Math.max(levels[i], minLevelOf(Dex.species.get(set.species)))));
 	for (let i = 1; i < dealt.length; i++) dealt[i] = Math.max(dealt[i], dealt[i - 1]);
 	const iv = Math.min(31, 8 + badges * 3);
-	const ev = badges * 10;
+	const budget = EV.trainerBudget(badges);
+	const fitted = set => ({ ...set, evs: EV.fitToLevel(Dex, set) });
 	return built.map((set, i) => {
 		const species = Dex.species.get(set.species);
 		let item = set.item || '';
 		if (!stall && badges >= 3 && badges < 6 && rng() < 0.5) item = 'Oran Berry';
 		if (stall) {
-			const wall = set.evs && set.evs.def > set.evs.spd ? 'def' : 'spd';
-			const evs = { hp: Math.min(252, 3 * ev), atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
-			evs[wall] = Math.min(252, 3 * ev);
-			return {
+			return fitted({
 				name: species.name, species: species.name, level: dealt[i], moves: set.moves, ability: set.ability, nature: set.nature, item,
-				ivs: { hp: iv, atk: set.ivs && set.ivs.atk === 0 ? 0 : iv, def: iv, spa: iv, spd: iv, spe: iv }, evs,
-			};
+				ivs: { hp: iv, atk: set.ivs && set.ivs.atk === 0 ? 0 : iv, def: iv, spa: iv, spd: iv, spe: iv },
+				evs: EV.spreadFor(Dex, set, budget, { stall: true }),
+			});
 		}
-		return {
+		return fitted({
 			name: species.name,
 			species: species.name,
 			level: dealt[i],
@@ -1509,8 +1517,9 @@ function dealTrainerTeam(built, levels, badges, rng, { stall = false } = {}) {
 			nature: badges >= 3 ? set.nature : pick(NATURES, rng),
 			item,
 			ivs: { hp: iv, atk: iv, def: iv, spa: iv, spd: iv, spe: iv },
-			evs: { hp: ev, atk: ev, def: ev, spa: ev, spd: ev, spe: ev },
-		};
+			// The stats the set uses, not the same few in all six (12 Oct 2026).
+			evs: EV.spreadFor(Dex, { ...set, item }, budget),
+		});
 	});
 }
 
@@ -1536,8 +1545,7 @@ function trainerSet(species, level, badges, rng) {
 	else if (badges >= 3 && rng() < 0.5) item = 'Oran Berry';
 
 	const iv = Math.min(31, 8 + badges * 3);
-	const ev = badges * 10;
-	return {
+	const set = {
 		name: species.name,
 		species: species.name,
 		level,
@@ -1546,8 +1554,10 @@ function trainerSet(species, level, badges, rng) {
 		nature: pick(NATURES, rng),
 		item,
 		ivs: { hp: iv, atk: iv, def: iv, spa: iv, spd: iv, spe: iv },
-		evs: { hp: ev, atk: ev, def: ev, spa: ev, spd: ev, spe: ev },
 	};
+	set.evs = EV.spreadFor(Dex, set, EV.trainerBudget(badges));
+	set.evs = EV.fitToLevel(Dex, set);
+	return set;
 }
 
 // ------------------------------------------------------------------ formats

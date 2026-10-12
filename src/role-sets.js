@@ -1055,7 +1055,143 @@ function repairSet(dex, set, options = {}) {
 		}
 		if (items && problems.some(p => ['trap-item', 'wrong-side', 'lo-passive'].includes(p.code))) reItem();
 	}
+	tidyMoves();
+	pressUp();
+	unwall();
 	return set;
+
+	/*
+	 * Walled by Steel (owner, 12 Oct 2026: "give Florges Hidden Fire, walled by Steel"): a set
+	 * none of whose attacks touch a Steel type gets one that does - an attack it learns, or
+	 * Hidden Power. A Fairy set takes Fire, the owner's pick for it. It replaces a second
+	 * attack Steel also resists, or a Protect or Substitute, never the set's core.
+	 */
+	function unwall() {
+		const moves = set.moves.map(n => dex.moves.get(n));
+		const attacks = moves.filter(m => m.category !== 'Status' && m.basePower > 0 && !m.damage);
+		if (!attacks.length || moves.some(m => m.damage)) return;
+		const steelHit = m => dex.getImmunity(m.type, 'Steel') && dex.getEffectiveness(m.type, 'Steel') >= 0;
+		if (attacks.some(steelHit)) return;
+		const fairy = attacks.some(m => m.type === 'Fairy');
+		const side = sideOf(dex, set);
+		const keepIt = m => (m.num < 0 && !m.velvetShared) || PIVOTS.includes(m.id) || m.priority > 0 || ['velvetpress', 'bodypress'].includes(m.id);
+		// The slot: Protect or Substitute first, then the weaker of the attacks Steel walls (not the best one).
+		const best = attacks.slice().sort((x, y) => attackValue(species, y, y.category) - attackValue(species, x, x.category))[0];
+		// Wish + Protect is one move in two slots (owner): Protect stays when Wish is there.
+		let slot = moves.findIndex(m => ['protect', 'substitute', 'detect'].includes(m.id) && !(m.id !== 'substitute' && has('wish')));
+		if (slot < 0) {
+			// Never the only attack of one of its own types: Venusaur keeps its Grass move.
+			const onlyStab = m => species.types.includes(m.type) && attacks.filter(o => o.type === m.type).length === 1;
+			const spare = moves.map((m, i) => ({ m, i })).filter(x => x.m.category !== 'Status' && x.m.id !== best.id && !keepIt(x.m) && !onlyStab(x.m))
+				.sort((x, y) => attackValue(species, x.m, x.m.category) - attackValue(species, y.m, y.m.category))[0];
+			slot = spare ? spare.i : -1;
+		}
+		if (slot < 0) return;
+		const others = attacks.filter((m, i) => moves.indexOf(m) !== slot);
+		const types = fairy ? ['Fire', 'Ground', 'Fighting'] : ['Fire', 'Ground', 'Fighting'];
+		const real = bestAttack(m => types.includes(m.type) && (m.category === side || m.category === best.category) && !m.damage && m.basePower >= 60 &&
+			(!fairy || m.type === 'Fire' || !options_().some(o => o.type === 'Fire' && o.category === side && o.basePower >= 60)));
+		let next = real;
+		if (!next && hpOk()) {
+			let top = null;
+			for (const type of types) {
+				const hp = dex.moves.get(`Hidden Power ${type}`);
+				if (!hp.exists) continue;
+				const gain = coverageGain(dex, others, hp) + (fairy && type === 'Fire' ? 100 : 0);
+				if (!top || gain > top.gain) top = { hp, gain };
+			}
+			next = top && top.hp;
+		}
+		if (next) set.moves[slot] = next.name;
+	}
+	function hpOk() {
+		return pool.has('hiddenpower') && !(avoid && avoid.has('hiddenpower')) && (!canLearn || canLearn('Hidden Power'));
+	}
+
+	/*
+	 * A wall that boosts its own defence hits with it (owner, 12 Oct 2026: "no Velvet Press on
+	 * Florges is a crime"). Calm Mind Florges, Sp. Def 154 against Sp. Atk 112: Velvet Press
+	 * grows with every Calm Mind twice over. The same for Body Press after Iron Defense. The
+	 * press takes the slot of the attack it out-hits that shares its type, or else the weakest.
+	 */
+	function pressUp() {
+		const b = species.baseStats;
+		const presses = [
+			{ id: 'velvetpress', stat: 'spd', against: 'spa', boosts: ['calmmind', 'velvetguard', 'amnesia', 'cosmicpower', 'stockpile'] },
+			{ id: 'bodypress', stat: 'def', against: 'atk', boosts: ['irondefense', 'cottonguard', 'cosmicpower', 'bulkup', 'stockpile', 'acidarmor', 'barrier', 'shelter'] },
+		];
+		for (const p of presses) {
+			if (has(p.id) || !pool.has(p.id) || b[p.stat] <= b[p.against]) continue;
+			if (!p.boosts.some(has)) continue;
+			const press = dex.moves.get(p.id);
+			if (!learns(press)) continue;
+			const moves = set.moves.map(n => dex.moves.get(n));
+			const swap = moves.map((m, i) => ({ m, i })).filter(x => (x.m.category === press.category || ['seismictoss', 'nightshade'].includes(x.m.id)) && !PIVOTS.includes(x.m.id) && !(x.m.num < 0 && !x.m.velvetShared));
+			if (!swap.length) continue;
+			const pick = swap.find(x => x.m.type === press.type) || swap.find(x => x.m.damage) || swap.sort((x, y) => attackValue(species, x.m, x.m.category) - attackValue(species, y.m, y.m.category))[0];
+			set.moves[pick.i] = press.name;
+		}
+	}
+
+	/*
+	 * Slop out (owner, 12 Oct 2026): two attacks of one type (Giga Drain and Solar Nectar on
+	 * the same Grass type), or a filler hit like Tackle on a Burmy that had better. The weaker
+	 * of the two, or the filler, makes way for a type the set doesn't hit yet, then a utility
+	 * move, then Hidden Power of the type that covers the most - "even Trailblaze is better".
+	 */
+	function tidyMoves() {
+		// Each attack on its own stat: a Special coverage move on a physical set is not filler for that.
+		const valueOf = m => attackValue(species, m, m.category);
+		// Their own reason to be there: a pivot, priority, Knock Off, fixed damage, spinners, a signature.
+		const kept = m => PIVOTS.includes(m.id) || m.priority > 0 || ['knockoff', 'rapidspin', 'mortalspin'].includes(m.id) ||
+			m.damage || !m.basePower || (m.num < 0 && !m.velvetShared);
+		const hpOk = pool.has('hiddenpower') && !(avoid && avoid.has('hiddenpower')) && (!canLearn || canLearn('Hidden Power'));
+		for (let round = 0; round < 2; round++) {
+			const moves = set.moves.map(n => dex.moves.get(n));
+			const attacks = moves.filter(m => m.category !== 'Status');
+			if (!attacks.length) return;
+			let slot = -1, why = '';
+			moves.forEach((m, i) => {
+				if (slot >= 0 || m.category === 'Status' || kept(m)) return;
+				const twin = attacks.find(o => o.id !== m.id && o.type === m.type && (valueOf(o) > valueOf(m) || (valueOf(o) === valueOf(m) && moves.indexOf(o) < i)));
+				if (twin) { slot = i; why = 'twin'; return; }
+				if (m.basePower <= 50 && !m.secondary && !m.multihit) { slot = i; why = 'filler'; }
+			});
+			if (slot < 0) return;
+			const out = moves[slot];
+			const others = attacks.filter(m => m.id !== out.id);
+			const newType = m => !others.some(o => o.type === m.type);
+			const floor = why === 'filler' ? valueOf(out) * 1.1 : valueOf(out) * 0.6;
+			// On the side the set attacks from: Outrage is no coverage for a special Venusaur.
+			const sideOk = m => (m.category === out.category || m.category === sideOf(dex, set)) && !m.damage && m.basePower > 0;
+			/*
+			 * Ground is the Grass type's coverage (owner, 12 Oct 2026): it hits the Fire, Steel and
+			 * Poison types that wall Grass. Earth Power or Earthquake when it learns one, before the rest.
+			 */
+			const grassy = others.some(o => o.type === 'Grass');
+			let next = (grassy && newType({ type: 'Ground' }) && bestAttack(m => m.type === 'Ground' && sideOk(m) && valueOf(m) >= floor)) ||
+				bestAttack(m => newType(m) && m.type !== out.type && sideOk(m) && valueOf(m) >= floor);
+			// A Choice item locks it in: an attack or nothing.
+			if (!next && !CHOICE_ITEMS.includes(itemId())) {
+				// Not Protect or Substitute: on a set with nothing ticking on the foe they only waste a turn (owner).
+				const wants = [...STATUS, ...RECOVERY, ...HAZARDS, ...UTILITY].filter(id => !has(id) && !['protect', 'substitute'].includes(id));
+				next = wants.map(id => dex.moves.get(id)).find(m => learns(m) && usefulMove(dex, m, { gameType })) || null;
+			}
+			if (!next && hpOk) {
+				let best = null;
+				for (const type of dex.types.names()) {
+					if (['Normal', 'Fairy', 'Stellar'].includes(type) || others.some(o => o.type === type)) continue;
+					const hp = dex.moves.get(`Hidden Power ${type}`);
+					if (!hp.exists) continue;
+					const gain = coverageGain(dex, others, hp) + (grassy && type === 'Ground' ? 1.5 : 0);
+					if (!best || gain > best.gain) best = { hp, gain };
+				}
+				if (best && (why === 'twin' || valueOf(best.hp) >= valueOf(out))) next = best.hp;
+			}
+			if (!next) return;
+			set.moves[slot] = next.name;
+		}
+	}
 }
 
 /*

@@ -1709,6 +1709,10 @@ const SMALL = {
 	wishiwashi: ['undertow'],
 	pyukumuku: ['undertow'],
 	delibird: ['hustleup'],
+	// Mystical Fire for the Florges line, walled by Steel without it (the owner, 12 Oct 2026).
+	flabebe: ['mysticalfire'],
+	floette: ['mysticalfire'],
+	florges: ['mysticalfire'],
 	farfetchd: ['hustleup'],
 	spinda: ['shufflejab'],
 	kricketune: ['hivefrenzy'],

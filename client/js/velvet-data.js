@@ -1011,6 +1011,13 @@
 			damage: '  {POKEMON} was hurt by its frostbite!',
 		};
 		for (var tid in TERRAIN_TEXT) if (!en.Moves[tid]) en.Moves[tid] = TERRAIN_TEXT[tid];
+		/*
+		 * Caretaker cures the team as Heal Bell does (|-cureteam|...|[from] ability: Caretaker), and
+		 * the client reads that line's text off the ability. Without one it fell back to the
+		 * default and printed "({EFFECT} activated!)" in chat (12 Oct 2026).
+		 */
+		var care = en.Abilities.caretaker || (en.Abilities.caretaker = { name: 'Caretaker' });
+		care.activate = "  [Caretaker] The team's status conditions were cured!";
 		en.__velvetDescriptions = true;
 		return true;
 	}
@@ -3120,6 +3127,7 @@
 		'events/wild-bw': 'Black & White: Wild Pokemon', 'events/rare-wild-bw': 'Black & White: Rare Wild Pokemon',
 		'events/trainer-rse': 'Ruby & Sapphire: Trainer', 'events/gym-leader-dppt': 'Diamond & Pearl: Gym Leader',
 		'events/elite-four-dppt': 'Diamond & Pearl: Elite Four', 'events/champion-cynthia': 'Champion Cynthia',
+		'events/trololo': 'Trololo (Larpers and Terrorists)',
 	};
 	var MUSIC_PREF = 'velvetBattleMusic';
 	function musicChoice() {
@@ -3127,6 +3135,8 @@
 	}
 	function ourMusicName(file) {
 		if (OUR_MUSIC_NAMES[file]) return OUR_MUSIC_NAMES[file];
+		// Only the legends/ folder is legendary themes; another event track gets its own name.
+		if (!/^legends\//.test(file)) return file.replace(/^events\//, '').replace(/-/g, ' ').replace(/\b[a-z]/g, function (c) { return c.toUpperCase(); });
 		return 'Legendary: ' + file.replace(/^legends\//, '').replace(/-/g, ' ').replace(/\b[a-z]/g, function (c) { return c.toUpperCase(); });
 	}
 	// Every track the picker offers: id -> how to load it.

@@ -1272,10 +1272,25 @@ function statsOf(value) {
 	}
 	return Object.keys(out).length ? out : undefined;
 }
+/*
+ * A spread from Build my team is fitted to the level it battles at (ev-spread.js): the
+ * stats it was built for on the fewest EVs, the rest in bulk. The saved spread stays as
+ * built, so it grows back toward 252 as the Pokemon levels up. Spreads written as numbers
+ * (an NPC's own team) are left exactly as written.
+ */
 function packSets(sets) {
 	const { Teams } = require('pokemon-showdown');
 	if (!Array.isArray(sets)) return Teams.pack(sets);
-	return Teams.pack(sets.map(set => set && typeof set === 'object' ? { ...set, evs: statsOf(set.evs), ivs: statsOf(set.ivs) } : set));
+	const EV = require('./ev-spread');
+	const dex = require('./rp-dex')();
+	return Teams.pack(sets.map(set => {
+		if (!set || typeof set !== 'object') return set;
+		const out = { ...set, evs: statsOf(set.evs), ivs: statsOf(set.ivs) };
+		if (typeof set.evs === 'string' && out.evs) {
+			try { out.evs = EV.fitToLevel(dex, out); } catch (e) { /* the spread as built */ }
+		}
+		return out;
+	}));
 }
 
 module.exports = {

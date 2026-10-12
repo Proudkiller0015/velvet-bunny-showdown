@@ -2900,6 +2900,45 @@ window.VelvetBuffs = {
 			],
 			"abilities": []
 		},
+		"flabebe": {
+			"moves": [
+				"mysticalfire",
+				"solarnectar",
+				"penance",
+				"velvetpress",
+				"velvetguard"
+			],
+			"abilities": [
+				"Unaware"
+			],
+			"slots": {
+				"0": "Flower Veil",
+				"1": "Unaware",
+				"H": "Symbiosis"
+			}
+		},
+		"floette": {
+			"moves": [],
+			"abilities": [
+				"Unaware"
+			],
+			"slots": {
+				"0": "Flower Veil",
+				"1": "Unaware",
+				"H": "Symbiosis"
+			}
+		},
+		"florges": {
+			"moves": [],
+			"abilities": [
+				"Unaware"
+			],
+			"slots": {
+				"0": "Flower Veil",
+				"1": "Unaware",
+				"H": "Symbiosis"
+			}
+		},
 		"farfetchd": {
 			"moves": [
 				"hustleup"
@@ -2980,22 +3019,6 @@ window.VelvetBuffs = {
 				"1": "Thick Fat",
 				"H": "Gluttony",
 				"V0": "Unaware"
-			}
-		},
-		"florges": {
-			"moves": [
-				"solarnectar",
-				"penance",
-				"velvetpress",
-				"velvetguard"
-			],
-			"abilities": [
-				"Unaware"
-			],
-			"slots": {
-				"0": "Flower Veil",
-				"1": "Unaware",
-				"H": "Symbiosis"
 			}
 		},
 		"goodra": {
@@ -6131,38 +6154,6 @@ window.VelvetBuffs = {
 				"solarnectar"
 			],
 			"abilities": []
-		},
-		"floette": {
-			"moves": [
-				"solarnectar",
-				"penance",
-				"velvetpress",
-				"velvetguard"
-			],
-			"abilities": [
-				"Unaware"
-			],
-			"slots": {
-				"0": "Flower Veil",
-				"1": "Unaware",
-				"H": "Symbiosis"
-			}
-		},
-		"flabebe": {
-			"moves": [
-				"solarnectar",
-				"penance",
-				"velvetpress",
-				"velvetguard"
-			],
-			"abilities": [
-				"Unaware"
-			],
-			"slots": {
-				"0": "Flower Veil",
-				"1": "Unaware",
-				"H": "Symbiosis"
-			}
 		},
 		"sliggoo": {
 			"moves": [

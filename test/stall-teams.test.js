@@ -20,6 +20,7 @@ const SB = require('../src/stall-builder');
 const TL = require('../src/team-logic');
 const RS = require('../src/role-sets');
 const E = require('../src/encounters');
+const EV = require('../src/ev-spread');
 const { stallShare } = require('../src/ladder-defaults');
 
 const N = Number(process.argv[2]) || 50;
@@ -137,8 +138,7 @@ function stallChecks(dex, team, label) {
 				const top = Math.max(...enc.team.map(m => m.level));
 				const [, hi] = E.levelRange(badges, null);
 				if (top !== hi) bad.push(`${badges} badges: ace at ${top}, not ${hi}`);
-				const ev = badges * 10;
-				if (enc.team.some(m => Object.values(m.evs).reduce((a, b) => a + b, 0) > 6 * ev)) bad.push(`${badges} badges: EVs over the badge budget`);
+				if (enc.team.some(m => Object.values(m.evs).reduce((a, b) => a + b, 0) > EV.trainerBudget(badges))) bad.push(`${badges} badges: EVs over the badge budget`);
 				if (enc.team.some(m => m.ivs.hp !== Math.min(31, 8 + badges * 3))) bad.push(`${badges} badges: IVs not the badge rule`);
 			}
 		}
