@@ -1,0 +1,12 @@
+{
+	"id": "gen3ou-1-tmsq1r",
+	"format": "[Gen 3] OU",
+	"players": [
+		"Bunny Normal",
+		"0p9o9i8"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Normal\n|j|☆0p9o9i8\n|t:|1791812007\n|gametype|singles\n|badge|p1|gold|gen3ou|1-1\n|badge|p2|silver|gen3ou|2-2\n|player|p1|Bunny Normal|bunny.png|1211\n|player|p2|0p9o9i8|102|1080\n|gen|3\n|tier|[Gen 3] OU\n|rated|\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Beat Up Nicknames Mod: Beat Up will not reveal any party members\n|rule|Endless Battle Clause: Forcing endless battles is banned\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Switch Priority Clause Mod: Faster Pokémon switch first\n|rule|Species Clause: Limit one of each Pokémon\n|rule|OHKO Clause: OHKO moves are banned\n|rule|Evasion Items Clause: Evasion items are banned\n|rule|Evasion Moves Clause: Evasion moves are banned\n|rule|One Boost Passer Clause: Limit one Baton Passer that has a way to boost its stats\n|rule|Freeze Clause Mod: Limit one foe frozen\n|rule|Baton Pass Stat Clause: No Baton Passer may have a way to boost its Speed\n|\n|t:|1791812008\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Skarmory|Skarmory, M|100/100\n|switch|p2a: Blissey|Blissey, F, shiny|100/100\n|turn|1\n|c|☆Bunny Normal|Good luck! Playing on **normal**.\n|\n|t:|1791812023\n|move|p2a: Blissey|Protect|p2a: Blissey\n|-singleturn|p2a: Blissey|Protect\n|move|p1a: Skarmory|Steel Wing|p2a: Blissey\n|-activate|p2a: Blissey|Protect\n|\n|upkeep\n|turn|2\n|\n|t:|1791812036\n|switch|p2a: Metagross|Metagross, shiny|100/100\n|move|p1a: Skarmory|Steel Wing|p2a: Metagross\n|-resisted|p2a: Metagross\n|-damage|p2a: Metagross|93/100\n|\n|upkeep\n|turn|3\n|\n|t:|1791812047\n|switch|p1a: Jirachi|Jirachi|100/100\n|move|p2a: Metagross|Shadow Ball|p1a: Jirachi\n|-damage|p1a: Jirachi|68/100\n|\n|-heal|p1a: Jirachi|74/100|[from] item: Leftovers\n|upkeep\n|turn|4\n|\n|t:|1791812057\n|move|p1a: Jirachi|Fire Punch|p2a: Metagross\n|-supereffective|p2a: Metagross\n|-damage|p2a: Metagross|45/100\n|move|p2a: Metagross|Explosion|p1a: Jirachi\n|-resisted|p1a: Jirachi\n|-damage|p1a: Jirachi|0 fnt\n|faint|p2a: Metagross\n|faint|p1a: Jirachi\n|\n|t:|1791812069\n|switch|p1a: Gengar|Gengar, F|100/100\n|switch|p2a: Blissey|Blissey, F, shiny|100/100\n|\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1791812078
+}
