@@ -1713,6 +1713,8 @@ const SMALL = {
 	flabebe: ['mysticalfire'],
 	floette: ['mysticalfire'],
 	florges: ['mysticalfire'],
+	// Swords Dance to power up Soul Toll (the owner, 12 Oct 2026).
+	spiritomb: ['swordsdance'],
 	farfetchd: ['hustleup'],
 	spinda: ['shufflejab'],
 	kricketune: ['hivefrenzy'],

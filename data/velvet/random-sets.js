@@ -142,6 +142,15 @@ const SETS = {
 				nature: 'Calm',
 				evs: { hp: 252, def: 4, spd: 252 },
 			},
+			{
+				role: 'Setup Sweeper',
+				movepool: ['Swords Dance', 'Soul Toll', 'Knock Off', 'Strength Sap', 'Will-O-Wisp'],
+				abilities: ['Keystone Legion'],
+				teraTypes: ['Dark', 'Fairy'],
+				item: 'Leftovers',
+				nature: 'Adamant',
+				evs: { hp: 252, atk: 252, spd: 4 },
+			},
 		],
 	},
 };
