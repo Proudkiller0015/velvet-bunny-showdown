@@ -347,6 +347,17 @@
    ]
   },
   {
+   "name": "Tapu Lele",
+   "id": "tapulele",
+   "price": 80,
+   "tier": "A+",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/tapulele.png",
+   "types": [
+    "Psychic",
+    "Fairy"
+   ]
+  },
+  {
    "name": "Darmanitan-Galar",
    "id": "darmanitangalar",
    "price": 65,
@@ -493,17 +504,6 @@
    "types": [
     "Normal",
     "Fighting"
-   ]
-  },
-  {
-   "name": "Tapu Lele",
-   "id": "tapulele",
-   "price": 65,
-   "tier": "A",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/tapulele.png",
-   "types": [
-    "Psychic",
-    "Fairy"
    ]
   },
   {

@@ -50,7 +50,8 @@ window.VelvetDraft = {
 				"sneasler",
 				"tapubulu",
 				"empoleon",
-				"latiosmega"
+				"latiosmega",
+				"tapulele"
 			]
 		},
 		{
@@ -71,7 +72,6 @@ window.VelvetDraft = {
 				"kangaskhanmega",
 				"ogerponwellspring",
 				"lopunnymega",
-				"tapulele",
 				"glaceon",
 				"urshifurapidstrike",
 				"ironhands",
