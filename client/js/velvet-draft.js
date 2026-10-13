@@ -10,10 +10,17 @@ window.VelvetDraft = {
 	"season": "Season 1",
 	"tiers": [
 		{
+			"tier": "S+",
+			"price": 120,
+			"ids": [
+				"mew",
+				"glaceon"
+			]
+		},
+		{
 			"tier": "S",
 			"price": 100,
 			"ids": [
-				"mew",
 				"zeraoramega",
 				"dragapult",
 				"kingambit",
@@ -72,7 +79,6 @@ window.VelvetDraft = {
 				"kangaskhanmega",
 				"ogerponwellspring",
 				"lopunnymega",
-				"glaceon",
 				"urshifurapidstrike",
 				"ironhands",
 				"volcarona",

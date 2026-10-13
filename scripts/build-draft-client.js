@@ -13,7 +13,7 @@ const path = require('path');
 
 const ROOT = path.join(__dirname, '..');
 const pool = require(path.join(ROOT, 'data', 'velvet', 'draft-s1.json'));
-const ORDER = ['S', 'A+', 'A', 'B+', 'B', 'C+', 'C', 'D', 'E', 'F', 'NFE', 'LC'];
+const ORDER = ['S+', 'S', 'A+', 'A', 'B+', 'B', 'C+', 'C', 'D', 'E', 'F', 'NFE', 'LC'];
 
 const tiers = ORDER.map(tier => {
 	const list = pool.pokemon.filter(p => p.tier === tier);

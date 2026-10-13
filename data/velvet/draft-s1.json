@@ -3,11 +3,21 @@
   {
    "name": "Mew",
    "id": "mew",
-   "price": 100,
-   "tier": "S",
+   "price": 120,
+   "tier": "S+",
    "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/mew.png",
    "types": [
     "Psychic"
+   ]
+  },
+  {
+   "name": "Glaceon",
+   "id": "glaceon",
+   "price": 120,
+   "tier": "S+",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/glaceon.png",
+   "types": [
+    "Ice"
    ]
   },
   {
@@ -504,16 +514,6 @@
    "types": [
     "Normal",
     "Fighting"
-   ]
-  },
-  {
-   "name": "Glaceon",
-   "id": "glaceon",
-   "price": 65,
-   "tier": "A",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/glaceon.png",
-   "types": [
-    "Ice"
    ]
   },
   {
@@ -9977,7 +9977,7 @@
    "id": "clauncher",
    "price": 1,
    "tier": "LC",
-   "sprite": "https://play.pokemonshowdown.com/sprites/gen5/clauncher.png",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/clauncher.png",
    "types": [
     "Water"
    ]
