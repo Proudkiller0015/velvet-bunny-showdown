@@ -1,0 +1,12 @@
+{
+	"id": "gen9randombattle-1-tmtopj",
+	"format": "[Gen 9] Random Battle",
+	"players": [
+		"TestTrainer734",
+		"Velvet Bunny"
+	],
+	"rating": null,
+	"log": "|j|☆TestTrainer734\n|j|☆Velvet Bunny\n|t:|1791855754\n|gametype|singles\n|player|p1|TestTrainer734|265|\n|player|p2|Velvet Bunny|bunny.png|\n|gen|9\n|tier|[Gen 9] Random Battle\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1791855754\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Groudon|Groudon, L72|100/100\n|switch|p2a: Leavanny|Leavanny, L86, M|100/100\n|-weather|SunnyDay|[from] ability: Drought|[of] p1a: Groudon\n|turn|1\n|c|☆Velvet Bunny|Good luck! Playing on **champion**. (PM me to change it.)\n|\n|t:|1791855756\n|switch|p2a: Kyurem|Kyurem-White, L73|100/100\n|-ability|p2a: Kyurem|Turboblaze\n|move|p1a: Groudon|Heat Crash|p2a: Kyurem\n|-damage|p2a: Kyurem|75/100\n|\n|-weather|SunnyDay|[upkeep]\n|upkeep\n|turn|2\n|\n|t:|1791855756\n|move|p2a: Kyurem|Ice Beam|p1a: Groudon\n|-supereffective|p1a: Groudon\n|-damage|p1a: Groudon|0 fnt\n|faint|p1a: Groudon\n|\n|-weather|SunnyDay|[upkeep]\n|upkeep\n|\n|t:|1791855756\n|switch|p1a: Grafaiai|Grafaiai, L86, M|100/100\n|turn|3\n|\n|t:|1791855757\n|switch|p2a: Mudsdale|Mudsdale, L83, M|100/100\n|move|p1a: Grafaiai|Knock Off|p2a: Mudsdale\n|-damage|p2a: Mudsdale|78/100\n|-ability|p2a: Mudsdale|Stamina|boost\n|-boost|p2a: Mudsdale|def|1\n|-enditem|p2a: Mudsdale|Leftovers|[from] move: Knock Off|[of] p1a: Grafaiai\n|\n|-weather|SunnyDay|[upkeep]\n|upkeep\n|turn|4\n|\n|t:|1791855757\n|move|p1a: Grafaiai|Knock Off|p2a: Mudsdale\n|-damage|p2a: Mudsdale|68/100\n|-ability|p2a: Mudsdale|Stamina|boost\n|-boost|p2a: Mudsdale|def|1\n|move|p2a: Mudsdale|Earthquake|p1a: Grafaiai\n|-supereffective|p1a: Grafaiai\n|-damage|p1a: Grafaiai|0 fnt\n|faint|p1a: Grafaiai\n|\n|-weather|SunnyDay|[upkeep]\n|upkeep\n|\n|t:|1791855757\n|switch|p1a: Giratina|Giratina, L75|100/100\n|-ability|p1a: Giratina|Pressure\n|turn|5\n|\n|t:|1791855758\n|move|p1a: Giratina|Will-O-Wisp|p2a: Mudsdale\n|-status|p2a: Mudsdale|brn\n|move|p2a: Mudsdale|Earthquake|p1a: Giratina\n|-damage|p1a: Giratina|83/100\n|\n|-weather|none\n|-heal|p1a: Giratina|89/100|[from] item: Leftovers\n|-damage|p2a: Mudsdale|62/100 brn|[from] brn\n|upkeep\n|turn|6\n",
+	"inputlog": null,
+	"uploadtime": 1791855758
+}
