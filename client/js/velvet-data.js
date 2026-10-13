@@ -1347,7 +1347,15 @@
 			 * The draft lists its pool and nothing else, under the draft's price tiers:
 			 * the viability ranking coaches prep with (the owner, 12 Oct 2026).
 			 */
-			if (typed && searchType === 'pokemon' && draftFor(asked)) typed.getBaseResults = function () { return draftRows(asked); };
+			if (typed && searchType === 'pokemon' && draftFor(asked)) {
+				typed.getBaseResults = function () { return draftRows(asked); };
+				// And the tier column says the draft letter, not the Pokemon's usual tier.
+				var ownTier = typed.getTier;
+				typed.getTier = function (species) {
+					var letter = draftTierOf(species && (species.id || window.toID(species)));
+					return letter || (ownTier ? ownTier.apply(this, arguments) : '');
+				};
+			}
 			return typed;
 		};
 		return true;
@@ -1356,6 +1364,19 @@
 	function draftFor(format) {
 		var draft = window.VelvetDraft;
 		return !!(draft && draft.formats && draft.formats.indexOf(format) >= 0);
+	}
+
+	var draftTierIndex = null;
+	function draftTierOf(id) {
+		var draft = window.VelvetDraft;
+		if (!draft || !id) return '';
+		if (!draftTierIndex) {
+			draftTierIndex = {};
+			for (var i = 0; i < draft.tiers.length; i++) {
+				for (var j = 0; j < draft.tiers[i].ids.length; j++) draftTierIndex[draft.tiers[i].ids[j]] = draft.tiers[i].tier;
+			}
+		}
+		return draftTierIndex[id] || '';
 	}
 
 	function draftRows() {
