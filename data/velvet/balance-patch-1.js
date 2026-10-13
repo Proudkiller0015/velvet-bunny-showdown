@@ -373,10 +373,10 @@ exports.MOVES = {
 		shortDesc: "Always resets the target's stat changes and the user's stat drops. Uxie's signature.",
 		desc: "Uxie opens its eyes and the target forgets. After dealing damage, all of the target's stat stages are reset to 0, and any of the user's lowered stat stages are reset to 0.",
 	},
-	// Mesprit's: shared feeling. Heals the user for all of the damage it deals.
+	// Mesprit's: shared feeling. Heals the user for all of the damage it deals. Same accuracy and PP as her sisters (the owner, 12 Oct 2026).
 	soulresonance: {
 		num: -23, gen: 9, name: "Soul Resonance", type: "Psychic", category: "Special",
-		basePower: 110, accuracy: 90, pp: 5, priority: 0,
+		basePower: 110, accuracy: 95, pp: 8, priority: 0,
 		drain: [1, 1],
 		flags: { protect: 1, mirror: 1, heal: 1, metronome: 1, nosketch: 1 },
 		secondary: null, target: "normal", contestType: "Beautiful",
