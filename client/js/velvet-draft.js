@@ -21,20 +21,18 @@ window.VelvetDraft = {
 				"tapukoko",
 				"gougingfire",
 				"landorus",
-				"metagrossmega",
 				"kartana",
 				"roaringmoon",
-				"dragonite"
+				"dragonite",
+				"gholdengo"
 			]
 		},
 		{
 			"tier": "A+",
 			"price": 80,
 			"ids": [
-				"gholdengo",
 				"samurotthisui",
 				"absolmegaz",
-				"zamazenta",
 				"zeraora",
 				"landorustherian",
 				"ragingbolt",
@@ -50,15 +48,15 @@ window.VelvetDraft = {
 				"dragonitemega",
 				"registeel",
 				"sneasler",
-				"tapubulu"
+				"tapubulu",
+				"empoleon",
+				"darmanitangalar"
 			]
 		},
 		{
 			"tier": "A",
 			"price": 65,
 			"ids": [
-				"empoleon",
-				"darmanitangalar",
 				"melmetal",
 				"garchompmegaz",
 				"ironmoth",
@@ -88,15 +86,15 @@ window.VelvetDraft = {
 				"latiosmega",
 				"blazikenmega",
 				"flareon",
-				"scizormega"
+				"scizormega",
+				"mawilemega",
+				"sylveon"
 			]
 		},
 		{
 			"tier": "B+",
 			"price": 50,
 			"ids": [
-				"mawilemega",
-				"sylveon",
 				"steelixmega",
 				"scizor",
 				"gengar",
@@ -139,15 +137,15 @@ window.VelvetDraft = {
 				"azelf",
 				"umbreon",
 				"hippowdon",
-				"buzzwole"
+				"buzzwole",
+				"espathra",
+				"crawdaunt"
 			]
 		},
 		{
 			"tier": "B",
 			"price": 40,
 			"ids": [
-				"espathra",
-				"crawdaunt",
 				"zarude",
 				"gardevoirmega",
 				"manectricmega",
@@ -200,15 +198,15 @@ window.VelvetDraft = {
 				"slowbro",
 				"moltres",
 				"manaphy",
-				"tornadustherian"
+				"tornadustherian",
+				"medichammega",
+				"regirock"
 			]
 		},
 		{
 			"tier": "C+",
 			"price": 30,
 			"ids": [
-				"medichammega",
-				"regirock",
 				"jirachi",
 				"pidgeotmega",
 				"copperajah",
@@ -271,15 +269,15 @@ window.VelvetDraft = {
 				"regidrago",
 				"banettemega",
 				"haxorus",
-				"nihilego"
+				"nihilego",
+				"steelix",
+				"escavalier"
 			]
 		},
 		{
 			"tier": "C",
 			"price": 22,
 			"ids": [
-				"steelix",
-				"escavalier",
 				"uxie",
 				"feraligatr",
 				"absolmega",
@@ -353,6 +351,8 @@ window.VelvetDraft = {
 				"azumarill",
 				"hariyama",
 				"forretress",
+				"crobat",
+				"barbaracle",
 				"pansear",
 				"panpour",
 				"pansage"
@@ -362,8 +362,6 @@ window.VelvetDraft = {
 			"tier": "D",
 			"price": 15,
 			"ids": [
-				"crobat",
-				"barbaracle",
 				"goodra",
 				"grafaiai",
 				"oricoriopompom",
@@ -451,15 +449,15 @@ window.VelvetDraft = {
 				"gumshoos",
 				"stoutland",
 				"toucannon",
-				"decidueyehisui"
+				"decidueyehisui",
+				"lilligant",
+				"exeggutoralola"
 			]
 		},
 		{
 			"tier": "E",
 			"price": 10,
 			"ids": [
-				"lilligant",
-				"exeggutoralola",
 				"venusaur",
 				"typhlosionhisui",
 				"absol",
@@ -567,15 +565,15 @@ window.VelvetDraft = {
 				"swanna",
 				"bouffalant",
 				"raichu",
-				"pincurchin"
+				"pincurchin",
+				"gourgeistsuper",
+				"ninjask"
 			]
 		},
 		{
 			"tier": "F",
 			"price": 5,
 			"ids": [
-				"gourgeistsuper",
-				"ninjask",
 				"rapidash",
 				"weezing",
 				"toxicroak",

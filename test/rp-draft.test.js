@@ -16,7 +16,10 @@ ok(format.ruleset.includes('Terastal Clause') && format.ruleset.includes('Z-Move
 
 const v = TeamValidator.get('gen9rpdraft');
 const check = (set) => v.validateTeam([{ level: 100, evs: { hp: 4 }, nature: 'Adamant', ...set }]);
-ok(!check({ species: 'Metagross', item: 'Metagrossite', ability: 'Clear Body', moves: ['Meteor Mash'] }), 'Mega Metagross (pool entry) is legal');
+ok(/banned/.test(String(check({ species: 'Metagross', item: 'Metagrossite', ability: 'Clear Body', moves: ['Meteor Mash'] }))), 'Mega Metagross banned');
+ok(!check({ species: 'Metagross', item: 'Leftovers', ability: 'Clear Body', moves: ['Meteor Mash'] }), 'plain Metagross is fine');
+ok(!check({ species: 'Gardevoir', item: 'Gardevoirite', ability: 'Trace', moves: ['Moonblast'] }), 'Mega Gardevoir (pool entry) is legal');
+ok(/banned/.test(String(check({ species: 'Zamazenta', item: 'Leftovers', ability: 'Dauntless Shield', moves: ['Body Press'] }))), 'Zamazenta banned');
 ok(/banned/.test(String(check({ species: 'Magearna', item: 'Leftovers', ability: 'Soul-Heart', moves: ['Flash Cannon'] }))), 'Magearna banned');
 ok(/banned/.test(String(check({ species: 'Lucario', item: 'Lucarionite', ability: 'Justified', moves: ['Close Combat'] }))), 'Mega Lucario banned');
 ok(!check({ species: 'Lucario', item: 'Life Orb', ability: 'Justified', moves: ['Close Combat'] }), 'plain Lucario is fine');

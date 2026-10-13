@@ -87,17 +87,6 @@
    ]
   },
   {
-   "name": "Metagross-Mega",
-   "id": "metagrossmega",
-   "price": 100,
-   "tier": "S",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/metagross-mega.png",
-   "types": [
-    "Steel",
-    "Psychic"
-   ]
-  },
-  {
    "name": "Kartana",
    "id": "kartana",
    "price": 100,
@@ -133,8 +122,8 @@
   {
    "name": "Gholdengo",
    "id": "gholdengo",
-   "price": 80,
-   "tier": "A+",
+   "price": 100,
+   "tier": "S",
    "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/gholdengo.png",
    "types": [
     "Steel",
@@ -161,16 +150,6 @@
    "types": [
     "Dark",
     "Ghost"
-   ]
-  },
-  {
-   "name": "Zamazenta",
-   "id": "zamazenta",
-   "price": 80,
-   "tier": "A+",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/zamazenta.png",
-   "types": [
-    "Fighting"
    ]
   },
   {
@@ -348,8 +327,8 @@
   {
    "name": "Empoleon",
    "id": "empoleon",
-   "price": 65,
-   "tier": "A",
+   "price": 80,
+   "tier": "A+",
    "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/empoleon.png",
    "types": [
     "Water",
@@ -359,8 +338,8 @@
   {
    "name": "Darmanitan-Galar",
    "id": "darmanitangalar",
-   "price": 65,
-   "tier": "A",
+   "price": 80,
+   "tier": "A+",
    "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/darmanitan-galar.png",
    "types": [
     "Ice"
@@ -691,8 +670,8 @@
   {
    "name": "Mawile-Mega",
    "id": "mawilemega",
-   "price": 50,
-   "tier": "B+",
+   "price": 65,
+   "tier": "A",
    "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/mawile-mega.png",
    "types": [
     "Steel",
@@ -702,8 +681,8 @@
   {
    "name": "Sylveon",
    "id": "sylveon",
-   "price": 50,
-   "tier": "B+",
+   "price": 65,
+   "tier": "A",
    "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/sylveon.png",
    "types": [
     "Fairy"
@@ -1176,8 +1155,8 @@
   {
    "name": "Espathra",
    "id": "espathra",
-   "price": 40,
-   "tier": "B",
+   "price": 50,
+   "tier": "B+",
    "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/espathra.png",
    "types": [
     "Psychic"
@@ -1186,8 +1165,8 @@
   {
    "name": "Crawdaunt",
    "id": "crawdaunt",
-   "price": 40,
-   "tier": "B",
+   "price": 50,
+   "tier": "B+",
    "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/crawdaunt.png",
    "types": [
     "Water",
@@ -1766,8 +1745,8 @@
   {
    "name": "Medicham-Mega",
    "id": "medichammega",
-   "price": 30,
-   "tier": "C+",
+   "price": 40,
+   "tier": "B",
    "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/medicham-mega.png",
    "types": [
     "Fighting",
@@ -1777,8 +1756,8 @@
   {
    "name": "Regirock",
    "id": "regirock",
-   "price": 30,
-   "tier": "C+",
+   "price": 40,
+   "tier": "B",
    "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/regirock.png",
    "types": [
     "Rock"
@@ -2468,8 +2447,8 @@
   {
    "name": "Steelix",
    "id": "steelix",
-   "price": 22,
-   "tier": "C",
+   "price": 30,
+   "tier": "C+",
    "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/steelix.png",
    "types": [
     "Steel",
@@ -2479,8 +2458,8 @@
   {
    "name": "Escavalier",
    "id": "escavalier",
-   "price": 22,
-   "tier": "C",
+   "price": 30,
+   "tier": "C+",
    "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/escavalier.png",
    "types": [
     "Bug",
@@ -3271,6 +3250,28 @@
    ]
   },
   {
+   "name": "Crobat",
+   "id": "crobat",
+   "price": 22,
+   "tier": "C",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/crobat.png",
+   "types": [
+    "Poison",
+    "Flying"
+   ]
+  },
+  {
+   "name": "Barbaracle",
+   "id": "barbaracle",
+   "price": 22,
+   "tier": "C",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/barbaracle.png",
+   "types": [
+    "Rock",
+    "Water"
+   ]
+  },
+  {
    "name": "Pansear",
    "id": "pansear",
    "price": 22,
@@ -3298,28 +3299,6 @@
    "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/pansage.png",
    "types": [
     "Grass"
-   ]
-  },
-  {
-   "name": "Crobat",
-   "id": "crobat",
-   "price": 15,
-   "tier": "D",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/crobat.png",
-   "types": [
-    "Poison",
-    "Flying"
-   ]
-  },
-  {
-   "name": "Barbaracle",
-   "id": "barbaracle",
-   "price": 15,
-   "tier": "D",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/barbaracle.png",
-   "types": [
-    "Rock",
-    "Water"
    ]
   },
   {
@@ -4260,8 +4239,8 @@
   {
    "name": "Lilligant",
    "id": "lilligant",
-   "price": 10,
-   "tier": "E",
+   "price": 15,
+   "tier": "D",
    "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/lilligant.png",
    "types": [
     "Grass"
@@ -4270,8 +4249,8 @@
   {
    "name": "Exeggutor-Alola",
    "id": "exeggutoralola",
-   "price": 10,
-   "tier": "E",
+   "price": 15,
+   "tier": "D",
    "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/exeggutor-alola.png",
    "types": [
     "Grass",
@@ -5416,8 +5395,8 @@
   {
    "name": "Gourgeist-Super",
    "id": "gourgeistsuper",
-   "price": 5,
-   "tier": "F",
+   "price": 10,
+   "tier": "E",
    "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/gourgeist-super.png",
    "types": [
     "Ghost",
@@ -5427,8 +5406,8 @@
   {
    "name": "Ninjask",
    "id": "ninjask",
-   "price": 5,
-   "tier": "F",
+   "price": 10,
+   "tier": "E",
    "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/ninjask.png",
    "types": [
     "Bug",
@@ -12256,6 +12235,11 @@
    "why": "Box legendary"
   },
   {
+   "name": "Metagross-Mega",
+   "id": "metagrossmega",
+   "why": "Banned by the league"
+  },
+  {
    "name": "Reshiram",
    "id": "reshiram",
    "why": "Box legendary"
@@ -12269,6 +12253,11 @@
    "name": "Hoopa-Unbound",
    "id": "hoopaunbound",
    "why": "Mythical"
+  },
+  {
+   "name": "Zamazenta",
+   "id": "zamazenta",
+   "why": "Banned by the league"
   },
   {
    "name": "Lucario-Mega",
