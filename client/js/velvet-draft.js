@@ -50,18 +50,20 @@ window.VelvetDraft = {
 				"sneasler",
 				"tapubulu",
 				"empoleon",
-				"darmanitangalar"
+				"latiosmega"
 			]
 		},
 		{
 			"tier": "A",
 			"price": 65,
 			"ids": [
+				"darmanitangalar",
 				"melmetal",
 				"garchompmegaz",
 				"ironmoth",
 				"alakazammega",
 				"archaludon",
+				"latiasmega",
 				"dianciemega",
 				"kyurem",
 				"charizardmegay",
@@ -83,23 +85,22 @@ window.VelvetDraft = {
 				"walkingwake",
 				"ursaluna",
 				"gliscor",
-				"latiosmega",
 				"blazikenmega",
 				"flareon",
 				"scizormega",
-				"mawilemega",
-				"sylveon"
+				"mawilemega"
 			]
 		},
 		{
 			"tier": "B+",
 			"price": 50,
 			"ids": [
+				"sylveon",
 				"steelixmega",
 				"scizor",
 				"gengar",
+				"slowkinggalar",
 				"latios",
-				"latiasmega",
 				"enamorus",
 				"darmanitan",
 				"corviknight",
@@ -138,14 +139,15 @@ window.VelvetDraft = {
 				"umbreon",
 				"hippowdon",
 				"buzzwole",
-				"espathra",
-				"crawdaunt"
+				"espathra"
 			]
 		},
 		{
 			"tier": "B",
 			"price": 40,
 			"ids": [
+				"clefable",
+				"crawdaunt",
 				"zarude",
 				"gardevoirmega",
 				"manectricmega",
@@ -157,7 +159,6 @@ window.VelvetDraft = {
 				"deoxysspeed",
 				"leafeon",
 				"toxapex",
-				"slowkinggalar",
 				"beedrillmega",
 				"mudsdale",
 				"weavile",
@@ -199,14 +200,14 @@ window.VelvetDraft = {
 				"moltres",
 				"manaphy",
 				"tornadustherian",
-				"medichammega",
-				"regirock"
+				"medichammega"
 			]
 		},
 		{
 			"tier": "C+",
 			"price": 30,
 			"ids": [
+				"regirock",
 				"jirachi",
 				"pidgeotmega",
 				"copperajah",
@@ -238,7 +239,6 @@ window.VelvetDraft = {
 				"sandyshocks",
 				"gallade",
 				"sinistcha",
-				"clefable",
 				"barraskewda",
 				"palafin",
 				"lilliganthisui",

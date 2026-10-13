@@ -336,10 +336,21 @@
    ]
   },
   {
-   "name": "Darmanitan-Galar",
-   "id": "darmanitangalar",
+   "name": "Latios-Mega",
+   "id": "latiosmega",
    "price": 80,
    "tier": "A+",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/latios-mega.png",
+   "types": [
+    "Dragon",
+    "Psychic"
+   ]
+  },
+  {
+   "name": "Darmanitan-Galar",
+   "id": "darmanitangalar",
+   "price": 65,
+   "tier": "A",
    "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/darmanitan-galar.png",
    "types": [
     "Ice"
@@ -395,6 +406,17 @@
    "types": [
     "Steel",
     "Dragon"
+   ]
+  },
+  {
+   "name": "Latias-Mega",
+   "id": "latiasmega",
+   "price": 65,
+   "tier": "A",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/latias-mega.png",
+   "types": [
+    "Dragon",
+    "Psychic"
    ]
   },
   {
@@ -625,17 +647,6 @@
    ]
   },
   {
-   "name": "Latios-Mega",
-   "id": "latiosmega",
-   "price": 65,
-   "tier": "A",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/latios-mega.png",
-   "types": [
-    "Dragon",
-    "Psychic"
-   ]
-  },
-  {
    "name": "Blaziken-Mega",
    "id": "blazikenmega",
    "price": 65,
@@ -681,8 +692,8 @@
   {
    "name": "Sylveon",
    "id": "sylveon",
-   "price": 65,
-   "tier": "A",
+   "price": 50,
+   "tier": "B+",
    "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/sylveon.png",
    "types": [
     "Fairy"
@@ -722,22 +733,22 @@
    ]
   },
   {
+   "name": "Slowking-Galar",
+   "id": "slowkinggalar",
+   "price": 50,
+   "tier": "B+",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/slowking-galar.png",
+   "types": [
+    "Poison",
+    "Psychic"
+   ]
+  },
+  {
    "name": "Latios",
    "id": "latios",
    "price": 50,
    "tier": "B+",
    "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/latios.png",
-   "types": [
-    "Dragon",
-    "Psychic"
-   ]
-  },
-  {
-   "name": "Latias-Mega",
-   "id": "latiasmega",
-   "price": 50,
-   "tier": "B+",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/latias-mega.png",
    "types": [
     "Dragon",
     "Psychic"
@@ -1163,10 +1174,20 @@
    ]
   },
   {
+   "name": "Clefable",
+   "id": "clefable",
+   "price": 40,
+   "tier": "B",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/clefable.png",
+   "types": [
+    "Fairy"
+   ]
+  },
+  {
    "name": "Crawdaunt",
    "id": "crawdaunt",
-   "price": 50,
-   "tier": "B+",
+   "price": 40,
+   "tier": "B",
    "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/crawdaunt.png",
    "types": [
     "Water",
@@ -1288,17 +1309,6 @@
    "types": [
     "Poison",
     "Water"
-   ]
-  },
-  {
-   "name": "Slowking-Galar",
-   "id": "slowkinggalar",
-   "price": 40,
-   "tier": "B",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/slowking-galar.png",
-   "types": [
-    "Poison",
-    "Psychic"
    ]
   },
   {
@@ -1756,8 +1766,8 @@
   {
    "name": "Regirock",
    "id": "regirock",
-   "price": 40,
-   "tier": "B",
+   "price": 30,
+   "tier": "C+",
    "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/regirock.png",
    "types": [
     "Rock"
@@ -2097,16 +2107,6 @@
    "types": [
     "Grass",
     "Ghost"
-   ]
-  },
-  {
-   "name": "Clefable",
-   "id": "clefable",
-   "price": 30,
-   "tier": "C+",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/clefable.png",
-   "types": [
-    "Fairy"
    ]
   },
   {
