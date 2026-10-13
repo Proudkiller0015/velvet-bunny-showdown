@@ -1366,14 +1366,14 @@ exports.Formats = [
 	 * own pool entry, holding its stone.
 	 *
 	 * National Dex's clauses, minus its tier bans (the pool does that job) and
-	 * minus its Baton Pass ban: Baton Pass is allowed, but it cannot be selected
-	 * while the user has a raised stat, so it passes switch-ins and Substitutes,
-	 * never boosts. No Z-Moves, no Terastallization; Gems, Hidden Power and
+	 * minus its Baton Pass ban: Baton Pass is allowed, but it only ever dry passes -
+	 * a plain switch that carries no boosts, Substitute or other effects over (the
+	 * owner, 12 Oct 2026), so it can't be used to pass by accident either. No Z-Moves, no Terastallization; Gems, Hidden Power and
 	 * Pursuit stay allowed.
 	 */
 	{
 		name: "[Gen 9] RP Draft",
-		desc: "Kagura Draft League: the Season 1 draft pool only. No Z-Moves or Tera; Baton Pass can't pass boosts.",
+		desc: "Kagura Draft League: the Season 1 draft pool only. No Z-Moves or Tera; Baton Pass only dry passes (nothing carried over).",
 		mod: 'gen9',
 		ruleset: ['Standard NatDex', 'Terastal Clause', 'Z-Move Clause', ...RP_RULES, ...RP_GEMS],
 		banlist: ['Arena Trap', 'Moody', 'Power Construct', 'Shadow Tag', "King's Rock", 'Quick Claw', 'Razor Fang', 'Assist', 'Last Respects', 'Shed Tail'],
@@ -1393,8 +1393,10 @@ exports.Formats = [
 			if (pool.banned.has(id)) return [`${entry.name} is banned in the draft (${pool.banned.get(id)}).`];
 			if (!pool.ids.has(id)) return [`${entry.name} is not in the Season 1 draft pool.`];
 		},
-		onDisableMove(pokemon) {
-			if (Object.values(pokemon.boosts).some(b => b > 0) && pokemon.hasMove('batonpass')) pokemon.disableMove('batonpass');
+		// Baton Pass only ever dry passes here: a plain switch that carries nothing over.
+		// The switch reads what to copy from the move's id, so the flag is made a plain one after the move.
+		onAfterMove(source, target, move) {
+			if (move.id === 'batonpass' && source.switchFlag === 'batonpass') source.switchFlag = true;
 		},
 		// Singles. On the ladder too, for practice (the owner): not a mock battle, but a way to try a team's synergy.
 		gameType: 'singles',

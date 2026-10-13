@@ -1,8 +1,8 @@
 'use strict';
 
 /*
- * [Gen 9] RP Draft: the Season 1 pool only, singles, and Baton Pass cannot be
- * selected while the user has a raised stat.
+ * [Gen 9] RP Draft: the Season 1 pool only, singles, and Baton Pass only ever
+ * dry passes (a plain switch that carries nothing over).
  */
 
 const { Dex, TeamValidator, BattleStream, getPlayerStreams, Teams } = require('pokemon-showdown');
@@ -27,7 +27,7 @@ ok(/not in the Season 1/.test(String(check({ species: 'Arceus', item: 'Leftovers
 ok(!check({ species: 'Scolipede', item: 'Focus Sash', ability: 'Speed Boost', moves: ['Baton Pass', 'Swords Dance'] }), 'Baton Pass is legal');
 ok(!check({ species: 'Pansage', item: 'Eviolite', ability: 'Gluttony', moves: ['Seed Bomb'] }), 'Pansage legal');
 
-// Baton Pass is selectable until the user boosts.
+// After Swords Dance, Baton Pass switches out and the Pokemon coming in gets nothing.
 (async () => {
   const stream = new BattleStream();
   const ps = getPlayerStreams(stream);
@@ -41,18 +41,26 @@ ok(!check({ species: 'Pansage', item: 'Eviolite', ability: 'Gluttony', moves: ['
     for await (const chunk of ps.p1) {
       for (const line of chunk.split('\n')) {
         if (!line.startsWith('|request|') || line.length < 12) continue;
-        const r = JSON.parse(line.slice(9));
-        if (r.active) reqs.push(r.active[0].moves.find(m => m.id === 'batonpass'));
+        reqs.push(JSON.parse(line.slice(9)));
       }
     }
   })();
   (async () => { for await (const _ of ps.p2); })();
+  const wait = () => new Promise(r => setTimeout(r, 300));
   ps.omniscient.write(`>start {"formatid":"gen9rpdraft"}\n>player p1 {"name":"A","team":${JSON.stringify(t1)}}\n>player p2 {"name":"B","team":${JSON.stringify(t2)}}\n>p1 team 12\n>p2 team 1`);
-  await new Promise(r => setTimeout(r, 300));
-  ok(reqs.length && !reqs[reqs.length - 1].disabled, 'Baton Pass selectable before boosting');
+  await wait();
   ps.omniscient.write('>p1 move 1\n>p2 move 1');
-  await new Promise(r => setTimeout(r, 300));
-  ok(reqs.length >= 2 && reqs[reqs.length - 1].disabled, 'Baton Pass disabled after Swords Dance');
+  await wait();
+  ok(stream.battle.p1.active[0].boosts.atk === 2, 'Swords Dance raised Attack');
+  const last = reqs[reqs.length - 1];
+  ok(last && last.active && !last.active[0].moves.find(m => m.id === 'batonpass').disabled, 'Baton Pass still selectable while boosted');
+  ps.omniscient.write('>p1 move 2\n>p2 move 1');
+  await wait();
+  ps.omniscient.write('>p1 switch 2');
+  await wait();
+  const garchomp = stream.battle.p1.active[0];
+  ok(garchomp.species.id === 'garchomp', 'Baton Pass switched Garchomp in');
+  ok(garchomp.boosts.atk === 0, 'no boosts passed to Garchomp');
   console.log(`${pass} passed, ${fail} failed`);
   process.exit(fail ? 1 : 0);
 })();
