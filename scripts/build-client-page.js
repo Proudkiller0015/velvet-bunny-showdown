@@ -115,6 +115,7 @@ function build(upstream) {
 	if (!teambuilderTables.test(html)) throw new Error('could not find the teambuilder tables to follow');
 	html = html.replace(teambuilderTables, match => `${match}\n<script src="js/velvet-signatures.js"></script>
 <script src="js/velvet-buffs.js"></script>
+<script src="js/velvet-draft.js"></script>
 <script src="js/velvet-data.js"></script>
 <script src="js/velvet-matchmaking.js"></script>
 <script src="js/velvet-roster.js"></script>`);
@@ -172,7 +173,7 @@ function build(upstream) {
 	console.log(`wrote ${OUT} (${Math.round(html.length / 1024)}KB)`);
 
 	// A page that has lost one of our own scripts is worse than no page.
-	for (const needed of ['js/velvet-signatures.js', 'js/velvet-buffs.js', 'js/velvet-calc-data.js', 'style/velvet.css', 'config/config.js', 'js/velvet-storage.js', 'js/velvet-data.js', '/showdex/main.js', 'manifest.json']) {
+	for (const needed of ['js/velvet-signatures.js', 'js/velvet-buffs.js', 'js/velvet-draft.js', 'js/velvet-calc-data.js', 'style/velvet.css', 'config/config.js', 'js/velvet-storage.js', 'js/velvet-data.js', '/showdex/main.js', 'manifest.json']) {
 		if (!html.includes(needed)) throw new Error(`${needed} is missing from the built page`);
 	}
 	for (const banned of ['googletagmanager', 'hb.vntsm.com', 'window.__VM']) {

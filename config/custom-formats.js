@@ -467,6 +467,23 @@ function encounters() {
 	throw new Error('src/encounters.js not found');
 }
 
+/** The draft pool the RP Draft format allows, loaded once (data/velvet/draft-s1.json). */
+let draftPoolCache = null;
+function draftPool() {
+	if (draftPoolCache) return draftPoolCache;
+	const path = require('path');
+	let data = null;
+	for (const up of ['../../../../data/velvet/draft-s1.json', '../data/velvet/draft-s1.json']) {
+		try { data = require(path.join(__dirname, up)); break; } catch (e) { if (e.code !== 'MODULE_NOT_FOUND') throw e; }
+	}
+	if (!data) throw new Error('data/velvet/draft-s1.json not found');
+	draftPoolCache = {
+		ids: new Set(data.pokemon.map(p => p.id)),
+		banned: new Map(data.bans.map(b => [b.id, b.why])),
+	};
+	return draftPoolCache;
+}
+
 // "an X Attack": X is said "ex".
 const aOrAn = name => (/^([AEIOU]|X )/i.test(name) ? `an ${name}` : `a ${name}`);
 
@@ -1337,6 +1354,54 @@ exports.Formats = [
 		searchShow: false,
 		challengeShow: true,
 		rated: false,
+	},
+
+	/**
+	 * The Kagura Draft League's own format (the owner, 12 Oct 2026).
+	 *
+	 * Its own thing, listed with the RP formats only for convenience. What is
+	 * legal is the Season 1 draft pool and nothing else (data/velvet/draft-s1.json,
+	 * written by the draft sheet's generator), so it does not move with the RP
+	 * tier table: the pool is frozen for the season. A Mega is legal only as its
+	 * own pool entry, holding its stone.
+	 *
+	 * National Dex's clauses, minus its tier bans (the pool does that job) and
+	 * minus its Baton Pass ban: Baton Pass is allowed, but it cannot be selected
+	 * while the user has a raised stat, so it passes switch-ins and Substitutes,
+	 * never boosts. No Z-Moves, no Terastallization; Gems, Hidden Power and
+	 * Pursuit stay allowed.
+	 */
+	{
+		name: "[Gen 9] RP Draft",
+		desc: "Kagura Draft League: the Season 1 draft pool only. No Z-Moves or Tera; Baton Pass can't pass boosts.",
+		mod: 'gen9',
+		ruleset: ['Standard NatDex', 'Terastal Clause', 'Z-Move Clause', ...RP_RULES, ...RP_GEMS],
+		banlist: ['Arena Trap', 'Moody', 'Power Construct', 'Shadow Tag', "King's Rock", 'Quick Claw', 'Razor Fang', 'Assist', 'Last Respects', 'Shed Tail'],
+		checkCanLearn: levelFreeMoves,
+		onValidateSet(set) {
+			const pool = draftPool();
+			const species = this.dex.species.get(set.species);
+			const item = this.dex.items.get(set.item);
+			let entry = species;
+			if (item.megaStone) {
+				const mega = this.dex.species.get(typeof item.megaStone === 'string' ? item.megaStone : Object.values(item.megaStone)[0]);
+				if (mega.exists && mega.baseSpecies === species.baseSpecies) entry = mega;
+			}
+			// Cosmetic forms (Gastrodon-East) are drafted as their base.
+			const base = this.dex.species.get(entry.baseSpecies);
+			const id = pool.ids.has(entry.id) ? entry.id : (base.cosmeticFormes || []).includes(entry.name) ? base.id : entry.id;
+			if (pool.banned.has(id)) return [`${entry.name} is banned in the draft (${pool.banned.get(id)}).`];
+			if (!pool.ids.has(id)) return [`${entry.name} is not in the Season 1 draft pool.`];
+		},
+		onDisableMove(pokemon) {
+			if (Object.values(pokemon.boosts).some(b => b > 0) && pokemon.hasMove('batonpass')) pokemon.disableMove('batonpass');
+		},
+		// Singles. On the ladder too, for practice (the owner): not a mock battle, but a way to try a team's synergy.
+		gameType: 'singles',
+		searchShow: true,
+		challengeShow: true,
+		tournamentShow: true,
+		rated: true,
 	},
 
 	/**

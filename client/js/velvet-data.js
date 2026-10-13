@@ -1284,6 +1284,8 @@
 		 */
 		gen9rpbattle: 'gen9nationaldexag',
 		gen9rpag: 'gen9nationaldexag',
+		// The draft: everything National Dex has, then narrowed to the pool below (draftRows).
+		gen9rpdraft: 'gen9nationaldexag',
 		gen9rpou: 'gen9nationaldex',
 		gen9rpubers: 'gen9nationaldexubers',
 		gen9rpuu: 'gen9nationaldexuu',
@@ -1341,9 +1343,33 @@
 			 * Anything that is true of RP and not of National Dex needs this.
 			 */
 			if (typed) typed.velvetFormat = asked;
+			/*
+			 * The draft lists its pool and nothing else, under the draft's price tiers:
+			 * the viability ranking coaches prep with (the owner, 12 Oct 2026).
+			 */
+			if (typed && searchType === 'pokemon' && draftFor(asked)) typed.getBaseResults = function () { return draftRows(asked); };
 			return typed;
 		};
 		return true;
+	}
+
+	function draftFor(format) {
+		var draft = window.VelvetDraft;
+		return !!(draft && draft.formats && draft.formats.indexOf(format) >= 0);
+	}
+
+	function draftRows() {
+		var draft = window.VelvetDraft;
+		var dex = window.BattlePokedex || {};
+		var rows = [];
+		for (var i = 0; i < draft.tiers.length; i++) {
+			var t = draft.tiers[i];
+			var ids = t.ids.filter(function (id) { return !!dex[id]; });
+			if (!ids.length) continue;
+			rows.push(['header', t.tier + (t.tier.length > 2 ? '' : ' Tier') + ' · ₽' + t.price]);
+			for (var j = 0; j < ids.length; j++) rows.push(['pokemon', ids[j]]);
+		}
+		return rows;
 	}
 
 	/**
