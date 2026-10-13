@@ -1,0 +1,12 @@
+{
+	"id": "gen3ou-3-tmttls",
+	"format": "[Gen 3] OU",
+	"players": [
+		"Bunny Hard",
+		"0p9o9i8"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Hard\n|j|☆0p9o9i8\n|t:|1791918173\n|gametype|singles\n|badge|p2|silver|gen3ou|2-2\n|player|p1|Bunny Hard|bunny.png|1000\n|player|p2|0p9o9i8|170|1201\n|gen|3\n|tier|[Gen 3] OU\n|rated|\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Beat Up Nicknames Mod: Beat Up will not reveal any party members\n|rule|Endless Battle Clause: Forcing endless battles is banned\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Switch Priority Clause Mod: Faster Pokémon switch first\n|rule|Species Clause: Limit one of each Pokémon\n|rule|OHKO Clause: OHKO moves are banned\n|rule|Evasion Items Clause: Evasion items are banned\n|rule|Evasion Moves Clause: Evasion moves are banned\n|rule|One Boost Passer Clause: Limit one Baton Passer that has a way to boost its stats\n|rule|Freeze Clause Mod: Limit one foe frozen\n|rule|Baton Pass Stat Clause: No Baton Passer may have a way to boost its Speed\n|\n|t:|1791918173\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Skarmory|Skarmory, F|100/100\n|switch|p2a: Umbreon|Umbreon, M, shiny|100/100\n|turn|1\n|c|☆Bunny Hard|Good luck! Playing on **hard**.\n|\n|t:|1791918214\n|switch|p2a: Milotic|Milotic, M, shiny|100/100\n|move|p1a: Skarmory|Spikes|p2a: Milotic\n|-sidestart|p2: 0p9o9i8|Spikes\n|\n|upkeep\n|turn|2\n|\n|t:|1791918220\n|move|p2a: Milotic|Hidden Power|p1a: Skarmory\n|-supereffective|p1a: Skarmory\n|-damage|p1a: Skarmory|56/100\n|move|p1a: Skarmory|Drill Peck|p2a: Milotic\n|-damage|p2a: Milotic|76/100\n|\n|-heal|p2a: Milotic|82/100|[from] item: Leftovers\n|-heal|p1a: Skarmory|62/100|[from] item: Leftovers\n|upkeep\n|turn|3\n|\n|t:|1791918228\n|move|p2a: Milotic|Hidden Power|p1a: Skarmory\n|-supereffective|p1a: Skarmory\n|-damage|p1a: Skarmory|20/100\n|move|p1a: Skarmory|Drill Peck|p2a: Milotic\n|-damage|p2a: Milotic|58/100\n|\n|-heal|p2a: Milotic|64/100|[from] item: Leftovers\n|-heal|p1a: Skarmory|26/100|[from] item: Leftovers\n|upkeep\n|turn|4\n|\n|t:|1791918236\n|switch|p1a: Snorlax|Snorlax, F|100/100\n|move|p2a: Milotic|Hidden Power|p1a: Snorlax\n|-damage|p1a: Snorlax|88/100\n|\n|-heal|p2a: Milotic|70/100|[from] item: Leftovers\n|-heal|p1a: Snorlax|94/100|[from] item: Leftovers\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1791918245
+}
