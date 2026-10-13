@@ -1891,8 +1891,9 @@ const LUXRAY = { ability: 'Prankster', moves: ['gleamstalk', 'knockoff', 'sucker
 
 const EEVEELUTIONS = {
 	// Solar Blade (native) fires in one turn in its own sun. Rock for the Fire,
-	// Flying and Bug types that wall Grass; Ground for Steel and Poison.
-	leafeon: { ability: 'Solstice', moves: ['stoneedge', 'earthquake'] },
+	// Flying and Bug types that wall Grass; Ground for Steel and Poison; Temper Flare,
+	// boosted by its own sun, for Steel and Bug.
+	leafeon: { ability: 'Solstice', moves: ['stoneedge', 'earthquake', 'temperflare'] },
 	// Facade (native) is the burn's other half. Ground for the Fire and Rock
 	// types, Fighting and Dark for the rest.
 	// Swords Dance, which it never learned in any game: 130 Attack with nothing to

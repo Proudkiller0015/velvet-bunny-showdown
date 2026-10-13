@@ -7556,7 +7556,8 @@ window.VelvetBuffs = {
 		"leafeon": {
 			"moves": [
 				"stoneedge",
-				"earthquake"
+				"earthquake",
+				"temperflare"
 			],
 			"abilities": [
 				"Solstice"

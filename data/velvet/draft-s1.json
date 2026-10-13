@@ -700,6 +700,16 @@
    ]
   },
   {
+   "name": "Leafeon",
+   "id": "leafeon",
+   "price": 65,
+   "tier": "A",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/leafeon.png",
+   "types": [
+    "Grass"
+   ]
+  },
+  {
    "name": "Sylveon",
    "id": "sylveon",
    "price": 50,
@@ -1299,16 +1309,6 @@
    "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/deoxys-speed.png",
    "types": [
     "Psychic"
-   ]
-  },
-  {
-   "name": "Leafeon",
-   "id": "leafeon",
-   "price": 40,
-   "tier": "B",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/leafeon.png",
-   "types": [
-    "Grass"
    ]
   },
   {
