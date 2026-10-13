@@ -2342,7 +2342,25 @@
 		var base = baseFormOf(speciesid);
 		var baseRecord = base ? buffs.get(base) : null;
 		if (baseRecord) for (var i = 0; i < baseRecord.moves.length; i++) if (moves.indexOf(baseRecord.moves[i]) < 0) moves.push(baseRecord.moves[i]);
+		/*
+		 * An evolution keeps what its pre-evolutions were given: Sylveon learns Eevee's
+		 * Awakened moves through Eevee, and they are still Awakened (the owner, 12 Oct 2026).
+		 * The move list only hoists the ones this Pokemon is actually offered.
+		 */
+		var prevo = prevoOf(base || speciesid);
+		for (var guard = 0; prevo && guard < 4; guard++) {
+			var prevoRecord = buffs.get(prevo);
+			if (prevoRecord) for (var p = 0; p < prevoRecord.moves.length; p++) if (moves.indexOf(prevoRecord.moves[p]) < 0) moves.push(prevoRecord.moves[p]);
+			prevo = prevoOf(prevo);
+		}
 		return moves;
+	}
+
+	/** The Pokemon this one evolves from, or ''. */
+	function prevoOf(speciesid) {
+		if (!window.Dex || !window.Dex.species) return '';
+		var species = window.Dex.species.get(speciesid || '');
+		return species && species.exists && species.prevo ? window.toID(species.prevo) : '';
 	}
 
 	/** The Pokemon a Mega, Primal or battle-only form is picked as, or '' for anything else. */
