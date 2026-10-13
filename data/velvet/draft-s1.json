@@ -141,17 +141,6 @@
    ]
   },
   {
-   "name": "Samurott-Hisui",
-   "id": "samurotthisui",
-   "price": 80,
-   "tier": "A+",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/samurott-hisui.png",
-   "types": [
-    "Water",
-    "Dark"
-   ]
-  },
-  {
    "name": "Absol-Mega-Z",
    "id": "absolmegaz",
    "price": 80,
@@ -160,6 +149,17 @@
    "types": [
     "Dark",
     "Ghost"
+   ]
+  },
+  {
+   "name": "Samurott-Hisui",
+   "id": "samurotthisui",
+   "price": 80,
+   "tier": "A+",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/samurott-hisui.png",
+   "types": [
+    "Water",
+    "Dark"
    ]
   },
   {
@@ -388,6 +388,17 @@
    ]
   },
   {
+   "name": "Latias-Mega",
+   "id": "latiasmega",
+   "price": 65,
+   "tier": "A",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/latias-mega.png",
+   "types": [
+    "Dragon",
+    "Psychic"
+   ]
+  },
+  {
    "name": "Garchomp-Mega-Z",
    "id": "garchompmegaz",
    "price": 65,
@@ -419,28 +430,6 @@
    ]
   },
   {
-   "name": "Archaludon",
-   "id": "archaludon",
-   "price": 65,
-   "tier": "A",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/archaludon.png",
-   "types": [
-    "Steel",
-    "Dragon"
-   ]
-  },
-  {
-   "name": "Latias-Mega",
-   "id": "latiasmega",
-   "price": 65,
-   "tier": "A",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/latias-mega.png",
-   "types": [
-    "Dragon",
-    "Psychic"
-   ]
-  },
-  {
    "name": "Diancie-Mega",
    "id": "dianciemega",
    "price": 65,
@@ -449,6 +438,17 @@
    "types": [
     "Rock",
     "Fairy"
+   ]
+  },
+  {
+   "name": "Archaludon",
+   "id": "archaludon",
+   "price": 65,
+   "tier": "A",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/archaludon.png",
+   "types": [
+    "Steel",
+    "Dragon"
    ]
   },
   {
@@ -625,6 +625,17 @@
    ]
   },
   {
+   "name": "Mawile-Mega",
+   "id": "mawilemega",
+   "price": 65,
+   "tier": "A",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/mawile-mega.png",
+   "types": [
+    "Steel",
+    "Fairy"
+   ]
+  },
+  {
    "name": "Ursaluna",
    "id": "ursaluna",
    "price": 65,
@@ -676,17 +687,6 @@
    "types": [
     "Bug",
     "Steel"
-   ]
-  },
-  {
-   "name": "Mawile-Mega",
-   "id": "mawilemega",
-   "price": 65,
-   "tier": "A",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/mawile-mega.png",
-   "types": [
-    "Steel",
-    "Fairy"
    ]
   },
   {
@@ -937,6 +937,17 @@
    ]
   },
   {
+   "name": "Hatterene",
+   "id": "hatterene",
+   "price": 50,
+   "tier": "B+",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/hatterene.png",
+   "types": [
+    "Psychic",
+    "Fairy"
+   ]
+  },
+  {
    "name": "Excadrill",
    "id": "excadrill",
    "price": 50,
@@ -1021,17 +1032,6 @@
    "types": [
     "Water",
     "Fighting"
-   ]
-  },
-  {
-   "name": "Hatterene",
-   "id": "hatterene",
-   "price": 50,
-   "tier": "B+",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/hatterene.png",
-   "types": [
-    "Psychic",
-    "Fairy"
    ]
   },
   {
@@ -1238,6 +1238,17 @@
    ]
   },
   {
+   "name": "Weavile",
+   "id": "weavile",
+   "price": 40,
+   "tier": "B",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/weavile.png",
+   "types": [
+    "Dark",
+    "Ice"
+   ]
+  },
+  {
    "name": "Clefable-Mega",
    "id": "clefablemega",
    "price": 40,
@@ -1333,17 +1344,6 @@
    ]
   },
   {
-   "name": "Weavile",
-   "id": "weavile",
-   "price": 40,
-   "tier": "B",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/weavile.png",
-   "types": [
-    "Dark",
-    "Ice"
-   ]
-  },
-  {
    "name": "Alakazam",
    "id": "alakazam",
    "price": 40,
@@ -1394,6 +1394,17 @@
    "types": [
     "Psychic",
     "Fighting"
+   ]
+  },
+  {
+   "name": "Latias",
+   "id": "latias",
+   "price": 40,
+   "tier": "B",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/latias.png",
+   "types": [
+    "Dragon",
+    "Psychic"
    ]
   },
   {
@@ -1495,17 +1506,6 @@
    ]
   },
   {
-   "name": "Latias",
-   "id": "latias",
-   "price": 40,
-   "tier": "B",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/latias.png",
-   "types": [
-    "Dragon",
-    "Psychic"
-   ]
-  },
-  {
    "name": "Obstagoon",
    "id": "obstagoon",
    "price": 40,
@@ -1535,6 +1535,17 @@
    "types": [
     "Dragon",
     "Ground"
+   ]
+  },
+  {
+   "name": "Durant",
+   "id": "durant",
+   "price": 40,
+   "tier": "B",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/durant.png",
+   "types": [
+    "Bug",
+    "Steel"
    ]
   },
   {
@@ -1636,17 +1647,6 @@
    ]
   },
   {
-   "name": "Durant",
-   "id": "durant",
-   "price": 40,
-   "tier": "B",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/durant.png",
-   "types": [
-    "Bug",
-    "Steel"
-   ]
-  },
-  {
    "name": "Mienshao",
    "id": "mienshao",
    "price": 40,
@@ -1664,6 +1664,17 @@
    "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/alomomola.png",
    "types": [
     "Water"
+   ]
+  },
+  {
+   "name": "Medicham-Mega",
+   "id": "medichammega",
+   "price": 40,
+   "tier": "B",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/medicham-mega.png",
+   "types": [
+    "Fighting",
+    "Psychic"
    ]
   },
   {
@@ -1753,17 +1764,6 @@
    ]
   },
   {
-   "name": "Medicham-Mega",
-   "id": "medichammega",
-   "price": 40,
-   "tier": "B",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/medicham-mega.png",
-   "types": [
-    "Fighting",
-    "Psychic"
-   ]
-  },
-  {
    "name": "Regirock",
    "id": "regirock",
    "price": 30,
@@ -1803,6 +1803,16 @@
    "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/copperajah.png",
    "types": [
     "Steel"
+   ]
+  },
+  {
+   "name": "Polteageist",
+   "id": "polteageist",
+   "price": 30,
+   "tier": "C+",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/polteageist.png",
+   "types": [
+    "Ghost"
    ]
   },
   {
@@ -1883,16 +1893,6 @@
    ]
   },
   {
-   "name": "Polteageist",
-   "id": "polteageist",
-   "price": 30,
-   "tier": "C+",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/polteageist.png",
-   "types": [
-    "Ghost"
-   ]
-  },
-  {
    "name": "Glimmora",
    "id": "glimmora",
    "price": 30,
@@ -1900,6 +1900,17 @@
    "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/glimmora.png",
    "types": [
     "Rock",
+    "Poison"
+   ]
+  },
+  {
+   "name": "Scolipede-Mega",
+   "id": "scolipedemega",
+   "price": 30,
+   "tier": "C+",
+   "sprite": "https://velvet-bunny-showdown.onrender.com/sprites/scolipede-mega.png",
+   "types": [
+    "Bug",
     "Poison"
    ]
   },
@@ -1965,17 +1976,6 @@
    "types": [
     "Dark",
     "Fire"
-   ]
-  },
-  {
-   "name": "Scolipede-Mega",
-   "id": "scolipedemega",
-   "price": 30,
-   "tier": "C+",
-   "sprite": "https://velvet-bunny-showdown.onrender.com/sprites/scolipede-mega.png",
-   "types": [
-    "Bug",
-    "Poison"
    ]
   },
   {
@@ -2099,6 +2099,17 @@
    ]
   },
   {
+   "name": "Chimecho-Mega",
+   "id": "chimechomega",
+   "price": 30,
+   "tier": "C+",
+   "sprite": "https://play.pokemonshowdown.com/sprites/gen5/chimecho-mega.png",
+   "types": [
+    "Psychic",
+    "Steel"
+   ]
+  },
+  {
    "name": "Sinistcha",
    "id": "sinistcha",
    "price": 30,
@@ -2171,17 +2182,6 @@
    "types": [
     "Water",
     "Flying"
-   ]
-  },
-  {
-   "name": "Chimecho-Mega",
-   "id": "chimechomega",
-   "price": 30,
-   "tier": "C+",
-   "sprite": "https://play.pokemonshowdown.com/sprites/gen5/chimecho-mega.png",
-   "types": [
-    "Psychic",
-    "Steel"
    ]
   },
   {
@@ -2371,6 +2371,16 @@
    ]
   },
   {
+   "name": "Absol-Mega",
+   "id": "absolmega",
+   "price": 30,
+   "tier": "C+",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/absol-mega.png",
+   "types": [
+    "Dark"
+   ]
+  },
+  {
    "name": "Feraligatr-Mega",
    "id": "feraligatrmega",
    "price": 30,
@@ -2458,8 +2468,8 @@
   {
    "name": "Escavalier",
    "id": "escavalier",
-   "price": 30,
-   "tier": "C+",
+   "price": 22,
+   "tier": "C",
    "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/escavalier.png",
    "types": [
     "Bug",
@@ -2484,16 +2494,6 @@
    "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/feraligatr.png",
    "types": [
     "Water"
-   ]
-  },
-  {
-   "name": "Absol-Mega",
-   "id": "absolmega",
-   "price": 22,
-   "tier": "C",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/absol-mega.png",
-   "types": [
-    "Dark"
    ]
   },
   {
@@ -2637,6 +2637,17 @@
    ]
   },
   {
+   "name": "Diancie",
+   "id": "diancie",
+   "price": 22,
+   "tier": "C",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/diancie.png",
+   "types": [
+    "Rock",
+    "Fairy"
+   ]
+  },
+  {
    "name": "Mamoswine",
    "id": "mamoswine",
    "price": 22,
@@ -2701,14 +2712,13 @@
    ]
   },
   {
-   "name": "Diancie",
-   "id": "diancie",
+   "name": "Meowstic-M-Mega",
+   "id": "meowsticmmega",
    "price": 22,
    "tier": "C",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/diancie.png",
+   "sprite": "https://play.pokemonshowdown.com/sprites/gen5/meowstic-mmega.png",
    "types": [
-    "Rock",
-    "Fairy"
+    "Psychic"
    ]
   },
   {
@@ -2775,16 +2785,6 @@
    "types": [
     "Normal",
     "Flying"
-   ]
-  },
-  {
-   "name": "Meowstic-M-Mega",
-   "id": "meowsticmmega",
-   "price": 22,
-   "tier": "C",
-   "sprite": "https://play.pokemonshowdown.com/sprites/gen5/meowstic-mmega.png",
-   "types": [
-    "Psychic"
    ]
   },
   {
@@ -2982,6 +2982,28 @@
    ]
   },
   {
+   "name": "Scolipede",
+   "id": "scolipede",
+   "price": 22,
+   "tier": "C",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/scolipede.png",
+   "types": [
+    "Bug",
+    "Poison"
+   ]
+  },
+  {
+   "name": "Tatsugiri-Curly-Mega",
+   "id": "tatsugiricurlymega",
+   "price": 22,
+   "tier": "C",
+   "sprite": "https://velvet-bunny-showdown.onrender.com/sprites/tatsugiri-curlymega.png",
+   "types": [
+    "Dragon",
+    "Water"
+   ]
+  },
+  {
    "name": "Hoopa",
    "id": "hoopa",
    "price": 22,
@@ -3046,17 +3068,6 @@
    ]
   },
   {
-   "name": "Tatsugiri-Curly-Mega",
-   "id": "tatsugiricurlymega",
-   "price": 22,
-   "tier": "C",
-   "sprite": "https://velvet-bunny-showdown.onrender.com/sprites/tatsugiri-curlymega.png",
-   "types": [
-    "Dragon",
-    "Water"
-   ]
-  },
-  {
    "name": "Avalugg-Hisui",
    "id": "avalugghisui",
    "price": 22,
@@ -3065,17 +3076,6 @@
    "types": [
     "Ice",
     "Rock"
-   ]
-  },
-  {
-   "name": "Scolipede",
-   "id": "scolipede",
-   "price": 22,
-   "tier": "C",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/scolipede.png",
-   "types": [
-    "Bug",
-    "Poison"
    ]
   },
   {
@@ -3889,6 +3889,36 @@
    ]
   },
   {
+   "name": "Hitmonlee",
+   "id": "hitmonlee",
+   "price": 15,
+   "tier": "D",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/hitmonlee.png",
+   "types": [
+    "Fighting"
+   ]
+  },
+  {
+   "name": "Florges",
+   "id": "florges",
+   "price": 15,
+   "tier": "D",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/florges.png",
+   "types": [
+    "Fairy"
+   ]
+  },
+  {
+   "name": "Gorebyss",
+   "id": "gorebyss",
+   "price": 15,
+   "tier": "D",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/gorebyss.png",
+   "types": [
+    "Water"
+   ]
+  },
+  {
    "name": "Kingdra",
    "id": "kingdra",
    "price": 15,
@@ -3897,6 +3927,16 @@
    "types": [
     "Water",
     "Dragon"
+   ]
+  },
+  {
+   "name": "Dudunsparce",
+   "id": "dudunsparce",
+   "price": 15,
+   "tier": "D",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/dudunsparce.png",
+   "types": [
+    "Normal"
    ]
   },
   {
@@ -3941,16 +3981,6 @@
    ]
   },
   {
-   "name": "Hitmonlee",
-   "id": "hitmonlee",
-   "price": 15,
-   "tier": "D",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/hitmonlee.png",
-   "types": [
-    "Fighting"
-   ]
-  },
-  {
    "name": "Tauros-Paldea-Aqua",
    "id": "taurospaldeaaqua",
    "price": 15,
@@ -3958,26 +3988,6 @@
    "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/tauros-paldeaaqua.png",
    "types": [
     "Fighting",
-    "Water"
-   ]
-  },
-  {
-   "name": "Florges",
-   "id": "florges",
-   "price": 15,
-   "tier": "D",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/florges.png",
-   "types": [
-    "Fairy"
-   ]
-  },
-  {
-   "name": "Gorebyss",
-   "id": "gorebyss",
-   "price": 15,
-   "tier": "D",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/gorebyss.png",
-   "types": [
     "Water"
    ]
   },
@@ -4002,16 +4012,6 @@
    ]
   },
   {
-   "name": "Dudunsparce",
-   "id": "dudunsparce",
-   "price": 15,
-   "tier": "D",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/dudunsparce.png",
-   "types": [
-    "Normal"
-   ]
-  },
-  {
    "name": "Crabominable",
    "id": "crabominable",
    "price": 15,
@@ -4020,6 +4020,17 @@
    "types": [
     "Fighting",
     "Ice"
+   ]
+  },
+  {
+   "name": "Scream Tail",
+   "id": "screamtail",
+   "price": 15,
+   "tier": "D",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/screamtail.png",
+   "types": [
+    "Fairy",
+    "Psychic"
    ]
   },
   {
@@ -4074,17 +4085,6 @@
    "types": [
     "Flying",
     "Fighting"
-   ]
-  },
-  {
-   "name": "Scream Tail",
-   "id": "screamtail",
-   "price": 15,
-   "tier": "D",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/screamtail.png",
-   "types": [
-    "Fairy",
-    "Psychic"
    ]
   },
   {
@@ -4237,6 +4237,16 @@
    ]
   },
   {
+   "name": "Absol",
+   "id": "absol",
+   "price": 15,
+   "tier": "D",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/absol.png",
+   "types": [
+    "Dark"
+   ]
+  },
+  {
    "name": "Lilligant",
    "id": "lilligant",
    "price": 15,
@@ -4249,8 +4259,8 @@
   {
    "name": "Exeggutor-Alola",
    "id": "exeggutoralola",
-   "price": 15,
-   "tier": "D",
+   "price": 10,
+   "tier": "E",
    "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/exeggutor-alola.png",
    "types": [
     "Grass",
@@ -4280,13 +4290,13 @@
    ]
   },
   {
-   "name": "Absol",
-   "id": "absol",
+   "name": "Huntail",
+   "id": "huntail",
    "price": 10,
    "tier": "E",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/absol.png",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/huntail.png",
    "types": [
-    "Dark"
+    "Water"
    ]
   },
   {
@@ -4352,16 +4362,6 @@
    ]
   },
   {
-   "name": "Huntail",
-   "id": "huntail",
-   "price": 10,
-   "tier": "E",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/huntail.png",
-   "types": [
-    "Water"
-   ]
-  },
-  {
    "name": "Lapras",
    "id": "lapras",
    "price": 10,
@@ -4413,6 +4413,16 @@
    "types": [
     "Water",
     "Psychic"
+   ]
+  },
+  {
+   "name": "Bellossom",
+   "id": "bellossom",
+   "price": 10,
+   "tier": "E",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/bellossom.png",
+   "types": [
+    "Grass"
    ]
   },
   {
@@ -4499,11 +4509,22 @@
    ]
   },
   {
-   "name": "Bellossom",
-   "id": "bellossom",
+   "name": "Poliwrath",
+   "id": "poliwrath",
    "price": 10,
    "tier": "E",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/bellossom.png",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/poliwrath.png",
+   "types": [
+    "Water",
+    "Fighting"
+   ]
+  },
+  {
+   "name": "Shaymin",
+   "id": "shaymin",
+   "price": 10,
+   "tier": "E",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/shaymin.png",
    "types": [
     "Grass"
    ]
@@ -4551,6 +4572,17 @@
    ]
   },
   {
+   "name": "Sawsbuck",
+   "id": "sawsbuck",
+   "price": 10,
+   "tier": "E",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/sawsbuck.png",
+   "types": [
+    "Normal",
+    "Grass"
+   ]
+  },
+  {
    "name": "Linoone",
    "id": "linoone",
    "price": 10,
@@ -4561,32 +4593,11 @@
    ]
   },
   {
-   "name": "Poliwrath",
-   "id": "poliwrath",
-   "price": 10,
-   "tier": "E",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/poliwrath.png",
-   "types": [
-    "Water",
-    "Fighting"
-   ]
-  },
-  {
    "name": "Tsareena",
    "id": "tsareena",
    "price": 10,
    "tier": "E",
    "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/tsareena.png",
-   "types": [
-    "Grass"
-   ]
-  },
-  {
-   "name": "Shaymin",
-   "id": "shaymin",
-   "price": 10,
-   "tier": "E",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/shaymin.png",
    "types": [
     "Grass"
    ]
@@ -4646,6 +4657,17 @@
    ]
   },
   {
+   "name": "Farigiraf",
+   "id": "farigiraf",
+   "price": 10,
+   "tier": "E",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/farigiraf.png",
+   "types": [
+    "Normal",
+    "Psychic"
+   ]
+  },
+  {
    "name": "Zangoose",
    "id": "zangoose",
    "price": 10,
@@ -4663,17 +4685,6 @@
    "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/accelgor.png",
    "types": [
     "Bug"
-   ]
-  },
-  {
-   "name": "Sawsbuck",
-   "id": "sawsbuck",
-   "price": 10,
-   "tier": "E",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/sawsbuck.png",
-   "types": [
-    "Normal",
-    "Grass"
    ]
   },
   {
@@ -4770,17 +4781,6 @@
    ]
   },
   {
-   "name": "Farigiraf",
-   "id": "farigiraf",
-   "price": 10,
-   "tier": "E",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/farigiraf.png",
-   "types": [
-    "Normal",
-    "Psychic"
-   ]
-  },
-  {
    "name": "Cacturne",
    "id": "cacturne",
    "price": 10,
@@ -4834,6 +4834,17 @@
    ]
   },
   {
+   "name": "Mawile",
+   "id": "mawile",
+   "price": 10,
+   "tier": "E",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/mawile.png",
+   "types": [
+    "Steel",
+    "Fairy"
+   ]
+  },
+  {
    "name": "Aurorus",
    "id": "aurorus",
    "price": 10,
@@ -4852,6 +4863,17 @@
    "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/ampharos.png",
    "types": [
     "Electric"
+   ]
+  },
+  {
+   "name": "Rapidash-Galar",
+   "id": "rapidashgalar",
+   "price": 10,
+   "tier": "E",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/rapidash-galar.png",
+   "types": [
+    "Psychic",
+    "Fairy"
    ]
   },
   {
@@ -4919,17 +4941,6 @@
    ]
   },
   {
-   "name": "Mawile",
-   "id": "mawile",
-   "price": 10,
-   "tier": "E",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/mawile.png",
-   "types": [
-    "Steel",
-    "Fairy"
-   ]
-  },
-  {
    "name": "Seaking",
    "id": "seaking",
    "price": 10,
@@ -4972,14 +4983,24 @@
    ]
   },
   {
-   "name": "Rapidash-Galar",
-   "id": "rapidashgalar",
+   "name": "Tatsugiri",
+   "id": "tatsugiri",
    "price": 10,
    "tier": "E",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/rapidash-galar.png",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/tatsugiri.png",
    "types": [
-    "Psychic",
-    "Fairy"
+    "Dragon",
+    "Water"
+   ]
+  },
+  {
+   "name": "Hitmonchan",
+   "id": "hitmonchan",
+   "price": 10,
+   "tier": "E",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/hitmonchan.png",
+   "types": [
+    "Fighting"
    ]
   },
   {
@@ -5068,6 +5089,16 @@
    ]
   },
   {
+   "name": "Hitmontop",
+   "id": "hitmontop",
+   "price": 10,
+   "tier": "E",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/hitmontop.png",
+   "types": [
+    "Fighting"
+   ]
+  },
+  {
    "name": "Samurott",
    "id": "samurott",
    "price": 10,
@@ -5089,6 +5120,16 @@
    ]
   },
   {
+   "name": "Musharna",
+   "id": "musharna",
+   "price": 10,
+   "tier": "E",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/musharna.png",
+   "types": [
+    "Psychic"
+   ]
+  },
+  {
    "name": "Basculin",
    "id": "basculin",
    "price": 10,
@@ -5107,27 +5148,6 @@
    "types": [
     "Bug",
     "Psychic"
-   ]
-  },
-  {
-   "name": "Tatsugiri",
-   "id": "tatsugiri",
-   "price": 10,
-   "tier": "E",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/tatsugiri.png",
-   "types": [
-    "Dragon",
-    "Water"
-   ]
-  },
-  {
-   "name": "Hitmonchan",
-   "id": "hitmonchan",
-   "price": 10,
-   "tier": "E",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/hitmonchan.png",
-   "types": [
-    "Fighting"
    ]
   },
   {
@@ -5206,16 +5226,6 @@
    ]
   },
   {
-   "name": "Hitmontop",
-   "id": "hitmontop",
-   "price": 10,
-   "tier": "E",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/hitmontop.png",
-   "types": [
-    "Fighting"
-   ]
-  },
-  {
    "name": "Muk",
    "id": "muk",
    "price": 10,
@@ -5234,16 +5244,6 @@
    "types": [
     "Grass",
     "Dark"
-   ]
-  },
-  {
-   "name": "Musharna",
-   "id": "musharna",
-   "price": 10,
-   "tier": "E",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/musharna.png",
-   "types": [
-    "Psychic"
    ]
   },
   {
@@ -5332,6 +5332,27 @@
    ]
   },
   {
+   "name": "Rapidash",
+   "id": "rapidash",
+   "price": 10,
+   "tier": "E",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/rapidash.png",
+   "types": [
+    "Fire"
+   ]
+  },
+  {
+   "name": "Toxicroak",
+   "id": "toxicroak",
+   "price": 10,
+   "tier": "E",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/toxicroak.png",
+   "types": [
+    "Poison",
+    "Fighting"
+   ]
+  },
+  {
    "name": "Octillery",
    "id": "octillery",
    "price": 10,
@@ -5395,8 +5416,8 @@
   {
    "name": "Gourgeist-Super",
    "id": "gourgeistsuper",
-   "price": 10,
-   "tier": "E",
+   "price": 5,
+   "tier": "F",
    "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/gourgeist-super.png",
    "types": [
     "Ghost",
@@ -5404,24 +5425,25 @@
    ]
   },
   {
-   "name": "Ninjask",
-   "id": "ninjask",
-   "price": 10,
-   "tier": "E",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/ninjask.png",
+   "name": "Drifblim",
+   "id": "drifblim",
+   "price": 5,
+   "tier": "F",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/drifblim.png",
    "types": [
-    "Bug",
+    "Ghost",
     "Flying"
    ]
   },
   {
-   "name": "Rapidash",
-   "id": "rapidash",
+   "name": "Ninjask",
+   "id": "ninjask",
    "price": 5,
    "tier": "F",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/rapidash.png",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/ninjask.png",
    "types": [
-    "Fire"
+    "Bug",
+    "Flying"
    ]
   },
   {
@@ -5432,17 +5454,6 @@
    "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/weezing.png",
    "types": [
     "Poison"
-   ]
-  },
-  {
-   "name": "Toxicroak",
-   "id": "toxicroak",
-   "price": 5,
-   "tier": "F",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/toxicroak.png",
-   "types": [
-    "Poison",
-    "Fighting"
    ]
   },
   {
@@ -5551,6 +5562,16 @@
    ]
   },
   {
+   "name": "Chimecho",
+   "id": "chimecho",
+   "price": 5,
+   "tier": "F",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/chimecho.png",
+   "types": [
+    "Psychic"
+   ]
+  },
+  {
    "name": "Morpeko",
    "id": "morpeko",
    "price": 5,
@@ -5569,17 +5590,6 @@
    "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/rotom-fan.png",
    "types": [
     "Electric",
-    "Flying"
-   ]
-  },
-  {
-   "name": "Drifblim",
-   "id": "drifblim",
-   "price": 5,
-   "tier": "F",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/drifblim.png",
-   "types": [
-    "Ghost",
     "Flying"
    ]
   },
@@ -5657,6 +5667,17 @@
    ]
   },
   {
+   "name": "Leavanny",
+   "id": "leavanny",
+   "price": 5,
+   "tier": "F",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/leavanny.png",
+   "types": [
+    "Bug",
+    "Grass"
+   ]
+  },
+  {
    "name": "Typhlosion",
    "id": "typhlosion",
    "price": 5,
@@ -5672,16 +5693,6 @@
    "price": 5,
    "tier": "F",
    "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/gothitelle.png",
-   "types": [
-    "Psychic"
-   ]
-  },
-  {
-   "name": "Chimecho",
-   "id": "chimecho",
-   "price": 5,
-   "tier": "F",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/chimecho.png",
    "types": [
     "Psychic"
    ]
@@ -5760,17 +5771,6 @@
    "types": [
     "Fire",
     "Normal"
-   ]
-  },
-  {
-   "name": "Leavanny",
-   "id": "leavanny",
-   "price": 5,
-   "tier": "F",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/leavanny.png",
-   "types": [
-    "Bug",
-    "Grass"
    ]
   },
   {
@@ -5875,6 +5875,17 @@
    "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/lycanroc-midnight.png",
    "types": [
     "Rock"
+   ]
+  },
+  {
+   "name": "Ninetales-Alola",
+   "id": "ninetalesalola",
+   "price": 5,
+   "tier": "F",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/ninetales-alola.png",
+   "types": [
+    "Ice",
+    "Fairy"
    ]
   },
   {
@@ -6047,14 +6058,14 @@
    ]
   },
   {
-   "name": "Ninetales-Alola",
-   "id": "ninetalesalola",
+   "name": "Lunatone",
+   "id": "lunatone",
    "price": 5,
    "tier": "F",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/ninetales-alola.png",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/lunatone.png",
    "types": [
-    "Ice",
-    "Fairy"
+    "Rock",
+    "Psychic"
    ]
   },
   {
@@ -6193,17 +6204,6 @@
    ]
   },
   {
-   "name": "Lunatone",
-   "id": "lunatone",
-   "price": 5,
-   "tier": "F",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/lunatone.png",
-   "types": [
-    "Rock",
-    "Psychic"
-   ]
-  },
-  {
    "name": "Stunfisk-Galar",
    "id": "stunfiskgalar",
    "price": 5,
@@ -6246,6 +6246,17 @@
    ]
   },
   {
+   "name": "Indeedee-F",
+   "id": "indeedeef",
+   "price": 5,
+   "tier": "F",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/indeedee-f.png",
+   "types": [
+    "Psychic",
+    "Normal"
+   ]
+  },
+  {
    "name": "Mightyena",
    "id": "mightyena",
    "price": 5,
@@ -6275,6 +6286,17 @@
    "types": [
     "Bug",
     "Poison"
+   ]
+  },
+  {
+   "name": "Solrock",
+   "id": "solrock",
+   "price": 5,
+   "tier": "F",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/solrock.png",
+   "types": [
+    "Rock",
+    "Psychic"
    ]
   },
   {
@@ -6311,17 +6333,6 @@
    ]
   },
   {
-   "name": "Indeedee-F",
-   "id": "indeedeef",
-   "price": 5,
-   "tier": "F",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/indeedee-f.png",
-   "types": [
-    "Psychic",
-    "Normal"
-   ]
-  },
-  {
    "name": "Araquanid",
    "id": "araquanid",
    "price": 5,
@@ -6333,14 +6344,13 @@
    ]
   },
   {
-   "name": "Solrock",
-   "id": "solrock",
+   "name": "Kricketune",
+   "id": "kricketune",
    "price": 5,
    "tier": "F",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/solrock.png",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/kricketune.png",
    "types": [
-    "Rock",
-    "Psychic"
+    "Bug"
    ]
   },
   {
@@ -6448,16 +6458,6 @@
    "types": [
     "Rock",
     "Fire"
-   ]
-  },
-  {
-   "name": "Kricketune",
-   "id": "kricketune",
-   "price": 5,
-   "tier": "F",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/kricketune.png",
-   "types": [
-    "Bug"
    ]
   },
   {
@@ -6598,6 +6598,16 @@
    ]
   },
   {
+   "name": "Dachsbun",
+   "id": "dachsbun",
+   "price": 5,
+   "tier": "F",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/dachsbun.png",
+   "types": [
+    "Fairy"
+   ]
+  },
+  {
    "name": "Persian-Alola",
    "id": "persianalola",
    "price": 5,
@@ -6638,16 +6648,6 @@
    "types": [
     "Bug",
     "Steel"
-   ]
-  },
-  {
-   "name": "Dachsbun",
-   "id": "dachsbun",
-   "price": 5,
-   "tier": "F",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/dachsbun.png",
-   "types": [
-    "Fairy"
    ]
   },
   {
@@ -6694,6 +6694,16 @@
    ]
   },
   {
+   "name": "Meowstic",
+   "id": "meowstic",
+   "price": 5,
+   "tier": "F",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/meowstic.png",
+   "types": [
+    "Psychic"
+   ]
+  },
+  {
    "name": "Bastiodon",
    "id": "bastiodon",
    "price": 5,
@@ -6723,6 +6733,16 @@
    "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/persian.png",
    "types": [
     "Normal"
+   ]
+  },
+  {
+   "name": "Pyukumuku",
+   "id": "pyukumuku",
+   "price": 5,
+   "tier": "F",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/pyukumuku.png",
+   "types": [
+    "Water"
    ]
   },
   {
@@ -6790,16 +6810,6 @@
    ]
   },
   {
-   "name": "Meowstic",
-   "id": "meowstic",
-   "price": 5,
-   "tier": "F",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/meowstic.png",
-   "types": [
-    "Psychic"
-   ]
-  },
-  {
    "name": "Vivillon",
    "id": "vivillon",
    "price": 5,
@@ -6854,16 +6864,6 @@
    ]
   },
   {
-   "name": "Pyukumuku",
-   "id": "pyukumuku",
-   "price": 5,
-   "tier": "F",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/pyukumuku.png",
-   "types": [
-    "Water"
-   ]
-  },
-  {
    "name": "Raticate",
    "id": "raticate",
    "price": 5,
@@ -6881,6 +6881,36 @@
    "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/purugly.png",
    "types": [
     "Normal"
+   ]
+  },
+  {
+   "name": "Meowstic-F",
+   "id": "meowsticf",
+   "price": 5,
+   "tier": "F",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/meowstic-f.png",
+   "types": [
+    "Psychic"
+   ]
+  },
+  {
+   "name": "Dubwool",
+   "id": "dubwool",
+   "price": 5,
+   "tier": "F",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/dubwool.png",
+   "types": [
+    "Normal"
+   ]
+  },
+  {
+   "name": "Ninetales",
+   "id": "ninetales",
+   "price": 5,
+   "tier": "F",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/ninetales.png",
+   "types": [
+    "Fire"
    ]
   },
   {
@@ -6904,16 +6934,6 @@
    ]
   },
   {
-   "name": "Meowstic-F",
-   "id": "meowsticf",
-   "price": 5,
-   "tier": "F",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/meowstic-f.png",
-   "types": [
-    "Psychic"
-   ]
-  },
-  {
    "name": "Wishiwashi",
    "id": "wishiwashi",
    "price": 5,
@@ -6924,13 +6944,14 @@
    ]
   },
   {
-   "name": "Dubwool",
-   "id": "dubwool",
+   "name": "Medicham",
+   "id": "medicham",
    "price": 5,
    "tier": "F",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/dubwool.png",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/medicham.png",
    "types": [
-    "Normal"
+    "Fighting",
+    "Psychic"
    ]
   },
   {
@@ -6951,16 +6972,6 @@
    "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/pachirisu.png",
    "types": [
     "Electric"
-   ]
-  },
-  {
-   "name": "Ninetales",
-   "id": "ninetales",
-   "price": 5,
-   "tier": "F",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/ninetales.png",
-   "types": [
-    "Fire"
    ]
   },
   {
@@ -7016,17 +7027,6 @@
    ]
   },
   {
-   "name": "Medicham",
-   "id": "medicham",
-   "price": 5,
-   "tier": "F",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/medicham.png",
-   "types": [
-    "Fighting",
-    "Psychic"
-   ]
-  },
-  {
    "name": "Phione",
    "id": "phione",
    "price": 5,
@@ -7066,6 +7066,16 @@
    "types": [
     "Water",
     "Rock"
+   ]
+  },
+  {
+   "name": "Spinda",
+   "id": "spinda",
+   "price": 5,
+   "tier": "F",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/spinda.png",
+   "types": [
+    "Normal"
    ]
   },
   {
@@ -7120,16 +7130,6 @@
    ]
   },
   {
-   "name": "Spinda",
-   "id": "spinda",
-   "price": 5,
-   "tier": "F",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/spinda.png",
-   "types": [
-    "Normal"
-   ]
-  },
-  {
    "name": "Wobbuffet",
    "id": "wobbuffet",
    "price": 5,
@@ -7151,16 +7151,6 @@
    ]
   },
   {
-   "name": "Meltan",
-   "id": "meltan",
-   "price": 5,
-   "tier": "F",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/meltan.png",
-   "types": [
-    "Steel"
-   ]
-  },
-  {
    "name": "Calyrex",
    "id": "calyrex",
    "price": 5,
@@ -7169,6 +7159,16 @@
    "types": [
     "Psychic",
     "Grass"
+   ]
+  },
+  {
+   "name": "Meltan",
+   "id": "meltan",
+   "price": 5,
+   "tier": "F",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/meltan.png",
+   "types": [
+    "Steel"
    ]
   },
   {
@@ -7524,6 +7524,16 @@
    ]
   },
   {
+   "name": "Hattrem",
+   "id": "hattrem",
+   "price": 2,
+   "tier": "NFE",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/hattrem.png",
+   "types": [
+    "Psychic"
+   ]
+  },
+  {
    "name": "Drizzile",
    "id": "drizzile",
    "price": 2,
@@ -7566,16 +7576,6 @@
    ]
   },
   {
-   "name": "Hattrem",
-   "id": "hattrem",
-   "price": 2,
-   "tier": "NFE",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/hattrem.png",
-   "types": [
-    "Psychic"
-   ]
-  },
-  {
    "name": "Chansey",
    "id": "chansey",
    "price": 2,
@@ -7594,6 +7594,17 @@
    "types": [
     "Steel",
     "Rock"
+   ]
+  },
+  {
+   "name": "Combusken",
+   "id": "combusken",
+   "price": 2,
+   "tier": "NFE",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/combusken.png",
+   "types": [
+    "Fire",
+    "Fighting"
    ]
   },
   {
@@ -7638,17 +7649,6 @@
    ]
   },
   {
-   "name": "Combusken",
-   "id": "combusken",
-   "price": 2,
-   "tier": "NFE",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/combusken.png",
-   "types": [
-    "Fire",
-    "Fighting"
-   ]
-  },
-  {
    "name": "Sliggoo-Hisui",
    "id": "sliggoohisui",
    "price": 2,
@@ -7688,6 +7688,17 @@
    "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/grotle.png",
    "types": [
     "Grass"
+   ]
+  },
+  {
+   "name": "Togetic",
+   "id": "togetic",
+   "price": 2,
+   "tier": "NFE",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/togetic.png",
+   "types": [
+    "Fairy",
+    "Flying"
    ]
   },
   {
@@ -7735,17 +7746,6 @@
    ]
   },
   {
-   "name": "Togetic",
-   "id": "togetic",
-   "price": 2,
-   "tier": "NFE",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/togetic.png",
-   "types": [
-    "Fairy",
-    "Flying"
-   ]
-  },
-  {
    "name": "Prinplup",
    "id": "prinplup",
    "price": 2,
@@ -7753,6 +7753,16 @@
    "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/prinplup.png",
    "types": [
     "Water"
+   ]
+  },
+  {
+   "name": "Floette",
+   "id": "floette",
+   "price": 2,
+   "tier": "NFE",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/floette.png",
+   "types": [
+    "Fairy"
    ]
   },
   {
@@ -7815,16 +7825,6 @@
    "price": 2,
    "tier": "NFE",
    "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/clefairy.png",
-   "types": [
-    "Fairy"
-   ]
-  },
-  {
-   "name": "Floette",
-   "id": "floette",
-   "price": 2,
-   "tier": "NFE",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/floette.png",
    "types": [
     "Fairy"
    ]
@@ -8166,6 +8166,17 @@
    ]
   },
   {
+   "name": "Dartrix",
+   "id": "dartrix",
+   "price": 2,
+   "tier": "NFE",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/dartrix.png",
+   "types": [
+    "Grass",
+    "Flying"
+   ]
+  },
+  {
    "name": "Carkol",
    "id": "carkol",
    "price": 2,
@@ -8219,6 +8230,17 @@
    ]
   },
   {
+   "name": "Swadloon",
+   "id": "swadloon",
+   "price": 2,
+   "tier": "NFE",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/swadloon.png",
+   "types": [
+    "Bug",
+    "Grass"
+   ]
+  },
+  {
    "name": "Dolliv",
    "id": "dolliv",
    "price": 2,
@@ -8248,17 +8270,6 @@
    "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/silcoon.png",
    "types": [
     "Bug"
-   ]
-  },
-  {
-   "name": "Dartrix",
-   "id": "dartrix",
-   "price": 2,
-   "tier": "NFE",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/dartrix.png",
-   "types": [
-    "Grass",
-    "Flying"
    ]
   },
   {
@@ -8333,17 +8344,6 @@
    "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/vanillish.png",
    "types": [
     "Ice"
-   ]
-  },
-  {
-   "name": "Swadloon",
-   "id": "swadloon",
-   "price": 2,
-   "tier": "NFE",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/swadloon.png",
-   "types": [
-    "Bug",
-    "Grass"
    ]
   },
   {
@@ -8699,6 +8699,17 @@
    ]
   },
   {
+   "name": "Doduo",
+   "id": "doduo",
+   "price": 1,
+   "tier": "LC",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/doduo.png",
+   "types": [
+    "Normal",
+    "Flying"
+   ]
+  },
+  {
    "name": "Trapinch",
    "id": "trapinch",
    "price": 1,
@@ -8715,6 +8726,17 @@
    "tier": "LC",
    "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/ponyta-galar.png",
    "types": [
+    "Psychic"
+   ]
+  },
+  {
+   "name": "Girafarig",
+   "id": "girafarig",
+   "price": 1,
+   "tier": "LC",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/girafarig.png",
+   "types": [
+    "Normal",
     "Psychic"
    ]
   },
@@ -8750,17 +8772,6 @@
    ]
   },
   {
-   "name": "Doduo",
-   "id": "doduo",
-   "price": 1,
-   "tier": "LC",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/doduo.png",
-   "types": [
-    "Normal",
-    "Flying"
-   ]
-  },
-  {
    "name": "Corsola-Galar",
    "id": "corsolagalar",
    "price": 1,
@@ -8788,17 +8799,6 @@
    "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/porygon.png",
    "types": [
     "Normal"
-   ]
-  },
-  {
-   "name": "Girafarig",
-   "id": "girafarig",
-   "price": 1,
-   "tier": "LC",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/girafarig.png",
-   "types": [
-    "Normal",
-    "Psychic"
    ]
   },
   {
@@ -9037,6 +9037,16 @@
    ]
   },
   {
+   "name": "Flabébé",
+   "id": "flabebe",
+   "price": 1,
+   "tier": "LC",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/flabebe.png",
+   "types": [
+    "Fairy"
+   ]
+  },
+  {
    "name": "Piplup",
    "id": "piplup",
    "price": 1,
@@ -9100,6 +9110,17 @@
    ]
   },
   {
+   "name": "Mime Jr.",
+   "id": "mimejr",
+   "price": 1,
+   "tier": "LC",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/mimejr.png",
+   "types": [
+    "Psychic",
+    "Fairy"
+   ]
+  },
+  {
    "name": "Chimchar",
    "id": "chimchar",
    "price": 1,
@@ -9117,16 +9138,6 @@
    "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/wailmer.png",
    "types": [
     "Water"
-   ]
-  },
-  {
-   "name": "Flabébé",
-   "id": "flabebe",
-   "price": 1,
-   "tier": "LC",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/flabebe.png",
-   "types": [
-    "Fairy"
    ]
   },
   {
@@ -9222,17 +9233,6 @@
    ]
   },
   {
-   "name": "Mime Jr.",
-   "id": "mimejr",
-   "price": 1,
-   "tier": "LC",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/mimejr.png",
-   "types": [
-    "Psychic",
-    "Fairy"
-   ]
-  },
-  {
    "name": "Greavard",
    "id": "greavard",
    "price": 1,
@@ -9261,6 +9261,16 @@
    "types": [
     "Bug",
     "Fire"
+   ]
+  },
+  {
+   "name": "Togepi",
+   "id": "togepi",
+   "price": 1,
+   "tier": "LC",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/togepi.png",
+   "types": [
+    "Fairy"
    ]
   },
   {
@@ -9304,6 +9314,16 @@
    "types": [
     "Water",
     "Electric"
+   ]
+  },
+  {
+   "name": "Buneary",
+   "id": "buneary",
+   "price": 1,
+   "tier": "LC",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/buneary.png",
+   "types": [
+    "Normal"
    ]
   },
   {
@@ -9369,6 +9389,16 @@
    ]
   },
   {
+   "name": "Fidough",
+   "id": "fidough",
+   "price": 1,
+   "tier": "LC",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/fidough.png",
+   "types": [
+    "Fairy"
+   ]
+  },
+  {
    "name": "Slugma",
    "id": "slugma",
    "price": 1,
@@ -9386,16 +9416,6 @@
    "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/duskull.png",
    "types": [
     "Ghost"
-   ]
-  },
-  {
-   "name": "Togepi",
-   "id": "togepi",
-   "price": 1,
-   "tier": "LC",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/togepi.png",
-   "types": [
-    "Fairy"
    ]
   },
   {
@@ -9453,6 +9473,17 @@
    ]
   },
   {
+   "name": "Drifloon",
+   "id": "drifloon",
+   "price": 1,
+   "tier": "LC",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/drifloon.png",
+   "types": [
+    "Ghost",
+    "Flying"
+   ]
+  },
+  {
    "name": "Poliwag",
    "id": "poliwag",
    "price": 1,
@@ -9505,13 +9536,13 @@
    ]
   },
   {
-   "name": "Buneary",
-   "id": "buneary",
+   "name": "Munna",
+   "id": "munna",
    "price": 1,
    "tier": "LC",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/buneary.png",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/munna.png",
    "types": [
-    "Normal"
+    "Psychic"
    ]
   },
   {
@@ -9678,13 +9709,14 @@
    ]
   },
   {
-   "name": "Fidough",
-   "id": "fidough",
+   "name": "Venonat",
+   "id": "venonat",
    "price": 1,
    "tier": "LC",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/fidough.png",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/venonat.png",
    "types": [
-    "Fairy"
+    "Bug",
+    "Poison"
    ]
   },
   {
@@ -9696,6 +9728,16 @@
    "types": [
     "Grass",
     "Fairy"
+   ]
+  },
+  {
+   "name": "Vulpix-Alola",
+   "id": "vulpixalola",
+   "price": 1,
+   "tier": "LC",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/vulpix-alola.png",
+   "types": [
+    "Ice"
    ]
   },
   {
@@ -9772,14 +9814,33 @@
    ]
   },
   {
-   "name": "Drifloon",
-   "id": "drifloon",
+   "name": "Sinistea",
+   "id": "sinistea",
    "price": 1,
    "tier": "LC",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/drifloon.png",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/sinistea.png",
    "types": [
-    "Ghost",
-    "Flying"
+    "Ghost"
+   ]
+  },
+  {
+   "name": "Sinistea-Antique",
+   "id": "sinisteaantique",
+   "price": 1,
+   "tier": "LC",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/sinistea-antique.png",
+   "types": [
+    "Ghost"
+   ]
+  },
+  {
+   "name": "Quaxly",
+   "id": "quaxly",
+   "price": 1,
+   "tier": "LC",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/quaxly.png",
+   "types": [
+    "Water"
    ]
   },
   {
@@ -9930,16 +9991,6 @@
    ]
   },
   {
-   "name": "Munna",
-   "id": "munna",
-   "price": 1,
-   "tier": "LC",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/munna.png",
-   "types": [
-    "Psychic"
-   ]
-  },
-  {
    "name": "Pidove",
    "id": "pidove",
    "price": 1,
@@ -9979,6 +10030,17 @@
    "tier": "LC",
    "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/clauncher.png",
    "types": [
+    "Water"
+   ]
+  },
+  {
+   "name": "Surskit",
+   "id": "surskit",
+   "price": 1,
+   "tier": "LC",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/surskit.png",
+   "types": [
+    "Bug",
     "Water"
    ]
   },
@@ -10077,6 +10139,16 @@
    ]
   },
   {
+   "name": "Chingling",
+   "id": "chingling",
+   "price": 1,
+   "tier": "LC",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/chingling.png",
+   "types": [
+    "Psychic"
+   ]
+  },
+  {
    "name": "Dwebble",
    "id": "dwebble",
    "price": 1,
@@ -10088,6 +10160,16 @@
    ]
   },
   {
+   "name": "Hatenna",
+   "id": "hatenna",
+   "price": 1,
+   "tier": "LC",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/hatenna.png",
+   "types": [
+    "Psychic"
+   ]
+  },
+  {
    "name": "Aipom",
    "id": "aipom",
    "price": 1,
@@ -10095,17 +10177,6 @@
    "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/aipom.png",
    "types": [
     "Normal"
-   ]
-  },
-  {
-   "name": "Venonat",
-   "id": "venonat",
-   "price": 1,
-   "tier": "LC",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/venonat.png",
-   "types": [
-    "Bug",
-    "Poison"
    ]
   },
   {
@@ -10127,6 +10198,17 @@
    "types": [
     "Grass",
     "Poison"
+   ]
+  },
+  {
+   "name": "Meditite",
+   "id": "meditite",
+   "price": 1,
+   "tier": "LC",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/meditite.png",
+   "types": [
+    "Fighting",
+    "Psychic"
    ]
   },
   {
@@ -10169,16 +10251,6 @@
    "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/burmy.png",
    "types": [
     "Bug"
-   ]
-  },
-  {
-   "name": "Vulpix-Alola",
-   "id": "vulpixalola",
-   "price": 1,
-   "tier": "LC",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/vulpix-alola.png",
-   "types": [
-    "Ice"
    ]
   },
   {
@@ -10233,41 +10305,11 @@
    ]
   },
   {
-   "name": "Sinistea",
-   "id": "sinistea",
-   "price": 1,
-   "tier": "LC",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/sinistea.png",
-   "types": [
-    "Ghost"
-   ]
-  },
-  {
-   "name": "Sinistea-Antique",
-   "id": "sinisteaantique",
-   "price": 1,
-   "tier": "LC",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/sinistea-antique.png",
-   "types": [
-    "Ghost"
-   ]
-  },
-  {
    "name": "Sobble",
    "id": "sobble",
    "price": 1,
    "tier": "LC",
    "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/sobble.png",
-   "types": [
-    "Water"
-   ]
-  },
-  {
-   "name": "Quaxly",
-   "id": "quaxly",
-   "price": 1,
-   "tier": "LC",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/quaxly.png",
    "types": [
     "Water"
    ]
@@ -10334,6 +10376,17 @@
    ]
   },
   {
+   "name": "Dreepy",
+   "id": "dreepy",
+   "price": 1,
+   "tier": "LC",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/dreepy.png",
+   "types": [
+    "Dragon",
+    "Ghost"
+   ]
+  },
+  {
    "name": "Rellor",
    "id": "rellor",
    "price": 1,
@@ -10372,6 +10425,16 @@
    "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/rookidee.png",
    "types": [
     "Flying"
+   ]
+  },
+  {
+   "name": "Dunsparce",
+   "id": "dunsparce",
+   "price": 1,
+   "tier": "LC",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/dunsparce.png",
+   "types": [
+    "Normal"
    ]
   },
   {
@@ -10501,17 +10564,6 @@
    ]
   },
   {
-   "name": "Surskit",
-   "id": "surskit",
-   "price": 1,
-   "tier": "LC",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/surskit.png",
-   "types": [
-    "Bug",
-    "Water"
-   ]
-  },
-  {
    "name": "Timburr",
    "id": "timburr",
    "price": 1,
@@ -10638,6 +10690,17 @@
    ]
   },
   {
+   "name": "Deerling",
+   "id": "deerling",
+   "price": 1,
+   "tier": "LC",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/deerling.png",
+   "types": [
+    "Normal",
+    "Grass"
+   ]
+  },
+  {
    "name": "Hoppip",
    "id": "hoppip",
    "price": 1,
@@ -10657,26 +10720,6 @@
    "types": [
     "Fire",
     "Ground"
-   ]
-  },
-  {
-   "name": "Chingling",
-   "id": "chingling",
-   "price": 1,
-   "tier": "LC",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/chingling.png",
-   "types": [
-    "Psychic"
-   ]
-  },
-  {
-   "name": "Hatenna",
-   "id": "hatenna",
-   "price": 1,
-   "tier": "LC",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/hatenna.png",
-   "types": [
-    "Psychic"
    ]
   },
   {
@@ -10707,17 +10750,6 @@
    "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/nidoranm.png",
    "types": [
     "Poison"
-   ]
-  },
-  {
-   "name": "Meditite",
-   "id": "meditite",
-   "price": 1,
-   "tier": "LC",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/meditite.png",
-   "types": [
-    "Fighting",
-    "Psychic"
    ]
   },
   {
@@ -10844,6 +10876,16 @@
    ]
   },
   {
+   "name": "Vulpix",
+   "id": "vulpix",
+   "price": 1,
+   "tier": "LC",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/vulpix.png",
+   "types": [
+    "Fire"
+   ]
+  },
+  {
    "name": "Wurmple",
    "id": "wurmple",
    "price": 1,
@@ -10851,6 +10893,17 @@
    "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/wurmple.png",
    "types": [
     "Bug"
+   ]
+  },
+  {
+   "name": "Spinarak",
+   "id": "spinarak",
+   "price": 1,
+   "tier": "LC",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/spinarak.png",
+   "types": [
+    "Bug",
+    "Poison"
    ]
   },
   {
@@ -10887,17 +10940,6 @@
    ]
   },
   {
-   "name": "Dreepy",
-   "id": "dreepy",
-   "price": 1,
-   "tier": "LC",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/dreepy.png",
-   "types": [
-    "Dragon",
-    "Ghost"
-   ]
-  },
-  {
    "name": "Onix",
    "id": "onix",
    "price": 1,
@@ -10926,16 +10968,6 @@
    "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/gimmighoul-roaming.png",
    "types": [
     "Ghost"
-   ]
-  },
-  {
-   "name": "Dunsparce",
-   "id": "dunsparce",
-   "price": 1,
-   "tier": "LC",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/dunsparce.png",
-   "types": [
-    "Normal"
    ]
   },
   {
@@ -11052,6 +11084,16 @@
    ]
   },
   {
+   "name": "Shelmet",
+   "id": "shelmet",
+   "price": 1,
+   "tier": "LC",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/shelmet.png",
+   "types": [
+    "Bug"
+   ]
+  },
+  {
    "name": "Poltchageist",
    "id": "poltchageist",
    "price": 1,
@@ -11127,17 +11169,6 @@
    ]
   },
   {
-   "name": "Deerling",
-   "id": "deerling",
-   "price": 1,
-   "tier": "LC",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/deerling.png",
-   "types": [
-    "Normal",
-    "Grass"
-   ]
-  },
-  {
    "name": "Yamper",
    "id": "yamper",
    "price": 1,
@@ -11199,6 +11230,16 @@
    ]
   },
   {
+   "name": "Torchic",
+   "id": "torchic",
+   "price": 1,
+   "tier": "LC",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/torchic.png",
+   "types": [
+    "Fire"
+   ]
+  },
+  {
    "name": "Tepig",
    "id": "tepig",
    "price": 1,
@@ -11230,6 +11271,17 @@
    ]
   },
   {
+   "name": "Croagunk",
+   "id": "croagunk",
+   "price": 1,
+   "tier": "LC",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/croagunk.png",
+   "types": [
+    "Poison",
+    "Fighting"
+   ]
+  },
+  {
    "name": "Tandemaus",
    "id": "tandemaus",
    "price": 1,
@@ -11251,16 +11303,6 @@
    ]
   },
   {
-   "name": "Vulpix",
-   "id": "vulpix",
-   "price": 1,
-   "tier": "LC",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/vulpix.png",
-   "types": [
-    "Fire"
-   ]
-  },
-  {
    "name": "Karrablast",
    "id": "karrablast",
    "price": 1,
@@ -11268,17 +11310,6 @@
    "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/karrablast.png",
    "types": [
     "Bug"
-   ]
-  },
-  {
-   "name": "Spinarak",
-   "id": "spinarak",
-   "price": 1,
-   "tier": "LC",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/spinarak.png",
-   "types": [
-    "Bug",
-    "Poison"
    ]
   },
   {
@@ -11333,6 +11364,17 @@
    ]
   },
   {
+   "name": "Rowlet",
+   "id": "rowlet",
+   "price": 1,
+   "tier": "LC",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/rowlet.png",
+   "types": [
+    "Grass",
+    "Flying"
+   ]
+  },
+  {
    "name": "Joltik",
    "id": "joltik",
    "price": 1,
@@ -11363,6 +11405,16 @@
    "types": [
     "Rock",
     "Steel"
+   ]
+  },
+  {
+   "name": "Skitty",
+   "id": "skitty",
+   "price": 1,
+   "tier": "LC",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/skitty.png",
+   "types": [
+    "Normal"
    ]
   },
   {
@@ -11428,13 +11480,13 @@
    ]
   },
   {
-   "name": "Shelmet",
-   "id": "shelmet",
+   "name": "Patrat",
+   "id": "patrat",
    "price": 1,
    "tier": "LC",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/shelmet.png",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/patrat.png",
    "types": [
-    "Bug"
+    "Normal"
    ]
   },
   {
@@ -11522,16 +11574,6 @@
    ]
   },
   {
-   "name": "Torchic",
-   "id": "torchic",
-   "price": 1,
-   "tier": "LC",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/torchic.png",
-   "types": [
-    "Fire"
-   ]
-  },
-  {
    "name": "Charmander",
    "id": "charmander",
    "price": 1,
@@ -11581,17 +11623,6 @@
    "types": [
     "Water",
     "Rock"
-   ]
-  },
-  {
-   "name": "Croagunk",
-   "id": "croagunk",
-   "price": 1,
-   "tier": "LC",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/croagunk.png",
-   "types": [
-    "Poison",
-    "Fighting"
    ]
   },
   {
@@ -11728,17 +11759,6 @@
    ]
   },
   {
-   "name": "Rowlet",
-   "id": "rowlet",
-   "price": 1,
-   "tier": "LC",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/rowlet.png",
-   "types": [
-    "Grass",
-    "Flying"
-   ]
-  },
-  {
    "name": "Cherubi",
    "id": "cherubi",
    "price": 1,
@@ -11781,16 +11801,6 @@
    ]
   },
   {
-   "name": "Skitty",
-   "id": "skitty",
-   "price": 1,
-   "tier": "LC",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/skitty.png",
-   "types": [
-    "Normal"
-   ]
-  },
-  {
    "name": "Pineco",
    "id": "pineco",
    "price": 1,
@@ -11798,16 +11808,6 @@
    "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/pineco.png",
    "types": [
     "Bug"
-   ]
-  },
-  {
-   "name": "Patrat",
-   "id": "patrat",
-   "price": 1,
-   "tier": "LC",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/patrat.png",
-   "types": [
-    "Normal"
    ]
   },
   {
@@ -11898,6 +11898,17 @@
    "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/silicobra.png",
    "types": [
     "Ground"
+   ]
+  },
+  {
+   "name": "Sewaddle",
+   "id": "sewaddle",
+   "price": 1,
+   "tier": "LC",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/sewaddle.png",
+   "types": [
+    "Bug",
+    "Grass"
    ]
   },
   {
@@ -12034,17 +12045,6 @@
    "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/rolycoly.png",
    "types": [
     "Rock"
-   ]
-  },
-  {
-   "name": "Sewaddle",
-   "id": "sewaddle",
-   "price": 1,
-   "tier": "LC",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/sewaddle.png",
-   "types": [
-    "Bug",
-    "Grass"
    ]
   },
   {
@@ -12325,6 +12325,11 @@
    "why": "Monkey (Balance Patch rebuild)"
   },
   {
+   "name": "Shaymin-Sky",
+   "id": "shayminsky",
+   "why": "Mythical"
+  },
+  {
    "name": "Simipour",
    "id": "simipour",
    "why": "Monkey (Balance Patch rebuild)"
@@ -12332,11 +12337,6 @@
   {
    "name": "Darkrai",
    "id": "darkrai",
-   "why": "Mythical"
-  },
-  {
-   "name": "Shaymin-Sky",
-   "id": "shayminsky",
    "why": "Mythical"
   },
   {
