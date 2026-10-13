@@ -88,7 +88,8 @@ window.VelvetDraft = {
 				"blazikenmega",
 				"flareon",
 				"scizormega",
-				"mawilemega"
+				"mawilemega",
+				"umbreon"
 			]
 		},
 		{
@@ -136,7 +137,6 @@ window.VelvetDraft = {
 				"slitherwing",
 				"roserade",
 				"azelf",
-				"umbreon",
 				"hippowdon",
 				"buzzwole",
 				"espathra"

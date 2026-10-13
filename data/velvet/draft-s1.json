@@ -690,6 +690,16 @@
    ]
   },
   {
+   "name": "Umbreon",
+   "id": "umbreon",
+   "price": 65,
+   "tier": "A",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/umbreon.png",
+   "types": [
+    "Dark"
+   ]
+  },
+  {
    "name": "Sylveon",
    "id": "sylveon",
    "price": 50,
@@ -1130,16 +1140,6 @@
    "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/azelf.png",
    "types": [
     "Psychic"
-   ]
-  },
-  {
-   "name": "Umbreon",
-   "id": "umbreon",
-   "price": 50,
-   "tier": "B+",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/umbreon.png",
-   "types": [
-    "Dark"
    ]
   },
   {
@@ -9977,7 +9977,7 @@
    "id": "clauncher",
    "price": 1,
    "tier": "LC",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/clauncher.png",
+   "sprite": "https://play.pokemonshowdown.com/sprites/gen5/clauncher.png",
    "types": [
     "Water"
    ]
