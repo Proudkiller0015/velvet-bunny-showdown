@@ -82,16 +82,26 @@ exports.moves = (data) => {
 	}
 	for (const [id, move] of Object.entries(data)) {
 		if (!move || !move.flags || !move.flags.recharge) continue;
-		const own = move.onAfterMove;
+		const own = move.onAfterMoveSecondarySelf;
+		// The recharge is only added once the hit is known to have left the target standing:
+		// adding it first and lifting it after a KO left "Must recharge" showing in the battle.
+		let self = null;
+		if (move.self) {
+			const { volatileStatus, ...rest } = move.self;
+			if (volatileStatus !== 'mustrecharge') rest.volatileStatus = volatileStatus;
+			if (Object.keys(rest).length) self = rest;
+		}
 		data[id] = {
 			...move,
+			self,
 			shortDesc: "User cannot move next turn, unless this knocks the target out.",
 			desc: "If this move is successful, the user must recharge on the following turn and cannot select a move - unless it knocked the target out, as in Generation 1, in which case there is no recharge turn.",
 			// Gen 1: a knockout means no recharge turn.
-			onAfterMove(pokemon, target, activeMove) {
+			onAfterMoveSecondarySelf(pokemon, target, activeMove) {
 				if (own) own.call(this, pokemon, target, activeMove);
-				if (target && (target.fainted || !target.hp) && pokemon.volatiles['mustrecharge']) {
-					pokemon.removeVolatile('mustrecharge');
+				if (target && target.hp && !target.fainted) {
+					pokemon.addVolatile('mustrecharge');
+				} else {
 					this.add('-message', `${pokemon.name} doesn't need to recharge after the knockout!`);
 				}
 			},

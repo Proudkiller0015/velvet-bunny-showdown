@@ -214,7 +214,7 @@ function attackValue(species, move, stat) {
 	// Half your HP (Steel Beam, Mind Blown) costs more than Flare Blitz's recoil; a
 	// recharge turn (Rock Wrecker, Giga Impact) gives the opponent a free one.
 	const drawback = AWKWARD.includes(move.id) ? 0.4 : move.id === 'foulplay' ? 0.6
-		: move.mindBlownRecoil ? 0.6 : move.self && move.self.volatileStatus === 'mustrecharge' ? 0.5 : move.recoil ? 0.85 : 1;
+		: move.mindBlownRecoil ? 0.6 : move.flags && move.flags.recharge ? 0.5 : move.recoil ? 0.85 : 1;
 	return power * acc * stab * fits * ours * drawback;
 }
 

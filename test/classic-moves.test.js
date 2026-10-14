@@ -72,5 +72,30 @@ for (const id of ['explosion', 'selfdestruct']) {
 	check(flinched / N > 0.24 && flinched / N < 0.36, `Twister flinch rate ${(100 * flinched / N).toFixed(0)}%`);
 }
 
+// Recharge (14 Oct 2026): a KO means no recharge turn, and the battle never shows "Must recharge" for it.
+{
+	const ko = battle(
+		[{ species: 'Snorlax', ability: 'Thick Fat', moves: ['gigaimpact', 'splash'] }],
+		[{ species: 'Pichu', ability: 'Static', level: 5, moves: ['splash'] }, { species: 'Blissey', ability: 'Natural Cure', moves: ['splash'] }],
+	);
+	ko.makeChoices('move 1', 'move 1');
+	const koLog = ko.log.join('\n');
+	check(/\|faint\|p2a: Pichu/.test(koLog), 'Giga Impact knocks Pichu out');
+	check(!/-mustrecharge/.test(koLog), 'no "Must recharge" after the KO');
+	check(!ko.p1.active[0].volatiles['mustrecharge'], 'and no recharge turn');
+	ko.choose('p2', 'switch 2');
+	ko.makeChoices('move 2', 'move 1');
+	check(!/\|cant\|p1a: Snorlax\|recharge/.test(ko.log.join('\n')), 'Snorlax moves freely the next turn');
+
+	const hit = battle(
+		[{ species: 'Snorlax', ability: 'Thick Fat', moves: ['gigaimpact', 'splash'] }],
+		[{ species: 'Blissey', ability: 'Natural Cure', moves: ['splash'] }],
+	);
+	hit.makeChoices('move 1', 'move 1');
+	check(/-mustrecharge\|p1a: Snorlax/.test(hit.log.join('\n')), 'without a KO it must recharge');
+	hit.makeChoices('move 1', 'move 1');
+	check(/\|cant\|p1a: Snorlax\|recharge/.test(hit.log.join('\n')), 'and loses the next turn');
+}
+
 if (failed) { console.log(`\n${failed} failed`); process.exit(1); }
 console.log('\nall passed');

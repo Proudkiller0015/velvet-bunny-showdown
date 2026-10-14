@@ -129,7 +129,7 @@ function attackWorth(species, move, stats) {
 	const status = move.secondary && move.secondary.status && (move.secondary.chance || 100) >= 20 ? move.secondary.status : null;
 	if (status) value += ['brn', 'tox', 'psn'].includes(status) ? 60 : 30;
 	if (move.id === 'knockoff' || move.id === 'saltcure') value *= 1.4;
-	if (move.recoil || move.selfdestruct || (move.self && move.self.volatileStatus === 'mustrecharge')) value *= 0.5;
+	if (move.recoil || move.selfdestruct || (move.flags && move.flags.recharge)) value *= 0.5;
 	// Outrage and Petal Dance lock the wall in and confuse it: nothing a wall that switches all game wants.
 	if (move.self && move.self.volatileStatus === 'lockedmove') value *= 0.4;
 	if (move.flags && move.flags.charge) value *= 0.3;
