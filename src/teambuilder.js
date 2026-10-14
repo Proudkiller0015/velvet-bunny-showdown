@@ -999,7 +999,22 @@ class TeamBuilder {
 		const onlyForTheMega = baseRank !== undefined && baseRank <= formatRank - 2;
 		if (rng() > (onlyForTheMega ? 0.9 : 0.33)) return;
 		const stone = this.megaStoneFor(ctx, species);
-		if (stone) set.item = stone;
+		if (stone && !this.weatherOnlyMega(ctx, stone)) set.item = stone;
+	}
+
+	/**
+	 * A Mega that needs the weather comes only from the weather plan (owner, 1 Oct 2026:
+	 * "mega swampert is exclusive to rain"). Given by the stone roll or by old Random
+	 * Battle sets, it turned up on Gen 6 and 7 OU teams with no rain at all (owner,
+	 * 14 Oct 2026). Only the speed doublers: Sand Force Garchomp or Steelix are Megas
+	 * worth having without sand.
+	 */
+	weatherOnlyMega(ctx, itemName) {
+		const item = ctx.dex.items.get(itemName);
+		if (!item.exists || !item.megaStone) return false;
+		const formes = typeof item.megaStone === 'string' ? [item.megaStone] : Object.values(item.megaStone);
+		const doublers = ['swiftswim', 'chlorophyll', 'sandrush', 'slushrush'];
+		return formes.some(name => Object.values(ctx.dex.species.get(name).abilities || {}).some(a => doublers.includes(toID(a))));
 	}
 
 	/**
@@ -1205,6 +1220,7 @@ class TeamBuilder {
 			 * holding Choice Specs next to Protect and Substitute.
 			 */
 			set.item = raw.item !== undefined ? raw.item : '';
+			if (set.item && this.weatherOnlyMega(ctx, set.item)) set.item = '';
 		} else if (gen >= 2) {
 			const abilities = Object.values(species.abilities || {}).filter(a => a);
 			if (abilities.length) set.ability = raw.ability || pick(rng, abilities);
