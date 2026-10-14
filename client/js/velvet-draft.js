@@ -92,9 +92,9 @@ window.VelvetDraft = {
 				"mawilemega",
 				"ursaluna",
 				"gliscor",
-				"blazikenmega",
 				"flareon",
 				"scizormega",
+				"sylveon",
 				"umbreon",
 				"leafeon"
 			]
@@ -103,7 +103,6 @@ window.VelvetDraft = {
 			"tier": "B+",
 			"price": 50,
 			"ids": [
-				"sylveon",
 				"steelixmega",
 				"scizor",
 				"gengar",
@@ -146,14 +145,14 @@ window.VelvetDraft = {
 				"azelf",
 				"hippowdon",
 				"buzzwole",
-				"espathra"
+				"espathra",
+				"clefable"
 			]
 		},
 		{
 			"tier": "B",
 			"price": 40,
 			"ids": [
-				"clefable",
 				"crawdaunt",
 				"zarude",
 				"gardevoirmega",
@@ -206,14 +205,14 @@ window.VelvetDraft = {
 				"slowbro",
 				"moltres",
 				"manaphy",
-				"tornadustherian"
+				"tornadustherian",
+				"regirock"
 			]
 		},
 		{
 			"tier": "C+",
 			"price": 30,
 			"ids": [
-				"regirock",
 				"jirachi",
 				"pidgeotmega",
 				"copperajah",
@@ -277,14 +276,14 @@ window.VelvetDraft = {
 				"banettemega",
 				"haxorus",
 				"nihilego",
-				"steelix"
+				"steelix",
+				"escavalier"
 			]
 		},
 		{
 			"tier": "C",
 			"price": 22,
 			"ids": [
-				"escavalier",
 				"uxie",
 				"feraligatr",
 				"houndstone",
@@ -359,6 +358,7 @@ window.VelvetDraft = {
 				"forretress",
 				"crobat",
 				"barbaracle",
+				"goodra",
 				"pansear",
 				"panpour",
 				"pansage"
@@ -368,7 +368,6 @@ window.VelvetDraft = {
 			"tier": "D",
 			"price": 15,
 			"ids": [
-				"goodra",
 				"grafaiai",
 				"oricoriopompom",
 				"cursola",
@@ -457,14 +456,14 @@ window.VelvetDraft = {
 				"toucannon",
 				"decidueyehisui",
 				"absol",
-				"lilligant"
+				"lilligant",
+				"exeggutoralola"
 			]
 		},
 		{
 			"tier": "E",
 			"price": 10,
 			"ids": [
-				"exeggutoralola",
 				"venusaur",
 				"typhlosionhisui",
 				"huntail",
@@ -573,14 +572,14 @@ window.VelvetDraft = {
 				"swanna",
 				"bouffalant",
 				"raichu",
-				"pincurchin"
+				"pincurchin",
+				"gourgeistsuper"
 			]
 		},
 		{
 			"tier": "F",
 			"price": 5,
 			"ids": [
-				"gourgeistsuper",
 				"drifblim",
 				"ninjask",
 				"weezing",
