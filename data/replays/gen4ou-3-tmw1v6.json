@@ -1,0 +1,12 @@
+{
+	"id": "gen4ou-3-tmw1v6",
+	"format": "[Gen 4] OU",
+	"players": [
+		"Bunny Hard",
+		"0p9o9i8"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Hard\n|j|☆0p9o9i8\n|t:|1792017244\n|gametype|singles\n|badge|p1|gold|gen4ou|1-1\n|badge|p2|silver|gen4ou|2-2\n|player|p1|Bunny Hard|bunny.png|1283\n|player|p2|0p9o9i8|265|1247\n|gen|4\n|tier|[Gen 4] OU\n|rated|\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Beat Up Nicknames Mod: Beat Up will not reveal any party members\n|rule|Endless Battle Clause: Forcing endless battles is banned\n|rule|Species Clause: Limit one of each Pokémon\n|rule|OHKO Clause: OHKO moves are banned\n|rule|Evasion Items Clause: Evasion items are banned\n|rule|Evasion Moves Clause: Evasion moves are banned\n|rule|Evasion Abilities Clause: Evasion abilities are banned\n|rule|Baton Pass Stat Trap Clause: No Baton Passer may have a way to boost stats or trap Pokémon\n|rule|Freeze Clause Mod: Limit one foe frozen\n|rule|Sleep Moves Clause: Sleep-inducing moves are banned\n|\n|t:|1792017244\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Latias|Latias, F|100/100\n|switch|p2a: Gliscor|Gliscor, M|100/100\n|turn|1\n|c|☆Bunny Hard|Good luck! Playing on **hard**.\n|\n|t:|1792017253\n|move|p1a: Latias|Calm Mind|p1a: Latias\n|-boost|p1a: Latias|spa|1\n|-boost|p1a: Latias|spd|1\n|move|p2a: Gliscor|Stealth Rock|p1a: Latias\n|-sidestart|p1: Bunny Hard|move: Stealth Rock\n|\n|upkeep\n|turn|2\n|\n|t:|1792017260\n|move|p1a: Latias|Calm Mind|p1a: Latias\n|-boost|p1a: Latias|spa|1\n|-boost|p1a: Latias|spd|1\n|move|p2a: Gliscor|Toxic|p1a: Latias\n|-status|p1a: Latias|tox\n|\n|-damage|p1a: Latias|94/100 tox|[from] psn\n|upkeep\n|turn|3\n|\n|t:|1792017267\n|move|p1a: Latias|Draco Meteor|p2a: Gliscor\n|-damage|p2a: Gliscor|1/100\n|-unboost|p1a: Latias|spa|2\n|-enditem|p2a: Gliscor|Focus Sash\n|move|p2a: Gliscor|Earthquake|p1a: Latias\n|-immune|p1a: Latias|[from] ability: Levitate\n|\n|-damage|p1a: Latias|82/100 tox|[from] psn\n|upkeep\n|turn|4\n|\n|t:|1792017280\n|move|p1a: Latias|Hidden Power|p2a: Gliscor\n|-damage|p2a: Gliscor|0 fnt\n|faint|p2a: Gliscor\n|\n|-damage|p1a: Latias|64/100 tox|[from] psn\n|upkeep\n|\n|t:|1792017300\n|switch|p2a: Latias|Latias, F|100/100\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1792017304
+}
