@@ -10,5 +10,8 @@
  "caught": null,
  "holder": null,
  "awayUntil": 0,
- "forced": null
+ "forced": {
+  "place": "amber",
+  "until": 1792086739443
+ }
 }
