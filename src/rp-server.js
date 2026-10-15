@@ -1227,9 +1227,13 @@ function roamerReport(now = Date.now()) {
 	const maxhp = Math.floor((2 * base + set.ivs.hp + Math.floor(set.evs.hp / 4)) * set.level / 100) + set.level + 10;
 	const slotEnd = (Math.floor(now / Roamer.MOVE_MS) + 1) * Roamer.MOVE_MS;
 	const next = [];
-	for (let t = slotEnd; next.length < 3 && t < slotEnd + 24 * 3600000; t += Roamer.MOVE_MS) {
-		const at = Roamer.where(ids, state, t);
-		if (at) next.push({ at: t, place: named(at) });
+	// After a move by the owner, the schedule picks up again where it was.
+	const forcedUntil = state.forced && state.forced.until > now ? state.forced.until : 0;
+	const from = forcedUntil ? { ...state, forced: null } : state;
+	const first = forcedUntil ? Math.floor(forcedUntil / Roamer.MOVE_MS) * Roamer.MOVE_MS : slotEnd;
+	for (let t = first; next.length < 3 && t < first + 24 * 3600000; t += Roamer.MOVE_MS) {
+		const at = Roamer.where(ids, from, t);
+		if (at) next.push({ at: Math.max(t, forcedUntil), place: named(at) });
 	}
 	return {
 		ok: true,
@@ -1241,7 +1245,8 @@ function roamerReport(now = Date.now()) {
 			awayUntil: (state.awayUntil || 0) > now ? state.awayUntil : null,
 			holder: state.holder || null,
 			place: (state.awayUntil || 0) > now || state.caught ? null : named(Roamer.where(ids, state, now)),
-			movesAt: slotEnd,
+			forcedUntil: state.forced && state.forced.until > now ? state.forced.until : null,
+			movesAt: state.forced && state.forced.until > now ? state.forced.until : slotEnd,
 			next,
 		}],
 	};
@@ -1255,6 +1260,18 @@ function httpRoute(deps, log) {
 				const checked = verify(body);
 				if (checked.error) return send(res, 403, { ok: false, code: 'forbidden', message: checked.error });
 				try {
+					// The owner's `!roamer move <place> [minutes]`: put it there for a while first.
+					const move = checked.payload.move;
+					if (move) {
+						const places = REGIONS.kagura().locations;
+						const want = String(move.place || '').replace(/^#/, '').toLowerCase();
+						const id = Object.keys(places).find(p => p === want || toID(places[p].name) === toID(want) ||
+							(places[p].wild || []).includes(want) || (places[p].channels || []).includes(want));
+						if (!id) return send(res, 200, { ok: false, code: 'noplace', message: `No place called "${move.place}" in Kagura.` });
+						const minutes = Math.max(1, Math.min(24 * 60, Number(move.minutes) || 10));
+						const moved = Roamer.moveTo(id, minutes * 60000);
+						if (!moved.ok) return send(res, 200, { ok: false, code: 'caught', message: moved.message });
+					}
 					send(res, 200, roamerReport());
 				} catch (e) {
 					log(`roamer report failed: ${e.stack || e.message}`);

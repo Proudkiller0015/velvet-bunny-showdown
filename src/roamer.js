@@ -117,6 +117,8 @@ function available(isOpen = () => true, now = Date.now()) {
  * move it.
  */
 function where(places, state = load(), now = Date.now()) {
+	// Put somewhere by the owner for a while (`!roamer move`): there, whatever the schedule says.
+	if (state.forced && now < state.forced.until && places.includes(state.forced.place)) return state.forced.place;
 	if (!state.seed || !places.length) return null;
 	const sorted = [...places].sort();
 	const slot = Math.floor(now / MOVE_MS);
@@ -169,6 +171,7 @@ function release(currentHp, maxhp) {
 	state.hp = currentHp >= maxhp ? null : Math.max(1, Math.round(currentHp));
 	state.holder = null;
 	state.moves = (state.moves || 0) + 1;
+	state.forced = null;
 	write(state);
 }
 
@@ -188,7 +191,17 @@ function knockedOut(now = Date.now()) {
 	state.holder = null;
 	state.awayUntil = now + KO_AWAY_MS;
 	state.moves = (state.moves || 0) + 1;
+	state.forced = null;
 	write(state);
+}
+
+/** The owner puts it in `place` for `ms` (`!roamer move`); after that the schedule takes over again. */
+function moveTo(place, ms, now = Date.now()) {
+	const state = load();
+	if (state.caught) return { ok: false, message: 'It has been caught.' };
+	state.forced = { place, until: now + ms };
+	write(state);
+	return { ok: true, until: state.forced.until };
 }
 
 function markCaught(userid, name) {
@@ -207,5 +220,5 @@ function catchChance(currentHp, maxhp) {
 
 module.exports = {
 	FILE, SPECIES, NICKNAME, LEVEL, MOVE_MS, SLOTS, HOLD_MS, KO_AWAY_MS, FIRST_FOR,
-	set, load, write, available, where, roll, heldBy, hp, note, release, knockedOut, markCaught, catchChance,
+	set, load, write, available, where, roll, heldBy, hp, note, release, knockedOut, moveTo, markCaught, catchChance,
 };
