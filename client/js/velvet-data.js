@@ -2806,8 +2806,11 @@
 			if (!RP.on || !out || (this.dex && this.dex.gen < 2)) return out;
 			var have = {};
 			for (var i = 0; i < out.length; i++) if (out[i][0] === 'item') have[out[i][1]] = true;
+			// Every Gem in the Gems section, the Normal Gem too (owner, 14 Oct 2026): it is in
+			// Showdown's own list, so it was left down there instead. Moved, not copied.
 			var add = [];
-			for (var g = 0; g < GEM_IDS.length; g++) if (!have[GEM_IDS[g]] && window.BattleItems && window.BattleItems[GEM_IDS[g]]) add.push(['item', GEM_IDS[g]]);
+			for (var g = 0; g < GEM_IDS.length; g++) if (window.BattleItems && window.BattleItems[GEM_IDS[g]]) add.push(['item', GEM_IDS[g]]);
+			if (add.length) out = out.filter(function (row) { return !(row[0] === 'item' && GEM_IDS.indexOf(row[1]) >= 0); });
 			// And this server's own items for everyone (Chilling Orb, Warped Hourglass,
 			// Ultra Shard), which Showdown's list has never heard of either.
 			var ours = [];
@@ -3398,7 +3401,8 @@
 		var pokemon = value && value.pokemon, serverPokemon = value && value.serverPokemon;
 		var tera = (pokemon && pokemon.terastallized) || (serverPokemon && serverPokemon.terastallized);
 		if (!tera || !pokemon || !pokemon.getTypes) return;
-		var own = pokemon.getTypes(serverPokemon, true)[0] || [];
+		// Not serverPokemon: once it has terastallized, its copy answers "???" for the types it had.
+		var own = pokemon.getTypes(undefined, true)[0] || [];
 		var stab = own.indexOf(moveType) >= 0;
 		if (tera === 'Stellar') {
 			var terapagos = pokemon.getSpeciesForme && pokemon.getSpeciesForme() === 'Terapagos-Stellar';
