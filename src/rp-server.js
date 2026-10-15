@@ -29,6 +29,7 @@ const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
 const E = require('./encounters');
+const Roamer = require('./roamer');
 
 const REGIONS = {
 	kagura: () => require('./encounter-tables/kagura'),
@@ -222,7 +223,20 @@ function requestEncounter(payload, deps) {
 	// The trainer's strongest Pokemon, which both a wild encounter and a trainer are measured against.
 	const ace = E.aceLevel(payload.box);
 	let rolled;
-	if (payload.summon) {
+	const id = crypto.randomBytes(8).toString('hex');
+	/*
+	 * The roaming Suicune (src/roamer.js), Kagura only: anybody looking for an encounter in
+	 * the place it is in meets it, wild or trainer, anywhere but a gym.
+	 */
+	const region = toID(payload.region || 'kagura');
+	const roamer = !payload.summon && region === 'kagura' && !E.gymPlace(place, found.channel).gymType && Roamer.roll({
+		encounterId: id, userid, discord: payload.discord, badges, wildFormat: E.WILD_FORMAT,
+		place: found.id, places: Object.keys(REGIONS.kagura().locations),
+		isOpen: open => { const e = encounters.get(open); return !!e && !e.result; },
+	});
+	if (roamer) {
+		rolled = roamer;
+	} else if (payload.summon) {
 		// Staff choosing what appears. The Discord bot only signs this for admins.
 		rolled = summoned(payload.summon, { place, badges, levelCap, ace });
 		if (rolled.error) return { ok: false, code: 'summon', message: rolled.error };
@@ -236,7 +250,7 @@ function requestEncounter(payload, deps) {
 	const failBalls = payload.summon && Number(payload.summon.failBalls) > 0 ? Math.min(10, Math.floor(Number(payload.summon.failBalls))) : 0;
 
 	const enc = {
-		id: crypto.randomBytes(8).toString('hex'),
+		id,
 		createdAt: Date.now(),
 		userid,
 		showdown: payload.showdown,

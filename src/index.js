@@ -106,6 +106,7 @@ function startServer() {
 	const { LadderStore } = require('./ladder-store');
 	const { FriendsStore } = require('./friends-store');
 	const { RosterStore } = require('./roster-store');
+	const { RoamerStore } = require('./roamer-store');
 	const store = new LadderStore(ladderDir, (...a) => console.log('[ladder-store]', ...a));
 	await store.connect();
 	await store.restore();
@@ -127,6 +128,10 @@ function startServer() {
 	const roster = new RosterStore(undefined, (...a) => console.log('[roster]', ...a));
 	await roster.restore();
 
+	// And the roaming Suicune: its HP, its nature, and whether somebody has it now.
+	const roamer = new RoamerStore(undefined, (...a) => console.log('[roamer]', ...a));
+	await roamer.restore();
+
 	const { seedLadder } = require('./ladder-seed');
 	// The names only: ./ladder would load the dex and the builder into this process.
 	const { ladderQueues, DEFAULT_FORMATS } = require('./ladder-defaults');
@@ -143,6 +148,7 @@ function startServer() {
 	// processes away - so it looks now and then. See src/friends-store.js.
 	friends.start();
 	roster.start();
+	roamer.start();
 
 	/*
 	 * Say how much memory this process is using, where something can read it.
@@ -236,7 +242,7 @@ function startServer() {
 		const done = () => {
 			// Ratings and friendships last, so anything the wind-down changed is
 			// included. Neither is allowed to hold the exit up on its own.
-			Promise.allSettled([store.stop(), friends.stop(), roster.stop()])
+			Promise.allSettled([store.stop(), friends.stop(), roster.stop(), roamer.stop()])
 				.finally(() => process.exit(0));
 		};
 

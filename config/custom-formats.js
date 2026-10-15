@@ -459,6 +459,62 @@ const UNBAN_DYNAMAX = ['!Dynamax Clause'];
  * the project is four directories up from here - and one when a test loads it
  * from config/ directly.
  */
+/** The roaming Suicune's state (src/roamer.js), found the same way as encounters(). */
+function roamerModule() {
+	const path = require('path');
+	for (const up of ['../../../../src/roamer', '../src/roamer']) {
+		try { return require(path.join(__dirname, up)); } catch (e) { if (e.code !== 'MODULE_NOT_FOUND') throw e; }
+	}
+	return null;
+}
+
+/*
+ * The roaming Suicune (the owner, 15 Oct 2026; src/roamer.js says what it is).
+ *
+ * A wild battle is the roamer when its one wild Pokemon is Suicune and the roamer
+ * is being held for this player's encounter. It starts at the HP the last battle
+ * left it on, never drops below 1, keeps its item, and on its turn heals below
+ * half HP or roars and leaves at half or more.
+ */
+function installRoamer(battle) {
+	const R = roamerModule();
+	if (!R) return;
+	const wildSide = battle.sides.find(isWildSide);
+	const player = wildSide && wildSide.foe;
+	const mon = wildSide && wildSide.pokemon.length === 1 ? wildSide.pokemon[0] : null;
+	if (!mon || mon.species.name !== R.SPECIES || !player || !R.heldBy(encounters().toID(player.name))) return;
+	const hp = R.hp();
+	if (hp !== null) mon.hp = Math.max(1, Math.min(mon.maxhp, hp));
+	battle.rpRoamer = { mon, R };
+}
+
+function isRoamer(battle, pokemon) {
+	return !!battle.rpRoamer && !!pokemon && battle.rpRoamer.mon === pokemon;
+}
+
+/** Its move, whatever the bot picked: Recover below half HP, otherwise a roar and gone. */
+function roamerTurn(battle, pokemon) {
+	if (pokemon.hp * 2 < pokemon.maxhp) {
+		battle.actions.useMove('Recover', pokemon);
+		battle.rpRoamer.R.note(pokemon.hp, pokemon.maxhp);
+		return;
+	}
+	const foe = pokemon.side.foe.active.find(p => p && !p.fainted);
+	battle.add('-anim', pokemon, 'Roar', foe || pokemon);
+	// Shed Shell keeps this false; a trap only ever holds it if the shell is gone.
+	if (pokemon.trapped) {
+		battle.add('-message', `${pokemon.name} roared, but it can't get away!`);
+		return;
+	}
+	const left = Math.ceil(pokemon.hp / pokemon.maxhp * 100);
+	battle.rpRoamer.R.release(pokemon.hp, pokemon.maxhp);
+	battle.rpRoamer.gone = true;
+	battle.add('-message', `${pokemon.name} let out a mighty roar and fled!`);
+	battle.add('raw', `<div class="broadcast-blue"><b>${pokemon.name} got away.</b> It roams on with ${left}% of its HP - ` +
+		`what you did to it is still there the next time somebody meets it.</div>`);
+	battle.tie();
+}
+
 function encounters() {
 	const path = require('path');
 	for (const up of ['../../../../src/encounters', '../src/encounters']) {
@@ -753,12 +809,18 @@ function useItem(battle, side, itemId, target) {
 /** Everything RP battles do instead of a move: throwing a ball, using an item. */
 const RP_TURN_ACTIONS = {
 	onModifyPriority(priority, pokemon) {
+		// The roaming Suicune always acts last, Roar's bracket, so the player always gets the turn to hit or throw.
+		if (isRoamer(this, pokemon)) return -6;
 		const side = pokemon.side;
 		if ((side.rpBall && side.rpBall.turn === this.turn) || (side.rpItem && side.rpItem.turn === this.turn) ||
 			(side.rpRun && side.rpRun.turn === this.turn)) return priority + 20;
 	},
 	onBeforeMovePriority: 100,
 	onBeforeMove(pokemon) {
+		if (isRoamer(this, pokemon)) {
+			roamerTurn(this, pokemon);
+			return false;
+		}
 		const side = pokemon.side;
 		const ball = side.rpBall;
 		const item = side.rpItem;
@@ -841,7 +903,7 @@ function installCatching(battle) {
 				if (!isWildSide(foe)) return refuse(`You can't run from a trainer - that battle is settled in the RP`);
 				const wild = foe.active.find(p => p && !p.fainted);
 				if (!wild) return refuse(`There's nothing to run from`);
-				if (E.isLegendary(wild.species)) {
+				if (E.isLegendary(wild.species) && !isRoamer(battle, wild)) {
 					return refuse(`${wild.species.name} will not let you leave. Legendaries are not escapable`);
 				}
 				const item = r[1] ? E.findBattleItem(r[1]) : null;
@@ -910,10 +972,15 @@ function installCatching(battle) {
 			}
 			const wild = standing[0];
 			if (!wild) return this.emitChoiceError(`There's nothing to throw at`);
-			if (E.isLegendary(wild.species) && !allow) {
+			if (E.isLegendary(wild.species) && !allow && !isRoamer(battle, wild)) {
 				return this.emitChoiceError(`${wild.species.name} can't be caught on Showdown: legendaries happen in the RP`);
 			}
 			if (!ball) return this.emitChoiceError(`There's no ball called "${m[1]}"`);
+			if (isRoamer(battle, wild) && ball.id === 'master') {
+				const no = this.emitChoiceError(`A mysterious aura around ${wild.name} turns the Master Ball away. It won't work here`);
+				if (this.activeRequest) this.emitRequest(this.activeRequest);
+				return no;
+			}
 			// Throwing is the whole turn. In a double battle both of your
 			// Pokemon wait for it, so neither can knock out what you're catching.
 			const fillers = this.active.map(p => fillerChoice(battle, p));
@@ -946,7 +1013,7 @@ function tryRun(battle, pokemon) {
 	const wild = side.foe.active.find(p => p && !p.fainted);
 	if (!wild) return;
 	side.rpRuns = (side.rpRuns || 0) + 1;
-	if (E.isLegendary(wild.species)) {
+	if (E.isLegendary(wild.species) && !isRoamer(battle, wild)) {
 		battle.add('-message', `${pokemon.name} tried to get away - but ${wild.name} is not letting anyone leave.`);
 		return;
 	}
@@ -978,7 +1045,9 @@ function throwBall(battle, pokemon, ballId, sure = false, fail = false) {
 	if (!wild || wild.fainted || !ball) return;
 
 	const species = wild.species;
-	const chance = E.catchChance({
+	// The roamer: 1% at full HP to 5% at 1 HP, and nothing else counts (src/roamer.js).
+	const roamer = isRoamer(battle, wild) ? battle.rpRoamer.R : null;
+	const chance = roamer ? roamer.catchChance(wild.hp, wild.maxhp) : E.catchChance({
 		ball,
 		hpFraction: wild.hp / wild.maxhp,
 		status: wild.status,
@@ -1004,7 +1073,8 @@ function throwBall(battle, pokemon, ballId, sure = false, fail = false) {
 	const raidChance = raid ? chance * (isGmax(wild) ? RAID_CATCH_GMAX : RAID_CATCH_DMAX) : chance;
 
 	const rng = () => battle.random();
-	const caught = !fail && (sure || rng() < raidChance);
+	const caught = !fail && (roamer ? rng() < raidChance : sure || rng() < raidChance);
+	if (caught && roamer) roamer.markCaught(E.toID(side.name), side.name);
 	// A rigged miss looks like a close one: two or three wobbles, never a clean bounce.
 	const shakes = caught ? 3 : fail ? 2 + (rng() < 0.5 ? 1 : 0) : E.shakesFor(raidChance, rng);
 
@@ -1234,6 +1304,7 @@ exports.Formats = [
 			allGimmicks.call(this);
 			installCatching(this);
 			installItems(this);
+			installRoamer(this);
 		},
 		onBattleStart() {
 			if (this.sides.some(isWildSide)) this.add('uhtml', 'rpball0', ballPanel(encounters()));
@@ -1241,6 +1312,30 @@ exports.Formats = [
 
 		// A throw or an item happens before anything else that turn, the way it does in the games.
 		...RP_TURN_ACTIONS,
+
+		// The roaming Suicune never goes below 1 HP, by a hit or by anything that faints it outright.
+		onDamagePriority: -100,
+		onDamage(damage, target) {
+			if (isRoamer(this, target) && damage >= target.hp) return target.hp - 1;
+		},
+		onBeforeFaint(pokemon) {
+			if (!isRoamer(this, pokemon)) return;
+			pokemon.hp = 1;
+			this.add('-sethp', pokemon, pokemon.getHealth, '[silent]');
+			this.add('-message', `${pokemon.name} refuses to go down!`);
+			return false;
+		},
+		// The aura that turns a Master Ball away keeps its Shed Shell on it too: no Knock Off, Trick or Thief.
+		onTakeItem(item, pokemon) {
+			if (!isRoamer(this, pokemon)) return;
+			this.add('-message', `The mysterious aura around ${pokemon.name} keeps its ${item.name} in place!`);
+			return false;
+		},
+		onResidualOrder: 100,
+		onResidual() {
+			const r = this.rpRoamer;
+			if (r && !r.gone) r.R.note(r.mon.hp, r.mon.maxhp);
+		},
 
 		searchShow: false,
 		challengeShow: true,
