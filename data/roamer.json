@@ -8,5 +8,10 @@
  "hp": null,
  "seen": 1,
  "caught": null,
- "holder": null
+ "holder": null,
+ "awayUntil": 0,
+ "forced": {
+  "place": "route-1",
+  "until": 1792084680710
+ }
 }
