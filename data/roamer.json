@@ -5,10 +5,14 @@
  },
  "seed": "b88029fa11e7ecb2",
  "moves": 4,
- "hp": 169,
- "seen": 4,
+ "hp": 194,
+ "seen": 5,
  "caught": null,
- "holder": null,
+ "holder": {
+  "encounter": "70f654529bee0316",
+  "userid": "simiaignis",
+  "at": 1792096328871
+ },
  "awayUntil": 0,
  "forced": null
 }
