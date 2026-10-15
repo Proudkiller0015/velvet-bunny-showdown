@@ -1921,6 +1921,38 @@
 			}
 		}
 
+		/*
+		 * Last word: the RP tier each Pokemon is actually legal in (src/rp-tiers.json,
+		 * the table the validator enforces), as its label and its heading in the
+		 * ninth-generation National Dex tables the RP tiers are built on. Everything
+		 * above gets most of them right from Smogon's lists; this is what makes every
+		 * one of them right (240 were not, 15 Oct 2026 - MissingNo. read RU as an Uber).
+		 */
+		var rpTiers = window.VelvetRpTiers;
+		var RP_LADDER = ['AG', 'Uber', 'OU', 'UUBL', 'UU', 'RUBL', 'RU', 'NUBL', 'NU', 'PUBL', 'PU', 'ZUBL', 'ZU'];
+		if (rpTiers) {
+			for (var q = 0; q < natdexTargets.length; q++) {
+				var rpTable = natdexTargets[q];
+				if (rpTable === table.gen8natdex) continue;
+				if (!rpTable.overrideTier) rpTable.overrideTier = {};
+				for (var rpId in rpTiers) {
+					var rpTier = rpTiers[rpId];
+					// A Mega is its base Pokemon holding the stone, and the server checks both
+					// (lowTierRule): it can be used no lower than the higher of the two tiers.
+					var rpSpecies = window.Dex && window.Dex.species.get(rpId);
+					if (rpSpecies && rpSpecies.isMega && rpSpecies.baseSpecies) {
+						var baseTier = rpTiers[window.toID(rpSpecies.baseSpecies)];
+						if (baseTier && RP_LADDER.indexOf(baseTier) >= 0 && RP_LADDER.indexOf(baseTier) < RP_LADDER.indexOf(rpTier)) rpTier = baseTier;
+					}
+					rpTable.overrideTier[rpId] = rpTier;
+					// The builder has no NUBL/PUBL/ZUBL headings: one of those is listed with
+					// the tier above it, where it can be used, still labelled as its own.
+					var heading = { NUBL: 'RU', PUBL: 'NU', ZUBL: 'PU' }[rpTier] || rpTier;
+					placeSpecies(rpTable, rpId, heading);
+				}
+			}
+		}
+
 		installLearnset(table);
 		if (!landed) return false;
 		return true;
