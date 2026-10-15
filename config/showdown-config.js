@@ -1338,6 +1338,23 @@ function currentTurn(room) {
 }
 global.velvetCurrentTurn = currentTurn;
 
+/**
+ * Games against a bot end when the player walks away (the owner, 14 Oct 2026): five idle
+ * minutes on one turn, or leaving, starts a two-minute countdown, then a forfeit.
+ * Player-vs-player games are not touched. The rule itself is src/bot-idle.js.
+ */
+function botIdle() {
+	if (global.velvetBotIdle) return;
+	global.velvetBotIdle = true;
+	const { tick } = require('../../../src/bot-idle');
+	const timer = setInterval(() => {
+		try {
+			for (const d of tick(Rooms.rooms.values(), { getUser: id => Users.get(id), botIds: BOT_IDS })) console.log(`[bot-idle] ${d.room}: ${d.did}${d.why ? ' (' + d.why + ')' : ''}`);
+		} catch (e) { console.log('[bot-idle] failed:', e.message); }
+	}, 5000);
+	if (timer.unref) timer.unref();
+}
+
 function replaySnapshots() {
 	if (global.velvetSnapshots) return;
 	global.velvetSnapshots = true;
@@ -2676,6 +2693,7 @@ exports.startuphook = function () {
 	roleplay();
 	rpBattlesToRoleplay();
 	replaySnapshots();
+	botIdle();
 	goodbye();
 
 	setInterval(() => {

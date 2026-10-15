@@ -97,18 +97,5 @@ for (const [label, make] of [['ladder', ladderBot], ['house', houseBot]]) {
 	});
 }
 
-// The opponent walking out of a live battle turns the timer on, once (14 Oct 2026).
-check('house: the opponent leaving turns the battle timer on', () => {
-	const bot = houseBot();
-	bot.name = 'Velvet Bunny';
-	bot.onBattleLine(ROOM, ['player', 'p1', 'Velvet Bunny']);
-	bot.onBattleLine(ROOM, ['player', 'p2', 'Some Player']);
-	bot.onBattleLine(ROOM, ['l', ' Someone Watching']);
-	assert.ok(!bot.sent.includes(`${ROOM}|/timer on`), 'a spectator leaving changes nothing');
-	bot.onBattleLine(ROOM, ['l', '☆Some Player']);
-	bot.onBattleLine(ROOM, ['L', '☆Some Player']);
-	assert.strictEqual(bot.sent.filter(l => l === `${ROOM}|/timer on`).length, 1);
-});
-
 console.log(failed ? `\n${failed} failed` : '\nall passed');
 process.exit(failed ? 1 : 0);

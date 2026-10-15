@@ -362,7 +362,6 @@ class ShowdownBot {
 			const myId = this.name.toLowerCase().replace(/[^a-z0-9]/g, '');
 			if (id === myId) state.myPlayer = parts[1];
 			else if (id) {
-				battle.opponentId = id;
 				const wanted = this.difficultyFor.get(id);
 				if (wanted) ai.setDifficulty(wanted);
 				if (!battle.greeted) {
@@ -371,19 +370,6 @@ class ShowdownBot {
 					if (hello) this.room(roomid, hello);
 					this.onBattleStart(roomid);
 				}
-			}
-			break;
-		}
-		/*
-		 * The opponent left the battle (14 Oct 2026, the owner: "the live game is a dead end").
-		 * Nothing else ever ends it: the bot waits on a move that never comes. Turning the timer
-		 * on makes Showdown forfeit them if they stay away, and they can still come back and play.
-		 */
-		case 'l': case 'L': case 'leave': {
-			const gone = (parts[1] || '').toLowerCase().replace(/[^a-z0-9]/g, '');
-			if (gone && gone === battle.opponentId && !battle.timerOn) {
-				battle.timerOn = true;
-				this.room(roomid, '/timer on');
 			}
 			break;
 		}
