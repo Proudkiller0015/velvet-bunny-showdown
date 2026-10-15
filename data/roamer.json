@@ -4,14 +4,11 @@
   "nature": "Calm"
  },
  "seed": "b88029fa11e7ecb2",
- "moves": 1,
+ "moves": 2,
  "hp": null,
- "seen": 1,
+ "seen": 2,
  "caught": null,
  "holder": null,
  "awayUntil": 0,
- "forced": {
-  "place": "route-1",
-  "until": 1792084680710
- }
+ "forced": null
 }
