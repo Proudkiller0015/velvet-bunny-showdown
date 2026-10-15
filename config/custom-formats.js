@@ -473,8 +473,8 @@ function roamerModule() {
  *
  * A wild battle is the roamer when its one wild Pokemon is Suicune and the roamer
  * is being held for this player's encounter. It starts at the HP the last battle
- * left it on, never drops below 1, keeps its item, and on its turn heals below
- * half HP or roars and leaves at half or more.
+ * left it on, keeps its item, is gone for twelve hours if knocked out, and on its
+ * turn heals below half HP or roars and leaves at half or more (always roars asleep).
  */
 function installRoamer(battle) {
 	const R = roamerModule();
@@ -1548,12 +1548,14 @@ exports.Formats = [
 	},
 
 	// Above Ubers: the tier with nothing taken out of it.
-	rpTier('AG', '[Gen 9] National Dex AG'),
+	rpTier('AG', '[Gen 9] National Dex AG', { rules: ['+Light of Ruin'] }),
 	// Every RP tier checks our own tier table (lowTierOf, species and Mega), not only National Dex's
 	// banlists: the owner (30 Sep 2026) "RP tier should be independent". It caught Mega Floette (Uber)
 	// passing RP OU, and Shedinja (Uber here) refused by National Dex Ubers' own ban.
-	rpTier('Ubers', '[Gen 9] National Dex Ubers', { rules: ['+Shedinja'], onValidateSet: lowTierRule('Uber') }),
-	rpTier('OU', '[Gen 9] National Dex', { rules: UNBAN_TERA, ...UBERS_ONLY_ITEM, onValidateSet: lowTierRule('OU') }),
+	// Light of Ruin is a past-generation move, so National Dex refuses it; Floette-Eternal is OU
+	// here and its signature comes with it (the owner, 15 Oct 2026).
+	rpTier('Ubers', '[Gen 9] National Dex Ubers', { rules: ['+Shedinja', '+Light of Ruin'], onValidateSet: lowTierRule('Uber') }),
+	rpTier('OU', '[Gen 9] National Dex', { rules: [...UNBAN_TERA, '+Light of Ruin'], ...UBERS_ONLY_ITEM, onValidateSet: lowTierRule('OU') }),
 	rpTier('UU', '[Gen 9] National Dex UU', { rules: UNBAN_TERA, ...UBERS_ONLY_ITEM, onValidateSet: lowTierRule('UU') }),
 	rpTier('RU', '[Gen 9] National Dex RU', { rules: UNBAN_TERA, ...UBERS_ONLY_ITEM, onValidateSet: lowTierRule('RU') }),
 

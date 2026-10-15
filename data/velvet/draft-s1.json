@@ -12352,6 +12352,11 @@
    "name": "MissingNo.",
    "id": "missingno",
    "why": "Halloween event Pokemon"
+  },
+  {
+   "name": "Floette-Eternal",
+   "id": "floetteeternal",
+   "why": "Banned by the league"
   }
  ]
 }

@@ -212,6 +212,9 @@ const TIERS = {
 	// RU because its base form is an unevolved Pokemon and the derived rule had
 	// nothing better to say; that is the rule failing, not a judgement.
 	floettemega: 'Uber',
+	// Not in SV, so it had no tier at all and was legal everywhere, RU and below included.
+	// OU (the owner, 15 Oct 2026), and banned from the Kagura Draft League.
+	floetteeternal: 'OU',
 
 	// Huge Power. That is the ability that put Mega Mawile in Ubers, on 120
 	// Speed rather than 50.
