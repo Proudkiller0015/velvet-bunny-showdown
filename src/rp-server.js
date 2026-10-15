@@ -1212,9 +1212,57 @@ function startMatch(payload, deps) {
 	return out;
 }
 
+/*
+ * Where the roamers are, for the owner's `!roamer` on Discord (bot DMs only). Signed like
+ * every other request, so only the RP bot can ask.
+ */
+function roamerReport(now = Date.now()) {
+	const state = Roamer.load();
+	const places = REGIONS.kagura().locations;
+	const ids = Object.keys(places);
+	const named = id => (id ? { id, name: places[id].name || id, channels: [...new Set([...(places[id].wild || []), ...(places[id].channels || [])])].slice(0, 6) } : null);
+	const Dex = require('./rp-dex')();
+	const set = Roamer.set(state);
+	const base = Dex.species.get(set.species).baseStats.hp;
+	const maxhp = Math.floor((2 * base + set.ivs.hp + Math.floor(set.evs.hp / 4)) * set.level / 100) + set.level + 10;
+	const slotEnd = (Math.floor(now / Roamer.MOVE_MS) + 1) * Roamer.MOVE_MS;
+	const next = [];
+	for (let t = slotEnd; next.length < 3 && t < slotEnd + 24 * 3600000; t += Roamer.MOVE_MS) {
+		const at = Roamer.where(ids, state, t);
+		if (at) next.push({ at: t, place: named(at) });
+	}
+	return {
+		ok: true,
+		roamers: [{
+			species: set.species, nickname: set.name, level: set.level, shiny: !!set.shiny, nature: set.nature,
+			hp: state.hp === null ? maxhp : state.hp, maxhp,
+			started: (state.seen || 0) > 0, seen: state.seen || 0,
+			caught: state.caught || null,
+			awayUntil: (state.awayUntil || 0) > now ? state.awayUntil : null,
+			holder: state.holder || null,
+			place: (state.awayUntil || 0) > now || state.caught ? null : named(Roamer.where(ids, state, now)),
+			movesAt: slotEnd,
+			next,
+		}],
+	};
+}
+
 function httpRoute(deps, log) {
 	return (req, res) => {
 		const url = String(req.url || '');
+		if (url === '/rp/roamer' && req.method === 'POST') {
+			readJson(req).then(body => {
+				const checked = verify(body);
+				if (checked.error) return send(res, 403, { ok: false, code: 'forbidden', message: checked.error });
+				try {
+					send(res, 200, roamerReport());
+				} catch (e) {
+					log(`roamer report failed: ${e.stack || e.message}`);
+					send(res, 200, { ok: false, code: 'error', message: e.message });
+				}
+			}).catch(() => send(res, 400, { ok: false, code: 'bad', message: 'Bad request.' }));
+			return true;
+		}
 		if (url === '/rp/encounter' && req.method === 'POST') {
 			readJson(req).then(body => {
 				const checked = verify(body);
@@ -1333,7 +1381,7 @@ function packSets(sets) {
 
 module.exports = {
 	packSets,
-	freeCatch, FREE_CATCHES, allowCatch, summoned, chosenSet, musicFor, caughtBefore, partyOf,
+	freeCatch, FREE_CATCHES, allowCatch, summoned, chosenSet, musicFor, caughtBefore, roamerReport, partyOf,
 	pvpCheck, pvpNotice, friendlyNotice, isAgreed, verify, placeFor, requestEncounter, requestTutorial, completeEncounter, canUseItem, usedInLog, setBags, bagFor, pvpItemsFor, canUsePvpItem, NPC_ITEMS_EACH, publicView, canThrow, thrownInLog, resultFromLog, openFor, encounterAccount, isEncounterName, isLocalOnly, LOOPBACK,
 	checkTeam, gimmickIn, GIMMICK_ITEM, GIMMICK_NAME, sidesInLog, startMatch,
 	httpRoute, encounters, RP_ROOM, CHALLENGE_MS, recordFinished, finishedSince,
