@@ -1313,17 +1313,13 @@ exports.Formats = [
 		// A throw or an item happens before anything else that turn, the way it does in the games.
 		...RP_TURN_ACTIONS,
 
-		// The roaming Suicune never goes below 1 HP, by a hit or by anything that faints it outright.
-		onDamagePriority: -100,
-		onDamage(damage, target) {
-			if (isRoamer(this, target) && damage >= target.hp) return target.hp - 1;
-		},
-		onBeforeFaint(pokemon) {
-			if (!isRoamer(this, pokemon)) return;
-			pokemon.hp = 1;
-			this.add('-sethp', pokemon, pokemon.getHealth, '[silent]');
-			this.add('-message', `${pokemon.name} refuses to go down!`);
-			return false;
+		// The roaming Suicune knocked out is gone for twelve hours, and back at full HP after.
+		onFaint(pokemon) {
+			if (!isRoamer(this, pokemon) || this.rpRoamer.gone) return;
+			this.rpRoamer.gone = true;
+			this.rpRoamer.R.knockedOut();
+			this.add('raw', `<div class="broadcast-blue"><b>${pokemon.name} was knocked out</b> and fades into the mist. ` +
+				`It won't be seen anywhere for twelve hours - and it comes back fully healed.</div>`);
 		},
 		// The aura that turns a Master Ball away keeps its Shed Shell on it too: no Knock Off, Trick or Thief.
 		onTakeItem(item, pokemon) {

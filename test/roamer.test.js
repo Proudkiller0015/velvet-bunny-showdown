@@ -4,7 +4,7 @@
  *
  *   node test/roamer.test.js
  *
- * Its HP carries from battle to battle, it never goes below 1 HP, it roars and
+ * Its HP carries from battle to battle, a knockout sends it away for 12 hours, it roars and
  * leaves at half HP or more and heals below, it acts after the player, a
  * Master Ball and Knock Off do nothing to it, a trap doesn't hold it, a ball
  * holds 1% to 5% of the time, and it turns up once for the owner, then roams
@@ -23,7 +23,7 @@ const E = require('../src/encounters');
 let failed = 0;
 const check = (ok, what) => { console.log(`${ok ? 'ok  ' : 'FAIL'} ${what}`); if (!ok) failed++; };
 
-const fresh = (extra = {}) => R.write({ species: 'Suicune', individual: { nature: 'Bold' }, hp: null, seen: 1, caught: null, holder: { encounter: 'e1', userid: 'ash', at: Date.now() }, ...extra });
+const fresh = (extra = {}) => R.write({ species: 'Suicune', individual: { nature: 'Bold' }, seed: 'test', moves: 0, awayUntil: 0, hp: null, seen: 1, caught: null, holder: { encounter: 'e1', userid: 'ash', at: Date.now() }, ...extra });
 
 function mine(species, moves, level = 50) {
 	return Teams.pack([{ species, level, moves, ability: Dex.species.get(species).abilities[0], evs: {}, ivs: {} }]);
@@ -81,15 +81,20 @@ const turn = (b, p1 = 'move 1') => { b.choose('p1', p1); if (!b.ended) b.choose(
 	check(b.ended && /fled/.test(log(b)), 'back over half, it roars and leaves the next turn');
 }
 
-// 5. Never below 1 HP.
+// 5. Knocked out: gone for twelve hours, then back at full HP.
 {
 	fresh({ hp: 30 });
 	const b = battle(mine('Mewtwo', ['Electro Ball', 'Thunderbolt'], 100));
 	b.choose('p1', 'move 2');
 	b.choose('p2', 'move 1');
-	const l = log(b);
-	check(!/\|faint\|p2a/.test(l) && /\|-damage\|p2a: Sparkles\|1\//.test(l), 'a hit that would knock it out leaves it at 1 HP');
-	check(b.p2.active[0].hp > 1 && !b.ended, 'and it heals from there');
+	const st = R.load();
+	check(/\|faint\|p2a: Sparkles/.test(log(b)) && b.winner === 'Ash', 'a knockout ends the battle for the player');
+	check(st.awayUntil > Date.now() + R.KO_AWAY_MS - 60000 && !st.holder && st.hp === null, 'it is away for twelve hours, and will be back at full HP');
+	check(!R.available(() => false) && R.available(() => false, st.awayUntil + 1), 'nobody can meet it until then, and anybody can after');
+	const places = Object.keys(require('../src/encounter-tables/kagura').locations);
+	let t = Date.now();
+	while (!R.where(places, st, t)) t += R.MOVE_MS;
+	check(R.roll({ encounterId: 'k', userid: 'brock', discord: '1', badges: 1, place: R.where(places, st, t), places, isOpen: () => false, now: t, wildFormat: E.WILD_FORMAT }) === null, 'not even where it would be');
 }
 
 // 6. A Master Ball is turned away, without being thrown.

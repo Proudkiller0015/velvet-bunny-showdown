@@ -12,7 +12,8 @@
  * and Roar and nothing else: at half HP or more it roars and is gone, below
  * half it heals instead. Its HP is its own and nobody else's - what one
  * trainer takes off it, and what it heals back, is still the case in the next
- * trainer's grass. It never faints (a hit stops at 1 HP), a Master Ball does
+ * trainer's grass. Knocked out, it is gone for KO_AWAY_MS and comes back at full
+ * HP (the owner: "if KO it goes away for 12h"). A Master Ball does
  * not work on it, and every ball holds 1% of the time at full HP, rising to
  * 5% at 1 HP, whatever the ball, status or misses.
  *
@@ -48,6 +49,7 @@ const NATURES = ['Hardy', 'Lonely', 'Brave', 'Adamant', 'Naughty', 'Bold', 'Doci
 	'Sassy', 'Careful', 'Quirky'];
 // An encounter that never reached a result (declined, timed out) stops holding it after this.
 const HOLD_MS = 45 * 60 * 1000;
+const KO_AWAY_MS = 12 * 60 * 60 * 1000;
 
 /** Rolled once, then kept: the same Suicune every time. Its IVs are perfect (the owner), so only the nature is rolled. */
 function individual(rng = Math.random) {
@@ -75,7 +77,7 @@ function set(state = load()) {
 }
 
 function blank() {
-	return { species: SPECIES, individual: null, seed: null, moves: 0, hp: null, seen: 0, caught: null, holder: null };
+	return { species: SPECIES, individual: null, seed: null, moves: 0, hp: null, seen: 0, caught: null, holder: null, awayUntil: 0 };
 }
 
 function load() {
@@ -103,7 +105,7 @@ function write(state) {
  */
 function available(isOpen = () => true, now = Date.now()) {
 	const state = load();
-	if (state.caught) return false;
+	if (state.caught || (state.awayUntil || 0) > now) return false;
 	const h = state.holder;
 	return !h || !isOpen(h.encounter) || now - h.at > HOLD_MS;
 }
@@ -178,6 +180,17 @@ function note(currentHp, maxhp) {
 	write(state);
 }
 
+/** Knocked out: gone for twelve hours, then back somewhere at full HP. */
+function knockedOut(now = Date.now()) {
+	const state = load();
+	if (state.caught) return;
+	state.hp = null;
+	state.holder = null;
+	state.awayUntil = now + KO_AWAY_MS;
+	state.moves = (state.moves || 0) + 1;
+	write(state);
+}
+
 function markCaught(userid, name) {
 	const state = load();
 	state.caught = { userid, name, at: new Date().toISOString() };
@@ -193,6 +206,6 @@ function catchChance(currentHp, maxhp) {
 }
 
 module.exports = {
-	FILE, SPECIES, NICKNAME, LEVEL, MOVE_MS, SLOTS, HOLD_MS, FIRST_FOR,
-	set, load, write, available, where, roll, heldBy, hp, note, release, markCaught, catchChance,
+	FILE, SPECIES, NICKNAME, LEVEL, MOVE_MS, SLOTS, HOLD_MS, KO_AWAY_MS, FIRST_FOR,
+	set, load, write, available, where, roll, heldBy, hp, note, release, knockedOut, markCaught, catchChance,
 };
