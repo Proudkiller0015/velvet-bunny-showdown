@@ -1225,15 +1225,17 @@ function roamerReport(now = Date.now()) {
 	const set = Roamer.set(state);
 	const base = Dex.species.get(set.species).baseStats.hp;
 	const maxhp = Math.floor((2 * base + set.ivs.hp + Math.floor(set.evs.hp / 4)) * set.level / 100) + set.level + 10;
-	const slotEnd = (Math.floor(now / Roamer.MOVE_MS) + 1) * Roamer.MOVE_MS;
+	const slotEnd = state.seed ? Roamer.stopAt(state, now).end : now + Roamer.MOVE_MS;
 	const next = [];
 	// After a move by the owner, the schedule picks up again where it was.
 	const forcedUntil = state.forced && state.forced.until > now ? state.forced.until : 0;
 	const from = forcedUntil ? { ...state, forced: null } : state;
-	const first = forcedUntil ? Math.floor(forcedUntil / Roamer.MOVE_MS) * Roamer.MOVE_MS : slotEnd;
-	for (let t = first; next.length < 3 && t < first + 24 * 3600000; t += Roamer.MOVE_MS) {
+	// Stop by stop from the end of this one (or of the owner's move), the first three it is somewhere.
+	let t = forcedUntil || slotEnd;
+	for (let n = 0; state.seed && next.length < 3 && n < 2000; n++) {
 		const at = Roamer.where(ids, from, t);
-		if (at) next.push({ at: Math.max(t, forcedUntil), place: named(at) });
+		if (at && !(next.length && next[next.length - 1].place.id === at)) next.push({ at: t, place: named(at) });
+		t = Roamer.stopAt(from, t).end;
 	}
 	return {
 		ok: true,

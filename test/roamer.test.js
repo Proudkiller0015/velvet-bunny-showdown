@@ -194,7 +194,7 @@ const turn = (b, p1 = 'move 1') => { b.choose('p1', p1); if (!b.ended) b.choose(
 	check(Object.keys(counts).length === places.length, `and it gets everywhere (${Object.keys(counts).length}/${places.length} places)`);
 	let changes = 0;
 	for (let i = 1; i < 200; i++) if (R.where(places, st, now + i * R.MOVE_MS) !== R.where(places, st, now + (i - 1) * R.MOVE_MS)) changes++;
-	check(changes > 150, `it moves on most ten-minute marks (${changes}/199), so it comes and goes from a place`);
+	check(changes > 150, `it moves on most stops (${changes}/199), so it comes and goes from a place`);
 	const at = R.where(places, st, now);
 	const there = at || places.find(() => false);
 	if (at) {

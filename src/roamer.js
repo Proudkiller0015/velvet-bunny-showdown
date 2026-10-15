@@ -36,8 +36,12 @@ const FILE = process.env.PS_ROAMER_FILE ||
 const SPECIES = 'Suicune';
 const LEVEL = 50;
 const NICKNAME = 'Sparkles';
-// Where it is changes this often, so somebody waiting in one place sees it come and go.
-const MOVE_MS = 10 * 60 * 1000;
+// Where it is changes every MOVE_MS, so somebody waiting in one place sees it come and go.
+// Ten minutes until 15 Oct 2026, then three (the owner: "way too long... 3 min per location"),
+// keeping the same run of places: the stops after SCHEDULE_FROM carry on from its ten-minute slot.
+const OLD_MOVE_MS = 10 * 60 * 1000;
+const MOVE_MS = 3 * 60 * 1000;
+const SCHEDULE_FROM = 1792084200000;
 // One slot in this many is each place; the rest are nowhere. 1% each, on average.
 const SLOTS = 100;
 const CATCH_FULL = 0.01;
@@ -110,20 +114,30 @@ function available(isOpen = () => true, now = Date.now()) {
 	return !h || !isOpen(h.encounter) || now - h.at > HOLD_MS;
 }
 
+const hashOf = text => require('crypto').createHash('sha256').update(text).digest().readUInt32BE(0);
+
+/** The stop `now` falls in: { key, start, end }, the key being its place in the run. */
+function stopAt(state, now = Date.now()) {
+	if (now < SCHEDULE_FROM) {
+		const slot = Math.floor(now / OLD_MOVE_MS);
+		return { key: slot, start: slot * OLD_MOVE_MS, end: (slot + 1) * OLD_MOVE_MS };
+	}
+	const step = Math.floor((now - SCHEDULE_FROM) / MOVE_MS);
+	const start = SCHEDULE_FROM + step * MOVE_MS;
+	return { key: SCHEDULE_FROM / OLD_MOVE_MS + step, start, end: start + MOVE_MS };
+}
+
 /**
  * The place it is in right now, out of `places` (the region's place ids), or
- * null when it is in none of them. The same answer for everybody in the same
- * ten minutes, worked out from its seed rather than kept, so a restart does not
- * move it.
+ * null when it is in none of them. The same answer for everybody during the same
+ * stop, worked out from its seed rather than kept, so a restart does not move it.
  */
 function where(places, state = load(), now = Date.now()) {
 	// Put somewhere by the owner for a while (`!roamer move`): there, whatever the schedule says.
 	if (state.forced && now < state.forced.until && places.includes(state.forced.place)) return state.forced.place;
 	if (!state.seed || !places.length) return null;
 	const sorted = [...places].sort();
-	const slot = Math.floor(now / MOVE_MS);
-	const digest = require('crypto').createHash('sha256').update(`${state.seed}:${slot}:${state.moves || 0}`).digest();
-	const at = digest.readUInt32BE(0) % Math.max(SLOTS, sorted.length);
+	const at = hashOf(`${state.seed}:${stopAt(state, now).key}:${state.moves || 0}`) % Math.max(SLOTS, sorted.length);
 	return at < sorted.length ? sorted[at] : null;
 }
 
@@ -220,5 +234,5 @@ function catchChance(currentHp, maxhp) {
 
 module.exports = {
 	FILE, SPECIES, NICKNAME, LEVEL, MOVE_MS, SLOTS, HOLD_MS, KO_AWAY_MS, FIRST_FOR,
-	set, load, write, available, where, roll, heldBy, hp, note, release, knockedOut, moveTo, markCaught, catchChance,
+	set, load, write, available, stopAt, where, roll, heldBy, hp, note, release, knockedOut, moveTo, markCaught, catchChance,
 };
