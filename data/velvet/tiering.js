@@ -435,6 +435,10 @@ const TIERS = {
 	// The owner's calls, 30 Sep 2026: unbanned to OU, and OU Pokemon dropped to UU.
 	tapubulu: 'OU',
 	whimsicott: 'UU',
+
+	// The owner, 15 Oct 2026: Broken Pact is a second life as Nuzleaf-SOLD (190 Atk/SpA/Spe), and
+	// Merchant's Call trades the first one at +1 priority. Far too much for NFE.
+	nuzleaf: 'UU',
 };
 
 /**
