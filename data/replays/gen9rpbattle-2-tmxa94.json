@@ -1,0 +1,12 @@
+{
+	"id": "gen9rpbattle-2-tmxa94",
+	"format": "[Gen 9] RP Battle",
+	"players": [
+		"Larper Boomer",
+		"simia ignis"
+	],
+	"rating": null,
+	"log": "|velvetmusic|troll|events/trololo\n|j|☆Larper Boomer\n|j|☆simia ignis\n|t:|1792080620\n|gametype|singles\n|player|p1|Larper Boomer|harlequin|\n|player|p2|simia ignis|simia-ignis.png|\n|gen|9\n|tier|[Gen 9] RP Battle\n|clearpoke\n|poke|p1|Electrode, L34|\n|poke|p1|Golem, L34, F|\n|poke|p1|Forretress, L34, F|\n|poke|p1|Weezing, L34, M|\n|poke|p1|Cloyster, L34, F|\n|poke|p1|Magnezone, L34|\n|poke|p2|Whimsicott, L34, F|\n|poke|p2|Miraidon, L34|\n|teampreview\n|inactive|Battle timer is ON: inactive players will automatically lose when time's up. (requested by Larper Boomer)\n|n|☆Larper Boomer|larperboomer\n|\n|t:|1792080626\n|teamsize|p1|6\n|teamsize|p2|2\n|start\n|switch|p1a: Electrode|Electrode, L34|100/100\n|switch|p2a: Whimsicott|Whimsicott, L34, F|100/100\n|turn|1\n|\n|t:|1792080630\n|move|p2a: Whimsicott|Spore|p1a: Electrode\n|-status|p1a: Electrode|slp|[from] move: Spore\n|cant|p1a: Electrode|slp\n|\n|upkeep\n|turn|2\n|\n|t:|1792080633\n|cant|p1a: Electrode|slp\n|move|p2a: Whimsicott|Moonblast|p1a: Electrode\n|-damage|p1a: Electrode|50/100 slp\n|\n|upkeep\n|turn|3\n|\n|t:|1792080639\n|move|p2a: Whimsicott|Tailwind|p2a: Whimsicott\n|-sidestart|p2: simia ignis|move: Tailwind\n|-curestatus|p1a: Electrode|slp|[msg]\n|move|p1a: Electrode|Explosion|p2a: Whimsicott\n|-enditem|p2a: Whimsicott|Focus Sash\n|-damage|p2a: Whimsicott|2/100\n|faint|p1a: Electrode\n|\n|upkeep\n|\n|t:|1792080639\n|switch|p1a: Golem|Golem, L34, F|100/100\n|turn|4\n|\n|t:|1792080641\n|move|p2a: Whimsicott|Spore|p1a: Golem\n|-status|p1a: Golem|slp|[from] move: Spore\n|cant|p1a: Golem|slp\n|\n|upkeep\n|turn|5\n|\n|t:|1792080642\n|move|p2a: Whimsicott|Moonblast|p1a: Golem\n|-damage|p1a: Golem|54/100 slp\n|cant|p1a: Golem|slp\n|\n|upkeep\n|turn|6\n|\n|t:|1792080644\n|move|p2a: Whimsicott|Moonblast|p1a: Golem\n|-damage|p1a: Golem|7/100 slp\n|-unboost|p1a: Golem|spa|1\n|cant|p1a: Golem|slp\n|\n|-sideend|p2: simia ignis|move: Tailwind\n|upkeep\n|turn|7\n|\n|t:|1792080646\n|move|p2a: Whimsicott|Moonblast|p1a: Golem\n|-damage|p1a: Golem|0 fnt\n|faint|p1a: Golem\n|\n|upkeep\n|\n|t:|1792080646\n|switch|p1a: Forretress|Forretress, L34, F|100/100\n|turn|8\n",
+	"inputlog": null,
+	"uploadtime": 1792080647
+}
