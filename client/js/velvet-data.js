@@ -3364,6 +3364,51 @@
 		}
 		return total;
 	}
+	/*
+	 * Power the tooltip leaves out, for every format on this server (owner, 14 Oct 2026):
+	 *  - Explosion and Self-Destruct halve the target's Defense (Gen 1-4), Misty Explosion its
+	 *    Sp. Def (data/velvet/classic-mechanics.js) - the same sum as double power.
+	 *  - Tera: a move of the Tera type gets STAB (1.5x), or 2x instead of 1.5x when it was
+	 *    already a type of the Pokemon. Shown as the step up from what it had before.
+	 *  - Stellar: the first move of each type gets 1.2x, or 2x for the Pokemon's own types
+	 *    (every time for Terapagos). Types already used are read from the battle log.
+	 */
+	function stellarUsed(battle, pokemon) {
+		var used = {};
+		var who = String(pokemon.ident || '').replace(/^(p\d)[a-z]?:\s*/, '$1: ');
+		var lines = (battle && battle.stepQueue) || [];
+		var on = false;
+		for (var i = 0; i < Math.min(lines.length, battle.currentStep || lines.length); i++) {
+			var parts = String(lines[i]).split('|');
+			var by = String(parts[2] || '').replace(/^(p\d)[a-z]?:\s*/, '$1: ');
+			if (by !== who) continue;
+			if (parts[1] === '-terastallize') on = parts[3] === 'Stellar';
+			else if (on && parts[1] === 'move') {
+				var m = window.Dex && Dex.moves.get(parts[3]);
+				if (m && m.type) used[m.type] = true;
+			}
+		}
+		return used;
+	}
+	function everyFormatPower(battle, move, moveType, value, out) {
+		if (!move || !out || !out.modify || move.category === 'Status') return;
+		var id = move.id || window.toID(move.name || '');
+		if (id === 'explosion' || id === 'selfdestruct') out.modify(2, "target's Defense halved");
+		if (id === 'mistyexplosion') out.modify(2, "target's Sp. Def halved");
+		var pokemon = value && value.pokemon, serverPokemon = value && value.serverPokemon;
+		var tera = (pokemon && pokemon.terastallized) || (serverPokemon && serverPokemon.terastallized);
+		if (!tera || !pokemon || !pokemon.getTypes) return;
+		var own = pokemon.getTypes(serverPokemon, true)[0] || [];
+		var stab = own.indexOf(moveType) >= 0;
+		if (tera === 'Stellar') {
+			var terapagos = pokemon.getSpeciesForme && pokemon.getSpeciesForme() === 'Terapagos-Stellar';
+			if (terapagos || !stellarUsed(battle, pokemon)[moveType]) {
+				out.modify(stab ? 2 / 1.5 : 1.2, stab ? 'Stellar: 2x STAB, first ' + moveType + ' move' : 'Stellar: first ' + moveType + ' move');
+			}
+		} else if (tera === moveType) {
+			out.modify(stab ? 2 / 1.5 : 1.5, stab ? 'Tera: 2x STAB' : 'Tera STAB');
+		}
+	}
 	function installBuffedBasePower() {
 		var tips = window.BattleTooltips;
 		if (!tips || !tips.prototype || !tips.prototype.getMoveBasePower) return false;
@@ -3385,9 +3430,26 @@
 			};
 		}
 
+		// Type Gems are Gen 5's 1.5x in every format here (data/velvet/gems.js); the stock tooltip says 1.3x after Gen 5.
+		var originalItemBoost = tips.prototype.getItemBoost;
+		if (originalItemBoost) {
+			tips.prototype.getItemBoost = function (move, value, moveType) {
+				try {
+					var gems = window.BattleTooltips.noGemMoves || [];
+					if (value && value.itemName && value.itemName === moveType + ' Gem' && gems.indexOf(move.name) < 0) {
+						value.itemModify(1.5);
+						return value;
+					}
+				} catch (e) {}
+				return originalItemBoost.apply(this, arguments);
+			};
+		}
+
 		var original = tips.prototype.getMoveBasePower;
 		tips.prototype.getMoveBasePower = function (move, moveType, value, target) {
 			var out = original.apply(this, arguments);
+			// Every format here: the classic Explosion and Tera / Stellar, shown in the power.
+			try { everyFormatPower(this.battle, move, moveType, value, out); } catch (e) {}
 			if (!RP.on) return out;
 			try {
 				var pokemon = value && value.pokemon;
@@ -3446,6 +3508,30 @@
 					if (has('Abyssal Terrain') && (moveType === 'Water' || moveType === 'Dark')) out.modify(5325 / 4096, 'Abyssal Terrain');
 					if (has('Shrine Terrain') && (moveType === 'Electric' || moveType === 'Ghost')) out.modify(5325 / 4096, 'Shrine Terrain');
 					if (has('Sanctuary Terrain') && (moveType === 'Ground' || moveType === 'Fairy')) out.modify(5325 / 4096, 'Sanctuary Terrain');
+				}
+				/*
+				 * The rest of what the server changes, shown in the power (owner, 14 Oct 2026: "all
+				 * move boosting stuff ... like fini move in misty"). Data: balance-patch-1.js,
+				 * classic-mechanics.js, unnerfs.js, halloween.js.
+				 */
+				var foeBoosts = function () {
+					var n = 0;
+					for (var stat in (target && target.boosts) || {}) if (target.boosts[stat] > 0) n += target.boosts[stat];
+					return n;
+				};
+				if (out && out.modify) {
+					// Fini's Ohu Wave: 2x on Misty Terrain. Koko's Uila Surge: 1.5x on Electric Terrain, grounded target.
+					if (moveId === 'ohuwave' && has && has('Misty Terrain')) out.modify(2, 'Misty Terrain');
+					var targetGrounded = !target || !target.isGrounded || target.isGrounded();
+					if (moveId === 'uilasurge' && has && has('Electric Terrain') && targetGrounded) out.modify(1.5, 'Electric Terrain');
+					// Penance, and Punishment as buffed here: 75 +20 for each of the target's boosts, no cap.
+					if ((moveId === 'penance' || moveId === 'punishment') && target) out.set(75 + 20 * foeBoosts(), 'target boosts');
+					// Soul Toll: double against a statused or cursed target.
+					if (moveId === 'soultoll' && target && (target.status || (target.volatiles && target.volatiles.curse))) out.modify(2, 'Soul Toll + status');
+					// Witch's Snatch: 150 while the target has an item to take.
+					if (moveId === 'witchssnatch' && target && target.item) out.set(150, 'target holds an item');
+					// Normalize is 1.3x here, not 1.2x: the tooltip already applied its 1.2.
+					if (ability === 'normalize' && moveType === 'Normal' && String(out.comment || '').indexOf('Normalize') >= 0) out.modify(5325 / 4915, 'Normalize (1.3x here)');
 				}
 			} catch (e) {
 				// A tooltip is never worth throwing over.
