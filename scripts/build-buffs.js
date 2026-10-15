@@ -312,6 +312,12 @@ for (const id of Object.keys(require(path.join(PACKAGE, 'dist', 'data', 'velvet'
 for (const id of CHANGED.abilities) overrides.abilities[id] = abilityRow(Dex.abilities.get(id));
 const items = {};
 for (const id of OUR_ITEMS) items[id] = itemRow(Dex.items.get(id));
+// Type Gems boost 1.5x here, as in Gen 5 (data/velvet/gems.js); the stock text says 1.3x.
+overrides.items = {};
+for (const id of ['normalgem', ...require(path.join(PACKAGE, 'dist', 'data', 'velvet', 'gems.js')).GEMS]) {
+	const row = itemRow(Dex.items.get(id));
+	overrides.items[id] = { ...row, shortDesc: String(row.shortDesc || '').replace('1.3x', '1.5x'), desc: String(row.desc || '').replace('1.3x', '1.5x') };
+}
 
 /*
  * The "awakened" search term: every Pokemon with one of our signature
