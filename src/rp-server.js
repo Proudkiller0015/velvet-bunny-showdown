@@ -1220,7 +1220,11 @@ function roamerReport(now = Date.now()) {
 	const state = Roamer.load();
 	const places = REGIONS.kagura().locations;
 	const ids = Object.keys(places);
-	const named = id => (id ? { id, name: places[id].name || id, channels: [...new Set([...(places[id].wild || []), ...(places[id].channels || [])])].slice(0, 6) } : null);
+	// types and residents: what the bot's roam hints describe a place by, without naming it (roamhint.js).
+	const named = id => (id ? {
+		id, name: places[id].name || id, channels: [...new Set([...(places[id].wild || []), ...(places[id].channels || [])])].slice(0, 6),
+		types: places[id].types || [], residents: (places[id].common || []).slice(0, 8),
+	} : null);
 	const Dex = require('./rp-dex')();
 	const set = Roamer.set(state);
 	const base = Dex.species.get(set.species).baseStats.hp;
