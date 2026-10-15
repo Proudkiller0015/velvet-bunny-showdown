@@ -213,9 +213,10 @@ function knockedOut(now = Date.now()) {
 function moveTo(place, ms, now = Date.now()) {
 	const state = load();
 	if (state.caught) return { ok: false, message: 'It has been caught.' };
-	state.forced = { place, until: now + ms };
+	// No place: back on its schedule.
+	state.forced = place ? { place, until: now + ms } : null;
 	write(state);
-	return { ok: true, until: state.forced.until };
+	return { ok: true, until: state.forced ? state.forced.until : null };
 }
 
 function markCaught(userid, name) {
