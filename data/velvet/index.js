@@ -147,4 +147,4 @@ exports.items = data => {
 };
 
 // Field conditions: the Abyss's and the Shrine's terrains (a table no other file here touches).
-exports.conditions = data => Frostbite.conditions(AbyssShrine.conditions(data));
+exports.conditions = data => Gems.conditions(Frostbite.conditions(AbyssShrine.conditions(data)));
