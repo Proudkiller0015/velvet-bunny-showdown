@@ -219,6 +219,17 @@ function moveTo(place, ms, now = Date.now()) {
 	return { ok: true, until: state.forced ? state.forced.until : null };
 }
 
+/** Back from a knockout now rather than in twelve hours (the owners' ⏰ Wake up), at full HP. */
+function wake() {
+	const state = load();
+	if (state.caught) return { ok: false, message: 'It has been caught.' };
+	if (!(state.awayUntil > Date.now())) return { ok: false, message: 'It is not knocked out.' };
+	state.awayUntil = 0;
+	state.hp = null;
+	write(state);
+	return { ok: true };
+}
+
 function markCaught(userid, name) {
 	const state = load();
 	state.caught = { userid, name, at: new Date().toISOString() };
@@ -235,5 +246,5 @@ function catchChance(currentHp, maxhp) {
 
 module.exports = {
 	FILE, SPECIES, NICKNAME, LEVEL, MOVE_MS, SLOTS, HOLD_MS, KO_AWAY_MS, FIRST_FOR,
-	set, load, write, available, stopAt, where, roll, heldBy, hp, note, release, knockedOut, moveTo, markCaught, catchChance,
+	set, load, write, available, stopAt, where, roll, heldBy, hp, note, release, knockedOut, moveTo, wake, markCaught, catchChance,
 };

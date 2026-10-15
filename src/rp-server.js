@@ -1270,8 +1270,11 @@ function httpRoute(deps, log) {
 				try {
 					// The owner's `!roamer move <place> [minutes]`: put it there for a while first.
 					const move = checked.payload.move;
-					// Back to its own schedule, now (the ↩️ button).
-					if (move && move.clear) {
+					// Back from a knockout now (the ⏰ button).
+					if (move && move.wake) {
+						const woke = Roamer.wake();
+						if (!woke.ok) return send(res, 200, { ok: false, code: 'wake', message: woke.message });
+					} else if (move && move.clear) {
 						Roamer.moveTo(null, 0);
 					} else if (move) {
 						const places = REGIONS.kagura().locations;
