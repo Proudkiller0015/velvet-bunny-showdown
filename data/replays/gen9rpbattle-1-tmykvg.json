@@ -1,0 +1,12 @@
+{
+	"id": "gen9rpbattle-1-tmykvg",
+	"format": "[Gen 9] RP Battle",
+	"players": [
+		"Bug Catcher Jay",
+		"simia ignis"
+	],
+	"rating": null,
+	"log": "|velvetmusic|trainer|events/trainer-rse\n|j|☆Bug Catcher Jay\n|j|☆simia ignis\n|t:|1792084059\n|gametype|singles\n|player|p1|Bug Catcher Jay|bugcatcher-gen4dp|\n|player|p2|simia ignis|simia-ignis.png|\n|gen|9\n|tier|[Gen 9] RP Battle\n|clearpoke\n|poke|p1|Rabsca, L29, F|\n|poke|p1|Kleavor, L32, M|\n|poke|p1|Scolipede, L34, F|\n|poke|p2|Miraidon, L34|\n|poke|p2|Smeargle, L34, F|\n|teampreview\n|inactive|Battle timer is ON: inactive players will automatically lose when time's up. (requested by Bug Catcher Jay)\n|n|☆Bug Catcher Jay|bugcatcherjay\n|\n|t:|1792084063\n|teamsize|p1|3\n|teamsize|p2|2\n|start\n|switch|p1a: Kleavor|Kleavor, L32, M|100/100\n|switch|p2a: Miraidon|Miraidon, L34|100/100\n|-fieldstart|move: Electric Terrain|[from] ability: Hadron Engine|[of] p2a: Miraidon\n|turn|1\n|\n|t:|1792084066\n|move|p2a: Miraidon|Electro Drift|p1a: Kleavor\n|-damage|p1a: Kleavor|0 fnt\n|faint|p1a: Kleavor\n|\n|upkeep\n|\n|t:|1792084067\n|switch|p1a: Rabsca|Rabsca, L29, F|100/100\n|turn|2\n|\n|t:|1792084068\n|move|p2a: Miraidon|Electro Drift|p1a: Rabsca\n|-damage|p1a: Rabsca|0 fnt\n|faint|p1a: Rabsca\n|\n|upkeep\n|\n|t:|1792084068\n|switch|p1a: Scolipede|Scolipede, L34, F|100/100\n|turn|3\n|\n|t:|1792084069\n|move|p2a: Miraidon|Electro Drift|p1a: Scolipede\n|-damage|p1a: Scolipede|0 fnt\n|faint|p1a: Scolipede\n|\n|win|simia ignis\n",
+	"inputlog": ">start {\"formatid\":\"gen9rpbattle\",\"seed\":\"sodium,612322d92ca78f0298c35ad81bf7c9d5\"}\n>player p1 {\"name\":\"Bug Catcher Jay\",\"avatar\":\"bugcatcher-gen4dp\",\"team\":\"Rabsca|||Synchronize|Extrasensory,StruggleBug,RevivalBlessing,Psybeam|Bold|,,,224,,||14,14,14,14,14,14||29|]Kleavor|||SheerForce|StoneAxe,FuryCutter,Slash,SmackDown|Timid|,216,,,,||14,14,14,14,14,14||32|]Scolipede|||PoisonPoint|PoisonTail,BugBite,TakeDown,Protect|Modest|,216,,,4,||14,14,14,14,14,14||34|\",\"rating\":0}\n>player p2 {\"name\":\"simia ignis\",\"avatar\":\"simia-ignis.png\",\"team\":\"Miraidon||ChoiceSpecs|HadronEngine|ElectroDrift,VoltSwitch,DracoMeteor,Overheat||||||34|]Smeargle||Leftovers|OwnTempo|Imprison,Spore,Roar,Nuzzle||||||34|\",\"rating\":0}\n>p1 team 2, 3, 1\n>p2 team 1, 2\n>p1 move slash\n>p2 move electrodrift\n>p1 switch 3\n>p1 move extrasensory\n>p2 move electrodrift\n>p1 switch 2\n>p1 move bugbite\n>p2 move electrodrift",
+	"uploadtime": 1792084069
+}
