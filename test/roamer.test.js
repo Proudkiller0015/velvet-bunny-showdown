@@ -138,6 +138,27 @@ const turn = (b, p1 = 'move 1') => { b.choose('p1', p1); if (!b.ended) b.choose(
 	}
 }
 
+// 8b. Asleep, it always roars and leaves, at any HP, and may wake doing it (the owner).
+{
+	fresh();
+	const b = battle(mine('Breloom', ['Spore'], 100));
+	turn(b);
+	check(b.ended && /fled/.test(log(b)), 'put to sleep on turn 1, it roars and leaves anyway');
+	fresh({ hp: 40 });
+	const c = battle(mine('Breloom', ['Spore'], 100));
+	turn(c);
+	check(c.ended && /fled/.test(log(c)) && !/\|move\|p2a: Sparkles\|Recover/.test(log(c)), 'asleep below half HP, it roars instead of healing');
+	let woke = 0, dozed = 0;
+	for (let i = 1; i <= 40; i++) {
+		fresh();
+		const d = battle(mine('Breloom', ['Spore'], 100), [i, i + 1, i + 2, i + 3]);
+		turn(d);
+		if (/\|-curestatus\|p2a: Sparkles\|slp/.test(log(d))) woke++;
+		if (/roar in its sleep/.test(log(d))) dozed++;
+	}
+	check(woke > 0 && dozed > 0 && woke + dozed === 40, `sometimes it wakes as it roars (${woke} of 40), otherwise it roars in its sleep (${dozed})`);
+}
+
 // 9. Running is allowed, unlike from other legendaries.
 {
 	fresh();

@@ -492,9 +492,19 @@ function isRoamer(battle, pokemon) {
 	return !!battle.rpRoamer && !!pokemon && battle.rpRoamer.mon === pokemon;
 }
 
-/** Its move, whatever the bot picked: Recover below half HP, otherwise a roar and gone. */
+/**
+ * Its move, whatever the bot picked: Recover below half HP, otherwise a roar and gone.
+ * Asleep, it always roars, at any HP and on any turn, and may wake up doing it (the owner):
+ * one roar in three wakes it.
+ */
 function roamerTurn(battle, pokemon) {
-	if (pokemon.hp * 2 < pokemon.maxhp) {
+	const asleep = pokemon.status === 'slp';
+	if (asleep) {
+		// One roar in three wakes it.
+		if (battle.randomChance(1, 3)) pokemon.cureStatus();
+		else battle.add('-message', `${pokemon.name} let out a roar in its sleep!`);
+	}
+	if (!asleep && pokemon.hp * 2 < pokemon.maxhp) {
 		battle.actions.useMove('Recover', pokemon);
 		battle.rpRoamer.R.note(pokemon.hp, pokemon.maxhp);
 		return;
