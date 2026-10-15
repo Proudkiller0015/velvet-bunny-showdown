@@ -23,10 +23,11 @@ let n = 0;
 const ok = (cond, what) => { assert.ok(cond, what); n++; };
 
 // Legal where it should be, and its Tera type falls back to Normal (Bird is not one).
-for (const f of ['gen9rpru', 'gen9rpuu', 'gen9rpou', 'gen9rpubers', 'gen9rpag']) ok(!new TeamValidator(f).validateTeam([set('Sitrus Berry')]), `legal in ${f}`);
-ok((new TeamValidator('gen9rpnu').validateTeam([set('Sitrus Berry')]) || []).join(' ').includes('RU'), 'too high for RP NU');
+// Uber since 15 Oct 2026 (the owner); it was RU "for now".
+for (const f of ['gen9rpubers', 'gen9rpag']) ok(!new TeamValidator(f).validateTeam([set('Sitrus Berry')]), `legal in ${f}`);
+ok((new TeamValidator('gen9rpou').validateTeam([set('Sitrus Berry')]) || []).join(' ').includes('Uber'), 'too high for RP OU');
 ok((new TeamValidator('gen9rpru').validateTeam([{ ...set('Leftovers'), species: 'Pikachu', name: 'Pikachu', ability: 'Static', moves: ['Thunderbolt'], teraType: 'Bird' }]) || []).join(' ').includes('Terastal'), 'nobody else Terastallizes into Bird');
-ok((new TeamValidator('gen9rpru').validateTeam([set('Sitrus Berry', { moves: ['Spore'] })]) || []).length, 'it does not learn everything');
+ok((new TeamValidator('gen9rpubers').validateTeam([set('Sitrus Berry', { moves: ['Spore'] })]) || []).length, 'it does not learn everything');
 
 // The cap: a Choice Band Earthquake takes a quarter, not all of it.
 {

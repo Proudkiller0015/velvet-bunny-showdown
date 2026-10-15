@@ -29,3 +29,11 @@ gives up if the client's own runtime is not ready when it loads) and pulls in
 the two Google fonts it expects.
 
 Version built: v1.4.1.
+
+## Patched after the build
+
+`main.js` is edited once after copying, and a rebuild has to redo it: the
+calculator's `TYPE_CHART` gets the server's own **Bird** type (MissingNo.'s, see
+data/velvet/missingno.js), neutral both ways, right after the chart is assigned
+and before the calc builds its type tables. Without it every Bird move -
+Data Corruption - calculates as 0 damage (15 Oct 2026). Search for `.Bird=1`.

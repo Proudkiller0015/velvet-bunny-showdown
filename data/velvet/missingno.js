@@ -45,8 +45,8 @@ exports.pokedex = (data) => {
 };
 
 exports.formatsData = (data) => {
-	// RU for now (the owner). Nothing below: it is not in standard Showdown's dex at all.
-	data[ID] = { isNonstandard: null, tier: 'RU', doublesTier: 'DUU', natDexTier: 'RU' };
+	// Uber (the owner, 15 Oct 2026: RU at first, "for now"). Nothing below: it is not in standard Showdown's dex at all.
+	data[ID] = { isNonstandard: null, tier: 'Uber', doublesTier: 'DUber', natDexTier: 'Uber' };
 	return data;
 };
 
