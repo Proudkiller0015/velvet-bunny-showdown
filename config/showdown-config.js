@@ -2420,6 +2420,11 @@ function roleplay() {
 					const music = rp.musicFor(enc);
 					if (music && music.file) this.room.add(`|velvetmusic|${music.kind}|${music.file}`);
 				} catch (e) { console.log(`[roleplay] music: ${e.message}`); }
+				// Wild Pokémon the character has caught before get a Poké Ball by their name (rp.caughtBefore).
+				try {
+					const caught = rp.caughtBefore(enc);
+					if (caught.length) this.room.add(`|velvetcaught|${caught.join('|')}`);
+				} catch (e) { console.log(`[roleplay] caught mark: ${e.message}`); }
 
 				// A team that doesn't match the character's box calls the battle off
 				// before a turn is played. The encounter stays open, so fixing the team

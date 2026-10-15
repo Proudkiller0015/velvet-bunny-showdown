@@ -502,7 +502,8 @@
 		var sureIn = installSureHit();
 		var gemIn = installGemItems();
 		var switchIn = installRpSwitch();
-		return switchIn && tableIn && orderIn && spritesIn && iconIn && builderIn && tipsIn && rpIn &&
+		var caughtIn = installCaughtMark();
+		return caughtIn && switchIn && tableIn && orderIn && spritesIn && iconIn && builderIn && tipsIn && rpIn &&
 			cutIn && listIn && buffsIn && abilitiesIn && itemIn && sigItemIn && powerIn && dmaxIn && awakenedIn && textIn && zMaxIn && eternaIn && defaultIn && bagIn && usefulIn && frbIn && sureIn && gemIn;
 	}
 
@@ -2713,6 +2714,48 @@
 	 * status is read, tagged FRB beside the HP bar, and worded in the battle log
 	 * (fillDescriptions adds its lines), and the stat tooltip halves Special Attack.
 	 */
+	/*
+	 * A Poké Ball beside a wild Pokémon your character has caught before, as the
+	 * games do (the owner, 15 Oct 2026). The server says which, once, at the start:
+	 * "|velvetcaught|<Species>|..." (config/showdown-config.js, from the character's
+	 * Pokédex on Discord). The line never reaches the log; replays keep it.
+	 */
+	function installCaughtMark() {
+		var B = window.Battle, S = window.PokemonSprite, D = window.Dex;
+		if (!B || !B.prototype || !B.prototype.run || !S || !S.prototype || !S.prototype.getStatbarHTML || !D || !D.getItemIcon) return false;
+		if (S.prototype.getStatbarHTML.__velvetCaught) return true;
+		var toId = function (s) { return String(s || '').toLowerCase().replace(/[^a-z0-9]+/g, ''); };
+		var run = B.prototype.run;
+		B.prototype.run = function (str) {
+			if (typeof str === 'string' && str.indexOf('|velvetcaught|') === 0) {
+				var caught = {};
+				str.split('|').slice(2).forEach(function (s) { if (s) caught[toId(s)] = true; });
+				this.velvetCaught = caught;
+				return;
+			}
+			return run.apply(this, arguments);
+		};
+		var statbar = S.prototype.getStatbarHTML;
+		var marked = function (pokemon) {
+			var buf = statbar.apply(this, arguments);
+			try {
+				var caught = this.scene && this.scene.battle && this.scene.battle.velvetCaught;
+				var side = pokemon && pokemon.side;
+				if (!caught || !side || !/^Wild /.test(side.name || '')) return buf;
+				var species = D.species.get(pokemon.speciesForme);
+				if (!caught[toId(species.baseSpecies || species.name)]) return buf;
+				var icon = '<span class="itemicon" title="Caught before" style="' + D.getItemIcon('Poke Ball') +
+					';display:inline-block;vertical-align:middle;margin-left:2px"></span>';
+				return buf.replace('</strong>', ' ' + icon + '</strong>');
+			} catch (e) {
+				return buf;
+			}
+		};
+		marked.__velvetCaught = true;
+		S.prototype.getStatbarHTML = marked;
+		return true;
+	}
+
 	function installFrostbite() {
 		var B = window.Battle, S = window.PokemonSprite;
 		if (!B || !B.prototype || !B.prototype.parseHealth || !S || !S.prototype || !S.prototype.updateStatbar) return false;

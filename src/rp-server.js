@@ -208,6 +208,7 @@ function requestEncounter(payload, deps) {
 		if (payload.balls && typeof payload.balls === 'object') existing.balls = normaliseBalls(payload.balls);
 		if (payload.items && typeof payload.items === 'object') existing.items = normaliseItems(payload.items);
 		if (payload.badges !== undefined) existing.badges = E.clampBadges(payload.badges);
+		if (Array.isArray(payload.dexCaught)) existing.dexCaught = normaliseDex(payload.dexCaught);
 		// A team picked since it was first sent: this time it opens rather than challenges.
 		if (Array.isArray(payload.playerTeam) && payload.playerTeam.length) existing.playerTeam = payload.playerTeam.slice(0, 6);
 		if (existing.status === 'waiting' && deps.spawn(existing) === false) return notSpawned(existing);
@@ -275,6 +276,8 @@ function requestEncounter(payload, deps) {
 		 */
 		playerTeam: Array.isArray(payload.playerTeam) && payload.playerTeam.length ? payload.playerTeam.slice(0, 6) : null,
 		caught: Math.max(0, Math.floor(Number(payload.caught) || 0)),
+		// The species the character has ever caught (its Pokédex on Discord): a Poké Ball by those in battle.
+		dexCaught: Array.isArray(payload.dexCaught) ? normaliseDex(payload.dexCaught) : null,
 		gimmicks: payload.gimmicks && typeof payload.gimmicks === 'object'
 			? { mega: !!payload.gimmicks.mega, zmove: !!payload.gimmicks.zmove, dynamax: !!payload.gimmicks.dynamax, tera: !!payload.gimmicks.tera }
 			: null,
@@ -716,6 +719,27 @@ function canUsePvpItem(userid, itemId, usedSoFar) {
 	const bag = bagFor(userid);
 	if (!bag) return { ok: false, message: 'Link a character first: set your Showdown name with !showdown on Discord and select a character, then items from its bag work in RP battles.' };
 	return canUseItem({ items: pvpItemsFor(userid), character: bag.character }, itemId, usedSoFar);
+}
+
+function normaliseDex(list) {
+	return list.slice(0, 3000).map(s => String(s).slice(0, 40));
+}
+
+/**
+ * The wild Pokémon in an encounter that the character has caught before, by base
+ * species (the Pokédex counts a form as its species, as the games do).
+ */
+function caughtBefore(enc) {
+	if (!enc || enc.kind !== 'wild' || !Array.isArray(enc.dexCaught) || !enc.dexCaught.length) return [];
+	const Dex = require('./rp-dex')();
+	const have = new Set(enc.dexCaught.map(toID));
+	const out = [];
+	for (const set of enc.team || []) {
+		const s = Dex.species.get(set.species);
+		const base = s.exists ? s.baseSpecies || s.name : set.species;
+		if (have.has(toID(base)) && !out.includes(base)) out.push(base);
+	}
+	return out;
 }
 
 function normaliseBalls(balls) {
@@ -1309,7 +1333,7 @@ function packSets(sets) {
 
 module.exports = {
 	packSets,
-	freeCatch, FREE_CATCHES, allowCatch, summoned, chosenSet, musicFor, partyOf,
+	freeCatch, FREE_CATCHES, allowCatch, summoned, chosenSet, musicFor, caughtBefore, partyOf,
 	pvpCheck, pvpNotice, friendlyNotice, isAgreed, verify, placeFor, requestEncounter, requestTutorial, completeEncounter, canUseItem, usedInLog, setBags, bagFor, pvpItemsFor, canUsePvpItem, NPC_ITEMS_EACH, publicView, canThrow, thrownInLog, resultFromLog, openFor, encounterAccount, isEncounterName, isLocalOnly, LOOPBACK,
 	checkTeam, gimmickIn, GIMMICK_ITEM, GIMMICK_NAME, sidesInLog, startMatch,
 	httpRoute, encounters, RP_ROOM, CHALLENGE_MS, recordFinished, finishedSince,
