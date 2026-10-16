@@ -4,10 +4,11 @@
   "nature": "Bold"
  },
  "seed": "fb14389ac78c245f",
- "moves": 0,
+ "moves": 1,
  "hp": null,
- "seen": 0,
+ "seen": 1,
  "caught": null,
  "holder": null,
- "awayUntil": 0
+ "awayUntil": 0,
+ "forced": null
 }
