@@ -5,14 +5,14 @@
  },
  "seed": "b88029fa11e7ecb2",
  "moves": 13,
- "hp": 103,
+ "hp": 5,
  "seen": 14,
- "caught": null,
- "holder": {
-  "encounter": "fb42448a5606b639",
+ "caught": {
   "userid": "simiaignis",
-  "at": 1792125134381
+  "name": "simia ignis",
+  "at": "2026-10-16T04:32:47.556Z"
  },
+ "holder": null,
  "awayUntil": 0,
  "forced": null
 }
