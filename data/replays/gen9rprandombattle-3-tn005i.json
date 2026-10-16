@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-3-tn005i",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Hard",
+		"ThomasLF1"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Hard\n|j|☆ThomasLF1\n|t:|1792161386\n|gametype|singles\n|player|p1|Bunny Hard|bunny.png|1283\n|player|p2|ThomasLF1|265|1075\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1792161387\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Scrafty|Scrafty, L83, M|100/100\n|switch|p2a: Squawkabilly|Squawkabilly-White, L89, M|100/100\n|turn|1\n|c|☆Bunny Hard|Good luck! Playing on **hard**.\n|\n|t:|1792161406\n|switch|p1a: Sandy Shocks|Sandy Shocks, L80|100/100\n|move|p2a: Squawkabilly|Brave Bird|p1a: Sandy Shocks\n|-resisted|p1a: Sandy Shocks\n|-damage|p1a: Sandy Shocks|45/100\n|-damage|p2a: Squawkabilly|84/100|[from] Recoil\n|\n|upkeep\n|turn|2\n|\n|t:|1792161415\n|move|p2a: Squawkabilly|Brave Bird|p1a: Sandy Shocks\n|-resisted|p1a: Sandy Shocks\n|-damage|p1a: Sandy Shocks|0 fnt\n|faint|p1a: Sandy Shocks\n|-end|p1a: Sandy Shocks|Protosynthesis|[silent]\n|-damage|p2a: Squawkabilly|70/100|[from] Recoil\n|\n|upkeep\n|\n|t:|1792161416\n|switch|p1a: Raging Bolt|Raging Bolt, L78|100/100\n|-enditem|p1a: Raging Bolt|Booster Energy\n|-activate|p1a: Raging Bolt|ability: Protosynthesis|[fromitem]\n|-start|p1a: Raging Bolt|protosynthesisspa\n|turn|3\n|\n|t:|1792161430\n|switch|p2a: Rampardos|Rampardos, L90, M|100/100\n|-terastallize|p1a: Raging Bolt|Electric\n|move|p1a: Raging Bolt|Thunderclap||[still]\n|-fail|p1a: Raging Bolt\n|\n|upkeep\n|turn|4\n|\n|t:|1792161445\n|-end|p1a: Raging Bolt|Protosynthesis|[silent]\n|switch|p1a: Scrafty|Scrafty, L83, M|100/100\n|move|p2a: Rampardos|Earthquake|p1a: Scrafty\n|-damage|p1a: Scrafty|47/100\n|-damage|p2a: Rampardos|91/100|[from] item: Life Orb\n|\n|-heal|p1a: Scrafty|53/100|[from] item: Leftovers\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1792161445
+}
