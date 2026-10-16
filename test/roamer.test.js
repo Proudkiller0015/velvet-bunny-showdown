@@ -169,16 +169,18 @@ const turn = (b, p1 = 'move 1') => { b.choose('p1', p1); if (!b.ended) b.choose(
 
 // 10. Turning up: the owner first, wherever she is; then wherever it roams, one player at a time.
 {
+	// The Suicune's own roll (R.roll is all three, and the other two roam from the start).
+	const roll = o => R.ALL[0].roll(o);
 	R.write({ species: 'Suicune', individual: null, seed: null, moves: 0, hp: null, seen: 0, caught: null, holder: null });
 	const places = Object.keys(require('../src/encounter-tables/kagura').locations);
 	const args = (o = {}) => ({ encounterId: 'x', userid: 'misty', discord: '123', badges: 2, place: places[0], places, isOpen: () => true, wildFormat: E.WILD_FORMAT, ...o });
-	check(places.every(p => R.roll(args({ place: p })) === null), 'before her encounter, it is nowhere');
-	const first = R.roll(args({ userid: 'samantha', discord: R.FIRST_FOR, place: places[5] }));
+	check(places.every(p => roll(args({ place: p })) === null), 'before her encounter, it is nowhere');
+	const first = roll(args({ userid: 'samantha', discord: R.FIRST_FOR, place: places[5] }));
 	check(!!first && first.team[0].species === 'Suicune' && first.team[0].name === 'Sparkles', "the owner's next encounter is Sparkles, wherever she is");
 	const nature = R.load().individual.nature;
 	const now = Date.now();
 	const here = R.where(places, R.load(), now);
-	if (here) check(R.roll(args({ place: here, now })) === null, 'while she has it in front of her, nobody else meets it, even where it is');
+	if (here) check(roll(args({ place: here, now })) === null, 'while she has it in front of her, nobody else meets it, even where it is');
 	R.release(100, 200);
 	const st = R.load();
 	// Where it goes, over a long stretch: about 1 slot in 100 per place, and nowhere the rest.
@@ -198,8 +200,8 @@ const turn = (b, p1 = 'move 1') => { b.choose('p1', p1); if (!b.ended) b.choose(
 	const at = R.where(places, st, now);
 	const there = at || places.find(() => false);
 	if (at) {
-		check(!!R.roll(args({ place: at, now })), 'anybody looking where it is meets it, every time');
-		check(R.roll(args({ place: at, userid: 'brock', now })) === null, 'and only one trainer at a time');
+		check(!!roll(args({ place: at, now })), 'anybody looking where it is meets it, every time');
+		check(roll(args({ place: at, userid: 'brock', now })) === null, 'and only one trainer at a time');
 		R.release(100, 200);
 		check(R.where(places, R.load(), now) !== at, 'once it gets away, it is somewhere else at once');
 	} else {
@@ -207,11 +209,11 @@ const turn = (b, p1 = 'move 1') => { b.choose('p1', p1); if (!b.ended) b.choose(
 		let t = now;
 		while (!R.where(places, st, t)) t += R.MOVE_MS;
 		const p = R.where(places, st, t);
-		check(!!R.roll(args({ place: p, now: t })), 'anybody looking where it is meets it, every time');
-		check(R.roll(args({ place: p, userid: 'brock', now: t })) === null, 'and only one trainer at a time');
+		check(!!roll(args({ place: p, now: t })), 'anybody looking where it is meets it, every time');
+		check(roll(args({ place: p, userid: 'brock', now: t })) === null, 'and only one trainer at a time');
 	}
 	const elsewhere = places.find(p => p !== R.where(places, R.load(), now));
-	check(R.roll(args({ place: elsewhere, now, isOpen: () => false })) === null, 'nobody meets it anywhere else');
+	check(roll(args({ place: elsewhere, now, isOpen: () => false })) === null, 'nobody meets it anywhere else');
 	check(R.load().individual.nature === nature, `and it is the same Suicune throughout (${nature})`);
 	void there;
 }
@@ -223,6 +225,43 @@ const turn = (b, p1 = 'move 1') => { b.choose('p1', p1); if (!b.ended) b.choose(
 	check(music && music.kind === 'legend' && /suicune/.test(music.file), `it plays Suicune's theme (${music && music.file})`);
 	check(fs.existsSync(path.join(__dirname, '..', 'client', 'audio', music.file + (path.extname(music.file) ? '' : '.mp3'))) ||
 		fs.existsSync(path.join(__dirname, '..', 'client', 'audio', 'legends', 'suicune.mp3')), 'and the track exists');
+}
+
+// 12. Crackles the Raikou and Sizzles the Entei: the same set, shiny, roaming from the start, each on its own.
+{
+	const [, K, N] = R.ALL;
+	for (const f of [K.FILE, N.FILE]) { try { fs.unlinkSync(f); } catch (e) {} }
+	const k = K.set(), n = N.set();
+	check(k.species === 'Raikou' && k.name === 'Crackles' && n.species === 'Entei' && n.name === 'Sizzles', `Crackles the Raikou, Sizzles the Entei (${k.name}, ${n.name})`);
+	check([k, n].every(s => s.shiny && s.level === 50 && s.item === 'Shed Shell' && s.moves.join() === 'Recover,Roar' &&
+		Object.values(s.ivs).every(v => v === 31) && s.evs.hp === 252 && s.evs.spe === 252), 'same set as Sparkles: shiny Lv. 50, Recover + Roar, Shed Shell, perfect IVs');
+	check(K.started() && N.started() && K.load().seed && N.load().seed && K.load().seed !== N.load().seed, 'both roam at once, each on its own run of places');
+	check(fs.existsSync(K.FILE) && fs.existsSync(N.FILE) && K.FILE !== R.FILE && N.FILE !== K.FILE, 'each keeps its own file');
+	check(R.find('raikou') === K && R.find('Sizzles') === N && R.find('sparkles') === R.ALL[0] && !R.find('lugia'), 'found by species or nickname');
+	const places = Object.keys(require('../src/encounter-tables/kagura').locations);
+	const args = (o = {}) => ({ encounterId: 'y', userid: 'misty', discord: '123', badges: 2, places, isOpen: () => true, wildFormat: E.WILD_FORMAT, ...o });
+	let t = Date.now();
+	// Somewhere the Raikou is and the other two are not (the Suicune would be met first).
+	const only = at => at && ![R.ALL[0], N].some(o => o.where(places, o.load(), t) === at);
+	while (!only(K.where(places, K.load(), t))) t += R.MOVE_MS;
+	const met = R.roll(args({ place: K.where(places, K.load(), t), now: t }));
+	check(!!met && met.team[0].name === 'Crackles' && K.heldBy('misty') && !N.heldBy('misty'), 'looking where the Raikou is meets Crackles, and only Crackles is held');
+	// A real battle: it is the roamer, flees at full HP, and the Entei is untouched.
+	const b = new Battle({ formatid: E.WILD_FORMAT, seed: [5, 6, 7, 8] });
+	b.setPlayer('p1', { name: 'Misty', team: mine('Pikachu', ['Thunderbolt']) });
+	b.setPlayer('p2', { name: 'Wild Raikou', team: Teams.pack([k]) });
+	b.makeChoices('default', 'default');
+	check(b.rpRoamer && b.rpRoamer.R === K, 'in battle it is the Raikou roamer');
+	turn(b);
+	check(b.ended && /Crackles let out a mighty roar and fled/.test(log(b)) && K.hp() !== null && N.hp() === null, 'it roars and flees, keeping its own HP');
+	check(!K.heldBy('misty'), 'and it is free again');
+	N.knockedOut();
+	check(!N.available() && K.available(), 'a knocked-out Entei is away; the Raikou is not');
+	const rp = require('../src/rp-server');
+	check(/raikou/.test((rp.musicFor({ kind: 'wild', team: [k] }) || {}).file) && /entei/.test((rp.musicFor({ kind: 'wild', team: [n] }) || {}).file), 'each plays its own theme');
+	const rep = rp.roamerReport();
+	check(rep.roamers.map(r => r.nickname).join() === 'Sparkles,Crackles,Sizzles' && rep.roamers.every(r => r.shiny), `the owner's report lists all three (${rep.roamers.map(r => r.nickname)})`);
+	for (const f of [K.FILE, N.FILE]) { try { fs.unlinkSync(f); } catch (e) {} }
 }
 
 try { fs.unlinkSync(process.env.PS_ROAMER_FILE); } catch (e) {}

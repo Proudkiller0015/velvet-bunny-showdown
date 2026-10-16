@@ -11,16 +11,16 @@
  */
 
 const { RepoFile } = require('./repo-file');
-const { FILE } = require('./roamer');
+const { FILE, ALL } = require('./roamer');
 
 class RoamerStore {
 	/**
 	 * @param {string} localPath the file the server writes
 	 * @param {(msg: string) => void} log
 	 */
-	constructor(localPath = FILE, log = () => {}) {
+	constructor(localPath = FILE, log = () => {}, repoPath = process.env.ROAMER_REPO_PATH || 'data/roamer.json') {
 		this.log = log;
-		this.file = new RepoFile(localPath, process.env.ROAMER_REPO_PATH || 'data/roamer.json', log);
+		this.file = new RepoFile(localPath, repoPath, log);
 		this.timer = null;
 	}
 
@@ -52,4 +52,9 @@ class RoamerStore {
 	}
 }
 
-module.exports = { RoamerStore };
+/** One store per roamer (src/roamer.js ALL), each its own file in the repository. */
+function allStores(log = () => {}) {
+	return ALL.map(r => (r.FILE === FILE ? new RoamerStore(FILE, log) : new RoamerStore(r.FILE, log, r.REPO_PATH)));
+}
+
+module.exports = { RoamerStore, allStores };

@@ -1217,6 +1217,17 @@ function startMatch(payload, deps) {
  * every other request, so only the RP bot can ask.
  */
 function roamerReport(now = Date.now()) {
+	return {
+		ok: true,
+		// Every place it can be put, for the owner's Move menus (roamui.js).
+		places: Object.entries(REGIONS.kagura().locations).map(([id, p]) => ({ id, name: p.name || id }))
+			.sort((a, b) => a.name.localeCompare(b.name)),
+		roamers: Roamer.ALL.map(r => oneRoamer(r, now)),
+	};
+}
+
+/** One roamer's line in the report. */
+function oneRoamer(Roamer, now) {
 	const state = Roamer.load();
 	const places = REGIONS.kagura().locations;
 	const ids = Object.keys(places);
@@ -1242,21 +1253,16 @@ function roamerReport(now = Date.now()) {
 		t = Roamer.stopAt(from, t).end;
 	}
 	return {
-		ok: true,
-		// Every place it can be put, for the owner's Move menus (roamui.js).
-		places: ids.map(id => ({ id, name: places[id].name || id })).sort((a, b) => a.name.localeCompare(b.name)),
-		roamers: [{
-			species: set.species, nickname: set.name, level: set.level, shiny: !!set.shiny, nature: set.nature,
-			hp: state.hp === null ? maxhp : state.hp, maxhp,
-			started: (state.seen || 0) > 0, seen: state.seen || 0,
-			caught: state.caught || null,
-			awayUntil: (state.awayUntil || 0) > now ? state.awayUntil : null,
-			holder: state.holder || null,
-			place: (state.awayUntil || 0) > now || state.caught ? null : named(Roamer.where(ids, state, now)),
-			forcedUntil: state.forced && state.forced.until > now ? state.forced.until : null,
-			movesAt: state.forced && state.forced.until > now ? state.forced.until : slotEnd,
-			next,
-		}],
+		species: set.species, nickname: set.name, level: set.level, shiny: !!set.shiny, nature: set.nature,
+		hp: state.hp === null ? maxhp : state.hp, maxhp,
+		started: Roamer.started(state), seen: state.seen || 0,
+		caught: state.caught || null,
+		awayUntil: (state.awayUntil || 0) > now ? state.awayUntil : null,
+		holder: state.holder || null,
+		place: (state.awayUntil || 0) > now || state.caught ? null : named(Roamer.where(ids, state, now)),
+		forcedUntil: state.forced && state.forced.until > now ? state.forced.until : null,
+		movesAt: state.forced && state.forced.until > now ? state.forced.until : slotEnd,
+		next,
 	};
 }
 
@@ -1270,12 +1276,16 @@ function httpRoute(deps, log) {
 				try {
 					// The owner's `!roamer move <place> [minutes]`: put it there for a while first.
 					const move = checked.payload.move;
-					// Back from a knockout now (the ⏰ button).
+					// Which one (species or nickname); a move with none is the Suicune, as before there were three.
+					const one = move && move.species ? Roamer.find(move.species) : Roamer.ALL[0];
+					if (!one) return send(res, 200, { ok: false, code: 'noroamer', message: `No roamer called "${move.species}".` });
+					// Back from a knockout now (the ⏰ button). With no species, every one that is knocked out.
 					if (move && move.wake) {
-						const woke = Roamer.wake();
+						const tried = (move.species ? [one] : Roamer.ALL).map(r => r.wake());
+						const woke = tried.find(w => w.ok) || tried[0];
 						if (!woke.ok) return send(res, 200, { ok: false, code: 'wake', message: woke.message });
 					} else if (move && move.clear) {
-						Roamer.moveTo(null, 0);
+						one.moveTo(null, 0);
 					} else if (move) {
 						const places = REGIONS.kagura().locations;
 						const want = String(move.place || '').replace(/^#/, '').toLowerCase();
@@ -1283,7 +1293,7 @@ function httpRoute(deps, log) {
 							(places[p].wild || []).includes(want) || (places[p].channels || []).includes(want));
 						if (!id) return send(res, 200, { ok: false, code: 'noplace', message: `No place called "${move.place}" in Kagura.` });
 						const minutes = Math.max(1, Math.min(24 * 60, Number(move.minutes) || 10));
-						const moved = Roamer.moveTo(id, minutes * 60000);
+						const moved = one.moveTo(id, minutes * 60000);
 						if (!moved.ok) return send(res, 200, { ok: false, code: 'caught', message: moved.message });
 					}
 					send(res, 200, roamerReport());

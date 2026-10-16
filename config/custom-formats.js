@@ -482,10 +482,13 @@ function installRoamer(battle) {
 	const wildSide = battle.sides.find(isWildSide);
 	const player = wildSide && wildSide.foe;
 	const mon = wildSide && wildSide.pokemon.length === 1 ? wildSide.pokemon[0] : null;
-	if (!mon || mon.species.name !== R.SPECIES || !player || !R.heldBy(encounters().toID(player.name))) return;
-	const hp = R.hp();
+	if (!mon || !player) return;
+	// Which of them (Suicune, Raikou, Entei) this is, held for this player.
+	const one = (R.ALL || [R]).find(r => mon.species.name === r.SPECIES && r.heldBy(encounters().toID(player.name)));
+	if (!one) return;
+	const hp = one.hp();
 	if (hp !== null) mon.hp = Math.max(1, Math.min(mon.maxhp, hp));
-	battle.rpRoamer = { mon, R };
+	battle.rpRoamer = { mon, R: one };
 }
 
 function isRoamer(battle, pokemon) {
