@@ -1278,7 +1278,7 @@ exports.Formats = [
 			if (!mon || mon.fainted || this.rpTutorialHinted) return;
 			if (mon.hp <= mon.maxhp / 2) {
 				this.rpTutorialHinted = true;
-				this.add('-message', "Step 2: Rattata is weak! Open the Bag (under your moves) > Pokéballs and throw your Pokéball to catch it (or finish it off).");
+				this.add('-message', `Step 2: ${mon.name} is weak! Open the Bag (under your moves) > Pokéballs and throw your Pokéball to catch it (or finish it off).`);
 			}
 		},
 		...RP_TURN_ACTIONS,

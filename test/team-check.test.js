@@ -6,6 +6,7 @@
  */
 
 const rp = require('../src/rp-server');
+const E = require('../src/encounters');
 
 let failed = 0;
 const check = (ok, what) => { console.log(`${ok ? 'ok  ' : 'FAIL'} ${what}`); if (!ok) failed++; };
@@ -88,19 +89,21 @@ check(rp.checkTeam({ box: [{ species: 'Giratina', level: 60 }], badges: 1 }, tea
 	const spawned = [];
 	const deps = { isOnline: () => true, spawn: enc => spawned.push(enc) };
 	const answer = rp.requestTutorial({ showdown: 'Newbie' }, deps);
-	check(answer.ok && spawned.length === 1 && spawned[0].format === 'gen9rptutorial' && spawned[0].name === 'Wild Rattata', 'the tutorial spawns a wild Rattata in RP Tutorial');
+	check(answer.ok && spawned.length === 1 && spawned[0].format === 'gen9rptutorial' && spawned[0].name === `Wild ${E.tutorialWild().species}`, `the tutorial spawns a wild ${E.tutorialWild().species} in RP Tutorial`);
 	const tut = spawned[0];
 	check(rp.canUseItem(tut, 'potion', 0).ok && !rp.canUseItem(tut, 'potion', 1).ok && !rp.canUseItem(tut, 'superpotion', 0).ok, 'exactly 1 Potion');
 	check(rp.canThrow(tut, 'poke', 0).ok && !rp.canThrow(tut, 'poke', 1).ok && !rp.canThrow(tut, 'ultra', 0).ok, 'and exactly 1 Poke Ball');
 	check(rp.checkTeam(tut, [{ species: 'Mewtwo', level: 100 }]).ok, 'no box to check a team against');
 	const tb = new Battle({ formatid: 'gen9rptutorial', seed: [1, 2, 3, 4] });
-	tb.setPlayer('p1', { name: 'Wild Rattata' });
+	tb.setPlayer('p1', { name: `Wild ${E.tutorialWild().species}` });
 	tb.setPlayer('p2', { name: 'Newbie' });
-	check(tb.p2.pokemon.length === 1 && tb.p2.pokemon[0].species.name === 'Pikachu' && tb.p2.pokemon[0].level === 5 && tb.p1.pokemon[0].species.name === 'Rattata', 'no team needed: Lv. 5 Pikachu against Lv. 5 Rattata');
+	check(tb.p2.pokemon.length === 1 && tb.p2.pokemon[0].species.name === 'Pikachu' && tb.p2.pokemon[0].level === 5 && tb.p1.pokemon[0].species.name === E.tutorialWild().species, `no team needed: Lv. 5 Pikachu against Lv. 5 ${E.tutorialWild().species}`);
 	tb.p1.active[0].hp = 1;
 	tb.makeChoices('move 1', 'ball poke');
 	const result = rp.resultFromLog(tut, tb.log, 'newbie');
-	check(tb.ended && result.outcome === 'caught', 'the Rattata can be caught (and the result says so)');
+	// Audino (the Audino meme) is catch rate 120, so its one ball can miss; Rattata's (255) never does here.
+	const audino = E.tutorialWild().species === 'Audino';
+	check(audino ? result.ballsUsed.poke === 1 : tb.ended && result.outcome === 'caught', `the ${E.tutorialWild().species} can be caught (and the result says so)`);
 	check(rp.publicView(tut).tutorial === true, 'Discord is told it was the tutorial');
 	check(rp.requestTutorial({ showdown: 'Newbie' }, deps).again, 'asking again brings the same tutorial back');
 }

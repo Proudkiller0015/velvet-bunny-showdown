@@ -197,10 +197,13 @@ function wildSet(species, level, rng = Math.random) {
 	};
 }
 
-/** The side name a wild Pokemon battles under. The battle checks for "Wild ". */
-function wildName(species) {
-	const full = `Wild ${species.name}`;
-	return full.length <= 18 ? full : `Wild ${species.baseSpecies}`.slice(0, 18);
+/**
+ * The side name a wild Pokemon battles under. The battle checks for "Wild ". It no longer
+ * names the species (owner, 16 Oct 2026): the challenge on Showdown came from "Wild Audino",
+ * and what it is stays a surprise until the battle opens, as on Discord.
+ */
+function wildName() {
+	return 'Wild Pokemon';
 }
 
 // ----------------------------------------------------------------- catching

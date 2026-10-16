@@ -433,7 +433,7 @@ function audinoMeme({ badges, levelCap, shiny, ace }) {
 	if (Math.random() < E.shinyChance(shiny)) set.shiny = true;
 	set.rare = true;
 	return {
-		kind: 'wild', double: false, name: 'Wild Audino', avatar: '', team: [set],
+		kind: 'wild', double: false, name: E.wildName(), avatar: '', team: [set],
 		ai: badges >= 6 ? 'hard' : badges >= 3 ? 'normal' : 'easy', format: E.WILD_FORMAT, badges,
 	};
 }
@@ -824,6 +824,15 @@ function musicFor(enc) {
 }
 
 /** What Discord gets told: enough to announce it, nothing about its moves. */
+/** A wild encounter that plays the rare wild theme or a legendary's own (musicFor). */
+function isRare(enc) {
+	try {
+		const m = enc.kind === 'wild' && musicFor(enc);
+		return !!m && (m.kind === 'rarewild' || m.kind === 'legend');
+	} catch (e) {
+		return false;
+	}
+}
 function publicView(enc) {
 	return {
 		id: enc.id,
@@ -841,6 +850,8 @@ function publicView(enc) {
 		result: enc.result,
 		invalid: enc.invalid || null,
 		tutorial: !!enc.tutorial,
+		// A rare encounter (the rare wild or a legendary's theme): the bot and the battle say so.
+		rare: isRare(enc),
 	};
 }
 
@@ -1444,6 +1455,6 @@ module.exports = {
 	packSets,
 	freeCatch, FREE_CATCHES, allowCatch, summoned, chosenSet, musicFor, caughtBefore, roamerReport, partyOf,
 	pvpCheck, pvpNotice, friendlyNotice, isAgreed, verify, placeFor, requestEncounter, requestTutorial, completeEncounter, canUseItem, usedInLog, setBags, bagFor, pvpItemsFor, canUsePvpItem, NPC_ITEMS_EACH, publicView, canThrow, thrownInLog, resultFromLog, openFor, encounterAccount, isEncounterName, isLocalOnly, LOOPBACK,
-	checkTeam, gimmickIn, GIMMICK_ITEM, GIMMICK_NAME, sidesInLog, startMatch,
+	isRare, checkTeam, gimmickIn, GIMMICK_ITEM, GIMMICK_NAME, sidesInLog, startMatch,
 	httpRoute, encounters, RP_ROOM, CHALLENGE_MS, recordFinished, finishedSince,
 };

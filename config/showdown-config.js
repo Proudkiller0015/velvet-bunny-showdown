@@ -2419,6 +2419,8 @@ function roleplay() {
 				try {
 					const music = rp.musicFor(enc);
 					if (music && music.file) this.room.add(`|velvetmusic|${music.kind}|${music.file}`);
+					// Said in the battle too, as on Discord (owner, 16 Oct 2026).
+					if (rp.isRare(enc)) this.room.add('|raw|<div class="broadcast-blue"><strong>🌟 A rare encounter!</strong></div>');
 				} catch (e) { console.log(`[roleplay] music: ${e.message}`); }
 				// Wild Pokémon the character has caught before get a Poké Ball by their name (rp.caughtBefore).
 				try {
