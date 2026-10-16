@@ -9,5 +9,9 @@
  "seen": 0,
  "caught": null,
  "holder": null,
- "awayUntil": 0
+ "awayUntil": 0,
+ "forced": {
+  "place": "route-1",
+  "until": 1792174796621
+ }
 }
