@@ -4,14 +4,11 @@
   "nature": "Modest"
  },
  "seed": "befa5135b094a228",
- "moves": 0,
- "hp": null,
+ "moves": 1,
+ "hp": 121,
  "seen": 1,
  "caught": null,
- "holder": {
-  "encounter": "dd558701110deb39",
-  "userid": "simiaignis",
-  "at": 1792122626476
- },
- "awayUntil": 0
+ "holder": null,
+ "awayUntil": 0,
+ "forced": null
 }
