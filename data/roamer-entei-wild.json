@@ -4,15 +4,11 @@
   "nature": "Impish"
  },
  "seed": "74814f05b7588d0f",
- "moves": 1,
- "hp": 65,
+ "moves": 2,
+ "hp": null,
  "seen": 2,
  "caught": null,
- "holder": {
-  "encounter": "116024131726de6e",
-  "userid": "simiaignis",
-  "at": 1792174640728
- },
- "awayUntil": 0,
+ "holder": null,
+ "awayUntil": 1792217923453,
  "forced": null
 }
