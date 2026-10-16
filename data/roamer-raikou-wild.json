@@ -4,14 +4,11 @@
   "nature": "Naughty"
  },
  "seed": "00a9e1b83cb159dc",
- "moves": 0,
- "hp": null,
- "seen": 0,
+ "moves": 1,
+ "hp": 116,
+ "seen": 1,
  "caught": null,
  "holder": null,
  "awayUntil": 0,
- "forced": {
-  "place": "route-1",
-  "until": 1792174796621
- }
+ "forced": null
 }
