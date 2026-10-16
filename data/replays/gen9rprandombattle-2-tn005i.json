@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-2-tn005i",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Hard",
+		"ThomasLF1"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Hard\n|j|☆ThomasLF1\n|t:|1792161053\n|gametype|singles\n|player|p1|Bunny Hard|bunny.png|1283\n|player|p2|ThomasLF1|265|1000\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1792161054\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Scream Tail|Scream Tail, L84|100/100\n|switch|p2a: Cinccino|Cinccino, L83, F|100/100\n|turn|1\n|c|☆Bunny Hard|Good luck! Playing on **hard**.\n|\n|t:|1792161082\n|move|p2a: Cinccino|U-turn|p1a: Scream Tail\n|-damage|p1a: Scream Tail|88/100\n|\n|t:|1792161087\n|switch|p2a: Blastoise|Blastoise, L80, M|100/100|[from] U-turn\n|move|p1a: Scream Tail|Thunder Wave|p2a: Blastoise\n|-status|p2a: Blastoise|par\n|\n|-heal|p1a: Scream Tail|94/100|[from] item: Leftovers\n|upkeep\n|turn|2\n|\n|t:|1792161102\n|move|p1a: Scream Tail|Velvet Press|p2a: Blastoise\n|-damage|p2a: Blastoise|66/100 par\n|cant|p2a: Blastoise|par\n|\n|-heal|p1a: Scream Tail|99/100|[from] item: Leftovers\n|upkeep\n|turn|3\n|\n|t:|1792161108\n|move|p1a: Scream Tail|Velvet Press|p2a: Blastoise\n|-damage|p2a: Blastoise|31/100 par\n|cant|p2a: Blastoise|par\n|\n|-heal|p1a: Scream Tail|100/100|[from] item: Leftovers\n|upkeep\n|turn|4\n|\n|t:|1792161113\n|move|p1a: Scream Tail|Velvet Press|p2a: Blastoise\n|-damage|p2a: Blastoise|0 fnt\n|faint|p2a: Blastoise\n|\n|upkeep\n|\n|t:|1792161119\n|switch|p2a: Excadrill|Excadrill, L79, M|100/100\n|-ability|p2a: Excadrill|Mold Breaker\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1792161125
+}
