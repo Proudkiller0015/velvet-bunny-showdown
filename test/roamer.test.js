@@ -260,8 +260,33 @@ const turn = (b, p1 = 'move 1') => { b.choose('p1', p1); if (!b.ended) b.choose(
 	const rp = require('../src/rp-server');
 	check(/raikou/.test((rp.musicFor({ kind: 'wild', team: [k] }) || {}).file) && /entei/.test((rp.musicFor({ kind: 'wild', team: [n] }) || {}).file), 'each plays its own theme');
 	const rep = rp.roamerReport();
-	check(rep.roamers.map(r => r.nickname).join() === 'Sparkles,Crackles,Sizzles' && rep.roamers.every(r => r.shiny), `the owner's report lists all three (${rep.roamers.map(r => r.nickname)})`);
+	check(rep.roamers.map(r => r.id).join() === 'suicune,raikou,entei,raikou-wild,entei-wild,suicune-wild' &&
+		rep.roamers.slice(0, 3).every(r => r.shiny && r.nickname) && rep.roamers.slice(3).every(r => !r.shiny && !r.nickname),
+		`the owner's report lists all six, the regular three not shiny and without nicknames (${rep.roamers.map(r => r.id)})`);
 	for (const f of [K.FILE, N.FILE]) { try { fs.unlinkSync(f); } catch (e) {} }
+}
+
+// 13. The regular trio: the same behaviour, not shiny, no nickname, never mixed up with the shiny ones.
+{
+	const [, K, , WK, WN, WS] = R.ALL;
+	for (const r of R.ALL.slice(1)) { try { fs.unlinkSync(r.FILE); } catch (e) {} }
+	const w = WK.set();
+	check(w.species === 'Raikou' && w.name === 'Raikou' && !w.shiny && w.level === 50 && w.moves.join() === 'Recover,Roar' && w.item === 'Shed Shell',
+		'the regular Raikou: Lv. 50, Recover + Roar, Shed Shell, not shiny, no nickname');
+	check(WN.set().species === 'Entei' && WS.set().species === 'Suicune' && !WN.set().shiny && !WS.set().shiny, 'and so are the regular Entei and Suicune');
+	check(R.find('raikou') === K && R.find('crackles') === K && R.find('raikou-wild') === WK && R.find('suicune-wild') === WS, 'the shiny one is "raikou", the regular one "raikou-wild"');
+	check(WK.started() && WK.load().seed && WK.load().seed !== K.load().seed, 'it roams from the start, on its own route');
+	// Both Raikou held by the same player at once (an old hold): the battle with the regular one is the regular roamer.
+	const hold = (r) => r.write({ ...r.load(), holder: { encounter: 'w1', userid: 'misty', at: Date.now() } });
+	hold(K); hold(WK);
+	const b = new Battle({ formatid: E.WILD_FORMAT, seed: [9, 9, 9, 9] });
+	b.setPlayer('p1', { name: 'Misty', team: mine('Pikachu', ['Thunderbolt']) });
+	b.setPlayer('p2', { name: 'Wild Raikou', team: Teams.pack([w]) });
+	b.makeChoices('default', 'default');
+	check(b.rpRoamer && b.rpRoamer.R === WK, 'a battle with the regular Raikou is the regular roamer, not the shiny one');
+	turn(b);
+	check(b.ended && /Raikou let out a mighty roar and fled/.test(log(b)) && WK.hp() !== null && K.hp() === null, 'it flees the same way, and only its own HP changes');
+	for (const r of R.ALL.slice(1)) { try { fs.unlinkSync(r.FILE); } catch (e) {} }
 }
 
 try { fs.unlinkSync(process.env.PS_ROAMER_FILE); } catch (e) {}

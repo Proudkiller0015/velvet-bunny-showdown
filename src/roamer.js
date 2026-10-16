@@ -100,7 +100,7 @@ function catchChance(currentHp, maxhp) {
  * One roamer: its species, nickname, the file its state lives in, and whose
  * encounter it waits for before it starts roaming (null: it roams at once).
  */
-function makeRoamer({ species, nickname, file, repoPath, firstFor = null }) {
+function makeRoamer({ id, species, nickname = null, shiny = true, file, repoPath, firstFor = null }) {
 	function blank() {
 		return { species, individual: null, seed: null, moves: 0, hp: null, seen: 0, caught: null, holder: null, awayUntil: 0 };
 	}
@@ -134,7 +134,8 @@ function makeRoamer({ species, nickname, file, repoPath, firstFor = null }) {
 	function set(state = load()) {
 		const self = state.individual || individual();
 		return {
-			name: nickname,
+			// No nickname: just the species, like any wild Pokemon.
+			name: nickname || species,
 			species,
 			level: LEVEL,
 			moves: ['Recover', 'Roar'],
@@ -145,7 +146,7 @@ function makeRoamer({ species, nickname, file, repoPath, firstFor = null }) {
 			evs: { hp: 252, atk: 0, def: 4, spa: 0, spd: 0, spe: 252 },
 			// Trapping never holds it (the owner): Mean Look, Block, Arena Trap and the rest.
 			item: 'Shed Shell',
-			shiny: true,
+			shiny,
 			rare: true,
 		};
 	}
@@ -262,7 +263,7 @@ function makeRoamer({ species, nickname, file, repoPath, firstFor = null }) {
 	}
 
 	return {
-		FILE: file, REPO_PATH: repoPath, SPECIES: species, NICKNAME: nickname, LEVEL, MOVE_MS, SLOTS, HOLD_MS, KO_AWAY_MS,
+		ID: id, FILE: file, REPO_PATH: repoPath, SPECIES: species, NICKNAME: nickname, SHINY: shiny, LEVEL, MOVE_MS, SLOTS, HOLD_MS, KO_AWAY_MS,
 		FIRST_FOR: firstFor,
 		set, load, write, available, started, stopAt, where: (places, state = load(), now = Date.now()) => where(places, state, now),
 		roll, heldBy, hp, note, release, knockedOut, moveTo, wake, markCaught, catchChance,
@@ -274,15 +275,21 @@ const fileFor = id => FILE.replace(/(\.json)?$/, `-${id}.json`);
 
 /** Every roamer, the Suicune first: an encounter where two are at once meets the first. */
 const ALL = [
-	makeRoamer({ species: 'Suicune', nickname: 'Sparkles', file: FILE, repoPath: 'data/roamer.json', firstFor: FIRST_FOR }),
-	makeRoamer({ species: 'Raikou', nickname: 'Crackles', file: fileFor('raikou'), repoPath: 'data/roamer-raikou.json' }),
-	makeRoamer({ species: 'Entei', nickname: 'Sizzles', file: fileFor('entei'), repoPath: 'data/roamer-entei.json' }),
+	makeRoamer({ id: 'suicune', species: 'Suicune', nickname: 'Sparkles', file: FILE, repoPath: 'data/roamer.json', firstFor: FIRST_FOR }),
+	makeRoamer({ id: 'raikou', species: 'Raikou', nickname: 'Crackles', file: fileFor('raikou'), repoPath: 'data/roamer-raikou.json' }),
+	makeRoamer({ id: 'entei', species: 'Entei', nickname: 'Sizzles', file: fileFor('entei'), repoPath: 'data/roamer-entei.json' }),
+	// The regular trio (the owner, 16 Oct 2026): not shiny, no nickname, the same behaviour.
+	makeRoamer({ id: 'raikou-wild', species: 'Raikou', shiny: false, file: fileFor('raikou-wild'), repoPath: 'data/roamer-raikou-wild.json' }),
+	makeRoamer({ id: 'entei-wild', species: 'Entei', shiny: false, file: fileFor('entei-wild'), repoPath: 'data/roamer-entei-wild.json' }),
+	makeRoamer({ id: 'suicune-wild', species: 'Suicune', shiny: false, file: fileFor('suicune-wild'), repoPath: 'data/roamer-suicune-wild.json' }),
 ];
 
-/** The roamer of this species or nickname, or null. */
+/** The roamer with this id, nickname or species (a species alone means the shiny one), or null. */
 function find(name) {
-	const id = String(name || '').toLowerCase().replace(/[^a-z0-9]/g, '');
-	return ALL.find(r => r.SPECIES.toLowerCase() === id || r.NICKNAME.toLowerCase() === id) || null;
+	const raw = String(name || '').toLowerCase();
+	const id = raw.replace(/[^a-z0-9]/g, '');
+	return ALL.find(r => r.ID === raw.trim()) || ALL.find(r => r.ID.replace(/[^a-z0-9]/g, '') === id) ||
+		ALL.find(r => r.NICKNAME && r.NICKNAME.toLowerCase() === id) || ALL.find(r => r.SHINY && r.SPECIES.toLowerCase() === id) || null;
 }
 
 /** An encounter in `place`: whichever roamer is there and free, or null. */

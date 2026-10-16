@@ -484,7 +484,8 @@ function installRoamer(battle) {
 	const mon = wildSide && wildSide.pokemon.length === 1 ? wildSide.pokemon[0] : null;
 	if (!mon || !player) return;
 	// Which of them (Suicune, Raikou, Entei) this is, held for this player.
-	const one = (R.ALL || [R]).find(r => mon.species.name === r.SPECIES && r.heldBy(encounters().toID(player.name)));
+	// Two of a species roam (shiny and regular): the shine tells them apart.
+	const one = (R.ALL || [R]).find(r => mon.species.name === r.SPECIES && !!mon.set.shiny === !!(r.SHINY ?? true) && r.heldBy(encounters().toID(player.name)));
 	if (!one) return;
 	const hp = one.hp();
 	if (hp !== null) mon.hp = Math.max(1, Math.min(mon.maxhp, hp));

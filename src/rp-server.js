@@ -1253,7 +1253,7 @@ function oneRoamer(Roamer, now) {
 		t = Roamer.stopAt(from, t).end;
 	}
 	return {
-		species: set.species, nickname: set.name, level: set.level, shiny: !!set.shiny, nature: set.nature,
+		id: Roamer.ID, species: set.species, nickname: Roamer.NICKNAME || null, level: set.level, shiny: !!set.shiny, nature: set.nature,
 		hp: state.hp === null ? maxhp : state.hp, maxhp,
 		started: Roamer.started(state), seen: state.seen || 0,
 		caught: state.caught || null,
