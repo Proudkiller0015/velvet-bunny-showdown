@@ -4,11 +4,11 @@
   "nature": "Mild"
  },
  "seed": "f7eae04a6b4307a4",
- "moves": 4,
- "hp": 106,
- "seen": 4,
+ "moves": 5,
+ "hp": null,
+ "seen": 5,
  "caught": null,
  "holder": null,
- "awayUntil": 0,
+ "awayUntil": 1792234434025,
  "forced": null
 }
