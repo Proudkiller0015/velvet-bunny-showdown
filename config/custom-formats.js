@@ -1250,7 +1250,7 @@ exports.Formats = [
 		onBegin() {
 			const E = encounters();
 			for (const side of this.sides) {
-				const set = /^Wild /.test(side.name) ? E.TUTORIAL_RATTATA : E.TUTORIAL_PIKACHU;
+				const set = /^Wild /.test(side.name) ? E.tutorialWild() : E.TUTORIAL_PIKACHU;
 				side.team = [set];
 				side.pokemon = [];
 				side.pokemonLeft = 0;

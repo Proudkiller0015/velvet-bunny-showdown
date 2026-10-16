@@ -1669,6 +1669,21 @@ const TUTORIAL_RATTATA = {
 	moves: ['tackle', 'tailwhip', 'quickattack'],
 	evs: { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 }, ivs: { hp: 15, atk: 15, def: 15, spa: 15, spd: 15, spe: 15 },
 };
+/*
+ * The Audino meme (owner, 16 Oct 2026): for 24 hours half of all encounters (rp-server
+ * audinoMeme) and every tutorial are a wild Audino, with the rare wild theme (`rare`). The
+ * Discord bot's `!audino <time>` turns it on again: every signed request carries its end
+ * (payload.audinoUntil), and the last one heard is kept here.
+ */
+const AUDINO = { until: Date.parse('2026-10-17T11:00:00Z') };
+const TUTORIAL_AUDINO = {
+	name: 'Audino', species: 'Audino', level: 5, ability: 'Healer', item: '', nature: 'Hardy', rare: true,
+	moves: ['pound', 'growl', 'helpinghand'],
+	evs: { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 }, ivs: { hp: 15, atk: 15, def: 15, spa: 15, spd: 15, spe: 15 },
+};
+/** The tutorial's wild Pokemon: Rattata, or Audino while the meme lasts. */
+const audinoOn = (now = Date.now()) => now < AUDINO.until;
+const tutorialWild = (now = Date.now()) => (audinoOn(now) ? TUTORIAL_AUDINO : TUTORIAL_RATTATA);
 const TUTORIAL_BAG = { balls: { poke: 1 }, items: { potion: 1 } };
 const WILD_DOUBLE_FORMAT = 'gen9rpbattlewilddoubles';
 const TRAINER_FORMAT = 'gen9rpbattle';
@@ -1692,5 +1707,5 @@ module.exports = {
 	TRAINER_CLASSES, GYM_TYPES, gymPlace, findClass, trainerName, minLevel, rootOf, lineOf, lineWeight, BADGE_TIERS, Rarity,
 	stageFor, BABIES, babyWeight, clock, clockWeight, TIME_OF_DAY, DAY_OF_WEEK, SEASONS, EVENTS, eventOn, aceAdjusted, aceLevel,
 	rollWild, rollTrainer, trainerSet, describe, stallTrainerTeam, trollTrainerTeam, customClass, boomAverage, ACE_CLASSES, TROLL_HOME_CHANCE, ACE_STALL_CHANCE, LARPER_CHANCE,
-	WILD_FORMAT, WILD_DOUBLE_FORMAT, TUTORIAL_FORMAT, TUTORIAL_PIKACHU, TUTORIAL_RATTATA, TUTORIAL_BAG, TRAINER_FORMAT, TRAINER_DOUBLE_FORMAT,
+	WILD_FORMAT, WILD_DOUBLE_FORMAT, TUTORIAL_FORMAT, TUTORIAL_PIKACHU, TUTORIAL_RATTATA, TUTORIAL_AUDINO, tutorialWild, AUDINO, audinoOn, TUTORIAL_BAG, TRAINER_FORMAT, TRAINER_DOUBLE_FORMAT,
 };

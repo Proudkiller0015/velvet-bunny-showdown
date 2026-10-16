@@ -147,6 +147,8 @@ function openFor(userid) {
 function requestEncounter(payload, deps) {
 	const userid = toID(payload.showdown);
 	if (!userid) return { ok: false, code: 'noname', message: 'No Showdown name given.' };
+	// The Audino meme's end, from the bot's owner-only !audino (encounters.js AUDINO). Signed, so trusted.
+	if (Number.isFinite(payload.audinoUntil)) E.AUDINO.until = payload.audinoUntil;
 	if (payload.tutorial) return requestTutorial(payload, deps);
 
 	let found = placeFor(payload.region, payload.channel);
@@ -241,6 +243,8 @@ function requestEncounter(payload, deps) {
 		// Staff choosing what appears. The Discord bot only signs this for admins.
 		rolled = summoned(payload.summon, { place, badges, levelCap, ace });
 		if (rolled.error) return { ok: false, code: 'summon', message: rolled.error };
+	} else if (E.audinoOn() && Math.random() < 0.5) {
+		rolled = audinoMeme({ badges, levelCap, shiny: payload.shiny || {}, ace });
 	} else {
 		rolled = kind === 'wild'
 			? E.rollWild({ place: wildPlace, badges, levelCap, shiny: payload.shiny || {}, ace })
@@ -335,7 +339,7 @@ function requestTutorial(payload, deps) {
 		place: 'tutorial', placeName: 'the tutorial', channel: String(payload.channel || ''),
 		balls: { ...E.TUTORIAL_BAG.balls }, items: { ...E.TUTORIAL_BAG.items },
 		warning: '', box: null, gimmicks: null,
-		kind: 'wild', double: false, name: 'Wild Rattata', avatar: '', team: [E.TUTORIAL_RATTATA],
+		kind: 'wild', double: false, name: `Wild ${E.tutorialWild().name}`, avatar: '', team: [E.tutorialWild()],
 		ai: 'easy', format: E.TUTORIAL_FORMAT, badges: 0,
 		tutorial: true,
 		status: 'waiting',
@@ -416,6 +420,22 @@ function chosenSet(Dex, species, summon, fit = false) {
 		}
 	}
 	return { set: out };
+}
+
+/*
+ * The Audino meme (owner, 16 Oct 2026): for 24 hours half of all encounters, gyms included,
+ * are a wild Audino with the rare wild theme. Summons and the roamer still come first.
+ */
+function audinoMeme({ badges, levelCap, shiny, ace }) {
+	const [lo, hi] = E.levelRange(badges, levelCap, ace);
+	const level = lo + Math.floor(Math.random() * (hi - lo + 1));
+	const set = E.wildSet(require('./rp-dex')().species.get('Audino'), level);
+	if (Math.random() < E.shinyChance(shiny)) set.shiny = true;
+	set.rare = true;
+	return {
+		kind: 'wild', double: false, name: 'Wild Audino', avatar: '', team: [set],
+		ai: badges >= 6 ? 'hard' : badges >= 3 ? 'normal' : 'easy', format: E.WILD_FORMAT, badges,
+	};
 }
 
 function summoned(summon, { place, badges, levelCap, ace = null }) {

@@ -36,7 +36,7 @@ const wait = ms => new Promise(r => setTimeout(r, ms));
 				ws.send(`|/accept ${from}`);
 			}
 			if (!room.startsWith('battle-')) {
-				if (/tutorial|Rattata/i.test(line)) seen.replies.push(line);
+				if (/tutorial|Rattata|Audino/i.test(line)) seen.replies.push(line);
 				continue;
 			}
 			seen.battle = room;
@@ -83,7 +83,8 @@ const wait = ms => new Promise(r => setTimeout(r, ms));
 	for (let i = 0; i < 120 && !seen.ended; i++) await wait(1000);
 
 	const log = seen.log.join('\n');
-	check(/\|switch\|p\d+a: Pikachu\|Pikachu, L5/.test(log) && /Rattata, L5/.test(log), 'Lv. 5 Pikachu against Lv. 5 Rattata');
+	const foe = require("../src/encounters").tutorialWild().species;   // Rattata, or Audino while the Audino meme is on
+	check(/\|switch\|p\d+a: Pikachu\|Pikachu, L5/.test(log) && new RegExp(`${foe}, L5`).test(log), `Lv. 5 Pikachu against Lv. 5 ${foe}`);
 	check(/\|uhtml\|rpball0\|.*\/throwball poke/.test(log), 'the Throw buttons are in the battle');
 	check(/\|uhtml\|rpitems\|/.test(log), 'the item panel is in the battle');
 	check(!!seen.potionButton, 'the item panel offers a Potion button once Pikachu is hurt');
