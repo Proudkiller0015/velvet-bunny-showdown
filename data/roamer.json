@@ -6,9 +6,13 @@
  "seed": "b88029fa11e7ecb2",
  "moves": 9,
  "hp": 137,
- "seen": 9,
+ "seen": 10,
  "caught": null,
- "holder": null,
+ "holder": {
+  "encounter": "d0f2cde3073b4419",
+  "userid": "simiaignis",
+  "at": 1792114459437
+ },
  "awayUntil": 0,
  "forced": null
 }
