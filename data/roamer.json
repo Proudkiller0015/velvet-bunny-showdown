@@ -4,15 +4,11 @@
   "nature": "Calm"
  },
  "seed": "b88029fa11e7ecb2",
- "moves": 9,
+ "moves": 10,
  "hp": 137,
  "seen": 10,
  "caught": null,
- "holder": {
-  "encounter": "d0f2cde3073b4419",
-  "userid": "simiaignis",
-  "at": 1792114459437
- },
+ "holder": null,
  "awayUntil": 0,
  "forced": null
 }
