@@ -1,0 +1,12 @@
+{
+	"id": "gen9randombattle-17-tn005i",
+	"format": "[Gen 9] Random Battle",
+	"players": [
+		"Bunny Normal",
+		"JoshimitzuGK"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Normal\n|j|☆JoshimitzuGK\n|t:|1792249124\n|gametype|singles\n|player|p1|Bunny Normal|bunny.png|1297\n|player|p2|JoshimitzuGK|170|1100\n|gen|9\n|tier|[Gen 9] Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1792249124\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Pyroar|Pyroar, L88, F|100/100\n|switch|p2a: Greedent|Greedent, L86, F|100/100\n|-ability|p1a: Pyroar|Unnerve\n|turn|1\n|c|☆Bunny Normal|Good luck! Playing on **normal**.\n|\n|t:|1792249163\n|switch|p2a: Politoed|Politoed, L88, F|100/100\n|-weather|RainDance|[from] ability: Drizzle|[of] p2a: Politoed\n|move|p1a: Pyroar|Hyper Voice|p2a: Politoed\n|-damage|p2a: Politoed|68/100\n|\n|-weather|RainDance|[upkeep]\n|upkeep\n|turn|2\n|\n|t:|1792249172\n|switch|p1a: Brambleghast|Brambleghast, L88, M|100/100\n|move|p2a: Politoed|Weather Ball|p1a: Brambleghast\n|-resisted|p1a: Brambleghast\n|-crit|p1a: Brambleghast\n|-damage|p1a: Brambleghast|11/100\n|\n|-weather|RainDance|[upkeep]\n|-heal|p1a: Brambleghast|17/100|[from] item: Leftovers\n|upkeep\n|turn|3\n|\n|t:|1792249200\n|switch|p2a: Galvantula|Galvantula, L82, F|100/100\n|move|p1a: Brambleghast|Power Whip|p2a: Galvantula\n|-resisted|p2a: Galvantula\n|-damage|p2a: Galvantula|61/100\n|\n|-weather|RainDance|[upkeep]\n|-heal|p1a: Brambleghast|23/100|[from] item: Leftovers\n|upkeep\n|turn|4\n|\n|t:|1792249214\n|move|p2a: Galvantula|Thunder|p1a: Brambleghast\n|-resisted|p1a: Brambleghast\n|-damage|p1a: Brambleghast|0 fnt\n|faint|p1a: Brambleghast\n|\n|-weather|RainDance|[upkeep]\n|upkeep\n|\n|t:|1792249214\n|switch|p1a: Camerupt|Camerupt, L91, M|100/100\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1792249232
+}
