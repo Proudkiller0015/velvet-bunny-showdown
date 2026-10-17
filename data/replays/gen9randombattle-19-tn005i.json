@@ -1,0 +1,12 @@
+{
+	"id": "gen9randombattle-19-tn005i",
+	"format": "[Gen 9] Random Battle",
+	"players": [
+		"Bunny Stockfish",
+		"JoshimitzuGK"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Stockfish\n|j|☆JoshimitzuGK\n|t:|1792249951\n|gametype|singles\n|badge|p1|gold|gen9randombattle|1-1\n|player|p1|Bunny Stockfish|bunny.png|1332\n|player|p2|JoshimitzuGK|170|1176\n|gen|9\n|tier|[Gen 9] Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1792249951\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Froslass|Froslass, L87, F|100/100\n|switch|p2a: Chi-Yu|Chi-Yu, L77|100/100\n|-ability|p2a: Chi-Yu|Beads of Ruin\n|turn|1\n|c|☆Bunny Stockfish|Good luck! Playing on **stockfish**.\n|\n|t:|1792249965\n|switch|p1a: Carbink|Carbink, L90|100/100\n|move|p2a: Chi-Yu|Dark Pulse|p1a: Carbink\n|-resisted|p1a: Carbink\n|-damage|p1a: Carbink|84/100\n|\n|-heal|p1a: Carbink|90/100|[from] item: Leftovers\n|upkeep\n|turn|2\n|\n|t:|1792250006\n|switch|p2a: Jumpluff|Jumpluff, L87, M|100/100\n|-terastallize|p1a: Carbink|Fighting\n|move|p1a: Carbink|Body Press|p2a: Jumpluff\n|-resisted|p2a: Jumpluff\n|-damage|p2a: Jumpluff|72/100\n|\n|-heal|p1a: Carbink|96/100|[from] item: Leftovers\n|upkeep\n|turn|3\n|\n|t:|1792250015\n|move|p2a: Jumpluff|Leech Seed|p1a: Carbink\n|-start|p1a: Carbink|move: Leech Seed\n|move|p1a: Carbink|Iron Defense|p1a: Carbink\n|-boost|p1a: Carbink|def|2\n|\n|-heal|p1a: Carbink|100/100|[from] item: Leftovers\n|-damage|p1a: Carbink|88/100|[from] Leech Seed|[of] p2a: Jumpluff\n|-heal|p2a: Jumpluff|82/100|[silent]\n|upkeep\n|turn|4\n|\n|t:|1792250023\n|move|p2a: Jumpluff|Substitute|p2a: Jumpluff\n|-start|p2a: Jumpluff|Substitute\n|-damage|p2a: Jumpluff|58/100\n|move|p1a: Carbink|Body Press|p2a: Jumpluff\n|-resisted|p2a: Jumpluff\n|-end|p2a: Jumpluff|Substitute\n|\n|-heal|p1a: Carbink|94/100|[from] item: Leftovers\n|-damage|p1a: Carbink|82/100|[from] Leech Seed|[of] p2a: Jumpluff\n|-heal|p2a: Jumpluff|68/100|[silent]\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1792250032
+}
