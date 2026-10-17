@@ -1,0 +1,12 @@
+{
+	"id": "gen9rpbattle-19-tn2n9v",
+	"format": "[Gen 9] RP Battle",
+	"players": [
+		"Terrorist Mike",
+		"simia ignis"
+	],
+	"rating": null,
+	"log": "|velvetmusic|troll|events/trololo\n|j|☆Terrorist Mike\n|j|☆simia ignis\n|t:|1792275331\n|gametype|singles\n|player|p1|Terrorist Mike|burglar|\n|player|p2|simia ignis|simia-ignis.png|\n|gen|9\n|tier|[Gen 9] RP Battle\n|clearpoke\n|poke|p1|Solrock, L43|\n|poke|p1|Carbink, L43|\n|poke|p1|Gourgeist-*, L44, F|\n|poke|p1|Golem-Alola, L44, F|\n|poke|p1|Golem-Alola, L44, F|\n|poke|p1|Garganacl, L45, M|\n|poke|p2|Ditto, L45|\n|poke|p2|Miraidon, L45|\n|poke|p2|Regigigas, L45|\n|poke|p2|Zacian-*, L45|\n|poke|p2|Giratina-Origin, L45|\n|poke|p2|Groudon, L45|\n|teampreview\n|inactive|Battle timer is ON: inactive players will automatically lose when time's up. (requested by Terrorist Mike)\n|n|☆Terrorist Mike|terroristmike\n|\n|t:|1792275337\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Solrock|Solrock, L43|100/100\n|switch|p2a: Ditto|Ditto, L45, shiny|100/100\n|-transform|p2a: Ditto|p1a: Solrock|[from] ability: Imposter\n|turn|1\n|\n|t:|1792275341\n|switch|p2a: Giratina|Giratina-Origin, L45|100/100\n|move|p1a: Solrock|Explosion|p2a: Giratina\n|-immune|p2a: Giratina\n|faint|p1a: Solrock\n|\n|upkeep\n|\n|t:|1792275341\n|switch|p1a: Carbink|Carbink, L43|100/100\n|turn|2\n|\n|t:|1792275345\n|switch|p2a: Ditto|Ditto, L45, shiny|100/100\n|-transform|p2a: Ditto|p1a: Carbink|[from] ability: Imposter\n|move|p1a: Carbink|Power Gem|p2a: Ditto\n|-damage|p2a: Ditto|84/100\n|\n|upkeep\n|turn|3\n|\n|t:|1792275349\n|switch|p2a: Giratina|Giratina-Origin, L45|100/100\n|switch|p1a: Garganacl|Garganacl, L45, M|100/100\n|\n|upkeep\n|turn|4\n|\n|t:|1792275354\n|switch|p2a: Ditto|Ditto, L45, shiny|84/100\n|-transform|p2a: Ditto|p1a: Garganacl|[from] ability: Imposter\n|move|p1a: Garganacl|Heavy Slam|p2a: Ditto\n|-supereffective|p2a: Ditto\n|-damage|p2a: Ditto|43/100\n|\n|upkeep\n|turn|5\n|\n|t:|1792275358\n|switch|p2a: Giratina|Giratina-Origin, L45|100/100\n|move|p1a: Garganacl|Heavy Slam|p2a: Giratina\n|-damage|p2a: Giratina|87/100\n|\n|upkeep\n|turn|6\n|\n|t:|1792275361\n|switch|p1a: Golem|Golem-Alola, L44, F|100/100\n|move|p2a: Giratina|Shadow Force||[still]\n|-prepare|p2a: Giratina|Shadow Force\n|\n|upkeep\n|turn|7\n",
+	"inputlog": null,
+	"uploadtime": 1792275361
+}
