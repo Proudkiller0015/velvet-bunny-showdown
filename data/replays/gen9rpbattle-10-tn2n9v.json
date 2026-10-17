@@ -1,0 +1,12 @@
+{
+	"id": "gen9rpbattle-10-tn2n9v",
+	"format": "[Gen 9] RP Battle",
+	"players": [
+		"Hiker Jay",
+		"simia ignis"
+	],
+	"rating": null,
+	"log": "|velvetmusic|trainer|events/trainer-rse\n|j|☆Hiker Jay\n|j|☆simia ignis\n|t:|1792275019\n|gametype|singles\n|player|p1|Hiker Jay|hiker-gen4|\n|player|p2|simia ignis|simia-ignis.png|\n|gen|9\n|tier|[Gen 9] RP Battle\n|clearpoke\n|poke|p1|Carbink, L43|\n|poke|p1|Aerodactyl, L43, F|\n|poke|p1|Dugtrio-Alola, L44, F|\n|poke|p1|Steelix, L44, F|\n|poke|p1|Gigalith, L44, M|\n|poke|p1|Krookodile, L45, M|\n|poke|p2|Ditto, L45|\n|poke|p2|Miraidon, L45|\n|poke|p2|Regigigas, L45|\n|poke|p2|Zacian-*, L45|\n|poke|p2|Giratina-Origin, L45|\n|poke|p2|Groudon, L45|\n|teampreview\n|inactive|Battle timer is ON: inactive players will automatically lose when time's up. (requested by Hiker Jay)\n|n|☆Hiker Jay|hikerjay\n|\n|t:|1792275023\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Gigalith|Gigalith, L44, M|100/100\n|switch|p2a: Zacian|Zacian-Crowned, L45|100/100\n|-ability|p2a: Zacian|Intrepid Sword|boost\n|-boost|p2a: Zacian|atk|1\n|-weather|Sandstorm|[from] ability: Sand Stream|[of] p1a: Gigalith\n|turn|1\n|\n|t:|1792275025\n|switch|p1a: Steelix|Steelix, L44, F|100/100\n|move|p2a: Zacian|Behemoth Blade|p1a: Steelix\n|-resisted|p1a: Steelix\n|-damage|p1a: Steelix|80/100\n|\n|-weather|Sandstorm|[upkeep]\n|-heal|p1a: Steelix|86/100|[from] item: Leftovers\n|upkeep\n|turn|2\n|\n|t:|1792275031\n|switch|p2a: Giratina|Giratina-Origin, L45|100/100\n|move|p1a: Steelix|Earthquake|p2a: Giratina\n|-immune|p2a: Giratina\n|\n|-weather|Sandstorm|[upkeep]\n|-damage|p2a: Giratina|95/100|[from] Sandstorm\n|-heal|p1a: Steelix|92/100|[from] item: Leftovers\n|upkeep\n|turn|3\n|\n|t:|1792275033\n|move|p2a: Giratina|Shadow Force||[still]\n|-prepare|p2a: Giratina|Shadow Force\n|move|p1a: Steelix|Toxic|p2a: Giratina|[miss]\n|-miss|p1a: Steelix|p2a: Giratina\n|\n|-weather|Sandstorm|[upkeep]\n|-damage|p2a: Giratina|89/100|[from] Sandstorm\n|-heal|p1a: Steelix|99/100|[from] item: Leftovers\n|upkeep\n|turn|4\n|\n|t:|1792275036\n|move|p2a: Giratina|Shadow Force|p1a: Steelix|[from] lockedmove\n|-damage|p1a: Steelix|70/100\n|move|p1a: Steelix|Toxic|p2a: Giratina\n|-status|p2a: Giratina|tox\n|\n|-weather|Sandstorm|[upkeep]\n|-damage|p2a: Giratina|83/100 tox|[from] Sandstorm\n|-heal|p1a: Steelix|76/100|[from] item: Leftovers\n|-damage|p2a: Giratina|77/100 tox|[from] psn\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1792275041
+}
