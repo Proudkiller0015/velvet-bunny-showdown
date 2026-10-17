@@ -7,12 +7,12 @@
  "moves": 3,
  "hp": 49,
  "seen": 4,
- "caught": null,
- "holder": {
-  "encounter": "7564d89c8d1887ec",
+ "caught": {
   "userid": "simiaignis",
-  "at": 1792258109359
+  "name": "simia ignis",
+  "at": "2026-10-17T17:28:46.264Z"
  },
+ "holder": null,
  "awayUntil": 1792217923453,
  "forced": null
 }
