@@ -1,0 +1,12 @@
+{
+	"id": "gen9rpbattle-9-tn2n9v",
+	"format": "[Gen 9] RP Battle",
+	"players": [
+		"Larper Gus",
+		"simia ignis"
+	],
+	"rating": null,
+	"log": "|velvetmusic|troll|events/trololo\n|j|☆Larper Gus\n|j|☆simia ignis\n|t:|1792274929\n|gametype|singles\n|player|p1|Larper Gus|harlequin|\n|player|p2|simia ignis|simia-ignis.png|\n|gen|9\n|tier|[Gen 9] RP Battle\n|clearpoke\n|poke|p1|Torkoal, L43, M|\n|poke|p1|Turtonator, L43, F|\n|poke|p1|Polteageist, L43|\n|poke|p1|Lickilicky, L43, F|\n|poke|p1|Aromatisse, L44, F|\n|poke|p1|Steelix, L45, F|\n|poke|p2|Ditto, L45|\n|poke|p2|Miraidon, L45|\n|poke|p2|Regigigas, L45|\n|poke|p2|Zacian-*, L45|\n|poke|p2|Giratina-Origin, L45|\n|poke|p2|Groudon, L45|\n|teampreview\n|inactive|Battle timer is ON: inactive players will automatically lose when time's up. (requested by Larper Gus)\n|n|☆Larper Gus|larpergus\n|\n|t:|1792274935\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Torkoal|Torkoal, L43, M|100/100\n|switch|p2a: Miraidon|Miraidon, L45|100/100\n|-fieldstart|move: Electric Terrain|[from] ability: Hadron Engine|[of] p2a: Miraidon\n|turn|1\n|\n|t:|1792274937\n|move|p2a: Miraidon|Electro Drift|p1a: Torkoal\n|-damage|p1a: Torkoal|0 fnt\n|faint|p1a: Torkoal\n|\n|upkeep\n|\n|t:|1792274937\n|switch|p1a: Turtonator|Turtonator, L43, F|100/100\n|turn|2\n|\n|t:|1792274943\n|switch|p2a: Zacian|Zacian-Crowned, L45|100/100\n|-ability|p2a: Zacian|Intrepid Sword|boost\n|-boost|p2a: Zacian|atk|1\n|move|p1a: Turtonator|Explosion|p2a: Zacian\n|-resisted|p2a: Zacian\n|-damage|p2a: Zacian|50/100\n|faint|p1a: Turtonator\n|\n|upkeep\n|\n|t:|1792274943\n|switch|p1a: Polteageist|Polteageist, L43|100/100\n|turn|3\n|\n|t:|1792274948\n|switch|p2a: Ditto|Ditto, L45, shiny|100/100\n|-transform|p2a: Ditto|p1a: Polteageist|[from] ability: Imposter\n|move|p1a: Polteageist|Self-Destruct|p2a: Ditto\n|-immune|p2a: Ditto\n|faint|p1a: Polteageist\n|\n|upkeep\n|\n|t:|1792274948\n|switch|p1a: Lickilicky|Lickilicky, L43, F|100/100\n|turn|4\n|\n|t:|1792274956\n|move|p2a: Ditto|Substitute|p2a: Ditto\n|-start|p2a: Ditto|Substitute\n|-damage|p2a: Ditto|75/100\n|move|p1a: Lickilicky|Knock Off|p2a: Ditto\n|-supereffective|p2a: Ditto\n|-end|p2a: Ditto|Substitute\n|\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1792274961
+}
