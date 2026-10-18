@@ -1,0 +1,12 @@
+{
+	"id": "gen9customgame-25-tn2n9v",
+	"format": "[Gen 9] Custom Game",
+	"players": [
+		"Bunny Normal",
+		"Pablo_OP333"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Normal\n|j|☆Pablo_OP333\n|t:|1792317005\n|gametype|singles\n|badge|p1|gold|gen9customgame|1-1\n|badge|p2|silver|gen9customgame|2-2\n|player|p1|Bunny Normal|bunny.png|1221\n|player|p2|Pablo_OP333|102|1062\n|gen|9\n|tier|[Gen 9] Custom Game\n|rated|\n|clearpoke\n|poke|p1|Gliscor|\n|poke|p1|Kyurem-Black|\n|poke|p1|Slowking-Galar|\n|poke|p1|Great Tusk|\n|poke|p1|Raging Bolt|\n|poke|p1|Kingambit|\n|poke|p2|Naganadel|\n|poke|p2|Dragonite|\n|poke|p2|Rotom-Wash|\n|poke|p2|Incineroar|\n|poke|p2|Meowscarada|\n|poke|p2|Aerodactyl, F|\n|teampreview\n|c|☆Bunny Normal|Good luck! Playing on **normal**.\n|\n|t:|1792317021\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Raging Bolt|Raging Bolt|391/391\n|switch|p2a: Aereonaigga|Aerodactyl, F|273/273\n|-ability|p2a: Aereonaigga|Pressure\n|turn|1\n|\n|t:|1792317030\n|move|p2a: Aereonaigga|Earthquake|p1a: Raging Bolt\n|-supereffective|p1a: Raging Bolt\n|-damage|p1a: Raging Bolt|151/391\n|move|p1a: Raging Bolt|Thunderbolt|p2a: Aereonaigga\n|-supereffective|p2a: Aereonaigga\n|-enditem|p2a: Aereonaigga|Focus Sash\n|-damage|p2a: Aereonaigga|1/273\n|\n|upkeep\n|turn|2\n|\n|t:|1792317038\n|move|p2a: Aereonaigga|Earthquake|p1a: Raging Bolt\n|-supereffective|p1a: Raging Bolt\n|-damage|p1a: Raging Bolt|0 fnt\n|faint|p1a: Raging Bolt\n|-end|p1a: Raging Bolt|Protosynthesis|[silent]\n|\n|upkeep\n|\n|t:|1792317038\n|switch|p1a: Kyurem|Kyurem-Black|391/391\n|-ability|p1a: Kyurem|Teravolt\n|turn|3\n|\n|t:|1792317052\n|move|p2a: Aereonaigga|Stone Edge|p1a: Kyurem\n|-supereffective|p1a: Kyurem\n|-damage|p1a: Kyurem|67/391\n|move|p1a: Kyurem|Fusion Bolt|p2a: Aereonaigga\n|-supereffective|p2a: Aereonaigga\n|-damage|p2a: Aereonaigga|0 fnt\n|faint|p2a: Aereonaigga\n|\n|upkeep\n|\n|t:|1792317075\n|switch|p2a: Chupabolas|Naganadel|287/287\n|turn|4\n|\n|t:|1792317082\n|switch|p1a: Kingambit|Kingambit|341/341\n|-activate|p1a: Kingambit|ability: Supreme Overlord\n|-start|p1a: Kingambit|fallen1|[silent]\n|move|p2a: Chupabolas|Sludge Wave|p1a: Kingambit\n|-immune|p1a: Kingambit\n|\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1792317083
+}
