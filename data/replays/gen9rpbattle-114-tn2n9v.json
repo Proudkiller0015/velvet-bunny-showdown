@@ -1,0 +1,12 @@
+{
+	"id": "gen9rpbattle-114-tn2n9v",
+	"format": "[Gen 9] RP Battle",
+	"players": [
+		"Backpacker Rex",
+		"StaleThunder126"
+	],
+	"rating": null,
+	"log": "|velvetmusic|trainer|events/trainer-rse\n|j|☆Backpacker Rex\n|j|☆StaleThunder126\n|t:|1792342214\n|gametype|singles\n|player|p1|Backpacker Rex|backpacker-gen6|\n|player|p2|StaleThunder126|jolt.png|\n|gen|9\n|tier|[Gen 9] RP Battle\n|clearpoke\n|poke|p1|Omanyte, L19, M|\n|poke|p1|Mawile, L20, M|\n|poke|p1|Basculin-White-Striped, L20, F|\n|poke|p1|Tauros-Paldea-Aqua, L20, M|\n|poke|p1|Nidorino, L20, M|\n|poke|p1|Liepard, L23, M|\n|poke|p2|Smeargle, L23, F|\n|poke|p2|Budew, L13, F|\n|poke|p2|Frogadier, L23, F|\n|poke|p2|Yungoos, L22, F|\n|poke|p2|Nuzleaf, L23, M|\n|poke|p2|Bidoof, L13, F|\n|teampreview\n|inactive|Battle timer is ON: inactive players will automatically lose when time's up. (requested by Backpacker Rex)\n|n|☆Backpacker Rex|backpackerrex\n|\n|t:|1792342229\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Tauros|Tauros-Paldea-Aqua, L20, M|100/100\n|switch|p2a: Frogadier|Frogadier, L23, F|100/100\n|turn|1\n|\n|t:|1792342241\n|move|p2a: Frogadier|Gunk Shot|p1a: Tauros|[miss]\n|-start|p2a: Frogadier|typechange|Poison|[from] ability: Protean\n|-miss|p2a: Frogadier|p1a: Tauros\n|move|p1a: Tauros|Headbutt|p2a: Frogadier\n|-damage|p2a: Frogadier|67/100\n|\n|upkeep\n|turn|2\n|\n|t:|1792342255\n|move|p2a: Frogadier|Hydro Pump|p1a: Tauros\n|-start|p2a: Frogadier|typechange|Water|[from] ability: Protean\n|-resisted|p1a: Tauros\n|-damage|p1a: Tauros|52/100\n|move|p1a: Tauros|Headbutt|p2a: Frogadier\n|-crit|p2a: Frogadier\n|-damage|p2a: Frogadier|16/100\n|\n|upkeep\n|turn|3\n|\n|t:|1792342265\n|move|p2a: Frogadier|Ice Beam|p1a: Tauros\n|-start|p2a: Frogadier|typechange|Ice|[from] ability: Protean\n|-resisted|p1a: Tauros\n|-damage|p1a: Tauros|12/100\n|move|p1a: Tauros|Headbutt|p2a: Frogadier\n|-damage|p2a: Frogadier|0 fnt\n|faint|p2a: Frogadier\n|\n|upkeep\n|\n|t:|1792342278\n|switch|p2a: Smeargle|Smeargle, L23, F|100/100\n|turn|4\n|\n|t:|1792342283\n|switch|p1a: Mawile|Mawile, L20, M|100/100\n|move|p2a: Smeargle|Continental Heave|p1a: Mawile\n|-resisted|p1a: Mawile\n|-damage|p1a: Mawile|83/100\n|\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1792342284
+}
