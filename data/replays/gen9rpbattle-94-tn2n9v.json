@@ -1,0 +1,12 @@
+{
+	"id": "gen9rpbattle-94-tn2n9v",
+	"format": "[Gen 9] RP Battle",
+	"players": [
+		"Bird Keeper Ryo",
+		"StaleThunder126"
+	],
+	"rating": null,
+	"log": "|velvetmusic|trainer|events/trainer-rse\n|j|☆Bird Keeper Ryo\n|j|☆StaleThunder126\n|t:|1792337442\n|gametype|singles\n|player|p1|Bird Keeper Ryo|birdkeeper-gen4dp|\n|player|p2|StaleThunder126|jolt.png|\n|gen|9\n|tier|[Gen 9] RP Battle\n|clearpoke\n|poke|p1|Cramorant, L20, M|\n|poke|p1|Oricorio, L21, F|\n|poke|p1|Bombirdier, L21, F|\n|poke|p1|Sigilyph, L22, F|\n|poke|p1|Togetic, L23, M|\n|poke|p2|Frogadier, L23, M|\n|poke|p2|Grimer-Alola, L23, F|\n|poke|p2|Wingull, L16, M|\n|poke|p2|Taillow, L16, F|\n|poke|p2|Linoone-Galar, L23, F|\n|poke|p2|Nuzleaf, L23, F|\n|teampreview\n|inactive|Battle timer is ON: inactive players will automatically lose when time's up. (requested by Bird Keeper Ryo)\n|c|☆Bird Keeper Ryo|🔒 Z-Moves, Dynamax, Terastallization are locked until the story gives Jolt the item; the battle won't allow them.\n|c|☆Bird Keeper Ryo|Your Showdown team must match your box: only Pokémon you own, at or below their box level, or the battle is called off.\n|c|☆Bird Keeper Ryo|You look like a trainer. Let's battle!\n|n|☆Bird Keeper Ryo|birdkeeperryo\n|\n|t:|1792337458\n|teamsize|p1|5\n|teamsize|p2|6\n|start\n|switch|p1a: Bombirdier|Bombirdier, L21, F|100/100\n|switch|p2a: Frogadier|Frogadier, L23, M|100/100\n|turn|1\n|\n|t:|1792337465\n|move|p2a: Frogadier|Ice Beam|p1a: Bombirdier\n|-start|p2a: Frogadier|typechange|Ice|[from] ability: Protean\n|-supereffective|p1a: Bombirdier\n|-damage|p1a: Bombirdier|0 fnt\n|faint|p1a: Bombirdier\n|\n|upkeep\n|\n|t:|1792337465\n|switch|p1a: Cramorant|Cramorant, L20, M|100/100\n|turn|2\n|\n|t:|1792337475\n|move|p2a: Frogadier|Ice Beam|p1a: Cramorant\n|-damage|p1a: Cramorant|40/100\n|-enditem|p1a: Cramorant|Oran Berry|[eat]\n|-heal|p1a: Cramorant|56/100|[from] item: Oran Berry\n|move|p1a: Cramorant|Pluck|p2a: Frogadier\n|-damage|p2a: Frogadier|57/100\n|\n|upkeep\n|turn|3\n|\n|t:|1792337484\n|move|p2a: Frogadier|Ice Beam|p1a: Cramorant\n|-damage|p1a: Cramorant|0 fnt\n|faint|p1a: Cramorant\n|\n|upkeep\n|\n|t:|1792337484\n|switch|p1a: Oricorio|Oricorio, L21, F|100/100\n|turn|4\n|\n|t:|1792337494\n|move|p2a: Frogadier|Hydro Pump|p1a: Oricorio\n|-start|p2a: Frogadier|typechange|Water|[from] ability: Protean\n|-supereffective|p1a: Oricorio\n|-damage|p1a: Oricorio|0 fnt\n|faint|p1a: Oricorio\n|\n|upkeep\n|\n|t:|1792337494\n|switch|p1a: Sigilyph|Sigilyph, L22, F|100/100\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1792337503
+}
