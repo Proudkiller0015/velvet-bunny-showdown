@@ -1,0 +1,12 @@
+{
+	"id": "gen9rpbattle-47-tn2n9v",
+	"format": "[Gen 9] RP Battle",
+	"players": [
+		"Bug Catcher Sora",
+		"StaleThunder126"
+	],
+	"rating": null,
+	"log": "|velvetmusic|trainer|events/trainer-rse\n|j|☆Bug Catcher Sora\n|j|☆StaleThunder126\n|t:|1792327239\n|gametype|singles\n|player|p1|Bug Catcher Sora|bugcatcher-gen4dp|\n|player|p2|StaleThunder126|jolt.png|\n|gen|9\n|tier|[Gen 9] RP Battle\n|clearpoke\n|poke|p1|Pineco, L11, F|\n|poke|p1|Cutiefly, L11, M|\n|poke|p1|Sewaddle, L11, F|\n|poke|p1|Kricketune, L12, M|\n|poke|p1|Vivillon-Fancy, L13, F|\n|poke|p2|Shroodle, L10, M|\n|poke|p2|Nuzleaf, L13, F|\n|poke|p2|Froakie, L13, F|\n|poke|p2|Helioptile, L13, F|\n|poke|p2|Kingler, L9, M|\n|poke|p2|Fletchling, L13, F|\n|teampreview\n|inactive|Battle timer is ON: inactive players will automatically lose when time's up. (requested by Bug Catcher Sora)\n|n|☆Bug Catcher Sora|bugcatchersora\n|\n|t:|1792327247\n|teamsize|p1|5\n|teamsize|p2|6\n|start\n|switch|p1a: Vivillon|Vivillon-Fancy, L13, F|100/100\n|switch|p2a: Fletchling|Fletchling, L13, F|100/100\n|turn|1\n|\n|t:|1792327254\n|move|p2a: Fletchling|Brave Bird|p1a: Vivillon\n|-supereffective|p1a: Vivillon\n|-damage|p1a: Vivillon|0 fnt\n|faint|p1a: Vivillon\n|-damage|p2a: Fletchling|57/100|[from] Recoil\n|\n|upkeep\n|\n|t:|1792327254\n|switch|p1a: Pineco|Pineco, L11, F|100/100\n|turn|2\n|\n|t:|1792327269\n|move|p2a: Fletchling|Brave Bird|p1a: Pineco\n|-supereffective|p1a: Pineco\n|-ability|p1a: Pineco|Sturdy\n|-damage|p1a: Pineco|4/100\n|-damage|p2a: Fletchling|29/100|[from] Recoil\n|move|p1a: Pineco|Take Down|p2a: Fletchling\n|-damage|p2a: Fletchling|0 fnt\n|faint|p2a: Fletchling\n|-damage|p1a: Pineco|0 fnt|[from] Recoil\n|faint|p1a: Pineco\n|\n|upkeep\n|\n|t:|1792327283\n|switch|p2a: Froakie|Froakie, L13, F|100/100\n|switch|p1a: Kricketune|Kricketune, L12, M|100/100\n|turn|3\n|\n|t:|1792327288\n|move|p2a: Froakie|Ice Beam|p1a: Kricketune\n|-start|p2a: Froakie|typechange|Ice|[from] ability: Protean\n|-damage|p1a: Kricketune|13/100\n|-status|p1a: Kricketune|frz\n|cant|p1a: Kricketune|frz\n|\n|upkeep\n|turn|4\n|\n|t:|1792327298\n|move|p2a: Froakie|Ice Beam|p1a: Kricketune\n|-damage|p1a: Kricketune|0 fnt\n|faint|p1a: Kricketune\n|\n|upkeep\n|\n|t:|1792327298\n|switch|p1a: Cutiefly|Cutiefly, L11, M|100/100\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1792327303
+}
