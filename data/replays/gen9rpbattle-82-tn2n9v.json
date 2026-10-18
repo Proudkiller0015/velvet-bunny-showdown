@@ -1,0 +1,12 @@
+{
+	"id": "gen9rpbattle-82-tn2n9v",
+	"format": "[Gen 9] RP Battle",
+	"players": [
+		"School Kid Jay",
+		"StaleThunder126"
+	],
+	"rating": null,
+	"log": "|velvetmusic|trainer|events/trainer-rse\n|j|☆School Kid Jay\n|j|☆StaleThunder126\n|t:|1792333966\n|gametype|singles\n|player|p1|School Kid Jay|schoolkid-gen4|\n|player|p2|StaleThunder126|jolt.png|\n|gen|9\n|tier|[Gen 9] RP Battle\n|clearpoke\n|poke|p1|Plusle, L18, F|\n|poke|p1|Squawkabilly-Blue, L19, M|\n|poke|p1|Trumbeak, L20, F|\n|poke|p1|Flaaffy, L20, M|\n|poke|p1|Jigglypuff, L21, M|\n|poke|p1|Gumshoos, L23, M|\n|poke|p2|Tentacool, L13, M|\n|poke|p2|Nuzleaf, L23, M|\n|poke|p2|Pidgeotto, L19, F|\n|poke|p2|Frogadier, L23, M|\n|poke|p2|Oranguru, L23, F|\n|poke|p2|Doduo, L13, M|\n|teampreview\n|inactive|Battle timer is ON: inactive players will automatically lose when time's up. (requested by School Kid Jay)\n|n|☆School Kid Jay|schoolkidjay\n|\n|t:|1792333979\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Gumshoos|Gumshoos, L23, M|100/100\n|switch|p2a: Frogadier|Frogadier, L23, M|100/100\n|turn|1\n|\n|t:|1792333986\n|move|p2a: Frogadier|Ice Beam|p1a: Gumshoos\n|-start|p2a: Frogadier|typechange|Ice|[from] ability: Protean\n|-damage|p1a: Gumshoos|28/100\n|move|p1a: Gumshoos|Payback|p2a: Frogadier\n|-damage|p2a: Frogadier|40/100\n|\n|upkeep\n|turn|2\n|\n|t:|1792333996\n|move|p2a: Frogadier|Ice Beam|p1a: Gumshoos\n|-damage|p1a: Gumshoos|0 fnt\n|faint|p1a: Gumshoos\n|\n|upkeep\n|\n|t:|1792333996\n|switch|p1a: Flaaffy|Flaaffy, L20, M|100/100\n|turn|3\n|\n|t:|1792334005\n|move|p2a: Frogadier|U-turn|p1a: Flaaffy\n|-start|p2a: Frogadier|typechange|Bug|[from] ability: Protean\n|-crit|p1a: Flaaffy\n|-damage|p1a: Flaaffy|30/100\n|\n|t:|1792334012\n|switch|p2a: Oranguru|Oranguru, L23, F|100/100|[from] U-turn\n|move|p1a: Flaaffy|Thunder Shock|p2a: Oranguru\n|-damage|p2a: Oranguru|90/100\n|\n|upkeep\n|turn|4\n|\n|t:|1792334022\n|move|p2a: Oranguru|Psychic|p1a: Flaaffy\n|-damage|p1a: Flaaffy|0 fnt\n|faint|p1a: Flaaffy\n|\n|upkeep\n|\n|t:|1792334022\n|switch|p1a: Plusle|Plusle, L18, F|100/100\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1792334023
+}
