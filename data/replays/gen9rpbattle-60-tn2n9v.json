@@ -1,0 +1,12 @@
+{
+	"id": "gen9rpbattle-60-tn2n9v",
+	"format": "[Gen 9] RP Battle",
+	"players": [
+		"Lass Nia",
+		"StaleThunder126"
+	],
+	"rating": null,
+	"log": "|velvetmusic|trainer|events/trainer-rse\n|j|☆Lass Nia\n|j|☆StaleThunder126\n|t:|1792329407\n|gametype|singles\n|player|p1|Lass Nia|lass-gen4|\n|player|p2|StaleThunder126|jolt.png|\n|gen|9\n|tier|[Gen 9] RP Battle\n|clearpoke\n|poke|p1|Hoothoot, L11, F|\n|poke|p1|Cottonee, L11, M|\n|poke|p1|Glameow, L12, M|\n|poke|p1|Doduo, L12, M|\n|poke|p1|Chatot, L12, M|\n|poke|p1|Girafarig, L13, M|\n|poke|p2|Kecleon, L13, F|\n|poke|p2|Nuzleaf, L13, M|\n|poke|p2|Froakie, L13, M|\n|poke|p2|Helioptile, L13, M|\n|poke|p2|Sawsbuck, L13, F|\n|poke|p2|Fletchling, L13, M|\n|teampreview\n|inactive|Battle timer is ON: inactive players will automatically lose when time's up. (requested by Lass Nia)\n|n|☆Lass Nia|lassnia\n|\n|t:|1792329424\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Chatot|Chatot, L12, M|100/100\n|switch|p2a: Fletchling|Fletchling, L13, M|100/100\n|turn|1\n|\n|t:|1792329440\n|switch|p2a: Helioptile|Helioptile, L13, M|100/100\n|move|p1a: Chatot|Hyper Voice|p2a: Helioptile\n|-damage|p2a: Helioptile|35/100\n|\n|upkeep\n|turn|2\n|\n|t:|1792329447\n|move|p2a: Helioptile|Thunderbolt|p1a: Chatot\n|-supereffective|p1a: Chatot\n|-damage|p1a: Chatot|0 fnt\n|faint|p1a: Chatot\n|\n|upkeep\n|\n|t:|1792329447\n|switch|p1a: Girafarig|Girafarig, L13, M|100/100\n|turn|3\n|\n|t:|1792329456\n|move|p2a: Helioptile|Dark Pulse|p1a: Girafarig\n|-supereffective|p1a: Girafarig\n|-damage|p1a: Girafarig|17/100\n|move|p1a: Girafarig|Assurance|p2a: Helioptile\n|-damage|p2a: Helioptile|0 fnt\n|faint|p2a: Helioptile\n|\n|upkeep\n|\n|t:|1792329473\n|switch|p2a: Kecleon|Kecleon, L13, F|100/100\n|turn|4\n|\n|t:|1792329479\n|move|p1a: Girafarig|Assurance|p2a: Kecleon\n|-damage|p2a: Kecleon|80/100\n|move|p2a: Kecleon|Drain Punch|p1a: Girafarig\n|-start|p2a: Kecleon|typechange|Fighting|[from] ability: Protean\n|-damage|p1a: Girafarig|0 fnt\n|-heal|p2a: Kecleon|88/100|[from] drain|[of] p1a: Girafarig\n|faint|p1a: Girafarig\n|\n|upkeep\n|\n|t:|1792329479\n|switch|p1a: Cottonee|Cottonee, L11, M|100/100\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1792329483
+}
