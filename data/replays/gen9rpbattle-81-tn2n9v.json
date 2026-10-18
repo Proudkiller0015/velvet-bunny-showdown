@@ -1,0 +1,12 @@
+{
+	"id": "gen9rpbattle-81-tn2n9v",
+	"format": "[Gen 9] RP Battle",
+	"players": [
+		"School Kid Ken",
+		"StaleThunder126"
+	],
+	"rating": null,
+	"log": "|velvetmusic|trainer|events/trainer-rse\n|j|☆School Kid Ken\n|j|☆StaleThunder126\n|t:|1792333554\n|gametype|singles\n|player|p1|School Kid Ken|schoolkid-gen4|\n|player|p2|StaleThunder126|jolt.png|\n|gen|9\n|tier|[Gen 9] RP Battle\n|clearpoke\n|poke|p1|Pumpkaboo-*, L19, F|\n|poke|p1|Porygon, L19|\n|poke|p1|Squawkabilly, L19, M|\n|poke|p1|Carnivine, L20, M|\n|poke|p1|Bibarel, L23, F|\n|poke|p2|Frogadier, L23, M|\n|poke|p2|Grimer-Alola, L15, M|\n|poke|p2|Poliwag, L15, M|\n|poke|p2|Gastly, L15, M|\n|poke|p2|Oranguru, L21, F|\n|poke|p2|Nuzleaf, L23, F|\n|teampreview\n|inactive|Battle timer is ON: inactive players will automatically lose when time's up. (requested by School Kid Ken)\n|n|☆School Kid Ken|schoolkidken\n|\n|t:|1792333577\n|teamsize|p1|5\n|teamsize|p2|6\n|start\n|switch|p1a: Bibarel|Bibarel, L23, F|100/100\n|switch|p2a: Frogadier|Frogadier, L23, M|100/100\n|turn|1\n|\n|t:|1792333587\n|move|p2a: Frogadier|U-turn|p1a: Bibarel\n|-start|p2a: Frogadier|typechange|Bug|[from] ability: Protean\n|-damage|p1a: Bibarel|70/100\n|\n|t:|1792333594\n|switch|p2a: Oranguru|Oranguru, L21, F|100/100|[from] U-turn\n|move|p1a: Bibarel|Headbutt|p2a: Oranguru\n|-damage|p2a: Oranguru|66/100\n|\n|upkeep\n|turn|2\n|\n|t:|1792333604\n|move|p1a: Bibarel|Aqua Jet|p2a: Oranguru\n|-damage|p2a: Oranguru|46/100\n|move|p2a: Oranguru|Thunderbolt|p1a: Bibarel\n|-supereffective|p1a: Bibarel\n|-damage|p1a: Bibarel|0 fnt\n|faint|p1a: Bibarel\n|\n|upkeep\n|\n|t:|1792333605\n|switch|p1a: Carnivine|Carnivine, L20, M|100/100\n|turn|3\n|\n|t:|1792333617\n|move|p2a: Oranguru|Psychic|p1a: Carnivine\n|-damage|p1a: Carnivine|26/100\n|move|p1a: Carnivine|Bite|p2a: Oranguru\n|-supereffective|p2a: Oranguru\n|-damage|p2a: Oranguru|12/100\n|\n|upkeep\n|turn|4\n|\n|t:|1792333624\n|move|p2a: Oranguru|Psychic|p1a: Carnivine\n|-damage|p1a: Carnivine|0 fnt\n|faint|p1a: Carnivine\n|\n|upkeep\n|\n|t:|1792333624\n|switch|p1a: Squawkabilly|Squawkabilly, L19, M|100/100\n|-ability|p1a: Squawkabilly|Intimidate|boost\n|-fail|p2a: Oranguru|unboost|Attack|[from] ability: Inner Focus|[of] p2a: Oranguru\n|turn|5\n|\n|t:|1792333633\n|move|p1a: Squawkabilly|Quick Attack|p2a: Oranguru\n|-damage|p2a: Oranguru|0 fnt\n|faint|p2a: Oranguru\n|\n|upkeep\n|\n|t:|1792333641\n|switch|p2a: Frogadier|Frogadier, L23, M|100/100\n|turn|6\n",
+	"inputlog": null,
+	"uploadtime": 1792333643
+}
