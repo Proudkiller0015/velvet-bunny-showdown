@@ -1,0 +1,12 @@
+{
+	"id": "gen9customgame-23-tn2n9v",
+	"format": "[Gen 9] Custom Game",
+	"players": [
+		"Bunny Normal",
+		"Pablo_OP333"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Normal\n|j|☆Pablo_OP333\n|t:|1792315427\n|gametype|singles\n|badge|p1|gold|gen9customgame|1-1\n|badge|p2|bronze|gen9customgame|3-3\n|player|p1|Bunny Normal|bunny.png|1211\n|player|p2|Pablo_OP333|102|1000\n|gen|9\n|tier|[Gen 9] Custom Game\n|rated|\n|clearpoke\n|poke|p1|Skarmory|\n|poke|p1|Gholdengo|\n|poke|p1|Great Tusk|\n|poke|p1|Heatran|\n|poke|p1|Iron Moth|\n|poke|p1|Zamazenta-*|\n|poke|p2|Naganadel|\n|poke|p2|Dragonite|\n|poke|p2|Rotom-Wash|\n|poke|p2|Incineroar|\n|poke|p2|Meowscarada|\n|poke|p2|Aerodactyl, F|\n|teampreview\n|c|☆Bunny Normal|Good luck! Playing on **normal**.\n|\n|t:|1792315433\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Heatran|Heatran|323/323\n|switch|p2a: Aereonaigga|Aerodactyl, F|273/273\n|-ability|p2a: Aereonaigga|Pressure\n|turn|1\n|\n|t:|1792315443\n|move|p2a: Aereonaigga|Earthquake|p1a: Heatran\n|-supereffective|p1a: Heatran\n|-damage|p1a: Heatran|0 fnt\n|faint|p1a: Heatran\n|\n|upkeep\n|\n|t:|1792315443\n|switch|p1a: Gholdengo|Gholdengo|315/315\n|turn|2\n|\n|t:|1792315461\n|move|p1a: Gholdengo|Make It Rain|p2a: Aereonaigga\n|-supereffective|p2a: Aereonaigga\n|-enditem|p2a: Aereonaigga|Focus Sash\n|-damage|p2a: Aereonaigga|1/273\n|-unboost|p1a: Gholdengo|spa|1\n|move|p2a: Aereonaigga|Earthquake|p1a: Gholdengo\n|-supereffective|p1a: Gholdengo\n|-damage|p1a: Gholdengo|115/315\n|\n|upkeep\n|turn|3\n|\n|t:|1792315492\n|move|p1a: Gholdengo|Make It Rain|p2a: Aereonaigga\n|-supereffective|p2a: Aereonaigga\n|-damage|p2a: Aereonaigga|0 fnt\n|-unboost|p1a: Gholdengo|spa|1\n|faint|p2a: Aereonaigga\n|\n|upkeep\n|\n|t:|1792315499\n|switch|p2a: Naiggacat|Incineroar|394/394\n|-ability|p2a: Naiggacat|Intimidate|boost\n|-unboost|p1a: Gholdengo|atk|1\n|turn|4\n|\n|t:|1792315505\n|switch|p1a: Zamazenta|Zamazenta|388/388\n|-ability|p1a: Zamazenta|Dauntless Shield|boost\n|-boost|p1a: Zamazenta|def|1\n|move|p2a: Naiggacat|Flare Blitz|p1a: Zamazenta\n|-damage|p1a: Zamazenta|297/388\n|-damage|p2a: Naiggacat|364/394|[from] Recoil\n|\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1792315523
+}
