@@ -1,0 +1,12 @@
+{
+	"id": "gen9rpbattle-36-tn2n9v",
+	"format": "[Gen 9] RP Battle",
+	"players": [
+		"Larper Sora",
+		"StaleThunder126"
+	],
+	"rating": null,
+	"log": "|velvetmusic|troll|events/trololo\n|j|☆Larper Sora\n|j|☆StaleThunder126\n|t:|1792325470\n|gametype|singles\n|player|p1|Larper Sora|harlequin|\n|player|p2|StaleThunder126|jolt.png|\n|gen|9\n|tier|[Gen 9] RP Battle\n|clearpoke\n|poke|p1|Seedot, L10, M|\n|poke|p1|Solosis, L10, F|\n|poke|p1|Baltoy, L11|\n|poke|p1|Grimer-Alola, L12, F|\n|poke|p1|Onix, L12, F|\n|poke|p1|Minior, L13|\n|poke|p2|Budew, L13, F|\n|poke|p2|Poliwag, L10, F|\n|poke|p2|Gastly, L12, M|\n|poke|p2|Nuzleaf, L13, F|\n|poke|p2|Silicobra, L10, M|\n|poke|p2|Patrat, L12, M|\n|teampreview\n|inactive|Battle timer is ON: inactive players will automatically lose when time's up. (requested by Larper Sora)\n|c|☆Larper Sora|⚠️ Jolt can't use held items (they unlock with your first badge) yet (not blocked, so just don't).\n|c|☆Larper Sora|🔒 Z-Moves, Dynamax, Terastallization are locked until the story gives Jolt the item; the battle won't allow them.\n|c|☆Larper Sora|Your Showdown team must match your box: only Pokémon you own, at or below their box le\n|c|☆Larper Sora|Let's see what you've got!\n|\n|t:|1792325487\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Seedot|Seedot, L10, M|100/100\n|switch|p2a: Nuzleaf|Nuzleaf, L13, F, shiny|100/100\n|turn|1\n|\n|t:|1792325500\n|move|p2a: Nuzleaf|Sucker Punch|p1a: Seedot\n|-damage|p1a: Seedot|0 fnt\n|faint|p1a: Seedot\n|\n|upkeep\n|\n|t:|1792325500\n|switch|p1a: Solosis|Solosis, L10, F|100/100\n|turn|2\n|\n|t:|1792325509\n|move|p2a: Nuzleaf|Sucker Punch|p1a: Solosis\n|-supereffective|p1a: Solosis\n|-damage|p1a: Solosis|0 fnt\n|faint|p1a: Solosis\n|\n|upkeep\n|\n|t:|1792325509\n|switch|p1a: Baltoy|Baltoy, L11|100/100\n|turn|3\n|\n|t:|1792325516\n|move|p2a: Nuzleaf|Sucker Punch|p1a: Baltoy\n|-supereffective|p1a: Baltoy\n|-damage|p1a: Baltoy|0 fnt\n|faint|p1a: Baltoy\n|\n|upkeep\n|\n|t:|1792325516\n|switch|p1a: Grimer|Grimer-Alola, L12, F|100/100\n|turn|4\n|\n|t:|1792325525\n|move|p2a: Nuzleaf|Sucker Punch|p1a: Grimer\n|-resisted|p1a: Grimer\n|-damage|p1a: Grimer|70/100\n|move|p1a: Grimer|Explosion|p2a: Nuzleaf\n|-damage|p2a: Nuzleaf|0 fnt\n|faint|p1a: Grimer\n|faint|p2a: Nuzleaf\n|\n|upkeep\n|\n|t:|1792325538\n|switch|p2a: Patrat|Patrat, L12, M|100/100\n|switch|p1a: Onix|Onix, L12, F|100/100\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1792325543
+}
