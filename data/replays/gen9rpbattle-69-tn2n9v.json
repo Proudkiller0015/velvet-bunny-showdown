@@ -1,0 +1,12 @@
+{
+	"id": "gen9rpbattle-69-tn2n9v",
+	"format": "[Gen 9] RP Battle",
+	"players": [
+		"Larper Ned",
+		"StaleThunder126"
+	],
+	"rating": null,
+	"log": "|velvetmusic|troll|events/trololo\n|j|☆Larper Ned\n|j|☆StaleThunder126\n|t:|1792331470\n|gametype|singles\n|player|p1|Larper Ned|harlequin|\n|player|p2|StaleThunder126|jolt.png|\n|gen|9\n|tier|[Gen 9] RP Battle\n|clearpoke\n|poke|p1|Geodude-Alola, L12, F|\n|poke|p1|Gastly, L12, F|\n|poke|p1|Grimer, L12, M|\n|poke|p1|Magnemite, L12|\n|poke|p1|Voltorb, L12|\n|poke|p1|Munchlax, L13, M|\n|poke|p2|Kecleon, L13, M|\n|poke|p2|Nuzleaf, L13, M|\n|poke|p2|Froakie, L13, F|\n|poke|p2|Helioptile, L13, F|\n|poke|p2|Sawsbuck, L13, F|\n|poke|p2|Fletchling, L13, M|\n|teampreview\n|inactive|Battle timer is ON: inactive players will automatically lose when time's up. (requested by Larper Ned)\n|n|☆Larper Ned|larperned\n|\n|t:|1792331492\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Geodude|Geodude-Alola, L12, F|100/100\n|switch|p2a: Froakie|Froakie, L13, F|100/100\n|turn|1\n|\n|t:|1792331499\n|move|p2a: Froakie|Hydro Pump|p1a: Geodude\n|-supereffective|p1a: Geodude\n|-damage|p1a: Geodude|0 fnt\n|faint|p1a: Geodude\n|\n|upkeep\n|\n|t:|1792331499\n|switch|p1a: Gastly|Gastly, L12, F|100/100\n|turn|2\n|\n|t:|1792331517\n|move|p2a: Froakie|Ice Beam|p1a: Gastly\n|-start|p2a: Froakie|typechange|Ice|[from] ability: Protean\n|-damage|p1a: Gastly|0 fnt\n|faint|p1a: Gastly\n|\n|upkeep\n|\n|t:|1792331517\n|switch|p1a: Grimer|Grimer, L12, M|100/100\n|turn|3\n|\n|t:|1792331529\n|move|p2a: Froakie|Ice Beam|p1a: Grimer\n|-damage|p1a: Grimer|10/100\n|move|p1a: Grimer|Explosion|p2a: Froakie\n|-damage|p2a: Froakie|0 fnt\n|faint|p1a: Grimer\n|faint|p2a: Froakie\n|\n|upkeep\n|\n|t:|1792331543\n|switch|p2a: Kecleon|Kecleon, L13, M|100/100\n|switch|p1a: Magnemite|Magnemite, L12|100/100\n|turn|4\n|\n|t:|1792331552\n|move|p2a: Kecleon|Drain Punch|p1a: Magnemite\n|-start|p2a: Kecleon|typechange|Fighting|[from] ability: Protean\n|-supereffective|p1a: Magnemite\n|-ability|p1a: Magnemite|Sturdy\n|-damage|p1a: Magnemite|4/100\n|move|p1a: Magnemite|Explosion|p2a: Kecleon\n|-damage|p2a: Kecleon|14/100\n|faint|p1a: Magnemite\n|\n|upkeep\n|\n|t:|1792331552\n|switch|p1a: Voltorb|Voltorb, L12|100/100\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1792331563
+}
