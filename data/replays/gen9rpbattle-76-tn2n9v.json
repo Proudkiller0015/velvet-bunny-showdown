@@ -1,0 +1,12 @@
+{
+	"id": "gen9rpbattle-76-tn2n9v",
+	"format": "[Gen 9] RP Battle",
+	"players": [
+		"Youngster Jin",
+		"StaleThunder126"
+	],
+	"rating": null,
+	"log": "|velvetmusic|trainer|events/trainer-rse\n|j|☆Youngster Jin\n|j|☆StaleThunder126\n|t:|1792332620\n|gametype|singles\n|player|p1|Youngster Jin|youngster-gen4|\n|player|p2|StaleThunder126|jolt.png|\n|gen|9\n|tier|[Gen 9] RP Battle\n|clearpoke\n|poke|p1|Castform, L19, F|\n|poke|p1|Oricorio-Pom-Pom, L19, M|\n|poke|p1|Pidgeotto, L20, F|\n|poke|p1|Vigoroth, L21, M|\n|poke|p1|Loudred, L23, F|\n|poke|p2|Smeargle, L18, M|\n|poke|p2|Froakie, L13, M|\n|poke|p2|Meowth, L13, F|\n|poke|p2|Rattata, L13, M|\n|poke|p2|Nuzleaf, L23, M|\n|poke|p2|Butterfree, L13, F|\n|teampreview\n|inactive|Battle timer is ON: inactive players will automatically lose when time's up. (requested by Youngster Jin)\n|n|☆Youngster Jin|youngsterjin\n|\n|t:|1792332631\n|teamsize|p1|5\n|teamsize|p2|6\n|start\n|switch|p1a: Vigoroth|Vigoroth, L21, M|100/100\n|switch|p2a: Nuzleaf|Nuzleaf, L23, M, shiny|100/100\n|turn|1\n|\n|t:|1792332644\n|move|p2a: Nuzleaf|Leaf Blade|p1a: Vigoroth\n|-damage|p1a: Vigoroth|32/100\n|move|p1a: Vigoroth|Slash|p2a: Nuzleaf\n|-damage|p2a: Nuzleaf|54/100\n|\n|upkeep\n|turn|2\n|\n|t:|1792332652\n|move|p2a: Nuzleaf|Leaf Blade|p1a: Vigoroth\n|-damage|p1a: Vigoroth|0 fnt\n|faint|p1a: Vigoroth\n|\n|upkeep\n|\n|t:|1792332652\n|switch|p1a: Oricorio|Oricorio-Pom-Pom, L19, M|100/100\n|turn|3\n|\n|t:|1792332663\n|move|p2a: Nuzleaf|Sucker Punch|p1a: Oricorio\n|-damage|p1a: Oricorio|39/100\n|move|p1a: Oricorio|Air Cutter|p2a: Nuzleaf\n|-supereffective|p2a: Nuzleaf\n|-damage|p2a: Nuzleaf|0 fnt\n|faint|p2a: Nuzleaf\n|\n|upkeep\n|\n|t:|1792332676\n|switch|p2a: Smeargle|Smeargle, L18, M|100/100\n|turn|4\n|\n|t:|1792332685\n|move|p2a: Smeargle|Continental Heave|p1a: Oricorio\n|-damage|p1a: Oricorio|17/100\n|move|p1a: Oricorio|Air Cutter|p2a: Smeargle\n|-damage|p2a: Smeargle|61/100\n|\n|upkeep\n|turn|5\n|\n|t:|1792332693\n|switch|p1a: Loudred|Loudred, L23, F|100/100\n|move|p2a: Smeargle|Continental Heave|p1a: Loudred\n|-damage|p1a: Loudred|76/100\n|\n|upkeep\n|turn|6\n",
+	"inputlog": null,
+	"uploadtime": 1792332703
+}
