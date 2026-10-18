@@ -1,0 +1,12 @@
+{
+	"id": "gen9rpbattle-107-tn2n9v",
+	"format": "[Gen 9] RP Battle",
+	"players": [
+		"Camper Sora",
+		"StaleThunder126"
+	],
+	"rating": null,
+	"log": "|velvetmusic|trainer|events/trainer-rse\n|j|☆Camper Sora\n|j|☆StaleThunder126\n|t:|1792340468\n|gametype|singles\n|player|p1|Camper Sora|camper-gen6|\n|player|p2|StaleThunder126|jolt.png|\n|gen|9\n|tier|[Gen 9] RP Battle\n|clearpoke\n|poke|p1|Toedscool, L20, M|\n|poke|p1|Litleo, L21, F|\n|poke|p1|Bouffalant, L22, F|\n|poke|p1|Butterfree, L22, F|\n|poke|p1|Fearow, L22, F|\n|poke|p1|Tranquill, L23, M|\n|poke|p2|Smeargle, L23, F|\n|poke|p2|Frogadier, L23, M|\n|poke|p2|Luvdisc, L16, M|\n|poke|p2|Purrloin, L16, F|\n|poke|p2|Nuzleaf, L23, F|\n|poke|p2|Hippopotas, L20, F|\n|teampreview\n|inactive|Battle timer is ON: inactive players will automatically lose when time's up. (requested by Camper Sora)\n|n|☆Camper Sora|campersora\n|\n|t:|1792340482\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Butterfree|Butterfree, L22, F|100/100\n|switch|p2a: Frogadier|Frogadier, L23, M|100/100\n|turn|1\n|\n|t:|1792340489\n|move|p2a: Frogadier|Ice Beam|p1a: Butterfree\n|-start|p2a: Frogadier|typechange|Ice|[from] ability: Protean\n|-supereffective|p1a: Butterfree\n|-damage|p1a: Butterfree|0 fnt\n|faint|p1a: Butterfree\n|\n|upkeep\n|\n|t:|1792340490\n|switch|p1a: Litleo|Litleo, L21, F|100/100\n|turn|2\n|\n|t:|1792340511\n|move|p2a: Frogadier|Hydro Pump|p1a: Litleo\n|-start|p2a: Frogadier|typechange|Water|[from] ability: Protean\n|-supereffective|p1a: Litleo\n|-damage|p1a: Litleo|0 fnt\n|faint|p1a: Litleo\n|\n|upkeep\n|\n|t:|1792340512\n|switch|p1a: Bouffalant|Bouffalant, L22, F|100/100\n|turn|3\n|\n|t:|1792340528\n|move|p2a: Frogadier|Ice Beam|p1a: Bouffalant\n|-start|p2a: Frogadier|typechange|Ice|[from] ability: Protean\n|-damage|p1a: Bouffalant|63/100\n|move|p1a: Bouffalant|Tackle|p2a: Frogadier\n|-damage|p2a: Frogadier|71/100\n|\n|upkeep\n|turn|4\n|\n|t:|1792340539\n|move|p2a: Frogadier|Gunk Shot|p1a: Bouffalant\n|-start|p2a: Frogadier|typechange|Poison|[from] ability: Protean\n|-damage|p1a: Bouffalant|36/100\n|-status|p1a: Bouffalant|psn\n|-enditem|p1a: Bouffalant|Oran Berry|[eat]\n|-heal|p1a: Bouffalant|47/100 psn|[from] item: Oran Berry\n|move|p1a: Bouffalant|Tackle|p2a: Frogadier\n|-damage|p2a: Frogadier|39/100\n|\n|-damage|p1a: Bouffalant|35/100 psn|[from] psn\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1792340544
+}
