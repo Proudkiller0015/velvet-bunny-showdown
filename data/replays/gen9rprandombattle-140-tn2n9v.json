@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-140-tn2n9v",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Easy",
+		"JoshimitzuGK"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆JoshimitzuGK\n|t:|1792452551\n|gametype|singles\n|player|p1|Bunny Easy|bunny.png|1032\n|player|p2|JoshimitzuGK|2|1000\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1792452551\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Garchomp|Garchomp, L74, F|100/100\n|switch|p2a: Oranguru|Oranguru, L92, F|100/100\n|turn|1\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1792452617\n|move|p1a: Garchomp|Earthquake|p2a: Oranguru\n|-damage|p2a: Oranguru|68/100\n|move|p2a: Oranguru|Hyper Voice|p1a: Garchomp\n|-damage|p1a: Garchomp|44/100\n|-damage|p2a: Oranguru|58/100|[from] item: Life Orb\n|\n|upkeep\n|turn|2\n|\n|t:|1792452628\n|move|p1a: Garchomp|Earthquake|p2a: Oranguru\n|-damage|p2a: Oranguru|25/100\n|move|p2a: Oranguru|Hypno Whirl|p1a: Garchomp\n|-damage|p1a: Garchomp|0 fnt\n|faint|p1a: Garchomp\n|-damage|p2a: Oranguru|15/100|[from] item: Life Orb\n|\n|upkeep\n|\n|t:|1792452628\n|switch|p1a: Mightyena|Mightyena, L96, M|100/100\n|-ability|p1a: Mightyena|Intimidate|boost\n|-fail|p2a: Oranguru|unboost|Attack|[from] ability: Inner Focus|[of] p2a: Oranguru\n|turn|3\n|\n|t:|1792452676\n|switch|p2a: Toxicroak|Toxicroak, L84, F|100/100\n|move|p1a: Mightyena|Jaw Lock|p2a: Toxicroak\n|-resisted|p2a: Toxicroak\n|-damage|p2a: Toxicroak|77/100\n|-activate|p1a: Mightyena|trapped\n|-activate|p2a: Toxicroak|trapped\n|\n|upkeep\n|turn|4\n|\n|t:|1792452684\n|move|p2a: Toxicroak|Close Combat|p1a: Mightyena\n|-supereffective|p1a: Mightyena\n|-damage|p1a: Mightyena|0 fnt\n|-unboost|p2a: Toxicroak|def|1\n|-unboost|p2a: Toxicroak|spd|1\n|faint|p1a: Mightyena\n|-damage|p2a: Toxicroak|68/100|[from] item: Life Orb\n|\n|upkeep\n|\n|t:|1792452684\n|switch|p1a: Iron Boulder|Iron Boulder, L77|100/100\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1792452688
+}
