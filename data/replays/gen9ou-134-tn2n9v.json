@@ -1,0 +1,12 @@
+{
+	"id": "gen9ou-134-tn2n9v",
+	"format": "[Gen 9] OU",
+	"players": [
+		"Bunny Normal",
+		"Awther"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Normal\n|j|☆Awther\n|t:|1792444710\n|gametype|singles\n|badge|p1|bronze|gen9ou|3-3\n|badge|p2|silver|gen9ou|2-2\n|player|p1|Bunny Normal|bunny.png|1211\n|player|p2|Awther|blue|1220\n|gen|9\n|tier|[Gen 9] OU\n|rated|\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Endless Battle Clause: Forcing endless battles is banned\n|rule|Species Clause: Limit one of each Pokémon\n|rule|OHKO Clause: OHKO moves are banned\n|rule|Evasion Items Clause: Evasion items are banned\n|rule|Evasion Moves Clause: Evasion moves are banned\n|rule|Evasion Abilities Clause: Evasion abilities are banned\n|rule|Sleep Moves Clause: Sleep-inducing moves are banned\n|clearpoke\n|poke|p1|Dragonite, F|\n|poke|p1|Landorus-Therian, M|\n|poke|p1|Iron Valiant|\n|poke|p1|Zapdos|\n|poke|p1|Kingambit, F|\n|poke|p1|Kyurem|\n|poke|p2|Samurott-Hisui, M|\n|poke|p2|Dragonite, F|\n|poke|p2|Kingambit, F|\n|poke|p2|Iron Moth|\n|poke|p2|Iron Valiant|\n|poke|p2|Moltres-Galar|\n|teampreview\n|c|☆Bunny Normal|Good luck! Playing on **normal**.\n|\n|t:|1792444716\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Landorus|Landorus-Therian, M|100/100\n|switch|p2a: Samurott|Samurott-Hisui, M|100/100\n|-ability|p1a: Landorus|Intimidate|boost\n|-unboost|p2a: Samurott|atk|1\n|turn|1\n|\n|t:|1792444718\n|-terastallize|p1a: Landorus|Ground\n|move|p1a: Landorus|Earthquake|p2a: Samurott\n|-enditem|p2a: Samurott|Focus Sash\n|-damage|p2a: Samurott|1/100\n|move|p2a: Samurott|Razor Shell|p1a: Landorus\n|-supereffective|p1a: Landorus\n|-damage|p1a: Landorus|12/100\n|\n|upkeep\n|turn|2\n|\n|t:|1792444727\n|move|p2a: Samurott|Sucker Punch|p1a: Landorus\n|-damage|p1a: Landorus|0 fnt\n|faint|p1a: Landorus\n|\n|upkeep\n|\n|t:|1792444727\n|switch|p1a: Iron Valiant|Iron Valiant|100/100\n|turn|3\n|\n|t:|1792444731\n|move|p1a: Iron Valiant|Focus Blast|p2a: Samurott\n|-supereffective|p2a: Samurott\n|-damage|p2a: Samurott|0 fnt\n|faint|p2a: Samurott\n|\n|upkeep\n|\n|t:|1792444737\n|switch|p2a: Iron Moth|Iron Moth, shiny|100/100\n|-enditem|p2a: Iron Moth|Booster Energy\n|-activate|p2a: Iron Moth|ability: Quark Drive|[fromitem]\n|-start|p2a: Iron Moth|quarkdrivespe\n|turn|4\n|\n|t:|1792444744\n|-end|p1a: Iron Valiant|Quark Drive|[silent]\n|switch|p1a: Dragonite|Dragonite, F|100/100\n|move|p2a: Iron Moth|Sludge Wave|p1a: Dragonite\n|-damage|p1a: Dragonite|74/100\n|\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1792444748
+}
