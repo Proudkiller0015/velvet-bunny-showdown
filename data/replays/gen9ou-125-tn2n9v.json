@@ -1,0 +1,12 @@
+{
+	"id": "gen9ou-125-tn2n9v",
+	"format": "[Gen 9] OU",
+	"players": [
+		"Bunny Normal",
+		"Awther"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Normal\n|j|☆Awther\n|t:|1792443227\n|gametype|singles\n|badge|p1|silver|gen9ou|2-2\n|badge|p2|bronze|gen9ou|3-3\n|player|p1|Bunny Normal|bunny.png|1211\n|player|p2|Awther|blue|1131\n|gen|9\n|tier|[Gen 9] OU\n|rated|\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Endless Battle Clause: Forcing endless battles is banned\n|rule|Species Clause: Limit one of each Pokémon\n|rule|OHKO Clause: OHKO moves are banned\n|rule|Evasion Items Clause: Evasion items are banned\n|rule|Evasion Moves Clause: Evasion moves are banned\n|rule|Evasion Abilities Clause: Evasion abilities are banned\n|rule|Sleep Moves Clause: Sleep-inducing moves are banned\n|clearpoke\n|poke|p1|Cresselia, F|\n|poke|p1|Raging Bolt|\n|poke|p1|Pecharunt|\n|poke|p1|Glimmora, F|\n|poke|p1|Dragonite, F|\n|poke|p1|Dragapult, F|\n|poke|p2|Slowking-Galar, F|\n|poke|p2|Landorus-Therian, M|\n|poke|p2|Kyurem|\n|poke|p2|Iron Valiant|\n|poke|p2|Cinderace, F|\n|poke|p2|Kingambit, F|\n|teampreview\n|c|☆Bunny Normal|Good luck! Playing on **normal**.\n|\n|t:|1792443256\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Raging Bolt|Raging Bolt|100/100\n|switch|p2a: Landorus|Landorus-Therian, M|100/100\n|-ability|p2a: Landorus|Intimidate|boost\n|-unboost|p1a: Raging Bolt|atk|1\n|turn|1\n|\n|t:|1792443262\n|move|p2a: Landorus|Stealth Rock|p1a: Raging Bolt\n|-sidestart|p1: Bunny Normal|move: Stealth Rock\n|move|p1a: Raging Bolt|Volt Switch|p2a: Landorus\n|-immune|p2a: Landorus\n|\n|upkeep\n|turn|2\n|\n|t:|1792443268\n|-end|p1a: Raging Bolt|Protosynthesis|[silent]\n|switch|p1a: Dragonite|Dragonite, F|100/100\n|move|p2a: Landorus|Earthquake|p1a: Dragonite\n|-immune|p1a: Dragonite\n|\n|upkeep\n|turn|3\n|\n|t:|1792443271\n|move|p2a: Landorus|Taunt|p1a: Dragonite\n|-start|p1a: Dragonite|move: Taunt\n|move|p1a: Dragonite|Dragon Tail|p2a: Landorus|[miss]\n|-miss|p1a: Dragonite|p2a: Landorus\n|\n|upkeep\n|turn|4\n|\n|t:|1792443277\n|move|p2a: Landorus|U-turn|p1a: Dragonite\n|-resisted|p1a: Dragonite\n|-damage|p1a: Dragonite|96/100\n|\n|t:|1792443280\n|switch|p2a: Iron Valiant|Iron Valiant, shiny|100/100|[from] U-turn\n|-enditem|p2a: Iron Valiant|Booster Energy\n|-activate|p2a: Iron Valiant|ability: Quark Drive|[fromitem]\n|-start|p2a: Iron Valiant|quarkdrivespe\n|move|p1a: Dragonite|Dragon Tail|p2a: Iron Valiant\n|-immune|p2a: Iron Valiant\n|\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1792443288
+}
