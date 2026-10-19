@@ -1,0 +1,12 @@
+{
+	"id": "gen9randombattle-141-tn2n9v",
+	"format": "[Gen 9] Random Battle",
+	"players": [
+		"Bunny Normal",
+		"JoshimitzuGK"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Normal\n|j|☆JoshimitzuGK\n|t:|1792453068\n|gametype|singles\n|player|p1|Bunny Normal|bunny.png|1273\n|player|p2|JoshimitzuGK|2|1163\n|gen|9\n|tier|[Gen 9] Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1792453068\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Slither Wing|Slither Wing, L81|100/100\n|switch|p2a: Farigiraf|Farigiraf, L90, F|100/100\n|turn|1\n|c|☆Bunny Normal|Good luck! Playing on **normal**.\n|\n|t:|1792453093\n|-terastallize|p1a: Slither Wing|Bug\n|move|p1a: Slither Wing|U-turn|p2a: Farigiraf\n|-supereffective|p2a: Farigiraf\n|-damage|p2a: Farigiraf|0 fnt\n|faint|p2a: Farigiraf\n|-damage|p1a: Slither Wing|90/100|[from] item: Life Orb\n|\n|t:|1792453093\n|-end|p1a: Slither Wing|Protosynthesis|[silent]\n|switch|p1a: Incineroar|Incineroar, L82, M|100/100|[from] U-turn\n|\n|upkeep\n|\n|t:|1792453140\n|switch|p2a: Whiscash|Whiscash, L88, F|100/100\n|turn|2\n|\n|t:|1792453143\n|switch|p1a: Dipplin|Dipplin, L88, M|100/100\n|move|p2a: Whiscash|Dragon Dance|p2a: Whiscash\n|-boost|p2a: Whiscash|atk|1\n|-boost|p2a: Whiscash|spe|1\n|\n|upkeep\n|turn|3\n|\n|t:|1792453157\n|switch|p2a: Okidogi|Okidogi, L77, M|100/100\n|move|p1a: Dipplin|Giga Drain|p2a: Okidogi\n|-resisted|p2a: Okidogi\n|-damage|p2a: Okidogi|89/100\n|\n|upkeep\n|turn|4\n|\n|t:|1792453164\n|move|p2a: Okidogi|Knock Off|p1a: Dipplin\n|-damage|p1a: Dipplin|86/100\n|-activate|p1a: Dipplin|ability: Sticky Hold\n|move|p1a: Dipplin|Dragon Tail|p2a: Okidogi|[miss]\n|-miss|p1a: Dipplin|p2a: Okidogi\n|\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1792453168
+}
