@@ -1,0 +1,12 @@
+{
+	"id": "gen9randombattle-143-tn2n9v",
+	"format": "[Gen 9] Random Battle",
+	"players": [
+		"Bunny Normal",
+		"JoshimitzuGK"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Normal\n|j|☆JoshimitzuGK\n|t:|1792454036\n|gametype|singles\n|player|p1|Bunny Normal|bunny.png|1234\n|player|p2|JoshimitzuGK|2|1219\n|gen|9\n|tier|[Gen 9] Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1792454036\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Salazzle|Salazzle, L83, F|100/100\n|switch|p2a: Flapple|Flapple, L88, M|100/100\n|turn|1\n|c|☆Bunny Normal|Good luck! Playing on **normal**.\n|\n|t:|1792454072\n|switch|p1a: Baxcalibur|Baxcalibur, L75, F|100/100\n|switch|p2a: Eternatus|Eternatus, L69|100/100\n|-ability|p2a: Eternatus|Pressure\n|\n|upkeep\n|turn|2\n|\n|t:|1792454113\n|switch|p2a: Minun|Minun, L95, M|100/100\n|-terastallize|p1a: Baxcalibur|Ground\n|move|p1a: Baxcalibur|Glaive Rush|p2a: Minun\n|-damage|p2a: Minun|28/100\n|-singlemove|p1a: Baxcalibur|Glaive Rush|[silent]\n|\n|upkeep\n|turn|3\n|\n|t:|1792454122\n|move|p2a: Minun|Grass Knot|p1a: Baxcalibur\n|-supereffective|p1a: Baxcalibur\n|-damage|p1a: Baxcalibur|0 fnt\n|faint|p1a: Baxcalibur\n|-damage|p2a: Minun|19/100|[from] item: Life Orb\n|\n|upkeep\n|\n|t:|1792454122\n|switch|p1a: Mienshao|Mienshao, L83, M|100/100\n|turn|4\n|\n|t:|1792454143\n|move|p2a: Minun|Thunderbolt|p1a: Mienshao\n|-damage|p1a: Mienshao|28/100\n|-damage|p2a: Minun|9/100|[from] item: Life Orb\n|move|p1a: Mienshao|High Jump Kick|p2a: Minun\n|-damage|p2a: Minun|0 fnt\n|faint|p2a: Minun\n|\n|upkeep\n|\n|t:|1792454163\n|switch|p2a: Eternatus|Eternatus, L69|100/100\n|-ability|p2a: Eternatus|Pressure\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1792454168
+}
