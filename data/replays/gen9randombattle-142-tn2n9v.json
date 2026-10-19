@@ -1,0 +1,12 @@
+{
+	"id": "gen9randombattle-142-tn2n9v",
+	"format": "[Gen 9] Random Battle",
+	"players": [
+		"Bunny Normal",
+		"JoshimitzuGK"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Normal\n|j|☆JoshimitzuGK\n|t:|1792453491\n|gametype|singles\n|player|p1|Bunny Normal|bunny.png|1252\n|player|p2|JoshimitzuGK|2|1200\n|gen|9\n|tier|[Gen 9] Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1792453491\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Rillaboom|Rillaboom, L79, M|100/100\n|switch|p2a: Hypno|Hypno, L95, F|100/100\n|-fieldstart|move: Grassy Terrain|[from] ability: Grassy Surge|[of] p1a: Rillaboom\n|turn|1\n|c|☆Bunny Normal|Good luck! Playing on **normal**.\n|\n|t:|1792453531\n|switch|p2a: Muk|Muk-Alola, L82, F|100/100\n|move|p1a: Rillaboom|U-turn|p2a: Muk\n|-damage|p2a: Muk|71/100\n|\n|t:|1792453531\n|switch|p1a: Skarmory|Skarmory, L80, M|100/100|[from] U-turn\n|\n|-heal|p2a: Muk|78/100|[from] Grassy Terrain\n|upkeep\n|turn|2\n|\n|t:|1792453563\n|move|p1a: Skarmory|Brave Bird|p2a: Muk\n|-damage|p2a: Muk|40/100\n|-damage|p1a: Skarmory|84/100|[from] Recoil\n|move|p2a: Muk|Knock Off|p1a: Skarmory\n|-damage|p1a: Skarmory|52/100\n|-enditem|p1a: Skarmory|Leftovers|[from] move: Knock Off|[of] p2a: Muk\n|\n|-heal|p2a: Muk|46/100|[from] Grassy Terrain\n|upkeep\n|turn|3\n|\n|t:|1792453579\n|move|p1a: Skarmory|Spikes|p2a: Muk\n|-sidestart|p2: JoshimitzuGK|Spikes\n|move|p2a: Muk|Drain Punch|p1a: Skarmory\n|-damage|p1a: Skarmory|35/100\n|-heal|p2a: Muk|53/100|[from] drain|[of] p1a: Skarmory\n|\n|-heal|p2a: Muk|59/100|[from] Grassy Terrain\n|upkeep\n|turn|4\n|\n|t:|1792453587\n|move|p1a: Skarmory|Brave Bird|p2a: Muk\n|-damage|p2a: Muk|23/100\n|-damage|p1a: Skarmory|19/100|[from] Recoil\n|move|p2a: Muk|Drain Punch|p1a: Skarmory\n|-damage|p1a: Skarmory|3/100\n|-heal|p2a: Muk|29/100|[from] drain|[of] p1a: Skarmory\n|\n|-heal|p2a: Muk|35/100|[from] Grassy Terrain\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1792453588
+}
