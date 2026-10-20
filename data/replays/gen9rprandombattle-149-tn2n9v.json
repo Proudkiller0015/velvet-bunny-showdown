@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-149-tn2n9v",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Easy",
+		"I love brazil 020"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆I love brazil 020\n|t:|1792494205\n|gametype|singles\n|player|p1|Bunny Easy|bunny.png|1079\n|player|p2|I love brazil 020|266|1109\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1792494206\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Quagsire|Quagsire, L84, F|100/100\n|switch|p2a: Mismagius|Mismagius, L86, M|100/100\n|turn|1\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1792494218\n|switch|p2a: Exeggutor|Exeggutor, L89, F|100/100\n|move|p1a: Quagsire|Earthquake|p2a: Exeggutor\n|-resisted|p2a: Exeggutor\n|-damage|p2a: Exeggutor|85/100\n|\n|upkeep\n|turn|2\n|\n|t:|1792494233\n|move|p2a: Exeggutor|Leech Seed|p1a: Quagsire\n|-start|p1a: Quagsire|move: Leech Seed\n|move|p1a: Quagsire|Earthquake|p2a: Exeggutor\n|-resisted|p2a: Exeggutor\n|-damage|p2a: Exeggutor|69/100\n|\n|-damage|p1a: Quagsire|88/100|[from] Leech Seed|[of] p2a: Exeggutor\n|-heal|p2a: Exeggutor|81/100|[silent]\n|upkeep\n|turn|3\n|\n|t:|1792494240\n|move|p2a: Exeggutor|Leech Seed|p1a: Quagsire|[miss]\n|-miss|p2a: Exeggutor|p1a: Quagsire\n|move|p1a: Quagsire|Undertow|p2a: Exeggutor\n|-resisted|p2a: Exeggutor\n|-damage|p2a: Exeggutor|68/100\n|\n|-heal|p1a: Quagsire|94/100|[from] item: Leftovers\n|-damage|p1a: Quagsire|82/100|[from] Leech Seed|[of] p2a: Exeggutor\n|-heal|p2a: Exeggutor|80/100|[silent]\n|upkeep\n|turn|4\n|\n|t:|1792494251\n|move|p2a: Exeggutor|Solar Nectar|p1a: Quagsire\n|-supereffective|p1a: Quagsire\n|-damage|p1a: Quagsire|0 fnt\n|-heal|p2a: Exeggutor|99/100|[from] drain|[of] p1a: Quagsire\n|faint|p1a: Quagsire\n|\n|upkeep\n|\n|t:|1792494251\n|switch|p1a: Revavroom|Revavroom, L79, F|100/100\n|turn|5\n|\n|t:|1792494260\n|switch|p2a: Moltres|Moltres, L81|100/100\n|move|p1a: Revavroom|Gunk Shot|p2a: Moltres\n|-damage|p2a: Moltres|37/100\n|-damage|p1a: Revavroom|91/100|[from] item: Life Orb\n|\n|upkeep\n|turn|6\n|\n|t:|1792494269\n|move|p2a: Moltres|Fire Blast|p1a: Revavroom\n|-supereffective|p1a: Revavroom\n|-damage|p1a: Revavroom|0 fnt\n|faint|p1a: Revavroom\n|\n|upkeep\n|\n|t:|1792494269\n|switch|p1a: Samurott|Samurott-Hisui, L77, F|100/100\n|turn|7\n",
+	"inputlog": null,
+	"uploadtime": 1792494271
+}
