@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-145-tn2n9v",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Easy",
+		"I love brazil 020"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆I love brazil 020\n|t:|1792487998\n|gametype|singles\n|player|p1|Bunny Easy|bunny.png|1015\n|player|p2|I love brazil 020|266|1048\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1792487998\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Regidrago|Regidrago, L77|435/435\n|switch|p2a: Vaporeon|Vaporeon, L86, M|364/364\n|turn|1\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1792488059\n|switch|p2a: Yanmega|Yanmega, L82, M|275/275\n|-terastallize|p1a: Regidrago|Dragon\n|move|p1a: Regidrago|Dragon Energy|p2a: Yanmega\n|-damage|p2a: Yanmega|0 fnt\n|faint|p2a: Yanmega\n|\n|upkeep\n|-message|I love brazil 020 forfeited.\n|\n|win|Bunny Easy\n",
+	"inputlog": ">start {\"formatid\":\"gen9rprandombattle\",\"seed\":\"sodium,455ca568030e0dff995a47b5ca804981\",\"rated\":\"Rated battle\"}\n>player p1 {\"name\":\"Bunny Easy\",\"avatar\":\"bunny.png\",\"rating\":1015,\"seed\":\"sodium,936840d124510949fa38fa4d91e1c65e\"}\n>player p2 {\"name\":\"I love brazil 020\",\"avatar\":\"266\",\"rating\":1048,\"seed\":\"sodium,ea5a7cd15bc50f0f95c061b49bc4b479\"}\n>chat ☆Bunny Easy|Good luck! Playing on **easy**.\n>p1 move dragonenergy terastallize\n>p2 switch 3\n>forcelose p2",
+	"uploadtime": 1792488068
+}
