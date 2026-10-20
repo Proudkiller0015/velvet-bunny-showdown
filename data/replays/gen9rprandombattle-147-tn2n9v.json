@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-147-tn2n9v",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Easy",
+		"I love brazil 020"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆I love brazil 020\n|t:|1792488408\n|gametype|singles\n|player|p1|Bunny Easy|bunny.png|1051\n|player|p2|I love brazil 020|266|1082\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1792488409\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Jumpluff|Jumpluff, L87, F|100/100\n|switch|p2a: Flapple|Flapple, L88, M|100/100\n|turn|1\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1792488425\n|-terastallize|p1a: Jumpluff|Steel\n|move|p2a: Flapple|Stone Edge|p1a: Jumpluff\n|-resisted|p1a: Jumpluff\n|-damage|p1a: Jumpluff|74/100\n|move|p1a: Jumpluff|Acrobatics|p2a: Flapple\n|-supereffective|p2a: Flapple\n|-damage|p2a: Flapple|41/100\n|\n|upkeep\n|turn|2\n|\n|t:|1792488440\n|switch|p2a: Feraligatr|Feraligatr, L79, M|100/100\n|move|p1a: Jumpluff|Earthquake|p2a: Feraligatr\n|-damage|p2a: Feraligatr|82/100\n|\n|upkeep\n|turn|3\n|\n|t:|1792488450\n|move|p1a: Jumpluff|Knock Off|p2a: Feraligatr\n|-damage|p2a: Feraligatr|63/100\n|-enditem|p2a: Feraligatr|Life Orb|[from] move: Knock Off|[of] p1a: Jumpluff\n|move|p2a: Feraligatr|Liquidation|p1a: Jumpluff\n|-damage|p1a: Jumpluff|24/100\n|\n|upkeep\n|turn|4\n|\n|t:|1792488457\n|move|p1a: Jumpluff|Earthquake|p2a: Feraligatr\n|-damage|p2a: Feraligatr|43/100\n|move|p2a: Feraligatr|Liquidation|p1a: Jumpluff\n|-damage|p1a: Jumpluff|0 fnt\n|faint|p1a: Jumpluff\n|\n|upkeep\n|\n|t:|1792488457\n|switch|p1a: Tsareena|Tsareena, L87, F|100/100\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1792488470
+}
