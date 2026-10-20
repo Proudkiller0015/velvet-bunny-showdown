@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-151-tn2n9v",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Easy",
+		"I love brazil 020"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆I love brazil 020\n|t:|1792497275\n|gametype|singles\n|player|p1|Bunny Easy|bunny.png|1113\n|player|p2|I love brazil 020|266|1117\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1792497275\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Arceus|Arceus-Ground, L70|100/100\n|switch|p2a: Infernape|Infernape, L82, F|100/100\n|turn|1\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1792497298\n|switch|p2a: Cramorant|Cramorant, L86, F|100/100\n|move|p1a: Arceus|Fire Blast|p2a: Cramorant\n|-resisted|p2a: Cramorant\n|-damage|p2a: Cramorant|89/100\n|\n|upkeep\n|turn|2\n|\n|t:|1792497308\n|move|p1a: Arceus|Judgment|p2a: Cramorant\n|-immune|p2a: Cramorant\n|move|p2a: Cramorant|Surf|p1a: Arceus\n|-formechange|p2a: Cramorant|Cramorant-Gulping|\n|-supereffective|p1a: Arceus\n|-damage|p1a: Arceus|45/100\n|\n|upkeep\n|turn|3\n|\n|t:|1792497325\n|-terastallize|p1a: Arceus|Dragon\n|move|p1a: Arceus|Fire Blast|p2a: Cramorant|[miss]\n|-miss|p1a: Arceus|p2a: Cramorant\n|move|p2a: Cramorant|Brave Bird|p1a: Arceus\n|-damage|p1a: Arceus|8/100\n|-damage|p2a: Cramorant|76/100|[from] Recoil\n|\n|upkeep\n|turn|4\n|\n|t:|1792497335\n|move|p1a: Arceus|Calm Mind|p1a: Arceus\n|-boost|p1a: Arceus|spa|1\n|-boost|p1a: Arceus|spd|1\n|move|p2a: Cramorant|Surf|p1a: Arceus\n|-resisted|p1a: Arceus\n|-damage|p1a: Arceus|0 fnt\n|faint|p1a: Arceus\n|\n|upkeep\n|\n|t:|1792497335\n|switch|p1a: Iron Crown|Iron Crown, L78|100/100\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1792497351
+}
