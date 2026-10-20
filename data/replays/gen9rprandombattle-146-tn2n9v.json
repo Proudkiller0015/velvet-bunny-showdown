@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-146-tn2n9v",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Easy",
+		"I love brazil 020"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆I love brazil 020\n|t:|1792488072\n|gametype|singles\n|player|p1|Bunny Easy|bunny.png|1063\n|player|p2|I love brazil 020|266|1037\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1792488073\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Lapras|Lapras, L87, F|100/100\n|switch|p2a: Swampert|Swampert, L83, F|100/100\n|turn|1\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1792488084\n|move|p1a: Lapras|Undertow|p2a: Swampert\n|-damage|p2a: Swampert|70/100\n|move|p2a: Swampert|Earthquake|p1a: Lapras\n|-damage|p1a: Lapras|67/100\n|\n|-heal|p2a: Swampert|76/100|[from] item: Leftovers\n|upkeep\n|turn|2\n|\n|t:|1792488091\n|move|p1a: Lapras|Rime Cleaver|p2a: Swampert\n|-crit|p2a: Swampert\n|-damage|p2a: Swampert|28/100\n|move|p2a: Swampert|Earthquake|p1a: Lapras\n|-damage|p1a: Lapras|32/100\n|\n|-heal|p2a: Swampert|34/100|[from] item: Leftovers\n|upkeep\n|turn|3\n|\n|t:|1792488111\n|switch|p2a: Clawitzer|Clawitzer, L87, F|100/100\n|move|p1a: Lapras|Rime Cleaver|p2a: Clawitzer\n|-resisted|p2a: Clawitzer\n|-damage|p2a: Clawitzer|81/100\n|\n|upkeep\n|turn|4\n|\n|t:|1792488122\n|move|p1a: Lapras|Rime Cleaver|p2a: Clawitzer\n|-resisted|p2a: Clawitzer\n|-damage|p2a: Clawitzer|62/100\n|move|p2a: Clawitzer|Aura Sphere|p1a: Lapras\n|-supereffective|p1a: Lapras\n|-damage|p1a: Lapras|0 fnt\n|faint|p1a: Lapras\n|\n|upkeep\n|\n|t:|1792488122\n|switch|p1a: Scovillain|Scovillain, L91, F|100/100\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1792488130
+}
