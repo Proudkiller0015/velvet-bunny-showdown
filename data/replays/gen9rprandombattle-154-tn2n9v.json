@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-154-tn2n9v",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Easy",
+		"I love brazil 020"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆I love brazil 020\n|t:|1792500789\n|gametype|singles\n|player|p1|Bunny Easy|bunny.png|1194\n|player|p2|I love brazil 020|266|1077\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1792500790\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Misdreavus|Misdreavus, L90, F|254/254\n|switch|p2a: Iron Bundle|Iron Bundle, L78|215/215\n|turn|1\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1792500825\n|move|p2a: Iron Bundle|Hydro Pump|p1a: Misdreavus\n|-damage|p1a: Misdreavus|167/254\n|move|p1a: Misdreavus|Shadow Ball|p2a: Iron Bundle\n|-damage|p2a: Iron Bundle|85/215\n|-unboost|p2a: Iron Bundle|spd|1\n|\n|upkeep\n|turn|2\n|\n|t:|1792500833\n|-end|p2a: Iron Bundle|Quark Drive|[silent]\n|switch|p2a: Iron Treads|Iron Treads, L77|265/265\n|move|p1a: Misdreavus|Shadow Ball|p2a: Iron Treads\n|-damage|p2a: Iron Treads|151/265\n|-unboost|p2a: Iron Treads|spd|1\n|\n|-heal|p2a: Iron Treads|167/265|[from] item: Leftovers\n|upkeep\n|turn|3\n|-message|I love brazil 020 forfeited.\n|l|☆I love brazil 020\n|player|p2|\n|\n|win|Bunny Easy\n",
+	"inputlog": ">start {\"formatid\":\"gen9rprandombattle\",\"seed\":\"sodium,d3d3b1337dff98137ab87507863699d4\",\"rated\":\"Rated battle\"}\n>player p1 {\"name\":\"Bunny Easy\",\"avatar\":\"bunny.png\",\"rating\":1194,\"seed\":\"sodium,cb53f27d3b3748c3ec0984d48f1c83f0\"}\n>player p2 {\"name\":\"I love brazil 020\",\"avatar\":\"266\",\"rating\":1077,\"seed\":\"sodium,b909a79e3551cdcce8089ed7636845fb\"}\n>chat ☆Bunny Easy|Good luck! Playing on **easy**.\n>p1 move shadowball\n>p2 move hydropump\n>p1 move shadowball\n>p2 switch 3\n>forcelose p2",
+	"uploadtime": 1792500853
+}
