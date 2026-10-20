@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-155-tn2n9v",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Easy",
+		"I love brazil 020"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆I love brazil 020\n|t:|1792500952\n|gametype|singles\n|player|p1|Bunny Easy|bunny.png|1212\n|player|p2|I love brazil 020|266|1068\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1792500952\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Rabsca|Rabsca, L91, M|100/100\n|switch|p2a: Avalugg|Avalugg-Hisui, L90, F|100/100\n|turn|1\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1792500960\n|switch|p2a: Blaziken|Blaziken, L76, F|100/100\n|-terastallize|p1a: Rabsca|Steel\n|move|p1a: Rabsca|Bug Buzz|p2a: Blaziken\n|-resisted|p2a: Blaziken\n|-damage|p2a: Blaziken|83/100\n|\n|upkeep\n|turn|2\n|\n|t:|1792500970\n|move|p2a: Blaziken|Flare Blitz|p1a: Rabsca\n|-supereffective|p1a: Rabsca\n|-damage|p1a: Rabsca|0 fnt\n|faint|p1a: Rabsca\n|-damage|p2a: Blaziken|45/100|[from] Recoil\n|-damage|p2a: Blaziken|35/100|[from] item: Life Orb\n|\n|-ability|p2a: Blaziken|Speed Boost|boost\n|-boost|p2a: Blaziken|spe|1\n|upkeep\n|\n|t:|1792500970\n|switch|p1a: Primarina|Primarina, L83, F|100/100\n|turn|3\n|\n|t:|1792500996\n|switch|p2a: Illumise|Illumise, L91, F|100/100\n|move|p1a: Primarina|Hydro Pump|p2a: Illumise\n|-damage|p2a: Illumise|31/100\n|\n|upkeep\n|turn|4\n|\n|t:|1792501006\n|switch|p2a: Electrode|Electrode, L92|100/100\n|move|p1a: Primarina|Hydro Pump|p2a: Electrode\n|-damage|p2a: Electrode|21/100\n|\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1792501012
+}
