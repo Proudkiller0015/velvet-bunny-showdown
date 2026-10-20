@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-157-tn2n9v",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Normal",
+		"I love brazil 020"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Normal\n|j|☆I love brazil 020\n|t:|1792513874\n|gametype|singles\n|player|p1|Bunny Normal|bunny.png|1218\n|player|p2|I love brazil 020|2|1055\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1792513874\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Tauros|Tauros-Paldea-Combat, L82, M|257/257\n|switch|p2a: Volcanion|Volcanion, L79|255/255\n|-ability|p1a: Tauros|Intimidate|boost\n|-unboost|p2a: Volcanion|atk|1\n|turn|1\n|c|☆Bunny Normal|Good luck! Playing on **normal**.\n|\n|t:|1792513890\n|move|p1a: Tauros|Stone Edge|p2a: Volcanion\n|-supereffective|p2a: Volcanion\n|-damage|p2a: Volcanion|104/255\n|-damage|p1a: Tauros|232/257|[from] item: Life Orb\n|move|p2a: Volcanion|Flame Charge|p1a: Tauros\n|-damage|p1a: Tauros|202/257\n|-boost|p2a: Volcanion|spe|1\n|\n|upkeep\n|turn|2\n|\n|t:|1792513901\n|switch|p2a: Gouging Fire|Gouging Fire, L74|277/277\n|move|p1a: Tauros|Stone Edge|p2a: Gouging Fire\n|-supereffective|p2a: Gouging Fire\n|-damage|p2a: Gouging Fire|105/277\n|-damage|p1a: Tauros|177/257|[from] item: Life Orb\n|\n|upkeep\n|turn|3\n|l|☆I love brazil 020\n|player|p2|\n|inactive|I love brazil 020 has 2 minutes to come back and make a move, or they forfeit.\n|-message|I love brazil 020 lost due to inactivity.\n|\n|win|Bunny Normal\n",
+	"inputlog": ">start {\"formatid\":\"gen9rprandombattle\",\"seed\":\"sodium,aa9bcd87775b81124f87e8083a4fe33d\",\"rated\":\"Rated battle\"}\n>player p1 {\"name\":\"Bunny Normal\",\"avatar\":\"bunny.png\",\"rating\":1218,\"seed\":\"sodium,ce13042898446fdf404a7be69dcfa242\"}\n>player p2 {\"name\":\"I love brazil 020\",\"avatar\":\"2\",\"rating\":1055,\"seed\":\"sodium,ffe0adcd316ed936ae86c7bfc8e6260d\"}\n>chat ☆Bunny Normal|Good luck! Playing on **normal**.\n>p1 move stoneedge\n>p2 move flamecharge\n>p1 move stoneedge\n>p2 switch 4\n>forcelose p2",
+	"uploadtime": 1792514039
+}
