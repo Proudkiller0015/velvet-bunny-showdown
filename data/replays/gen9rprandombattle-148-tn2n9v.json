@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-148-tn2n9v",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Easy",
+		"I love brazil 020"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆I love brazil 020\n|t:|1792491952\n|gametype|singles\n|player|p1|Bunny Easy|bunny.png|1094\n|player|p2|I love brazil 020|266|1067\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1792491952\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Vileplume|Vileplume, L85, F|100/100\n|switch|p2a: Greninja|Greninja, L80, M, shiny|100/100\n|turn|1\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1792491962\n|switch|p2a: Heatran|Heatran, L79, F|100/100\n|-item|p2a: Heatran|Air Balloon\n|move|p1a: Vileplume|Solar Nectar|p2a: Heatran\n|-resisted|p2a: Heatran\n|-damage|p2a: Heatran|92/100\n|-enditem|p2a: Heatran|Air Balloon\n|\n|upkeep\n|turn|2\n|\n|t:|1792491974\n|move|p2a: Heatran|Lava Plume|p1a: Vileplume\n|-supereffective|p1a: Vileplume\n|-damage|p1a: Vileplume|28/100\n|move|p1a: Vileplume|Sludge Bomb|p2a: Heatran\n|-immune|p2a: Heatran\n|\n|-heal|p1a: Vileplume|34/100|[from] item: Leftovers\n|upkeep\n|turn|3\n|\n|t:|1792491982\n|move|p2a: Heatran|Lava Plume|p1a: Vileplume\n|-supereffective|p1a: Vileplume\n|-damage|p1a: Vileplume|0 fnt\n|faint|p1a: Vileplume\n|\n|upkeep\n|\n|t:|1792491982\n|switch|p1a: Rampardos|Rampardos, L90, M|100/100\n|turn|4\n|\n|t:|1792491997\n|switch|p2a: Greninja|Greninja, L80, M, shiny|100/100\n|move|p1a: Rampardos|Earthquake|p2a: Greninja\n|-damage|p2a: Greninja|38/100\n|\n|upkeep\n|turn|5\n|\n|t:|1792492005\n|move|p2a: Greninja|Hydro Pump|p1a: Rampardos\n|-start|p2a: Greninja|typechange|Water|[from] ability: Protean\n|-supereffective|p1a: Rampardos\n|-damage|p1a: Rampardos|0 fnt\n|faint|p1a: Rampardos\n|-damage|p2a: Greninja|29/100|[from] item: Life Orb\n|\n|upkeep\n|\n|t:|1792492005\n|switch|p1a: Miraidon|Miraidon, L65|100/100\n|-fieldstart|move: Electric Terrain|[from] ability: Hadron Engine|[of] p1a: Miraidon\n|turn|6\n",
+	"inputlog": null,
+	"uploadtime": 1792492011
+}
