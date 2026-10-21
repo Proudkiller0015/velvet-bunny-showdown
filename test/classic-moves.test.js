@@ -97,5 +97,58 @@ for (const id of ['explosion', 'selfdestruct']) {
 	check(/\|cant\|p1a: Snorlax\|recharge/.test(hit.log.join('\n')), 'and loses the next turn');
 }
 
+{
+	/*
+	 * Gen 2's Rest and Sleep Talk (data/velvet/classic-mechanics.js), turn by turn against
+	 * Showdown's own Gen 2 mod: the same Snorlax and the same Tauros in [Gen 2] Custom Game,
+	 * in RP, and in plain Gen 9, which should be the odd one out.
+	 */
+	const play = (formatid, snorlaxMoves, turns) => {
+		const gen2 = formatid.startsWith('gen2');
+		const ability = gen2 ? 'No Ability' : '';
+		const b = new Battle({ formatid, seed: [1, 2, 3, 4] });
+		b.setPlayer('p1', { team: [{ species: 'Snorlax', ability, item: '', moves: snorlaxMoves, level: 100, evs: { hp: 252 }, ivs: {} }] });
+		b.setPlayer('p2', { team: [{ species: 'Tauros', ability, item: '', moves: ['strength'], level: 50, evs: { atk: 252, spe: 252 }, ivs: {} }] });
+		if (b.requestState === 'teampreview') b.makeChoices('team 1', 'team 1');
+		const snorlax = b.p1.active[0];
+		const rows = [];
+		for (let t = 0; t < turns && !b.ended; t++) {
+			const before = b.log.length;
+			b.makeChoices(t ? 'move 2' : 'move 1', 'move 1');   // Rest, then the second move
+			const lines = b.log.slice(before).join('\n');
+			rows.push([
+				snorlax.status || '-',
+				snorlax.status === 'slp' ? snorlax.statusState.time : 0,
+				snorlax.hp === snorlax.maxhp ? 'full' : 'hurt',
+				/\|move\|p1a: Snorlax\|/.test(lines) ? 'moved' : 'slept',
+			].join(' '));
+		}
+		return rows;
+	};
+	// Rest, then Sleep Talk every turn: it can only call Rest, which in Gen 2 resets the nap.
+	const restTalk = ['rest', 'sleeptalk'];
+	const gen2 = play('gen2customgame', restTalk, 5);
+	const ours = play('gen9rpcustomgame', restTalk, 5);
+	const vanilla = play('gen9customgame', restTalk, 5);
+	check(JSON.stringify(ours) === JSON.stringify(gen2), `RestTalk plays as in Gen 2 (${ours.join(' | ')})`);
+	check(ours.slice(1).every(r => r.startsWith('slp 3 full')), 'Sleep Talk into Rest heals to full and restarts the sleep at 3, every turn');
+	check(JSON.stringify(vanilla) !== JSON.stringify(gen2), `and plain Gen 9 does not (${vanilla.join(' | ')})`);
+	// Rest, then sleep it off: two turns asleep, then wake and act on the third.
+	const gen2Nap = play('gen2customgame', ['rest', 'headbutt'], 5);
+	const ourNap = play('gen9rpcustomgame', ['rest', 'headbutt'], 5);
+	check(JSON.stringify(ourNap.map(r => r.split(' ')[0] + ' ' + r.split(' ')[3])) === JSON.stringify(gen2Nap.map(r => r.split(' ')[0] + ' ' + r.split(' ')[3])),
+		`waking matches Gen 2 (${ourNap.join(' | ')})`);
+	// Rest at full HP still fails; Comatose still cannot Rest.
+	const full = new Battle({ formatid: 'gen9rpcustomgame', seed: [1, 2, 3, 4] });
+	full.setPlayer('p1', { team: [{ species: 'Snorlax', ability: 'Thick Fat', moves: ['rest'], level: 100 }] });
+	full.setPlayer('p2', { team: [{ species: 'Blissey', ability: 'Natural Cure', moves: ['splash'], level: 100 }] });
+	if (full.requestState === 'teampreview') full.makeChoices('team 1', 'team 1');
+	full.makeChoices('move 1', 'move 1');
+	check(full.p1.active[0].status === '' && /\|-fail\|p1a: Snorlax\|heal/.test(full.log.join('\n')), 'Rest at full HP fails');
+	const rest = Dex.moves.get('rest');
+	check(/already asleep/.test(rest.desc) && /Works while asleep/.test(rest.shortDesc), 'Rest says so in its description');
+	check(/Generation 2/.test(Dex.moves.get('sleeptalk').desc), 'and so does Sleep Talk');
+}
+
 if (failed) { console.log(`\n${failed} failed`); process.exit(1); }
 console.log('\nall passed');

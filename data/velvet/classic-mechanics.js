@@ -80,6 +80,80 @@ exports.moves = (data) => {
 			desc: "Raises the user's Attack by 12 stages in exchange for the user losing 1/2 of its maximum HP, rounded down. If the user has 1/2 of its maximum HP or less, it instead raises its Attack by 2 stages and loses no HP, as in Generation 2. Fails if the user's Attack is already +6.",
 		};
 	}
+	/*
+	 * Rest and Sleep Talk, Gen 2's (the owner, 21 Oct 2026: "add gen 2 Sleep Talk", "gen 2 Rest").
+	 *
+	 * Read off pokemon-showdown's own Gen 2 mod (data/mods/gen2/moves.ts and conditions.ts;
+	 * Gen 2 inherits Gen 3 and replaces both of these outright). What differs from Gen 9:
+	 *
+	 *   Rest      - Works while the user is already asleep. Gen 9's Rest fails on a sleeping
+	 *               user, so Sleep Talk calling Rest did nothing; in Gen 2 it restarts the sleep
+	 *               at Rest's count and heals to full again ("RestTalk": the sleeper keeps
+	 *               resetting its own nap). The status is announced again ("-status ... [from]
+	 *               move: Rest") instead of being set, and the sleep counts as self-inflicted.
+	 *             - Fails only at full HP. Gen 9 adds the abilities; abilities did not exist in
+	 *               Gen 2, so those checks are kept (Comatose, Insomnia, Vital Spirit), as Gen 2
+	 *               itself would have refused the sleep through setStatus.
+	 *             - The counter is the same 3 in both: asleep for two turns, waking on the third
+	 *               and acting that turn. Rest restarted on a turn the counter already ticked
+	 *               starts again from 3.
+	 *   Sleep Talk - Gen 2's picks from the same moves as Gen 9's (not itself or any other
+	 *               nosleeptalk move, no charge moves), and the picked move costs no PP in either.
+	 *               What Gen 9 adds is leaving out Z-Moves and Max Moves, which Gen 2 did not
+	 *               have; that stays, as a Z-Move cannot be called here either way. So Sleep
+	 *               Talk's own code changes nothing: Gen 2's RestTalk lives in Rest. Its flags
+	 *               (Gen 2: no noassist/failcopycat/failmimic/failinstruct, and no Sketch)
+	 *               concern other moves calling or copying Sleep Talk, and stay Gen 9's.
+	 *   Sleep     - Waking: both wake at the start of the turn the counter runs out and act
+	 *               that same turn. Unchanged. (Gen 2's ordinary sleep lasts 1-7 turns rather
+	 *               than 1-3; that is sleep itself, not Rest, and is not part of this.)
+	 *
+	 * Only the description of Sleep Talk changes, to say what it calls Rest into doing.
+	 * test/classic-moves.test.js plays the same turns in [Gen 2] Custom Game and here.
+	 */
+	const rest = data.rest;
+	if (rest) {
+		data.rest = {
+			...rest,
+			onTry(source) {
+				if (source.hasAbility('comatose')) return false;
+				if (source.hp === source.maxhp) {
+					this.add('-fail', source, 'heal');
+					return null;
+				}
+				if (source.status === 'slp') return;
+				if (source.hasAbility('insomnia')) {
+					this.add('-fail', source, '[from] ability: Insomnia', `[of] ${source}`);
+					return null;
+				}
+				if (source.hasAbility('vitalspirit')) {
+					this.add('-fail', source, '[from] ability: Vital Spirit', `[of] ${source}`);
+					return null;
+				}
+			},
+			onHit(target, source, move) {
+				if (target.status !== 'slp') {
+					const result = target.setStatus('slp', source, move);
+					if (!result) return result;
+				} else {
+					this.add('-status', target, 'slp', '[from] move: Rest');
+				}
+				target.statusState.time = 3;
+				target.statusState.startTime = 3;
+				target.statusState.source = target;
+				this.heal(target.maxhp);
+			},
+			shortDesc: "User sleeps 2 turns and restores HP and status. Works while asleep.",
+			desc: "The user falls asleep for the next two turns and restores all of its HP, curing itself of any non-volatile status condition in the process. As in Generation 2, it also works if the user is already asleep (called by Sleep Talk): the sleep starts over at two turns and the HP is restored again. Fails if the user has full HP or if another effect prevents it from falling asleep.",
+		};
+	}
+	if (data.sleeptalk) {
+		data.sleeptalk = {
+			...data.sleeptalk,
+			desc: "One of the user's known moves, besides this move, is selected for use at random. Fails if the user is not asleep. The selected move does not have PP deducted from it, and can currently have 0 PP. If it selects Rest, Rest works as in Generation 2: the user's sleep starts over at two turns and its HP is restored. This move cannot select Assist, Beak Blast, Belch, Bide, Blazing Torque, Celebrate, Chatter, Combat Torque, Copycat, Dynamax Cannon, Focus Punch, Hold Hands, Magical Torque, Me First, Metronome, Mimic, Mirror Move, Nature Power, Noxious Torque, Shell Trap, Sketch, Sleep Talk, Struggle, Uproar, Wicked Torque, or any two-turn move.",
+			shortDesc: "User must be asleep. Uses another known move. Rest works (Gen 2).",
+		};
+	}
 	for (const [id, move] of Object.entries(data)) {
 		if (!move || !move.flags || !move.flags.recharge) continue;
 		const own = move.onAfterMoveSecondarySelf;
@@ -219,4 +293,4 @@ const Z_STATUS = {
 exports.Z_STATUS = Z_STATUS;
 
 // For the client's move descriptions (scripts/build-buffs.js): every move this file changes.
-exports.CHANGED_MOVES = ['punishment', 'bellydrum', 'hyperbeam', 'gigaimpact', 'blastburn', 'frenzyplant', 'hydrocannon', 'rockwrecker', 'roaroftime', 'prismaticlaser', 'eternabeam', 'meteorassault', 'magmastorm', 'wickedblow', 'twister', 'explosion', 'selfdestruct', 'mistyexplosion', 'dragonpulse', 'icywind', 'ancientpower', 'ominouswind', 'silverwind'];
+exports.CHANGED_MOVES = ['punishment', 'bellydrum', 'rest', 'sleeptalk', 'hyperbeam', 'gigaimpact', 'blastburn', 'frenzyplant', 'hydrocannon', 'rockwrecker', 'roaroftime', 'prismaticlaser', 'eternabeam', 'meteorassault', 'magmastorm', 'wickedblow', 'twister', 'explosion', 'selfdestruct', 'mistyexplosion', 'dragonpulse', 'icywind', 'ancientpower', 'ominouswind', 'silverwind'];
