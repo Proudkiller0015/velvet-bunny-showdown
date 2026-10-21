@@ -76,6 +76,12 @@ exports.formatsData = (data) => {
 
 exports.learnsets = (data) => {
 	for (const [id, learnset] of Object.entries(DATA.learnsets)) data[id] = { learnset: clone(learnset) };
+	// Fate's Call (ours, not the mod's): Remilia's alone, from level 1.
+	if (data.remiliascarlet) data.remiliascarlet.learnset.fatescall = ['9L1'];
+	// Forbidden Barrage: Flandre's alone now. The mod also taught it to Byakuren Hijiri
+	// and Zanmu Nippaku; they no longer learn it.
+	for (const id of Object.keys(DATA.learnsets)) if (id !== 'flandrescarlet' && data[id]) delete data[id].learnset.forbiddenbarrage;
+	if (data.flandrescarlet) data.flandrescarlet.learnset.forbiddenbarrage = ['9L1'];
 	return data;
 };
 
@@ -130,14 +136,16 @@ const MOVES = {
 		shortDesc: '1.5x power if the user moves before the target.',
 		desc: "Power is multiplied by 1.5 (97.5) if the user moves before the target this turn, or the target switched in this turn. Slicing move.",
 	},
+	// Flandre Scarlet's signature (the owner, 21 Oct 2026): raised to match her sister's
+	// Fate's Call - 120 power, never misses, 8 PP - and hers alone (learnsets above).
 	forbiddenbarrage: {
-		num: -203, accuracy: 80, basePower: 110, category: 'Special', name: 'Forbidden Barrage', pp: 5, priority: 0,
+		num: -203, accuracy: true, basePower: 120, category: 'Special', name: 'Forbidden Barrage', pp: 8, priority: 0,
 		flags: { protect: 1, mirror: 1, bullet: 1 },
 		onPrepareHit: anim('Astral Barrage'),
 		secondary: { chance: 10, volatileStatus: 'flinch' },
 		target: 'allAdjacentFoes', type: 'Dark',
-		shortDesc: '10% chance to make the target(s) flinch. Hits adjacent foes.',
-		desc: "Has a 10% chance to make each target flinch. Hits all adjacent foes. Ball and bomb move: Bulletproof blocks it.",
+		shortDesc: "Can't miss. 10% to flinch. Hits adjacent foes. Flandre's signature.",
+		desc: "Can't miss: does not check accuracy, so evasion and accuracy changes do not matter. Has a 10% chance to make each target flinch. Hits all adjacent foes. Ball and bomb move: Bulletproof blocks it. Flandre Scarlet's signature move.",
 	},
 	shikigamirush: {
 		num: -204, accuracy: 100, basePower: 70, category: 'Special', name: 'Shikigami Rush', pp: 5, priority: 0,
@@ -382,6 +390,20 @@ const MOVES = {
 		shortDesc: '+1 Spe. User becomes Electric type; its slicing moves become Electric.',
 		desc: "Raises the user's Speed by 1 stage. The user becomes pure Electric type, and its slicing moves become Electric type, until it switches out or uses another Invoke move.",
 	},
+	/*
+	 * Fate's Call: Remilia Scarlet's own, not the mod's (the owner, 21 Oct 2026). She
+	 * manipulates fate, so it cannot miss and no protection stops it: no `protect` flag,
+	 * so Protect, Detect, King's Shield and the rest are passed by, not broken - they are
+	 * still up for the next move. Never a machine (not in TMS).
+	 */
+	fatescall: {
+		num: -222, accuracy: true, basePower: 120, category: 'Special', name: "Fate's Call", pp: 8, priority: 0,
+		flags: { mirror: 1, metronome: 1 },
+		onPrepareHit: anim('Dark Pulse'),
+		secondary: null, target: 'normal', type: 'Dark',
+		shortDesc: "Can't miss. Hits through protection. Remilia's signature.",
+		desc: "Does not check accuracy, so evasion and accuracy changes do not matter. Hits a target using Protect, Detect, King's Shield, Spiky Shield, Baneful Bunker, Silk Trap, Burning Bulwark, Obstruct or Max Guard without ending the protection or suffering its effects. Remilia Scarlet's signature move.",
+	},
 	invokeishikoridome: {
 		num: -221, accuracy: 100, basePower: 0, category: 'Status', name: 'Invoke Ishikori-Dome', pp: 10, priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
@@ -399,6 +421,159 @@ const MOVES = {
 	},
 };
 
+// ------------------------------------------------------------------ TMs
+
+/*
+ * The mod's moves as machines (the owner, 21 Oct 2026: "distribute the new tms
+ * generously"). Handed out by buffs.js the way Wave Charge is: each rule is a test
+ * on a Pokemon's types, stats, abilities and the moves it already learns, run over
+ * the whole dex (Touhou guests included), and a Pokemon that passes learns the move
+ * as '9M'. Pre-evolutions of a Pokemon that passes learn it too. A rule's `except`
+ * takes out a whole evolution family, since an evolution inherits its baby's moves.
+ *
+ * Left out of every rule unless named in `also`: the Restricted Legendaries, the
+ * Mythicals, and anything with 670 base stats or more (the box-art and Uber legends).
+ *
+ * `physical` is Attack at least Special Attack, `special` the reverse.
+ */
+const SLICING = ['slash', 'nightslash', 'xscissor', 'leafblade', 'sacredsword', 'psychocut', 'razorshell', 'crosspoison',
+	'kowtowcleave', 'stoneaxe', 'ceaselessedge', 'bitterblade', 'aquacutter', 'solarblade', 'secretsword',
+	'populationbomb', 'tachyoncutter', 'psyblade', 'mightycleave'];
+const PUNCHES = ['machpunch', 'drainpunch', 'firepunch', 'icepunch', 'thunderpunch', 'dynamicpunch', 'focuspunch',
+	'hammerarm', 'skyuppercut', 'cometpunch', 'megapunch', 'bulletpunch', 'shadowpunch', 'poweruppunch', 'meteormash',
+	'wickedblow', 'surgingstrikes', 'ragefist', 'jetpunch', 'icehammer'];
+const DANCES = ['quiverdance', 'featherdance', 'teeterdance', 'petaldance', 'fierydance', 'revelationdance',
+	'lunardance', 'victorydance', 'aquastep'];
+const BITES = ['bite', 'crunch', 'firefang', 'icefang', 'thunderfang', 'poisonfang', 'psychicfangs', 'hyperfang',
+	'jawlock', 'fishiousrend'];
+// A flat half of the user's HP, which is all Body Swap does for anyone but Hecatia.
+const HALF_HEALS = ['recover', 'slackoff', 'softboiled', 'roost', 'milkdrink', 'shoreup', 'healorder'];
+// Sword-bearers, for the two Invokes that are not Yorihime's alone.
+const SWORDS = ['gallade', 'ceruledge', 'samurott', 'samurotthisui', 'kleavor', 'sirfetchd', 'farfetchd',
+	'scyther', 'kabutops', 'bisharp', 'decidueyehisui', 'veluza', 'aegislash'];
+
+const TMS = {
+	// Reimu Hakurei's own (the move says so): kept narrow, to the mystic special
+	// birds. A never-missing trap is a lot to hand out further than that.
+	dreamseal: {
+		when: () => false,
+		also: ['xatu', 'sigilyph', 'noctowl', 'swoobat', 'oricoriopau', 'oricoriosensu', 'togekiss', 'articunogalar'],
+	},
+	// The physical Steel and Dark types with a blade or claw (any slicing move), and
+	// every Sharpness user. Not Chien-Pao or Kartana: a 97.5 power hit for outspeeding
+	// is a free upgrade on the fastest blades in the game.
+	silverdagger: {
+		when: (s, k) => s.physical && (s.has('Steel') || s.has('Dark')) && k(SLICING) || s.physical && s.ability('Sharpness'),
+		except: ['chienpao', 'kartana'],
+	},
+	// Flandre Scarlet's signature (the owner): never a machine.
+	forbiddenbarrage: null,
+	// The special Psychic types. Off Yukari it is a plain 70 power Psychic move (the
+	// priority only comes with Ran Yakumo beside her), so it costs nothing to share.
+	shikigamirush: {
+		when: s => s.special && s.has('Psychic'),
+	},
+	// The special Psychic and Ghost types: a 40 power shot that goes first among
+	// equals, Vacuum Wave for the mind.
+	lunaticbullet: {
+		when: s => s.special && (s.has('Psychic') || s.has('Ghost')),
+	},
+	// The special Poison types. Not Gengar or Glimmora (as with Oxidize, a 30%
+	// paralysis STAB on top of what they threaten), Iron Moth, or the Poison Ultra
+	// Beasts (Nihilego, Naganadel).
+	nervepoison: {
+		when: s => s.special && s.has('Poison'),
+		except: ['gengar', 'glimmora', 'ironmoth', 'nihilego', 'naganadel'],
+	},
+	// The physical Water types: Nitori's water cannon, three rising shots.
+	superscope3d: {
+		when: s => s.physical && s.has('Water'),
+	},
+	// The physical Flying types, the physical Fighting types that throw punches, and
+	// every Iron Fist user. Not Annihilape or Urshifu (Ubers), nor Landorus.
+	cloudfist: {
+		when: (s, k) => s.physical && (s.has('Flying') || s.has('Fighting') && k(PUNCHES) || s.ability('Iron Fist')),
+		except: ['annihilape', 'urshifu', 'landorus'],
+	},
+	// The physical Water types. Not the Sniper ones: two high-crit hits on Sniper and a
+	// Scope Lens is a guaranteed double crit at 2.25x.
+	waterplates: {
+		when: s => s.physical && s.has('Water') && !s.ability('Sniper'),
+	},
+	// Psychic and Ghost types (a soul changing bodies) that already heal half their HP:
+	// to them it is Recover under another name. The forme change is Hecatia's alone.
+	bodyswap: {
+		when: (s, k) => (s.has('Psychic') || s.has('Ghost')) && k(HALF_HEALS),
+	},
+	// The physical Fighting types and the physical dancers (any dance move but Swords
+	// and Dragon Dance, which nearly everything knows), and every Dancer.
+	// Not Annihilape or Urshifu (Ubers).
+	dancingblow: {
+		when: (s, k) => s.physical && (s.has('Fighting') || k(DANCES)) || s.ability('Dancer'),
+		except: ['annihilape', 'urshifu'],
+	},
+	// Eika Ebisu's, at the Sanzu river: kept narrow. 140 power Ghost on a fast special
+	// Ghost (Dragapult, Chandelure, Gholdengo, Flutter Mane) is far too much; it goes to
+	// the slow stone-and-tomb Ghosts, for whom Stealth Rock on their own side really costs.
+	stonestacking: {
+		when: () => false,
+		also: ['spiritomb', 'runerigus', 'cofagrigus', 'palossand', 'dusknoir', 'golurk'],
+	},
+	// Ground and Rock types, and the clay and stone statues. Not Garganacl, Gliscor,
+	// Ting-Lu or Landorus: Cosmic Power plus an Electric immunity on a top-tier wall
+	// (Gliscor with Poison Heal above all) is a tier review.
+	sculptedarmor: {
+		when: s => s.has('Ground') || s.has('Rock'),
+		also: ['golurk', 'bronzong', 'regirock', 'registeel', 'regice'],
+		except: ['garganacl', 'gliscor', 'tinglu', 'landorus'],
+	},
+	// The physical Ground types, and the physical Rock and Steel types that dig. Not
+	// Garchomp, Landorus, Ting-Lu or Garganacl: hazard control and a 130 power Ground
+	// move tips any of them.
+	excavate: {
+		when: (s, k) => s.physical && (s.has('Ground') || (s.has('Rock') || s.has('Steel')) && k(['dig'])),
+		except: ['garchomp', 'landorus', 'tinglu', 'garganacl'],
+	},
+	// The physical biters that are Steel or have Strong Jaw. Not Dracovish (Strong Jaw
+	// and Fishious Rend is an Uber already).
+	ironchomp: {
+		when: (s, k) => s.physical && k(BITES) && (s.has('Steel') || s.ability('Strong Jaw')),
+		also: ['mawile'],
+		except: ['dracovish'],
+	},
+	// The physical Steel and Electric types, and the machines and cannons. Not
+	// Kingambit (a never-missing STAB that burns is more than Iron Head on it), Kartana,
+	// or Regieleki (an Uber).
+	missile: {
+		when: s => s.physical && (s.has('Steel') || s.has('Electric')),
+		also: ['blastoise', 'golurk', 'revavroom', 'ironhands', 'irontreads', 'ironboulder', 'ironleaves', 'ironvaliant',
+			'porygonz', 'magnezone', 'klinklang', 'clawitzer'],
+		except: ['kingambit', 'kartana', 'regieleki'],
+	},
+	// Every Dark type: Charge, for Dark. Not where a doubled Dark move is already a
+	// threat: Kingambit (Sucker Punch and Kowtow Cleave), Chien-Pao, Roaring Moon,
+	// Meowscarada (Knock Off), Chi-Yu, Urshifu (an always-critting Wicked Blow at 150),
+	// Greninja (Battle Bond) and Ting-Lu (+1 Sp. Def a turn on that wall).
+	wickedenergy: {
+		when: s => s.has('Dark'),
+		except: ['kingambit', 'chienpao', 'roaringmoon', 'meowscarada', 'chiyu', 'urshifu', 'greninja', 'tinglu'],
+	},
+	// The physical Ground and Rock types. Not the Sand Rush or Sand Veil ones (it would
+	// set their own sand and double their Speed, or their evasion, in one move), nor
+	// Landorus.
+	dustupheaval: {
+		when: s => s.physical && (s.has('Ground') || s.has('Rock')) && !s.ability('Sand Rush') && !s.ability('Sand Veil'),
+		except: ['landorus', 'garchomp', 'gliscor'],
+	},
+	// Yorihime's: a god's type for the user and its blade. Kept to the sword-bearers.
+	invokeamaterasu: { when: () => false, also: SWORDS },
+	invokehonoikazuchi: { when: () => false, also: SWORDS },
+	// Yorihime's alone: it hands out Magic Bounce, which no TM should.
+	invokeishikoridome: null,
+};
+// Mew learns every machine move, as with the shared moves in balance-patch-1.js.
+for (const rule of Object.values(TMS)) if (rule) rule.also = [...(rule.also || []), 'mew'];
+
 /** Hazards that Dexterity walks over: the switch-in handlers of these two, behind a check. */
 function dexterous(entry) {
 	const condition = { ...entry.condition };
@@ -411,7 +586,9 @@ function dexterous(entry) {
 }
 
 exports.moves = (data) => {
-	for (const [id, move] of Object.entries(MOVES)) data[id] = { gen: 9, ...move };
+	// `velvetShared`: handed out as machines (TMS above), so not anyone's signature by
+	// learnset, and the bot treats them as ordinary moves rather than a Pokemon's own.
+	for (const [id, move] of Object.entries(MOVES)) data[id] = { gen: 9, ...move, ...(TMS[id] ? { velvetShared: true } : {}) };
 	// Dexterity (Yamame Kurodani): Toxic Spikes and Sticky Web pass it by as well.
 	for (const id of ['toxicspikes', 'stickyweb']) if (data[id] && data[id].condition) data[id] = dexterous(data[id]);
 	// Hyperspace Fury: Junko can use it, as Hoopa-Unbound can.
@@ -1062,6 +1239,26 @@ const ABILITIES = {
 		shortDesc: '30% chance to confuse an attacker making contact.',
 		desc: "When a Pokemon makes contact with this Pokemon, it has a 30% chance to become confused. Nina Watari's.",
 	},
+	/*
+	 * Remilia and Flandre's Awakened ability (the owner, 21 Oct 2026: "literally old gen
+	 * Soul Dew", then: "Attack and Special Attack"): the Gen 3-6 Soul Dew's 1.5x, on Attack
+	 * and Special Attack, with no item and no condition. Not the mod's: granted beside what each sister already has
+	 * (GRANTS below, applied by buffs.js like any Awakened ability).
+	 */
+	scarletsisters: {
+		num: -248, rating: 3.5, flags: {},
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk) {
+			return this.chainModify(1.5);
+		},
+		onModifySpAPriority: 5,
+		onModifySpA(spa) {
+			return this.chainModify(1.5);
+		},
+		name: 'Scarlet Sisters',
+		shortDesc: "This Pokemon's Attack and Sp. Atk are 1.5x.",
+		desc: "This Pokemon's Attack and Special Attack are multiplied by 1.5, in the manner of the old Soul Dew, without holding anything. Remilia and Flandre Scarlet's.",
+	},
 };
 
 exports.abilities = (data) => {
@@ -1072,10 +1269,32 @@ exports.abilities = (data) => {
 // ------------------------------------------------------------------ items
 
 const EIKI = 'eikishiki';
+const SCARLET = ['remiliascarlet', 'flandrescarlet'];
 const PLATES = ['dracoplate', 'dreadplate', 'earthplate', 'fistplate', 'flameplate', 'icicleplate', 'insectplate', 'ironplate',
 	'meadowplate', 'mindplate', 'pixieplate', 'skyplate', 'splashplate', 'spookyplate', 'stoneplate', 'toxicplate', 'zapplate'];
 
 const ITEMS = {
+	/*
+	 * Bloodlust: the Scarlet sisters' own item (the owner, 21 Oct 2026). +1 Speed every
+	 * time the holder comes in, as often as it comes in - the old Intrepid Sword, before
+	 * Zacian's was cut to once a battle. Nobody else gets anything from it, and like the
+	 * trio's items (abyss-shrine.js) it never leaves them and they never take one, so
+	 * Knock Off neither removes it nor gains power from it.
+	 */
+	bloodlust: {
+		num: -203, gen: 9, spritenum: 390, name: 'Bloodlust',
+		fling: { basePower: 30 },
+		itemUser: ['Remilia Scarlet', 'Flandre Scarlet'],
+		onStart(pokemon) {
+			if (!SCARLET.includes(pokemon.baseSpecies.id)) return;
+			this.boost({ spe: 1 }, pokemon);
+		},
+		onTakeItem(item, pokemon, source) {
+			return !(SCARLET.includes(pokemon.baseSpecies.id) || (source && SCARLET.includes(source.baseSpecies.id)));
+		},
+		shortDesc: 'Remilia or Flandre Scarlet: +1 Speed every time it switches in. Can\'t be removed.',
+		desc: "If held by Remilia Scarlet or Flandre Scarlet, raises its Speed by 1 stage each time it enters the battle, with no limit. Does nothing for any other Pokemon. Can't be removed from either sister or stolen by one, so Knock Off gains no power against it.",
+	},
 	summerbackdoor: {
 		num: -201, gen: 9, spritenum: 751, name: 'Summer Backdoor',
 		forcedForme: 'Cirno-Tanned',
@@ -1178,6 +1397,14 @@ exports.FORMES = FORMES;
 // What config/custom-formats.js bans by name from every RP format but RP Touhou and the RP Battle ones.
 exports.NAMES = NAMES;
 exports.MOVE_IDS = Object.keys(MOVES);
+exports.TMS = TMS;
+// Awakened abilities for the guests, added beside the mod's (buffs.js, addAbilities).
+exports.GRANTS = { remiliascarlet: ['Scarlet Sisters'], flandrescarlet: ['Scarlet Sisters'] };
+// The spell cards that stay one character's signature though a few others learn them.
+exports.PERSONAL = {
+	dreamseal: 'reimuhakurei', stonestacking: 'eikaebisu',
+	invokeamaterasu: 'watatsukinoyorihime', invokehonoikazuchi: 'watatsukinoyorihime', invokeishikoridome: 'watatsukinoyorihime',
+};
 exports.ABILITY_IDS = Object.keys(ABILITIES);
 exports.ITEM_IDS = Object.keys(ITEMS);
 // The vanilla entries changed above, for anything that lists what we changed.

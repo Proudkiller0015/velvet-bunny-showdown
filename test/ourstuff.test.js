@@ -39,8 +39,13 @@ const builder = new TeamBuilder();
  */
 (async () => {
 try { await builder.prefetch(FORMAT); } catch (e) { /* offline: bundled data still works */ }
-const ourMoves = new Set(Dex.moves.all().filter(m => m.exists && m.num < 0).map(m => m.name));
-const ourAbilities = new Set(Dex.abilities.all().filter(a => a.exists && a.num < 0).map(a => a.name));
+// The format's own dex: ours live in the RP mod (gen9rp), and the base dex has only
+// three of them, so counting against it reported 0% whatever the bot drew.
+const dex = Dex.forFormat(FORMAT);
+const ourMoves = new Set(dex.moves.all().filter(m => m.exists && m.num < 0).map(m => m.name));
+const ourAbilities = new Set(dex.abilities.all().filter(a => a.exists && a.num < 0).map(a => a.name));
+const touhouMoves = new Set(require('../data/velvet/touhou.js').MOVE_IDS);
+const touhouCount = new Map();
 
 let pass = 0, bad = 0;
 const problems = [];
@@ -57,8 +62,12 @@ for (let i = 0; i < RUNS; i++) {
 	for (const set of team) {
 		pokemonSeen++;
 		speciesSeen.set(set.species, (speciesSeen.get(set.species) || 0) + 1);
-		if ((set.moves || []).some(move => ourMoves.has(Dex.moves.get(move).name))) withOurMove++;
-		if (set.ability && ourAbilities.has(Dex.abilities.get(set.ability).name)) withOurAbility++;
+		if ((set.moves || []).some(move => ourMoves.has(dex.moves.get(move).name))) withOurMove++;
+		if (set.ability && ourAbilities.has(dex.abilities.get(set.ability).name)) withOurAbility++;
+		for (const move of set.moves || []) {
+			const id = dex.moves.get(move).id;
+			if (touhouMoves.has(id)) touhouCount.set(id, (touhouCount.get(id) || 0) + 1);
+		}
 	}
 }
 
@@ -67,6 +76,9 @@ console.log(`${FORMAT}: ${RUNS} teams, ${pokemonSeen} Pokemon`);
 console.log(`  legal            ${pass}/${RUNS}`);
 console.log(`  with one of our moves      ${withOurMove} (${share(withOurMove)}%)`);
 console.log(`  with one of our abilities  ${withOurAbility} (${share(withOurAbility)}%)`);
+
+// The Touhou machines (touhou.js TMS) are handed to hundreds of Pokemon: on some, not all.
+console.log('  Touhou moves drawn: ' + ([...touhouCount.entries()].sort((a, b) => b[1] - a[1]).map(([id, n]) => `${id} x${n}`).join(', ') || 'none'));
 
 const top = [...speciesSeen.entries()].sort((a, b) => b[1] - a[1]).slice(0, 8);
 console.log('  most drawn: ' + top.map(([name, n]) => `${name} x${n}`).join(', '));

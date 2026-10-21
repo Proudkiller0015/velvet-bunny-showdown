@@ -1134,6 +1134,9 @@ class BattleAI {
 			 */
 			if (!this.cfg.naive) {
 				if (String(attacker.ability || '') === 'Witching Hour' && move.type === 'Ghost') scale *= 1.5;
+				// Scarlet Sisters (Remilia and Flandre, touhou.js): 1.5x Attack and Sp. Atk. The
+				// calculator has no ability like it, so the damage is scaled.
+				if (String(attacker.ability || '') === 'Scarlet Sisters' && move.category !== 'Status') scale *= 1.5;
 				if (move.name === "Witch's Snatch") {
 					const item = String(defender.item || '');
 					const data = item ? PkmnDex.forGen(9).items.get(item) : null;

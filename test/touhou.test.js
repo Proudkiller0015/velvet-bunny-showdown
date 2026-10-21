@@ -166,6 +166,117 @@ const turn = (b, p1, p2) => { b.choose('p1', p1); b.choose('p2', p2); };
 	ok(/\|move\|p1a: Kyouko Kasodani\|Hyper Voice/.test(log), 'Echo: and uses it back');
 }
 {
+	// Scarlet Sisters: 1.5x Attack and Sp. Atk, on both sisters and legal.
+	const b = battle([mon('Remilia Scarlet', ['Splash'], { ability: 'Scarlet Sisters' })], [mon('Blissey', ['Splash'])]);
+	const remilia = b.p1.active[0];
+	ok(remilia.getStat('atk') === Math.floor(remilia.storedStats.atk * 1.5) && remilia.getStat('spa') === Math.floor(remilia.storedStats.spa * 1.5),
+		`Scarlet Sisters: Remilia's Attack and Sp. Atk are 1.5x (${remilia.getStat('atk')}/${remilia.storedStats.atk}, ${remilia.getStat('spa')}/${remilia.storedStats.spa})`);
+	ok(remilia.getStat('def') === remilia.storedStats.def && remilia.getStat('spd') === remilia.storedStats.spd, 'Scarlet Sisters: Defense and Sp. Def untouched');
+	const hit = (ability, move) => {
+		const t = battle([mon('Remilia Scarlet', [move], { ability })], [mon('Blissey', ['Splash'])]);
+		turn(t, 'move 1', 'move 1');
+		return t.p2.active[0].maxhp - t.p2.active[0].hp;
+	};
+	for (const move of ['Dark Pulse', 'Crunch']) {
+		const strong = hit('Scarlet Sisters', move), plain = hit('Vampirism', move);
+		ok(strong > plain * 1.3, `Scarlet Sisters: ${move} hits harder (${strong} vs ${plain})`);
+	}
+	for (const id of ['remiliascarlet', 'flandrescarlet']) {
+		ok(Object.values(dex.species.get(id).abilities).includes('Scarlet Sisters'), `${id} has Scarlet Sisters`);
+		const set = setFor(id, { ability: 'Scarlet Sisters' });
+		ok(!problems('gen9rptouhou', [set]).length, `${id} with Scarlet Sisters legal in RP Touhou (${problems('gen9rptouhou', [set])})`);
+	}
+}
+{
+	// Bloodlust: +1 Speed on every entry (the old Intrepid Sword), never removed, Knock Off unboosted, theirs only.
+	const b = battle([mon('Remilia Scarlet', ['Splash'], { item: 'Bloodlust' }), mon('Blissey', ['Splash'])], [mon('Blissey', ['Knock Off'])]);
+	const remilia = b.p1.pokemon.find(p => p.species.id === 'remiliascarlet');
+	ok(remilia.boosts.spe === 1, `Bloodlust: Remilia enters at +1 Speed (${remilia.boosts.spe})`);
+	const before = remilia.hp;
+	turn(b, 'move 1', 'move 1');
+	ok(remilia.item === 'bloodlust', 'Bloodlust: Knock Off does not remove it');
+	const knocked = before - remilia.hp;
+	turn(b, 'switch 2', 'move 1');
+	turn(b, 'switch 2', 'move 1');
+	ok(remilia.isActive && remilia.boosts.spe === 1, `Bloodlust: +1 again on coming back in (${remilia.boosts.spe})`);
+	// Knock Off's power against it, beside the same hit into a held Leftovers.
+	const lefties = battle([mon('Remilia Scarlet', ['Splash'], { item: 'Leftovers' })], [mon('Blissey', ['Knock Off'])]);
+	const from = lefties.p1.active[0].hp;
+	turn(lefties, 'move 1', 'move 1');
+	const boosted = from - lefties.p1.active[0].hp;
+	ok(knocked < boosted / 1.3, `Bloodlust: Knock Off gains no power from it (${knocked} vs ${boosted} into Leftovers)`);
+	const other = battle([mon('Cirno', ['Splash'], { item: 'Bloodlust' })], [mon('Blissey', ['Splash'])]);
+	ok(other.p1.active[0].boosts.spe === 0, 'Bloodlust: nothing for anyone else');
+	for (const id of ['remiliascarlet', 'flandrescarlet']) {
+		const set = setFor(id, { item: 'Bloodlust' });
+		ok(!problems('gen9rptouhou', [set]).length, `${id} with Bloodlust legal in RP Touhou (${problems('gen9rptouhou', [set])})`);
+	}
+	const tb = new (require('../src/teambuilder').TeamBuilder)();
+	ok(tb.ourItems(tb.context('gen9rptouhou'), dex.species.get('Flandre Scarlet')).includes('Bloodlust'), 'the bot knows Bloodlust is theirs');
+}
+{
+	// Fate's Call: Remilia's own. 120 Dark special, through Protect (left standing) and past evasion.
+	const fc = dex.moves.get("Fate's Call");
+	ok(fc.exists && fc.basePower === 120 && fc.type === 'Dark' && fc.category === 'Special' && fc.accuracy === true && !fc.flags.protect && fc.num < 0, "Fate's Call: 120 power Dark special, never misses");
+	const b = battle([mon('Remilia Scarlet', ["Fate's Call", 'Splash'])], [mon('Blissey', ['Protect', 'Double Team'])]);
+	turn(b, 'move 1', 'move 1');
+	const blissey = b.p2.active[0];
+	ok(blissey.hp < blissey.maxhp && b.log.some(l => /\|-singleturn\|p2a: Blissey\|Protect/.test(l)) && !b.log.some(l => /\|-activate\|p2a: Blissey\|move: Protect/.test(l)),
+		"Fate's Call: hits through a Protect that went up first, without breaking it");
+	turn(b, 'move 2', 'move 2');
+	turn(b, 'move 2', 'move 2');
+	turn(b, 'move 2', 'move 2');
+	ok(blissey.boosts.evasion >= 3, 'Double Team up (+3 evasion)');
+	let hits = 0;
+	for (let i = 0; i < 6; i++) {
+		const hp = blissey.hp;
+		turn(b, 'move 1', 'move 2');
+		if (blissey.hp < hp || blissey.fainted) hits++;
+		if (blissey.fainted || b.ended) break;
+	}
+	ok(hits >= 1 && b.log.every(l => !/\|-miss\|p1a: Remilia/.test(l)), `Fate's Call: never misses through evasion (${hits} hits)`);
+	const learners = dex.species.all().filter(s => (dex.species.getLearnsetData(s.id).learnset || {}).fatescall).map(s => s.id);
+	ok(learners.every(id => ['remiliascarlet', 'samantha'].includes(id)) && learners.includes('remiliascarlet'), `Fate's Call: Remilia's alone (${learners})`);
+	const tb = new (require('../src/teambuilder').TeamBuilder)();
+	let carried = 0, seen = 0;
+	for (let seed = 1; seed <= 40 && seen < 6; seed++) {
+		const set = Teams.unpack(tb.build('gen9rptouhou', seed)).find(s => dex.species.get(s.species).id === 'remiliascarlet');
+		if (!set) continue;
+		seen++;
+		if (set.moves.some(m => dex.moves.get(m).id === 'fatescall')) carried++;
+	}
+	ok(!seen || carried > 0, `the bot's Remilia brings Fate's Call (${carried} of ${seen})`);
+}
+{
+	// Forbidden Barrage: Flandre's signature, raised to match Fate's Call.
+	const fb = dex.moves.get('Forbidden Barrage');
+	ok(fb.basePower === 120 && fb.accuracy === true && fb.pp === 8 && fb.type === 'Dark' && fb.category === 'Special' && fb.target === 'allAdjacentFoes' && fb.flags.bullet,
+		'Forbidden Barrage: 120 power, never misses, 8 PP, still a Dark spread bullet');
+	const b = battle([mon('Flandre Scarlet', ['Forbidden Barrage'])], [mon('Blissey', ['Double Team'])]);
+	const blissey = b.p2.active[0];
+	let hits = 0;
+	for (let i = 0; i < 4 && !b.ended; i++) {
+		const hp = blissey.hp;
+		turn(b, 'move 1', 'move 1');
+		if (blissey.hp < hp || blissey.fainted) hits++;
+	}
+	ok(blissey.boosts.evasion >= 2 || blissey.fainted, 'Double Team went up');
+	ok(hits >= 2 && !b.log.some(l => /\|-miss\|p1a: Flandre/.test(l)), `Forbidden Barrage: never misses through evasion (${hits} hits)`);
+	const learners = dex.species.all().filter(s => (dex.species.getLearnsetData(s.id).learnset || {}).forbiddenbarrage).map(s => s.id);
+	ok(learners.includes('flandrescarlet') && learners.every(id => ['flandrescarlet', 'samantha'].includes(id)), `Forbidden Barrage: Flandre's alone (${learners})`);
+}
+{
+	// The mod's moves as machines (touhou.js TMS): regular Pokemon and guests learn them,
+	// legally, and the excluded ones do not.
+	const learns = (id, move) => !problems('gen9rptouhou', [{ ...setFor(id), moves: [move] }]).length;
+	ok(learns('metagross', 'Missile') && learns('beldum', 'Missile'), 'Missile: Metagross and Beldum learn it');
+	ok(!learns('kingambit', 'Missile'), 'Missile: not Kingambit');
+	ok(learns('xatu', 'Dream Seal') && !learns('alakazam', 'Dream Seal'), 'Dream Seal: kept narrow');
+	ok(learns('regice', 'Sculpted Armor'), 'Sculpted Armor reaches Regice past its hand-written buff');
+	ok(learns('cirno', 'Wicked Energy') === dex.species.get('cirno').types.includes('Dark'), 'Wicked Energy follows type on the guests too');
+	ok(!learns('reimuhakurei', 'Invoke Ishikori-Dome'), 'Invoke Ishikori-Dome stays Yorihime\'s');
+}
+{
 	// Junko can use Hyperspace Fury.
 	const b = battle([mon('Junko', ['Hyperspace Fury'], { ability: 'Mold Breaker' })], [mon('Blissey', ['Splash'])]);
 	turn(b, 'move 1', 'move 1');

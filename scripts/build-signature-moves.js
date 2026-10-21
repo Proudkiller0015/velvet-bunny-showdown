@@ -225,10 +225,13 @@ function build() {
 	const CHOSEN = { shuppet: ['poltergeist'], makuro: ['abyssalmaw', 'leviathancrash', 'sovereignrite'], raishin: ['shrinebellstrike', 'spiritthunder', 'sovereignrite'], chimai: ['sanctuarypulse', 'hallowedquake', 'sovereignrite'] };
 	for (const [id, { signature }] of Object.entries(collab.LEARNSETS)) CHOSEN[id] = signature;
 	// Each Touhou Pokemon: the mod's moves it learns, formes included (Hecatia-Earth's are Hecatia's).
+	// Not the ones handed out as machines (touhou.js TMS, `velvetShared`), which half the dex
+	// now knows - except a spell card that stays its character's (touhou.PERSONAL).
 	for (const id of [...touhou.SPECIES, ...touhou.FORMES]) {
 		const species = Dex.species.get(id);
 		const learnset = Dex.species.getLearnsetData(id).learnset || {};
-		const own = touhou.MOVE_IDS.filter(move => learnset[move]);
+		const own = touhou.MOVE_IDS.filter(move => learnset[move])
+			.filter(move => !Dex.moves.get(move).velvetShared || touhou.PERSONAL[move] === familyOf(species));
 		if (!own.length) continue;
 		const family = familyOf(species);
 		CHOSEN[family] = [...new Set([...(CHOSEN[family] || []), ...own])];

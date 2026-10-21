@@ -367,28 +367,100 @@ const DISTRIBUTED = {
 	},
 };
 
+/*
+ * The Touhou moves as machines (touhou.js, TMS): the same table, with rules that test
+ * more than a type. Ishikori-Dome has none - it stays Yorihime's alone.
+ */
+for (const [move, rule] of Object.entries(require('./touhou.js').TMS)) if (rule) DISTRIBUTED[move] = rule;
+
+/** The id of a Pokemon's evolution family: its base forme's first stage. */
+function familyOf(Pokedex, id) {
+	const toID = s => String(s || '').toLowerCase().replace(/[^a-z0-9]+/g, '');
+	let current = id;
+	const seen = new Set();
+	while (Pokedex[current] && !seen.has(current)) {
+		seen.add(current);
+		const species = Pokedex[current];
+		if (species.baseSpecies && toID(species.baseSpecies) !== current) current = toID(species.baseSpecies);
+		else if (species.prevo) current = toID(species.prevo);
+		else break;
+	}
+	return current;
+}
+
 /**
  * Work out who a distributed move actually goes to.
  *
  * Mega Evolutions, Gigantamax formes and Totem Pokemon are left out: none of
  * them is a Pokemon you build, they inherit what their base form knows, and
  * listing them would triple the table for nothing.
+ *
+ * A rule is either a list of `types`, or a `when` test (the Touhou machines): it is
+ * handed the Pokemon - `has(type)`, `ability(name)`, `physical`, `special` - and a
+ * `knows(moves)` that is true when it already learns any of them. A `when` rule also
+ * reaches the Touhou guests, skips the Restricted Legendaries, the Mythicals and
+ * anything of 670 base stats or more, takes `except` as whole evolution families,
+ * and is passed down to the pre-evolutions of whatever it picks.
  */
-function distributionFor(Pokedex, rule) {
-	const skip = new Set(rule.except || []);
-	// The Touhou guests (touhou.js) keep the movepools their own mod gave them.
+function distributionFor(Pokedex, rule, Learnsets) {
 	const touhou = require('./touhou.js');
-	for (const id of [...touhou.SPECIES, ...touhou.FORMES]) skip.add(id);
+	const guests = new Set([...touhou.SPECIES, ...touhou.FORMES]);
+	// The Collab guests (collab.js) keep theirs: they have learnsets of their own design.
+	const { SPECIES: collabSpecies = [], FORMES: collabFormes = [] } = require('./collab.js');
+	const collab = new Set([...collabSpecies, ...collabFormes]);
+	const skip = new Set(rule.except || []);
+	const families = new Set((rule.except || []).map(id => familyOf(Pokedex, id)));
 	const out = [];
 	for (const [id, species] of Object.entries(Pokedex)) {
 		if (skip.has(id)) continue;
-		if (!species.types || !species.num || species.num < 0) continue;
+		if (!species.types || !species.num) continue;
 		if (/-(Mega|Gmax|Totem)/.test(species.name || '')) continue;
 		if (/-Tera$/.test(species.name || '')) continue;
-		if (rule.types.some(type => species.types.includes(type))) out.push(id);
+		if (!rule.when) {
+			// The Touhou guests (touhou.js) keep the movepools their own mod gave them.
+			if (species.num < 0 || guests.has(id)) continue;
+			if (rule.types.some(type => species.types.includes(type))) out.push(id);
+			continue;
+		}
+		if (species.num < 0 && !guests.has(id)) continue;
+		if (guests.has(id) && species.battleOnly) continue;
+		if (families.has(familyOf(Pokedex, id))) continue;
+		const stats = species.baseStats || {};
+		// A forme's tags are its base's: Genesect-Douse and Zarude-Dada are Mythical too.
+		const base = species.baseSpecies && Pokedex[String(species.baseSpecies).toLowerCase().replace(/[^a-z0-9]+/g, '')];
+		const tags = [...(species.tags || []), ...(base && base.tags || [])];
+		if (collab.has(id)) continue;
+		if (!guests.has(id)) {
+			if (tags.includes('Restricted Legendary') || tags.includes('Mythical')) continue;
+			if (Object.values(stats).reduce((a, b) => a + b, 0) >= 670) continue;
+		}
+		const abilities = Object.values(species.abilities || {});
+		const view = {
+			has: type => species.types.includes(type),
+			ability: name => abilities.includes(name),
+			physical: stats.atk >= stats.spa,
+			special: stats.spa >= stats.atk,
+		};
+		const knows = moves => moves.some(move => alreadyKnows(Pokedex, Learnsets, id, move) ||
+			(species.baseSpecies && alreadyKnows(Pokedex, Learnsets, String(species.baseSpecies).toLowerCase().replace(/[^a-z0-9]+/g, ''), move)));
+		if (rule.when(view, knows)) out.push(id);
 	}
 	for (const id of rule.also || []) {
 		if (Pokedex[id] && !out.includes(id)) out.push(id);
+	}
+	if (rule.when) {
+		// An evolution inherits its baby's moves, so the baby learns the machine too.
+		for (const id of out.slice()) {
+			let species = Pokedex[id];
+			const seen = new Set([id]);
+			while (species && species.prevo) {
+				const pre = String(species.prevo).toLowerCase().replace(/[^a-z0-9]+/g, '');
+				if (seen.has(pre) || !Pokedex[pre]) break;
+				seen.add(pre);
+				if (!out.includes(pre)) out.push(pre);
+				species = Pokedex[pre];
+			}
+		}
 	}
 	return out;
 }
@@ -423,6 +495,11 @@ exports.applyBuffs = (Pokedex, Learnsets) => {
 				moves: [...new Set([...(had.moves || []), ...(patch.moves || [])])],
 				abilities: [...new Set([...(had.abilities || []), ...(patch.abilities || [])])],
 			});
+		}
+		// The Touhou guests' Awakened abilities (touhou.js GRANTS): Scarlet Sisters.
+		for (const [id, abilities] of Object.entries(require('./touhou.js').GRANTS)) {
+			const buff = exports.Buffs[id] || (exports.Buffs[id] = { moves: [], abilities: [] });
+			buff.abilities = [...new Set([...(buff.abilities || []), ...abilities])];
 		}
 		// Every machine move Mew learns, for the Pokemon in legend-kits.js' LIKE_MEW.
 		const mew = Learnsets?.mew?.learnset || {};
@@ -464,7 +541,7 @@ exports.applyBuffs = (Pokedex, Learnsets) => {
 	 * ends up with both and is recorded once for each.
 	 */
 	for (const [move, rule] of Object.entries(DISTRIBUTED)) {
-		for (const id of distributionFor(Pokedex, rule)) {
+		for (const id of distributionFor(Pokedex, rule, Learnsets)) {
 			/*
 			 * No inheritance check here, unlike a per-Pokemon buff.
 			 *

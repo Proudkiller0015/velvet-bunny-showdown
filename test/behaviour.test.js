@@ -488,7 +488,9 @@ console.log('\n--- the Stockfish reviews: moves that fail, setup into its answer
 		const gen = ai.gen(9);
 		const foe = (species, moves = []) => ({ species, level: 100, hp: 100, maxhp: 100, status: '', boosts: {}, moves: new Set(moves), immuneTo: new Set(), notImmuneTo: new Set() });
 		check('a past-generation species we changed has our stats in the calc (Roserade 101 Speed)', ai.foePokemon(gen, foe('Roserade')).species.baseStats.spe, 101);
-		check('an unrevealed custom attack counts (Roserade may have Oxidize)', ai.hiddenAttacks(gen, foe('Roserade', ['Thorned Bouquet'])).includes('Oxidize'), true);
+		// Its shared custom attacks: Oxidize, or since the Touhou machines (21 Oct 2026) the
+		// Nerve Poison that now outranks it in Roserade's two shared slots.
+		check('an unrevealed custom attack counts (Roserade may have Oxidize or Nerve Poison)', ai.hiddenAttacks(gen, foe('Roserade', ['Thorned Bouquet'])).some(m => ['Oxidize', 'Nerve Poison'].includes(m)), true);
 		check('in a built format a foe is assumed to have full Speed investment', ai.foeSpeed(gen, foe('Roserade'), '') >= 331, true);
 		// Choice-locked into a resisted move, with a switch available: leave.
 		const { request, state } = scenario({ me: 'Enamorus', myMoves: ['Mystical Fire', 'Moonblast', 'Earth Power', 'Superpower'], myItem: 'Choice Scarf', foe: 'Garchomp', foeMoves: ['Stealth Rock'],
