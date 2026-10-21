@@ -2582,6 +2582,7 @@ value.abilityModify(1.3,"Punk Rock");
 }
 if(move.flags['slicing']){
 value.abilityModify(1.5,"Sharpness");
+value.abilityModify(1.5,"Maid's Trick");
 }
 for(var i=1;i<=5&&i<=pokemon.side.faintCounter;i++){
 if(pokemon.volatiles["fallen"+i]){

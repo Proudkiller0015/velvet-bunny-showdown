@@ -1852,7 +1852,7 @@ return itemid==='powerherb';
 if(move.flags['recharge']){
 return false;
 }
-if(move.flags['slicing']&&abilityid==='sharpness'){
+if(move.flags['slicing']&&(abilityid==='sharpness'||abilityid==='maidstrick')){
 return true;
 }
 return!BattleMoveSearch.BAD_STRONG_MOVES.includes(id);

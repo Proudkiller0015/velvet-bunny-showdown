@@ -380,6 +380,17 @@ const CALC_ABILITY = {
 	'Mudflat Ambush': 'Volt Absorb',
 	// Funerfly's (data/velvet/collab.js): the counter is no damage, its Technician is.
 	'Qliphoth Counter': 'Technician',
+	// Sakuya's (data/velvet/touhou.js): Sharpness's 1.5x, plus a priority the calculator has no use for.
+	"Maid's Trick": 'Sharpness',
+};
+/*
+ * Signatures that pick their type against the target (data/velvet/touhou.js): Marisa's Master
+ * Spark and Meiling's Rainbow Wind Chime. The calculator only knows the type they are listed
+ * as, so it is set to the one the battle will choose: the most damaging, STAB counted.
+ */
+const TYPE_CHOOSERS = {
+	'Master Spark': ['Electric', 'Fire'],
+	'Rainbow Wind Chime': ['Fighting', 'Dragon', 'Fire', 'Electric', 'Grass', 'Water', 'Poison'],
 };
 // Abilities that bounce status moves and hazards, and ones no status takes on.
 const BOUNCES = new Set(['magicbounce', 'prescience']);
@@ -1137,6 +1148,8 @@ class BattleAI {
 				// Scarlet Sisters (Remilia and Flandre, touhou.js): 1.5x Attack and Sp. Atk. The
 				// calculator has no ability like it, so the damage is scaled.
 				if (String(attacker.ability || '') === 'Scarlet Sisters' && move.category !== 'Status') scale *= 1.5;
+				// Transistor is Gen 8's 1.5x here (data/velvet/unnerfs.js); the calculator's Gen 9 is 1.3x.
+				if (String(attacker.ability || '') === 'Transistor' && move.type === 'Electric') scale *= 1.5 / 1.3;
 				if (move.name === "Witch's Snatch") {
 					const item = String(defender.item || '');
 					const data = item ? PkmnDex.forGen(9).items.get(item) : null;
@@ -1186,6 +1199,22 @@ class BattleAI {
 			if (this.cfg.itemSafe !== false && unknownItem(defender)) { defender = defender.clone(); defender.item = undefined; }
 			if (this.cfg.itemSafe !== false && unknownItem(attacker)) { attacker = attacker.clone(); attacker.item = undefined; }
 			defender = seeingPastImmunity(gen, move, defender);
+			if (TYPE_CHOOSERS[move.name] && !this.cfg.naive) {
+				const chart = PkmnDex.forGen(gen.num);
+				const types = (defender.teraType ? [defender.teraType] : defender.types) || [];
+				const score = type => {
+					let s = (attacker.types || []).includes(type) ? 0.585 : 0;
+					for (const t of types) {
+						const td = chart.types.get(t);
+						const code = td && td.damageTaken ? td.damageTaken[type] : 0;
+						if (code === 3) return -99;
+						s += code === 1 ? 1 : code === 2 ? -1 : 0;
+					}
+					return s;
+				};
+				const best = TYPE_CHOOSERS[move.name].reduce((a, b) => (score(b) > score(a) ? b : a));
+				if (best !== move.type) { move = move.clone(); move.type = best; }
+			}
 			if (birdMove) {
 				defender = retype(defender, ['Water']);
 				defender.teraType = undefined;

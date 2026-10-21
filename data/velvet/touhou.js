@@ -92,7 +92,38 @@ const TYPES = {
 	daiyousei: ['Fairy', 'Flying'],
 	// The Master Spark: a lightning-hot beam from her hakkero.
 	marisakirisame: ['Electric', 'Fire'],
+	// An engineer kappa: her machines and the Super Scope run on electricity, not armour.
+	nitorikawashiro: ['Water', 'Electric'],
+	// The teacher who keeps Gensokyo's history: a mind of knowledge (base forme only; Hakutaku stays Steel/Dragon).
+	keine: ['Steel', 'Psychic'],
+	// The maid's time and space manipulation is a power of the mind; Psychic in the fan games.
+	sakuyaizayoi: ['Steel', 'Psychic'],
+	// The firefly youkai of the night, as in the hacks.
+	wrigglenightbug: ['Bug', 'Dark'],
+	// The ghost princess of the Saigyou Ayakashi, the cherry tree that blooms over her grave.
+	yuyukosaigyouji: ['Ghost', 'Grass'],
+	// The doll of the lily-of-the-valley field: poison from the flowers.
+	medicinemelancholy: ['Poison', 'Grass'],
+	// The tsurube-otoshi in her bucket, who drops into the fires of the old hell.
+	kisume: ['Rock', 'Fire'],
+	// The kuda-gitsune: a spirit fox, a tricky schemer.
+	tsukasakudamaki: ['Ghost', 'Dark'],
 };
+/*
+ * Base stats the owner set (21 Oct 2026: "all Scarlet Devil Mansion members should have decent
+ * stats"). Written into the imported data as this file loads, so everything that reads
+ * DATA.species - the dex, the physical/special split behind the move kits (sides), random
+ * sets and the calc data - sees the same numbers.
+ */
+const STATS = {
+	hongmeiling: { hp: 90, atk: 130, def: 105, spa: 70, spd: 80, spe: 105 },
+	koakuma: { hp: 80, atk: 67, def: 80, spa: 115, spd: 90, spe: 108 },
+	patchouliknowledge: { hp: 85, atk: 40, def: 70, spa: 150, spd: 115, spe: 100 },
+	sakuyaizayoi: { hp: 90, atk: 115, def: 100, spa: 90, spd: 95, spe: 110 },
+	remiliascarlet: { hp: 80, atk: 130, def: 95, spa: 120, spd: 100, spe: 115 },
+	flandrescarlet: { hp: 75, atk: 140, def: 85, spa: 140, spd: 95, spe: 105 },
+};
+for (const [id, stats] of Object.entries(STATS)) if (DATA.species[id]) DATA.species[id].baseStats = { ...stats };
 const typesOf = id => TYPES[id] || DATA.species[id].types;
 
 exports.pokedex = (data) => {
@@ -115,7 +146,28 @@ exports.formatsData = (data) => {
 	return data;
 };
 
-/** Who learns each Touhou move: its owners in the mod, plus the two signatures added here. */
+/**
+ * The main cast's signatures (the owner, 21 Oct 2026: "give Reimu and the main cast their
+ * signature"): each character's best-known spell card, theirs alone. Move -> owner.
+ */
+const SIGNATURES = {
+	fantasyseal: 'reimuhakurei', sakuyasworld: 'sakuyaizayoi', killingdoll: 'sakuyaizayoi',
+	presentlifeslash: 'youmukonpaku', mosessmiracle: 'sanaekochiya', lunaticredeyes: 'reiseninaba',
+	occultball: 'sumirekousami', perfectfreeze: 'cirno', rainbowwindchime: 'hongmeiling',
+	royalflare: 'patchouliknowledge', artfulsacrifice: 'alicemargatroid', resurrectionbutterfly: 'yuyukosaigyouji',
+	spiritingaway: 'yukariyakumo', ultimatebuddhist: 'ranyakumo', pentagramflight: 'chen',
+	houraielixir: 'eirinyagokoro', impossiblerequest: 'kaguyahouraisan', phoenixrebirth: 'fujiwaranomokou',
+	illusionarydominance: 'ayashameimaru', kappaspororoca: 'nitorikawashiro', expandedonbashira: 'kanakoyasaka',
+	mishagujisama: 'suwakomoriya', terriblesouvenir: 'satorikomeiji', subterraneanrose: 'koishikomeiji',
+	gigaflare: 'utsuhoreiuji', rekindlingofdeadashes: 'rinkaenbyou', superhumanhijiri: 'byakurenhijiri',
+	undefinedufo: 'nuehoujuu', guseflash: 'toyosatomiminomiko', keystoneofheavenandearth: 'tenshihinanawi',
+	elekiterdragonpalace: 'ikunagae', refloweringofgensokyo: 'yuukakazami', narrowconfinesofavici: 'komachionozuka',
+	lastjudgement: 'eikishiki', missingpower: 'suikaibuki', tentransformations: 'mamizoufutatsuiwa',
+	changeairbrave: 'seijakijin', shiningneedlesword: 'shinmyoumarusukuna', purelightofthepalm: 'junko',
+	hiddenstarinallseasons: 'okinamatara',
+};
+
+/** Who learns each Touhou move: its owners in the mod, plus the signatures added here. */
 const OWNERS = (() => {
 	const out = {};
 	for (const [id, entry] of Object.entries(DATA.learnsets)) {
@@ -125,6 +177,7 @@ const OWNERS = (() => {
 	out.forbiddenbarrage = new Set(['flandrescarlet']);
 	out.wickedenergy = new Set(['kasenibaraki']);
 	out.masterspark = new Set(['marisakirisame']);
+	for (const [move, id] of Object.entries(SIGNATURES)) out[move] = new Set([id]);
 	return out;
 })();
 
@@ -139,6 +192,8 @@ exports.learnsets = (data) => {
 	// Wicked Energy is the move behind Kasen's Wicked Power: hers to use directly too.
 	if (data.kasenibaraki) data.kasenibaraki.learnset.wickedenergy = ['9L1'];
 	if (data.marisakirisame) data.marisakirisame.learnset.masterspark = ['9L1'];
+	// The main cast's spell cards (the owner, 21 Oct 2026): one each, from level 1 (SIGNATURES).
+	for (const [move, id] of Object.entries(SIGNATURES)) if (data[id]) data[id].learnset[move] = ['9L1'];
 	// Tanned Cirno brings her own summer (Drought): a fire move for each side of her 139/139.
 	if (data.cirnotanned) for (const move of ['flamethrower', 'heatwave', 'firepunch']) data.cirnotanned.learnset[move] = data.cirnotanned.learnset[move] || ['9M'];
 	// Full movepools (the owner, 21 Oct 2026): the classic machines, their types' kits and
@@ -646,6 +701,19 @@ function invoke(type, others, extra) {
 const INVOKES = ['invokeamaterasu', 'invokehonoikazuchi', 'invokeishikoridome'];
 const HAZARDS = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
 
+/** Of `types`, the one that deals `target` the most damage from `pokemon`: its own types' bonus counts; the first wins ties. */
+function bestType(battle, types, pokemon, target) {
+	const score = type => (battle.dex.getImmunity(type, target) ? battle.dex.getEffectiveness(type, target) : -99) + (pokemon.hasType(type) ? 0.585 : 0);
+	return types.reduce((best, type) => (score(type) > score(best) ? type : best));
+}
+// Meiling's rainbow, red to violet, her own two first.
+const RAINBOW = ['Fighting', 'Dragon', 'Fire', 'Electric', 'Grass', 'Water', 'Poison'];
+const clearHazards = (battle, pokemon) => {
+	for (const id of HAZARDS) {
+		if (pokemon.side.removeSideCondition(id)) battle.add('-sideend', pokemon.side, battle.dex.conditions.get(id).name, '[from] move: Illusionary Dominance', '[of] ' + pokemon);
+	}
+};
+
 const MOVES = {
 	dreamseal: {
 		num: -201, accuracy: true, basePower: 70, category: 'Special', name: 'Dream Seal', pp: 10, priority: 0,
@@ -958,6 +1026,532 @@ const MOVES = {
 		shortDesc: "Electric or Fire, whichever is more effective. 20% to burn or paralyze. Marisa's signature.",
 		desc: "This move is Electric or Fire, whichever is more effective against the target; Electric if they are equal. Has a 20% chance to either burn or paralyze the target. Marisa Kirisame's signature move.",
 	},
+	/*
+	 * ---------------------------------------------- the main cast's signatures
+	 *
+	 * The owner, 21 Oct 2026: each character's best-known spell card, theirs alone (SIGNATURES).
+	 * Power 80 to 130 - the stronger the effect, the lower - 100% accurate or never missing, and
+	 * no drawback: no recoil, recharge, charge turn or drop of the user's own stats. 8 PP flat
+	 * (noPPBoosts, see Forbidden Barrage). Positive priority only for Sakuya, the time-stopper.
+	 */
+	fantasyseal: {
+		num: -261, accuracy: true, basePower: 100, category: 'Special', name: 'Fantasy Seal', pp: 8, noPPBoosts: true, priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		onPrepareHit: anim('Hidden Power', 'Dazzling Gleam'),
+		// The shrine maiden's homing orbs: they find their mark, exorcise ghosts and seal power away.
+		ignoreImmunity: { Fighting: true },
+		onHit(target) {
+			target.clearBoosts();
+			this.add('-clearboost', target);
+		},
+		secondary: null, target: 'normal', type: 'Fighting',
+		shortDesc: "Can't miss. Hits Ghosts. Clears the target's stat changes. Reimu's signature.",
+		desc: "Does not check accuracy, so evasion and accuracy changes do not matter. Hits Ghost types, which are normally immune to Fighting moves. The target's stat stages are all reset to 0 when hit. Reimu Hakurei's signature move.",
+	},
+	// Sakuya stops time. The one signature with positive priority, and the owner's one exception to
+	// "priority signatures are 40 to 60": 80 power at +1, a slicing knife throw (Maid's Trick).
+	sakuyasworld: {
+		num: -262, accuracy: 100, basePower: 80, category: 'Physical', name: "Sakuya's World", pp: 8, noPPBoosts: true, priority: 1,
+		flags: { protect: 1, mirror: 1, metronome: 1, slicing: 1 },
+		onPrepareHit: anim('Agility', 'Smart Strike'),
+		secondary: null, target: 'normal', type: 'Steel',
+		shortDesc: "Usually goes first. Slicing. Sakuya's signature.",
+		desc: "Usually goes first: +1 priority, as the user stops time. Slicing move: Sharpness and Maid's Trick boost it. Sakuya Izayoi's signature move.",
+	},
+	// Her knife barrage, 20 knives of 10, each checking accuracy as Population Bomb's do.
+	killingdoll: {
+		num: -263, accuracy: 99, basePower: 10, category: 'Physical', name: 'Killing Doll', pp: 8, noPPBoosts: true, priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1, slicing: 1 },
+		onPrepareHit: anim('Spikes', 'Smart Strike'),
+		multihit: 20, multiaccuracy: true,
+		// Loaded Dice: Population Bomb's 4 to 10 of its 10 hits, all landing, scaled to 20 knives.
+		onModifyMove(move, pokemon) {
+			if (pokemon.hasItem('loadeddice')) move.multihit = [8, 20];
+		},
+		secondary: null, target: 'normal', type: 'Steel',
+		shortDesc: "Hits 20 times; each hit can miss. Slicing. Sakuya's signature.",
+		desc: "Hits 20 times. Each hit checks accuracy (99%), and the move stops at the first miss. Skill Link makes every hit land; Loaded Dice makes it hit 8 to 20 times without checking accuracy, as it does for Population Bomb. Slicing move: Sharpness and Maid's Trick boost each hit. Sakuya Izayoi's signature move.",
+	},
+	presentlifeslash: {
+		num: -264, accuracy: 100, basePower: 55, category: 'Physical', name: 'Present Life Slash', pp: 8, noPPBoosts: true, priority: 0,
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, slicing: 1 },
+		onPrepareHit: anim('Sacred Sword', 'Shadow Claw'),
+		// The half-ghost's two swords, the Roukanken and the Hakurouken: a cut from each.
+		multihit: 2,
+		secondary: null, target: 'normal', type: 'Ghost',
+		shortDesc: "Hits twice. Slicing. Youmu's signature.",
+		desc: "Hits twice, once with each of the user's swords. If the first hit breaks the target's substitute, it will take damage from the second hit. Slicing move. Youmu Konpaku's signature move.",
+	},
+	mosessmiracle: {
+		num: -265, accuracy: 100, basePower: 100, category: 'Special', name: "Moses's Miracle", pp: 8, noPPBoosts: true, priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		onPrepareHit: anim('Rain Dance', 'Surf'),
+		// The sea parts: walls of screens part with it.
+		onTryHit(target) {
+			for (const id of ['reflect', 'lightscreen', 'auroraveil']) target.side.removeSideCondition(id);
+		},
+		secondary: { chance: 20, volatileStatus: 'flinch' },
+		target: 'normal', type: 'Water',
+		shortDesc: "Ends the target side's screens. 20% flinch. Sanae's signature.",
+		desc: "If this attack does not miss, the effects of Reflect, Light Screen and Aurora Veil end for the target's side of the field before damage is calculated. Has a 20% chance to make the target flinch (40% with Serene Grace). Sanae Kochiya's signature move.",
+	},
+	lunaticredeyes: {
+		num: -266, accuracy: 100, basePower: 90, category: 'Special', name: 'Lunatic Red Eyes', pp: 8, noPPBoosts: true, priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		onPrepareHit: anim('Glare', 'Psybeam'),
+		secondary: { chance: 100, volatileStatus: 'confusion' },
+		target: 'normal', type: 'Psychic',
+		shortDesc: "Confuses the target. Reisen's signature.",
+		desc: "Confuses the target: the moon rabbit's eyes drive whoever meets them mad. Reisen Udongein Inaba's signature move.",
+	},
+	occultball: {
+		num: -267, accuracy: 100, basePower: 100, category: 'Special', name: 'Occult Ball', pp: 8, noPPBoosts: true, priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1, bullet: 1 },
+		onPrepareHit: anim('Psycho Boost'),
+		// She went collecting the Occult Balls: an empty-handed user takes the target's item, as Thief does.
+		onAfterHit(target, source, move) {
+			if (source.item || source.volatiles['gem']) return;
+			const yourItem = target.takeItem(source);
+			if (!yourItem) return;
+			if (!this.singleEvent('TakeItem', yourItem, target.itemState, source, target, move, yourItem) || !source.setItem(yourItem)) {
+				target.item = yourItem.id;
+				return;
+			}
+			this.add('-enditem', target, yourItem, '[silent]', '[from] move: Occult Ball', '[of] ' + source);
+			this.add('-item', source, yourItem, '[from] move: Occult Ball', '[of] ' + target);
+		},
+		secondary: null, target: 'normal', type: 'Psychic',
+		shortDesc: "If the user has no item, it steals the target's. Sumireko's signature.",
+		desc: "If this attack was successful and the user has not fainted, it steals the target's held item if the user is not holding one, as Thief does. Ball and bomb move. Sumireko Usami's signature move.",
+	},
+	perfectfreeze: {
+		num: -268, accuracy: 100, basePower: 90, category: 'Special', name: 'Perfect Freeze', pp: 8, noPPBoosts: true, priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		onPrepareHit: anim('Sheer Cold'),
+		// The strongest fairy freezes even water.
+		onEffectiveness(typeMod, target, type) {
+			if (type === 'Water') return 1;
+		},
+		secondary: { chance: 20, status: 'frz' },
+		target: 'normal', type: 'Ice',
+		shortDesc: "Super effective on Water. 20% to freeze. Cirno's signature.",
+		desc: "This move's type effectiveness against Water is changed to be super effective no matter what this move's type is, as Freeze-Dry's is. Has a 20% chance to freeze the target. Cirno's signature move.",
+	},
+	// Hong Meiling's (the owner: "especially Meiling"): the Rainbow Sign of her chi arts, a kick
+	// in the seven colours. Whichever of them hits hardest, counting her own types' bonus.
+	rainbowwindchime: {
+		num: -269, accuracy: 100, basePower: 110, category: 'Physical', name: 'Rainbow Wind Chime', pp: 8, noPPBoosts: true, priority: 0,
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		onPrepareHit: anim('Aura Sphere', 'High Jump Kick'),
+		onModifyType(move, pokemon, target) {
+			if (target) move.type = bestType(this, RAINBOW, pokemon, target);
+		},
+		secondary: null, target: 'normal', type: 'Fighting',
+		shortDesc: "Takes the most damaging of the 7 rainbow types. Meiling's signature.",
+		desc: "This move takes whichever of its seven rainbow types deals the most damage to the target: Fire, Fighting, Electric, Grass, Water, Dragon or Poison, counting same-type attack bonus and immunities; Fighting when they tie. Makes contact. Hong Meiling's signature move.",
+	},
+	royalflare: {
+		num: -270, accuracy: 100, basePower: 100, category: 'Special', name: 'Royal Flare', pp: 8, noPPBoosts: true, priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1, defrost: 1 },
+		onPrepareHit: anim('Sunny Day', 'Fusion Flare'),
+		onAfterMoveSecondarySelf() {
+			this.field.setWeather('sunnyday');
+		},
+		secondary: { chance: 10, status: 'brn' },
+		target: 'normal', type: 'Fire',
+		shortDesc: "Summons harsh sunlight after hitting. 10% burn. Patchouli's signature.",
+		desc: "Has a 10% chance to burn the target. After the attack, the weather becomes Sunny Day for 5 turns (8 with Heat Rock). Thaws the user. Patchouli Knowledge's signature move.",
+	},
+	artfulsacrifice: {
+		num: -271, accuracy: 100, basePower: 100, category: 'Special', name: 'Artful Sacrifice', pp: 8, noPPBoosts: true, priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1, bypasssub: 1 },
+		onPrepareHit: anim('Explosion'),
+		// A doll flung into the enemy lines and detonated: no wall of a substitute stops it.
+		secondary: null, target: 'allAdjacentFoes', type: 'Steel',
+		shortDesc: "Hits adjacent foes. Ignores substitutes. Alice's signature.",
+		desc: "Hits all adjacent foes. Ignores a target's substitute: one of the user's dolls explodes among them, and the user does not faint. Alice Margatroid's signature move.",
+	},
+	resurrectionbutterfly: {
+		num: -272, accuracy: 100, basePower: 90, category: 'Special', name: 'Resurrection Butterfly', pp: 8, noPPBoosts: true, priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1, heal: 1 },
+		onPrepareHit: anim('Silver Wind', 'Giga Drain'),
+		// The butterflies of death carry the life they take back to her.
+		drain: [1, 2],
+		secondary: null, target: 'normal', type: 'Ghost',
+		shortDesc: "User recovers 50% of the damage dealt. Yuyuko's signature.",
+		desc: "The user recovers 1/2 the HP lost by the target, rounded half up. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down. Yuyuko Saigyouji's signature move.",
+	},
+	spiritingaway: {
+		num: -273, accuracy: 100, basePower: 80, category: 'Special', name: 'Spiriting Away', pp: 8, noPPBoosts: true, priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1, noassist: 1, failcopycat: 1 },
+		onPrepareHit: anim('Hyperspace Hole'),
+		// A gap opens behind the target and it is gone. Not Dragon Tail's -6 priority: no drawback.
+		forceSwitch: true,
+		secondary: null, target: 'normal', type: 'Dark',
+		shortDesc: "Forces the target to switch to a random ally. Yukari's signature.",
+		desc: "If both the user and the target have not fainted, the target is forced to switch out and be replaced with a random unfainted ally. This effect fails if the target is under the effect of Ingrain, has the Suction Cups Ability, or this move hit a substitute. Unlike Dragon Tail, it has normal priority. Yukari Yakumo's signature move.",
+	},
+	ultimatebuddhist: {
+		num: -274, accuracy: true, basePower: 100, category: 'Special', name: 'Ultimate Buddhist', pp: 8, noPPBoosts: true, priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		onPrepareHit: anim('Psystrike'),
+		// The shikigami computes: it never misses, and strikes with whichever side of her is stronger.
+		onModifyMove(move, pokemon) {
+			if (pokemon.getStat('atk', false, true) > pokemon.getStat('spa', false, true)) move.category = 'Physical';
+		},
+		secondary: null, target: 'normal', type: 'Psychic',
+		shortDesc: "Can't miss. Physical if Atk > Sp. Atk. Ran's signature.",
+		desc: "Does not check accuracy. This move becomes a physical attack if the user's Attack is greater than its Special Attack, including stat stage changes, as Photon Geyser does. Ran Yakumo's signature move.",
+	},
+	pentagramflight: {
+		num: -275, accuracy: 100, basePower: 80, category: 'Physical', name: 'Pentagram Flight', pp: 8, noPPBoosts: true, priority: 0,
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		onPrepareHit: anim('Extreme Speed', 'U-turn'),
+		// The black cat darts along a pentagram and is back at her master's side.
+		selfSwitch: true,
+		secondary: null, target: 'normal', type: 'Normal',
+		shortDesc: "User switches out after damaging the target. Chen's signature.",
+		desc: "If this move is successful and the user has not fainted, the user switches out even if it is trapped and is replaced immediately by a selected party member. The user does not switch out if there are no unfainted party members, or if the target switched out using an Eject Button or through the effect of the Emergency Exit or Wimp Out Abilities. Chen's signature move.",
+	},
+	houraielixir: {
+		num: -276, accuracy: true, basePower: 0, category: 'Status', name: 'Hourai Elixir', pp: 8, noPPBoosts: true, priority: 0,
+		flags: { snatch: 1, heal: 1, metronome: 1 },
+		onPrepareHit: anim('Life Dew', 'Aromatherapy'),
+		// The genius pharmacist's elixir: half her health, and every ally's ailments cured.
+		onHit(pokemon, source) {
+			const healed = this.heal(this.modify(pokemon.maxhp, 0.5), pokemon, source);
+			let cured = false;
+			for (const ally of pokemon.side.pokemon) if (ally.status && ally.cureStatus()) cured = true;
+			if (!healed && !cured) return this.NOT_FAIL;
+		},
+		secondary: null, target: 'self', type: 'Poison',
+		shortDesc: "Heals 50% of max HP; cures the user's team of status. Eirin's signature.",
+		desc: "The user restores 1/2 of its maximum HP, rounded half up, and every Pokemon in the user's party is cured of its non-volatile status condition. Eirin Yagokoro's signature move.",
+	},
+	impossiblerequest: {
+		num: -277, accuracy: 100, basePower: 90, category: 'Special', name: 'Impossible Request', pp: 8, noPPBoosts: true, priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		onPrepareHit: anim('Dazzling Gleam', 'Power Gem'),
+		// One of the five treasures she asked her suitors for, at random each time.
+		secondary: {
+			chance: 100,
+			onHit(target, source) {
+				switch (this.random(5)) {
+				case 0: target.trySetStatus('brn', source); break;        // the robe of the fire-rat
+				case 1: target.trySetStatus('par', source); break;        // the swallow's cowry shell
+				case 2: target.addVolatile('confusion', source); break;   // the dragon's neck jewel
+				case 3: this.boost({ def: -1 }, target, source); break;   // the Buddha's stone bowl
+				default: this.boost({ spd: -1 }, target, source);         // the jewelled branch of Hourai
+				}
+			},
+		},
+		target: 'normal', type: 'Fairy',
+		shortDesc: "Burns, paralyzes, confuses, or lowers Def or Sp. Def. Kaguya's signature.",
+		desc: "Always has one of five effects on the target, chosen at random with equal odds: burn, paralysis, confusion, its Defense lowered by 1 stage, or its Special Defense lowered by 1 stage - the five impossible requests. Kaguya Houraisan's signature move.",
+	},
+	phoenixrebirth: {
+		num: -278, accuracy: 100, basePower: 100, category: 'Physical', name: 'Phoenix Rebirth', pp: 8, noPPBoosts: true, priority: 0,
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, defrost: 1, heal: 1 },
+		onPrepareHit: anim('Sacred Fire'),
+		// The immortal rises from her own flames.
+		onAfterMoveSecondarySelf(pokemon) {
+			if (pokemon.fainted) return;
+			pokemon.cureStatus();
+			this.heal(pokemon.baseMaxhp / 4, pokemon, pokemon);
+		},
+		secondary: null, target: 'normal', type: 'Fire',
+		shortDesc: "User is cured of status and heals 25% of max HP. Mokou's signature.",
+		desc: "After the attack, the user is cured of its non-volatile status condition and restores 1/4 of its maximum HP, rounded down. Thaws the user. Makes contact. Fujiwara no Mokou's signature move.",
+	},
+	illusionarydominance: {
+		num: -279, accuracy: 100, basePower: 100, category: 'Physical', name: 'Illusionary Dominance', pp: 8, noPPBoosts: true, priority: 0,
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		onPrepareHit: anim('Brave Bird', 'Defog'),
+		// The crow tengu's wind blows her own side clean as she passes.
+		onAfterHit(target, pokemon) {
+			if (pokemon.hp) clearHazards(this, pokemon);
+		},
+		onAfterSubDamage(damage, target, pokemon) {
+			if (pokemon.hp) clearHazards(this, pokemon);
+		},
+		secondary: null, target: 'normal', type: 'Flying',
+		shortDesc: "Clears hazards from the user's side. Aya's signature.",
+		desc: "If this move is successful and the user has not fainted, the effects of Spikes, Toxic Spikes, Stealth Rock and Sticky Web end for the user's side. Makes contact. Aya Shameimaru's signature move.",
+	},
+	kappaspororoca: {
+		num: -280, accuracy: 100, basePower: 110, category: 'Special', name: "Kappa's Pororoca", pp: 8, noPPBoosts: true, priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		onPrepareHit: anim('Hydro Pump'),
+		// A tidal bore of the kappa's engineering: it is not drunk up, and is not drawn aside.
+		tracksTarget: true,
+		onModifyMove(move, pokemon, target) {
+			if (target && ['waterabsorb', 'stormdrain', 'dryskin'].includes(target.getAbility().id)) move.ignoreAbility = true;
+		},
+		secondary: null, target: 'normal', type: 'Water',
+		shortDesc: "Ignores Water Absorb, Storm Drain, Dry Skin. Nitori's signature.",
+		desc: "Hits through the target's Water Absorb, Storm Drain or Dry Skin as if it had no Ability, and cannot be redirected by an ally's Storm Drain. Nitori Kawashiro's signature move.",
+	},
+	expandedonbashira: {
+		num: -281, accuracy: 100, basePower: 100, category: 'Physical', name: 'Expanded Onbashira', pp: 8, noPPBoosts: true, priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		onPrepareHit: anim('Stone Axe'),
+		// The pillars come down and stay standing.
+		onAfterHit(target, source) {
+			if (source.hp) target.side.addSideCondition('stealthrock', source);
+		},
+		onAfterSubDamage(damage, target, source) {
+			if (source.hp) target.side.addSideCondition('stealthrock', source);
+		},
+		secondary: null, target: 'normal', type: 'Ground',
+		shortDesc: "Sets Stealth Rock on the target's side. Kanako's signature.",
+		desc: "If this move is successful and the user has not fainted, sets Stealth Rock on the target's side of the field. Kanako Yasaka's signature move.",
+	},
+	mishagujisama: {
+		num: -282, accuracy: 100, basePower: 90, category: 'Special', name: 'Mishaguji-sama', pp: 8, noPPBoosts: true, priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		onPrepareHit: anim('Earth Power', 'Curse'),
+		// The curse of the native gods: it stays on the target until it leaves the field.
+		condition: {
+			onStart(pokemon) {
+				this.add('-start', pokemon, 'Mishaguji-sama');
+			},
+			onResidualOrder: 13,
+			onResidual(pokemon) {
+				this.damage(pokemon.baseMaxhp / 8);
+			},
+			onEnd(pokemon) {
+				this.add('-end', pokemon, 'Mishaguji-sama');
+			},
+		},
+		secondary: { chance: 100, volatileStatus: 'mishagujisama' },
+		target: 'normal', type: 'Ground',
+		shortDesc: "Curses the target: 1/8 max HP each turn. Suwako's signature.",
+		desc: "Curses the target: it loses 1/8 of its maximum HP, rounded down, at the end of each turn until it switches out. Suwako Moriya's signature move.",
+	},
+	terriblesouvenir: {
+		num: -283, accuracy: true, basePower: 100, category: 'Special', name: 'Terrible Souvenir', pp: 8, noPPBoosts: true, priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		onPrepareHit: anim('Psychic', 'Disable'),
+		// She reads the mind and hands back the worst memory in it: the last move it used.
+		onHit(target) {
+			const last = target.lastMove;
+			if (last && last.id !== 'struggle' && !last.isZOrMaxPowered && !last.isMax && !target.volatiles['disable']) target.addVolatile('disable');
+		},
+		secondary: null, target: 'normal', type: 'Psychic',
+		shortDesc: "Can't miss. Disables the target's last move. Satori's signature.",
+		desc: "Does not check accuracy. The move the target used last is disabled for 4 turns, as Disable does, unless it already has a disabled move. Satori Komeiji's signature move.",
+	},
+	subterraneanrose: {
+		num: -284, accuracy: 100, basePower: 100, category: 'Special', name: 'Subterranean Rose', pp: 8, noPPBoosts: true, priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		onPrepareHit: anim('Petal Blizzard', 'Psychic'),
+		// The closed eye: nothing the target is or does registers with her.
+		ignoreAbility: true, ignoreDefensive: true, ignoreEvasion: true,
+		secondary: null, target: 'normal', type: 'Psychic',
+		shortDesc: "Ignores the target's Ability and stat changes. Koishi's signature.",
+		desc: "This move and its effects ignore the Abilities of other Pokemon, and the target's stat stage changes, including evasiveness. Koishi Komeiji's signature move.",
+	},
+	gigaflare: {
+		num: -285, accuracy: 100, basePower: 130, category: 'Special', name: 'Giga Flare', pp: 8, noPPBoosts: true, priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1, defrost: 1 },
+		onPrepareHit: anim('Blast Burn'),
+		// Nuclear fusion: the raw nuke. No Overheat drop, no recoil.
+		secondary: { chance: 30, status: 'brn' },
+		target: 'normal', type: 'Fire',
+		shortDesc: "30% chance to burn. Okuu's signature.",
+		desc: "Has a 30% chance to burn the target. No recoil and no drop of the user's stats: the hell raven's nuclear fire. Thaws the user. Utsuho Reiuji's signature move.",
+	},
+	rekindlingofdeadashes: {
+		num: -286, accuracy: 100, basePower: 80, category: 'Special', name: 'Rekindling of Dead Ashes', pp: 8, noPPBoosts: true, priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1, defrost: 1 },
+		onPrepareHit: anim('Inferno', 'Hex'),
+		// The kasha who carries off corpses: every fallen Pokemon, on either side, feeds the fire.
+		basePowerCallback(pokemon, target, move) {
+			const fallen = this.sides.reduce((n, side) => n + side.totalFainted, 0);
+			const bp = Math.min(130, move.basePower + 10 * fallen);
+			if (bp > move.basePower) this.debug('BP ' + bp);
+			return bp;
+		},
+		secondary: null, target: 'normal', type: 'Fire',
+		shortDesc: "+10 power per fainted Pokemon on either side, up to 130. Orin's signature.",
+		desc: "Power is 80, plus 10 for each Pokemon on either side that has fainted this battle, up to 130. Thaws the user. Rin Kaenbyou's signature move.",
+	},
+	superhumanhijiri: {
+		num: -287, accuracy: 100, basePower: 85, category: 'Physical', name: 'Superhuman Hijiri', pp: 8, noPPBoosts: true, priority: 0,
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, punch: 1 },
+		onPrepareHit: anim('Bulk Up', 'Drain Punch'),
+		// Her body-strengthening magic: every blow makes the next one stronger.
+		secondary: { chance: 100, self: { boosts: { atk: 1 } } },
+		target: 'normal', type: 'Fighting',
+		shortDesc: "Raises the user's Attack by 1. Byakuren's signature.",
+		desc: "Has a 100% chance to raise the user's Attack by 1 stage. Makes contact; punching move. Byakuren Hijiri's signature move.",
+	},
+	undefinedufo: {
+		num: -288, accuracy: 100, basePower: 120, category: 'Special', name: 'Undefined UFO', pp: 8, noPPBoosts: true, priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		onPrepareHit: anim('Night Shade', 'Tri Attack'),
+		// Unidentified: it has no type to resist, and no type to get her bonus from either.
+		onModifyType(move) {
+			move.type = '???';
+		},
+		secondary: null, target: 'normal', type: 'Dark',
+		shortDesc: "Typeless: neutral damage on everything, no STAB. Nue's signature.",
+		desc: "This move has no type in battle (???): it deals neutral damage to every target, which no type resists or is immune to, and gets no same-type attack bonus. Listed as Dark. Nue Houjuu's signature move.",
+	},
+	guseflash: {
+		num: -289, accuracy: 100, basePower: 100, category: 'Special', name: 'Guse Flash', pp: 8, noPPBoosts: true, priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		onPrepareHit: anim('Flash', 'Dazzling Gleam'),
+		// She hears ten desires at once: a target that means to use a status move this turn flinches.
+		onHit(target) {
+			const action = this.queue.willMove(target);
+			if (action && action.choice === 'move' && action.move && action.move.category === 'Status') target.addVolatile('flinch');
+		},
+		secondary: null, target: 'normal', type: 'Fairy',
+		shortDesc: "Target flinches if it was going to use a status move. Miko's signature.",
+		desc: "If the target has not moved yet this turn and has chosen a status move, it flinches. Toyosatomimi no Miko's signature move.",
+	},
+	keystoneofheavenandearth: {
+		num: -290, accuracy: 100, basePower: 90, category: 'Physical', name: 'Keystone of Heaven and Earth', pp: 8, noPPBoosts: true, priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		onPrepareHit: anim('Stone Edge'),
+		// The masochist celestial: every hit she has taken makes the keystone fall harder.
+		basePowerCallback(pokemon, target, move) {
+			return Math.min(130, move.basePower + 20 * pokemon.timesAttacked);
+		},
+		secondary: null, target: 'normal', type: 'Rock',
+		shortDesc: "+20 power per hit the user has taken, up to 130. Tenshi's signature.",
+		desc: "Power is 90, plus 20 for each time the user has been hit by an attack this battle (counted as Rage Fist counts), up to 130. Tenshi Hinanawi's signature move.",
+	},
+	elekiterdragonpalace: {
+		num: -291, accuracy: 100, basePower: 100, category: 'Special', name: 'Elekiter Dragon Palace', pp: 8, noPPBoosts: true, priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		onPrepareHit: anim('Thunder'),
+		// Lightning from the dragon's palace above the clouds: the ground cannot hide from it.
+		ignoreImmunity: { Electric: true },
+		secondary: { chance: 10, status: 'par' },
+		target: 'normal', type: 'Electric',
+		shortDesc: "Hits Ground types. 10% to paralyze. Iku's signature.",
+		desc: "Hits Ground types, which are normally immune to Electric moves. Has a 10% chance to paralyze the target. Iku Nagae's signature move.",
+	},
+	refloweringofgensokyo: {
+		num: -292, accuracy: 100, basePower: 110, category: 'Physical', name: 'Reflowering of Gensokyo', pp: 8, noPPBoosts: true, priority: 0,
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		onPrepareHit: anim('Petal Blizzard', 'Grassy Terrain'),
+		onAfterMoveSecondarySelf() {
+			this.field.setTerrain('grassyterrain');
+		},
+		secondary: null, target: 'normal', type: 'Grass',
+		shortDesc: "Sets Grassy Terrain after hitting. Yuuka's signature.",
+		desc: "After the attack, the terrain becomes Grassy Terrain for 5 turns (8 with a Terrain Extender): every flower in Gensokyo blooms at once. Makes contact. Yuuka Kazami's signature move.",
+	},
+	narrowconfinesofavici: {
+		num: -293, accuracy: 100, basePower: 130, category: 'Physical', name: 'Narrow Confines of Avici', pp: 8, noPPBoosts: true, priority: 0,
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, slicing: 1 },
+		onPrepareHit: anim('Spirit Break', 'Night Slash'),
+		// The ferry toll is a life: the more of it the target has, the dearer the crossing.
+		basePowerCallback(pokemon, target, move) {
+			return 80 + Math.floor(50 * target.hp / target.maxhp);
+		},
+		secondary: null, target: 'normal', type: 'Ghost',
+		shortDesc: "80 to 130 power: more the more HP the target has. Komachi's signature.",
+		desc: "Power is 80 plus 50 times the target's remaining fraction of its maximum HP, rounded down: 130 at full HP. Slicing move. Komachi Onozuka's signature move.",
+	},
+	lastjudgement: {
+		num: -294, accuracy: 100, basePower: 100, category: 'Special', name: 'Last Judgement', pp: 8, noPPBoosts: true, priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		onPrepareHit: anim('Judgment'),
+		// The Yama weighs the sins: a target that has built itself up is judged guilty.
+		basePowerCallback(pokemon, target, move) {
+			if (Object.values(target.boosts).some(v => v > 0)) return move.basePower * 1.5;
+			return move.basePower;
+		},
+		secondary: null, target: 'normal', type: 'Normal',
+		shortDesc: "1.5x power if the target has a raised stat. Eiki's signature.",
+		desc: "Power is multiplied by 1.5 (150) if any of the target's stat stages is above 0. Eiki Shiki, Yamaxanadu's signature move.",
+	},
+	missingpower: {
+		num: -295, accuracy: 100, basePower: 120, category: 'Physical', name: 'Missing Power', pp: 8, noPPBoosts: true, priority: 0,
+		// No `protect` flag, as Feint has none: Protect would block it before it could break it.
+		flags: { contact: 1, mirror: 1, metronome: 1, punch: 1 },
+		onPrepareHit: anim('Gigaton Hammer', 'Mega Punch'),
+		// The oni grows to the size of a mountain: no shield holds that fist.
+		breaksProtect: true,
+		secondary: null, target: 'normal', type: 'Fighting',
+		shortDesc: "Breaks the target's protection. Suika's signature.",
+		desc: "If this move is successful, it breaks through the target's Baneful Bunker, Burning Bulwark, Detect, King's Shield, Protect, Silk Trap or Spiky Shield for this turn, allowing other Pokemon to attack the target normally, and the user takes none of their effects. If the target's side is protected by Crafty Shield, Mat Block, Quick Guard or Wide Guard, that protection is also broken for this turn. Makes contact; punching move. Suika Ibuki's signature move.",
+	},
+	tentransformations: {
+		num: -296, accuracy: 100, basePower: 85, category: 'Physical', name: 'Ten Transformations', pp: 8, noPPBoosts: true, priority: 0,
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		onPrepareHit: anim('Transform', 'Body Slam'),
+		// A leaf on the head, and the target is a plain tanuki's teakettle.
+		onHit(target) {
+			if (target.hp && !target.terastallized && target.getTypes().join() !== 'Normal' && target.setType('Normal')) {
+				this.add('-start', target, 'typechange', 'Normal');
+			}
+		},
+		secondary: null, target: 'normal', type: 'Normal',
+		shortDesc: "Target becomes pure Normal type. Mamizou's signature.",
+		desc: "If the target survives, it becomes pure Normal type, as Soak makes a Pokemon Water type, until it switches out. Fails on a Terastallized target, or one whose type cannot change. Makes contact. Mamizou Futatsuiwa's signature move.",
+	},
+	changeairbrave: {
+		num: -297, accuracy: 100, basePower: 100, category: 'Physical', name: 'Change Air Brave', pp: 8, noPPBoosts: true, priority: 0,
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		onPrepareHit: anim('Topsy-Turvy', 'Foul Play'),
+		// The amanojaku turns the world over: what resists it is weak to it, and the reverse.
+		onEffectiveness(typeMod) {
+			return -typeMod;
+		},
+		secondary: null, target: 'normal', type: 'Dark',
+		shortDesc: "Type effectiveness is inverted. Seija's signature.",
+		desc: "This move's type effectiveness is inverted, as in an Inverse Battle: it is super effective on Dark, Fighting and Fairy types, and resisted by Psychic and Ghost types. Seija Kijin's signature move.",
+	},
+	shiningneedlesword: {
+		num: -298, accuracy: 100, basePower: 80, category: 'Physical', name: 'Shining Needle Sword', pp: 8, noPPBoosts: true, priority: 0,
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, slicing: 1 },
+		onPrepareHit: anim('Smart Strike', 'Sacred Sword'),
+		// The inchling's needle: the bigger they are, the harder they fall.
+		basePowerCallback(pokemon, target) {
+			const kg = target.getWeight() / 10;
+			if (kg >= 200) return 130;
+			if (kg >= 100) return 120;
+			if (kg >= 50) return 110;
+			if (kg >= 25) return 100;
+			if (kg >= 10) return 90;
+			return 80;
+		},
+		secondary: null, target: 'normal', type: 'Steel',
+		shortDesc: "80 to 130 power: more the heavier the target. Shinmyoumaru's signature.",
+		desc: "Power is 80 if the target weighs less than 10 kg, 90 under 25 kg, 100 under 50 kg, 110 under 100 kg, 120 under 200 kg, and 130 at 200 kg or more. Slicing move. Shinmyoumaru Sukuna's signature move.",
+	},
+	purelightofthepalm: {
+		num: -299, accuracy: 100, basePower: 100, category: 'Special', name: 'Pure Light of the Palm', pp: 8, noPPBoosts: true, priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		onPrepareHit: anim('Light of Ruin'),
+		// Pure hatred, purified of everything else: nothing about the target softens it.
+		ignoreImmunity: true,
+		onEffectiveness(typeMod) {
+			return Math.max(0, typeMod);
+		},
+		secondary: null, target: 'normal', type: 'Normal',
+		shortDesc: "Never resisted: at least neutral on every type. Junko's signature.",
+		desc: "This move cannot be resisted: types that would resist it or be immune to it take neutral damage instead. Junko's signature move.",
+	},
+	hiddenstarinallseasons: {
+		num: -300, accuracy: 100, basePower: 110, category: 'Special', name: 'Hidden Star in All Seasons', pp: 8, noPPBoosts: true, priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1, bypasssub: 1 },
+		onPrepareHit: anim('Secret Power', 'Dark Pulse'),
+		// The god of the back door: the season she wears is the season she strikes with, and she
+		// comes in from behind any substitute.
+		onModifyType(move, pokemon) {
+			const type = pokemon.getTypes()[0];
+			move.type = type && type !== 'Normal' && type !== '???' ? type : 'Dark';
+		},
+		secondary: null, target: 'normal', type: 'Dark',
+		shortDesc: "Type is the user's season. Ignores substitutes. Okina's signature.",
+		desc: "This move's type is the user's first type - Water in spring, Fire in summer, Rock in autumn, Ice in winter - and Dark when that is Normal. Ignores a target's substitute. Okina Matara's signature move.",
+	},
 	invokeishikoridome: {
 		num: -221, accuracy: 100, basePower: 0, category: 'Status', name: 'Invoke Ishikori-Dome', pp: 10, priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
@@ -1224,9 +1818,14 @@ const ABILITIES = {
 		onModifyPriority(priority, pokemon, target, move) {
 			if (move.flags['slicing'] && pokemon.hp === pokemon.maxhp) return priority + 1;
 		},
+		// Her knives are sharp too (the owner, 21 Oct 2026): Sharpness's 1.5x, as vanilla does it.
+		onBasePowerPriority: 19,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.flags['slicing']) return this.chainModify(1.5);
+		},
 		name: "Maid's Trick",
-		shortDesc: 'At full HP, its slicing moves have +1 priority.',
-		desc: "If this Pokemon is at full HP, its slicing moves have their priority increased by 1.",
+		shortDesc: 'Slicing moves: 1.5x power, and +1 priority at full HP.',
+		desc: "This Pokemon's slicing moves have their power multiplied by 1.5, as Sharpness does. If this Pokemon is at full HP, its slicing moves also have their priority increased by 1.",
 	},
 	vampirism: {
 		num: -206, rating: 3, flags: {},
@@ -1962,6 +2561,7 @@ exports.LEGENDS = LEGENDS;
 // What config/custom-formats.js bans by name from every RP format but RP Touhou and the RP Battle ones.
 exports.NAMES = NAMES;
 exports.MOVE_IDS = Object.keys(MOVES);
+exports.SIGNATURES = SIGNATURES;
 exports.TMS = TMS;
 exports.UNIVERSAL = UNIVERSAL;
 exports.TYPE_TMS = TYPE_TMS;

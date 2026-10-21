@@ -419,4 +419,92 @@ function play(formatid, seed) {
 	console.log(`  ${games} random Touhou battles, ${turns} turns, no throw`);
 }
 
+{
+	// The main cast's signatures (touhou.js SIGNATURES; the owner, 21 Oct 2026).
+	global.window = global.window || {};
+	require('../client/js/velvet-signatures.js');
+	const table = window.VelvetSignatureMoves;
+	const tableOf = id => table.lists[table.bySpecies[id]] || [];
+	ok(Object.keys(touhou.SIGNATURES).length >= 30, `30+ main-cast signatures (${Object.keys(touhou.SIGNATURES).length})`);
+	for (const [id, owner] of Object.entries(touhou.SIGNATURES)) {
+		const m = dex.moves.get(id);
+		ok(m.exists && m.num <= -261, `${id}: exists, numbered from -261`);
+		const total = m.basePower * (m.multihit || 1);
+		ok(m.category === 'Status' || (total >= 80 && (total <= 130 || id === 'killingdoll')), `${id}: 80 to 130 power, or a status move (${total})`);
+		ok(m.accuracy === true || m.accuracy === 100 || (id === 'killingdoll' && m.accuracy === 99), `${id}: 100% accurate or never misses`);
+		ok(m.pp === 8 && m.noPPBoosts && !m.recoil && !m.self && !m.flags.recharge && !m.flags.charge && !m.mindBlownRecoil, `${id}: 8 PP, no drawback`);
+		ok(m.priority === 0 || id === 'sakuyasworld', `${id}: no priority (Sakuya's time stop excepted)`);
+		ok(/'s signature move\.$/.test(m.desc) && m.shortDesc, `${id}: descriptions name its owner`);
+		const learners = dex.species.all().filter(s => (dex.species.getLearnsetData(s.id).learnset || {})[id]).map(s => s.id).filter(x => !['samantha', 'mew', 'smeargle'].includes(x));
+		ok(learners.length === 1 && learners[0] === owner && dex.species.getLearnsetData(owner).learnset[id].includes('9L1'), `${id}: ${owner}'s alone, at 9L1 (${learners})`);
+		ok(!touhou.TMS[id], `${id}: not a machine`);
+		ok(tableOf(owner).includes(id), `${id}: in the client's signature table for ${owner}`);
+	}
+	ok(dex.species.getLearnsetData('reimuhakurei').learnset.dreamseal, 'Reimu keeps Dream Seal');
+	const dmg = b => b.p2.active[0].maxhp - b.p2.active[0].hp;
+	const once = (mine, theirs, seed) => { const x = battle(mine, theirs, seed); turn(x, 'move 1', 'move 1'); return x; };
+	// Sakuya's World: first, even against a faster foe; both knife moves slice.
+	let b = once([mon('Sakuya Izayoi', ["Sakuya's World"])], [mon('Regieleki', ['Thunderbolt'])]);
+	ok(/Sakuya/.test(b.log.find(l => /^\|move\|/.test(l))), "Sakuya's World: moves before a faster Regieleki");
+	ok(dex.moves.get("Sakuya's World").flags.slicing && dex.moves.get('Killing Doll').flags.slicing, 'both of her knife moves are slicing');
+	// Killing Doll: up to 20 hits, each one checking accuracy, so a miss ends it early.
+	const counts = [];
+	for (let seed = 1; seed <= 30; seed++) {
+		b = once([mon('Sakuya Izayoi', ['Killing Doll'])], [mon('Dondozo', ['Splash'], { evs: { hp: 252, def: 252 } })], [seed, 7, 3, 4]);
+		const line = b.log.find(l => /^\|-hitcount\|/.test(l));
+		counts.push(line ? +line.split('|')[3] : 0);
+	}
+	ok(counts.every(c => c >= 1 && c <= 20) && counts.includes(20), `Killing Doll: 1 to 20 hits, all 20 possible (${counts})`);
+	ok(counts.some(c => c < 20), `Killing Doll: stops at a miss (${counts})`);
+	// Maid's Trick is Sharpness too: a slicing move does 1.5x.
+	const slice = ability => dmg(once([mon('Sakuya Izayoi', ['Night Slash'], { ability })], [mon('Blissey', ['Splash'])]));
+	const sharp = slice("Maid's Trick"), plain = slice('Insomnia');
+	ok(sharp > plain * 1.4 && sharp < plain * 1.6, `Maid's Trick: slicing moves 1.5x (${sharp} vs ${plain})`);
+	// Transistor (unnerfs.js): 1.5x Electric, from Nitori, now Water/Electric.
+	const zap = ability => dmg(once([mon('Nitori Kawashiro', ['Thunderbolt'], { ability })], [mon('Blissey', ['Splash'])]));
+	const tr = zap('Transistor'), sw = zap('Swift Swim');
+	ok(dex.species.get('Nitori Kawashiro').types.join() === 'Water,Electric' && tr > sw * 1.4 && tr < sw * 1.6, `Transistor: 1.5x Electric (${tr} vs ${sw})`);
+	// Gale Wings (unnerfs.js): Generation 6, +1 priority at any HP.
+	b = battle([mon('Talonflame', ['Brave Bird'], { ability: 'Gale Wings' })], [mon('Regieleki', ['Splash'])]);
+	b.p1.active[0].sethp(Math.floor(b.p1.active[0].maxhp / 2));
+	turn(b, 'move 1', 'move 1');
+	ok(/Talonflame/.test(b.log.find(l => /^\|move\|/.test(l))), 'Gale Wings: Brave Bird first at half HP');
+	// Rainbow Wind Chime: the most damaging colour.
+	const chime = foe => once([mon('Hong Meiling', ['Rainbow Wind Chime'])], [mon(foe, ['Splash'])]);
+	ok(chime('Gyarados').log.some(l => /-supereffective/.test(l)), 'Rainbow Wind Chime: super effective on Gyarados');
+	ok(dmg(chime('Gengar')) > 0, 'Rainbow Wind Chime: no Fighting into a Ghost (Dragon lands on Gengar)');
+	ok(chime('Blissey').log.some(l => /-supereffective/.test(l)), 'Rainbow Wind Chime: Fighting on Blissey');
+	// Fantasy Seal: hits a Ghost, and seals its boosts away.
+	b = battle([mon('Reimu Hakurei', ['Fantasy Seal'])], [mon('Gengar', ['Nasty Plot'], { evs: { spe: 252 } })]);
+	turn(b, 'move 1', 'move 1');
+	ok(dmg(b) > 0 && !b.p2.active[0].boosts.spa, 'Fantasy Seal: hits a Ghost and clears its Nasty Plot');
+	// Expanded Onbashira: Stealth Rock. Missing Power: through Protect.
+	b = once([mon('Kanako Yasaka', ['Expanded Onbashira'])], [mon('Blissey', ['Splash'])]);
+	ok(b.p2.sideConditions.stealthrock, 'Expanded Onbashira: Stealth Rock on the target side');
+	b = once([mon('Suika Ibuki', ['Missing Power'])], [mon('Blissey', ['Protect'], { evs: { spe: 252 } })]);
+	ok(dmg(b) > 0, 'Missing Power: breaks through Protect');
+	// The healers: Hourai Elixir, Phoenix Rebirth, Resurrection Butterfly.
+	b = battle([mon('Eirin Yagokoro', ['Hourai Elixir'])], [mon('Blissey', ['Seismic Toss'], { evs: { spe: 252 } })]);
+	turn(b, 'move 1', 'move 1');
+	ok(b.p1.active[0].hp === b.p1.active[0].maxhp, `Hourai Elixir: heals (${b.p1.active[0].hp}/${b.p1.active[0].maxhp})`);
+	b = battle([mon('Fujiwara no Mokou', ['Phoenix Rebirth'])], [mon('Toxapex', ['Toxic'])]);
+	turn(b, 'move 1', 'move 1');
+	turn(b, 'move 1', 'move 1');
+	ok(b.log.some(l => /^\|-curestatus\|p1a: Fujiwara no Mokou\|tox/.test(l)) && b.log.some(l => /^\|-heal\|p1a: Fujiwara no Mokou/.test(l)), 'Phoenix Rebirth: cures and heals the user');
+	// Change Air Brave: inverse - super effective on a Fighting type.
+	b = once([mon('Seija Kijin', ['Change Air Brave'])], [mon('Machamp', ['Splash'])]);
+	ok(b.log.some(l => /-supereffective/.test(l)), 'Change Air Brave: super effective on Machamp');
+	// Pure Light of the Palm: hits a Ghost. Undefined UFO: neutral on a Dark resist.
+	ok(dmg(once([mon('Junko', ['Pure Light of the Palm'])], [mon('Gengar', ['Splash'])])) > 0, 'Pure Light of the Palm: hits a Ghost');
+	b = once([mon('Nue Houjuu', ['Undefined UFO'])], [mon('Hydreigon', ['Splash'])]);
+	ok(dmg(b) > 0 && !b.log.some(l => /-resisted|-supereffective/.test(l)), 'Undefined UFO: typeless, neutral on Hydreigon');
+	// Elekiter Dragon Palace: hits a Ground type.
+	ok(dmg(once([mon('Iku Nagae', ['Elekiter Dragon Palace'])], [mon('Garchomp', ['Splash'])])) > 0, 'Elekiter Dragon Palace: hits Garchomp');
+	// Terrible Souvenir: disables the last move.
+	b = battle([mon('Satori Komeiji', ['Terrible Souvenir'])], [mon('Blissey', ['Calm Mind', 'Protect'])]);
+	turn(b, 'move 1', 'move 1');
+	turn(b, 'move 1', 'move 1');
+	ok(b.p2.active[0].volatiles.disable, 'Terrible Souvenir: disables what the target used');
+	ok(/TYPE_CHOOSERS/.test(fs.readFileSync(path.join(ROOT, 'src', 'ai.js'), 'utf8')), "the bot's estimate knows the type-choosing signatures");
+}
 console.log(`touhou: ${n} checks passed`);
