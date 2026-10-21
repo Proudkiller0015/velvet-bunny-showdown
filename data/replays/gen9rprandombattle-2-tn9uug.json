@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-2-tn9uug",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Normal",
+		"Keiko_Sama"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Normal\n|j|☆Keiko_Sama\n|t:|1792617313\n|gametype|singles\n|player|p1|Bunny Normal|bunny.png|1227\n|player|p2|Keiko_Sama|keiko-yume.png|1000\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1792617314\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Scovillain|Scovillain, L91, M|266/266\n|switch|p2a: Cacturne|Cacturne, L92, F|278/278\n|turn|1\n|c|☆Bunny Normal|Good luck! Playing on **normal**.\n|\n|t:|1792617333\n|switch|p2a: Slaking|Slaking, L84, M|389/389\n|move|p1a: Scovillain|Overheat|p2a: Slaking\n|-damage|p2a: Slaking|188/389\n|-unboost|p1a: Scovillain|spa|2\n|\n|upkeep\n|turn|2\n|-message|Keiko_Sama forfeited.\n|\n|win|Bunny Normal\n",
+	"inputlog": ">start {\"formatid\":\"gen9rprandombattle\",\"seed\":\"sodium,d8a8fd5608c5af36dd89522dfa890cfc\",\"rated\":\"Rated battle\"}\n>player p1 {\"name\":\"Bunny Normal\",\"avatar\":\"bunny.png\",\"rating\":1227,\"seed\":\"sodium,9fee87220b31b39f2b7e2a5bb9441958\"}\n>player p2 {\"name\":\"Keiko_Sama\",\"avatar\":\"keiko-yume.png\",\"rating\":1000,\"seed\":\"sodium,0ec5a17c8747d9bd57f864ae4a3c4e51\"}\n>chat ☆Bunny Normal|Good luck! Playing on **normal**.\n>p1 move overheat\n>p2 switch 3\n>forcelose p2",
+	"uploadtime": 1792617340
+}
