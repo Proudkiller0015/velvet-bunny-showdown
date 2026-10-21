@@ -31,7 +31,7 @@
 
 const toID = s => String(s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
 
-const LOW_LADDER = ['Collab', 'AG', 'Uber', 'OU', 'UUBL', 'UU', 'RUBL', 'RU', 'NUBL', 'NU', 'PUBL', 'PU', 'ZUBL', 'ZU', 'NFE', 'LC'];
+const LOW_LADDER = ['Touhou', 'Collab', 'AG', 'Uber', 'OU', 'UUBL', 'UU', 'RUBL', 'RU', 'NUBL', 'NU', 'PUBL', 'PU', 'ZUBL', 'ZU', 'NFE', 'LC'];
 
 /** "(PU)" means ranked below PU: two rungs down, as lowTierOf() does it. */
 function unparen(tier) {
@@ -120,8 +120,8 @@ function buildPool(dex, { includeNfe = true } = {}) {
 		if (TYPE_FORMES.has(toID(species.baseSpecies)) && species.forme) continue;
 		if (/Totem|Gmax|Starter/.test(species.forme || '')) continue;
 		const tier = currentTier(dex, species);
-		// Collab (crossover Pokemon, data/velvet/collab.js) is a ban, not a power level: never tiered.
-		if (tier === 'AG' || tier === 'Collab') continue;
+		// Collab and Touhou (guests, data/velvet/collab.js and touhou.js) are bans, not power levels: never tiered.
+		if (tier === 'AG' || tier === 'Collab' || tier === 'Touhou') continue;
 		if (species.nfe) {
 			if (!includeNfe) continue;
 			if (RANK[tier] <= 0 && !evioliteViable(species)) continue;

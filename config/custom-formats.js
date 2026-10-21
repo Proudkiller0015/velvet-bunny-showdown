@@ -349,8 +349,9 @@ const RP_GEMS = ['normal', 'fire', 'water', 'electric', 'grass', 'ice', 'fightin
  * teambuilder uses to split National Dex RU into NU, PU and ZU headings, so the
  * list you scroll and the check you pass agree.
  */
-// Collab tops it: crossover Pokemon, banned everywhere but RP Collab (see COLLAB below).
-const LOW_LADDER = ['Collab', 'AG', 'Uber', 'OU', 'UUBL', 'UU', 'RUBL', 'RU', 'NUBL', 'NU', 'PUBL', 'PU', 'ZUBL', 'ZU', 'NFE', 'LC'];
+// The guest tiers top it: Touhou, then Collab, each banned everywhere but its own format
+// and the RP Battle ones (see GUEST_TIERS below).
+const LOW_LADDER = ['Touhou', 'Collab', 'AG', 'Uber', 'OU', 'UUBL', 'UU', 'RUBL', 'RU', 'NUBL', 'NU', 'PUBL', 'PU', 'ZUBL', 'ZU', 'NFE', 'LC'];
 function lowTierOf(dex, species) {
 	const nd = LOW_LADDER.indexOf(species.natDexTier);
 	if (nd >= 0 && nd < LOW_LADDER.indexOf('RU')) return species.natDexTier;
@@ -1157,8 +1158,9 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 9] RP Battle",
-		// Collab Pokemon are part of the RP, so every RP battle takes them; only the tiers refuse them.
+		// Collab and Touhou Pokemon are part of the RP, so every RP battle takes them; only the tiers refuse them.
 		allowsCollab: true,
+		allowsTouhou: true,
 
 		/**
 		 * The one with no rules at all.
@@ -1233,8 +1235,9 @@ exports.Formats = [
 			installItems(this);
 		},
 		...RP_TURN_ACTIONS,
-		// Nothing is checked, collab Pokemon included (see COLLAB below).
+		// Nothing is checked, collab and Touhou Pokemon included (see GUEST_TIERS below).
 		allowsCollab: true,
+		allowsTouhou: true,
 
 		searchShow: false,
 		challengeShow: true,
@@ -1295,6 +1298,7 @@ exports.Formats = [
 	WILD = {
 		name: "[Gen 9] RP Battle (Wild Encounter)",
 		allowsCollab: true,
+		allowsTouhou: true,
 		desc: "A wild Pokémon from the RP. Beat it, or weaken it and throw a ball.",
 
 		/**
@@ -1362,6 +1366,7 @@ exports.Formats = [
 	{
 		name: "[Gen 9] RP Battle (Wild Doubles)",
 		allowsCollab: true,
+		allowsTouhou: true,
 		desc: "Two wild Pokémon at once. Knock one out, then catch the other.",
 		/*
 		 * The same as RP Wild Encounter in every respect but the number of
@@ -1383,6 +1388,7 @@ exports.Formats = [
 	{
 		name: "[Gen 9] RP Raid",
 		allowsCollab: true,
+		allowsTouhou: true,
 		desc: "Three trainers against one Dynamaxed raid boss. Wear it down, then throw.",
 		/*
 		 * Free-for-all, which is four sides: the boss and three trainers. The rules
@@ -1456,6 +1462,7 @@ exports.Formats = [
 	{
 		name: "[Gen 9] RP Battle (Doubles)",
 		allowsCollab: true,
+		allowsTouhou: true,
 		desc: "RP Battle as a double battle: no rules, two Pokémon out a side.",
 		gameType: 'doubles',
 		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
@@ -1562,6 +1569,11 @@ exports.Formats = [
 
 	// Above Ubers: the tier with nothing taken out of it.
 	rpTier('AG', '[Gen 9] National Dex AG', { rules: ['+Light of Ruin'] }),
+	// The top of the ladder: RP AG's rules, plus the Touhou Pokemon every other tier bans (data/velvet/touhou.js).
+	rpTier('Touhou', '[Gen 9] National Dex AG', {
+		desc: "RP AG plus the Touhou Pokémon, which no other tier allows.",
+		rules: ['+Light of Ruin'], allowsTouhou: true,
+	}),
 	// Above AG: RP AG's rules, plus the crossover Pokemon every other format bans (data/velvet/collab.js).
 	rpTier('Collab', '[Gen 9] National Dex AG', {
 		desc: "RP AG plus the collab (crossover) Pokémon, which no other format allows.",
@@ -1679,32 +1691,52 @@ function witchStoneRule(set) {
 }
 
 /*
- * Collab Pokemon (data/velvet/collab.js): crossover guests, banned from every RP
- * format but RP Collab - not for their strength, for being guests. A banlist entry
- * rather than a set check, so the rule table itself refuses them and everything
- * reading it (the validator, the bot's draft pool) agrees. RP Custom Game checks
- * nothing and keeps taking them. Only the RP mods know these Pokemon at all; the
- * official formats never see them. The file sits beside this one's data/ both in
- * the project and in the package's dist.
+ * The guest tiers: Pokemon from other series, banned from every RP format but their
+ * own tier and the RP Battle formats - not for their strength, for being guests.
+ *
+ *   Collab (data/velvet/collab.js): crossover Pokemon, legal in RP Collab.
+ *   Touhou (data/velvet/touhou.js): the Touhoumons solomod's characters, legal in RP Touhou.
+ *
+ * A format takes a guest tier by saying so (`allowsCollab`, `allowsTouhou`). The refusal
+ * is a banlist entry rather than a set check, so the rule table itself refuses them and
+ * everything reading it (the validator, the bot's draft pool) agrees; the set check after
+ * it only says why. RP Custom Game checks nothing and keeps taking them. Only the RP mods
+ * know these Pokemon at all; the official formats never see them. The files sit beside
+ * this one's data/ both in the project and in the package's dist.
  */
-const COLLAB = require(require('path').join(__dirname, '..', 'data', 'velvet', 'collab.js'));
+const velvetData = file => require(require('path').join(__dirname, '..', 'data', 'velvet', file));
+const GUEST_TIERS = [
+	{
+		guests: velvetData('collab.js'), allows: 'allowsCollab',
+		why: name => `${name} is a Collab Pokémon: crossover Pokémon are legal only in [Gen 9] RP Collab and the RP Battle formats.`,
+	},
+	{
+		guests: velvetData('touhou.js'), allows: 'allowsTouhou',
+		why: name => `${name} is a Touhou Pokémon: legal only in [Gen 9] RP Touhou and the RP Battle formats.`,
+	},
+];
+const isRpFormat = format => String(format.mod || '').endsWith('rp');
 for (const format of exports.Formats) {
 	// Not where the teams are generated (RP Random Battle, the tutorial): the generator
-	// refuses any custom ban, and it never hands out a collab Pokemon anyway.
-	if (!format.name || !String(format.mod || '').endsWith('rp') || format.allowsCollab || format.team) continue;
-	format.banlist = [...(format.banlist || []), ...COLLAB.NAMES];
+	// refuses any custom ban, and it never hands out a guest anyway.
+	if (!format.name || !isRpFormat(format) || format.team) continue;
+	for (const { guests, allows } of GUEST_TIERS) {
+		if (!format[allows]) format.banlist = [...(format.banlist || []), ...guests.NAMES];
+	}
 }
-function collabRule(set) {
+function guestRule(set) {
+	if (!isRpFormat(this.format)) return [];
 	const species = this.dex.species.get(set.species);
-	if (species.tier !== COLLAB.TIER || this.format.allowsCollab || !String(this.format.mod || '').endsWith('rp')) return [];
-	return [`${species.baseSpecies} is a Collab Pokémon: crossover Pokémon are legal only in [Gen 9] RP Collab and the RP Battle formats.`];
+	const guest = GUEST_TIERS.find(g => g.guests.TIER === species.tier);
+	if (!guest || this.format[guest.allows]) return [];
+	return [guest.why(species.baseSpecies)];
 }
 
 for (const format of exports.Formats) {
 	if (!format.name) continue;
 	const own = format.onValidateSet;
 	format.onValidateSet = function (set, fmt, setHas, teamHas) {
-		const problems = [...((own && own.call(this, set, fmt, setHas, teamHas)) || []), ...witchStoneRule.call(this, set), ...collabRule.call(this, set)];
+		const problems = [...((own && own.call(this, set, fmt, setHas, teamHas)) || []), ...witchStoneRule.call(this, set), ...guestRule.call(this, set)];
 		return problems.length ? problems : undefined;
 	};
 	/*

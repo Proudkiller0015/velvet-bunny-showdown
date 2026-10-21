@@ -83,6 +83,13 @@ function patchPkmnData() {
 		const row = { gen: 9 };
 		for (const field of SPECIES_FIELDS) if (mon[field] !== undefined) row[field] = mon[field];
 		species[mon.id] = row;
+		/*
+		 * And its tier. @pkmn/dex looks a forme's tier up on its base's formats-data row and
+		 * throws when there is none: every non-battle-only Touhou forme (Hecatia-Earth,
+		 * Cirno-Tanned, Keine-Hakutaku) threw out of the AI's damage calcs until this.
+		 */
+		const formats = Pkmn.data.FormatsData;
+		if (formats && !formats[mon.id]) formats[mon.id] = { tier: mon.tier, doublesTier: mon.doublesTier, natDexTier: mon.natDexTier };
 		// The base form has to own it, or the calculator cannot reach the form at all.
 		const base = mon.baseSpecies && mon.baseSpecies !== mon.name ? Pkmn.species.get(mon.baseSpecies) : null;
 		const baseRow = base && base.exists ? species[base.id] : null;

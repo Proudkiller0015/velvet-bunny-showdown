@@ -242,6 +242,29 @@
 			builder: 'background-image:url(#SPRITES#' + file + '.png' + SPRITE_V + ');background-position:10px 5px;background-repeat:no-repeat;image-rendering:pixelated;',
 		};
 	});
+	/*
+	 * The Touhou Pokemon (data/velvet/touhou.js): the Touhoumons solomod's own sprites (DH2, MIT),
+	 * standard 96x96 fronts, backs and shinies with 40x30 icons, in sprites/touhou/<id>*.png.
+	 * One row per species and forme, written by scripts/import-touhou.js.
+	 */
+	/* TOUHOU-ART-START: written by scripts/import-touhou.js */
+	var TOUHOU_ART = ["reimuhakurei","marisakirisame","rumia","daiyousei","cirno","cirnotanned","hongmeiling","koakuma","patchouliknowledge","sakuyaizayoi","remiliascarlet","flandrescarlet","lettywhiterock","chen","alicemargatroid","lilywhite","lunasaprismriver","merlinprismriver","lyricaprismriver","youmukonpaku","yuyukosaigyouji","ranyakumo","yukariyakumo","suikaibuki","wrigglenightbug","mystialorelei","keine","keinehakutaku","tewiinaba","reiseninaba","eirinyagokoro","kaguyahouraisan","fujiwaranomokou","ayashameimaru","medicinemelancholy","yuukakazami","komachionozuka","eikishiki","shizuhaaki","minorikoaki","hinakagiyama","nitorikawashiro","momijiinubashiri","sanaekochiya","kanakoyasaka","suwakomoriya","ikunagae","tenshihinanawi","kisume","yamamekurodani","parseemizuhashi","yuugihoshiguma","satorikomeiji","rinkaenbyou","utsuhoreiuji","koishikomeiji","nazrin","kogasatatara","ichirinkumoi","ichirinkumoiunzan","minamitsumurasa","shoutoramaru","byakurenhijiri","nuehoujuu","hatatehimekaidou","sunnymilk","lunachild","starsapphire","kyoukokasodani","yoshikamiyako","seigakaku","soganotojiko","mononobenofuto","toyosatomiminomiko","mamizoufutatsuiwa","kasenibaraki","hatanokokoro","wakasagihime","sekibanki","kagerouimaizumi","benbentsukumo","yatsuhashitsukumo","seijakijin","shinmyoumarusukuna","raikohorikawa","sumirekousami","seiran","ringo","doremysweet","sagumekishin","clownpiece","junko","hecatia","hecatiaearth","hecatiamoon","joonyorigami","shionyorigami","eternitylarva","nemunosakata","aunnkomano","narumiyatadera","maiteireida","satononishida","okinamatara","okinamataraspring","okinamatarasummer","okinamataraautumn","okinamatarawinter","eikaebisu","urumiushizaki","kutakaniwatari","yachiekicchou","mayumijoutouguu","keikihaniyasushin","sakikurokuma","yuumatoutetsu","mikegotoukuji","takaneyamashiro","sannyokomakusa","misumarutamatsukuri","tsukasakudamaki","megumuiizunamaru","chimatatenkyuu","momoyohimemushi","sonbiten","enokomitsugashira","chiyaritenkajin","hisamiyomotsu","zanmunippaku","vivit","ubamechirizuka","chimihoujuu","narekomichigami","yuimanasama","watatsukinotoyohime","watatsukinoyorihime","ariyaiwanaga","ninawatari"];
+	var TOUHOU_ICON_OF = {"okinamataraspring":"okinamatara","okinamatarasummer":"okinamatara","okinamataraautumn":"okinamatara","okinamatarawinter":"okinamatara"};
+	/* TOUHOU-ART-END */
+	TOUHOU_ART.forEach(function (id) {
+		var file = 'touhou/' + id;
+		var builder = function (f) {
+			return 'background-image:url(#SPRITES#' + f + ');background-position:10px 5px;background-repeat:no-repeat;image-rendering:pixelated;';
+		};
+		ART[id] = {
+			standard: true,
+			still: { front: [file + '.png', 96, 96], back: [file + '-back.png', 96, 96] },
+			shiny: { still: { front: [file + '-shiny.png', 96, 96], back: [file + '-back-shiny.png', 96, 96] } },
+			icon: 'touhou/' + (TOUHOU_ICON_OF[id] || id) + '-icon.png',
+			builder: builder(file + '.png'),
+			shinyBuilder: builder(file + '-shiny.png'),
+		};
+	});
 	Object.keys(MEGA_SPRITES).forEach(function (id) {
 		var file = MEGA_SPRITES[id];
 		ART[id] = {
@@ -1310,6 +1333,8 @@
 		gen9rpag: 'gen9nationaldexag',
 		// RP AG plus the collab Pokemon, which are listed on top under their own heading (collabRows).
 		gen9rpcollab: 'gen9nationaldexag',
+		// RP AG plus the Touhou Pokemon, listed on top under a TOUHOU heading (touhouRows).
+		gen9rptouhou: 'gen9nationaldexag',
 		// The draft: everything National Dex has, then narrowed to the pool below (draftRows).
 		gen9rpdraft: 'gen9nationaldexag',
 		gen9rpou: 'gen9nationaldex',
@@ -1379,10 +1404,16 @@
 			 * which take them, list them first under a Collab heading, which also makes them
 			 * legal in their search.
 			 */
-			if (typed && searchType === 'pokemon' && /^gen9rp(collab|battle|raid)/.test(asked)) {
+			/*
+			 * Touhou Pokemon (data/velvet/touhou.js) the same way, under a TOUHOU heading at the very
+			 * top: in RP Touhou and the RP Battle formats, the formats that take them.
+			 */
+			if (typed && searchType === 'pokemon' && /^gen9rp(touhou|collab|battle|raid)/.test(asked)) {
 				var ownBase = typed.getBaseResults;
 				typed.getBaseResults = function () {
-					return collabRows().concat(ownBase.apply(this, arguments));
+					var guests = /^gen9rptouhou/.test(asked) ? touhouRows() :
+						/^gen9rpcollab/.test(asked) ? collabRows() : touhouRows().concat(collabRows());
+					return guests.concat(ownBase.apply(this, arguments));
 				};
 			}
 			if (typed && searchType === 'pokemon' && draftFor(asked)) {
@@ -1399,18 +1430,20 @@
 		return true;
 	}
 
-	/** The Collab heading and its Pokemon, from the RP tier table (src/rp-tiers.json). */
-	function collabRows() {
+	/** A guest tier's heading and its Pokemon, from the RP tier table (src/rp-tiers.json). */
+	function guestRows(tier, heading) {
 		var tiers = window.VelvetRpTiers || {};
 		var dex = window.BattlePokedex || {};
 		var ids = [];
-		for (var id in tiers) if (tiers[id] === 'Collab' && dex[id] && !dex[id].battleOnly) ids.push(id);
+		for (var id in tiers) if (tiers[id] === tier && dex[id] && !dex[id].battleOnly) ids.push(id);
 		if (!ids.length) return [];
 		ids.sort();
-		var rows = [['header', 'Collab']];
+		var rows = [['header', heading]];
 		for (var i = 0; i < ids.length; i++) rows.push(['pokemon', ids[i]]);
 		return rows;
 	}
+	function collabRows() { return guestRows('Collab', 'Collab'); }
+	function touhouRows() { return guestRows('Touhou', 'TOUHOU'); }
 
 	function draftFor(format) {
 		var draft = window.VelvetDraft;

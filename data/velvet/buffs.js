@@ -376,6 +376,9 @@ const DISTRIBUTED = {
  */
 function distributionFor(Pokedex, rule) {
 	const skip = new Set(rule.except || []);
+	// The Touhou guests (touhou.js) keep the movepools their own mod gave them.
+	const touhou = require('./touhou.js');
+	for (const id of [...touhou.SPECIES, ...touhou.FORMES]) skip.add(id);
 	const out = [];
 	for (const [id, species] of Object.entries(Pokedex)) {
 		if (skip.has(id)) continue;

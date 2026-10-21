@@ -73,8 +73,14 @@ OUR_ABILITIES.push(...missingno.ABILITY_IDS);
 const collab = require(path.join(PACKAGE, 'dist', 'data', 'velvet', 'collab.js'));
 OUR_MOVES.push(...collab.MOVE_IDS);
 OUR_ABILITIES.push(...collab.ABILITY_IDS);
+// Touhou (data/velvet/touhou.js): the Touhoumons solomod's characters, their moves, abilities and items.
+const touhou = require(path.join(PACKAGE, 'dist', 'data', 'velvet', 'touhou.js'));
+OUR_MOVES.push(...touhou.MOVE_IDS);
+OUR_ABILITIES.push(...touhou.ABILITY_IDS);
+OUR_ITEMS.push(...touhou.ITEM_IDS);
+const TOUHOU = new Set([...touhou.SPECIES, ...touhou.FORMES]);
 // Whole Pokemon the client has no usable row for: shipped from here (newSpecies below).
-const NEW_SPECIES = [...abyssShrine.SPECIES, ...missingno.SPECIES, ...collab.SPECIES, ...collab.FORMES];
+const NEW_SPECIES = [...abyssShrine.SPECIES, ...missingno.SPECIES, ...collab.SPECIES, ...collab.FORMES, ...touhou.SPECIES, ...touhou.FORMES];
 OUR_ITEMS.push(...require(path.join(PACKAGE, 'dist', 'data', 'velvet', 'new-items.js')).ITEM_IDS);
 for (const buff of Object.values(Buffs)) {
 	for (const name of buff.moves || []) {
@@ -322,6 +328,8 @@ for (const id of ['normalgem', ...require(path.join(PACKAGE, 'dist', 'data', 've
 	const row = itemRow(Dex.items.get(id));
 	overrides.items[id] = { ...row, shortDesc: String(row.shortDesc || '').replace('1.3x', '1.5x'), desc: String(row.desc || '').replace('1.3x', '1.5x') };
 }
+// The Water and Moon Stones change Hecatia's body (data/velvet/touhou.js).
+for (const id of ['waterstone', 'moonstone']) overrides.items[id] = itemRow(Dex.items.get(id));
 
 /*
  * The "awakened" search term: every Pokemon with one of our signature
@@ -335,6 +343,8 @@ const signatureMoves = Dex.moves.all().filter(m => ours(m) && !m.velvetShared).m
 const awakened = { ability: [], move: [] };
 for (const s of Dex.species.all()) {
 	if (!s.exists || s.isNonstandard === 'Custom' || s.num <= 0) continue;
+	// The Touhou guests' abilities and moves are their own mod's, not awakenings.
+	if (TOUHOU.has(s.id)) continue;
 	if (Object.values(s.abilities || {}).some(a => ours(Dex.abilities.get(a)))) awakened.ability.push(s.id);
 	const learnset = Dex.species.getLearnsetData(s.id).learnset || {};
 	if (signatureMoves.some(m => learnset[m])) awakened.move.push(s.id);
@@ -353,6 +363,8 @@ const searchAliases = [];
 for (const [alias, at] of halloween.SEARCH_ALIASES || []) searchAliases.push([alias, 'pokemon', Dex.species.get(halloween.FORME).id, at]);
 for (const [alias, at] of missingno.SEARCH_ALIASES || []) searchAliases.push([alias, 'pokemon', missingno.ID, at]);
 for (const [alias, target, at] of collab.SEARCH_ALIASES || []) searchAliases.push([alias, 'pokemon', target, at]);
+// The Touhou Pokemon's nicknames from their mod ("reimu", "patchy") and the later words of their names.
+for (const [alias, target, at] of touhou.SEARCH_ALIASES || []) searchAliases.push([alias, 'pokemon', target, at]);
 
 // Event Pokemon, for "event" in the search: every event file lists its own.
 const EVENT_FILES = ['halloween.js', 'missingno.js'];
@@ -378,7 +390,7 @@ for (const id of NEW_SPECIES) {
 		tags: sp.tags.slice(), tier: sp.natDexTier, gen: sp.gen || 9,
 	};
 	// A forme of ours (Funerfly-Breach) needs what makes it a forme: battle-only, base, the list it is in.
-	for (const key of ['baseSpecies', 'forme', 'otherFormes', 'formeOrder', 'battleOnly', 'requiredAbility']) {
+	for (const key of ['baseSpecies', 'baseForme', 'forme', 'otherFormes', 'formeOrder', 'battleOnly', 'requiredAbility', 'requiredItem', 'changesFrom']) {
 		if (sp[key] && (key !== 'baseSpecies' || sp.baseSpecies !== sp.name)) newSpecies[id][key] = Array.isArray(sp[key]) ? sp[key].slice() : sp[key];
 	}
 	search.push([id, 'pokemon', offsetsFor(sp.name)]);
