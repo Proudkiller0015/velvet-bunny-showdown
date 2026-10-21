@@ -226,6 +226,22 @@
 		};
 		ART[id].shinyBuilder = ART[id].builder.replace(id + '.png', id + '-shiny.png');
 	});
+	// Funerfly (data/velvet/collab.js): its in-game cut-out from Lobotomy Corporation, the breached
+	// forme the same figure in a pale soul light (art/funerfly). The backs are the fronts turned
+	// round. Animated like the trio's, drawn at half the file's size.
+	[['funerfly', 'funerfly', [152, 189], [168, 210]], ['funerflybreach', 'funerfly-breach', [152, 185], [168, 205]]].forEach(function (f) {
+		var file = f[1];
+		ART[f[0]] = {
+			standard: true,
+			still: { front: [file + '.png' + SPRITE_V, 96, 96], back: [file + '-back.png' + SPRITE_V, 96, 96] },
+			animated: {
+				front: [file + '-ani.webp' + SPRITE_V, f[2][0], f[2][1], true],
+				back: [file + '-back-ani.webp' + SPRITE_V, f[3][0], f[3][1], true],
+			},
+			icon: file + '-icon.png' + SPRITE_V,
+			builder: 'background-image:url(#SPRITES#' + file + '.png' + SPRITE_V + ');background-position:10px 5px;background-repeat:no-repeat;image-rendering:pixelated;',
+		};
+	});
 	Object.keys(MEGA_SPRITES).forEach(function (id) {
 		var file = MEGA_SPRITES[id];
 		ART[id] = {
