@@ -85,7 +85,10 @@ function movesOf(species) {
 // Makuro, Raishin and Chimai (data/velvet/abyss-shrine.js), and the collab Pokemon
 // (data/velvet/collab.js): movepools of ours, so they own only what is named in CHOSEN.
 const collab = require(require.resolve('pokemon-showdown/dist/data/velvet/collab.js'));
-const TRIO = new Set(['makuro', 'raishin', 'chimai', ...collab.SPECIES]);
+// The Touhou Pokemon (data/velvet/touhou.js) too: their mod's movepools, which hand out
+// plenty of real Pokemon's signatures; they own only their mod's own moves.
+const touhou = require(require.resolve('pokemon-showdown/dist/data/velvet/touhou.js'));
+const TRIO = new Set(['makuro', 'raishin', 'chimai', ...collab.SPECIES, ...touhou.SPECIES, ...touhou.FORMES]);
 
 function build() {
 	const familyMoves = new Map();     // family id -> Set of move ids it can get at all
@@ -221,6 +224,15 @@ function build() {
 	// Makuro, Raishin and Chimai (abyss-shrine.js): their own moves, which nothing else learns.
 	const CHOSEN = { shuppet: ['poltergeist'], makuro: ['abyssalmaw', 'leviathancrash', 'sovereignrite'], raishin: ['shrinebellstrike', 'spiritthunder', 'sovereignrite'], chimai: ['sanctuarypulse', 'hallowedquake', 'sovereignrite'] };
 	for (const [id, { signature }] of Object.entries(collab.LEARNSETS)) CHOSEN[id] = signature;
+	// Each Touhou Pokemon: the mod's moves it learns, formes included (Hecatia-Earth's are Hecatia's).
+	for (const id of [...touhou.SPECIES, ...touhou.FORMES]) {
+		const species = Dex.species.get(id);
+		const learnset = Dex.species.getLearnsetData(id).learnset || {};
+		const own = touhou.MOVE_IDS.filter(move => learnset[move]);
+		if (!own.length) continue;
+		const family = familyOf(species);
+		CHOSEN[family] = [...new Set([...(CHOSEN[family] || []), ...own])];
+	}
 	for (const [family, moves] of Object.entries(CHOSEN)) {
 		signatures[family] = [...new Set([...(TRIO.has(family) ? [] : signatures[family] || []), ...moves])]
 			.sort((a, b) => Dex.moves.get(a).name.localeCompare(Dex.moves.get(b).name));

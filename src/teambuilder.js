@@ -338,8 +338,10 @@ class TeamBuilder {
 			if (species.forme && species.forme.startsWith('Mega')) continue;
 			if (species.requiredItem || species.requiredMove) continue;
 			if (ruleTable.isBannedSpecies(species)) continue;
-			// Collab Pokemon are legal in the RP Battle formats too, but the bot only brings them to RP Collab.
+			// Collab and Touhou Pokemon are legal in the RP Battle formats too, but the bot only brings
+			// them to their own tier: Collab to RP Collab, Touhou to RP Touhou.
 			if (species.tier === 'Collab' && !/rpcollab$/.test(format.id)) continue;
+			if (species.tier === 'Touhou' && !/rptouhou$/.test(format.id)) continue;
 			if (!dex.species.getMovePool(species.id).size) continue;
 			pool.push(species);
 		}
@@ -790,9 +792,9 @@ class TeamBuilder {
 	 * is an empty object and everything below it quietly does nothing.
 	 */
 	/**
-	 * Whole new Pokemon this server added (data/velvet/abyss-shrine.js, collab.js), by id.
-	 * The collab ones only ever reach the draft in RP Collab: context() leaves them out of
-	 * every other format's pool, the RP Battle formats included.
+	 * Whole new Pokemon this server added (data/velvet/abyss-shrine.js, collab.js, touhou.js),
+	 * by id. The collab ones only ever reach the draft in RP Collab and the Touhou ones in RP
+	 * Touhou: context() leaves them out of every other format's pool, the RP Battle formats included.
 	 */
 	newSpecies() {
 		if (this._newSpecies) return this._newSpecies;
@@ -800,6 +802,7 @@ class TeamBuilder {
 			this._newSpecies = new Set([
 				...require('pokemon-showdown/dist/data/velvet/abyss-shrine.js').SPECIES,
 				...require('pokemon-showdown/dist/data/velvet/collab.js').SPECIES,
+				...require('pokemon-showdown/dist/data/velvet/touhou.js').SPECIES,
 			]);
 		} catch (e) {
 			this._newSpecies = new Set();
@@ -2264,20 +2267,25 @@ class TeamBuilder {
 	 */
 	build(formatId, seed, options = {}) {
 		const packed = this.buildAny(formatId, seed, options);
-		return packed && /rpcollab$/.test(Dex.formats.get(formatId).id) ? this.withCollab(formatId, packed, seed) : packed;
+		if (!packed) return packed;
+		const id = Dex.formats.get(formatId).id;
+		if (/rpcollab$/.test(id)) return this.withGuest(formatId, packed, seed, 'collab.js');
+		if (/rptouhou$/.test(id)) return this.withGuest(formatId, packed, seed, 'touhou.js');
+		return packed;
 	}
 
 	/**
 	 * RP Collab exists for its collab Pokemon, and a 570-stat Funerfly drawn by strength
 	 * against the AG pool almost never made the six: a team there brings one, in place
-	 * of another member, whenever the team stays legal with it.
+	 * of another member, whenever the team stays legal with it. RP Touhou the same, with
+	 * one of its Touhou Pokemon.
 	 */
-	withCollab(formatId, packed, seed) {
+	withGuest(formatId, packed, seed, file) {
 		const ctx = this.context(formatId);
-		const collab = new Set(require('pokemon-showdown/dist/data/velvet/collab.js').SPECIES);
+		const guests = new Set(require(`pokemon-showdown/dist/data/velvet/${file}`).SPECIES);
 		const team = Teams.unpack(packed);
-		if (team.some(set => collab.has(toID(ctx.dex.species.get(set.species).baseSpecies)))) return packed;
-		const choices = ctx.pool.filter(s => collab.has(s.id));
+		if (team.some(set => guests.has(toID(ctx.dex.species.get(set.species).baseSpecies)))) return packed;
+		const choices = ctx.pool.filter(s => guests.has(s.id));
 		if (!choices.length) return packed;
 		let s = ((seed ?? Date.now()) ^ 0x5bd1e995) >>> 0;
 		const rng = () => { s ^= s << 13; s >>>= 0; s ^= s >> 17; s ^= s << 5; s >>>= 0; return s / 0x100000000; };

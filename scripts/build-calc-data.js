@@ -41,7 +41,9 @@ const Dex = require(path.join(PACKAGE, 'dist', 'sim', 'dex.js')).Dex.mod('gen9rp
 // Makuro, Raishin and Chimai (29 Sep 2026): whole new Pokemon, legal in RP Ubers.
 // The collab Pokemon and their formes (data/velvet/collab.js): Funerfly and Funerfly-Breach.
 const collab = require(path.join(PACKAGE, 'dist', 'data', 'velvet', 'collab.js'));
-const SPECIES = ['samantha', 'nuzleafsold', 'banettemegahalloween', 'makuro', 'raishin', 'chimai', ...collab.SPECIES, ...collab.FORMES];
+// The Touhou Pokemon and their formes (data/velvet/touhou.js).
+const touhou = require(path.join(PACKAGE, 'dist', 'data', 'velvet', 'touhou.js'));
+const SPECIES = ['samantha', 'nuzleafsold', 'banettemegahalloween', 'makuro', 'raishin', 'chimai', ...collab.SPECIES, ...collab.FORMES, ...touhou.SPECIES, ...touhou.FORMES];
 /*
  * Moves and abilities are worked out rather than listed: anything with a
  * negative number is ours. A hand-written list is how Balance Patch 1's eleven
@@ -52,7 +54,7 @@ const SPECIES = ['samantha', 'nuzleafsold', 'banettemegahalloween', 'makuro', 'r
 const MOVES = Dex.moves.all().filter(m => m.exists && m.num < 0 && m.isNonstandard !== 'CAP').map(m => m.id);
 const ABILITIES = Dex.abilities.all().filter(a => a.exists && a.num < 0 && a.isNonstandard !== 'CAP').map(a => a.id);
 // Banettite-Halloween (24 Sep 2026): its stone, so a set holding it is not refused.
-const ITEMS = ['elementalbanana', 'brokenpact', 'banettitehalloween', 'abyssalpearl', 'shrinebell', 'sanctuarylotus', 'warpedhourglass', 'ultrashard', 'chillingorb'];
+const ITEMS = ['elementalbanana', 'brokenpact', 'banettitehalloween', 'abyssalpearl', 'shrinebell', 'sanctuarylotus', 'warpedhourglass', 'ultrashard', 'chillingorb', ...touhou.ITEM_IDS];
 
 /**
  * The calculator's own field names, which are not Showdown's.

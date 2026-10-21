@@ -50,6 +50,8 @@ const Stall = require('./stall.js');
 const CreationTrio = require('./creation-trio.js');
 // Collab: crossover Pokemon, refused by every RP tier but RP Collab (Funerfly).
 const Collab = require('./collab.js');
+// Touhou: the Touhoumons solomod's characters (DH2, MIT), a guest tier above Collab.
+const Touhou = require('./touhou.js');
 
 // The buffed Pokemon are Showdown's own, so they are changed in place rather
 // than added - and the learnsets they need are added when that file is loaded,
@@ -76,13 +78,14 @@ exports.pokedex = data => {
 	Missingno.pokedex(data);
 	AbyssShrine.pokedex(data);
 	Collab.pokedex(data);
+	Touhou.pokedex(data);
 	buffedPokedex = data;
 	buffWhatWeHave();
 };
-exports.abilities = data => Collab.abilities(CreationTrio.abilities(Stall.abilities(AbyssShrine.abilities(Missingno.abilities(Halloween.abilities(require('./balance-patch-1.js').patchAbsorbers(patchAbilities(unnerfAbilities(Object.assign(data, Abilities))))))))));
+exports.abilities = data => Touhou.abilities(Collab.abilities(CreationTrio.abilities(Stall.abilities(AbyssShrine.abilities(Missingno.abilities(Halloween.abilities(require('./balance-patch-1.js').patchAbsorbers(patchAbilities(unnerfAbilities(Object.assign(data, Abilities)))))))))));
 let moveTable = null;
 exports.moves = data => {
-	moveTable = Collab.moves(CreationTrio.moves(Classic.moves(Frostbite.moves(AbyssShrine.moves(Missingno.moves(Halloween.moves(patchMoves(unnerfMoves(Object.assign(data, Moves))))))))));
+	moveTable = Touhou.moves(Collab.moves(CreationTrio.moves(Classic.moves(Frostbite.moves(AbyssShrine.moves(Missingno.moves(Halloween.moves(patchMoves(unnerfMoves(Object.assign(data, Moves)))))))))));
 	teachHerEverything();
 	return moveTable;
 };
@@ -92,6 +95,7 @@ exports.formatsData = data => {
 	Missingno.formatsData(data);
 	AbyssShrine.formatsData(data);
 	Collab.formatsData(data);
+	Touhou.formatsData(data);
 	tierTable = data;
 	buffWhatWeHave();
 };
@@ -101,6 +105,7 @@ exports.learnsets = data => {
 	Missingno.learnsets(data);
 	AbyssShrine.learnsets(data);
 	Collab.learnsets(data);
+	Touhou.learnsets(data);
 	buffedLearnsets = data;
 	teachHerEverything();
 	buffWhatWeHave();
@@ -148,8 +153,9 @@ exports.items = data => {
 	Frostbite.items(data);
 	Gems.items(data);
 	NewItems.items(data);
+	Touhou.items(data);
 	return data;
 };
 
 // Field conditions: the Abyss's and the Shrine's terrains (a table no other file here touches).
-exports.conditions = data => Gems.conditions(Frostbite.conditions(AbyssShrine.conditions(data)));
+exports.conditions = data => Touhou.conditions(Gems.conditions(Frostbite.conditions(AbyssShrine.conditions(data))));
