@@ -12,6 +12,9 @@
  *   - which wild species play which legendary theme (data/legend-music.json),
  *   - which wild species count as rare (src/rarity.js: rare and up, or no theme),
  *   - which trainer avatars and titles are NPC trainers (src/encounters.js),
+ *   - which Touhou species play which character theme, and the picker's names for them
+ *     (data/touhou-music.json; the tracks in client/audio/touhou are rendered from MIDI
+ *     by tools/music/touhou.py, which also sets their loop points),
  *   - each track's file and length, so it loops before its fade-out.
  * Needs ffmpeg/ffprobe on PATH and `npm run setup` done (it reads the RP dex).
  */
@@ -25,6 +28,8 @@ const { tracks, own = [] } = read('data/legend-music.json');
 const { events, sounds = {} } = read('data/battle-music.json');
 const EVENTS_DIR = path.join(ROOT, 'client', 'audio', 'events');
 const LEGENDS_DIR = path.join(ROOT, 'client', 'audio', 'legends');
+const TOUHOU_DIR = path.join(ROOT, 'client', 'audio', 'touhou');
+const touhou = read('data/touhou-music.json').tracks;
 
 const cutAt = process.argv.indexOf('--cut');
 if (cutAt > -1) {
@@ -147,6 +152,17 @@ for (const t of own) {
 	if (!fs.existsSync(f)) throw new Error(`our own theme ${t.file}.mp3 is missing from client/audio/legends`);
 	files[`legends/${t.file}`] = t.loop;
 }
+// Touhou character themes: rendered from MIDI, loop measured in the score (tools/music/touhou.py).
+const TOUHOU_OF = {};
+const TOUHOU_NAMES = {};
+for (const t of touhou) {
+	const f = path.join(TOUHOU_DIR, `${t.file}.mp3`);
+	if (!fs.existsSync(f)) throw new Error(`Touhou theme ${t.file}.mp3 is missing from client/audio/touhou (tools/music/touhou.py)`);
+	if (!t.loop || t.loop[1] > lengthMs(f)) throw new Error(`Touhou theme ${t.file}: its loop runs past the file`);
+	files[`touhou/${t.file}`] = t.loop;
+	TOUHOU_NAMES[`touhou/${t.file}`] = `${t.title} (${t.character})`;
+	for (const s of t.species) TOUHOU_OF[s] = `touhou/${t.file}`;
+}
 const EVENT_OF = {};
 for (const [id, e] of Object.entries(events)) {
 	const f = path.join(EVENTS_DIR, `${e.file}.mp3`);
@@ -187,6 +203,8 @@ const block = [
 	`\tvar LEGEND_OF = ${JSON.stringify(LEGEND_OF)};`,
 	`\tvar RARE_WILD = ${JSON.stringify(Object.fromEntries(rare.sort().map(id => [id, 1])))};`,
 	`\tvar NPC_TRAINERS = ${JSON.stringify(TRAINERS)};`,
+	`\tvar TOUHOU_OF = ${JSON.stringify(TOUHOU_OF)};`,
+	`\tvar TOUHOU_NAMES = ${JSON.stringify(TOUHOU_NAMES)};`,
 	'\t/* MUSIC-DATA-END */',
 ].join('\n');
 
@@ -199,4 +217,4 @@ const b = src.indexOf('/* MUSIC-DATA-END */');
 if (a < 0 || b < 0) throw new Error('no MUSIC-DATA markers in velvet-data.js');
 src = src.slice(0, a) + block + src.slice(b + '/* MUSIC-DATA-END */'.length);
 fs.writeFileSync(target, src.replace(/\n/g, eol));
-console.log(`${Object.keys(files).length} tracks, ${Object.keys(LEGEND_OF).length} legendary species, ${rare.length} rare wild species, ${Object.keys(TRAINERS).length} trainer avatars`);
+console.log(`${Object.keys(files).length} tracks, ${Object.keys(LEGEND_OF).length} legendary species, ${rare.length} rare wild species, ${Object.keys(TRAINERS).length} trainer avatars, ${Object.keys(TOUHOU_OF).length} Touhou species`);
