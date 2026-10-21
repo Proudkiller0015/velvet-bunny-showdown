@@ -42,6 +42,10 @@ const TIERS = {
 	// tier to be played in. Then unbanned back to OU by the owner's call (Patch 1.5).
 	gliscor: 'OU',
 
+	// Gale Wings is back to Generation 6 (unnerfs.js): a Brave Bird that always goes first,
+	// which is what made Talonflame OU in X and Y. Up from UU with it (the owner, 21 Oct 2026).
+	talonflame: 'OU',
+
 	/*
 	 * The two that National Dex tiered under a Terastal ban this server does
 	 * not have.
