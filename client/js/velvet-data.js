@@ -1413,7 +1413,10 @@
 				typed.getBaseResults = function () {
 					var guests = /^gen9rptouhou/.test(asked) ? touhouRows() :
 						/^gen9rpcollab/.test(asked) ? collabRows() : touhouRows().concat(collabRows());
-					return guests.concat(ownBase.apply(this, arguments));
+					var rows = ownBase.apply(this, arguments) || [];
+					// Samantha's Dev heading stays first (installPokemonOrder); the guests go right under her.
+					var top = rows.length > 1 && rows[0][0] === 'header' && rows[0][1] === 'Dev' && rows[1][1] === 'samantha' ? 2 : 0;
+					return rows.slice(0, top).concat(guests, rows.slice(top));
 				};
 			}
 			if (typed && searchType === 'pokemon' && draftFor(asked)) {
