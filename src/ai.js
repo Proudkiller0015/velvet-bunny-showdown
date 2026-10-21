@@ -378,6 +378,8 @@ const CALC_ABILITY = {
 	'Kindled Fury': 'Guts', 'Diamond Dust': 'Slush Rush', 'Solstice': 'Chlorophyll',
 	'Prescience': 'Magic Guard', 'Liquid Body': 'Water Absorb', 'Static Needles': 'Volt Absorb', 'Ribbon Hymn': 'Pixilate',
 	'Mudflat Ambush': 'Volt Absorb',
+	// Funerfly's (data/velvet/collab.js): the counter is no damage, its Technician is.
+	'Qliphoth Counter': 'Technician',
 };
 // Abilities that bounce status moves and hazards, and ones no status takes on.
 const BOUNCES = new Set(['magicbounce', 'prescience']);
@@ -1132,16 +1134,6 @@ class BattleAI {
 			 */
 			if (!this.cfg.naive) {
 				if (String(attacker.ability || '') === 'Witching Hour' && move.type === 'Ghost') scale *= 1.5;
-				// Solemn Lament (data/velvet/collab.js) is Bug as well as Ghost, as Flying Press is
-				// Flying; the calculator knows that only for Flying Press, by name.
-				if (move.name === 'Solemn Lament') {
-					const dex = PkmnDex.forGen(gen.num);
-					for (const t of (defender.teraType ? [defender.teraType] : defender.types) || []) {
-						const taken = dex.types.get(t)?.damageTaken?.Bug;
-						if (taken === 1) scale *= 2;
-						else if (taken === 2) scale *= 0.5;
-					}
-				}
 				if (move.name === "Witch's Snatch") {
 					const item = String(defender.item || '');
 					const data = item ? PkmnDex.forGen(9).items.get(item) : null;

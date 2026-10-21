@@ -2,8 +2,9 @@
 /**
  * Collab (data/velvet/collab.js): crossover Pokemon, refused by every RP format but
  * RP Collab. Funerfly's Qliphoth Counter (two super-effective hits, or a teammate
- * fainting beside it, and it breaches for good), Solemn Lament's Bug half, Butterfly
- * Procession's four-turn bind and Last Rites' once-a-battle heal.
+ * fainting beside it, and it breaches for good), Solemn Lament's two Ghost hits, Butterfly
+ * Procession's four-turn bind, Last Rites (a special Last Respects) and the
+ * ability's Technician.
  */
 const assert = require('assert');
 const { Battle, Dex, Teams, TeamValidator } = require('pokemon-showdown');
@@ -111,18 +112,16 @@ ok(require('../src/rp-tiers.json').funerfly === 'Collab', 'src/rp-tiers.json fil
 	ok(b.p1.active[0].m.qliphoth === 1, `a teammate fainting ticks it (${b.p1.active[0].m.qliphoth})`);
 }
 
-// ---- Solemn Lament: two hits, Ghost and Bug at once.
+// ---- Solemn Lament: two Ghost hits of 60.
 {
-	const b = battle([funerfly()], [mon('Malamar', ['Splash'], { ability: 'Contrary' })]);
+	const b = battle([funerfly()], [mon('Blastoise', ['Splash'])]);
 	const from = b.log.length;
 	turn(b, 'move 1', 'move 1');
-	const log = logSince(b, from);
-	ok(/\|-hitcount\|p2a?: Malamar\|2/.test(log), 'hits twice');
-	ok(/\|-supereffective\|p2a: Malamar/.test(log), 'super effective on Psychic/Dark');
+	ok(/\|-hitcount\|p2a?: Blastoise\|2/.test(logSince(b, from)), 'hits twice');
 	const move = b.dex.getActiveMove('solemnlament');
-	ok(b.p2.active[0].runEffectiveness(move) === 2, 'quadruple: Ghost x Psychic/Dark (1x) and Bug x Psychic/Dark (4x)');
+	ok(move.basePower === 60 && move.type === 'Ghost', 'Ghost, 60 a hit');
 	const umbreon = battle([funerfly()], [mon('Umbreon', ['Splash'])]);
-	ok(umbreon.p2.active[0].runEffectiveness(umbreon.dex.getActiveMove('solemnlament')) === 0, 'neutral on a plain Dark type (Ghost resisted, Bug super effective)');
+	ok(umbreon.p2.active[0].runEffectiveness(umbreon.dex.getActiveMove('solemnlament')) === -1, 'plain Ghost: resisted by Dark');
 }
 
 // ---- Butterfly Procession: trapped for 4 turns, 1/8 each.
@@ -141,46 +140,63 @@ ok(require('../src/rp-tiers.json').funerfly === 'Collab', 'src/rp-tiers.json fil
 	ok(binds === 4 && !foe.volatiles['partiallytrapped'], `four turns, then free (${binds} hits)`);
 }
 
-// ---- Last Rites: 1/4 per fainted Pokemon on either side, once a battle.
+// ---- Last Rites: a special Last Respects, 50 +50 for each fainted Pokemon on the user's side.
 {
-	// Nobody has fainted: it fails.
-	const b = battle([funerfly()], [mon('Chansey', ['Night Shade', 'Splash'])]);
-	turn(b, 'move 4', 'move 1');
-	const hurt = b.p1.active[0].hp;
-	const from = b.log.length;
-	turn(b, 'move 3', 'move 2');
-	ok(hurt < b.p1.active[0].maxhp && b.p1.active[0].hp === hurt && /\|-fail\|p1a: Funerfly/.test(logSince(b, from)), 'fails while nobody has fainted');
-}
-{
-	// One of theirs and one of ours down: 2/4 of its HP.
-	const b = battle([funerfly(), mon('Magikarp', ['Splash'], { level: 1 })],
-		[mon('Magikarp', ['Splash'], { level: 1 }), mon('Chansey', ['Night Shade', 'Splash'])]);
-	turn(b, 'move 1', 'move 1');
-	b.choose('p2', 'switch 2');
-	turn(b, 'switch 2', 'move 1');
+	const move = Dex.forFormat('gen9rpcollab').moves.get('lastrites');
+	ok(move.category === 'Special' && move.type === 'Ghost' && move.accuracy === 100 && move.pp === 10 && move.basePower === 50, 'Ghost, special, 50, 100%, 10 PP');
+	ok(!move.flags.heal && !move.heal && !move.drain && move.target === 'normal', 'an attack: no healing');
+	// Power as the battle works it out, without the ability's Technician.
+	const power = (b) => {
+		const user = b.p1.active[0];
+		const m = b.dex.getActiveMove('lastrites');
+		return m.basePowerCallback.call(b, user, b.p2.active[0], m);
+	};
+	const b = battle([funerfly(), mon('Magikarp', ['Splash'], { level: 1 })], [mon('Blastoise', ['Splash', 'Water Gun'], { evs: { spa: 252 } })]);
+	ok(power(b) === 50, `50 with nobody fainted (${power(b)})`);
+	turn(b, 'switch 2', 'move 2');
+	ok(b.p1.pokemon.find(p => p.species.name === 'Magikarp').fainted, 'a teammate fainted');
 	b.choose('p1', 'switch 2');
-	turn(b, 'move 4', 'move 1');
-	turn(b, 'move 4', 'move 1');
+	ok(b.p1.active[0].species.baseSpecies === 'Funerfly' && power(b) === 100, `100 with one ally fainted (${power(b)})`);
+	// And it hurts, and heals nothing.
 	const me = b.p1.active[0];
-	ok(me.species.baseSpecies === 'Funerfly' && b.p1.pokemon.filter(p => p.fainted).length === 1 && b.p2.pokemon.filter(p => p.fainted).length === 1, 'one down on each side');
-	const missing = me.maxhp - me.hp;
-	const before = me.hp;
-	turn(b, 'move 3', 'move 2');
-	const healed = me.hp - before;
-	ok(missing > Math.floor(me.baseMaxhp / 4) * 2 && healed === Math.min(missing, Math.floor(me.baseMaxhp / 4) * 2), `heals 2/4 for two fainted (${healed}, ${missing} missing)`);
-	turn(b, 'move 4', 'move 1');
-	const hurt = me.hp;
-	const from = b.log.length;
-	turn(b, 'move 3', 'move 2');
-	ok(me.m.lastRites && hurt < me.maxhp && me.hp === hurt && /\|-fail\|p1a: Funerfly/.test(logSince(b, from)), 'works once a battle');
+	me.hp = Math.floor(me.maxhp / 2);
+	const foe = b.p2.active[0];
+	const before = foe.hp;
+	turn(b, 'move 3', 'move 1');
+	ok(foe.hp < before && me.hp === Math.floor(me.maxhp / 2), `damages the target (${before - foe.hp}), heals nothing`);
 }
+
+// ---- Qliphoth Counter is also Technician: Solemn Lament is 90 a hit, Butterfly Procession stays 120.
 {
-	// At full HP it fails (and is not used up).
-	const b = battle([funerfly()], [mon('Magikarp', ['Splash'], { level: 1 }), mon('Chansey', ['Night Shade', 'Splash'])]);
-	turn(b, 'move 1', 'move 1');
-	b.choose('p2', 'switch 2');
-	turn(b, 'move 3', 'move 2');
-	ok(!b.p1.active[0].m.lastRites, 'fails at full HP, and is still there to use');
+	const b = battle([funerfly()], [mon('Blastoise', ['Splash'])]);
+	const user = b.p1.active[0];
+	const foe = b.p2.active[0];
+	const runPower = (id) => {
+		const m = b.dex.getActiveMove(id);
+		const bp = m.basePowerCallback ? m.basePowerCallback.call(b, user, foe, m) : m.basePower;
+		return b.runEvent('BasePower', user, foe, m, bp, true);
+	};
+	ok(runPower('solemnlament') === 90, `Solemn Lament: 90 a hit (${runPower('solemnlament')})`);
+	ok(runPower('lastrites') === 75, `Last Rites at 50 is 75 with it (${runPower('lastrites')})`);
+	ok(runPower('butterflyprocession') === 120, 'Butterfly Procession: 120, untouched');
+	// The same move from a Pokemon without it hits softer.
+	const dmg = (ability) => {
+		let total = 0;
+		for (let seed = 1; seed <= 4; seed++) {
+			const t = new Battle({ formatid: 'gen9rpcollab', seed: [seed, seed, seed, seed] });
+			t.setPlayer('p1', { team: Teams.pack([funerfly({ moves: ['Solemn Lament'] })]) });
+			t.setPlayer('p2', { team: Teams.pack([mon('Blastoise', ['Splash'])]) });
+			t.choose('p1', 'team 1'); t.choose('p2', 'team 1');
+			if (!ability) t.p1.active[0].setAbility('Pressure', null, null, true);
+			const f = t.p2.active[0];
+			turn(t, 'move 1', 'move 1');
+			total += f.maxhp - f.hp;
+		}
+		return total;
+	};
+	const withIt = dmg(true);
+	const without = dmg(false);
+	ok(withIt > without * 1.35, `Technician shows in the damage (${withIt} vs ${without})`);
 }
 
 // ---- Full battles with random choices: nothing throws.

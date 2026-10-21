@@ -3611,6 +3611,15 @@
 						if (flags[flag]) out.modify(boost.flags[flag], boost.name + (boost.types ? ' (' + flag + ')' : ''));
 					}
 				}
+				// Last Rites (Funerfly, data/velvet/collab.js): Last Respects, 50 +50 per fainted ally.
+				var sigId = move && (move.id || window.toID(move.name || ''));
+				if (sigId === 'lastrites' && pokemon && pokemon.side && out && out.set) {
+					out.set(50 + 50 * Math.min(pokemon.side.faintCounter || 0, 100), 'fainted allies');
+				}
+				// Qliphoth Counter is also Technician: 1.5x on 60 power or less.
+				if (ability === 'qliphothcounter' && move && move.category !== 'Status' && out && out.modify && out.value && out.value <= 60) {
+					out.modify(1.5, 'Qliphoth Counter (Technician)');
+				}
 				/*
 				 * Super effective against the Pokemon in front of you: Expert Belt's 1.2x, and
 				 * Crown of Flame's own (its built-in belt), shown in the power (owner, 1 Oct 2026).

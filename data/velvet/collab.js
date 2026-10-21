@@ -21,9 +21,12 @@
  *                      a teammate faints beside it (doubles: in singles the teammate
  *                      that faints is the one out, never beside it). At 0 it breaches,
  *                      for good: Funerfly-Breach until it faints, switches included.
- *   Solemn Lament      Ghost, special, 40 x2, 100%. Bug as well, as Flying Press is Flying.
- *   Butterfly Procession  Bug, special, 60, 100%. Traps for 4 turns, 1/8 a turn.
- *   Last Rites         Ghost, status, once a battle: heals 1/4 per fainted Pokemon, both sides.
+ *                      Also Technician: moves of 60 power or less are 1.5x.
+ *   Solemn Lament      Ghost, special, 60 x2 (90 x2 with Technician), 100%. Each hit:
+ *                      20% to lower Sp. Def by 1.
+ *   Butterfly Procession  Bug, special, 120, 100%. Traps for 4 turns, 1/8 a turn.
+ *   Last Rites         Ghost, special Last Respects: 50 +50 for each fainted Pokemon on
+ *                      the user's side, 100%.
  */
 
 const ID = 'funerfly';
@@ -113,14 +116,24 @@ exports.abilities = (data) => {
 			if (move.hit > 1) return;
 			tick(this, target, 'struck by a super-effective move');
 		},
+		// Technician, as the original: 1.5x on a move of 60 power or less, after other power changes.
+		onBasePowerPriority: 30,
+		onBasePower(basePower, attacker, defender, move) {
+			const basePowerAfterMultiplier = this.modify(basePower, this.event.modifier);
+			this.debug(`Base Power: ${basePowerAfterMultiplier}`);
+			if (basePowerAfterMultiplier <= 60) {
+				this.debug('Qliphoth Counter: Technician boost');
+				return this.chainModify(1.5);
+			}
+		},
 		onAllyFaint(ally) {
 			const self = this.effectState.target;
 			if (ally === self || !self.hp || !self.isActive) return;
 			tick(this, self, `${ally.name} fainted`);
 		},
 		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1 },
-		shortDesc: 'Counter 2: -1 when hit super effectively or an ally faints. At 0, becomes Funerfly-Breach.',
-		desc: "Funerfly starts contained with a Qliphoth Counter of 2. The counter drops by 1 when a super-effective move hits it (once per move, however many hits), and by 1 when an ally faints while Funerfly is on the field. The counter is kept when it switches out. At 0 it breaches: it permanently becomes Funerfly-Breach (80/70/75/125/85/95) until it faints, switching included. This Ability can't be suppressed, copied, swapped or replaced.",
+		shortDesc: 'Technician. Counter 2: -1 when hit super effectively or an ally faints. At 0: Funerfly-Breach.',
+		desc: "This Pokemon's moves of 60 power or less have their power multiplied by 1.5, as Technician (this includes Struggle). Funerfly starts contained with a Qliphoth Counter of 2. The counter drops by 1 when a super-effective move hits it (once per move, however many hits), and by 1 when an ally faints while Funerfly is on the field. The counter is kept when it switches out. At 0 it breaches: it permanently becomes Funerfly-Breach (95/75/85/150/95/120) until it faints, switching included. This Ability can't be suppressed, copied, swapped or replaced.",
 	};
 	return data;
 };
@@ -130,31 +143,27 @@ exports.moves = (data) => {
 		num: -63,
 		gen: 9,
 		accuracy: 100,
-		basePower: 40,
+		basePower: 60,
 		category: 'Special',
 		name: 'Solemn Lament',
 		pp: 10,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
 		multihit: 2,
-		// Flying Press's rule: Bug's matchup on top of Ghost's.
-		onEffectiveness(typeMod, target, type) {
-			return typeMod + this.dex.getEffectiveness('Bug', type);
-		},
-		secondary: null,
+		secondary: { chance: 20, boosts: { spd: -1 } },
 		target: 'normal',
 		type: 'Ghost',
-		shortDesc: 'Hits 2 times. Combines Bug in its type effectiveness. Funerfly.',
-		desc: "Hits twice. This move combines Bug in its type effectiveness against the target, as Flying Press combines Flying: it is Ghost and Bug at once against each of the target's types. If the first hit breaks the target's substitute, it will take damage for the second hit. Funerfly's signature move.",
+		shortDesc: "Hits 2 times. Each hit: 20% chance to lower the target's Sp. Def by 1. Funerfly.",
+		desc: "Hits twice. Each hit has a 20% chance to lower the target's Special Defense by 1 stage. If the first hit breaks the target's substitute, it will take damage for the second hit. Funerfly's signature move.",
 	};
 	data.butterflyprocession = {
 		num: -64,
 		gen: 9,
 		accuracy: 100,
-		basePower: 60,
+		basePower: 120,
 		category: 'Special',
 		name: 'Butterfly Procession',
-		pp: 15,
+		pp: 8,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
 		// Infestation's binding, held to four turns whatever the user holds.
@@ -167,31 +176,25 @@ exports.moves = (data) => {
 		shortDesc: 'Traps and damages the target for 4 turns. Funerfly.',
 		desc: "Prevents the target from switching for four turns and causes damage to the target equal to 1/8 of its maximum HP (1/6 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The effect ends early if the user leaves the field or uses Rapid Spin or Mortal Spin successfully. Grip Claw does not lengthen it. Funerfly's signature move.",
 	};
+	// Last Respects, special: 50 power +50 for each fainted Pokemon on the user's side (counted to 100, as the original).
 	data.lastrites = {
 		num: -65,
 		gen: 9,
-		accuracy: true,
-		basePower: 0,
-		category: 'Status',
+		accuracy: 100,
+		basePower: 50,
+		basePowerCallback(pokemon, target, move) {
+			return 50 + 50 * pokemon.side.totalFainted;
+		},
+		category: 'Special',
 		name: 'Last Rites',
-		pp: 5,
+		pp: 10,
 		priority: 0,
-		flags: { snatch: 1, heal: 1, metronome: 1 },
-		onTry(source) {
-			const fallen = this.sides.reduce((n, side) => n + side.pokemon.filter(p => p.fainted).length, 0);
-			if (source.m.lastRites || !fallen || source.hp >= source.maxhp) return false;
-		},
-		onHit(pokemon) {
-			const fallen = this.sides.reduce((n, side) => n + side.pokemon.filter(p => p.fainted).length, 0);
-			if (!this.heal(Math.floor(pokemon.baseMaxhp / 4) * fallen, pokemon, pokemon)) return this.NOT_FAIL;
-			// Once a battle: marked on the Pokemon, so a switch does not reset it.
-			pokemon.m.lastRites = true;
-		},
+		flags: { protect: 1, mirror: 1, metronome: 1 },
 		secondary: null,
-		target: 'self',
+		target: 'normal',
 		type: 'Ghost',
-		shortDesc: 'Heals 1/4 max HP per fainted Pokemon (both sides). Once per battle. Funerfly.',
-		desc: "The user restores 1/4 of its maximum HP, rounded down, for each Pokemon on either side that has fainted. Fails if no Pokemon has fainted, if the user is at full HP, or if this Pokemon has already used it successfully this battle. Funerfly's signature move.",
+		shortDesc: '+50 power for each time a party member fainted. Funerfly.',
+		desc: "Power is equal to 50+(X*50), where X is the total number of times any Pokemon has fainted on the user's side, and X cannot be greater than 100. Funerfly's signature move.",
 	};
 	return data;
 };
