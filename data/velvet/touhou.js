@@ -267,7 +267,7 @@ const THEMATIC = {
 	cirno: ['freezedry', 'iceshard', 'iciclecrash', 'tripleaxel', 'icespinner', 'auroraveil', 'frostbreath', 'chillingmist', 'rimecleaver', 'uturn', 'mist'],
 	// The gatekeeper martial artist, rainbow qi, asleep on duty (owner: Belly Drum, "hi meiling").
 	// RISK: Belly Drum with Mach Punch; no Extreme Speed on top, which would be Azumarill with a Dragon STAB.
-	hongmeiling: ['bellydrum', 'bulkup', 'dragondance', 'machpunch', 'drainpunch', 'firepunch', 'icepunch', 'thunderpunch', 'highjumpkick', 'blazekick', 'cloudfist', 'dancingblow', 'shufflejab', 'focuspunch', 'rapidspin'],
+	hongmeiling: ['bellydrum', 'swordsdance', 'bulkup', 'dragondance', 'machpunch', 'drainpunch', 'firepunch', 'icepunch', 'thunderpunch', 'highjumpkick', 'blazekick', 'cloudfist', 'dancingblow', 'shufflejab', 'focuspunch', 'rapidspin'],
 	// The library's little devil: tricks, Prankster mischief, bat wings.
 	koakuma: ['nastyplot', 'encore', 'partingshot', 'memento', 'trick', 'faketears', 'flatter', 'willowisp', 'hex', 'dazzlinggleam', 'airslash', 'psychic'],
 	// The magician of five elements and sun and moon (owner: all five, special, Calm Mind).
