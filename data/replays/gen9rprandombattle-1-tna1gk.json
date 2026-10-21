@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-1-tna1gk",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Normal",
+		"marmoudcouscous"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Normal\n|j|☆marmoudcouscous\n|t:|1792619887\n|gametype|singles\n|player|p1|Bunny Normal|bunny.png|1247\n|player|p2|marmoudcouscous|2|1000\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1792619888\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Gastrodon|Gastrodon, L86, F|100/100\n|switch|p2a: Ariados|Ariados, L95, M|100/100\n|turn|1\n|c|☆Bunny Normal|Good luck! Playing on **normal**.\n|\n|t:|1792619910\n|switch|p2a: Okidogi|Okidogi, L77, M|100/100\n|move|p1a: Gastrodon|Tremor Shot|p2a: Okidogi\n|-supereffective|p2a: Okidogi\n|-damage|p2a: Okidogi|73/100\n|\n|upkeep\n|turn|2\n|\n|t:|1792619922\n|move|p2a: Okidogi|Dancing Blow||[still]\n|-anim|p2a: Okidogi|Quiver Dance|p1a: Gastrodon\n|-anim|p2a: Okidogi|Mach Punch|p1a: Gastrodon\n|-damage|p1a: Gastrodon|68/100\n|-status|p1a: Gastrodon|tox|[from] ability: Toxic Chain|[of] p2a: Okidogi\n|move|p1a: Gastrodon|Ice Beam|p2a: Okidogi\n|-damage|p2a: Okidogi|56/100\n|\n|-heal|p1a: Gastrodon|74/100 tox|[from] item: Leftovers\n|-damage|p1a: Gastrodon|68/100 tox|[from] psn\n|upkeep\n|turn|3\n|\n|t:|1792619936\n|-terastallize|p1a: Gastrodon|Poison\n|move|p1a: Gastrodon|Tremor Shot|p2a: Okidogi\n|-supereffective|p2a: Okidogi\n|-damage|p2a: Okidogi|33/100\n|move|p2a: Okidogi|Knock Off|p1a: Gastrodon\n|-damage|p1a: Gastrodon|44/100 tox\n|-enditem|p1a: Gastrodon|Leftovers|[from] move: Knock Off|[of] p2a: Okidogi\n|\n|-damage|p1a: Gastrodon|32/100 tox|[from] psn\n|upkeep\n|turn|4\n|\n|t:|1792619948\n|switch|p2a: Archaludon|Archaludon, L78, M|100/100\n|move|p1a: Gastrodon|Tremor Shot|p2a: Archaludon\n|-supereffective|p2a: Archaludon\n|-damage|p2a: Archaludon|58/100\n|-ability|p2a: Archaludon|Stamina|boost\n|-boost|p2a: Archaludon|def|1\n|\n|-damage|p1a: Gastrodon|14/100 tox|[from] psn\n|upkeep\n|turn|5\n|\n|t:|1792619960\n|switch|p1a: Kingambit|Kingambit, L74, F|100/100\n|move|p2a: Archaludon|Swords Dance|p2a: Archaludon\n|-boost|p2a: Archaludon|atk|2\n|\n|upkeep\n|turn|6\n",
+	"inputlog": null,
+	"uploadtime": 1792619963
+}
