@@ -83,16 +83,27 @@ const LEGENDS = [
 	'ariyaiwanaga',        // Iwanaga-hime, goddess of stone and long life
 ];
 
+/**
+ * Typings the owner changed from the mod's (21 Oct 2026). The move tables read these too, so a
+ * new type brings its kit with it.
+ */
+const TYPES = {
+	// A fairy with wings.
+	daiyousei: ['Fairy', 'Flying'],
+	// The Master Spark: a lightning-hot beam from her hakkero.
+	marisakirisame: ['Electric', 'Fire'],
+};
+const typesOf = id => TYPES[id] || DATA.species[id].types;
+
 exports.pokedex = (data) => {
 	for (const [id, s] of Object.entries(DATA.species)) {
 		data[id] = clone(s);
+		if (TYPES[id]) data[id].types = TYPES[id];
 		const base = String(s.baseSpecies || s.name).toLowerCase().replace(/[^a-z0-9]/g, '');
 		if (LEGENDS.includes(base) && !(data[id].tags || []).includes('Sub-Legendary')) data[id].tags = [...(data[id].tags || []), 'Sub-Legendary'];
 		// The Summer Backdoor's forme (see the items below): the validator's message for
 		// a Cirno-Tanned without one names the Pokemon it changes from.
 		if (id === 'cirnotanned') data[id].changesFrom = 'Cirno';
-		// Daiyousei is a fairy with wings: Fairy/Flying (the owner, 21 Oct 2026).
-		if (id === 'daiyousei') data[id].types = ['Fairy', 'Flying'];
 	}
 	return data;
 };
@@ -113,6 +124,7 @@ const OWNERS = (() => {
 	out.fatescall = new Set(['remiliascarlet']);
 	out.forbiddenbarrage = new Set(['flandrescarlet']);
 	out.wickedenergy = new Set(['kasenibaraki']);
+	out.masterspark = new Set(['marisakirisame']);
 	return out;
 })();
 
@@ -126,6 +138,9 @@ exports.learnsets = (data) => {
 	if (data.flandrescarlet) data.flandrescarlet.learnset.forbiddenbarrage = ['9L1'];
 	// Wicked Energy is the move behind Kasen's Wicked Power: hers to use directly too.
 	if (data.kasenibaraki) data.kasenibaraki.learnset.wickedenergy = ['9L1'];
+	if (data.marisakirisame) data.marisakirisame.learnset.masterspark = ['9L1'];
+	// Tanned Cirno brings her own summer (Drought): a fire move for each side of her 139/139.
+	if (data.cirnotanned) for (const move of ['flamethrower', 'heatwave', 'firepunch']) data.cirnotanned.learnset[move] = data.cirnotanned.learnset[move] || ['9M'];
 	// Full movepools (the owner, 21 Oct 2026): the classic machines, their types' kits and
 	// their own canon, as machines ('9M'). See UNIVERSAL, TYPE_TMS and THEMATIC below.
 	for (const id of Object.keys(DATA.learnsets)) {
@@ -587,7 +602,7 @@ function grantsFor(id) {
 	const species = DATA.species[id];
 	if (!species) return [];
 	const base = FORME_OF[id];
-	const types = new Set([...species.types, ...(base ? DATA.species[base].types : [])]);
+	const types = new Set([...typesOf(id), ...(base ? typesOf(base) : [])]);
 	const { physical, special } = sides(species);
 	const out = new Set(UNIVERSAL);
 	for (const type of types) {
@@ -922,6 +937,26 @@ const MOVES = {
 		secondary: null, target: 'normal', type: 'Dark',
 		shortDesc: "Can't miss. Hits through protection. Remilia's signature.",
 		desc: "Does not check accuracy, so evasion and accuracy changes do not matter. Hits a target using Protect, Detect, King's Shield, Spiky Shield, Baneful Bunker, Silk Trap, Burning Bulwark, Obstruct or Max Guard without ending the protection or suffering its effects. Remilia Scarlet's signature move.",
+	},
+	masterspark: {
+		num: -260, accuracy: 100, basePower: 120, category: 'Special', name: 'Master Spark', pp: 8, noPPBoosts: true, priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		onPrepareHit: anim('Hyper Beam'),
+		// Light and heat from the hakkero: whichever of Electric and Fire hits harder.
+		onModifyMove(move, pokemon, target) {
+			if (!target) return;
+			const score = type => this.dex.getImmunity(type, target) ? this.dex.getEffectiveness(type, target) : -9;
+			move.type = score('Fire') > score('Electric') ? 'Fire' : 'Electric';
+		},
+		secondary: {
+			chance: 20,
+			onHit(target, source) {
+				target.trySetStatus(this.random(2) ? 'brn' : 'par', source);
+			},
+		},
+		target: 'normal', type: 'Electric',
+		shortDesc: "Electric or Fire, whichever is more effective. 20% to burn or paralyze. Marisa's signature.",
+		desc: "This move is Electric or Fire, whichever is more effective against the target; Electric if they are equal. Has a 20% chance to either burn or paralyze the target. Marisa Kirisame's signature move.",
 	},
 	invokeishikoridome: {
 		num: -221, accuracy: 100, basePower: 0, category: 'Status', name: 'Invoke Ishikori-Dome', pp: 10, priority: 0,
