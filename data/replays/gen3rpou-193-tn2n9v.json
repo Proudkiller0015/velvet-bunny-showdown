@@ -1,0 +1,12 @@
+{
+	"id": "gen3rpou-193-tn2n9v",
+	"format": "[Gen 3] RP OU",
+	"players": [
+		"Bunny Hard",
+		"UHOH Double Switch"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Hard\n|j|☆UHOH Double Switch\n|t:|1792562236\n|gametype|singles\n|badge|p2|gold|gen3rpou|1-1\n|player|p1|Bunny Hard|bunny.png|1283\n|player|p2|UHOH Double Switch|169|1495\n|gen|3\n|tier|[Gen 3] RP OU\n|rated|\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Beat Up Nicknames Mod: Beat Up will not reveal any party members\n|rule|Endless Battle Clause: Forcing endless battles is banned\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Switch Priority Clause Mod: Faster Pokémon switch first\n|rule|Species Clause: Limit one of each Pokémon\n|rule|OHKO Clause: OHKO moves are banned\n|rule|Evasion Items Clause: Evasion items are banned\n|rule|Evasion Moves Clause: Evasion moves are banned\n|rule|One Boost Passer Clause: Limit one Baton Passer that has a way to boost its stats\n|rule|Freeze Clause Mod: Limit one foe frozen\n|rule|Baton Pass Stat Clause: No Baton Passer may have a way to boost its Speed\n|\n|t:|1792562236\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Claydol|Claydol|100/100\n|switch|p2a: Skarmory|Skarmory, F|100/100\n|turn|1\n|c|☆Bunny Hard|Good luck! Playing on **hard**.\n|\n|t:|1792562241\n|move|p1a: Claydol|Double-Edge|p2a: Skarmory\n|-resisted|p2a: Skarmory\n|-damage|p2a: Skarmory|90/100\n|-damage|p1a: Claydol|97/100|[from] Recoil\n|move|p2a: Skarmory|Toxic|p1a: Claydol\n|-status|p1a: Claydol|tox\n|\n|-heal|p1a: Claydol|100/100 tox|[from] item: Leftovers\n|-damage|p1a: Claydol|94/100 tox|[from] psn\n|-heal|p2a: Skarmory|96/100|[from] item: Leftovers\n|upkeep\n|turn|2\n|\n|t:|1792562252\n|switch|p1a: Jirachi|Jirachi|100/100\n|move|p2a: Skarmory|Spikes|p1a: Jirachi\n|-sidestart|p1: Bunny Hard|Spikes\n|\n|-heal|p2a: Skarmory|100/100|[from] item: Leftovers\n|upkeep\n|turn|3\n|\n|t:|1792562264\n|switch|p2a: Swampert|Swampert, F|100/100\n|move|p1a: Jirachi|Calm Mind|p1a: Jirachi\n|-boost|p1a: Jirachi|spa|1\n|-boost|p1a: Jirachi|spd|1\n|\n|upkeep\n|turn|4\n|\n|t:|1792562270\n|move|p1a: Jirachi|Calm Mind|p1a: Jirachi\n|-boost|p1a: Jirachi|spa|1\n|-boost|p1a: Jirachi|spd|1\n|move|p2a: Swampert|Earthquake|p1a: Jirachi\n|-supereffective|p1a: Jirachi\n|-damage|p1a: Jirachi|30/100\n|\n|-heal|p1a: Jirachi|36/100|[from] item: Leftovers\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1792562277
+}
