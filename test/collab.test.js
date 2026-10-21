@@ -83,7 +83,7 @@ ok(require('../src/rp-tiers.json').funerfly === 'Collab', 'src/rp-tiers.json fil
 	ok(p.m.qliphoth === 0 && p.species.id === 'funerflybreach' && p.baseSpecies.id === 'funerflybreach', `second hit: breached (${p.species.name})`);
 	ok(logSince(b, from).includes('The funeral procession begins.'), 'it says so');
 	const bs = p.species.baseStats;
-	ok(bs.hp === 80 && bs.atk === 70 && bs.def === 75 && bs.spa === 125 && bs.spd === 85 && bs.spe === 95, 'with the breach stats');
+	ok(bs.hp === 95 && bs.atk === 75 && bs.def === 85 && bs.spa === 150 && bs.spd === 95 && bs.spe === 120, 'with the breach stats');
 	ok(p.storedStats.spa > b.dex.species.get('Funerfly').baseStats.spa * 2 + 100, `stats recalculated (SpA ${p.storedStats.spa})`);
 	turn(b, 'switch 2', 'move 2');
 	turn(b, 'switch 2', 'move 2');

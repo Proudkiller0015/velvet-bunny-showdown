@@ -2268,7 +2268,7 @@ class TeamBuilder {
 	}
 
 	/**
-	 * RP Collab exists for its collab Pokemon, and a 470-stat Funerfly drawn by strength
+	 * RP Collab exists for its collab Pokemon, and a 570-stat Funerfly drawn by strength
 	 * against the AG pool almost never made the six: a team there brings one, in place
 	 * of another member, whenever the team stays legal with it.
 	 */

@@ -14,8 +14,8 @@
  * Butterflies" (T-01-68, HE risk). A humanoid in a suit with a coffin full of
  * butterflies, whose harm is to the mind - WHITE damage - so its attacks are special.
  *
- *   Funerfly          Bug/Ghost   80 / 60 / 90 / 85 / 95 / 60    470   contained
- *   Funerfly-Breach   Bug/Ghost   80 / 70 / 75 / 125 / 85 / 95   530   breached
+ *   Funerfly          Bug/Ghost   95 / 65 / 100 / 115 / 110 / 85   570   contained
+ *   Funerfly-Breach   Bug/Ghost   95 / 75 / 85 / 150 / 95 / 120    620   breached
  *
  *   Qliphoth Counter   starts at 2; -1 when a super-effective move hits it, -1 when
  *                      a teammate faints beside it (doubles: in singles the teammate
@@ -51,7 +51,7 @@ exports.pokedex = (data) => {
 	data[ID] = {
 		...common,
 		name: 'Funerfly',
-		baseStats: { hp: 80, atk: 60, def: 90, spa: 85, spd: 95, spe: 60 },
+		baseStats: { hp: 95, atk: 65, def: 100, spa: 115, spd: 110, spe: 85 },
 		otherFormes: ['Funerfly-Breach'],
 		formeOrder: ['Funerfly', 'Funerfly-Breach'],
 	};
@@ -60,7 +60,7 @@ exports.pokedex = (data) => {
 		name: 'Funerfly-Breach',
 		baseSpecies: 'Funerfly',
 		forme: 'Breach',
-		baseStats: { hp: 80, atk: 70, def: 75, spa: 125, spd: 85, spe: 95 },
+		baseStats: { hp: 95, atk: 75, def: 85, spa: 150, spd: 95, spe: 120 },
 		requiredAbility: ABILITY,
 		battleOnly: 'Funerfly',
 	};

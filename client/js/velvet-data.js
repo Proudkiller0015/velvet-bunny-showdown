@@ -1358,11 +1358,12 @@
 			 * the viability ranking coaches prep with (the owner, 12 Oct 2026).
 			 */
 			/*
-			 * Collab Pokemon (data/velvet/collab.js) are in no tier list at all, so every RP
-			 * format shows them under "Illegal results"; RP Collab lists them first, under a
-			 * Collab heading above AG, which also makes them legal in its search.
+			 * Collab Pokemon (data/velvet/collab.js) are in no tier list at all, so the RP
+			 * tiers show them under "Illegal results"; RP Collab and the RP Battle formats,
+			 * which take them, list them first under a Collab heading, which also makes them
+			 * legal in their search.
 			 */
-			if (typed && searchType === 'pokemon' && asked === 'gen9rpcollab') {
+			if (typed && searchType === 'pokemon' && /^gen9rp(collab|battle|raid)/.test(asked)) {
 				var ownBase = typed.getBaseResults;
 				typed.getBaseResults = function () {
 					return collabRows().concat(ownBase.apply(this, arguments));
