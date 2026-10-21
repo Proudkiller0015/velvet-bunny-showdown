@@ -129,6 +129,24 @@ function unnerfBattleBond(ability) {
 }
 
 /**
+ * Transistor, back to 1.5x.
+ *
+ * Scarlet and Violet's DLC cut it from 1.5x to 1.3x Electric power, with Regieleki the only
+ * reason given. The Generation 8 number is the one restored here, for everyone who has it.
+ */
+function unnerfTransistor(ability) {
+	if (!ability) return;
+	ability.onModifyAtk = function (atk, attacker, defender, move) {
+		if (move.type === 'Electric') return this.chainModify(1.5);
+	};
+	ability.onModifySpA = function (atk, attacker, defender, move) {
+		if (move.type === 'Electric') return this.chainModify(1.5);
+	};
+	ability.shortDesc = "This Pokemon's offensive stat is multiplied by 1.5 while using an Electric-type attack.";
+	ability.desc = "This Pokemon's offensive stat is multiplied by 1.5 while using an Electric-type attack.";
+}
+
+/**
  * Normalize, made worth the slot (the owner's call).
  *
  * Every move turns Normal, which on its own is a downgrade: Ghosts are immune
@@ -165,6 +183,7 @@ function unnerfAbilities(Abilities) {
 	unnerfProtean(Abilities.protean, 'Protean');
 	unnerfProtean(Abilities.libero, 'Libero');
 	unnerfBattleBond(Abilities.battlebond);
+	unnerfTransistor(Abilities.transistor);
 	return Abilities;
 }
 
@@ -253,7 +272,7 @@ function unnerfSpecies(Pokedex) {
 
 exports.CHANGED = {
 	moves: ['darkvoid', ...Object.keys(RECOVERY_PP)],
-	abilities: ['protean', 'libero', 'battlebond', 'normalize'],
+	abilities: ['protean', 'libero', 'battlebond', 'normalize', 'transistor'],
 	species: [...new Set([...Object.keys(SPECIES_STATS), ...Object.keys(SPECIES_TYPES), ...Object.keys(SPECIES_ABILITIES)])],
 };
 exports.unnerfSpecies = unnerfSpecies;
