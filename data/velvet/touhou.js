@@ -91,6 +91,8 @@ exports.pokedex = (data) => {
 		// The Summer Backdoor's forme (see the items below): the validator's message for
 		// a Cirno-Tanned without one names the Pokemon it changes from.
 		if (id === 'cirnotanned') data[id].changesFrom = 'Cirno';
+		// Daiyousei is a fairy with wings: Fairy/Flying (the owner, 21 Oct 2026).
+		if (id === 'daiyousei') data[id].types = ['Fairy', 'Flying'];
 	}
 	return data;
 };
@@ -102,6 +104,18 @@ exports.formatsData = (data) => {
 	return data;
 };
 
+/** Who learns each Touhou move: its owners in the mod, plus the two signatures added here. */
+const OWNERS = (() => {
+	const out = {};
+	for (const [id, entry] of Object.entries(DATA.learnsets)) {
+		for (const move of Object.keys(entry.learnset || entry)) (out[move] = out[move] || new Set()).add(id);
+	}
+	out.fatescall = new Set(['remiliascarlet']);
+	out.forbiddenbarrage = new Set(['flandrescarlet']);
+	out.wickedenergy = new Set(['kasenibaraki']);
+	return out;
+})();
+
 exports.learnsets = (data) => {
 	for (const [id, learnset] of Object.entries(DATA.learnsets)) data[id] = { learnset: clone(learnset) };
 	// Fate's Call (ours, not the mod's): Remilia's alone, from level 1.
@@ -110,12 +124,22 @@ exports.learnsets = (data) => {
 	// and Zanmu Nippaku; they no longer learn it.
 	for (const id of Object.keys(DATA.learnsets)) if (id !== 'flandrescarlet' && data[id]) delete data[id].learnset.forbiddenbarrage;
 	if (data.flandrescarlet) data.flandrescarlet.learnset.forbiddenbarrage = ['9L1'];
+	// Wicked Energy is the move behind Kasen's Wicked Power: hers to use directly too.
+	if (data.kasenibaraki) data.kasenibaraki.learnset.wickedenergy = ['9L1'];
 	// Full movepools (the owner, 21 Oct 2026): the classic machines, their types' kits and
 	// their own canon, as machines ('9M'). See UNIVERSAL, TYPE_TMS and THEMATIC below.
 	for (const id of Object.keys(DATA.learnsets)) {
 		if (!data[id]) continue;
 		const learnset = data[id].learnset;
 		for (const move of grantsFor(id)) if (!learnset[move]) learnset[move] = ['9M'];
+	}
+	// The Touhou moves stay with the characters they belong to: whoever learns them in the mod,
+	// Remilia's Fate's Call, and Kasen's Wicked Energy (her Wicked Power's move).
+	for (const [id, entry] of Object.entries(data)) {
+		if (!entry || !entry.learnset) continue;
+		for (const move of Object.keys(MOVES)) {
+			if (entry.learnset[move] && !(OWNERS[move] || new Set()).has(id)) delete entry.learnset[move];
+		}
 	}
 	return data;
 };
@@ -1050,6 +1074,13 @@ const TMS = {
 	// Yorihime's alone: it hands out Magic Bounce, which no TM should.
 	invokeishikoridome: null,
 };
+/*
+ * Every one of these moves is a character's own in the mod (Sculpted Armor is Keiki's, Silver
+ * Dagger Sakuya's, Missile VIVIT's...), so none is a machine (the owner, 21 Oct 2026: "all
+ * awakened moves taken from touhou signature taken away"). The rules above stay as a record of
+ * how each was handed out, but nothing is distributed: OWNERS below decides who learns them.
+ */
+for (const id of Object.keys(TMS)) TMS[id] = null;
 // Mew learns every machine move, as with the shared moves in balance-patch-1.js.
 for (const rule of Object.values(TMS)) if (rule) rule.also = [...(rule.also || []), 'mew'];
 

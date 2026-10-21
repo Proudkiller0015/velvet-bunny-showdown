@@ -266,22 +266,21 @@ const turn = (b, p1, p2) => { b.choose('p1', p1); b.choose('p2', p2); };
 	ok(learners.includes('flandrescarlet') && learners.every(id => ['flandrescarlet', 'samantha'].includes(id)), `Forbidden Barrage: Flandre's alone (${learners})`);
 }
 {
-	// The mod's moves as machines (touhou.js TMS): regular Pokemon and guests learn them,
-	// legally, and the excluded ones do not.
-	const learns = (id, move) => !problems('gen9rptouhou', [{ ...setFor(id), moves: [move] }]).length;
-	ok(learns('metagross', 'Missile') && learns('beldum', 'Missile'), 'Missile: Metagross and Beldum learn it');
-	ok(!learns('kingambit', 'Missile'), 'Missile: not Kingambit');
-	ok(learns('reimuhakurei', 'Dream Seal') && !learns('xatu', 'Dream Seal') && !learns('alakazam', 'Dream Seal'), "Dream Seal: Reimu's alone");
-	// A character's spell card is that character's alone (the owner, 21 Oct 2026).
-	for (const [move, own] of [['bodyswap', ['hecatia', 'hecatiaearth', 'hecatiamoon']], ['shikigamirush', ['yukariyakumo']], ['stonestacking', ['eikaebisu']],
-		['invokeamaterasu', ['watatsukinoyorihime']], ['invokehonoikazuchi', ['watatsukinoyorihime']], ['dreamseal', ['reimuhakurei']]]) {
+	// Every one of the mod's moves is a character's own (the owner, 21 Oct 2026): only its owners
+	// learn it (plus Samantha, Mew and Smeargle, who learn everything), and none is a shared move.
+	const owners = {
+		dreamseal: ['reimuhakurei'], silverdagger: ['sakuyaizayoi'], forbiddenbarrage: ['flandrescarlet'], shikigamirush: ['yukariyakumo'],
+		lunaticbullet: ['reiseninaba', 'seiran'], superscope3d: ['nitorikawashiro'], cloudfist: ['ichirinkumoi', 'ichirinkumoiunzan'],
+		bodyswap: ['hecatia', 'hecatiaearth', 'hecatiamoon'], sculptedarmor: ['keikihaniyasushin'], missile: ['vivit'],
+		wickedenergy: ['kasenibaraki'], fatescall: ['remiliascarlet'],
+	};
+	for (const move of touhou.MOVE_IDS) {
 		const learners = dex.species.all().filter(s => (dex.species.getLearnsetData(s.id).learnset || {})[move]).map(s => s.id).filter(id => !['samantha', 'mew', 'smeargle'].includes(id));
-		ok(learners.length && learners.every(id => own.includes(id)), `${move}: ${own[0]}'s alone (${learners})`);
+		ok(learners.length && (!owners[move] || learners.every(id => owners[move].includes(id))), `${move}: only its owners learn it (${learners})`);
 		ok(!dex.moves.get(move).velvetShared, `${move}: not a shared move, so the builder files it as a signature`);
 	}
-	ok(learns('regice', 'Sculpted Armor'), 'Sculpted Armor reaches Regice past its hand-written buff');
-	ok(learns('cirno', 'Wicked Energy') === dex.species.get('cirno').types.includes('Dark'), 'Wicked Energy follows type on the guests too');
-	ok(!learns('reimuhakurei', 'Invoke Ishikori-Dome'), 'Invoke Ishikori-Dome stays Yorihime\'s');
+	const learns = (id, move) => !problems('gen9rptouhou', [{ ...setFor(id), moves: [move] }]).length;
+	ok(!learns('metagross', 'Missile') && !learns('regice', 'Sculpted Armor') && !learns('remiliascarlet', 'Cloud Fist'), 'no regular Pokemon or other Boneka keeps one');
 }
 {
 	// Full movepools (touhou.js UNIVERSAL, TYPE_TMS, THEMATIC; the owner, 21 Oct 2026).
@@ -305,7 +304,8 @@ const turn = (b, p1, p2) => { b.choose('p1', p1); b.choose('p2', p2); };
 	const ours = new Set(dex.moves.all().filter(m => m.num < 0 && !m.velvetShared).map(m => m.id));
 	const tables = [...touhou.UNIVERSAL.filter(m => m !== 'confide'), ...Object.values(touhou.TYPE_TMS).flatMap(k => [...k.status, ...k.physical, ...k.special]),
 		...Object.values(touhou.THEMATIC).flat()];
-	for (const id of new Set(tables)) {
+	// The tables still name a few of the mod's moves; the learnsets hook keeps those with their owners.
+	for (const id of new Set(tables.filter(m => !touhou.MOVE_IDS.includes(m)))) {
 		const m = dex.moves.get(id);
 		ok(m.exists && m.id === id && !m.isZ && !m.isMax && (!m.isNonstandard || m.isNonstandard === 'Past'), `${id}: a real, legal move`);
 		ok(!signatures.has(id) && !ours.has(id), `${id}: nobody's signature`);

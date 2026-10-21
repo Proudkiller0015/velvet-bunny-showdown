@@ -14,22 +14,19 @@ window.VelvetBuffs = {
 	bySpecies: {
 		"squirtle": {
 			"moves": [
-				"wavecharge",
-				"missile"
+				"wavecharge"
 			],
 			"abilities": []
 		},
 		"wartortle": {
 			"moves": [
-				"wavecharge",
-				"missile"
+				"wavecharge"
 			],
 			"abilities": []
 		},
 		"blastoise": {
 			"moves": [
-				"wavecharge",
-				"missile"
+				"wavecharge"
 			],
 			"abilities": []
 		},
@@ -50,10 +47,6 @@ window.VelvetBuffs = {
 		"poliwag": {
 			"moves": [
 				"wavecharge",
-				"superscope3d",
-				"cloudfist",
-				"waterplates",
-				"dancingblow",
 				"undertow",
 				"shufflejab"
 			],
@@ -62,10 +55,6 @@ window.VelvetBuffs = {
 		"poliwhirl": {
 			"moves": [
 				"wavecharge",
-				"superscope3d",
-				"cloudfist",
-				"waterplates",
-				"dancingblow",
 				"undertow",
 				"shufflejab"
 			],
@@ -74,10 +63,6 @@ window.VelvetBuffs = {
 		"poliwrath": {
 			"moves": [
 				"wavecharge",
-				"superscope3d",
-				"cloudfist",
-				"waterplates",
-				"dancingblow",
 				"shufflejab"
 			],
 			"abilities": []
@@ -85,7 +70,6 @@ window.VelvetBuffs = {
 		"tentacool": {
 			"moves": [
 				"wavecharge",
-				"nervepoison",
 				"undertow",
 				"chillingmist",
 				"oxidize"
@@ -95,7 +79,6 @@ window.VelvetBuffs = {
 		"tentacruel": {
 			"moves": [
 				"wavecharge",
-				"nervepoison",
 				"undertow",
 				"chillingmist",
 				"oxidize"
@@ -105,9 +88,6 @@ window.VelvetBuffs = {
 		"slowpoke": {
 			"moves": [
 				"wavecharge",
-				"lunaticbullet",
-				"superscope3d",
-				"waterplates",
 				"penance",
 				"velvetpress"
 			],
@@ -124,7 +104,6 @@ window.VelvetBuffs = {
 		"slowbro": {
 			"moves": [
 				"wavecharge",
-				"lunaticbullet",
 				"penance"
 			],
 			"abilities": []
@@ -132,8 +111,6 @@ window.VelvetBuffs = {
 		"seel": {
 			"moves": [
 				"wavecharge",
-				"superscope3d",
-				"waterplates",
 				"undertow",
 				"chillingmist"
 			],
@@ -142,8 +119,6 @@ window.VelvetBuffs = {
 		"dewgong": {
 			"moves": [
 				"wavecharge",
-				"superscope3d",
-				"waterplates",
 				"undertow",
 				"scald",
 				"chillingmist",
@@ -159,40 +134,31 @@ window.VelvetBuffs = {
 		"shellder": {
 			"moves": [
 				"wavecharge",
-				"superscope3d",
-				"waterplates",
 				"chillingmist"
 			],
 			"abilities": []
 		},
 		"cloyster": {
 			"moves": [
-				"wavecharge",
-				"superscope3d",
-				"waterplates"
+				"wavecharge"
 			],
 			"abilities": []
 		},
 		"krabby": {
 			"moves": [
-				"wavecharge",
-				"superscope3d",
-				"waterplates"
+				"wavecharge"
 			],
 			"abilities": []
 		},
 		"kingler": {
 			"moves": [
-				"wavecharge",
-				"superscope3d",
-				"waterplates"
+				"wavecharge"
 			],
 			"abilities": []
 		},
 		"horsea": {
 			"moves": [
 				"wavecharge",
-				"superscope3d",
 				"undertow",
 				"chillingmist"
 			],
@@ -201,7 +167,6 @@ window.VelvetBuffs = {
 		"seadra": {
 			"moves": [
 				"wavecharge",
-				"superscope3d",
 				"undertow",
 				"chillingmist"
 			],
@@ -210,8 +175,6 @@ window.VelvetBuffs = {
 		"goldeen": {
 			"moves": [
 				"wavecharge",
-				"superscope3d",
-				"waterplates",
 				"undertow"
 			],
 			"abilities": []
@@ -219,8 +182,6 @@ window.VelvetBuffs = {
 		"seaking": {
 			"moves": [
 				"wavecharge",
-				"superscope3d",
-				"waterplates",
 				"undertow",
 				"wavecrash",
 				"hornleech"
@@ -230,7 +191,6 @@ window.VelvetBuffs = {
 		"staryu": {
 			"moves": [
 				"wavecharge",
-				"lunaticbullet",
 				"penance"
 			],
 			"abilities": []
@@ -238,43 +198,31 @@ window.VelvetBuffs = {
 		"starmie": {
 			"moves": [
 				"wavecharge",
-				"lunaticbullet",
 				"penance"
 			],
 			"abilities": []
 		},
 		"taurospaldeaaqua": {
 			"moves": [
-				"wavecharge",
-				"superscope3d",
-				"waterplates",
-				"dancingblow"
+				"wavecharge"
 			],
 			"abilities": []
 		},
 		"magikarp": {
 			"moves": [
-				"wavecharge",
-				"superscope3d",
-				"cloudfist",
-				"waterplates"
+				"wavecharge"
 			],
 			"abilities": []
 		},
 		"gyarados": {
 			"moves": [
-				"wavecharge",
-				"superscope3d",
-				"cloudfist",
-				"waterplates"
+				"wavecharge"
 			],
 			"abilities": []
 		},
 		"lapras": {
 			"moves": [
 				"wavecharge",
-				"superscope3d",
-				"waterplates",
 				"undertow",
 				"chillingmist",
 				"penance",
@@ -306,26 +254,19 @@ window.VelvetBuffs = {
 		},
 		"omanyte": {
 			"moves": [
-				"wavecharge",
-				"sculptedarmor"
+				"wavecharge"
 			],
 			"abilities": []
 		},
 		"omastar": {
 			"moves": [
-				"wavecharge",
-				"sculptedarmor"
+				"wavecharge"
 			],
 			"abilities": []
 		},
 		"kabuto": {
 			"moves": [
 				"wavecharge",
-				"superscope3d",
-				"waterplates",
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval",
 				"craghammer"
 			],
 			"abilities": []
@@ -333,36 +274,25 @@ window.VelvetBuffs = {
 		"kabutops": {
 			"moves": [
 				"wavecharge",
-				"superscope3d",
-				"waterplates",
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval",
 				"craghammer"
 			],
 			"abilities": []
 		},
 		"totodile": {
 			"moves": [
-				"wavecharge",
-				"superscope3d",
-				"waterplates"
+				"wavecharge"
 			],
 			"abilities": []
 		},
 		"croconaw": {
 			"moves": [
-				"wavecharge",
-				"superscope3d",
-				"waterplates"
+				"wavecharge"
 			],
 			"abilities": []
 		},
 		"feraligatr": {
 			"moves": [
-				"wavecharge",
-				"superscope3d",
-				"waterplates"
+				"wavecharge"
 			],
 			"abilities": []
 		},
@@ -385,8 +315,6 @@ window.VelvetBuffs = {
 		"marill": {
 			"moves": [
 				"wavecharge",
-				"superscope3d",
-				"waterplates",
 				"penance",
 				"velvetpress",
 				"velvetguard"
@@ -412,11 +340,6 @@ window.VelvetBuffs = {
 		"wooper": {
 			"moves": [
 				"wavecharge",
-				"superscope3d",
-				"waterplates",
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval",
 				"undertow",
 				"velvetpress"
 			],
@@ -425,11 +348,6 @@ window.VelvetBuffs = {
 		"quagsire": {
 			"moves": [
 				"wavecharge",
-				"superscope3d",
-				"waterplates",
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval",
 				"undertow",
 				"punishment",
 				"velvetpress"
@@ -439,7 +357,6 @@ window.VelvetBuffs = {
 		"slowking": {
 			"moves": [
 				"wavecharge",
-				"lunaticbullet",
 				"penance",
 				"velvetpress"
 			],
@@ -456,8 +373,6 @@ window.VelvetBuffs = {
 		"qwilfish": {
 			"moves": [
 				"wavecharge",
-				"superscope3d",
-				"waterplates",
 				"undertow"
 			],
 			"abilities": []
@@ -465,7 +380,6 @@ window.VelvetBuffs = {
 		"corsola": {
 			"moves": [
 				"wavecharge",
-				"sculptedarmor",
 				"undertow",
 				"flipturn"
 			],
@@ -474,7 +388,6 @@ window.VelvetBuffs = {
 		"remoraid": {
 			"moves": [
 				"wavecharge",
-				"superscope3d",
 				"undertow"
 			],
 			"abilities": []
@@ -482,7 +395,6 @@ window.VelvetBuffs = {
 		"octillery": {
 			"moves": [
 				"wavecharge",
-				"superscope3d",
 				"undertow"
 			],
 			"abilities": []
@@ -497,7 +409,6 @@ window.VelvetBuffs = {
 		"kingdra": {
 			"moves": [
 				"wavecharge",
-				"superscope3d",
 				"dragoncheer",
 				"undertow",
 				"chillingmist"
@@ -523,34 +434,19 @@ window.VelvetBuffs = {
 		},
 		"mudkip": {
 			"moves": [
-				"wavecharge",
-				"superscope3d",
-				"waterplates",
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval"
+				"wavecharge"
 			],
 			"abilities": []
 		},
 		"marshtomp": {
 			"moves": [
-				"wavecharge",
-				"superscope3d",
-				"waterplates",
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval"
+				"wavecharge"
 			],
 			"abilities": []
 		},
 		"swampert": {
 			"moves": [
-				"wavecharge",
-				"superscope3d",
-				"waterplates",
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval"
+				"wavecharge"
 			],
 			"abilities": []
 		},
@@ -598,10 +494,6 @@ window.VelvetBuffs = {
 		"carvanha": {
 			"moves": [
 				"wavecharge",
-				"silverdagger",
-				"superscope3d",
-				"waterplates",
-				"wickedenergy",
 				"carrionfeast"
 			],
 			"abilities": []
@@ -609,10 +501,6 @@ window.VelvetBuffs = {
 		"sharpedo": {
 			"moves": [
 				"wavecharge",
-				"silverdagger",
-				"superscope3d",
-				"waterplates",
-				"wickedenergy",
 				"carrionfeast",
 				"knockoff",
 				"suckerpunch",
@@ -623,8 +511,6 @@ window.VelvetBuffs = {
 		"wailmer": {
 			"moves": [
 				"wavecharge",
-				"superscope3d",
-				"waterplates",
 				"slackoff",
 				"undertow"
 			],
@@ -633,8 +519,6 @@ window.VelvetBuffs = {
 		"wailord": {
 			"moves": [
 				"wavecharge",
-				"superscope3d",
-				"waterplates",
 				"undertow",
 				"slackoff"
 			],
@@ -643,11 +527,6 @@ window.VelvetBuffs = {
 		"barboach": {
 			"moves": [
 				"wavecharge",
-				"superscope3d",
-				"waterplates",
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval",
 				"undertow",
 				"tremorshot"
 			],
@@ -664,11 +543,6 @@ window.VelvetBuffs = {
 		"whiscash": {
 			"moves": [
 				"wavecharge",
-				"superscope3d",
-				"waterplates",
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval",
 				"undertow",
 				"flipturn",
 				"tremorshot",
@@ -687,10 +561,6 @@ window.VelvetBuffs = {
 		"corphish": {
 			"moves": [
 				"wavecharge",
-				"silverdagger",
-				"superscope3d",
-				"waterplates",
-				"wickedenergy",
 				"twilightexit",
 				"chillingmist"
 			],
@@ -699,10 +569,6 @@ window.VelvetBuffs = {
 		"crawdaunt": {
 			"moves": [
 				"wavecharge",
-				"silverdagger",
-				"superscope3d",
-				"waterplates",
-				"wickedenergy",
 				"twilightexit",
 				"chillingmist",
 				"punishment"
@@ -712,8 +578,6 @@ window.VelvetBuffs = {
 		"feebas": {
 			"moves": [
 				"wavecharge",
-				"superscope3d",
-				"waterplates",
 				"undertow",
 				"chillingmist",
 				"penance",
@@ -749,9 +613,7 @@ window.VelvetBuffs = {
 		},
 		"castformrainy": {
 			"moves": [
-				"wavecharge",
-				"superscope3d",
-				"waterplates"
+				"wavecharge"
 			],
 			"abilities": []
 		},
@@ -780,8 +642,6 @@ window.VelvetBuffs = {
 		"clamperl": {
 			"moves": [
 				"wavecharge",
-				"superscope3d",
-				"waterplates",
 				"undertow"
 			],
 			"abilities": []
@@ -789,8 +649,6 @@ window.VelvetBuffs = {
 		"huntail": {
 			"moves": [
 				"wavecharge",
-				"superscope3d",
-				"waterplates",
 				"undertow"
 			],
 			"abilities": []
@@ -805,10 +663,6 @@ window.VelvetBuffs = {
 		"relicanth": {
 			"moves": [
 				"wavecharge",
-				"superscope3d",
-				"waterplates",
-				"sculptedarmor",
-				"dustupheaval",
 				"undertow",
 				"craghammer",
 				"shoreup",
@@ -892,8 +746,6 @@ window.VelvetBuffs = {
 		"bibarel": {
 			"moves": [
 				"wavecharge",
-				"superscope3d",
-				"waterplates",
 				"hustleup",
 				"uturn",
 				"knockoff",
@@ -907,24 +759,19 @@ window.VelvetBuffs = {
 		},
 		"buizel": {
 			"moves": [
-				"wavecharge",
-				"superscope3d",
-				"waterplates"
+				"wavecharge"
 			],
 			"abilities": []
 		},
 		"floatzel": {
 			"moves": [
-				"wavecharge",
-				"superscope3d",
-				"waterplates"
+				"wavecharge"
 			],
 			"abilities": []
 		},
 		"shellos": {
 			"moves": [
 				"wavecharge",
-				"sculptedarmor",
 				"velvetpress",
 				"tremorshot"
 			],
@@ -941,7 +788,6 @@ window.VelvetBuffs = {
 		"gastrodon": {
 			"moves": [
 				"wavecharge",
-				"sculptedarmor",
 				"velvetpress",
 				"tremorshot"
 			],
@@ -958,8 +804,6 @@ window.VelvetBuffs = {
 		"finneon": {
 			"moves": [
 				"wavecharge",
-				"superscope3d",
-				"waterplates",
 				"undertow",
 				"chillingmist"
 			],
@@ -968,8 +812,6 @@ window.VelvetBuffs = {
 		"lumineon": {
 			"moves": [
 				"wavecharge",
-				"superscope3d",
-				"waterplates",
 				"undertow",
 				"chillingmist",
 				"tailglow"
@@ -1032,21 +874,13 @@ window.VelvetBuffs = {
 		},
 		"oshawott": {
 			"moves": [
-				"wavecharge",
-				"silverdagger",
-				"superscope3d",
-				"waterplates",
-				"wickedenergy"
+				"wavecharge"
 			],
 			"abilities": []
 		},
 		"dewott": {
 			"moves": [
-				"wavecharge",
-				"silverdagger",
-				"superscope3d",
-				"waterplates",
-				"wickedenergy"
+				"wavecharge"
 			],
 			"abilities": []
 		},
@@ -1059,10 +893,6 @@ window.VelvetBuffs = {
 		"samurotthisui": {
 			"moves": [
 				"wavecharge",
-				"silverdagger",
-				"superscope3d",
-				"waterplates",
-				"wickedenergy",
 				"punishment"
 			],
 			"abilities": []
@@ -1070,8 +900,6 @@ window.VelvetBuffs = {
 		"panpour": {
 			"moves": [
 				"wavecharge",
-				"superscope3d",
-				"waterplates",
 				"liquidation",
 				"chillingwater",
 				"muddywater",
@@ -1114,8 +942,6 @@ window.VelvetBuffs = {
 		"simipour": {
 			"moves": [
 				"wavecharge",
-				"superscope3d",
-				"waterplates",
 				"liquidation",
 				"chillingwater",
 				"muddywater",
@@ -1156,11 +982,6 @@ window.VelvetBuffs = {
 		"tympole": {
 			"moves": [
 				"wavecharge",
-				"superscope3d",
-				"waterplates",
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval",
 				"tremorshot"
 			],
 			"abilities": []
@@ -1168,11 +989,6 @@ window.VelvetBuffs = {
 		"palpitoad": {
 			"moves": [
 				"wavecharge",
-				"superscope3d",
-				"waterplates",
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval",
 				"tremorshot"
 			],
 			"abilities": []
@@ -1180,11 +996,6 @@ window.VelvetBuffs = {
 		"seismitoad": {
 			"moves": [
 				"wavecharge",
-				"superscope3d",
-				"waterplates",
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval",
 				"tremorshot"
 			],
 			"abilities": []
@@ -1192,59 +1003,38 @@ window.VelvetBuffs = {
 		"basculin": {
 			"moves": [
 				"wavecharge",
-				"superscope3d",
-				"waterplates",
 				"undertow"
 			],
 			"abilities": []
 		},
 		"basculinbluestriped": {
 			"moves": [
-				"wavecharge",
-				"superscope3d",
-				"waterplates"
+				"wavecharge"
 			],
 			"abilities": []
 		},
 		"basculinwhitestriped": {
 			"moves": [
 				"wavecharge",
-				"lunaticbullet",
-				"superscope3d",
-				"waterplates",
 				"chillingmist"
 			],
 			"abilities": []
 		},
 		"tirtouga": {
 			"moves": [
-				"wavecharge",
-				"superscope3d",
-				"waterplates",
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval"
+				"wavecharge"
 			],
 			"abilities": []
 		},
 		"carracosta": {
 			"moves": [
-				"wavecharge",
-				"superscope3d",
-				"waterplates",
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval"
+				"wavecharge"
 			],
 			"abilities": []
 		},
 		"ducklett": {
 			"moves": [
 				"wavecharge",
-				"superscope3d",
-				"cloudfist",
-				"waterplates",
-				"dancingblow",
 				"undertow"
 			],
 			"abilities": [
@@ -1260,10 +1050,6 @@ window.VelvetBuffs = {
 		"swanna": {
 			"moves": [
 				"wavecharge",
-				"superscope3d",
-				"cloudfist",
-				"waterplates",
-				"dancingblow",
 				"undertow"
 			],
 			"abilities": [
@@ -1279,7 +1065,6 @@ window.VelvetBuffs = {
 		"frillish": {
 			"moves": [
 				"wavecharge",
-				"lunaticbullet",
 				"undertow",
 				"chillingmist"
 			],
@@ -1288,7 +1073,6 @@ window.VelvetBuffs = {
 		"jellicent": {
 			"moves": [
 				"wavecharge",
-				"lunaticbullet",
 				"undertow",
 				"chillingmist"
 			],
@@ -1297,8 +1081,6 @@ window.VelvetBuffs = {
 		"alomomola": {
 			"moves": [
 				"wavecharge",
-				"superscope3d",
-				"waterplates",
 				"undertow",
 				"velvetpress"
 			],
@@ -1357,10 +1139,6 @@ window.VelvetBuffs = {
 		"binacle": {
 			"moves": [
 				"wavecharge",
-				"superscope3d",
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval",
 				"craghammer"
 			],
 			"abilities": []
@@ -1368,10 +1146,6 @@ window.VelvetBuffs = {
 		"barbaracle": {
 			"moves": [
 				"wavecharge",
-				"superscope3d",
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval",
 				"craghammer"
 			],
 			"abilities": []
@@ -1379,9 +1153,6 @@ window.VelvetBuffs = {
 		"skrelp": {
 			"moves": [
 				"wavecharge",
-				"nervepoison",
-				"superscope3d",
-				"waterplates",
 				"undertow",
 				"oxidize"
 			],
@@ -1390,7 +1161,6 @@ window.VelvetBuffs = {
 		"clauncher": {
 			"moves": [
 				"wavecharge",
-				"missile",
 				"undertow"
 			],
 			"abilities": []
@@ -1398,7 +1168,6 @@ window.VelvetBuffs = {
 		"clawitzer": {
 			"moves": [
 				"wavecharge",
-				"missile",
 				"undertow"
 			],
 			"abilities": []
@@ -1448,17 +1217,13 @@ window.VelvetBuffs = {
 		},
 		"wishiwashischool": {
 			"moves": [
-				"wavecharge",
-				"superscope3d",
-				"waterplates"
+				"wavecharge"
 			],
 			"abilities": []
 		},
 		"mareanie": {
 			"moves": [
 				"wavecharge",
-				"superscope3d",
-				"waterplates",
 				"undertow",
 				"chillingmist",
 				"velvetpress",
@@ -1469,8 +1234,6 @@ window.VelvetBuffs = {
 		"toxapex": {
 			"moves": [
 				"wavecharge",
-				"superscope3d",
-				"waterplates",
 				"undertow",
 				"chillingmist",
 				"velvetpress",
@@ -1480,25 +1243,19 @@ window.VelvetBuffs = {
 		},
 		"dewpider": {
 			"moves": [
-				"wavecharge",
-				"superscope3d",
-				"waterplates"
+				"wavecharge"
 			],
 			"abilities": []
 		},
 		"araquanid": {
 			"moves": [
-				"wavecharge",
-				"superscope3d",
-				"waterplates"
+				"wavecharge"
 			],
 			"abilities": []
 		},
 		"wimpod": {
 			"moves": [
 				"wavecharge",
-				"superscope3d",
-				"waterplates",
 				"hivefrenzy"
 			],
 			"abilities": []
@@ -1506,8 +1263,6 @@ window.VelvetBuffs = {
 		"golisopod": {
 			"moves": [
 				"wavecharge",
-				"superscope3d",
-				"waterplates",
 				"hivefrenzy",
 				"megahorn",
 				"shoreup",
@@ -1518,8 +1273,6 @@ window.VelvetBuffs = {
 		"pyukumuku": {
 			"moves": [
 				"wavecharge",
-				"superscope3d",
-				"waterplates",
 				"undertow",
 				"slackoff"
 			],
@@ -1527,18 +1280,13 @@ window.VelvetBuffs = {
 		},
 		"silvallywater": {
 			"moves": [
-				"wavecharge",
-				"superscope3d",
-				"waterplates"
+				"wavecharge"
 			],
 			"abilities": []
 		},
 		"bruxish": {
 			"moves": [
 				"wavecharge",
-				"superscope3d",
-				"waterplates",
-				"ironchomp",
 				"hypnowhirl"
 			],
 			"abilities": []
@@ -1573,63 +1321,37 @@ window.VelvetBuffs = {
 		},
 		"chewtle": {
 			"moves": [
-				"wavecharge",
-				"superscope3d",
-				"waterplates",
-				"sculptedarmor",
-				"excavate",
-				"ironchomp",
-				"dustupheaval"
+				"wavecharge"
 			],
 			"abilities": []
 		},
 		"drednaw": {
 			"moves": [
-				"wavecharge",
-				"superscope3d",
-				"waterplates",
-				"sculptedarmor",
-				"excavate",
-				"ironchomp",
-				"dustupheaval"
+				"wavecharge"
 			],
 			"abilities": []
 		},
 		"cramorant": {
 			"moves": [
-				"wavecharge",
-				"superscope3d",
-				"cloudfist",
-				"waterplates",
-				"dancingblow"
+				"wavecharge"
 			],
 			"abilities": []
 		},
 		"cramorantgulping": {
 			"moves": [
-				"wavecharge",
-				"superscope3d",
-				"cloudfist",
-				"waterplates",
-				"dancingblow"
+				"wavecharge"
 			],
 			"abilities": []
 		},
 		"cramorantgorging": {
 			"moves": [
-				"wavecharge",
-				"superscope3d",
-				"cloudfist",
-				"waterplates",
-				"dancingblow"
+				"wavecharge"
 			],
 			"abilities": []
 		},
 		"arrokuda": {
 			"moves": [
 				"wavecharge",
-				"superscope3d",
-				"waterplates",
 				"undertow"
 			],
 			"abilities": []
@@ -1637,25 +1359,19 @@ window.VelvetBuffs = {
 		"barraskewda": {
 			"moves": [
 				"wavecharge",
-				"superscope3d",
-				"waterplates",
 				"undertow"
 			],
 			"abilities": []
 		},
 		"dracovish": {
 			"moves": [
-				"wavecharge",
-				"superscope3d",
-				"waterplates"
+				"wavecharge"
 			],
 			"abilities": []
 		},
 		"arctovish": {
 			"moves": [
 				"wavecharge",
-				"superscope3d",
-				"waterplates",
 				"chillingmist",
 				"rimecleaver"
 			],
@@ -1663,60 +1379,44 @@ window.VelvetBuffs = {
 		},
 		"urshifurapidstrike": {
 			"moves": [
-				"wavecharge",
-				"superscope3d",
-				"waterplates"
+				"wavecharge"
 			],
 			"abilities": []
 		},
 		"basculegion": {
 			"moves": [
 				"wavecharge",
-				"superscope3d",
-				"waterplates",
 				"chillingmist"
 			],
 			"abilities": []
 		},
 		"basculegionf": {
 			"moves": [
-				"wavecharge",
-				"lunaticbullet"
+				"wavecharge"
 			],
 			"abilities": []
 		},
 		"quaxly": {
 			"moves": [
-				"wavecharge",
-				"superscope3d",
-				"waterplates",
-				"dancingblow"
+				"wavecharge"
 			],
 			"abilities": []
 		},
 		"quaxwell": {
 			"moves": [
-				"wavecharge",
-				"superscope3d",
-				"waterplates",
-				"dancingblow"
+				"wavecharge"
 			],
 			"abilities": []
 		},
 		"quaquaval": {
 			"moves": [
-				"wavecharge",
-				"superscope3d",
-				"waterplates",
-				"dancingblow"
+				"wavecharge"
 			],
 			"abilities": []
 		},
 		"wiglett": {
 			"moves": [
 				"wavecharge",
-				"superscope3d",
-				"waterplates",
 				"undertow"
 			],
 			"abilities": []
@@ -1724,8 +1424,6 @@ window.VelvetBuffs = {
 		"wugtrio": {
 			"moves": [
 				"wavecharge",
-				"superscope3d",
-				"waterplates",
 				"undertow",
 				"scald",
 				"flipturn"
@@ -1734,42 +1432,31 @@ window.VelvetBuffs = {
 		},
 		"finizen": {
 			"moves": [
-				"wavecharge",
-				"superscope3d",
-				"waterplates"
+				"wavecharge"
 			],
 			"abilities": []
 		},
 		"palafin": {
 			"moves": [
-				"wavecharge",
-				"superscope3d",
-				"waterplates"
+				"wavecharge"
 			],
 			"abilities": []
 		},
 		"palafinhero": {
 			"moves": [
-				"wavecharge",
-				"superscope3d",
-				"waterplates"
+				"wavecharge"
 			],
 			"abilities": []
 		},
 		"veluza": {
 			"moves": [
-				"wavecharge",
-				"silverdagger",
-				"superscope3d",
-				"waterplates"
+				"wavecharge"
 			],
 			"abilities": []
 		},
 		"dondozo": {
 			"moves": [
 				"wavecharge",
-				"superscope3d",
-				"waterplates",
 				"undertow",
 				"slackoff",
 				"punishment",
@@ -1816,7 +1503,6 @@ window.VelvetBuffs = {
 		"tynamo": {
 			"moves": [
 				"wavecharge",
-				"missile",
 				"voltaiclance"
 			],
 			"abilities": []
@@ -1824,7 +1510,6 @@ window.VelvetBuffs = {
 		"eelektrik": {
 			"moves": [
 				"wavecharge",
-				"missile",
 				"voltaiclance"
 			],
 			"abilities": []
@@ -1832,7 +1517,6 @@ window.VelvetBuffs = {
 		"eelektross": {
 			"moves": [
 				"wavecharge",
-				"missile",
 				"voltaiclance"
 			],
 			"abilities": []
@@ -1840,7 +1524,6 @@ window.VelvetBuffs = {
 		"pincurchin": {
 			"moves": [
 				"wavecharge",
-				"missile",
 				"sparkscamper",
 				"voltswitch",
 				"nuzzle",
@@ -1851,7 +1534,6 @@ window.VelvetBuffs = {
 		"corsolagalar": {
 			"moves": [
 				"wavecharge",
-				"lunaticbullet",
 				"undertow",
 				"chillingmist"
 			],
@@ -1860,7 +1542,6 @@ window.VelvetBuffs = {
 		"cursola": {
 			"moves": [
 				"wavecharge",
-				"lunaticbullet",
 				"undertow",
 				"chillingmist"
 			],
@@ -1911,7 +1592,6 @@ window.VelvetBuffs = {
 		"eiscue": {
 			"moves": [
 				"wavecharge",
-				"dancingblow",
 				"tripleaxel",
 				"chillingmist",
 				"rimecleaver"
@@ -2102,19 +1782,6 @@ window.VelvetBuffs = {
 		"mew": {
 			"moves": [
 				"wavecharge",
-				"silverdagger",
-				"lunaticbullet",
-				"nervepoison",
-				"superscope3d",
-				"cloudfist",
-				"waterplates",
-				"dancingblow",
-				"sculptedarmor",
-				"excavate",
-				"ironchomp",
-				"missile",
-				"wickedenergy",
-				"dustupheaval",
 				"penance",
 				"velvetpress",
 				"twilightexit",
@@ -2134,6168 +1801,6 @@ window.VelvetBuffs = {
 				"chillingmist",
 				"velvetguard",
 				"tremorshot"
-			],
-			"abilities": []
-		},
-		"sandshrewalola": {
-			"moves": [
-				"silverdagger",
-				"excavate",
-				"missile",
-				"chillingmist"
-			],
-			"abilities": []
-		},
-		"sandslashalola": {
-			"moves": [
-				"silverdagger",
-				"excavate",
-				"missile",
-				"chillingmist"
-			],
-			"abilities": []
-		},
-		"diglettalola": {
-			"moves": [
-				"silverdagger",
-				"sculptedarmor",
-				"excavate",
-				"missile"
-			],
-			"abilities": []
-		},
-		"dugtrioalola": {
-			"moves": [
-				"silverdagger",
-				"sculptedarmor",
-				"excavate",
-				"missile"
-			],
-			"abilities": []
-		},
-		"meowthgalar": {
-			"moves": [
-				"silverdagger",
-				"dancingblow",
-				"excavate",
-				"ironchomp",
-				"missile"
-			],
-			"abilities": []
-		},
-		"scizor": {
-			"moves": [
-				"silverdagger",
-				"missile"
-			],
-			"abilities": []
-		},
-		"sneasel": {
-			"moves": [
-				"silverdagger",
-				"wickedenergy",
-				"chillingmist"
-			],
-			"abilities": []
-		},
-		"skarmory": {
-			"moves": [
-				"silverdagger",
-				"cloudfist",
-				"missile",
-				"punishment"
-			],
-			"abilities": []
-		},
-		"linoonegalar": {
-			"moves": [
-				"silverdagger",
-				"wickedenergy"
-			],
-			"abilities": []
-		},
-		"nuzleaf": {
-			"moves": [
-				"silverdagger",
-				"wickedenergy",
-				"merchantscall",
-				"carrionfeast"
-			],
-			"abilities": []
-		},
-		"shiftry": {
-			"moves": [
-				"silverdagger",
-				"wickedenergy",
-				"earthquake",
-				"punishment"
-			],
-			"abilities": []
-		},
-		"sableye": {
-			"moves": [
-				"silverdagger",
-				"wickedenergy",
-				"carrionfeast",
-				"crunch",
-				"twilightexit",
-				"chillingmist"
-			],
-			"abilities": []
-		},
-		"absol": {
-			"moves": [
-				"silverdagger",
-				"wickedenergy",
-				"carrionfeast",
-				"crunch",
-				"chillingmist"
-			],
-			"abilities": []
-		},
-		"metang": {
-			"moves": [
-				"silverdagger",
-				"ironchomp",
-				"missile"
-			],
-			"abilities": []
-		},
-		"metagross": {
-			"moves": [
-				"silverdagger",
-				"ironchomp",
-				"missile"
-			],
-			"abilities": []
-		},
-		"luxray": {
-			"moves": [
-				"silverdagger",
-				"missile",
-				"wickedenergy",
-				"twilightexit",
-				"sparkscamper",
-				"punishment",
-				"voltaiclance",
-				"gleamstalk",
-				"knockoff",
-				"suckerpunch",
-				"taunt",
-				"partingshot",
-				"encore",
-				"yawn",
-				"swordsdance"
-			],
-			"abilities": [
-				"Prankster"
-			],
-			"slots": {
-				"0": "Rivalry",
-				"1": "Intimidate",
-				"H": "Guts",
-				"V0": "Prankster"
-			}
-		},
-		"honchkrow": {
-			"moves": [
-				"silverdagger",
-				"cloudfist",
-				"dancingblow",
-				"wickedenergy",
-				"twilightexit",
-				"carrionfeast",
-				"chillingmist",
-				"punishment"
-			],
-			"abilities": []
-		},
-		"stunky": {
-			"moves": [
-				"silverdagger",
-				"wickedenergy",
-				"twilightexit",
-				"carrionfeast",
-				"oxidize"
-			],
-			"abilities": []
-		},
-		"skuntank": {
-			"moves": [
-				"silverdagger",
-				"wickedenergy",
-				"twilightexit",
-				"carrionfeast",
-				"oxidize"
-			],
-			"abilities": []
-		},
-		"drapion": {
-			"moves": [
-				"silverdagger",
-				"wickedenergy",
-				"hivefrenzy",
-				"carrionfeast",
-				"punishment"
-			],
-			"abilities": []
-		},
-		"weavile": {
-			"moves": [
-				"silverdagger",
-				"wickedenergy",
-				"chillingmist"
-			],
-			"abilities": []
-		},
-		"gallade": {
-			"moves": [
-				"silverdagger",
-				"cloudfist",
-				"dancingblow"
-			],
-			"abilities": []
-		},
-		"purrloin": {
-			"moves": [
-				"silverdagger",
-				"wickedenergy",
-				"carrionfeast",
-				"twilightexit",
-				"chillingmist"
-			],
-			"abilities": []
-		},
-		"liepard": {
-			"moves": [
-				"silverdagger",
-				"wickedenergy",
-				"carrionfeast",
-				"crunch",
-				"twilightexit",
-				"chillingmist",
-				"punishment"
-			],
-			"abilities": []
-		},
-		"excadrill": {
-			"moves": [
-				"silverdagger",
-				"sculptedarmor",
-				"excavate",
-				"missile"
-			],
-			"abilities": []
-		},
-		"escavalier": {
-			"moves": [
-				"silverdagger",
-				"missile",
-				"pounce",
-				"hivefrenzy"
-			],
-			"abilities": []
-		},
-		"pawniard": {
-			"moves": [
-				"silverdagger",
-				"excavate",
-				"carrionfeast"
-			],
-			"abilities": []
-		},
-		"bisharp": {
-			"moves": [
-				"silverdagger",
-				"excavate",
-				"carrionfeast"
-			],
-			"abilities": []
-		},
-		"durant": {
-			"moves": [
-				"silverdagger",
-				"excavate",
-				"ironchomp",
-				"missile",
-				"pounce",
-				"hivefrenzy"
-			],
-			"abilities": []
-		},
-		"cobalion": {
-			"moves": [
-				"silverdagger",
-				"dancingblow",
-				"missile"
-			],
-			"abilities": []
-		},
-		"pangoro": {
-			"moves": [
-				"silverdagger",
-				"cloudfist",
-				"dancingblow",
-				"wickedenergy",
-				"twilightexit",
-				"punishment",
-				"shufflejab"
-			],
-			"abilities": []
-		},
-		"honedge": {
-			"moves": [
-				"silverdagger",
-				"lunaticbullet",
-				"missile",
-				"chillingmist"
-			],
-			"abilities": []
-		},
-		"doublade": {
-			"moves": [
-				"silverdagger",
-				"lunaticbullet",
-				"missile",
-				"chillingmist"
-			],
-			"abilities": []
-		},
-		"aegislash": {
-			"moves": [
-				"silverdagger",
-				"lunaticbullet",
-				"missile",
-				"chillingmist"
-			],
-			"abilities": []
-		},
-		"aegislashblade": {
-			"moves": [
-				"silverdagger",
-				"lunaticbullet",
-				"missile"
-			],
-			"abilities": []
-		},
-		"inkay": {
-			"moves": [
-				"silverdagger",
-				"wickedenergy",
-				"twilightexit",
-				"carrionfeast",
-				"hypnowhirl"
-			],
-			"abilities": []
-		},
-		"malamar": {
-			"moves": [
-				"silverdagger",
-				"wickedenergy",
-				"twilightexit",
-				"carrionfeast",
-				"punishment",
-				"hypnowhirl"
-			],
-			"abilities": []
-		},
-		"silvallydark": {
-			"moves": [
-				"silverdagger",
-				"wickedenergy"
-			],
-			"abilities": []
-		},
-		"silvallysteel": {
-			"moves": [
-				"silverdagger",
-				"ironchomp",
-				"missile"
-			],
-			"abilities": []
-		},
-		"obstagoon": {
-			"moves": [
-				"silverdagger",
-				"wickedenergy",
-				"punishment"
-			],
-			"abilities": []
-		},
-		"perrserker": {
-			"moves": [
-				"silverdagger",
-				"excavate",
-				"ironchomp",
-				"missile"
-			],
-			"abilities": []
-		},
-		"kleavor": {
-			"moves": [
-				"silverdagger",
-				"sculptedarmor",
-				"dustupheaval"
-			],
-			"abilities": []
-		},
-		"meowscarada": {
-			"moves": [
-				"silverdagger",
-				"punishment"
-			],
-			"abilities": []
-		},
-		"lokix": {
-			"moves": [
-				"silverdagger",
-				"wickedenergy",
-				"hivefrenzy",
-				"punishment"
-			],
-			"abilities": []
-		},
-		"kingambit": {
-			"moves": [
-				"silverdagger",
-				"excavate",
-				"punishment"
-			],
-			"abilities": []
-		},
-		"roaringmoon": {
-			"moves": [
-				"silverdagger",
-				"punishment"
-			],
-			"abilities": []
-		},
-		"rumia": {
-			"moves": [
-				"silverdagger",
-				"wickedenergy"
-			],
-			"abilities": []
-		},
-		"sakuyaizayoi": {
-			"moves": [
-				"silverdagger",
-				"missile"
-			],
-			"abilities": []
-		},
-		"remiliascarlet": {
-			"moves": [
-				"silverdagger",
-				"cloudfist",
-				"dancingblow",
-				"wickedenergy"
-			],
-			"abilities": [
-				"Scarlet Sisters"
-			],
-			"slots": {
-				"0": "Vampirism",
-				"1": "Scarlet Sisters"
-			}
-		},
-		"keine": {
-			"moves": [
-				"silverdagger",
-				"missile"
-			],
-			"abilities": []
-		},
-		"komachionozuka": {
-			"moves": [
-				"silverdagger",
-				"superscope3d",
-				"waterplates"
-			],
-			"abilities": []
-		},
-		"momijiinubashiri": {
-			"moves": [
-				"silverdagger",
-				"cloudfist",
-				"dancingblow",
-				"ironchomp",
-				"missile"
-			],
-			"abilities": []
-		},
-		"kisume": {
-			"moves": [
-				"silverdagger",
-				"sculptedarmor",
-				"wickedenergy",
-				"dustupheaval"
-			],
-			"abilities": []
-		},
-		"parseemizuhashi": {
-			"moves": [
-				"silverdagger",
-				"dancingblow",
-				"wickedenergy"
-			],
-			"abilities": []
-		},
-		"kagerouimaizumi": {
-			"moves": [
-				"silverdagger",
-				"ironchomp",
-				"wickedenergy"
-			],
-			"abilities": []
-		},
-		"seijakijin": {
-			"moves": [
-				"silverdagger",
-				"wickedenergy"
-			],
-			"abilities": []
-		},
-		"shinmyoumarusukuna": {
-			"moves": [
-				"silverdagger",
-				"missile"
-			],
-			"abilities": []
-		},
-		"yachiekicchou": {
-			"moves": [
-				"silverdagger",
-				"wickedenergy"
-			],
-			"abilities": []
-		},
-		"mayumijoutouguu": {
-			"moves": [
-				"silverdagger",
-				"sculptedarmor",
-				"excavate",
-				"missile",
-				"dustupheaval"
-			],
-			"abilities": []
-		},
-		"yuumatoutetsu": {
-			"moves": [
-				"silverdagger",
-				"superscope3d",
-				"waterplates",
-				"wickedenergy"
-			],
-			"abilities": []
-		},
-		"enokomitsugashira": {
-			"moves": [
-				"silverdagger",
-				"ironchomp",
-				"missile",
-				"wickedenergy"
-			],
-			"abilities": []
-		},
-		"zanmunippaku": {
-			"moves": [
-				"silverdagger",
-				"wickedenergy"
-			],
-			"abilities": []
-		},
-		"scyther": {
-			"moves": [
-				"silverdagger",
-				"cloudfist",
-				"sculptedarmor",
-				"missile",
-				"dustupheaval",
-				"hivefrenzy"
-			],
-			"abilities": []
-		},
-		"zigzagoongalar": {
-			"moves": [
-				"silverdagger",
-				"wickedenergy",
-				"extremespeed",
-				"hustleup",
-				"chillingmist"
-			],
-			"abilities": []
-		},
-		"seedot": {
-			"moves": [
-				"silverdagger",
-				"wickedenergy",
-				"carrionfeast"
-			],
-			"abilities": []
-		},
-		"beldum": {
-			"moves": [
-				"silverdagger",
-				"ironchomp",
-				"missile"
-			],
-			"abilities": []
-		},
-		"luxio": {
-			"moves": [
-				"silverdagger",
-				"missile",
-				"wickedenergy",
-				"twilightexit",
-				"sparkscamper",
-				"voltaiclance"
-			],
-			"abilities": []
-		},
-		"shinx": {
-			"moves": [
-				"silverdagger",
-				"missile",
-				"wickedenergy",
-				"twilightexit",
-				"sparkscamper",
-				"voltaiclance"
-			],
-			"abilities": []
-		},
-		"murkrow": {
-			"moves": [
-				"silverdagger",
-				"cloudfist",
-				"dancingblow",
-				"wickedenergy",
-				"twilightexit",
-				"carrionfeast",
-				"chillingmist"
-			],
-			"abilities": []
-		},
-		"skorupi": {
-			"moves": [
-				"silverdagger",
-				"wickedenergy",
-				"hivefrenzy",
-				"carrionfeast"
-			],
-			"abilities": []
-		},
-		"kirlia": {
-			"moves": [
-				"silverdagger",
-				"lunaticbullet",
-				"cloudfist",
-				"dancingblow",
-				"penance",
-				"velvetpress",
-				"velvetguard",
-				"hypnowhirl"
-			],
-			"abilities": []
-		},
-		"ralts": {
-			"moves": [
-				"silverdagger",
-				"lunaticbullet",
-				"cloudfist",
-				"dancingblow",
-				"penance",
-				"velvetpress",
-				"velvetguard",
-				"hypnowhirl"
-			],
-			"abilities": []
-		},
-		"drilbur": {
-			"moves": [
-				"silverdagger",
-				"sculptedarmor",
-				"excavate",
-				"missile"
-			],
-			"abilities": []
-		},
-		"karrablast": {
-			"moves": [
-				"silverdagger",
-				"missile",
-				"hivefrenzy"
-			],
-			"abilities": []
-		},
-		"pancham": {
-			"moves": [
-				"silverdagger",
-				"cloudfist",
-				"dancingblow",
-				"wickedenergy",
-				"twilightexit",
-				"shufflejab"
-			],
-			"abilities": []
-		},
-		"floragato": {
-			"moves": [
-				"silverdagger"
-			],
-			"abilities": []
-		},
-		"sprigatito": {
-			"moves": [
-				"silverdagger"
-			],
-			"abilities": []
-		},
-		"nymble": {
-			"moves": [
-				"silverdagger",
-				"wickedenergy",
-				"hivefrenzy"
-			],
-			"abilities": []
-		},
-		"raichualola": {
-			"moves": [
-				"lunaticbullet"
-			],
-			"abilities": []
-		},
-		"abra": {
-			"moves": [
-				"lunaticbullet",
-				"penance",
-				"hypnowhirl"
-			],
-			"abilities": []
-		},
-		"kadabra": {
-			"moves": [
-				"lunaticbullet",
-				"penance",
-				"hypnowhirl"
-			],
-			"abilities": []
-		},
-		"alakazam": {
-			"moves": [
-				"lunaticbullet",
-				"penance",
-				"hypnowhirl"
-			],
-			"abilities": []
-		},
-		"slowbrogalar": {
-			"moves": [
-				"lunaticbullet",
-				"nervepoison"
-			],
-			"abilities": []
-		},
-		"gastly": {
-			"moves": [
-				"lunaticbullet",
-				"twilightexit",
-				"chillingmist"
-			],
-			"abilities": []
-		},
-		"haunter": {
-			"moves": [
-				"lunaticbullet",
-				"twilightexit",
-				"chillingmist"
-			],
-			"abilities": []
-		},
-		"gengar": {
-			"moves": [
-				"lunaticbullet",
-				"twilightexit",
-				"chillingmist"
-			],
-			"abilities": []
-		},
-		"hypno": {
-			"moves": [
-				"lunaticbullet",
-				"slackoff",
-				"hypnowhirl"
-			],
-			"abilities": []
-		},
-		"exeggcute": {
-			"moves": [
-				"lunaticbullet",
-				"solarnectar",
-				"penance"
-			],
-			"abilities": []
-		},
-		"exeggutor": {
-			"moves": [
-				"lunaticbullet",
-				"earthpower",
-				"fireblast",
-				"solarnectar",
-				"penance"
-			],
-			"abilities": []
-		},
-		"mrmime": {
-			"moves": [
-				"lunaticbullet",
-				"hypnowhirl",
-				"psychicnoise",
-				"penance",
-				"velvetpress",
-				"velvetguard"
-			],
-			"abilities": []
-		},
-		"mrmimegalar": {
-			"moves": [
-				"lunaticbullet",
-				"chillingmist",
-				"penance",
-				"hypnowhirl"
-			],
-			"abilities": []
-		},
-		"jynx": {
-			"moves": [
-				"lunaticbullet",
-				"hypnowhirl",
-				"icespinner",
-				"snowscape",
-				"psychicnoise",
-				"chillingmist",
-				"penance"
-			],
-			"abilities": []
-		},
-		"articunogalar": {
-			"moves": [
-				"lunaticbullet",
-				"penance",
-				"velvetpress"
-			],
-			"abilities": []
-		},
-		"typhlosionhisui": {
-			"moves": [
-				"lunaticbullet",
-				"chillingmist"
-			],
-			"abilities": []
-		},
-		"natu": {
-			"moves": [
-				"lunaticbullet",
-				"penance",
-				"hypnowhirl"
-			],
-			"abilities": []
-		},
-		"xatu": {
-			"moves": [
-				"lunaticbullet",
-				"psychicnoise",
-				"penance",
-				"hypnowhirl"
-			],
-			"abilities": []
-		},
-		"espeon": {
-			"moves": [
-				"lunaticbullet",
-				"penance",
-				"recover",
-				"teleport",
-				"healingwish",
-				"knockoff",
-				"focusblast"
-			],
-			"abilities": [
-				"Prescience"
-			],
-			"slots": {
-				"0": "Synchronize",
-				"1": "Prescience",
-				"H": "Magic Bounce"
-			}
-		},
-		"slowkinggalar": {
-			"moves": [
-				"lunaticbullet",
-				"nervepoison",
-				"penance",
-				"velvetpress"
-			],
-			"abilities": [
-				"Unaware"
-			],
-			"slots": {
-				"0": "Curious Medicine",
-				"1": "Own Tempo",
-				"H": "Regenerator",
-				"V0": "Unaware"
-			}
-		},
-		"misdreavus": {
-			"moves": [
-				"lunaticbullet",
-				"twilightexit",
-				"chillingmist"
-			],
-			"abilities": []
-		},
-		"unown": {
-			"moves": [
-				"lunaticbullet",
-				"hypnowhirl"
-			],
-			"abilities": []
-		},
-		"wobbuffet": {
-			"moves": [
-				"lunaticbullet",
-				"slackoff"
-			],
-			"abilities": []
-		},
-		"girafarig": {
-			"moves": [
-				"lunaticbullet",
-				"hypnowhirl",
-				"penance"
-			],
-			"abilities": []
-		},
-		"smoochum": {
-			"moves": [
-				"lunaticbullet",
-				"tripleaxel",
-				"icespinner",
-				"snowscape",
-				"hypnowhirl",
-				"chillingmist",
-				"penance"
-			],
-			"abilities": []
-		},
-		"gardevoir": {
-			"moves": [
-				"lunaticbullet",
-				"penance",
-				"velvetpress",
-				"velvetguard",
-				"hypnowhirl"
-			],
-			"abilities": []
-		},
-		"meditite": {
-			"moves": [
-				"lunaticbullet",
-				"cloudfist",
-				"dancingblow",
-				"axekick",
-				"shufflejab"
-			],
-			"abilities": []
-		},
-		"medicham": {
-			"moves": [
-				"lunaticbullet",
-				"cloudfist",
-				"dancingblow",
-				"shufflejab"
-			],
-			"abilities": []
-		},
-		"spoink": {
-			"moves": [
-				"lunaticbullet",
-				"hypnowhirl",
-				"penance"
-			],
-			"abilities": []
-		},
-		"grumpig": {
-			"moves": [
-				"lunaticbullet",
-				"hypnowhirl",
-				"penance"
-			],
-			"abilities": []
-		},
-		"lunatone": {
-			"moves": [
-				"lunaticbullet",
-				"sculptedarmor",
-				"hypnowhirl",
-				"penance"
-			],
-			"abilities": []
-		},
-		"baltoy": {
-			"moves": [
-				"lunaticbullet",
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval",
-				"tremorshot",
-				"hypnowhirl"
-			],
-			"abilities": []
-		},
-		"claydol": {
-			"moves": [
-				"lunaticbullet",
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval",
-				"psychicnoise",
-				"tremorshot",
-				"hypnowhirl"
-			],
-			"abilities": []
-		},
-		"chimecho": {
-			"moves": [
-				"lunaticbullet",
-				"hypnowhirl",
-				"penance"
-			],
-			"abilities": []
-		},
-		"wynaut": {
-			"moves": [
-				"lunaticbullet",
-				"slackoff"
-			],
-			"abilities": []
-		},
-		"latias": {
-			"moves": [
-				"lunaticbullet",
-				"penance",
-				"velvetpress"
-			],
-			"abilities": []
-		},
-		"latios": {
-			"moves": [
-				"lunaticbullet",
-				"penance",
-				"velvetpress"
-			],
-			"abilities": []
-		},
-		"drifloon": {
-			"moves": [
-				"lunaticbullet",
-				"chillingmist"
-			],
-			"abilities": []
-		},
-		"drifblim": {
-			"moves": [
-				"lunaticbullet",
-				"chillingmist"
-			],
-			"abilities": []
-		},
-		"mismagius": {
-			"moves": [
-				"lunaticbullet",
-				"twilightexit",
-				"chillingmist"
-			],
-			"abilities": []
-		},
-		"chingling": {
-			"moves": [
-				"lunaticbullet",
-				"hypnowhirl",
-				"penance"
-			],
-			"abilities": []
-		},
-		"bronzor": {
-			"moves": [
-				"lunaticbullet",
-				"sculptedarmor",
-				"missile",
-				"hardpress",
-				"velvetpress",
-				"hypnowhirl"
-			],
-			"abilities": [
-				"Unaware"
-			],
-			"slots": {
-				"0": "Levitate",
-				"1": "Heatproof",
-				"H": "Heavy Metal",
-				"V0": "Unaware"
-			}
-		},
-		"mimejr": {
-			"moves": [
-				"lunaticbullet",
-				"hypnowhirl",
-				"penance",
-				"velvetpress",
-				"velvetguard",
-				"chillingmist"
-			],
-			"abilities": []
-		},
-		"spiritomb": {
-			"moves": [
-				"lunaticbullet",
-				"wickedenergy",
-				"swordsdance",
-				"twilightexit",
-				"carrionfeast",
-				"chillingmist",
-				"punishment",
-				"soultoll",
-				"strengthsap",
-				"partingshot",
-				"knockoff"
-			],
-			"abilities": [
-				"Keystone Legion"
-			],
-			"slots": {
-				"0": "Pressure",
-				"1": "Keystone Legion",
-				"H": "Infiltrator"
-			}
-		},
-		"froslass": {
-			"moves": [
-				"lunaticbullet",
-				"chillingmist"
-			],
-			"abilities": []
-		},
-		"rotom": {
-			"moves": [
-				"lunaticbullet",
-				"chillingmist"
-			],
-			"abilities": []
-		},
-		"uxie": {
-			"moves": [
-				"lunaticbullet",
-				"memorywipe",
-				"slackoff",
-				"teleport",
-				"velvetpress"
-			],
-			"abilities": [
-				"Mind Keeper"
-			],
-			"slots": {
-				"0": "Levitate",
-				"1": "Mind Keeper"
-			}
-		},
-		"mesprit": {
-			"moves": [
-				"lunaticbullet",
-				"soulresonance",
-				"moonblast",
-				"wish",
-				"velvetpress"
-			],
-			"abilities": [
-				"Heartfelt Resolve"
-			],
-			"slots": {
-				"0": "Levitate",
-				"1": "Heartfelt Resolve"
-			}
-		},
-		"azelf": {
-			"moves": [
-				"lunaticbullet",
-				"resolutestrike",
-				"closecombat",
-				"swordsdance",
-				"velvetpress"
-			],
-			"abilities": [
-				"Unbending Will"
-			],
-			"slots": {
-				"0": "Levitate",
-				"1": "Unbending Will"
-			}
-		},
-		"cresselia": {
-			"moves": [
-				"lunaticbullet",
-				"penance",
-				"velvetpress"
-			],
-			"abilities": [
-				"Unaware"
-			],
-			"slots": {
-				"0": "Levitate",
-				"1": "Unaware"
-			}
-		},
-		"munna": {
-			"moves": [
-				"lunaticbullet",
-				"slackoff",
-				"penance",
-				"hypnowhirl"
-			],
-			"abilities": []
-		},
-		"musharna": {
-			"moves": [
-				"lunaticbullet",
-				"psychicnoise",
-				"slackoff",
-				"penance",
-				"hypnowhirl"
-			],
-			"abilities": []
-		},
-		"woobat": {
-			"moves": [
-				"lunaticbullet",
-				"hypnowhirl",
-				"penance"
-			],
-			"abilities": []
-		},
-		"swoobat": {
-			"moves": [
-				"lunaticbullet",
-				"hypnowhirl",
-				"penance"
-			],
-			"abilities": []
-		},
-		"darmanitanzen": {
-			"moves": [
-				"lunaticbullet"
-			],
-			"abilities": []
-		},
-		"sigilyph": {
-			"moves": [
-				"lunaticbullet",
-				"psychicnoise",
-				"penance",
-				"hypnowhirl"
-			],
-			"abilities": []
-		},
-		"yamask": {
-			"moves": [
-				"lunaticbullet",
-				"chillingmist"
-			],
-			"abilities": []
-		},
-		"cofagrigus": {
-			"moves": [
-				"lunaticbullet",
-				"chillingmist"
-			],
-			"abilities": []
-		},
-		"zoruahisui": {
-			"moves": [
-				"lunaticbullet",
-				"chillingmist"
-			],
-			"abilities": []
-		},
-		"zoroarkhisui": {
-			"moves": [
-				"lunaticbullet",
-				"chillingmist"
-			],
-			"abilities": []
-		},
-		"gothita": {
-			"moves": [
-				"lunaticbullet",
-				"penance",
-				"hypnowhirl"
-			],
-			"abilities": []
-		},
-		"gothorita": {
-			"moves": [
-				"lunaticbullet",
-				"penance",
-				"hypnowhirl"
-			],
-			"abilities": []
-		},
-		"gothitelle": {
-			"moves": [
-				"lunaticbullet",
-				"penance",
-				"hypnowhirl"
-			],
-			"abilities": []
-		},
-		"solosis": {
-			"moves": [
-				"lunaticbullet",
-				"penance",
-				"hypnowhirl"
-			],
-			"abilities": []
-		},
-		"duosion": {
-			"moves": [
-				"lunaticbullet",
-				"penance",
-				"hypnowhirl"
-			],
-			"abilities": []
-		},
-		"reuniclus": {
-			"moves": [
-				"lunaticbullet",
-				"penance",
-				"hypnowhirl"
-			],
-			"abilities": []
-		},
-		"elgyem": {
-			"moves": [
-				"lunaticbullet",
-				"penance",
-				"hypnowhirl"
-			],
-			"abilities": []
-		},
-		"beheeyem": {
-			"moves": [
-				"lunaticbullet",
-				"psychicnoise",
-				"penance",
-				"hypnowhirl"
-			],
-			"abilities": []
-		},
-		"litwick": {
-			"moves": [
-				"lunaticbullet",
-				"chillingmist"
-			],
-			"abilities": [
-				"Shadow Tag"
-			],
-			"slots": {
-				"0": "Flash Fire",
-				"1": "Flame Body",
-				"H": "Infiltrator",
-				"V0": "Shadow Tag"
-			}
-		},
-		"lampent": {
-			"moves": [
-				"lunaticbullet"
-			],
-			"abilities": [
-				"Shadow Tag"
-			],
-			"slots": {
-				"0": "Flash Fire",
-				"1": "Flame Body",
-				"H": "Infiltrator",
-				"V0": "Shadow Tag"
-			}
-		},
-		"chandelure": {
-			"moves": [
-				"lunaticbullet"
-			],
-			"abilities": [
-				"Shadow Tag"
-			],
-			"slots": {
-				"0": "Flash Fire",
-				"1": "Flame Body",
-				"H": "Infiltrator",
-				"V0": "Shadow Tag"
-			}
-		},
-		"braviaryhisui": {
-			"moves": [
-				"lunaticbullet",
-				"penance"
-			],
-			"abilities": []
-		},
-		"delphox": {
-			"moves": [
-				"lunaticbullet",
-				"penance",
-				"hypnowhirl"
-			],
-			"abilities": []
-		},
-		"espurr": {
-			"moves": [
-				"lunaticbullet",
-				"hypnowhirl",
-				"penance"
-			],
-			"abilities": []
-		},
-		"meowstic": {
-			"moves": [
-				"lunaticbullet",
-				"hypnowhirl",
-				"futuresight",
-				"penance"
-			],
-			"abilities": []
-		},
-		"meowsticf": {
-			"moves": [
-				"lunaticbullet",
-				"hypnowhirl"
-			],
-			"abilities": []
-		},
-		"oricoriopau": {
-			"moves": [
-				"lunaticbullet",
-				"dancingblow"
-			],
-			"abilities": []
-		},
-		"oricoriosensu": {
-			"moves": [
-				"lunaticbullet",
-				"dancingblow"
-			],
-			"abilities": []
-		},
-		"oranguru": {
-			"moves": [
-				"lunaticbullet",
-				"penance",
-				"hypnowhirl"
-			],
-			"abilities": []
-		},
-		"sandygast": {
-			"moves": [
-				"lunaticbullet",
-				"sculptedarmor",
-				"chillingmist",
-				"tremorshot"
-			],
-			"abilities": []
-		},
-		"palossand": {
-			"moves": [
-				"lunaticbullet",
-				"sculptedarmor",
-				"chillingmist",
-				"tremorshot"
-			],
-			"abilities": []
-		},
-		"silvallyghost": {
-			"moves": [
-				"lunaticbullet"
-			],
-			"abilities": []
-		},
-		"silvallypsychic": {
-			"moves": [
-				"lunaticbullet"
-			],
-			"abilities": []
-		},
-		"tapulele": {
-			"moves": [
-				"lunaticbullet",
-				"penance",
-				"velvetpress",
-				"velvetguard",
-				"manapierce"
-			],
-			"abilities": []
-		},
-		"blacephalon": {
-			"moves": [
-				"lunaticbullet",
-				"chillingmist"
-			],
-			"abilities": []
-		},
-		"dottler": {
-			"moves": [
-				"lunaticbullet",
-				"penance",
-				"hypnowhirl"
-			],
-			"abilities": []
-		},
-		"orbeetle": {
-			"moves": [
-				"lunaticbullet",
-				"penance",
-				"hypnowhirl"
-			],
-			"abilities": []
-		},
-		"sinistea": {
-			"moves": [
-				"lunaticbullet",
-				"chillingmist"
-			],
-			"abilities": []
-		},
-		"sinisteaantique": {
-			"moves": [
-				"lunaticbullet"
-			],
-			"abilities": []
-		},
-		"polteageist": {
-			"moves": [
-				"lunaticbullet",
-				"chillingmist"
-			],
-			"abilities": []
-		},
-		"polteageistantique": {
-			"moves": [
-				"lunaticbullet"
-			],
-			"abilities": []
-		},
-		"hatenna": {
-			"moves": [
-				"lunaticbullet",
-				"penance",
-				"velvetpress",
-				"velvetguard"
-			],
-			"abilities": []
-		},
-		"hattrem": {
-			"moves": [
-				"lunaticbullet",
-				"penance",
-				"velvetpress",
-				"velvetguard"
-			],
-			"abilities": []
-		},
-		"hatterene": {
-			"moves": [
-				"lunaticbullet",
-				"penance",
-				"velvetpress",
-				"velvetguard"
-			],
-			"abilities": []
-		},
-		"mrrime": {
-			"moves": [
-				"lunaticbullet",
-				"chillingmist",
-				"penance",
-				"hypnowhirl"
-			],
-			"abilities": []
-		},
-		"indeedee": {
-			"moves": [
-				"lunaticbullet",
-				"hypnowhirl",
-				"penance"
-			],
-			"abilities": []
-		},
-		"indeedeef": {
-			"moves": [
-				"lunaticbullet",
-				"hypnowhirl"
-			],
-			"abilities": []
-		},
-		"spectrier": {
-			"moves": [
-				"lunaticbullet"
-			],
-			"abilities": []
-		},
-		"wyrdeer": {
-			"moves": [
-				"lunaticbullet"
-			],
-			"abilities": []
-		},
-		"skeledirge": {
-			"moves": [
-				"lunaticbullet",
-				"chillingmist"
-			],
-			"abilities": []
-		},
-		"armarouge": {
-			"moves": [
-				"lunaticbullet",
-				"penance"
-			],
-			"abilities": []
-		},
-		"rabsca": {
-			"moves": [
-				"lunaticbullet",
-				"chrysalisveil",
-				"uturn",
-				"hypnowhirl",
-				"penance"
-			],
-			"abilities": []
-		},
-		"flittle": {
-			"moves": [
-				"lunaticbullet"
-			],
-			"abilities": []
-		},
-		"espathra": {
-			"moves": [
-				"lunaticbullet"
-			],
-			"abilities": []
-		},
-		"farigiraf": {
-			"moves": [
-				"lunaticbullet"
-			],
-			"abilities": []
-		},
-		"screamtail": {
-			"moves": [
-				"lunaticbullet",
-				"penance",
-				"velvetpress",
-				"velvetguard"
-			],
-			"abilities": []
-		},
-		"fluttermane": {
-			"moves": [
-				"lunaticbullet"
-			],
-			"abilities": []
-		},
-		"gimmighoul": {
-			"moves": [
-				"lunaticbullet",
-				"chillingmist"
-			],
-			"abilities": []
-		},
-		"gimmighoulroaming": {
-			"moves": [
-				"lunaticbullet"
-			],
-			"abilities": []
-		},
-		"gholdengo": {
-			"moves": [
-				"lunaticbullet",
-				"chillingmist"
-			],
-			"abilities": []
-		},
-		"poltchageist": {
-			"moves": [
-				"lunaticbullet",
-				"chillingmist"
-			],
-			"abilities": []
-		},
-		"poltchageistartisan": {
-			"moves": [
-				"lunaticbullet"
-			],
-			"abilities": []
-		},
-		"sinistcha": {
-			"moves": [
-				"lunaticbullet",
-				"chillingmist"
-			],
-			"abilities": []
-		},
-		"sinistchamasterpiece": {
-			"moves": [
-				"lunaticbullet"
-			],
-			"abilities": []
-		},
-		"munkidori": {
-			"moves": [
-				"lunaticbullet",
-				"nervepoison",
-				"penance"
-			],
-			"abilities": []
-		},
-		"ironcrown": {
-			"moves": [
-				"lunaticbullet",
-				"penance"
-			],
-			"abilities": []
-		},
-		"patchouliknowledge": {
-			"moves": [
-				"lunaticbullet"
-			],
-			"abilities": []
-		},
-		"alicemargatroid": {
-			"moves": [
-				"lunaticbullet"
-			],
-			"abilities": []
-		},
-		"lunasaprismriver": {
-			"moves": [
-				"lunaticbullet"
-			],
-			"abilities": []
-		},
-		"merlinprismriver": {
-			"moves": [
-				"lunaticbullet"
-			],
-			"abilities": []
-		},
-		"lyricaprismriver": {
-			"moves": [
-				"lunaticbullet"
-			],
-			"abilities": []
-		},
-		"yuyukosaigyouji": {
-			"moves": [
-				"lunaticbullet"
-			],
-			"abilities": []
-		},
-		"ranyakumo": {
-			"moves": [
-				"lunaticbullet"
-			],
-			"abilities": []
-		},
-		"yukariyakumo": {
-			"moves": [
-				"lunaticbullet",
-				"wickedenergy"
-			],
-			"abilities": []
-		},
-		"reiseninaba": {
-			"moves": [
-				"lunaticbullet"
-			],
-			"abilities": []
-		},
-		"eirinyagokoro": {
-			"moves": [
-				"lunaticbullet",
-				"nervepoison"
-			],
-			"abilities": []
-		},
-		"satorikomeiji": {
-			"moves": [
-				"lunaticbullet"
-			],
-			"abilities": []
-		},
-		"rinkaenbyou": {
-			"moves": [
-				"lunaticbullet"
-			],
-			"abilities": []
-		},
-		"koishikomeiji": {
-			"moves": [
-				"lunaticbullet"
-			],
-			"abilities": []
-		},
-		"nuehoujuu": {
-			"moves": [
-				"lunaticbullet",
-				"wickedenergy"
-			],
-			"abilities": []
-		},
-		"hatatehimekaidou": {
-			"moves": [
-				"lunaticbullet"
-			],
-			"abilities": []
-		},
-		"starsapphire": {
-			"moves": [
-				"lunaticbullet"
-			],
-			"abilities": []
-		},
-		"soganotojiko": {
-			"moves": [
-				"lunaticbullet"
-			],
-			"abilities": []
-		},
-		"hatanokokoro": {
-			"moves": [
-				"lunaticbullet",
-				"dancingblow"
-			],
-			"abilities": []
-		},
-		"sekibanki": {
-			"moves": [
-				"lunaticbullet"
-			],
-			"abilities": []
-		},
-		"sumirekousami": {
-			"moves": [
-				"lunaticbullet"
-			],
-			"abilities": []
-		},
-		"seiran": {
-			"moves": [
-				"lunaticbullet"
-			],
-			"abilities": []
-		},
-		"doremysweet": {
-			"moves": [
-				"lunaticbullet"
-			],
-			"abilities": []
-		},
-		"hecatia": {
-			"moves": [
-				"lunaticbullet",
-				"wickedenergy"
-			],
-			"abilities": []
-		},
-		"shionyorigami": {
-			"moves": [
-				"lunaticbullet",
-				"nervepoison"
-			],
-			"abilities": []
-		},
-		"eikaebisu": {
-			"moves": [
-				"lunaticbullet",
-				"sculptedarmor"
-			],
-			"abilities": []
-		},
-		"tsukasakudamaki": {
-			"moves": [
-				"lunaticbullet"
-			],
-			"abilities": []
-		},
-		"megumuiizunamaru": {
-			"moves": [
-				"lunaticbullet"
-			],
-			"abilities": []
-		},
-		"hisamiyomotsu": {
-			"moves": [
-				"lunaticbullet"
-			],
-			"abilities": []
-		},
-		"narekomichigami": {
-			"moves": [
-				"lunaticbullet",
-				"sculptedarmor"
-			],
-			"abilities": []
-		},
-		"pikachu": {
-			"moves": [
-				"lunaticbullet",
-				"dancingblow",
-				"missile",
-				"sparkscamper",
-				"voltaiclance",
-				"penance"
-			],
-			"abilities": []
-		},
-		"pichu": {
-			"moves": [
-				"lunaticbullet",
-				"dancingblow",
-				"missile",
-				"sparkscamper",
-				"voltaiclance",
-				"penance"
-			],
-			"abilities": []
-		},
-		"slowpokegalar": {
-			"moves": [
-				"lunaticbullet",
-				"nervepoison",
-				"penance",
-				"velvetpress"
-			],
-			"abilities": [
-				"Unaware"
-			],
-			"slots": {
-				"0": "Gluttony",
-				"1": "Own Tempo",
-				"H": "Regenerator",
-				"V0": "Unaware"
-			}
-		},
-		"drowzee": {
-			"moves": [
-				"lunaticbullet",
-				"slackoff",
-				"hypnowhirl"
-			],
-			"abilities": []
-		},
-		"quilava": {
-			"moves": [
-				"lunaticbullet",
-				"chillingmist"
-			],
-			"abilities": []
-		},
-		"cyndaquil": {
-			"moves": [
-				"lunaticbullet",
-				"chillingmist"
-			],
-			"abilities": []
-		},
-		"eevee": {
-			"moves": [
-				"lunaticbullet",
-				"wickedenergy",
-				"chillingmist",
-				"penance",
-				"velvetpress",
-				"velvetguard",
-				"sparkscamper",
-				"recover",
-				"teleport",
-				"healingwish",
-				"knockoff",
-				"focusblast"
-			],
-			"abilities": []
-		},
-		"snorunt": {
-			"moves": [
-				"lunaticbullet",
-				"chillingmist",
-				"rimecleaver"
-			],
-			"abilities": []
-		},
-		"rufflet": {
-			"moves": [
-				"lunaticbullet",
-				"cloudfist",
-				"dancingblow",
-				"penance"
-			],
-			"abilities": []
-		},
-		"braixen": {
-			"moves": [
-				"lunaticbullet",
-				"penance",
-				"hypnowhirl"
-			],
-			"abilities": []
-		},
-		"fennekin": {
-			"moves": [
-				"lunaticbullet",
-				"penance",
-				"hypnowhirl"
-			],
-			"abilities": []
-		},
-		"blipbug": {
-			"moves": [
-				"lunaticbullet",
-				"penance",
-				"hypnowhirl"
-			],
-			"abilities": []
-		},
-		"stantler": {
-			"moves": [
-				"lunaticbullet"
-			],
-			"abilities": []
-		},
-		"crocalor": {
-			"moves": [
-				"lunaticbullet",
-				"chillingmist"
-			],
-			"abilities": []
-		},
-		"fuecoco": {
-			"moves": [
-				"lunaticbullet",
-				"chillingmist"
-			],
-			"abilities": []
-		},
-		"charcadet": {
-			"moves": [
-				"lunaticbullet",
-				"chillingmist",
-				"penance"
-			],
-			"abilities": []
-		},
-		"rellor": {
-			"moves": [
-				"lunaticbullet",
-				"chrysalisveil",
-				"hypnowhirl",
-				"penance"
-			],
-			"abilities": []
-		},
-		"bulbasaur": {
-			"moves": [
-				"nervepoison",
-				"solarnectar"
-			],
-			"abilities": []
-		},
-		"ivysaur": {
-			"moves": [
-				"nervepoison",
-				"solarnectar"
-			],
-			"abilities": []
-		},
-		"venusaur": {
-			"moves": [
-				"nervepoison",
-				"solarnectar"
-			],
-			"abilities": []
-		},
-		"kakuna": {
-			"moves": [
-				"nervepoison",
-				"hivefrenzy"
-			],
-			"abilities": []
-		},
-		"oddish": {
-			"moves": [
-				"nervepoison",
-				"solarnectar",
-				"oxidize"
-			],
-			"abilities": []
-		},
-		"gloom": {
-			"moves": [
-				"nervepoison",
-				"solarnectar",
-				"oxidize"
-			],
-			"abilities": []
-		},
-		"vileplume": {
-			"moves": [
-				"nervepoison",
-				"earthpower",
-				"solarnectar",
-				"oxidize"
-			],
-			"abilities": []
-		},
-		"venomoth": {
-			"moves": [
-				"nervepoison",
-				"chrysalisveil",
-				"oxidize"
-			],
-			"abilities": []
-		},
-		"dustox": {
-			"moves": [
-				"nervepoison",
-				"dancingblow",
-				"chrysalisveil",
-				"oxidize"
-			],
-			"abilities": []
-		},
-		"roselia": {
-			"moves": [
-				"nervepoison",
-				"solarnectar",
-				"oxidize"
-			],
-			"abilities": []
-		},
-		"gulpin": {
-			"moves": [
-				"nervepoison",
-				"slackoff",
-				"oxidize"
-			],
-			"abilities": []
-		},
-		"swalot": {
-			"moves": [
-				"nervepoison",
-				"slackoff",
-				"oxidize"
-			],
-			"abilities": []
-		},
-		"seviper": {
-			"moves": [
-				"nervepoison",
-				"carrionfeast",
-				"oxidize"
-			],
-			"abilities": [
-				"Intimidate"
-			],
-			"slots": {
-				"0": "Shed Skin",
-				"1": "Intimidate",
-				"H": "Infiltrator"
-			}
-		},
-		"budew": {
-			"moves": [
-				"nervepoison",
-				"solarnectar",
-				"oxidize"
-			],
-			"abilities": []
-		},
-		"roserade": {
-			"moves": [
-				"nervepoison",
-				"earthpower",
-				"solarnectar",
-				"oxidize",
-				"thornedbouquet",
-				"strengthsap",
-				"mortalspin",
-				"nastyplot"
-			],
-			"abilities": [
-				"Masquerade"
-			],
-			"slots": {
-				"0": "Natural Cure",
-				"1": "Poison Point",
-				"H": "Technician",
-				"V0": "Masquerade"
-			}
-		},
-		"croagunk": {
-			"moves": [
-				"nervepoison",
-				"cloudfist",
-				"dancingblow",
-				"shufflejab"
-			],
-			"abilities": []
-		},
-		"foongus": {
-			"moves": [
-				"nervepoison",
-				"penance",
-				"velvetpress"
-			],
-			"abilities": [
-				"Unaware"
-			],
-			"slots": {
-				"0": "Effect Spore",
-				"1": "Unaware",
-				"H": "Regenerator"
-			}
-		},
-		"amoonguss": {
-			"moves": [
-				"nervepoison",
-				"penance",
-				"velvetpress"
-			],
-			"abilities": [
-				"Unaware"
-			],
-			"slots": {
-				"0": "Effect Spore",
-				"1": "Unaware",
-				"H": "Regenerator"
-			}
-		},
-		"dragalge": {
-			"moves": [
-				"nervepoison",
-				"dragoncheer",
-				"undertow",
-				"oxidize"
-			],
-			"abilities": []
-		},
-		"salandit": {
-			"moves": [
-				"nervepoison",
-				"oxidize"
-			],
-			"abilities": []
-		},
-		"salazzle": {
-			"moves": [
-				"nervepoison",
-				"oxidize"
-			],
-			"abilities": []
-		},
-		"silvallypoison": {
-			"moves": [
-				"nervepoison"
-			],
-			"abilities": []
-		},
-		"toxel": {
-			"moves": [
-				"nervepoison",
-				"oxidize"
-			],
-			"abilities": []
-		},
-		"toxtricity": {
-			"moves": [
-				"nervepoison",
-				"oxidize"
-			],
-			"abilities": []
-		},
-		"toxtricitylowkey": {
-			"moves": [
-				"nervepoison",
-				"oxidize"
-			],
-			"abilities": []
-		},
-		"medicinemelancholy": {
-			"moves": [
-				"nervepoison"
-			],
-			"abilities": []
-		},
-		"hinakagiyama": {
-			"moves": [
-				"nervepoison",
-				"wickedenergy"
-			],
-			"abilities": []
-		},
-		"sagumekishin": {
-			"moves": [
-				"nervepoison",
-				"cloudfist",
-				"dancingblow"
-			],
-			"abilities": []
-		},
-		"joonyorigami": {
-			"moves": [
-				"nervepoison"
-			],
-			"abilities": []
-		},
-		"weedle": {
-			"moves": [
-				"nervepoison",
-				"hivefrenzy"
-			],
-			"abilities": []
-		},
-		"venonat": {
-			"moves": [
-				"nervepoison",
-				"chrysalisveil",
-				"oxidize"
-			],
-			"abilities": []
-		},
-		"cascoon": {
-			"moves": [
-				"nervepoison",
-				"dancingblow"
-			],
-			"abilities": []
-		},
-		"wurmple": {
-			"moves": [
-				"nervepoison",
-				"dancingblow",
-				"chrysalisveil",
-				"oxidize"
-			],
-			"abilities": [
-				"Tinted Lens"
-			],
-			"slots": {
-				"0": "Shield Dust",
-				"1": "Tinted Lens",
-				"H": "Run Away"
-			}
-		},
-		"ogerponwellspring": {
-			"moves": [
-				"superscope3d",
-				"waterplates"
-			],
-			"abilities": []
-		},
-		"suwakomoriya": {
-			"moves": [
-				"superscope3d",
-				"waterplates",
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval"
-			],
-			"abilities": []
-		},
-		"kogasatatara": {
-			"moves": [
-				"superscope3d",
-				"waterplates"
-			],
-			"abilities": []
-		},
-		"minamitsumurasa": {
-			"moves": [
-				"superscope3d",
-				"waterplates"
-			],
-			"abilities": []
-		},
-		"wakasagihime": {
-			"moves": [
-				"superscope3d",
-				"waterplates"
-			],
-			"abilities": []
-		},
-		"urumiushizaki": {
-			"moves": [
-				"superscope3d",
-				"waterplates",
-				"sculptedarmor",
-				"dustupheaval"
-			],
-			"abilities": []
-		},
-		"watatsukinotoyohime": {
-			"moves": [
-				"superscope3d",
-				"waterplates"
-			],
-			"abilities": []
-		},
-		"azurill": {
-			"moves": [
-				"superscope3d",
-				"waterplates",
-				"penance",
-				"velvetpress",
-				"velvetguard"
-			],
-			"abilities": []
-		},
-		"bidoof": {
-			"moves": [
-				"superscope3d",
-				"waterplates",
-				"slackoff",
-				"hustleup"
-			],
-			"abilities": []
-		},
-		"kubfu": {
-			"moves": [
-				"superscope3d",
-				"waterplates"
-			],
-			"abilities": []
-		},
-		"pidgey": {
-			"moves": [
-				"cloudfist",
-				"dancingblow"
-			],
-			"abilities": []
-		},
-		"pidgeotto": {
-			"moves": [
-				"cloudfist",
-				"dancingblow"
-			],
-			"abilities": []
-		},
-		"pidgeot": {
-			"moves": [
-				"cloudfist",
-				"dancingblow"
-			],
-			"abilities": []
-		},
-		"spearow": {
-			"moves": [
-				"cloudfist",
-				"dancingblow",
-				"hustleup"
-			],
-			"abilities": []
-		},
-		"fearow": {
-			"moves": [
-				"cloudfist",
-				"dancingblow",
-				"hustleup",
-				"knockoff",
-				"suckerpunch",
-				"bodyslam"
-			],
-			"abilities": []
-		},
-		"zubat": {
-			"moves": [
-				"cloudfist"
-			],
-			"abilities": []
-		},
-		"golbat": {
-			"moves": [
-				"cloudfist"
-			],
-			"abilities": []
-		},
-		"machop": {
-			"moves": [
-				"cloudfist",
-				"dancingblow",
-				"shufflejab"
-			],
-			"abilities": []
-		},
-		"machoke": {
-			"moves": [
-				"cloudfist",
-				"dancingblow",
-				"shufflejab"
-			],
-			"abilities": []
-		},
-		"machamp": {
-			"moves": [
-				"cloudfist",
-				"dancingblow",
-				"shufflejab"
-			],
-			"abilities": []
-		},
-		"farfetchd": {
-			"moves": [
-				"cloudfist",
-				"dancingblow",
-				"hustleup"
-			],
-			"abilities": []
-		},
-		"doduo": {
-			"moves": [
-				"cloudfist",
-				"dancingblow",
-				"hustleup"
-			],
-			"abilities": [
-				"Reckless"
-			],
-			"slots": {
-				"0": "Run Away",
-				"1": "Early Bird",
-				"H": "Tangled Feet",
-				"V0": "Reckless"
-			}
-		},
-		"dodrio": {
-			"moves": [
-				"cloudfist",
-				"dancingblow",
-				"hustleup",
-				"uturn",
-				"suckerpunch"
-			],
-			"abilities": [
-				"Reckless"
-			],
-			"slots": {
-				"0": "Run Away",
-				"1": "Early Bird",
-				"H": "Tangled Feet",
-				"V0": "Reckless"
-			}
-		},
-		"hitmonlee": {
-			"moves": [
-				"cloudfist",
-				"dancingblow",
-				"shufflejab",
-				"drainpunch",
-				"tripleaxel"
-			],
-			"abilities": []
-		},
-		"hitmonchan": {
-			"moves": [
-				"cloudfist",
-				"dancingblow",
-				"shufflejab"
-			],
-			"abilities": []
-		},
-		"aerodactyl": {
-			"moves": [
-				"cloudfist",
-				"sculptedarmor",
-				"dustupheaval",
-				"craghammer"
-			],
-			"abilities": []
-		},
-		"zapdosgalar": {
-			"moves": [
-				"cloudfist",
-				"dancingblow",
-				"velvetpress"
-			],
-			"abilities": []
-		},
-		"dragonite": {
-			"moves": [
-				"cloudfist",
-				"velvetpress"
-			],
-			"abilities": []
-		},
-		"crobat": {
-			"moves": [
-				"cloudfist"
-			],
-			"abilities": []
-		},
-		"hoppip": {
-			"moves": [
-				"cloudfist",
-				"solarnectar",
-				"velvetpress",
-				"velvetguard"
-			],
-			"abilities": []
-		},
-		"skiploom": {
-			"moves": [
-				"cloudfist",
-				"solarnectar",
-				"velvetpress",
-				"velvetguard"
-			],
-			"abilities": []
-		},
-		"jumpluff": {
-			"moves": [
-				"cloudfist",
-				"solarnectar",
-				"knockoff",
-				"earthquake",
-				"velvetpress",
-				"velvetguard"
-			],
-			"abilities": []
-		},
-		"gligar": {
-			"moves": [
-				"cloudfist",
-				"excavate",
-				"hivefrenzy"
-			],
-			"abilities": []
-		},
-		"heracross": {
-			"moves": [
-				"cloudfist",
-				"dancingblow",
-				"hivefrenzy"
-			],
-			"abilities": []
-		},
-		"sneaselhisui": {
-			"moves": [
-				"cloudfist",
-				"dancingblow"
-			],
-			"abilities": []
-		},
-		"tyrogue": {
-			"moves": [
-				"cloudfist",
-				"dancingblow",
-				"tripleaxel",
-				"axekick",
-				"shufflejab"
-			],
-			"abilities": []
-		},
-		"hitmontop": {
-			"moves": [
-				"cloudfist",
-				"dancingblow",
-				"shufflejab",
-				"drainpunch",
-				"knockoff",
-				"axekick"
-			],
-			"abilities": []
-		},
-		"combusken": {
-			"moves": [
-				"cloudfist",
-				"dancingblow"
-			],
-			"abilities": []
-		},
-		"blaziken": {
-			"moves": [
-				"cloudfist",
-				"dancingblow"
-			],
-			"abilities": []
-		},
-		"taillow": {
-			"moves": [
-				"cloudfist",
-				"dancingblow",
-				"hustleup"
-			],
-			"abilities": []
-		},
-		"swellow": {
-			"moves": [
-				"cloudfist",
-				"dancingblow",
-				"hustleup",
-				"knockoff",
-				"suckerpunch",
-				"bodyslam"
-			],
-			"abilities": []
-		},
-		"breloom": {
-			"moves": [
-				"cloudfist",
-				"dancingblow"
-			],
-			"abilities": []
-		},
-		"ninjask": {
-			"moves": [
-				"cloudfist",
-				"pounce",
-				"hivefrenzy"
-			],
-			"abilities": []
-		},
-		"makuhita": {
-			"moves": [
-				"cloudfist",
-				"dancingblow",
-				"shufflejab"
-			],
-			"abilities": [
-				"Unaware"
-			],
-			"slots": {
-				"0": "Thick Fat",
-				"1": "Guts",
-				"H": "Sheer Force",
-				"V0": "Unaware"
-			}
-		},
-		"hariyama": {
-			"moves": [
-				"cloudfist",
-				"dancingblow",
-				"shufflejab",
-				"machpunch"
-			],
-			"abilities": [
-				"Unaware"
-			],
-			"slots": {
-				"0": "Thick Fat",
-				"1": "Guts",
-				"H": "Sheer Force",
-				"V0": "Unaware"
-			}
-		},
-		"swablu": {
-			"moves": [
-				"cloudfist",
-				"dancingblow",
-				"velvetpress",
-				"velvetguard"
-			],
-			"abilities": []
-		},
-		"altaria": {
-			"moves": [
-				"cloudfist",
-				"dancingblow",
-				"velvetpress",
-				"velvetguard"
-			],
-			"abilities": []
-		},
-		"salamence": {
-			"moves": [
-				"cloudfist"
-			],
-			"abilities": []
-		},
-		"chimchar": {
-			"moves": [
-				"cloudfist",
-				"dancingblow",
-				"shufflejab"
-			],
-			"abilities": [
-				"Kindling Crown"
-			],
-			"slots": {
-				"0": "Blaze",
-				"1": "Kindling Crown",
-				"H": "Iron Fist"
-			}
-		},
-		"monferno": {
-			"moves": [
-				"cloudfist",
-				"dancingblow",
-				"shufflejab"
-			],
-			"abilities": [
-				"Kindling Crown"
-			],
-			"slots": {
-				"0": "Blaze",
-				"1": "Kindling Crown",
-				"H": "Iron Fist"
-			}
-		},
-		"infernape": {
-			"moves": [
-				"cloudfist",
-				"dancingblow",
-				"shufflejab",
-				"icepunch",
-				"greatsagestrike",
-				"pyrestrike",
-				"hustleup",
-				"craghammer",
-				"sparkscamper",
-				"explosion",
-				"copycat",
-				"screech",
-				"doublehit",
-				"tickle",
-				"highjumpkick",
-				"bounce"
-			],
-			"abilities": [
-				"Crown of Flame"
-			],
-			"slots": {
-				"0": "Blaze",
-				"1": "Crown of Flame",
-				"H": "Iron Fist"
-			}
-		},
-		"starly": {
-			"moves": [
-				"cloudfist",
-				"dancingblow"
-			],
-			"abilities": []
-		},
-		"staravia": {
-			"moves": [
-				"cloudfist",
-				"dancingblow"
-			],
-			"abilities": []
-		},
-		"staraptor": {
-			"moves": [
-				"cloudfist",
-				"dancingblow"
-			],
-			"abilities": []
-		},
-		"mothim": {
-			"moves": [
-				"cloudfist",
-				"dancingblow",
-				"hivefrenzy",
-				"leechlife",
-				"knockoff",
-				"swordsdance",
-				"chrysalisveil"
-			],
-			"abilities": []
-		},
-		"combee": {
-			"moves": [
-				"cloudfist",
-				"hivefrenzy"
-			],
-			"abilities": []
-		},
-		"vespiquen": {
-			"moves": [
-				"cloudfist",
-				"hivefrenzy",
-				"leechlife",
-				"knockoff",
-				"swordsdance"
-			],
-			"abilities": []
-		},
-		"riolu": {
-			"moves": [
-				"cloudfist",
-				"dancingblow",
-				"shufflejab"
-			],
-			"abilities": []
-		},
-		"toxicroak": {
-			"moves": [
-				"cloudfist",
-				"dancingblow",
-				"shufflejab"
-			],
-			"abilities": []
-		},
-		"gliscor": {
-			"moves": [
-				"cloudfist",
-				"excavate",
-				"punishment"
-			],
-			"abilities": []
-		},
-		"pignite": {
-			"moves": [
-				"cloudfist",
-				"dancingblow"
-			],
-			"abilities": []
-		},
-		"emboar": {
-			"moves": [
-				"cloudfist",
-				"dancingblow"
-			],
-			"abilities": []
-		},
-		"pidove": {
-			"moves": [
-				"cloudfist",
-				"dancingblow",
-				"hustleup"
-			],
-			"abilities": []
-		},
-		"tranquill": {
-			"moves": [
-				"cloudfist",
-				"dancingblow",
-				"hustleup"
-			],
-			"abilities": []
-		},
-		"unfezant": {
-			"moves": [
-				"cloudfist",
-				"dancingblow",
-				"hustleup"
-			],
-			"abilities": []
-		},
-		"timburr": {
-			"moves": [
-				"cloudfist",
-				"dancingblow",
-				"craghammer",
-				"shufflejab"
-			],
-			"abilities": []
-		},
-		"gurdurr": {
-			"moves": [
-				"cloudfist",
-				"dancingblow",
-				"craghammer",
-				"shufflejab"
-			],
-			"abilities": []
-		},
-		"conkeldurr": {
-			"moves": [
-				"cloudfist",
-				"dancingblow",
-				"craghammer",
-				"shufflejab"
-			],
-			"abilities": []
-		},
-		"throh": {
-			"moves": [
-				"cloudfist",
-				"dancingblow",
-				"shufflejab",
-				"drainpunch",
-				"machpunch"
-			],
-			"abilities": []
-		},
-		"sawk": {
-			"moves": [
-				"cloudfist",
-				"dancingblow",
-				"shufflejab",
-				"drainpunch",
-				"machpunch",
-				"axekick",
-				"upperhand"
-			],
-			"abilities": []
-		},
-		"scraggy": {
-			"moves": [
-				"cloudfist",
-				"dancingblow",
-				"wickedenergy",
-				"twilightexit",
-				"carrionfeast",
-				"shufflejab"
-			],
-			"abilities": []
-		},
-		"scrafty": {
-			"moves": [
-				"cloudfist",
-				"dancingblow",
-				"wickedenergy",
-				"twilightexit",
-				"carrionfeast",
-				"punishment",
-				"shufflejab"
-			],
-			"abilities": []
-		},
-		"archen": {
-			"moves": [
-				"cloudfist",
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval",
-				"craghammer"
-			],
-			"abilities": []
-		},
-		"archeops": {
-			"moves": [
-				"cloudfist",
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval",
-				"craghammer"
-			],
-			"abilities": []
-		},
-		"emolga": {
-			"moves": [
-				"cloudfist",
-				"missile",
-				"sparkscamper",
-				"voltaiclance"
-			],
-			"abilities": []
-		},
-		"mienfoo": {
-			"moves": [
-				"cloudfist",
-				"dancingblow",
-				"axekick",
-				"shufflejab"
-			],
-			"abilities": []
-		},
-		"mienshao": {
-			"moves": [
-				"cloudfist",
-				"dancingblow"
-			],
-			"abilities": []
-		},
-		"golett": {
-			"moves": [
-				"cloudfist",
-				"sculptedarmor",
-				"excavate",
-				"missile",
-				"dustupheaval",
-				"chillingmist"
-			],
-			"abilities": []
-		},
-		"golurk": {
-			"moves": [
-				"cloudfist",
-				"sculptedarmor",
-				"excavate",
-				"missile",
-				"dustupheaval",
-				"chillingmist"
-			],
-			"abilities": []
-		},
-		"braviary": {
-			"moves": [
-				"cloudfist",
-				"dancingblow"
-			],
-			"abilities": []
-		},
-		"vullaby": {
-			"moves": [
-				"cloudfist",
-				"dancingblow",
-				"wickedenergy",
-				"twilightexit",
-				"carrionfeast",
-				"chillingmist",
-				"velvetpress"
-			],
-			"abilities": [
-				"Unaware"
-			],
-			"slots": {
-				"0": "Big Pecks",
-				"1": "Overcoat",
-				"H": "Weak Armor",
-				"V0": "Unaware"
-			}
-		},
-		"mandibuzz": {
-			"moves": [
-				"cloudfist",
-				"dancingblow",
-				"wickedenergy",
-				"twilightexit",
-				"carrionfeast",
-				"chillingmist",
-				"velvetpress"
-			],
-			"abilities": [
-				"Unaware"
-			],
-			"slots": {
-				"0": "Big Pecks",
-				"1": "Overcoat",
-				"H": "Weak Armor",
-				"V0": "Unaware"
-			}
-		},
-		"chesnaught": {
-			"moves": [
-				"cloudfist",
-				"dancingblow"
-			],
-			"abilities": []
-		},
-		"fletchling": {
-			"moves": [
-				"cloudfist",
-				"dancingblow"
-			],
-			"abilities": []
-		},
-		"fletchinder": {
-			"moves": [
-				"cloudfist",
-				"dancingblow"
-			],
-			"abilities": []
-		},
-		"talonflame": {
-			"moves": [
-				"cloudfist",
-				"dancingblow"
-			],
-			"abilities": []
-		},
-		"hawlucha": {
-			"moves": [
-				"cloudfist",
-				"dancingblow",
-				"shufflejab"
-			],
-			"abilities": []
-		},
-		"rowlet": {
-			"moves": [
-				"cloudfist",
-				"dancingblow",
-				"chillingmist"
-			],
-			"abilities": []
-		},
-		"dartrix": {
-			"moves": [
-				"cloudfist",
-				"dancingblow",
-				"chillingmist"
-			],
-			"abilities": []
-		},
-		"decidueyehisui": {
-			"moves": [
-				"cloudfist",
-				"dancingblow"
-			],
-			"abilities": []
-		},
-		"pikipek": {
-			"moves": [
-				"cloudfist",
-				"dancingblow"
-			],
-			"abilities": []
-		},
-		"trumbeak": {
-			"moves": [
-				"cloudfist",
-				"dancingblow"
-			],
-			"abilities": []
-		},
-		"toucannon": {
-			"moves": [
-				"cloudfist",
-				"dancingblow"
-			],
-			"abilities": []
-		},
-		"crabrawler": {
-			"moves": [
-				"cloudfist",
-				"dancingblow",
-				"chillingmist",
-				"rimecleaver",
-				"shufflejab"
-			],
-			"abilities": []
-		},
-		"crabominable": {
-			"moves": [
-				"cloudfist",
-				"dancingblow",
-				"chillingmist",
-				"rimecleaver",
-				"shufflejab"
-			],
-			"abilities": []
-		},
-		"stufful": {
-			"moves": [
-				"cloudfist",
-				"dancingblow"
-			],
-			"abilities": []
-		},
-		"bewear": {
-			"moves": [
-				"cloudfist",
-				"dancingblow"
-			],
-			"abilities": []
-		},
-		"passimian": {
-			"moves": [
-				"cloudfist",
-				"dancingblow",
-				"shufflejab"
-			],
-			"abilities": []
-		},
-		"silvallyflying": {
-			"moves": [
-				"cloudfist"
-			],
-			"abilities": []
-		},
-		"minior": {
-			"moves": [
-				"cloudfist",
-				"sculptedarmor",
-				"dustupheaval"
-			],
-			"abilities": []
-		},
-		"miniormeteor": {
-			"moves": [
-				"cloudfist",
-				"sculptedarmor",
-				"dustupheaval"
-			],
-			"abilities": []
-		},
-		"hakamoo": {
-			"moves": [
-				"cloudfist",
-				"dancingblow",
-				"shufflejab"
-			],
-			"abilities": []
-		},
-		"kommoo": {
-			"moves": [
-				"cloudfist",
-				"dancingblow",
-				"shufflejab"
-			],
-			"abilities": []
-		},
-		"buzzwole": {
-			"moves": [
-				"cloudfist",
-				"dancingblow"
-			],
-			"abilities": []
-		},
-		"rookidee": {
-			"moves": [
-				"cloudfist",
-				"missile",
-				"velvetpress"
-			],
-			"abilities": []
-		},
-		"corvisquire": {
-			"moves": [
-				"cloudfist",
-				"missile",
-				"velvetpress"
-			],
-			"abilities": []
-		},
-		"corviknight": {
-			"moves": [
-				"cloudfist",
-				"missile",
-				"punishment",
-				"velvetpress"
-			],
-			"abilities": []
-		},
-		"clobbopus": {
-			"moves": [
-				"cloudfist",
-				"dancingblow",
-				"shufflejab"
-			],
-			"abilities": []
-		},
-		"grapploct": {
-			"moves": [
-				"cloudfist",
-				"dancingblow",
-				"shufflejab"
-			],
-			"abilities": []
-		},
-		"sneasler": {
-			"moves": [
-				"cloudfist",
-				"dancingblow"
-			],
-			"abilities": []
-		},
-		"pawmi": {
-			"moves": [
-				"cloudfist",
-				"dancingblow",
-				"missile",
-				"sparkscamper",
-				"voltaiclance",
-				"shufflejab"
-			],
-			"abilities": []
-		},
-		"pawmo": {
-			"moves": [
-				"cloudfist",
-				"dancingblow",
-				"missile",
-				"sparkscamper",
-				"voltaiclance",
-				"shufflejab"
-			],
-			"abilities": []
-		},
-		"pawmot": {
-			"moves": [
-				"cloudfist",
-				"dancingblow",
-				"missile",
-				"sparkscamper",
-				"voltaiclance",
-				"shufflejab"
-			],
-			"abilities": []
-		},
-		"squawkabilly": {
-			"moves": [
-				"cloudfist",
-				"dancingblow",
-				"hustleup",
-				"knockoff",
-				"suckerpunch",
-				"bodyslam"
-			],
-			"abilities": []
-		},
-		"squawkabillyblue": {
-			"moves": [
-				"cloudfist",
-				"dancingblow"
-			],
-			"abilities": []
-		},
-		"squawkabillyyellow": {
-			"moves": [
-				"cloudfist",
-				"dancingblow"
-			],
-			"abilities": []
-		},
-		"squawkabillywhite": {
-			"moves": [
-				"cloudfist",
-				"dancingblow"
-			],
-			"abilities": []
-		},
-		"bombirdier": {
-			"moves": [
-				"cloudfist",
-				"dancingblow",
-				"wickedenergy",
-				"punishment"
-			],
-			"abilities": []
-		},
-		"flamigo": {
-			"moves": [
-				"cloudfist",
-				"dancingblow"
-			],
-			"abilities": []
-		},
-		"ironhands": {
-			"moves": [
-				"cloudfist",
-				"dancingblow",
-				"missile"
-			],
-			"abilities": []
-		},
-		"ironvaliant": {
-			"moves": [
-				"cloudfist",
-				"dancingblow",
-				"missile",
-				"penance",
-				"velvetpress",
-				"velvetguard"
-			],
-			"abilities": []
-		},
-		"okidogi": {
-			"moves": [
-				"cloudfist",
-				"dancingblow"
-			],
-			"abilities": []
-		},
-		"hongmeiling": {
-			"moves": [
-				"cloudfist",
-				"dancingblow"
-			],
-			"abilities": []
-		},
-		"youmukonpaku": {
-			"moves": [
-				"cloudfist",
-				"dancingblow"
-			],
-			"abilities": []
-		},
-		"suikaibuki": {
-			"moves": [
-				"cloudfist",
-				"dancingblow",
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval"
-			],
-			"abilities": []
-		},
-		"fujiwaranomokou": {
-			"moves": [
-				"cloudfist",
-				"dancingblow"
-			],
-			"abilities": []
-		},
-		"ayashameimaru": {
-			"moves": [
-				"cloudfist",
-				"dancingblow"
-			],
-			"abilities": []
-		},
-		"kanakoyasaka": {
-			"moves": [
-				"cloudfist",
-				"dancingblow",
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval"
-			],
-			"abilities": []
-		},
-		"yuugihoshiguma": {
-			"moves": [
-				"cloudfist",
-				"dancingblow",
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval"
-			],
-			"abilities": []
-		},
-		"ichirinkumoi": {
-			"moves": [
-				"cloudfist",
-				"dancingblow"
-			],
-			"abilities": []
-		},
-		"ichirinkumoiunzan": {
-			"moves": [
-				"cloudfist",
-				"dancingblow"
-			],
-			"abilities": []
-		},
-		"byakurenhijiri": {
-			"moves": [
-				"cloudfist",
-				"dancingblow"
-			],
-			"abilities": []
-		},
-		"kasenibaraki": {
-			"moves": [
-				"cloudfist",
-				"dancingblow"
-			],
-			"abilities": []
-		},
-		"maiteireida": {
-			"moves": [
-				"cloudfist",
-				"dancingblow"
-			],
-			"abilities": []
-		},
-		"satononishida": {
-			"moves": [
-				"cloudfist",
-				"dancingblow"
-			],
-			"abilities": []
-		},
-		"sakikurokuma": {
-			"moves": [
-				"cloudfist",
-				"dancingblow"
-			],
-			"abilities": []
-		},
-		"watatsukinoyorihime": {
-			"moves": [
-				"cloudfist",
-				"dancingblow"
-			],
-			"abilities": []
-		},
-		"dragonair": {
-			"moves": [
-				"cloudfist",
-				"velvetpress"
-			],
-			"abilities": []
-		},
-		"dratini": {
-			"moves": [
-				"cloudfist",
-				"velvetpress"
-			],
-			"abilities": []
-		},
-		"torchic": {
-			"moves": [
-				"cloudfist",
-				"dancingblow"
-			],
-			"abilities": []
-		},
-		"shroomish": {
-			"moves": [
-				"cloudfist",
-				"dancingblow",
-				"trailblaze",
-				"solarnectar"
-			],
-			"abilities": []
-		},
-		"nincada": {
-			"moves": [
-				"cloudfist",
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval",
-				"hivefrenzy"
-			],
-			"abilities": []
-		},
-		"shelgon": {
-			"moves": [
-				"cloudfist"
-			],
-			"abilities": []
-		},
-		"bagon": {
-			"moves": [
-				"cloudfist"
-			],
-			"abilities": []
-		},
-		"burmy": {
-			"moves": [
-				"cloudfist",
-				"dancingblow",
-				"sculptedarmor",
-				"excavate",
-				"missile",
-				"dustupheaval",
-				"hivefrenzy",
-				"chrysalisveil",
-				"solarnectar"
-			],
-			"abilities": [
-				"Filter"
-			],
-			"slots": {
-				"0": "Shed Skin",
-				"1": "Filter",
-				"H": "Overcoat"
-			}
-		},
-		"tepig": {
-			"moves": [
-				"cloudfist",
-				"dancingblow"
-			],
-			"abilities": []
-		},
-		"quilladin": {
-			"moves": [
-				"cloudfist",
-				"dancingblow"
-			],
-			"abilities": []
-		},
-		"chespin": {
-			"moves": [
-				"cloudfist",
-				"dancingblow"
-			],
-			"abilities": []
-		},
-		"jangmoo": {
-			"moves": [
-				"cloudfist",
-				"dancingblow",
-				"shufflejab"
-			],
-			"abilities": []
-		},
-		"pikachucosplay": {
-			"moves": [
-				"dancingblow",
-				"missile"
-			],
-			"abilities": []
-		},
-		"pikachurockstar": {
-			"moves": [
-				"dancingblow",
-				"missile"
-			],
-			"abilities": []
-		},
-		"pikachubelle": {
-			"moves": [
-				"dancingblow",
-				"missile"
-			],
-			"abilities": []
-		},
-		"pikachupopstar": {
-			"moves": [
-				"dancingblow",
-				"missile"
-			],
-			"abilities": []
-		},
-		"pikachuphd": {
-			"moves": [
-				"dancingblow",
-				"missile"
-			],
-			"abilities": []
-		},
-		"pikachulibre": {
-			"moves": [
-				"dancingblow",
-				"missile"
-			],
-			"abilities": []
-		},
-		"pikachuoriginal": {
-			"moves": [
-				"dancingblow",
-				"missile"
-			],
-			"abilities": []
-		},
-		"pikachuhoenn": {
-			"moves": [
-				"dancingblow",
-				"missile"
-			],
-			"abilities": []
-		},
-		"pikachusinnoh": {
-			"moves": [
-				"dancingblow",
-				"missile"
-			],
-			"abilities": []
-		},
-		"pikachuunova": {
-			"moves": [
-				"dancingblow",
-				"missile"
-			],
-			"abilities": []
-		},
-		"pikachukalos": {
-			"moves": [
-				"dancingblow",
-				"missile"
-			],
-			"abilities": []
-		},
-		"pikachualola": {
-			"moves": [
-				"dancingblow",
-				"missile"
-			],
-			"abilities": []
-		},
-		"pikachupartner": {
-			"moves": [
-				"dancingblow",
-				"missile"
-			],
-			"abilities": []
-		},
-		"pikachustarter": {
-			"moves": [
-				"dancingblow",
-				"missile"
-			],
-			"abilities": []
-		},
-		"pikachuworld": {
-			"moves": [
-				"dancingblow",
-				"missile"
-			],
-			"abilities": []
-		},
-		"raichu": {
-			"moves": [
-				"dancingblow",
-				"missile"
-			],
-			"abilities": []
-		},
-		"meowth": {
-			"moves": [
-				"dancingblow",
-				"hustleup"
-			],
-			"abilities": []
-		},
-		"persian": {
-			"moves": [
-				"dancingblow",
-				"hustleup",
-				"suckerpunch"
-			],
-			"abilities": []
-		},
-		"bellsprout": {
-			"moves": [
-				"dancingblow",
-				"solarnectar",
-				"oxidize"
-			],
-			"abilities": []
-		},
-		"weepinbell": {
-			"moves": [
-				"dancingblow",
-				"solarnectar",
-				"oxidize"
-			],
-			"abilities": []
-		},
-		"victreebel": {
-			"moves": [
-				"dancingblow",
-				"earthquake",
-				"solarnectar",
-				"oxidize"
-			],
-			"abilities": []
-		},
-		"farfetchdgalar": {
-			"moves": [
-				"dancingblow",
-				"hustleup"
-			],
-			"abilities": []
-		},
-		"taurospaldeacombat": {
-			"moves": [
-				"dancingblow"
-			],
-			"abilities": []
-		},
-		"taurospaldeablaze": {
-			"moves": [
-				"dancingblow"
-			],
-			"abilities": []
-		},
-		"pichuspikyeared": {
-			"moves": [
-				"dancingblow",
-				"missile"
-			],
-			"abilities": []
-		},
-		"whismur": {
-			"moves": [
-				"dancingblow"
-			],
-			"abilities": []
-		},
-		"loudred": {
-			"moves": [
-				"dancingblow"
-			],
-			"abilities": []
-		},
-		"exploud": {
-			"moves": [
-				"dancingblow"
-			],
-			"abilities": []
-		},
-		"spinda": {
-			"moves": [
-				"dancingblow",
-				"shufflejab",
-				"hustleup",
-				"slackoff"
-			],
-			"abilities": []
-		},
-		"cacnea": {
-			"moves": [
-				"dancingblow",
-				"wickedenergy",
-				"carrionfeast",
-				"solarnectar",
-				"twilightexit"
-			],
-			"abilities": []
-		},
-		"cacturne": {
-			"moves": [
-				"dancingblow",
-				"wickedenergy",
-				"carrionfeast",
-				"crunch",
-				"solarnectar",
-				"earthquake",
-				"gunkshot",
-				"twilightexit",
-				"punishment"
-			],
-			"abilities": []
-		},
-		"wormadamsandy": {
-			"moves": [
-				"dancingblow",
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval",
-				"chrysalisveil",
-				"uturn",
-				"energyball"
-			],
-			"abilities": [
-				"Filter"
-			],
-			"slots": {
-				"0": "Anticipation",
-				"1": "Filter",
-				"H": "Overcoat"
-			}
-		},
-		"wormadamtrash": {
-			"moves": [
-				"dancingblow",
-				"missile",
-				"chrysalisveil",
-				"uturn",
-				"energyball"
-			],
-			"abilities": [
-				"Filter"
-			],
-			"slots": {
-				"0": "Anticipation",
-				"1": "Filter",
-				"H": "Overcoat"
-			}
-		},
-		"buneary": {
-			"moves": [
-				"dancingblow",
-				"axekick",
-				"hustleup",
-				"shufflejab"
-			],
-			"abilities": []
-		},
-		"lopunny": {
-			"moves": [
-				"dancingblow",
-				"axekick",
-				"hustleup",
-				"shufflejab"
-			],
-			"abilities": []
-		},
-		"lilliganthisui": {
-			"moves": [
-				"dancingblow"
-			],
-			"abilities": []
-		},
-		"terrakion": {
-			"moves": [
-				"dancingblow",
-				"sculptedarmor",
-				"dustupheaval"
-			],
-			"abilities": []
-		},
-		"virizion": {
-			"moves": [
-				"dancingblow"
-			],
-			"abilities": []
-		},
-		"decidueye": {
-			"moves": [
-				"dancingblow",
-				"stoneedge",
-				"chillingmist"
-			],
-			"abilities": []
-		},
-		"oricorio": {
-			"moves": [
-				"dancingblow"
-			],
-			"abilities": []
-		},
-		"oricoriopompom": {
-			"moves": [
-				"dancingblow"
-			],
-			"abilities": []
-		},
-		"bounsweet": {
-			"moves": [
-				"dancingblow"
-			],
-			"abilities": []
-		},
-		"steenee": {
-			"moves": [
-				"dancingblow"
-			],
-			"abilities": []
-		},
-		"tsareena": {
-			"moves": [
-				"dancingblow"
-			],
-			"abilities": []
-		},
-		"silvallyfighting": {
-			"moves": [
-				"dancingblow"
-			],
-			"abilities": []
-		},
-		"pheromosa": {
-			"moves": [
-				"dancingblow"
-			],
-			"abilities": []
-		},
-		"sirfetchd": {
-			"moves": [
-				"dancingblow",
-				"hustleup"
-			],
-			"abilities": []
-		},
-		"falinks": {
-			"moves": [
-				"dancingblow",
-				"shufflejab",
-				"drainpunch",
-				"machpunch"
-			],
-			"abilities": []
-		},
-		"eiscuenoice": {
-			"moves": [
-				"dancingblow"
-			],
-			"abilities": []
-		},
-		"greattusk": {
-			"moves": [
-				"dancingblow",
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval"
-			],
-			"abilities": []
-		},
-		"slitherwing": {
-			"moves": [
-				"dancingblow"
-			],
-			"abilities": []
-		},
-		"wrigglenightbug": {
-			"moves": [
-				"dancingblow"
-			],
-			"abilities": []
-		},
-		"yuukakazami": {
-			"moves": [
-				"dancingblow"
-			],
-			"abilities": []
-		},
-		"yamamekurodani": {
-			"moves": [
-				"dancingblow"
-			],
-			"abilities": []
-		},
-		"aunnkomano": {
-			"moves": [
-				"dancingblow",
-				"sculptedarmor",
-				"dustupheaval"
-			],
-			"abilities": []
-		},
-		"petilil": {
-			"moves": [
-				"dancingblow",
-				"solarnectar"
-			],
-			"abilities": []
-		},
-		"sandshrew": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"craghammer"
-			],
-			"abilities": []
-		},
-		"sandslash": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"craghammer"
-			],
-			"abilities": []
-		},
-		"nidoqueen": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval",
-				"tremorshot",
-				"oxidize"
-			],
-			"abilities": []
-		},
-		"nidoking": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval",
-				"tremorshot",
-				"oxidize"
-			],
-			"abilities": []
-		},
-		"diglett": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"craghammer"
-			],
-			"abilities": []
-		},
-		"dugtrio": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"craghammer"
-			],
-			"abilities": []
-		},
-		"growlithehisui": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval"
-			],
-			"abilities": []
-		},
-		"arcaninehisui": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval"
-			],
-			"abilities": []
-		},
-		"geodude": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"craghammer"
-			],
-			"abilities": []
-		},
-		"geodudealola": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"missile",
-				"dustupheaval",
-				"craghammer"
-			],
-			"abilities": []
-		},
-		"graveler": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"craghammer"
-			],
-			"abilities": []
-		},
-		"graveleralola": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"missile",
-				"dustupheaval",
-				"craghammer"
-			],
-			"abilities": []
-		},
-		"golem": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"craghammer"
-			],
-			"abilities": []
-		},
-		"golemalola": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"missile",
-				"dustupheaval",
-				"craghammer"
-			],
-			"abilities": []
-		},
-		"onix": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"ironchomp",
-				"missile",
-				"dustupheaval",
-				"hardpress",
-				"craghammer"
-			],
-			"abilities": [
-				"Unaware"
-			],
-			"slots": {
-				"0": "Rock Head",
-				"1": "Sturdy",
-				"H": "Weak Armor",
-				"V0": "Unaware"
-			}
-		},
-		"cubone": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval",
-				"craghammer",
-				"chillingmist"
-			],
-			"abilities": []
-		},
-		"marowak": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval",
-				"craghammer"
-			],
-			"abilities": []
-		},
-		"rhyhorn": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval",
-				"craghammer"
-			],
-			"abilities": []
-		},
-		"rhydon": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval",
-				"craghammer"
-			],
-			"abilities": []
-		},
-		"sudowoodo": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval",
-				"craghammer"
-			],
-			"abilities": []
-		},
-		"wooperpaldea": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval",
-				"velvetpress"
-			],
-			"abilities": []
-		},
-		"steelix": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"ironchomp",
-				"missile",
-				"dustupheaval",
-				"hardpress",
-				"craghammer"
-			],
-			"abilities": [
-				"Unaware"
-			],
-			"slots": {
-				"0": "Rock Head",
-				"1": "Sturdy",
-				"H": "Sheer Force",
-				"V0": "Unaware"
-			}
-		},
-		"shuckle": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval",
-				"chrysalisveil"
-			],
-			"abilities": []
-		},
-		"magcargo": {
-			"moves": [
-				"sculptedarmor",
-				"craghammer"
-			],
-			"abilities": [
-				"Solid Rock"
-			],
-			"slots": {
-				"0": "Magma Armor",
-				"1": "Flame Body",
-				"H": "Weak Armor",
-				"V0": "Solid Rock"
-			}
-		},
-		"swinub": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval",
-				"chillingmist",
-				"rimecleaver"
-			],
-			"abilities": []
-		},
-		"piloswine": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval"
-			],
-			"abilities": []
-		},
-		"phanpy": {
-			"moves": [
-				"sculptedarmor",
-				"excavate"
-			],
-			"abilities": []
-		},
-		"donphan": {
-			"moves": [
-				"sculptedarmor",
-				"excavate"
-			],
-			"abilities": []
-		},
-		"larvitar": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"wickedenergy",
-				"dustupheaval"
-			],
-			"abilities": []
-		},
-		"pupitar": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"wickedenergy",
-				"dustupheaval"
-			],
-			"abilities": []
-		},
-		"tyranitar": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"wickedenergy",
-				"dustupheaval",
-				"punishment"
-			],
-			"abilities": []
-		},
-		"nosepass": {
-			"moves": [
-				"sculptedarmor",
-				"dustupheaval",
-				"hardpress",
-				"craghammer"
-			],
-			"abilities": []
-		},
-		"aron": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"ironchomp",
-				"missile",
-				"dustupheaval",
-				"hardpress",
-				"craghammer"
-			],
-			"abilities": []
-		},
-		"lairon": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"ironchomp",
-				"missile",
-				"dustupheaval"
-			],
-			"abilities": []
-		},
-		"aggron": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"ironchomp",
-				"missile",
-				"dustupheaval"
-			],
-			"abilities": []
-		},
-		"numel": {
-			"moves": [
-				"sculptedarmor",
-				"slackoff",
-				"tremorshot"
-			],
-			"abilities": []
-		},
-		"camerupt": {
-			"moves": [
-				"sculptedarmor"
-			],
-			"abilities": []
-		},
-		"trapinch": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval",
-				"tremorshot"
-			],
-			"abilities": []
-		},
-		"vibrava": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval",
-				"tremorshot"
-			],
-			"abilities": []
-		},
-		"flygon": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval",
-				"tremorshot"
-			],
-			"abilities": []
-		},
-		"solrock": {
-			"moves": [
-				"sculptedarmor",
-				"dustupheaval",
-				"craghammer"
-			],
-			"abilities": []
-		},
-		"lileep": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval",
-				"craghammer"
-			],
-			"abilities": []
-		},
-		"cradily": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval",
-				"craghammer"
-			],
-			"abilities": []
-		},
-		"anorith": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval",
-				"craghammer"
-			],
-			"abilities": []
-		},
-		"armaldo": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval",
-				"craghammer"
-			],
-			"abilities": []
-		},
-		"regirock": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval",
-				"headsmash",
-				"rockwrecker",
-				"craghammer",
-				"shoreup",
-				"spikes",
-				"knockoff",
-				"rapidspin",
-				"slackoff"
-			],
-			"abilities": [
-				"Bedrock Core"
-			],
-			"slots": {
-				"0": "Clear Body",
-				"1": "Bedrock Core",
-				"H": "Sturdy"
-			}
-		},
-		"torterra": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval",
-				"eldertimber",
-				"tectonicshell",
-				"explosion",
-				"rapidspin",
-				"headsmash",
-				"yawn",
-				"flail",
-				"rollout",
-				"ancientpower"
-			],
-			"abilities": [
-				"World Turtle"
-			],
-			"slots": {
-				"0": "Overgrow",
-				"1": "World Turtle",
-				"H": "Shell Armor"
-			}
-		},
-		"cranidos": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval",
-				"craghammer"
-			],
-			"abilities": []
-		},
-		"rampardos": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval",
-				"craghammer"
-			],
-			"abilities": []
-		},
-		"shieldon": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"missile",
-				"dustupheaval",
-				"craghammer"
-			],
-			"abilities": []
-		},
-		"bastiodon": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"missile",
-				"dustupheaval"
-			],
-			"abilities": []
-		},
-		"bonsly": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval",
-				"craghammer"
-			],
-			"abilities": []
-		},
-		"gible": {
-			"moves": [
-				"sculptedarmor"
-			],
-			"abilities": []
-		},
-		"gabite": {
-			"moves": [
-				"sculptedarmor"
-			],
-			"abilities": []
-		},
-		"garchomp": {
-			"moves": [
-				"sculptedarmor"
-			],
-			"abilities": []
-		},
-		"hippopotas": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval",
-				"velvetpress"
-			],
-			"abilities": [
-				"Unaware"
-			],
-			"slots": {
-				"0": "Sand Stream",
-				"1": "Unaware",
-				"H": "Sand Force"
-			}
-		},
-		"hippowdon": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval",
-				"punishment",
-				"velvetpress"
-			],
-			"abilities": [
-				"Unaware"
-			],
-			"slots": {
-				"0": "Sand Stream",
-				"1": "Unaware",
-				"H": "Sand Force"
-			}
-		},
-		"rhyperior": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval",
-				"craghammer"
-			],
-			"abilities": []
-		},
-		"mamoswine": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval"
-			],
-			"abilities": []
-		},
-		"probopass": {
-			"moves": [
-				"sculptedarmor"
-			],
-			"abilities": []
-		},
-		"roggenrola": {
-			"moves": [
-				"sculptedarmor",
-				"dustupheaval",
-				"craghammer"
-			],
-			"abilities": []
-		},
-		"boldore": {
-			"moves": [
-				"sculptedarmor",
-				"dustupheaval",
-				"craghammer"
-			],
-			"abilities": []
-		},
-		"gigalith": {
-			"moves": [
-				"sculptedarmor",
-				"dustupheaval",
-				"craghammer"
-			],
-			"abilities": []
-		},
-		"sandile": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"wickedenergy",
-				"dustupheaval",
-				"carrionfeast"
-			],
-			"abilities": []
-		},
-		"krokorok": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"wickedenergy",
-				"dustupheaval",
-				"carrionfeast"
-			],
-			"abilities": []
-		},
-		"krookodile": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"wickedenergy",
-				"dustupheaval",
-				"carrionfeast",
-				"punishment"
-			],
-			"abilities": []
-		},
-		"dwebble": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval",
-				"pounce",
-				"hivefrenzy",
-				"craghammer"
-			],
-			"abilities": []
-		},
-		"crustle": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval"
-			],
-			"abilities": []
-		},
-		"yamaskgalar": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval",
-				"chillingmist"
-			],
-			"abilities": []
-		},
-		"stunfisk": {
-			"moves": [
-				"sculptedarmor",
-				"sparkscamper",
-				"voltswitch",
-				"nuzzle",
-				"slackoff",
-				"tremorshot",
-				"voltaiclance"
-			],
-			"abilities": [
-				"Mudflat Ambush"
-			],
-			"slots": {
-				"0": "Static",
-				"1": "Limber",
-				"H": "Sand Veil",
-				"V0": "Mudflat Ambush"
-			}
-		},
-		"stunfiskgalar": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"ironchomp",
-				"missile",
-				"dustupheaval",
-				"slackoff",
-				"tremorshot"
-			],
-			"abilities": [
-				"Mudflat Ambush"
-			],
-			"slots": {
-				"0": "Mimicry",
-				"1": "Mudflat Ambush"
-			}
-		},
-		"diggersby": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval"
-			],
-			"abilities": []
-		},
-		"tyrunt": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"ironchomp",
-				"dustupheaval",
-				"craghammer"
-			],
-			"abilities": []
-		},
-		"tyrantrum": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"ironchomp",
-				"dustupheaval",
-				"craghammer"
-			],
-			"abilities": []
-		},
-		"amaura": {
-			"moves": [
-				"sculptedarmor",
-				"chillingmist"
-			],
-			"abilities": []
-		},
-		"aurorus": {
-			"moves": [
-				"sculptedarmor",
-				"chillingmist"
-			],
-			"abilities": []
-		},
-		"carbink": {
-			"moves": [
-				"sculptedarmor",
-				"dustupheaval",
-				"craghammer",
-				"penance",
-				"velvetpress",
-				"velvetguard"
-			],
-			"abilities": [
-				"Unaware"
-			],
-			"slots": {
-				"0": "Clear Body",
-				"1": "Unaware",
-				"H": "Sturdy"
-			}
-		},
-		"avalugghisui": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"ironchomp",
-				"dustupheaval",
-				"craghammer",
-				"chillingmist",
-				"rimecleaver"
-			],
-			"abilities": [
-				"Unaware"
-			],
-			"slots": {
-				"0": "Strong Jaw",
-				"1": "Ice Body",
-				"H": "Sturdy",
-				"V0": "Unaware"
-			}
-		},
-		"rockruff": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval",
-				"craghammer"
-			],
-			"abilities": []
-		},
-		"rockruffdusk": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval",
-				"craghammer"
-			],
-			"abilities": []
-		},
-		"lycanroc": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"craghammer"
-			],
-			"abilities": []
-		},
-		"lycanrocmidnight": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval",
-				"craghammer"
-			],
-			"abilities": []
-		},
-		"lycanrocdusk": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval",
-				"craghammer"
-			],
-			"abilities": []
-		},
-		"mudbray": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval",
-				"slackoff",
-				"velvetpress"
-			],
-			"abilities": [
-				"Unaware"
-			],
-			"slots": {
-				"0": "Own Tempo",
-				"1": "Stamina",
-				"H": "Inner Focus",
-				"V0": "Unaware"
-			}
-		},
-		"mudsdale": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval",
-				"slackoff",
-				"punishment",
-				"velvetpress"
-			],
-			"abilities": [
-				"Unaware"
-			],
-			"slots": {
-				"0": "Own Tempo",
-				"1": "Stamina",
-				"H": "Inner Focus",
-				"V0": "Unaware"
-			}
-		},
-		"silvallyground": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval"
-			],
-			"abilities": []
-		},
-		"silvallyrock": {
-			"moves": [
-				"sculptedarmor",
-				"dustupheaval"
-			],
-			"abilities": []
-		},
-		"nihilego": {
-			"moves": [
-				"sculptedarmor"
-			],
-			"abilities": []
-		},
-		"stakataka": {
-			"moves": [
-				"sculptedarmor",
-				"missile",
-				"dustupheaval"
-			],
-			"abilities": []
-		},
-		"rolycoly": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval",
-				"craghammer"
-			],
-			"abilities": []
-		},
-		"carkol": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval",
-				"craghammer"
-			],
-			"abilities": []
-		},
-		"coalossal": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval",
-				"craghammer"
-			],
-			"abilities": []
-		},
-		"silicobra": {
-			"moves": [
-				"sculptedarmor",
-				"excavate"
-			],
-			"abilities": []
-		},
-		"sandaconda": {
-			"moves": [
-				"sculptedarmor",
-				"excavate"
-			],
-			"abilities": []
-		},
-		"runerigus": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval",
-				"chillingmist"
-			],
-			"abilities": []
-		},
-		"stonjourner": {
-			"moves": [
-				"sculptedarmor",
-				"dustupheaval",
-				"craghammer"
-			],
-			"abilities": [
-				"Sturdy"
-			],
-			"slots": {
-				"0": "Power Spot",
-				"1": "Sturdy"
-			}
-		},
-		"ursaluna": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval"
-			],
-			"abilities": []
-		},
-		"ursalunabloodmoon": {
-			"moves": [
-				"sculptedarmor"
-			],
-			"abilities": []
-		},
-		"toedscool": {
-			"moves": [
-				"sculptedarmor",
-				"oxidize"
-			],
-			"abilities": []
-		},
-		"toedscruel": {
-			"moves": [
-				"sculptedarmor",
-				"oxidize"
-			],
-			"abilities": []
-		},
-		"klawf": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval",
-				"craghammer"
-			],
-			"abilities": []
-		},
-		"glimmet": {
-			"moves": [
-				"sculptedarmor",
-				"velvetpress"
-			],
-			"abilities": []
-		},
-		"glimmora": {
-			"moves": [
-				"sculptedarmor",
-				"velvetpress"
-			],
-			"abilities": []
-		},
-		"clodsire": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval",
-				"punishment",
-				"velvetpress"
-			],
-			"abilities": []
-		},
-		"sandyshocks": {
-			"moves": [
-				"sculptedarmor",
-				"tremorshot"
-			],
-			"abilities": []
-		},
-		"irontreads": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"ironchomp",
-				"missile",
-				"dustupheaval"
-			],
-			"abilities": []
-		},
-		"ironthorns": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"missile",
-				"dustupheaval",
-				"voltaiclance"
-			],
-			"abilities": []
-		},
-		"ogerponcornerstone": {
-			"moves": [
-				"sculptedarmor",
-				"dustupheaval"
-			],
-			"abilities": []
-		},
-		"ironboulder": {
-			"moves": [
-				"sculptedarmor",
-				"missile",
-				"dustupheaval"
-			],
-			"abilities": []
-		},
-		"minorikoaki": {
-			"moves": [
-				"sculptedarmor"
-			],
-			"abilities": []
-		},
-		"tenshihinanawi": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval"
-			],
-			"abilities": []
-		},
-		"nazrin": {
-			"moves": [
-				"sculptedarmor"
-			],
-			"abilities": []
-		},
-		"nemunosakata": {
-			"moves": [
-				"sculptedarmor",
-				"dustupheaval"
-			],
-			"abilities": []
-		},
-		"narumiyatadera": {
-			"moves": [
-				"sculptedarmor"
-			],
-			"abilities": []
-		},
-		"keikihaniyasushin": {
-			"moves": [
-				"sculptedarmor"
-			],
-			"abilities": []
-		},
-		"misumarutamatsukuri": {
-			"moves": [
-				"sculptedarmor"
-			],
-			"abilities": []
-		},
-		"momoyohimemushi": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval"
-			],
-			"abilities": []
-		},
-		"ubamechirizuka": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval"
-			],
-			"abilities": []
-		},
-		"ariyaiwanaga": {
-			"moves": [
-				"sculptedarmor"
-			],
-			"abilities": []
-		},
-		"bronzong": {
-			"moves": [
-				"sculptedarmor",
-				"missile",
-				"velvetpress",
-				"hypnowhirl"
-			],
-			"abilities": [
-				"Unaware"
-			],
-			"slots": {
-				"0": "Levitate",
-				"1": "Heatproof",
-				"H": "Heavy Metal",
-				"V0": "Unaware"
-			}
-		},
-		"registeel": {
-			"moves": [
-				"sculptedarmor",
-				"missile",
-				"slackoff",
-				"velvetpress"
-			],
-			"abilities": [
-				"Unaware"
-			],
-			"slots": {
-				"0": "Clear Body",
-				"1": "Unaware",
-				"H": "Light Metal"
-			}
-		},
-		"regice": {
-			"moves": [
-				"sculptedarmor",
-				"freezedry",
-				"recover",
-				"aurorabeam",
-				"chillingwater",
-				"chillingmist",
-				"slackoff",
-				"penance",
-				"velvetpress"
-			],
-			"abilities": [
-				"Permafrost Core"
-			],
-			"slots": {
-				"0": "Clear Body",
-				"1": "Permafrost Core",
-				"H": "Ice Body"
-			}
-		},
-		"nidorina": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval",
-				"tremorshot",
-				"oxidize"
-			],
-			"abilities": []
-		},
-		"nidoranf": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval",
-				"tremorshot",
-				"oxidize"
-			],
-			"abilities": []
-		},
-		"nidorino": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval",
-				"tremorshot",
-				"oxidize"
-			],
-			"abilities": []
-		},
-		"nidoranm": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval",
-				"tremorshot",
-				"oxidize"
-			],
-			"abilities": []
-		},
-		"slugma": {
-			"moves": [
-				"sculptedarmor",
-				"craghammer"
-			],
-			"abilities": [
-				"Solid Rock"
-			],
-			"slots": {
-				"0": "Magma Armor",
-				"1": "Flame Body",
-				"H": "Weak Armor",
-				"V0": "Solid Rock"
-			}
-		},
-		"grotle": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval"
-			],
-			"abilities": [
-				"Sapling Shell"
-			],
-			"slots": {
-				"0": "Overgrow",
-				"1": "Sapling Shell",
-				"H": "Shell Armor"
-			}
-		},
-		"turtwig": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval"
-			],
-			"abilities": [
-				"Sapling Shell"
-			],
-			"slots": {
-				"0": "Overgrow",
-				"1": "Sapling Shell",
-				"H": "Shell Armor"
-			}
-		},
-		"bunnelby": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval"
-			],
-			"abilities": []
-		},
-		"bergmite": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"ironchomp",
-				"dustupheaval",
-				"craghammer",
-				"chillingmist",
-				"rimecleaver"
-			],
-			"abilities": [
-				"Unaware"
-			],
-			"slots": {
-				"0": "Own Tempo",
-				"1": "Ice Body",
-				"H": "Sturdy",
-				"V0": "Unaware"
-			}
-		},
-		"ursaring": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval",
-				"hustleup"
-			],
-			"abilities": []
-		},
-		"teddiursa": {
-			"moves": [
-				"sculptedarmor",
-				"excavate",
-				"dustupheaval",
-				"hustleup"
-			],
-			"abilities": []
-		},
-		"forretress": {
-			"moves": [
-				"excavate",
-				"missile",
-				"chrysalisveil"
-			],
-			"abilities": []
-		},
-		"cufant": {
-			"moves": [
-				"excavate",
-				"missile",
-				"hardpress"
-			],
-			"abilities": []
-		},
-		"copperajah": {
-			"moves": [
-				"excavate",
-				"missile"
-			],
-			"abilities": []
-		},
-		"orthworm": {
-			"moves": [
-				"excavate",
-				"missile"
-			],
-			"abilities": []
-		},
-		"pineco": {
-			"moves": [
-				"excavate",
-				"missile",
-				"chrysalisveil"
-			],
-			"abilities": []
-		},
-		"mawile": {
-			"moves": [
-				"ironchomp",
-				"missile",
-				"carrionfeast",
-				"penance",
-				"velvetpress",
-				"velvetguard"
-			],
-			"abilities": []
-		},
-		"yungoos": {
-			"moves": [
-				"ironchomp",
-				"hustleup"
-			],
-			"abilities": []
-		},
-		"gumshoos": {
-			"moves": [
-				"ironchomp",
-				"hustleup",
-				"suckerpunch"
-			],
-			"abilities": []
-		},
-		"boltund": {
-			"moves": [
-				"ironchomp",
-				"missile",
-				"voltaiclance"
-			],
-			"abilities": []
-		},
-		"vivit": {
-			"moves": [
-				"ironchomp",
-				"missile"
-			],
-			"abilities": []
-		},
-		"yamper": {
-			"moves": [
-				"ironchomp",
-				"missile",
-				"voltaiclance"
-			],
-			"abilities": []
-		},
-		"pachirisu": {
-			"moves": [
-				"missile",
-				"sparkscamper",
-				"voltaiclance"
-			],
-			"abilities": []
-		},
-		"electivire": {
-			"moves": [
-				"missile",
-				"voltaiclance"
-			],
-			"abilities": []
-		},
-		"blitzle": {
-			"moves": [
-				"missile",
-				"sparkscamper",
-				"voltaiclance"
-			],
-			"abilities": []
-		},
-		"zebstrika": {
-			"moves": [
-				"missile",
-				"sparkscamper",
-				"voltaiclance"
-			],
-			"abilities": []
-		},
-		"ferroseed": {
-			"moves": [
-				"missile",
-				"velvetpress"
-			],
-			"abilities": []
-		},
-		"ferrothorn": {
-			"moves": [
-				"missile",
-				"velvetpress"
-			],
-			"abilities": []
-		},
-		"klink": {
-			"moves": [
-				"missile",
-				"hardpress"
-			],
-			"abilities": []
-		},
-		"klang": {
-			"moves": [
-				"missile"
-			],
-			"abilities": []
-		},
-		"klinklang": {
-			"moves": [
-				"missile"
-			],
-			"abilities": []
-		},
-		"klefki": {
-			"moves": [
-				"missile",
-				"penance",
-				"velvetpress",
-				"velvetguard"
-			],
-			"abilities": []
-		},
-		"charjabug": {
-			"moves": [
-				"missile"
-			],
-			"abilities": []
-		},
-		"silvallyelectric": {
-			"moves": [
-				"missile"
-			],
-			"abilities": []
-		},
-		"togedemaru": {
-			"moves": [
-				"missile",
-				"sparkscamper",
-				"voltaiclance"
-			],
-			"abilities": []
-		},
-		"tapukoko": {
-			"moves": [
-				"missile",
-				"penance",
-				"velvetpress",
-				"velvetguard",
-				"uilasurge"
-			],
-			"abilities": []
-		},
-		"morpeko": {
-			"moves": [
-				"missile",
-				"wickedenergy",
-				"sparkscamper",
-				"punishment",
-				"voltaiclance"
-			],
-			"abilities": []
-		},
-		"morpekohangry": {
-			"moves": [
-				"missile",
-				"wickedenergy"
-			],
-			"abilities": []
-		},
-		"dracozolt": {
-			"moves": [
-				"missile",
-				"voltaiclance"
-			],
-			"abilities": []
-		},
-		"arctozolt": {
-			"moves": [
-				"missile",
-				"chillingmist",
-				"voltaiclance",
-				"rimecleaver"
-			],
-			"abilities": []
-		},
-		"tinkatink": {
-			"moves": [
-				"missile",
-				"craghammer",
-				"penance",
-				"velvetpress",
-				"velvetguard"
-			],
-			"abilities": []
-		},
-		"tinkatuff": {
-			"moves": [
-				"missile",
-				"craghammer",
-				"penance",
-				"velvetpress",
-				"velvetguard"
-			],
-			"abilities": []
-		},
-		"tinkaton": {
-			"moves": [
-				"missile",
-				"craghammer",
-				"penance",
-				"velvetpress",
-				"velvetguard"
-			],
-			"abilities": []
-		},
-		"varoom": {
-			"moves": [
-				"missile"
-			],
-			"abilities": []
-		},
-		"revavroom": {
-			"moves": [
-				"missile"
-			],
-			"abilities": []
-		},
-		"shoutoramaru": {
-			"moves": [
-				"missile"
-			],
-			"abilities": []
-		},
-		"raikohorikawa": {
-			"moves": [
-				"missile"
-			],
-			"abilities": []
-		},
-		"ironleaves": {
-			"moves": [
-				"missile"
-			],
-			"abilities": []
-		},
-		"porygonz": {
-			"moves": [
-				"missile"
-			],
-			"abilities": []
-		},
-		"magnezone": {
-			"moves": [
-				"missile"
-			],
-			"abilities": []
-		},
-		"electabuzz": {
-			"moves": [
-				"missile",
-				"voltaiclance"
-			],
-			"abilities": []
-		},
-		"elekid": {
-			"moves": [
-				"missile",
-				"voltaiclance"
-			],
-			"abilities": []
-		},
-		"grubbin": {
-			"moves": [
-				"missile"
-			],
-			"abilities": []
-		},
-		"porygon2": {
-			"moves": [
-				"missile",
-				"velvetpress"
-			],
-			"abilities": []
-		},
-		"porygon": {
-			"moves": [
-				"missile",
-				"velvetpress"
-			],
-			"abilities": []
-		},
-		"magneton": {
-			"moves": [
-				"missile"
-			],
-			"abilities": []
-		},
-		"magnemite": {
-			"moves": [
-				"missile"
-			],
-			"abilities": []
-		},
-		"rattataalola": {
-			"moves": [
-				"wickedenergy",
-				"hustleup",
-				"carrionfeast",
-				"twilightexit"
-			],
-			"abilities": []
-		},
-		"raticatealola": {
-			"moves": [
-				"wickedenergy",
-				"hustleup",
-				"bodyslam",
-				"carrionfeast",
-				"twilightexit",
-				"punishment"
-			],
-			"abilities": []
-		},
-		"meowthalola": {
-			"moves": [
-				"wickedenergy",
-				"carrionfeast",
-				"twilightexit"
-			],
-			"abilities": []
-		},
-		"persianalola": {
-			"moves": [
-				"wickedenergy",
-				"carrionfeast",
-				"suckerpunch",
-				"crunch",
-				"twilightexit"
-			],
-			"abilities": []
-		},
-		"grimeralola": {
-			"moves": [
-				"wickedenergy",
-				"oxidize"
-			],
-			"abilities": []
-		},
-		"mukalola": {
-			"moves": [
-				"wickedenergy",
-				"punishment",
-				"oxidize"
-			],
-			"abilities": []
-		},
-		"moltresgalar": {
-			"moves": [
-				"wickedenergy",
-				"velvetpress"
-			],
-			"abilities": []
-		},
-		"umbreon": {
-			"moves": [
-				"wickedenergy",
-				"chillingmist",
-				"punishment",
-				"velvetpress",
-				"recover",
-				"teleport",
-				"healingwish",
-				"knockoff",
-				"focusblast"
-			],
-			"abilities": [
-				"Moonlit Venom"
-			],
-			"slots": {
-				"0": "Synchronize",
-				"1": "Moonlit Venom",
-				"H": "Inner Focus"
-			}
-		},
-		"qwilfishhisui": {
-			"moves": [
-				"wickedenergy",
-				"undertow"
-			],
-			"abilities": []
-		},
-		"houndour": {
-			"moves": [
-				"wickedenergy",
-				"carrionfeast"
-			],
-			"abilities": []
-		},
-		"houndoom": {
-			"moves": [
-				"wickedenergy"
-			],
-			"abilities": []
-		},
-		"poochyena": {
-			"moves": [
-				"wickedenergy",
-				"carrionfeast",
-				"twilightexit",
-				"chillingmist"
-			],
-			"abilities": []
-		},
-		"mightyena": {
-			"moves": [
-				"wickedenergy",
-				"carrionfeast",
-				"knockoff",
-				"twilightexit",
-				"chillingmist",
-				"punishment",
-				"jawlock"
-			],
-			"abilities": []
-		},
-		"zorua": {
-			"moves": [
-				"wickedenergy",
-				"carrionfeast",
-				"chillingmist"
-			],
-			"abilities": [
-				"Imposter"
-			],
-			"slots": {
-				"0": "Illusion",
-				"1": "Imposter"
-			}
-		},
-		"zoroark": {
-			"moves": [
-				"wickedenergy",
-				"carrionfeast",
-				"chillingmist"
-			],
-			"abilities": [
-				"Imposter"
-			],
-			"slots": {
-				"0": "Illusion",
-				"1": "Imposter"
-			}
-		},
-		"deino": {
-			"moves": [
-				"wickedenergy",
-				"chillingmist"
-			],
-			"abilities": []
-		},
-		"zweilous": {
-			"moves": [
-				"wickedenergy",
-				"chillingmist"
-			],
-			"abilities": []
-		},
-		"hydreigon": {
-			"moves": [
-				"wickedenergy",
-				"chillingmist"
-			],
-			"abilities": []
-		},
-		"incineroar": {
-			"moves": [
-				"wickedenergy",
-				"punishment"
-			],
-			"abilities": []
-		},
-		"guzzlord": {
-			"moves": [
-				"wickedenergy",
-				"punishment",
-				"grandfeast",
-				"devour",
-				"endlesshunger",
-				"suckerpunch",
-				"throatchop",
-				"foulplay",
-				"nightslash",
-				"jawlock",
-				"powertrip",
-				"nastyplot",
-				"partingshot",
-				"taunt",
-				"dragondance",
-				"scaleshot",
-				"breakingswipe"
-			],
-			"abilities": []
-		},
-		"nickit": {
-			"moves": [
-				"wickedenergy",
-				"carrionfeast",
-				"twilightexit",
-				"chillingmist"
-			],
-			"abilities": []
-		},
-		"thievul": {
-			"moves": [
-				"wickedenergy",
-				"carrionfeast",
-				"twilightexit",
-				"chillingmist"
-			],
-			"abilities": []
-		},
-		"impidimp": {
-			"moves": [
-				"wickedenergy",
-				"twilightexit",
-				"carrionfeast",
-				"chillingmist",
-				"penance",
-				"velvetpress",
-				"velvetguard"
-			],
-			"abilities": []
-		},
-		"morgrem": {
-			"moves": [
-				"wickedenergy",
-				"twilightexit",
-				"carrionfeast",
-				"chillingmist",
-				"penance",
-				"velvetpress",
-				"velvetguard"
-			],
-			"abilities": []
-		},
-		"grimmsnarl": {
-			"moves": [
-				"wickedenergy",
-				"twilightexit",
-				"carrionfeast",
-				"chillingmist",
-				"penance",
-				"punishment",
-				"velvetpress",
-				"velvetguard"
-			],
-			"abilities": []
-		},
-		"overqwil": {
-			"moves": [
-				"wickedenergy",
-				"undertow",
-				"punishment"
-			],
-			"abilities": []
-		},
-		"maschiff": {
-			"moves": [
-				"wickedenergy",
-				"twilightexit",
-				"carrionfeast"
-			],
-			"abilities": []
-		},
-		"mabosstiff": {
-			"moves": [
-				"wickedenergy",
-				"twilightexit",
-				"carrionfeast",
-				"punishment"
-			],
-			"abilities": []
-		},
-		"brutebonnet": {
-			"moves": [
-				"wickedenergy",
-				"punishment"
-			],
-			"abilities": []
-		},
-		"ironjugulis": {
-			"moves": [
-				"wickedenergy"
-			],
-			"abilities": []
-		},
-		"wochien": {
-			"moves": [
-				"wickedenergy"
-			],
-			"abilities": []
-		},
-		"koakuma": {
-			"moves": [
-				"wickedenergy"
-			],
-			"abilities": []
-		},
-		"flandrescarlet": {
-			"moves": [
-				"wickedenergy"
-			],
-			"abilities": [
-				"Scarlet Sisters"
-			],
-			"slots": {
-				"0": "Mold Breaker",
-				"1": "Pressure",
-				"H": "Moxie",
-				"V0": "Scarlet Sisters"
-			}
-		},
-		"mystialorelei": {
-			"moves": [
-				"wickedenergy"
-			],
-			"abilities": []
-		},
-		"lunachild": {
-			"moves": [
-				"wickedenergy"
-			],
-			"abilities": []
-		},
-		"seigakaku": {
-			"moves": [
-				"wickedenergy"
-			],
-			"abilities": []
-		},
-		"okinamatara": {
-			"moves": [
-				"wickedenergy"
-			],
-			"abilities": []
-		},
-		"chimihoujuu": {
-			"moves": [
-				"wickedenergy"
-			],
-			"abilities": []
-		},
-		"torracat": {
-			"moves": [
-				"wickedenergy"
-			],
-			"abilities": []
-		},
-		"litten": {
-			"moves": [
-				"wickedenergy"
-			],
-			"abilities": []
-		},
-		"nacli": {
-			"moves": [
-				"dustupheaval",
-				"velvetpress"
-			],
-			"abilities": []
-		},
-		"naclstack": {
-			"moves": [
-				"dustupheaval",
-				"velvetpress"
-			],
-			"abilities": []
-		},
-		"garganacl": {
-			"moves": [
-				"dustupheaval",
-				"punishment",
-				"velvetpress"
-			],
-			"abilities": []
-		},
-		"tinglu": {
-			"moves": [
-				"dustupheaval",
-				"punishment",
-				"velvetpress"
 			],
 			"abilities": []
 		},
@@ -8459,6 +1964,44 @@ window.VelvetBuffs = {
 				"H": "Blaze"
 			}
 		},
+		"litwick": {
+			"moves": [
+				"chillingmist"
+			],
+			"abilities": [
+				"Shadow Tag"
+			],
+			"slots": {
+				"0": "Flash Fire",
+				"1": "Flame Body",
+				"H": "Infiltrator",
+				"V0": "Shadow Tag"
+			}
+		},
+		"lampent": {
+			"moves": [],
+			"abilities": [
+				"Shadow Tag"
+			],
+			"slots": {
+				"0": "Flash Fire",
+				"1": "Flame Body",
+				"H": "Infiltrator",
+				"V0": "Shadow Tag"
+			}
+		},
+		"chandelure": {
+			"moves": [],
+			"abilities": [
+				"Shadow Tag"
+			],
+			"slots": {
+				"0": "Flash Fire",
+				"1": "Flame Body",
+				"H": "Infiltrator",
+				"V0": "Shadow Tag"
+			}
+		},
 		"chandeluremega": {
 			"moves": [],
 			"abilities": [
@@ -8467,6 +2010,31 @@ window.VelvetBuffs = {
 			"slots": {
 				"0": "Shadow Tag"
 			}
+		},
+		"nuzleaf": {
+			"moves": [
+				"merchantscall",
+				"carrionfeast"
+			],
+			"abilities": []
+		},
+		"zigzagoongalar": {
+			"moves": [
+				"extremespeed",
+				"hustleup",
+				"chillingmist"
+			],
+			"abilities": []
+		},
+		"linoonegalar": {
+			"moves": [],
+			"abilities": []
+		},
+		"obstagoon": {
+			"moves": [
+				"punishment"
+			],
+			"abilities": []
 		},
 		"ariados": {
 			"moves": [
@@ -8493,6 +2061,16 @@ window.VelvetBuffs = {
 			],
 			"abilities": []
 		},
+		"mothim": {
+			"moves": [
+				"hivefrenzy",
+				"leechlife",
+				"knockoff",
+				"swordsdance",
+				"chrysalisveil"
+			],
+			"abilities": []
+		},
 		"volbeat": {
 			"moves": [
 				"hivefrenzy",
@@ -8506,6 +2084,15 @@ window.VelvetBuffs = {
 		"spidops": {
 			"moves": [
 				"hivefrenzy",
+				"swordsdance"
+			],
+			"abilities": []
+		},
+		"vespiquen": {
+			"moves": [
+				"hivefrenzy",
+				"leechlife",
+				"knockoff",
 				"swordsdance"
 			],
 			"abilities": []
@@ -8538,6 +2125,13 @@ window.VelvetBuffs = {
 				"H": "Rivalry"
 			}
 		},
+		"dustox": {
+			"moves": [
+				"chrysalisveil",
+				"oxidize"
+			],
+			"abilities": []
+		},
 		"masquerain": {
 			"moves": [
 				"chrysalisveil"
@@ -8568,10 +2162,49 @@ window.VelvetBuffs = {
 				"H": "Overcoat"
 			}
 		},
+		"wormadamsandy": {
+			"moves": [
+				"chrysalisveil",
+				"uturn",
+				"energyball"
+			],
+			"abilities": [
+				"Filter"
+			],
+			"slots": {
+				"0": "Anticipation",
+				"1": "Filter",
+				"H": "Overcoat"
+			}
+		},
+		"wormadamtrash": {
+			"moves": [
+				"chrysalisveil",
+				"uturn",
+				"energyball"
+			],
+			"abilities": [
+				"Filter"
+			],
+			"slots": {
+				"0": "Anticipation",
+				"1": "Filter",
+				"H": "Overcoat"
+			}
+		},
 		"illumise": {
 			"moves": [
 				"chrysalisveil",
 				"energyball"
+			],
+			"abilities": []
+		},
+		"rabsca": {
+			"moves": [
+				"chrysalisveil",
+				"uturn",
+				"hypnowhirl",
+				"penance"
 			],
 			"abilities": []
 		},
@@ -8596,6 +2229,16 @@ window.VelvetBuffs = {
 			],
 			"abilities": []
 		},
+		"raticatealola": {
+			"moves": [
+				"hustleup",
+				"bodyslam",
+				"carrionfeast",
+				"twilightexit",
+				"punishment"
+			],
+			"abilities": []
+		},
 		"linoone": {
 			"moves": [
 				"hustleup",
@@ -8611,6 +2254,47 @@ window.VelvetBuffs = {
 				"uturn",
 				"suckerpunch",
 				"bodyslam"
+			],
+			"abilities": []
+		},
+		"fearow": {
+			"moves": [
+				"hustleup",
+				"knockoff",
+				"suckerpunch",
+				"bodyslam"
+			],
+			"abilities": []
+		},
+		"dodrio": {
+			"moves": [
+				"hustleup",
+				"uturn",
+				"suckerpunch"
+			],
+			"abilities": [
+				"Reckless"
+			],
+			"slots": {
+				"0": "Run Away",
+				"1": "Early Bird",
+				"H": "Tangled Feet",
+				"V0": "Reckless"
+			}
+		},
+		"swellow": {
+			"moves": [
+				"hustleup",
+				"knockoff",
+				"suckerpunch",
+				"bodyslam"
+			],
+			"abilities": []
+		},
+		"persian": {
+			"moves": [
+				"hustleup",
+				"suckerpunch"
 			],
 			"abilities": []
 		},
@@ -8633,6 +2317,22 @@ window.VelvetBuffs = {
 				"hustleup",
 				"uturn",
 				"knockoff"
+			],
+			"abilities": []
+		},
+		"gumshoos": {
+			"moves": [
+				"hustleup",
+				"suckerpunch"
+			],
+			"abilities": []
+		},
+		"squawkabilly": {
+			"moves": [
+				"hustleup",
+				"knockoff",
+				"suckerpunch",
+				"bodyslam"
 			],
 			"abilities": []
 		},
@@ -8662,6 +2362,65 @@ window.VelvetBuffs = {
 				"H": "Rattled",
 				"V0": "Bulldog Grip"
 			}
+		},
+		"mightyena": {
+			"moves": [
+				"carrionfeast",
+				"knockoff",
+				"twilightexit",
+				"chillingmist",
+				"punishment",
+				"jawlock"
+			],
+			"abilities": []
+		},
+		"liepard": {
+			"moves": [
+				"carrionfeast",
+				"crunch",
+				"twilightexit",
+				"chillingmist",
+				"punishment"
+			],
+			"abilities": []
+		},
+		"thievul": {
+			"moves": [
+				"carrionfeast",
+				"twilightexit",
+				"chillingmist"
+			],
+			"abilities": []
+		},
+		"persianalola": {
+			"moves": [
+				"carrionfeast",
+				"suckerpunch",
+				"crunch",
+				"twilightexit"
+			],
+			"abilities": []
+		},
+		"cacturne": {
+			"moves": [
+				"carrionfeast",
+				"crunch",
+				"solarnectar",
+				"earthquake",
+				"gunkshot",
+				"twilightexit",
+				"punishment"
+			],
+			"abilities": []
+		},
+		"mawile": {
+			"moves": [
+				"carrionfeast",
+				"penance",
+				"velvetpress",
+				"velvetguard"
+			],
+			"abilities": []
 		},
 		"banette": {
 			"moves": [
@@ -8694,9 +2453,47 @@ window.VelvetBuffs = {
 				"V0": "Prankster"
 			}
 		},
+		"seviper": {
+			"moves": [
+				"carrionfeast",
+				"oxidize"
+			],
+			"abilities": [
+				"Intimidate"
+			],
+			"slots": {
+				"0": "Shed Skin",
+				"1": "Intimidate",
+				"H": "Infiltrator"
+			}
+		},
 		"arbok": {
 			"moves": [
 				"carrionfeast"
+			],
+			"abilities": []
+		},
+		"sableye": {
+			"moves": [
+				"carrionfeast",
+				"crunch",
+				"twilightexit",
+				"chillingmist"
+			],
+			"abilities": []
+		},
+		"absol": {
+			"moves": [
+				"carrionfeast",
+				"crunch",
+				"chillingmist"
+			],
+			"abilities": []
+		},
+		"pachirisu": {
+			"moves": [
+				"sparkscamper",
+				"voltaiclance"
 			],
 			"abilities": []
 		},
@@ -8728,12 +2525,26 @@ window.VelvetBuffs = {
 				"H": "Volt Absorb"
 			}
 		},
+		"emolga": {
+			"moves": [
+				"sparkscamper",
+				"voltaiclance"
+			],
+			"abilities": []
+		},
 		"dedenne": {
 			"moves": [
 				"sparkscamper",
 				"penance",
 				"velvetpress",
 				"velvetguard",
+				"voltaiclance"
+			],
+			"abilities": []
+		},
+		"togedemaru": {
+			"moves": [
+				"sparkscamper",
 				"voltaiclance"
 			],
 			"abilities": []
@@ -8745,6 +2556,25 @@ window.VelvetBuffs = {
 				"voltaiclance"
 			],
 			"abilities": []
+		},
+		"stunfisk": {
+			"moves": [
+				"sparkscamper",
+				"voltswitch",
+				"nuzzle",
+				"slackoff",
+				"tremorshot",
+				"voltaiclance"
+			],
+			"abilities": [
+				"Mudflat Ambush"
+			],
+			"slots": {
+				"0": "Static",
+				"1": "Limber",
+				"H": "Sand Veil",
+				"V0": "Mudflat Ambush"
+			}
 		},
 		"cherrim": {
 			"moves": [
@@ -8766,6 +2596,16 @@ window.VelvetBuffs = {
 				"earthpower",
 				"sludgebomb",
 				"trailblaze",
+				"velvetpress",
+				"velvetguard"
+			],
+			"abilities": []
+		},
+		"jumpluff": {
+			"moves": [
+				"solarnectar",
+				"knockoff",
+				"earthquake",
 				"velvetpress",
 				"velvetguard"
 			],
@@ -8816,6 +2656,208 @@ window.VelvetBuffs = {
 			],
 			"abilities": []
 		},
+		"sudowoodo": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"magcargo": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": [
+				"Solid Rock"
+			],
+			"slots": {
+				"0": "Magma Armor",
+				"1": "Flame Body",
+				"H": "Weak Armor",
+				"V0": "Solid Rock"
+			}
+		},
+		"solrock": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"klawf": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"stonjourner": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": [
+				"Sturdy"
+			],
+			"slots": {
+				"0": "Power Spot",
+				"1": "Sturdy"
+			}
+		},
+		"sandslash": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"marowak": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"dugtrio": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"chimecho": {
+			"moves": [
+				"hypnowhirl",
+				"penance"
+			],
+			"abilities": []
+		},
+		"grumpig": {
+			"moves": [
+				"hypnowhirl",
+				"penance"
+			],
+			"abilities": []
+		},
+		"meowstic": {
+			"moves": [
+				"hypnowhirl",
+				"futuresight",
+				"penance"
+			],
+			"abilities": []
+		},
+		"meowsticf": {
+			"moves": [
+				"hypnowhirl"
+			],
+			"abilities": []
+		},
+		"swoobat": {
+			"moves": [
+				"hypnowhirl",
+				"penance"
+			],
+			"abilities": []
+		},
+		"lunatone": {
+			"moves": [
+				"hypnowhirl",
+				"penance"
+			],
+			"abilities": []
+		},
+		"mrmime": {
+			"moves": [
+				"hypnowhirl",
+				"psychicnoise",
+				"penance",
+				"velvetpress",
+				"velvetguard"
+			],
+			"abilities": []
+		},
+		"jynx": {
+			"moves": [
+				"hypnowhirl",
+				"icespinner",
+				"snowscape",
+				"psychicnoise",
+				"chillingmist",
+				"penance"
+			],
+			"abilities": []
+		},
+		"indeedee": {
+			"moves": [
+				"hypnowhirl",
+				"penance"
+			],
+			"abilities": []
+		},
+		"indeedeef": {
+			"moves": [
+				"hypnowhirl"
+			],
+			"abilities": []
+		},
+		"hitmonlee": {
+			"moves": [
+				"shufflejab",
+				"drainpunch",
+				"tripleaxel"
+			],
+			"abilities": []
+		},
+		"hitmonchan": {
+			"moves": [
+				"shufflejab"
+			],
+			"abilities": []
+		},
+		"hitmontop": {
+			"moves": [
+				"shufflejab",
+				"drainpunch",
+				"knockoff",
+				"axekick"
+			],
+			"abilities": []
+		},
+		"throh": {
+			"moves": [
+				"shufflejab",
+				"drainpunch",
+				"machpunch"
+			],
+			"abilities": []
+		},
+		"sawk": {
+			"moves": [
+				"shufflejab",
+				"drainpunch",
+				"machpunch",
+				"axekick",
+				"upperhand"
+			],
+			"abilities": []
+		},
+		"hariyama": {
+			"moves": [
+				"shufflejab",
+				"machpunch"
+			],
+			"abilities": [
+				"Unaware"
+			],
+			"slots": {
+				"0": "Thick Fat",
+				"1": "Guts",
+				"H": "Sheer Force",
+				"V0": "Unaware"
+			}
+		},
+		"falinks": {
+			"moves": [
+				"shufflejab",
+				"drainpunch",
+				"machpunch"
+			],
+			"abilities": []
+		},
 		"cottonee": {
 			"moves": [
 				"spore",
@@ -8842,6 +2884,12 @@ window.VelvetBuffs = {
 		"entei": {
 			"moves": [
 				"recover"
+			],
+			"abilities": []
+		},
+		"unown": {
+			"moves": [
+				"hypnowhirl"
 			],
 			"abilities": []
 		},
@@ -8891,6 +2939,41 @@ window.VelvetBuffs = {
 				"H": "Symbiosis"
 			}
 		},
+		"spiritomb": {
+			"moves": [
+				"swordsdance",
+				"twilightexit",
+				"carrionfeast",
+				"chillingmist",
+				"punishment",
+				"soultoll",
+				"strengthsap",
+				"partingshot",
+				"knockoff"
+			],
+			"abilities": [
+				"Keystone Legion"
+			],
+			"slots": {
+				"0": "Pressure",
+				"1": "Keystone Legion",
+				"H": "Infiltrator"
+			}
+		},
+		"farfetchd": {
+			"moves": [
+				"hustleup"
+			],
+			"abilities": []
+		},
+		"spinda": {
+			"moves": [
+				"shufflejab",
+				"hustleup",
+				"slackoff"
+			],
+			"abilities": []
+		},
 		"kricketune": {
 			"moves": [
 				"hivefrenzy"
@@ -8903,6 +2986,45 @@ window.VelvetBuffs = {
 				"fireblast"
 			],
 			"abilities": []
+		},
+		"stunfiskgalar": {
+			"moves": [
+				"slackoff",
+				"tremorshot"
+			],
+			"abilities": [
+				"Mudflat Ambush"
+			],
+			"slots": {
+				"0": "Mimicry",
+				"1": "Mudflat Ambush"
+			}
+		},
+		"zoroark": {
+			"moves": [
+				"carrionfeast",
+				"chillingmist"
+			],
+			"abilities": [
+				"Imposter"
+			],
+			"slots": {
+				"0": "Illusion",
+				"1": "Imposter"
+			}
+		},
+		"zorua": {
+			"moves": [
+				"carrionfeast",
+				"chillingmist"
+			],
+			"abilities": [
+				"Imposter"
+			],
+			"slots": {
+				"0": "Illusion",
+				"1": "Imposter"
+			}
 		},
 		"snorlax": {
 			"moves": [
@@ -8950,6 +3072,97 @@ window.VelvetBuffs = {
 				"V0": "Unaware"
 			}
 		},
+		"registeel": {
+			"moves": [
+				"slackoff",
+				"velvetpress"
+			],
+			"abilities": [
+				"Unaware"
+			],
+			"slots": {
+				"0": "Clear Body",
+				"1": "Unaware",
+				"H": "Light Metal"
+			}
+		},
+		"bronzong": {
+			"moves": [
+				"velvetpress",
+				"hypnowhirl"
+			],
+			"abilities": [
+				"Unaware"
+			],
+			"slots": {
+				"0": "Levitate",
+				"1": "Heatproof",
+				"H": "Heavy Metal",
+				"V0": "Unaware"
+			}
+		},
+		"hippowdon": {
+			"moves": [
+				"punishment",
+				"velvetpress"
+			],
+			"abilities": [
+				"Unaware"
+			],
+			"slots": {
+				"0": "Sand Stream",
+				"1": "Unaware",
+				"H": "Sand Force"
+			}
+		},
+		"mandibuzz": {
+			"moves": [
+				"twilightexit",
+				"carrionfeast",
+				"chillingmist",
+				"velvetpress"
+			],
+			"abilities": [
+				"Unaware"
+			],
+			"slots": {
+				"0": "Big Pecks",
+				"1": "Overcoat",
+				"H": "Weak Armor",
+				"V0": "Unaware"
+			}
+		},
+		"slowkinggalar": {
+			"moves": [
+				"penance",
+				"velvetpress"
+			],
+			"abilities": [
+				"Unaware"
+			],
+			"slots": {
+				"0": "Curious Medicine",
+				"1": "Own Tempo",
+				"H": "Regenerator",
+				"V0": "Unaware"
+			}
+		},
+		"mudsdale": {
+			"moves": [
+				"slackoff",
+				"punishment",
+				"velvetpress"
+			],
+			"abilities": [
+				"Unaware"
+			],
+			"slots": {
+				"0": "Own Tempo",
+				"1": "Stamina",
+				"H": "Inner Focus",
+				"V0": "Unaware"
+			}
+		},
 		"avalugg": {
 			"moves": [
 				"craghammer",
@@ -8967,6 +3180,53 @@ window.VelvetBuffs = {
 				"V0": "Unaware"
 			}
 		},
+		"avalugghisui": {
+			"moves": [
+				"craghammer",
+				"chillingmist",
+				"rimecleaver"
+			],
+			"abilities": [
+				"Unaware"
+			],
+			"slots": {
+				"0": "Strong Jaw",
+				"1": "Ice Body",
+				"H": "Sturdy",
+				"V0": "Unaware"
+			}
+		},
+		"steelix": {
+			"moves": [
+				"hardpress",
+				"craghammer"
+			],
+			"abilities": [
+				"Unaware"
+			],
+			"slots": {
+				"0": "Rock Head",
+				"1": "Sturdy",
+				"H": "Sheer Force",
+				"V0": "Unaware"
+			}
+		},
+		"carbink": {
+			"moves": [
+				"craghammer",
+				"penance",
+				"velvetpress",
+				"velvetguard"
+			],
+			"abilities": [
+				"Unaware"
+			],
+			"slots": {
+				"0": "Clear Body",
+				"1": "Unaware",
+				"H": "Sturdy"
+			}
+		},
 		"tangrowth": {
 			"moves": [
 				"penance",
@@ -8980,6 +3240,33 @@ window.VelvetBuffs = {
 				"1": "Leaf Guard",
 				"H": "Regenerator",
 				"V0": "Unaware"
+			}
+		},
+		"amoonguss": {
+			"moves": [
+				"penance",
+				"velvetpress"
+			],
+			"abilities": [
+				"Unaware"
+			],
+			"slots": {
+				"0": "Effect Spore",
+				"1": "Unaware",
+				"H": "Regenerator"
+			}
+		},
+		"cresselia": {
+			"moves": [
+				"penance",
+				"velvetpress"
+			],
+			"abilities": [
+				"Unaware"
+			],
+			"slots": {
+				"0": "Levitate",
+				"1": "Unaware"
 			}
 		},
 		"happiny": {
@@ -9028,9 +3315,33 @@ window.VelvetBuffs = {
 			],
 			"abilities": []
 		},
+		"victreebel": {
+			"moves": [
+				"earthquake",
+				"solarnectar",
+				"oxidize"
+			],
+			"abilities": []
+		},
+		"exeggutor": {
+			"moves": [
+				"earthpower",
+				"fireblast",
+				"solarnectar",
+				"penance"
+			],
+			"abilities": []
+		},
 		"exeggutoralola": {
 			"moves": [
 				"solarnectar"
+			],
+			"abilities": []
+		},
+		"shiftry": {
+			"moves": [
+				"earthquake",
+				"punishment"
 			],
 			"abilities": []
 		},
@@ -9107,6 +3418,12 @@ window.VelvetBuffs = {
 			],
 			"abilities": []
 		},
+		"cradily": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
 		"lilligant": {
 			"moves": [
 				"earthpower",
@@ -9114,6 +3431,26 @@ window.VelvetBuffs = {
 				"solarnectar"
 			],
 			"abilities": []
+		},
+		"roserade": {
+			"moves": [
+				"earthpower",
+				"solarnectar",
+				"oxidize",
+				"thornedbouquet",
+				"strengthsap",
+				"mortalspin",
+				"nastyplot"
+			],
+			"abilities": [
+				"Masquerade"
+			],
+			"slots": {
+				"0": "Natural Cure",
+				"1": "Poison Point",
+				"H": "Technician",
+				"V0": "Masquerade"
+			}
 		},
 		"trevenant": {
 			"moves": [
@@ -9129,6 +3466,116 @@ window.VelvetBuffs = {
 			],
 			"abilities": []
 		},
+		"vileplume": {
+			"moves": [
+				"earthpower",
+				"solarnectar",
+				"oxidize"
+			],
+			"abilities": []
+		},
+		"decidueye": {
+			"moves": [
+				"stoneedge",
+				"chillingmist"
+			],
+			"abilities": []
+		},
+		"chesnaught": {
+			"moves": [],
+			"abilities": []
+		},
+		"toedscruel": {
+			"moves": [
+				"oxidize"
+			],
+			"abilities": []
+		},
+		"torterra": {
+			"moves": [
+				"eldertimber",
+				"tectonicshell",
+				"explosion",
+				"rapidspin",
+				"headsmash",
+				"yawn",
+				"flail",
+				"rollout",
+				"ancientpower"
+			],
+			"abilities": [
+				"World Turtle"
+			],
+			"slots": {
+				"0": "Overgrow",
+				"1": "World Turtle",
+				"H": "Shell Armor"
+			}
+		},
+		"froslass": {
+			"moves": [
+				"chillingmist"
+			],
+			"abilities": []
+		},
+		"smoochum": {
+			"moves": [
+				"tripleaxel",
+				"icespinner",
+				"snowscape",
+				"hypnowhirl",
+				"chillingmist",
+				"penance"
+			],
+			"abilities": []
+		},
+		"mrrime": {
+			"moves": [
+				"chillingmist",
+				"penance",
+				"hypnowhirl"
+			],
+			"abilities": []
+		},
+		"mrmimegalar": {
+			"moves": [
+				"chillingmist",
+				"penance",
+				"hypnowhirl"
+			],
+			"abilities": []
+		},
+		"tyrogue": {
+			"moves": [
+				"tripleaxel",
+				"axekick",
+				"shufflejab"
+			],
+			"abilities": []
+		},
+		"lopunny": {
+			"moves": [
+				"axekick",
+				"hustleup",
+				"shufflejab"
+			],
+			"abilities": []
+		},
+		"buneary": {
+			"moves": [
+				"axekick",
+				"hustleup",
+				"shufflejab"
+			],
+			"abilities": []
+		},
+		"snorunt": {
+			"moves": [
+				"chillingmist",
+				"rimecleaver"
+			],
+			"abilities": []
+		},
 		"glalie": {
 			"moves": [],
 			"abilities": []
@@ -9138,6 +3585,22 @@ window.VelvetBuffs = {
 				"chillingmist"
 			],
 			"abilities": []
+		},
+		"bergmite": {
+			"moves": [
+				"craghammer",
+				"chillingmist",
+				"rimecleaver"
+			],
+			"abilities": [
+				"Unaware"
+			],
+			"slots": {
+				"0": "Own Tempo",
+				"1": "Ice Body",
+				"H": "Sturdy",
+				"V0": "Unaware"
+			}
 		},
 		"articuno": {
 			"moves": [
@@ -9153,6 +3616,26 @@ window.VelvetBuffs = {
 				"0": "Pressure",
 				"1": "Polar Mantle",
 				"H": "Snow Cloak"
+			}
+		},
+		"regice": {
+			"moves": [
+				"freezedry",
+				"recover",
+				"aurorabeam",
+				"chillingwater",
+				"chillingmist",
+				"slackoff",
+				"penance",
+				"velvetpress"
+			],
+			"abilities": [
+				"Permafrost Core"
+			],
+			"slots": {
+				"0": "Clear Body",
+				"1": "Permafrost Core",
+				"H": "Ice Body"
 			}
 		},
 		"beartic": {
@@ -9192,6 +3675,21 @@ window.VelvetBuffs = {
 			],
 			"abilities": []
 		},
+		"swinub": {
+			"moves": [
+				"chillingmist",
+				"rimecleaver"
+			],
+			"abilities": []
+		},
+		"piloswine": {
+			"moves": [],
+			"abilities": []
+		},
+		"mamoswine": {
+			"moves": [],
+			"abilities": []
+		},
 		"glaceon": {
 			"moves": [
 				"chillingmist",
@@ -9224,11 +3722,45 @@ window.VelvetBuffs = {
 			"moves": [],
 			"abilities": []
 		},
+		"mienfoo": {
+			"moves": [
+				"axekick",
+				"shufflejab"
+			],
+			"abilities": []
+		},
+		"mienshao": {
+			"moves": [],
+			"abilities": []
+		},
+		"medicham": {
+			"moves": [
+				"shufflejab"
+			],
+			"abilities": []
+		},
+		"meditite": {
+			"moves": [
+				"axekick",
+				"shufflejab"
+			],
+			"abilities": []
+		},
 		"growlithe": {
 			"moves": [],
 			"abilities": []
 		},
 		"arcanine": {
+			"moves": [],
+			"abilities": []
+		},
+		"houndour": {
+			"moves": [
+				"carrionfeast"
+			],
+			"abilities": []
+		},
+		"houndoom": {
 			"moves": [],
 			"abilities": []
 		},
@@ -9251,6 +3783,43 @@ window.VelvetBuffs = {
 			"abilities": []
 		},
 		"darmanitan": {
+			"moves": [],
+			"abilities": []
+		},
+		"tepig": {
+			"moves": [],
+			"abilities": []
+		},
+		"pignite": {
+			"moves": [],
+			"abilities": []
+		},
+		"emboar": {
+			"moves": [],
+			"abilities": []
+		},
+		"litten": {
+			"moves": [],
+			"abilities": []
+		},
+		"torracat": {
+			"moves": [],
+			"abilities": []
+		},
+		"incineroar": {
+			"moves": [
+				"punishment"
+			],
+			"abilities": []
+		},
+		"numel": {
+			"moves": [
+				"slackoff",
+				"tremorshot"
+			],
+			"abilities": []
+		},
+		"camerupt": {
 			"moves": [],
 			"abilities": []
 		},
@@ -9304,6 +3873,47 @@ window.VelvetBuffs = {
 			"moves": [],
 			"abilities": []
 		},
+		"shroomish": {
+			"moves": [
+				"trailblaze",
+				"solarnectar"
+			],
+			"abilities": []
+		},
+		"breloom": {
+			"moves": [],
+			"abilities": []
+		},
+		"cacnea": {
+			"moves": [
+				"carrionfeast",
+				"solarnectar",
+				"twilightexit"
+			],
+			"abilities": []
+		},
+		"turtwig": {
+			"moves": [],
+			"abilities": [
+				"Sapling Shell"
+			],
+			"slots": {
+				"0": "Overgrow",
+				"1": "Sapling Shell",
+				"H": "Shell Armor"
+			}
+		},
+		"grotle": {
+			"moves": [],
+			"abilities": [
+				"Sapling Shell"
+			],
+			"slots": {
+				"0": "Overgrow",
+				"1": "Sapling Shell",
+				"H": "Shell Armor"
+			}
+		},
 		"spinarak": {
 			"moves": [
 				"hivefrenzy"
@@ -9318,7 +3928,26 @@ window.VelvetBuffs = {
 			"moves": [],
 			"abilities": []
 		},
+		"scyther": {
+			"moves": [
+				"hivefrenzy"
+			],
+			"abilities": []
+		},
+		"ninjask": {
+			"moves": [
+				"pounce",
+				"hivefrenzy"
+			],
+			"abilities": []
+		},
 		"yanmega": {
+			"moves": [
+				"hivefrenzy"
+			],
+			"abilities": []
+		},
+		"heracross": {
 			"moves": [
 				"hivefrenzy"
 			],
@@ -9331,9 +3960,195 @@ window.VelvetBuffs = {
 			],
 			"abilities": []
 		},
+		"durant": {
+			"moves": [
+				"pounce",
+				"hivefrenzy"
+			],
+			"abilities": []
+		},
+		"escavalier": {
+			"moves": [
+				"pounce",
+				"hivefrenzy"
+			],
+			"abilities": []
+		},
 		"accelgor": {
 			"moves": [
 				"pounce"
+			],
+			"abilities": []
+		},
+		"dwebble": {
+			"moves": [
+				"pounce",
+				"hivefrenzy",
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"crustle": {
+			"moves": [],
+			"abilities": []
+		},
+		"aron": {
+			"moves": [
+				"hardpress",
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"lairon": {
+			"moves": [],
+			"abilities": []
+		},
+		"aggron": {
+			"moves": [],
+			"abilities": []
+		},
+		"onix": {
+			"moves": [
+				"hardpress",
+				"craghammer"
+			],
+			"abilities": [
+				"Unaware"
+			],
+			"slots": {
+				"0": "Rock Head",
+				"1": "Sturdy",
+				"H": "Weak Armor",
+				"V0": "Unaware"
+			}
+		},
+		"shieldon": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"bastiodon": {
+			"moves": [],
+			"abilities": []
+		},
+		"nosepass": {
+			"moves": [
+				"hardpress",
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"probopass": {
+			"moves": [],
+			"abilities": []
+		},
+		"bronzor": {
+			"moves": [
+				"hardpress",
+				"velvetpress",
+				"hypnowhirl"
+			],
+			"abilities": [
+				"Unaware"
+			],
+			"slots": {
+				"0": "Levitate",
+				"1": "Heatproof",
+				"H": "Heavy Metal",
+				"V0": "Unaware"
+			}
+		},
+		"klink": {
+			"moves": [
+				"hardpress"
+			],
+			"abilities": []
+		},
+		"klang": {
+			"moves": [],
+			"abilities": []
+		},
+		"klinklang": {
+			"moves": [],
+			"abilities": []
+		},
+		"cufant": {
+			"moves": [
+				"hardpress"
+			],
+			"abilities": []
+		},
+		"copperajah": {
+			"moves": [],
+			"abilities": []
+		},
+		"xatu": {
+			"moves": [
+				"psychicnoise",
+				"penance",
+				"hypnowhirl"
+			],
+			"abilities": []
+		},
+		"girafarig": {
+			"moves": [
+				"hypnowhirl",
+				"penance"
+			],
+			"abilities": []
+		},
+		"claydol": {
+			"moves": [
+				"psychicnoise",
+				"tremorshot",
+				"hypnowhirl"
+			],
+			"abilities": []
+		},
+		"gothitelle": {
+			"moves": [
+				"penance",
+				"hypnowhirl"
+			],
+			"abilities": []
+		},
+		"reuniclus": {
+			"moves": [
+				"penance",
+				"hypnowhirl"
+			],
+			"abilities": []
+		},
+		"beheeyem": {
+			"moves": [
+				"psychicnoise",
+				"penance",
+				"hypnowhirl"
+			],
+			"abilities": []
+		},
+		"musharna": {
+			"moves": [
+				"psychicnoise",
+				"slackoff",
+				"penance",
+				"hypnowhirl"
+			],
+			"abilities": []
+		},
+		"sigilyph": {
+			"moves": [
+				"psychicnoise",
+				"penance",
+				"hypnowhirl"
+			],
+			"abilities": []
+		},
+		"delphox": {
+			"moves": [
+				"penance",
+				"hypnowhirl"
 			],
 			"abilities": []
 		},
@@ -9371,6 +4186,15 @@ window.VelvetBuffs = {
 				"velvetpress",
 				"velvetguard",
 				"uturn"
+			],
+			"abilities": []
+		},
+		"gardevoir": {
+			"moves": [
+				"penance",
+				"velvetpress",
+				"velvetguard",
+				"hypnowhirl"
 			],
 			"abilities": []
 		},
@@ -9421,9 +4245,62 @@ window.VelvetBuffs = {
 			],
 			"abilities": []
 		},
+		"hawlucha": {
+			"moves": [
+				"shufflejab"
+			],
+			"abilities": []
+		},
+		"infernape": {
+			"moves": [
+				"shufflejab",
+				"icepunch",
+				"greatsagestrike",
+				"pyrestrike",
+				"hustleup",
+				"craghammer",
+				"sparkscamper",
+				"explosion",
+				"copycat",
+				"screech",
+				"doublehit",
+				"tickle",
+				"highjumpkick",
+				"bounce"
+			],
+			"abilities": [
+				"Crown of Flame"
+			],
+			"slots": {
+				"0": "Blaze",
+				"1": "Crown of Flame",
+				"H": "Iron Fist"
+			}
+		},
 		"lucario": {
 			"moves": [
 				"shufflejab"
+			],
+			"abilities": []
+		},
+		"altaria": {
+			"moves": [
+				"velvetpress",
+				"velvetguard"
+			],
+			"abilities": []
+		},
+		"flygon": {
+			"moves": [
+				"tremorshot"
+			],
+			"abilities": []
+		},
+		"dragalge": {
+			"moves": [
+				"dragoncheer",
+				"undertow",
+				"oxidize"
 			],
 			"abilities": []
 		},
@@ -9447,7 +4324,21 @@ window.VelvetBuffs = {
 			],
 			"abilities": []
 		},
+		"gengar": {
+			"moves": [
+				"twilightexit",
+				"chillingmist"
+			],
+			"abilities": []
+		},
 		"dusknoir": {
+			"moves": [
+				"twilightexit",
+				"chillingmist"
+			],
+			"abilities": []
+		},
+		"mismagius": {
 			"moves": [
 				"twilightexit",
 				"chillingmist"
@@ -9462,11 +4353,134 @@ window.VelvetBuffs = {
 			],
 			"abilities": []
 		},
+		"skuntank": {
+			"moves": [
+				"twilightexit",
+				"carrionfeast",
+				"oxidize"
+			],
+			"abilities": []
+		},
+		"scrafty": {
+			"moves": [
+				"twilightexit",
+				"carrionfeast",
+				"punishment",
+				"shufflejab"
+			],
+			"abilities": []
+		},
+		"pangoro": {
+			"moves": [
+				"twilightexit",
+				"punishment",
+				"shufflejab"
+			],
+			"abilities": []
+		},
+		"malamar": {
+			"moves": [
+				"twilightexit",
+				"carrionfeast",
+				"punishment",
+				"hypnowhirl"
+			],
+			"abilities": []
+		},
+		"mabosstiff": {
+			"moves": [
+				"twilightexit",
+				"carrionfeast",
+				"punishment"
+			],
+			"abilities": []
+		},
+		"honchkrow": {
+			"moves": [
+				"twilightexit",
+				"carrionfeast",
+				"chillingmist",
+				"punishment"
+			],
+			"abilities": []
+		},
+		"grimmsnarl": {
+			"moves": [
+				"twilightexit",
+				"carrionfeast",
+				"chillingmist",
+				"penance",
+				"punishment",
+				"velvetpress",
+				"velvetguard"
+			],
+			"abilities": []
+		},
 		"hoopa": {
 			"moves": [
 				"twilightexit",
 				"chillingmist",
 				"penance"
+			],
+			"abilities": []
+		},
+		"luxray": {
+			"moves": [
+				"twilightexit",
+				"sparkscamper",
+				"punishment",
+				"voltaiclance",
+				"gleamstalk",
+				"knockoff",
+				"suckerpunch",
+				"taunt",
+				"partingshot",
+				"encore",
+				"yawn",
+				"swordsdance"
+			],
+			"abilities": [
+				"Prankster"
+			],
+			"slots": {
+				"0": "Rivalry",
+				"1": "Intimidate",
+				"H": "Guts",
+				"V0": "Prankster"
+			}
+		},
+		"scizor": {
+			"moves": [],
+			"abilities": []
+		},
+		"kleavor": {
+			"moves": [],
+			"abilities": []
+		},
+		"drapion": {
+			"moves": [
+				"hivefrenzy",
+				"carrionfeast",
+				"punishment"
+			],
+			"abilities": []
+		},
+		"gligar": {
+			"moves": [
+				"hivefrenzy"
+			],
+			"abilities": []
+		},
+		"gliscor": {
+			"moves": [
+				"punishment"
+			],
+			"abilities": []
+		},
+		"lokix": {
+			"moves": [
+				"hivefrenzy",
+				"punishment"
 			],
 			"abilities": []
 		},
@@ -9478,6 +4492,25 @@ window.VelvetBuffs = {
 				"penance",
 				"velvetpress",
 				"velvetguard"
+			],
+			"abilities": []
+		},
+		"venomoth": {
+			"moves": [
+				"chrysalisveil",
+				"oxidize"
+			],
+			"abilities": []
+		},
+		"shuckle": {
+			"moves": [
+				"chrysalisveil"
+			],
+			"abilities": []
+		},
+		"forretress": {
+			"moves": [
+				"chrysalisveil"
 			],
 			"abilities": []
 		},
@@ -9494,6 +4527,12 @@ window.VelvetBuffs = {
 				"0": "Colossus Unbound",
 				"1": "Slow Start"
 			}
+		},
+		"sirfetchd": {
+			"moves": [
+				"hustleup"
+			],
+			"abilities": []
 		},
 		"stoutland": {
 			"moves": [
@@ -9539,7 +4578,19 @@ window.VelvetBuffs = {
 			],
 			"abilities": []
 		},
+		"unfezant": {
+			"moves": [
+				"hustleup"
+			],
+			"abilities": []
+		},
 		"ambipom": {
+			"moves": [
+				"hustleup"
+			],
+			"abilities": []
+		},
+		"ursaring": {
 			"moves": [
 				"hustleup"
 			],
@@ -9549,6 +4600,35 @@ window.VelvetBuffs = {
 			"moves": [
 				"hustleup"
 			],
+			"abilities": []
+		},
+		"krookodile": {
+			"moves": [
+				"carrionfeast",
+				"punishment"
+			],
+			"abilities": []
+		},
+		"bisharp": {
+			"moves": [
+				"carrionfeast"
+			],
+			"abilities": []
+		},
+		"pikachu": {
+			"moves": [
+				"sparkscamper",
+				"voltaiclance",
+				"penance"
+			],
+			"abilities": []
+		},
+		"raichu": {
+			"moves": [],
+			"abilities": []
+		},
+		"raichualola": {
+			"moves": [],
 			"abilities": []
 		},
 		"jolteon": {
@@ -9569,6 +4649,29 @@ window.VelvetBuffs = {
 				"H": "Quick Feet"
 			}
 		},
+		"morpeko": {
+			"moves": [
+				"sparkscamper",
+				"punishment",
+				"voltaiclance"
+			],
+			"abilities": []
+		},
+		"pawmot": {
+			"moves": [
+				"sparkscamper",
+				"voltaiclance",
+				"shufflejab"
+			],
+			"abilities": []
+		},
+		"zebstrika": {
+			"moves": [
+				"sparkscamper",
+				"voltaiclance"
+			],
+			"abilities": []
+		},
 		"electrode": {
 			"moves": [
 				"sparkscamper"
@@ -9578,6 +4681,119 @@ window.VelvetBuffs = {
 		"electrodehisui": {
 			"moves": [
 				"sparkscamper"
+			],
+			"abilities": []
+		},
+		"overqwil": {
+			"moves": [
+				"undertow",
+				"punishment"
+			],
+			"abilities": []
+		},
+		"venusaur": {
+			"moves": [
+				"solarnectar"
+			],
+			"abilities": []
+		},
+		"golem": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"golemalola": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"rhyperior": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"rampardos": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"gigalith": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"coalossal": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"lycanroc": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"lycanrocmidnight": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"lycanrocdusk": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"tyrantrum": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"archeops": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"aerodactyl": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"armaldo": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"tinkaton": {
+			"moves": [
+				"craghammer",
+				"penance",
+				"velvetpress",
+				"velvetguard"
+			],
+			"abilities": []
+		},
+		"conkeldurr": {
+			"moves": [
+				"craghammer",
+				"shufflejab"
+			],
+			"abilities": []
+		},
+		"sandslashalola": {
+			"moves": [
+				"chillingmist"
 			],
 			"abilities": []
 		},
@@ -9596,10 +4812,79 @@ window.VelvetBuffs = {
 			],
 			"abilities": []
 		},
+		"typhlosionhisui": {
+			"moves": [
+				"chillingmist"
+			],
+			"abilities": []
+		},
+		"drifblim": {
+			"moves": [
+				"chillingmist"
+			],
+			"abilities": []
+		},
+		"weavile": {
+			"moves": [
+				"chillingmist"
+			],
+			"abilities": []
+		},
+		"rotom": {
+			"moves": [
+				"chillingmist"
+			],
+			"abilities": []
+		},
+		"cofagrigus": {
+			"moves": [
+				"chillingmist"
+			],
+			"abilities": []
+		},
+		"zoroarkhisui": {
+			"moves": [
+				"chillingmist"
+			],
+			"abilities": []
+		},
+		"golurk": {
+			"moves": [
+				"chillingmist"
+			],
+			"abilities": []
+		},
 		"kyurem": {
 			"moves": [
 				"chillingmist",
 				"rimecleaver"
+			],
+			"abilities": []
+		},
+		"aegislash": {
+			"moves": [
+				"chillingmist"
+			],
+			"abilities": []
+		},
+		"aurorus": {
+			"moves": [
+				"chillingmist"
+			],
+			"abilities": []
+		},
+		"crabominable": {
+			"moves": [
+				"chillingmist",
+				"rimecleaver",
+				"shufflejab"
+			],
+			"abilities": []
+		},
+		"palossand": {
+			"moves": [
+				"chillingmist",
+				"tremorshot"
 			],
 			"abilities": []
 		},
@@ -9612,6 +4897,32 @@ window.VelvetBuffs = {
 			],
 			"abilities": []
 		},
+		"blacephalon": {
+			"moves": [
+				"chillingmist"
+			],
+			"abilities": []
+		},
+		"polteageist": {
+			"moves": [
+				"chillingmist"
+			],
+			"abilities": []
+		},
+		"runerigus": {
+			"moves": [
+				"chillingmist"
+			],
+			"abilities": []
+		},
+		"arctozolt": {
+			"moves": [
+				"chillingmist",
+				"voltaiclance",
+				"rimecleaver"
+			],
+			"abilities": []
+		},
 		"dragapult": {
 			"moves": [
 				"chillingmist"
@@ -9619,6 +4930,12 @@ window.VelvetBuffs = {
 			"abilities": []
 		},
 		"glastrier": {
+			"moves": [
+				"chillingmist"
+			],
+			"abilities": []
+		},
+		"skeledirge": {
 			"moves": [
 				"chillingmist"
 			],
@@ -9636,7 +4953,45 @@ window.VelvetBuffs = {
 			],
 			"abilities": []
 		},
+		"gholdengo": {
+			"moves": [
+				"chillingmist"
+			],
+			"abilities": []
+		},
+		"sinistcha": {
+			"moves": [
+				"chillingmist"
+			],
+			"abilities": []
+		},
 		"pecharunt": {
+			"moves": [
+				"chillingmist"
+			],
+			"abilities": []
+		},
+		"umbreon": {
+			"moves": [
+				"chillingmist",
+				"punishment",
+				"velvetpress",
+				"recover",
+				"teleport",
+				"healingwish",
+				"knockoff",
+				"focusblast"
+			],
+			"abilities": [
+				"Moonlit Venom"
+			],
+			"slots": {
+				"0": "Synchronize",
+				"1": "Moonlit Venom",
+				"H": "Inner Focus"
+			}
+		},
+		"hydreigon": {
 			"moves": [
 				"chillingmist"
 			],
@@ -9660,6 +5015,41 @@ window.VelvetBuffs = {
 			],
 			"abilities": []
 		},
+		"swalot": {
+			"moves": [
+				"slackoff",
+				"oxidize"
+			],
+			"abilities": []
+		},
+		"wobbuffet": {
+			"moves": [
+				"slackoff"
+			],
+			"abilities": []
+		},
+		"hypno": {
+			"moves": [
+				"slackoff",
+				"hypnowhirl"
+			],
+			"abilities": []
+		},
+		"mudbray": {
+			"moves": [
+				"slackoff",
+				"velvetpress"
+			],
+			"abilities": [
+				"Unaware"
+			],
+			"slots": {
+				"0": "Own Tempo",
+				"1": "Stamina",
+				"H": "Inner Focus",
+				"V0": "Unaware"
+			}
+		},
 		"munchlax": {
 			"moves": [
 				"slackoff",
@@ -9673,6 +5063,74 @@ window.VelvetBuffs = {
 				"1": "Thick Fat",
 				"H": "Gluttony",
 				"V0": "Unaware"
+			}
+		},
+		"bidoof": {
+			"moves": [
+				"slackoff",
+				"hustleup"
+			],
+			"abilities": []
+		},
+		"hippopotas": {
+			"moves": [
+				"velvetpress"
+			],
+			"abilities": [
+				"Unaware"
+			],
+			"slots": {
+				"0": "Sand Stream",
+				"1": "Unaware",
+				"H": "Sand Force"
+			}
+		},
+		"munna": {
+			"moves": [
+				"slackoff",
+				"penance",
+				"hypnowhirl"
+			],
+			"abilities": []
+		},
+		"gulpin": {
+			"moves": [
+				"slackoff",
+				"oxidize"
+			],
+			"abilities": []
+		},
+		"wynaut": {
+			"moves": [
+				"slackoff"
+			],
+			"abilities": []
+		},
+		"drowzee": {
+			"moves": [
+				"slackoff",
+				"hypnowhirl"
+			],
+			"abilities": []
+		},
+		"regirock": {
+			"moves": [
+				"headsmash",
+				"rockwrecker",
+				"craghammer",
+				"shoreup",
+				"spikes",
+				"knockoff",
+				"rapidspin",
+				"slackoff"
+			],
+			"abilities": [
+				"Bedrock Core"
+			],
+			"slots": {
+				"0": "Clear Body",
+				"1": "Bedrock Core",
+				"H": "Sturdy"
 			}
 		},
 		"regieleki": {
@@ -9705,11 +5163,37 @@ window.VelvetBuffs = {
 			],
 			"abilities": []
 		},
+		"klefki": {
+			"moves": [
+				"penance",
+				"velvetpress",
+				"velvetguard"
+			],
+			"abilities": []
+		},
 		"diancie": {
 			"moves": [
 				"penance",
 				"velvetpress",
 				"velvetguard"
+			],
+			"abilities": []
+		},
+		"tapukoko": {
+			"moves": [
+				"penance",
+				"velvetpress",
+				"velvetguard",
+				"uilasurge"
+			],
+			"abilities": []
+		},
+		"tapulele": {
+			"moves": [
+				"penance",
+				"velvetpress",
+				"velvetguard",
+				"manapierce"
 			],
 			"abilities": []
 		},
@@ -9721,6 +5205,14 @@ window.VelvetBuffs = {
 				"nahelerush",
 				"playrough",
 				"uturn"
+			],
+			"abilities": []
+		},
+		"hatterene": {
+			"moves": [
+				"penance",
+				"velvetpress",
+				"velvetguard"
 			],
 			"abilities": []
 		},
@@ -9748,6 +5240,22 @@ window.VelvetBuffs = {
 			],
 			"abilities": []
 		},
+		"screamtail": {
+			"moves": [
+				"penance",
+				"velvetpress",
+				"velvetguard"
+			],
+			"abilities": []
+		},
+		"ironvaliant": {
+			"moves": [
+				"penance",
+				"velvetpress",
+				"velvetguard"
+			],
+			"abilities": []
+		},
 		"fezandipiti": {
 			"moves": [
 				"penance",
@@ -9762,9 +5270,68 @@ window.VelvetBuffs = {
 			],
 			"abilities": []
 		},
+		"alakazam": {
+			"moves": [
+				"penance",
+				"hypnowhirl"
+			],
+			"abilities": []
+		},
+		"articunogalar": {
+			"moves": [
+				"penance",
+				"velvetpress"
+			],
+			"abilities": []
+		},
+		"espeon": {
+			"moves": [
+				"penance",
+				"recover",
+				"teleport",
+				"healingwish",
+				"knockoff",
+				"focusblast"
+			],
+			"abilities": [
+				"Prescience"
+			],
+			"slots": {
+				"0": "Synchronize",
+				"1": "Prescience",
+				"H": "Magic Bounce"
+			}
+		},
+		"latias": {
+			"moves": [
+				"penance",
+				"velvetpress"
+			],
+			"abilities": []
+		},
+		"latios": {
+			"moves": [
+				"penance",
+				"velvetpress"
+			],
+			"abilities": []
+		},
+		"braviaryhisui": {
+			"moves": [
+				"penance"
+			],
+			"abilities": []
+		},
 		"meloetta": {
 			"moves": [
 				"penance"
+			],
+			"abilities": []
+		},
+		"oranguru": {
+			"moves": [
+				"penance",
+				"hypnowhirl"
 			],
 			"abilities": []
 		},
@@ -9780,7 +5347,36 @@ window.VelvetBuffs = {
 			],
 			"abilities": []
 		},
+		"orbeetle": {
+			"moves": [
+				"penance",
+				"hypnowhirl"
+			],
+			"abilities": []
+		},
 		"enamorustherian": {
+			"moves": [
+				"penance"
+			],
+			"abilities": []
+		},
+		"armarouge": {
+			"moves": [
+				"penance"
+			],
+			"abilities": []
+		},
+		"farigiraf": {
+			"moves": [],
+			"abilities": []
+		},
+		"munkidori": {
+			"moves": [
+				"penance"
+			],
+			"abilities": []
+		},
+		"ironcrown": {
 			"moves": [
 				"penance"
 			],
@@ -9807,9 +5403,107 @@ window.VelvetBuffs = {
 			],
 			"abilities": []
 		},
+		"mukalola": {
+			"moves": [
+				"punishment",
+				"oxidize"
+			],
+			"abilities": []
+		},
+		"tyranitar": {
+			"moves": [
+				"punishment"
+			],
+			"abilities": []
+		},
+		"guzzlord": {
+			"moves": [
+				"punishment",
+				"grandfeast",
+				"devour",
+				"endlesshunger",
+				"suckerpunch",
+				"throatchop",
+				"foulplay",
+				"nightslash",
+				"jawlock",
+				"powertrip",
+				"nastyplot",
+				"partingshot",
+				"taunt",
+				"dragondance",
+				"scaleshot",
+				"breakingswipe"
+			],
+			"abilities": []
+		},
 		"zarude": {
 			"moves": [
 				"punishment"
+			],
+			"abilities": []
+		},
+		"meowscarada": {
+			"moves": [
+				"punishment"
+			],
+			"abilities": []
+		},
+		"bombirdier": {
+			"moves": [
+				"punishment"
+			],
+			"abilities": []
+		},
+		"kingambit": {
+			"moves": [
+				"punishment"
+			],
+			"abilities": []
+		},
+		"brutebonnet": {
+			"moves": [
+				"punishment"
+			],
+			"abilities": []
+		},
+		"tinglu": {
+			"moves": [
+				"punishment",
+				"velvetpress"
+			],
+			"abilities": []
+		},
+		"roaringmoon": {
+			"moves": [
+				"punishment"
+			],
+			"abilities": []
+		},
+		"corviknight": {
+			"moves": [
+				"punishment",
+				"velvetpress"
+			],
+			"abilities": []
+		},
+		"skarmory": {
+			"moves": [
+				"punishment"
+			],
+			"abilities": []
+		},
+		"garganacl": {
+			"moves": [
+				"punishment",
+				"velvetpress"
+			],
+			"abilities": []
+		},
+		"clodsire": {
+			"moves": [
+				"punishment",
+				"velvetpress"
 			],
 			"abilities": []
 		},
@@ -9841,7 +5535,132 @@ window.VelvetBuffs = {
 			],
 			"abilities": []
 		},
+		"porygon2": {
+			"moves": [
+				"velvetpress"
+			],
+			"abilities": []
+		},
+		"dragonite": {
+			"moves": [
+				"velvetpress"
+			],
+			"abilities": []
+		},
+		"uxie": {
+			"moves": [
+				"memorywipe",
+				"slackoff",
+				"teleport",
+				"velvetpress"
+			],
+			"abilities": [
+				"Mind Keeper"
+			],
+			"slots": {
+				"0": "Levitate",
+				"1": "Mind Keeper"
+			}
+		},
+		"azelf": {
+			"moves": [
+				"resolutestrike",
+				"closecombat",
+				"swordsdance",
+				"velvetpress"
+			],
+			"abilities": [
+				"Unbending Will"
+			],
+			"slots": {
+				"0": "Levitate",
+				"1": "Unbending Will"
+			}
+		},
+		"mesprit": {
+			"moves": [
+				"soulresonance",
+				"moonblast",
+				"wish",
+				"velvetpress"
+			],
+			"abilities": [
+				"Heartfelt Resolve"
+			],
+			"slots": {
+				"0": "Levitate",
+				"1": "Heartfelt Resolve"
+			}
+		},
+		"zapdosgalar": {
+			"moves": [
+				"velvetpress"
+			],
+			"abilities": []
+		},
+		"moltresgalar": {
+			"moves": [
+				"velvetpress"
+			],
+			"abilities": []
+		},
+		"glimmora": {
+			"moves": [
+				"velvetpress"
+			],
+			"abilities": []
+		},
+		"ferrothorn": {
+			"moves": [
+				"velvetpress"
+			],
+			"abilities": []
+		},
+		"nidoking": {
+			"moves": [
+				"tremorshot",
+				"oxidize"
+			],
+			"abilities": []
+		},
+		"nidoqueen": {
+			"moves": [
+				"tremorshot",
+				"oxidize"
+			],
+			"abilities": []
+		},
+		"sandyshocks": {
+			"moves": [
+				"tremorshot"
+			],
+			"abilities": []
+		},
+		"electivire": {
+			"moves": [
+				"voltaiclance"
+			],
+			"abilities": []
+		},
 		"zeraora": {
+			"moves": [
+				"voltaiclance"
+			],
+			"abilities": []
+		},
+		"dracozolt": {
+			"moves": [
+				"voltaiclance"
+			],
+			"abilities": []
+		},
+		"ironthorns": {
+			"moves": [
+				"voltaiclance"
+			],
+			"abilities": []
+		},
+		"boltund": {
 			"moves": [
 				"voltaiclance"
 			],
@@ -9859,9 +5678,33 @@ window.VelvetBuffs = {
 			],
 			"abilities": []
 		},
+		"salazzle": {
+			"moves": [
+				"oxidize"
+			],
+			"abilities": []
+		},
+		"toxtricity": {
+			"moves": [
+				"oxidize"
+			],
+			"abilities": []
+		},
+		"toxtricitylowkey": {
+			"moves": [
+				"oxidize"
+			],
+			"abilities": []
+		},
 		"garbodor": {
 			"moves": [
 				"oxidize"
+			],
+			"abilities": []
+		},
+		"machamp": {
+			"moves": [
+				"shufflejab"
 			],
 			"abilities": []
 		},
@@ -9871,13 +5714,70 @@ window.VelvetBuffs = {
 			],
 			"abilities": []
 		},
+		"toxicroak": {
+			"moves": [
+				"shufflejab"
+			],
+			"abilities": []
+		},
+		"passimian": {
+			"moves": [
+				"shufflejab"
+			],
+			"abilities": []
+		},
+		"grapploct": {
+			"moves": [
+				"shufflejab"
+			],
+			"abilities": []
+		},
+		"kommoo": {
+			"moves": [
+				"shufflejab"
+			],
+			"abilities": []
+		},
+		"kakuna": {
+			"moves": [
+				"hivefrenzy"
+			],
+			"abilities": []
+		},
+		"weedle": {
+			"moves": [
+				"hivefrenzy"
+			],
+			"abilities": []
+		},
 		"ledyba": {
 			"moves": [
 				"hivefrenzy"
 			],
 			"abilities": []
 		},
+		"burmy": {
+			"moves": [
+				"hivefrenzy",
+				"chrysalisveil",
+				"solarnectar"
+			],
+			"abilities": [
+				"Filter"
+			],
+			"slots": {
+				"0": "Shed Skin",
+				"1": "Filter",
+				"H": "Overcoat"
+			}
+		},
 		"tarountula": {
+			"moves": [
+				"hivefrenzy"
+			],
+			"abilities": []
+		},
+		"combee": {
 			"moves": [
 				"hivefrenzy"
 			],
@@ -9914,6 +5814,24 @@ window.VelvetBuffs = {
 				"1": "Tinted Lens"
 			}
 		},
+		"wurmple": {
+			"moves": [
+				"chrysalisveil",
+				"oxidize"
+			],
+			"abilities": [
+				"Tinted Lens"
+			],
+			"slots": {
+				"0": "Shield Dust",
+				"1": "Tinted Lens",
+				"H": "Run Away"
+			}
+		},
+		"cascoon": {
+			"moves": [],
+			"abilities": []
+		},
 		"spewpa": {
 			"moves": [
 				"chrysalisveil"
@@ -9923,6 +5841,14 @@ window.VelvetBuffs = {
 		"scatterbug": {
 			"moves": [
 				"chrysalisveil"
+			],
+			"abilities": []
+		},
+		"rellor": {
+			"moves": [
+				"chrysalisveil",
+				"hypnowhirl",
+				"penance"
 			],
 			"abilities": []
 		},
@@ -9946,6 +5872,14 @@ window.VelvetBuffs = {
 			],
 			"abilities": []
 		},
+		"rattataalola": {
+			"moves": [
+				"hustleup",
+				"carrionfeast",
+				"twilightexit"
+			],
+			"abilities": []
+		},
 		"zigzagoon": {
 			"moves": [
 				"hustleup"
@@ -9953,6 +5887,38 @@ window.VelvetBuffs = {
 			"abilities": []
 		},
 		"patrat": {
+			"moves": [
+				"hustleup"
+			],
+			"abilities": []
+		},
+		"spearow": {
+			"moves": [
+				"hustleup"
+			],
+			"abilities": []
+		},
+		"doduo": {
+			"moves": [
+				"hustleup"
+			],
+			"abilities": [
+				"Reckless"
+			],
+			"slots": {
+				"0": "Run Away",
+				"1": "Early Bird",
+				"H": "Tangled Feet",
+				"V0": "Reckless"
+			}
+		},
+		"taillow": {
+			"moves": [
+				"hustleup"
+			],
+			"abilities": []
+		},
+		"meowth": {
 			"moves": [
 				"hustleup"
 			],
@@ -9970,6 +5936,12 @@ window.VelvetBuffs = {
 			],
 			"abilities": []
 		},
+		"yungoos": {
+			"moves": [
+				"hustleup"
+			],
+			"abilities": []
+		},
 		"snubbull": {
 			"moves": [
 				"hustleup",
@@ -9977,6 +5949,37 @@ window.VelvetBuffs = {
 				"penance",
 				"velvetpress",
 				"velvetguard"
+			],
+			"abilities": []
+		},
+		"poochyena": {
+			"moves": [
+				"carrionfeast",
+				"twilightexit",
+				"chillingmist"
+			],
+			"abilities": []
+		},
+		"purrloin": {
+			"moves": [
+				"carrionfeast",
+				"twilightexit",
+				"chillingmist"
+			],
+			"abilities": []
+		},
+		"nickit": {
+			"moves": [
+				"carrionfeast",
+				"twilightexit",
+				"chillingmist"
+			],
+			"abilities": []
+		},
+		"meowthalola": {
+			"moves": [
+				"carrionfeast",
+				"twilightexit"
 			],
 			"abilities": []
 		},
@@ -10017,6 +6020,22 @@ window.VelvetBuffs = {
 			],
 			"abilities": []
 		},
+		"skiploom": {
+			"moves": [
+				"solarnectar",
+				"velvetpress",
+				"velvetguard"
+			],
+			"abilities": []
+		},
+		"hoppip": {
+			"moves": [
+				"solarnectar",
+				"velvetpress",
+				"velvetguard"
+			],
+			"abilities": []
+		},
 		"morelull": {
 			"moves": [
 				"solarnectar",
@@ -10033,6 +6052,97 @@ window.VelvetBuffs = {
 				"velvetguard"
 			],
 			"abilities": []
+		},
+		"bonsly": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"slugma": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": [
+				"Solid Rock"
+			],
+			"slots": {
+				"0": "Magma Armor",
+				"1": "Flame Body",
+				"H": "Weak Armor",
+				"V0": "Solid Rock"
+			}
+		},
+		"sandshrew": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"cubone": {
+			"moves": [
+				"craghammer",
+				"chillingmist"
+			],
+			"abilities": []
+		},
+		"diglett": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"chingling": {
+			"moves": [
+				"hypnowhirl",
+				"penance"
+			],
+			"abilities": []
+		},
+		"spoink": {
+			"moves": [
+				"hypnowhirl",
+				"penance"
+			],
+			"abilities": []
+		},
+		"espurr": {
+			"moves": [
+				"hypnowhirl",
+				"penance"
+			],
+			"abilities": []
+		},
+		"woobat": {
+			"moves": [
+				"hypnowhirl",
+				"penance"
+			],
+			"abilities": []
+		},
+		"mimejr": {
+			"moves": [
+				"hypnowhirl",
+				"penance",
+				"velvetpress",
+				"velvetguard",
+				"chillingmist"
+			],
+			"abilities": []
+		},
+		"makuhita": {
+			"moves": [
+				"shufflejab"
+			],
+			"abilities": [
+				"Unaware"
+			],
+			"slots": {
+				"0": "Thick Fat",
+				"1": "Guts",
+				"H": "Sheer Force",
+				"V0": "Unaware"
+			}
 		},
 		"kricketot": {
 			"moves": [
@@ -10088,6 +6198,38 @@ window.VelvetBuffs = {
 				"V0": "Unaware"
 			}
 		},
+		"vullaby": {
+			"moves": [
+				"twilightexit",
+				"carrionfeast",
+				"chillingmist",
+				"velvetpress"
+			],
+			"abilities": [
+				"Unaware"
+			],
+			"slots": {
+				"0": "Big Pecks",
+				"1": "Overcoat",
+				"H": "Weak Armor",
+				"V0": "Unaware"
+			}
+		},
+		"slowpokegalar": {
+			"moves": [
+				"penance",
+				"velvetpress"
+			],
+			"abilities": [
+				"Unaware"
+			],
+			"slots": {
+				"0": "Gluttony",
+				"1": "Own Tempo",
+				"H": "Regenerator",
+				"V0": "Unaware"
+			}
+		},
 		"tangela": {
 			"moves": [
 				"penance",
@@ -10102,6 +6244,61 @@ window.VelvetBuffs = {
 				"H": "Regenerator",
 				"V0": "Unaware"
 			}
+		},
+		"foongus": {
+			"moves": [
+				"penance",
+				"velvetpress"
+			],
+			"abilities": [
+				"Unaware"
+			],
+			"slots": {
+				"0": "Effect Spore",
+				"1": "Unaware",
+				"H": "Regenerator"
+			}
+		},
+		"gloom": {
+			"moves": [
+				"solarnectar",
+				"oxidize"
+			],
+			"abilities": []
+		},
+		"oddish": {
+			"moves": [
+				"solarnectar",
+				"oxidize"
+			],
+			"abilities": []
+		},
+		"weepinbell": {
+			"moves": [
+				"solarnectar",
+				"oxidize"
+			],
+			"abilities": []
+		},
+		"bellsprout": {
+			"moves": [
+				"solarnectar",
+				"oxidize"
+			],
+			"abilities": []
+		},
+		"exeggcute": {
+			"moves": [
+				"solarnectar",
+				"penance"
+			],
+			"abilities": []
+		},
+		"seedot": {
+			"moves": [
+				"carrionfeast"
+			],
+			"abilities": []
 		},
 		"fomantis": {
 			"moves": [
@@ -10159,6 +6356,32 @@ window.VelvetBuffs = {
 			],
 			"abilities": []
 		},
+		"lileep": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"petilil": {
+			"moves": [
+				"solarnectar"
+			],
+			"abilities": []
+		},
+		"roselia": {
+			"moves": [
+				"solarnectar",
+				"oxidize"
+			],
+			"abilities": []
+		},
+		"budew": {
+			"moves": [
+				"solarnectar",
+				"oxidize"
+			],
+			"abilities": []
+		},
 		"phantump": {
 			"moves": [
 				"chillingmist"
@@ -10171,7 +6394,60 @@ window.VelvetBuffs = {
 			],
 			"abilities": []
 		},
+		"dartrix": {
+			"moves": [
+				"chillingmist"
+			],
+			"abilities": []
+		},
+		"rowlet": {
+			"moves": [
+				"chillingmist"
+			],
+			"abilities": []
+		},
+		"quilladin": {
+			"moves": [],
+			"abilities": []
+		},
+		"chespin": {
+			"moves": [],
+			"abilities": []
+		},
+		"toedscool": {
+			"moves": [
+				"oxidize"
+			],
+			"abilities": []
+		},
+		"eevee": {
+			"moves": [
+				"chillingmist",
+				"penance",
+				"velvetpress",
+				"velvetguard",
+				"sparkscamper",
+				"recover",
+				"teleport",
+				"healingwish",
+				"knockoff",
+				"focusblast"
+			],
+			"abilities": []
+		},
+		"nincada": {
+			"moves": [
+				"hivefrenzy"
+			],
+			"abilities": []
+		},
 		"yanma": {
+			"moves": [
+				"hivefrenzy"
+			],
+			"abilities": []
+		},
+		"karrablast": {
 			"moves": [
 				"hivefrenzy"
 			],
@@ -10179,6 +6455,69 @@ window.VelvetBuffs = {
 		},
 		"shelmet": {
 			"moves": [],
+			"abilities": []
+		},
+		"natu": {
+			"moves": [
+				"penance",
+				"hypnowhirl"
+			],
+			"abilities": []
+		},
+		"baltoy": {
+			"moves": [
+				"tremorshot",
+				"hypnowhirl"
+			],
+			"abilities": []
+		},
+		"gothorita": {
+			"moves": [
+				"penance",
+				"hypnowhirl"
+			],
+			"abilities": []
+		},
+		"gothita": {
+			"moves": [
+				"penance",
+				"hypnowhirl"
+			],
+			"abilities": []
+		},
+		"duosion": {
+			"moves": [
+				"penance",
+				"hypnowhirl"
+			],
+			"abilities": []
+		},
+		"solosis": {
+			"moves": [
+				"penance",
+				"hypnowhirl"
+			],
+			"abilities": []
+		},
+		"elgyem": {
+			"moves": [
+				"penance",
+				"hypnowhirl"
+			],
+			"abilities": []
+		},
+		"braixen": {
+			"moves": [
+				"penance",
+				"hypnowhirl"
+			],
+			"abilities": []
+		},
+		"fennekin": {
+			"moves": [
+				"penance",
+				"hypnowhirl"
+			],
 			"abilities": []
 		},
 		"cleffa": {
@@ -10213,6 +6552,24 @@ window.VelvetBuffs = {
 			],
 			"abilities": []
 		},
+		"kirlia": {
+			"moves": [
+				"penance",
+				"velvetpress",
+				"velvetguard",
+				"hypnowhirl"
+			],
+			"abilities": []
+		},
+		"ralts": {
+			"moves": [
+				"penance",
+				"velvetpress",
+				"velvetguard",
+				"hypnowhirl"
+			],
+			"abilities": []
+		},
 		"spritzee": {
 			"moves": [
 				"penance",
@@ -10229,6 +6586,57 @@ window.VelvetBuffs = {
 			],
 			"abilities": []
 		},
+		"monferno": {
+			"moves": [
+				"shufflejab"
+			],
+			"abilities": [
+				"Kindling Crown"
+			],
+			"slots": {
+				"0": "Blaze",
+				"1": "Kindling Crown",
+				"H": "Iron Fist"
+			}
+		},
+		"chimchar": {
+			"moves": [
+				"shufflejab"
+			],
+			"abilities": [
+				"Kindling Crown"
+			],
+			"slots": {
+				"0": "Blaze",
+				"1": "Kindling Crown",
+				"H": "Iron Fist"
+			}
+		},
+		"riolu": {
+			"moves": [
+				"shufflejab"
+			],
+			"abilities": []
+		},
+		"swablu": {
+			"moves": [
+				"velvetpress",
+				"velvetguard"
+			],
+			"abilities": []
+		},
+		"vibrava": {
+			"moves": [
+				"tremorshot"
+			],
+			"abilities": []
+		},
+		"trapinch": {
+			"moves": [
+				"tremorshot"
+			],
+			"abilities": []
+		},
 		"noibat": {
 			"moves": [],
 			"abilities": []
@@ -10239,6 +6647,20 @@ window.VelvetBuffs = {
 		},
 		"axew": {
 			"moves": [],
+			"abilities": []
+		},
+		"haunter": {
+			"moves": [
+				"twilightexit",
+				"chillingmist"
+			],
+			"abilities": []
+		},
+		"gastly": {
+			"moves": [
+				"twilightexit",
+				"chillingmist"
+			],
 			"abilities": []
 		},
 		"dusclops": {
@@ -10255,11 +6677,115 @@ window.VelvetBuffs = {
 			],
 			"abilities": []
 		},
+		"misdreavus": {
+			"moves": [
+				"twilightexit",
+				"chillingmist"
+			],
+			"abilities": []
+		},
 		"greavard": {
 			"moves": [
 				"twilightexit",
 				"carrionfeast",
 				"chillingmist"
+			],
+			"abilities": []
+		},
+		"stunky": {
+			"moves": [
+				"twilightexit",
+				"carrionfeast",
+				"oxidize"
+			],
+			"abilities": []
+		},
+		"scraggy": {
+			"moves": [
+				"twilightexit",
+				"carrionfeast",
+				"shufflejab"
+			],
+			"abilities": []
+		},
+		"pancham": {
+			"moves": [
+				"twilightexit",
+				"shufflejab"
+			],
+			"abilities": []
+		},
+		"inkay": {
+			"moves": [
+				"twilightexit",
+				"carrionfeast",
+				"hypnowhirl"
+			],
+			"abilities": []
+		},
+		"maschiff": {
+			"moves": [
+				"twilightexit",
+				"carrionfeast"
+			],
+			"abilities": []
+		},
+		"murkrow": {
+			"moves": [
+				"twilightexit",
+				"carrionfeast",
+				"chillingmist"
+			],
+			"abilities": []
+		},
+		"morgrem": {
+			"moves": [
+				"twilightexit",
+				"carrionfeast",
+				"chillingmist",
+				"penance",
+				"velvetpress",
+				"velvetguard"
+			],
+			"abilities": []
+		},
+		"impidimp": {
+			"moves": [
+				"twilightexit",
+				"carrionfeast",
+				"chillingmist",
+				"penance",
+				"velvetpress",
+				"velvetguard"
+			],
+			"abilities": []
+		},
+		"luxio": {
+			"moves": [
+				"twilightexit",
+				"sparkscamper",
+				"voltaiclance"
+			],
+			"abilities": []
+		},
+		"shinx": {
+			"moves": [
+				"twilightexit",
+				"sparkscamper",
+				"voltaiclance"
+			],
+			"abilities": []
+		},
+		"skorupi": {
+			"moves": [
+				"hivefrenzy",
+				"carrionfeast"
+			],
+			"abilities": []
+		},
+		"nymble": {
+			"moves": [
+				"hivefrenzy"
 			],
 			"abilities": []
 		},
@@ -10271,6 +6797,25 @@ window.VelvetBuffs = {
 				"penance",
 				"velvetpress",
 				"velvetguard"
+			],
+			"abilities": []
+		},
+		"venonat": {
+			"moves": [
+				"chrysalisveil",
+				"oxidize"
+			],
+			"abilities": []
+		},
+		"pineco": {
+			"moves": [
+				"chrysalisveil"
+			],
+			"abilities": []
+		},
+		"farfetchdgalar": {
+			"moves": [
+				"hustleup"
 			],
 			"abilities": []
 		},
@@ -10304,9 +6849,76 @@ window.VelvetBuffs = {
 			],
 			"abilities": []
 		},
+		"tranquill": {
+			"moves": [
+				"hustleup"
+			],
+			"abilities": []
+		},
+		"pidove": {
+			"moves": [
+				"hustleup"
+			],
+			"abilities": []
+		},
 		"aipom": {
 			"moves": [
 				"hustleup"
+			],
+			"abilities": []
+		},
+		"teddiursa": {
+			"moves": [
+				"hustleup"
+			],
+			"abilities": []
+		},
+		"krokorok": {
+			"moves": [
+				"carrionfeast"
+			],
+			"abilities": []
+		},
+		"sandile": {
+			"moves": [
+				"carrionfeast"
+			],
+			"abilities": []
+		},
+		"pawniard": {
+			"moves": [
+				"carrionfeast"
+			],
+			"abilities": []
+		},
+		"pichu": {
+			"moves": [
+				"sparkscamper",
+				"voltaiclance",
+				"penance"
+			],
+			"abilities": []
+		},
+		"pawmo": {
+			"moves": [
+				"sparkscamper",
+				"voltaiclance",
+				"shufflejab"
+			],
+			"abilities": []
+		},
+		"pawmi": {
+			"moves": [
+				"sparkscamper",
+				"voltaiclance",
+				"shufflejab"
+			],
+			"abilities": []
+		},
+		"blitzle": {
+			"moves": [
+				"sparkscamper",
+				"voltaiclance"
 			],
 			"abilities": []
 		},
@@ -10322,12 +6934,251 @@ window.VelvetBuffs = {
 			],
 			"abilities": []
 		},
+		"qwilfishhisui": {
+			"moves": [
+				"undertow"
+			],
+			"abilities": []
+		},
+		"ivysaur": {
+			"moves": [
+				"solarnectar"
+			],
+			"abilities": []
+		},
+		"bulbasaur": {
+			"moves": [
+				"solarnectar"
+			],
+			"abilities": []
+		},
+		"graveler": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"geodude": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"graveleralola": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"geodudealola": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"rhydon": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"rhyhorn": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"cranidos": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"boldore": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"roggenrola": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"carkol": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"rolycoly": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"rockruff": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"rockruffdusk": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"tyrunt": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"archen": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"anorith": {
+			"moves": [
+				"craghammer"
+			],
+			"abilities": []
+		},
+		"tinkatuff": {
+			"moves": [
+				"craghammer",
+				"penance",
+				"velvetpress",
+				"velvetguard"
+			],
+			"abilities": []
+		},
+		"tinkatink": {
+			"moves": [
+				"craghammer",
+				"penance",
+				"velvetpress",
+				"velvetguard"
+			],
+			"abilities": []
+		},
+		"gurdurr": {
+			"moves": [
+				"craghammer",
+				"shufflejab"
+			],
+			"abilities": []
+		},
+		"timburr": {
+			"moves": [
+				"craghammer",
+				"shufflejab"
+			],
+			"abilities": []
+		},
+		"sandshrewalola": {
+			"moves": [
+				"chillingmist"
+			],
+			"abilities": []
+		},
 		"vulpixalola": {
 			"moves": [
 				"chillingmist",
 				"penance",
 				"velvetpress",
 				"velvetguard"
+			],
+			"abilities": []
+		},
+		"quilava": {
+			"moves": [
+				"chillingmist"
+			],
+			"abilities": []
+		},
+		"cyndaquil": {
+			"moves": [
+				"chillingmist"
+			],
+			"abilities": []
+		},
+		"drifloon": {
+			"moves": [
+				"chillingmist"
+			],
+			"abilities": []
+		},
+		"sneasel": {
+			"moves": [
+				"chillingmist"
+			],
+			"abilities": []
+		},
+		"yamask": {
+			"moves": [
+				"chillingmist"
+			],
+			"abilities": []
+		},
+		"zoruahisui": {
+			"moves": [
+				"chillingmist"
+			],
+			"abilities": []
+		},
+		"golett": {
+			"moves": [
+				"chillingmist"
+			],
+			"abilities": []
+		},
+		"doublade": {
+			"moves": [
+				"chillingmist"
+			],
+			"abilities": []
+		},
+		"honedge": {
+			"moves": [
+				"chillingmist"
+			],
+			"abilities": []
+		},
+		"amaura": {
+			"moves": [
+				"chillingmist"
+			],
+			"abilities": []
+		},
+		"crabrawler": {
+			"moves": [
+				"chillingmist",
+				"rimecleaver",
+				"shufflejab"
+			],
+			"abilities": []
+		},
+		"sandygast": {
+			"moves": [
+				"chillingmist",
+				"tremorshot"
+			],
+			"abilities": []
+		},
+		"sinistea": {
+			"moves": [
+				"chillingmist"
+			],
+			"abilities": []
+		},
+		"yamaskgalar": {
+			"moves": [
+				"chillingmist"
 			],
 			"abilities": []
 		},
@@ -10343,7 +7194,50 @@ window.VelvetBuffs = {
 			],
 			"abilities": []
 		},
+		"crocalor": {
+			"moves": [
+				"chillingmist"
+			],
+			"abilities": []
+		},
+		"fuecoco": {
+			"moves": [
+				"chillingmist"
+			],
+			"abilities": []
+		},
+		"charcadet": {
+			"moves": [
+				"chillingmist",
+				"penance"
+			],
+			"abilities": []
+		},
 		"bramblin": {
+			"moves": [
+				"chillingmist"
+			],
+			"abilities": []
+		},
+		"gimmighoul": {
+			"moves": [
+				"chillingmist"
+			],
+			"abilities": []
+		},
+		"poltchageist": {
+			"moves": [
+				"chillingmist"
+			],
+			"abilities": []
+		},
+		"zweilous": {
+			"moves": [
+				"chillingmist"
+			],
+			"abilities": []
+		},
+		"deino": {
 			"moves": [
 				"chillingmist"
 			],
@@ -10370,6 +7264,30 @@ window.VelvetBuffs = {
 			],
 			"abilities": []
 		},
+		"azurill": {
+			"moves": [
+				"penance",
+				"velvetpress",
+				"velvetguard"
+			],
+			"abilities": []
+		},
+		"hattrem": {
+			"moves": [
+				"penance",
+				"velvetpress",
+				"velvetguard"
+			],
+			"abilities": []
+		},
+		"hatenna": {
+			"moves": [
+				"penance",
+				"velvetpress",
+				"velvetguard"
+			],
+			"abilities": []
+		},
 		"milcery": {
 			"moves": [
 				"penance",
@@ -10383,6 +7301,92 @@ window.VelvetBuffs = {
 				"penance",
 				"velvetpress",
 				"velvetguard"
+			],
+			"abilities": []
+		},
+		"kadabra": {
+			"moves": [
+				"penance",
+				"hypnowhirl"
+			],
+			"abilities": []
+		},
+		"abra": {
+			"moves": [
+				"penance",
+				"hypnowhirl"
+			],
+			"abilities": []
+		},
+		"rufflet": {
+			"moves": [
+				"penance"
+			],
+			"abilities": []
+		},
+		"dottler": {
+			"moves": [
+				"penance",
+				"hypnowhirl"
+			],
+			"abilities": []
+		},
+		"blipbug": {
+			"moves": [
+				"penance",
+				"hypnowhirl"
+			],
+			"abilities": []
+		},
+		"grimeralola": {
+			"moves": [
+				"oxidize"
+			],
+			"abilities": []
+		},
+		"pupitar": {
+			"moves": [],
+			"abilities": []
+		},
+		"larvitar": {
+			"moves": [],
+			"abilities": []
+		},
+		"floragato": {
+			"moves": [],
+			"abilities": []
+		},
+		"sprigatito": {
+			"moves": [],
+			"abilities": []
+		},
+		"corvisquire": {
+			"moves": [
+				"velvetpress"
+			],
+			"abilities": []
+		},
+		"rookidee": {
+			"moves": [
+				"velvetpress"
+			],
+			"abilities": []
+		},
+		"naclstack": {
+			"moves": [
+				"velvetpress"
+			],
+			"abilities": []
+		},
+		"nacli": {
+			"moves": [
+				"velvetpress"
+			],
+			"abilities": []
+		},
+		"wooperpaldea": {
+			"moves": [
+				"velvetpress"
 			],
 			"abilities": []
 		},
@@ -10407,7 +7411,95 @@ window.VelvetBuffs = {
 			],
 			"abilities": []
 		},
+		"porygon": {
+			"moves": [
+				"velvetpress"
+			],
+			"abilities": []
+		},
+		"dragonair": {
+			"moves": [
+				"velvetpress"
+			],
+			"abilities": []
+		},
+		"dratini": {
+			"moves": [
+				"velvetpress"
+			],
+			"abilities": []
+		},
+		"glimmet": {
+			"moves": [
+				"velvetpress"
+			],
+			"abilities": []
+		},
+		"ferroseed": {
+			"moves": [
+				"velvetpress"
+			],
+			"abilities": []
+		},
+		"nidorino": {
+			"moves": [
+				"tremorshot",
+				"oxidize"
+			],
+			"abilities": []
+		},
+		"nidoranm": {
+			"moves": [
+				"tremorshot",
+				"oxidize"
+			],
+			"abilities": []
+		},
+		"nidorina": {
+			"moves": [
+				"tremorshot",
+				"oxidize"
+			],
+			"abilities": []
+		},
+		"nidoranf": {
+			"moves": [
+				"tremorshot",
+				"oxidize"
+			],
+			"abilities": []
+		},
+		"electabuzz": {
+			"moves": [
+				"voltaiclance"
+			],
+			"abilities": []
+		},
+		"elekid": {
+			"moves": [
+				"voltaiclance"
+			],
+			"abilities": []
+		},
+		"yamper": {
+			"moves": [
+				"voltaiclance"
+			],
+			"abilities": []
+		},
 		"grimer": {
+			"moves": [
+				"oxidize"
+			],
+			"abilities": []
+		},
+		"salandit": {
+			"moves": [
+				"oxidize"
+			],
+			"abilities": []
+		},
+		"toxel": {
 			"moves": [
 				"oxidize"
 			],
@@ -10419,7 +7511,43 @@ window.VelvetBuffs = {
 			],
 			"abilities": []
 		},
+		"machoke": {
+			"moves": [
+				"shufflejab"
+			],
+			"abilities": []
+		},
+		"machop": {
+			"moves": [
+				"shufflejab"
+			],
+			"abilities": []
+		},
 		"mankey": {
+			"moves": [
+				"shufflejab"
+			],
+			"abilities": []
+		},
+		"croagunk": {
+			"moves": [
+				"shufflejab"
+			],
+			"abilities": []
+		},
+		"clobbopus": {
+			"moves": [
+				"shufflejab"
+			],
+			"abilities": []
+		},
+		"hakamoo": {
+			"moves": [
+				"shufflejab"
+			],
+			"abilities": []
+		},
+		"jangmoo": {
 			"moves": [
 				"shufflejab"
 			],
@@ -10592,6 +7720,28 @@ window.VelvetBuffs = {
 			],
 			"abilities": []
 		},
+		"remiliascarlet": {
+			"moves": [],
+			"abilities": [
+				"Scarlet Sisters"
+			],
+			"slots": {
+				"0": "Vampirism",
+				"1": "Scarlet Sisters"
+			}
+		},
+		"flandrescarlet": {
+			"moves": [],
+			"abilities": [
+				"Scarlet Sisters"
+			],
+			"slots": {
+				"0": "Mold Breaker",
+				"1": "Pressure",
+				"H": "Moxie",
+				"V0": "Scarlet Sisters"
+			}
+		},
 		"banettemegahalloween": {
 			"moves": [
 				"witchssnatch"
@@ -10616,8 +7766,8 @@ window.VelvetBuffs = {
 	awakened: {"ability":["chansey","vaporeon","jolteon","flareon","articuno","espeon","umbreon","granbull","blissey","regirock","regice","turtwig","grotle","torterra","chimchar","monferno","infernape","piplup","prinplup","empoleon","roserade","happiny","spiritomb","leafeon","glaceon","uxie","mesprit","azelf","dialga","dialgaorigin","palkia","palkiaorigin","regigigas","giratina","giratinaorigin","pansage","simisage","pansear","simisear","panpour","simipour","stunfisk","stunfiskgalar","sylveon","banettemegahalloween","makuro","raishin","chimai","funerfly","funerflybreach"],"move":["articuno","granbull","nuzleaf","torterra","infernape","empoleon","luxray","roserade","spiritomb","uxie","mesprit","azelf","regigigas","pansage","simisage","pansear","simisear","panpour","simipour","tapukoko","tapulele","tapubulu","tapufini","guzzlord","banettemegahalloween","makuro","raishin","chimai","funerfly"]},
 	events: ["banette","banettemegahalloween","missingno"],
 	searchAliases: [["megahalloween","pokemon","banettemegahalloween",7],["halloween","pokemon","banettemegahalloween",11],["megabanettehalloween","pokemon","banettemegahalloween",0],["halloweenbanette","pokemon","banettemegahalloween",0],["witchbanette","pokemon","banettemegahalloween",0],["witchmegabanette","pokemon","banettemegahalloween",0],["glitch","pokemon","missingno",0],["missingnumber","pokemon","missingno",0],["missing","pokemon","missingno",0],["funeral","pokemon","funerfly",0],["funeralofthedeadbutterflies","pokemon","funerfly",0],["deadbutterflies","pokemon","funerfly",0],["breach","pokemon","funerflybreach",8],["9","pokemon","cirno",0],["17","pokemon","yukariyakumo",0],["reimu","pokemon","reimuhakurei",0],["rei","pokemon","reimuhakurei",0],["marisa","pokemon","marisakirisame",0],["mari","pokemon","marisakirisame",0],["witch","pokemon","marisakirisame",0],["sonanoka","pokemon","rumia",0],["dai","pokemon","daiyousei",0],["tancirno","pokemon","cirnotanned",0],["tan","pokemon","cirnotanned",5],["tanned","pokemon","cirnotanned",5],["meiling","pokemon","hongmeiling",4],["china","pokemon","hongmeiling",0],["koa","pokemon","koakuma",0],["patchouli","pokemon","patchouliknowledge",0],["patchy","pokemon","patchouliknowledge",0],["patche","pokemon","patchouliknowledge",0],["pache","pokemon","patchouliknowledge",0],["sakuya","pokemon","sakuyaizayoi",0],["maid","pokemon","sakuyaizayoi",0],["remilia","pokemon","remiliascarlet",0],["remi","pokemon","remiliascarlet",0],["flandre","pokemon","flandrescarlet",0],["flan","pokemon","flandrescarlet",0],["fran","pokemon","flandrescarlet",0],["letty","pokemon","lettywhiterock",0],["alice","pokemon","alicemargatroid",0],["lily","pokemon","lilywhite",0],["lunasa","pokemon","lunasaprismriver",0],["merlin","pokemon","lunasaprismriver",0],["lyrica","pokemon","lyricaprismriver",0],["youmu","pokemon","youmukonpaku",0],["myon","pokemon","youmukonpaku",0],["yuyuko","pokemon","yuyukosaigyouji",0],["yuyu","pokemon","yuyukosaigyouji",0],["ran","pokemon","ranyakumo",0],["yukari","pokemon","yukariyakumo",0],["yukarin","pokemon","yukariyakumo",0],["gap","pokemon","yukariyakumo",0],["sukima","pokemon","yukariyakumo",0],["suika","pokemon","suikaibuki",0],["ibuki","pokemon","suikaibuki",5],["wriggle","pokemon","wrigglenightbug",0],["bug","pokemon","wrigglenightbug",12],["akira","pokemon","wrigglenightbug",0],["mystia","pokemon","mystialorelei",0],["mysti","pokemon","mystialorelei",0],["mysty","pokemon","mystialorelei",0],["kamishirasawa","pokemon","keine",0],["keinekamishirasawa","pokemon","keine",0],["hakutaku","pokemon","keinehakutaku",5],["tewi","pokemon","tewiinaba",0],["tei","pokemon","tewiinaba",0],["reisen","pokemon","reiseninaba",0],["undonge","pokemon","reiseninaba",0],["undongein","pokemon","reiseninaba",0],["donge","pokemon","reiseninaba",0],["eirin","pokemon","eirinyagokoro",0],["erin","pokemon","eirinyagokoro",0],["omoikane","pokemon","eirinyagokoro",0],["kaguya","pokemon","kaguyahouraisan",0],["teruyo","pokemon","kaguyahouraisan",0],["neet","pokemon","kaguyahouraisan",0],["hourai","pokemon","kaguyahouraisan",6],["mokou","pokemon","fujiwaranomokou",10],["moko","pokemon","fujiwaranomokou",10],["aya","pokemon","ayashameimaru",0],["shameimaru","pokemon","ayashameimaru",3],["bunbunmaru","pokemon","ayashameimaru",0],["medi","pokemon","medicinemelancholy",0],["medicine","pokemon","medicinemelancholy",0],["yuuka","pokemon","yuukakazami",0],["yuukarin","pokemon","yuukakazami",0],["flower","pokemon","yuukakazami",0],["komachi","pokemon","komachionozuka",0],["shinigami","pokemon","komachionozuka",0],["eiki","pokemon","eikishiki",0],["shiki","pokemon","eikishiki",4],["shikieiki","pokemon","eikishiki",0],["yama","pokemon","eikishiki",0],["yamaxanadu","pokemon","eikishiki",0],["toyo","pokemon","watatsukinotoyohime",11],["toyohime","pokemon","watatsukinotoyohime",11],["yori","pokemon","watatsukinoyorihime",11],["yorihime","pokemon","watatsukinoyorihime",11],["shizuha","pokemon","shizuhaaki",0],["minoriko","pokemon","minorikoaki",0],["hina","pokemon","hinakagiyama",0],["nitori","pokemon","nitorikawashiro",0],["kappa","pokemon","nitorikawashiro",0],["momiji","pokemon","momijiinubashiri",0],["miji","pokemon","momijiinubashiri",2],["sanae","pokemon","sanaekochiya",0],["snae","pokemon","sanaekochiya",0],["kanako","pokemon","kanakoyasaka",0],["suwako","pokemon","suwakomoriya",0],["froggy","pokemon","suwakomoriya",0],["wako","pokemon","suwakomoriya",2],["kero","pokemon","suwakomoriya",0],["iku","pokemon","ikunagae",0],["tenshi","pokemon","tenshihinanawi",0],["tenko","pokemon","tenshihinanawi",0],["bucket","pokemon","kisume",0],["yamame","pokemon","yamamekurodani",0],["parsee","pokemon","parseemizuhashi",0],["paru","pokemon","parseemizuhashi",0],["yuugi","pokemon","yuugihoshiguma",0],["yugi","pokemon","yuugihoshiguma",0],["satori","pokemon","satorikomeiji",0],["satorin","pokemon","satorikomeiji",0],["orin","pokemon","rinkaenbyou",0],["rin","pokemon","rinkaenbyou",0],["neko","pokemon","rinkaenbyou",0],["okuu","pokemon","utsuhoreiuji",0],["utsuho","pokemon","utsuhoreiuji",0],["kuu","pokemon","utsuhoreiuji",0],["koishi","pokemon","koishikomeiji",0],["koi","pokemon","koishikomeiji",0],["rat","pokemon","nazrin",0],["kogasa","pokemon","kogasatatara",0],["tatara","pokemon","kogasatatara",6],["ichirin","pokemon","ichirinkumoi",0],["unzan","pokemon","ichirinkumoiunzan",12],["murasa","pokemon","minamitsumurasa",9],["minamitsu","pokemon","minamitsumurasa",0],["shou","pokemon","shoutoramaru",0],["bishamonten","pokemon","shoutoramaru",0],["byakuren","pokemon","byakurenhijiri",0],["hijiri","pokemon","byakurenhijiri",8],["byak","pokemon","byakurenhijiri",0],["myouren","pokemon","byakurenhijiri",0],["nue","pokemon","nuehoujuu",0],["ufo","pokemon","nuehoujuu",0],["hatate","pokemon","hatatehimekaidou",0],["kakashi","pokemon","hatatehimekaidou",0],["sunny","pokemon","sunnymilk",0],["luna","pokemon","lunachild",0],["lunar","pokemon","lunachild",0],["star","pokemon","starsapphire",0],["kyouko","pokemon","kyoukokasodani",0],["yoshika","pokemon","yoshikamiyako",0],["seiga","pokemon","seigakaku",0],["sega","pokemon","seigakaku",0],["nyannyan","pokemon","seigakaku",0],["tojiko","pokemon","soganotojiko",6],["soga","pokemon","soganotojiko",0],["mononobe","pokemon","mononobenofuto",0],["futo","pokemon","mononobenofuto",10],["miko","pokemon","toyosatomiminomiko",14],["taishi","pokemon","toyosatomiminomiko",0],["shotoku","pokemon","toyosatomiminomiko",0],["mami","pokemon","mamizoufutatsuiwa",0],["mamizou","pokemon","mamizoufutatsuiwa",0],["kasen","pokemon","kasenibaraki",0],["hata","pokemon","hatanokokoro",0],["kokoro","pokemon","hatanokokoro",6],["wakasagi","pokemon","wakasagihime",0],["fish","pokemon","wakasagihime",0],["banki","pokemon","sekibanki",4],["kagerou","pokemon","kagerouimaizumi",0],["benben","pokemon","benbentsukumo",0],["yatsuhashi","pokemon","yatsuhashitsukumo",0],["notbenben","pokemon","yatsuhashitsukumo",0],["seija","pokemon","seijakijin",0],["shinmy","pokemon","shinmyoumarusukuna",0],["shinmyoumaru","pokemon","shinmyoumarusukuna",0],["sukuna","pokemon","shinmyoumarusukuna",12],["raiko","pokemon","raikohorikawa",0],["sumi","pokemon","sumirekousami",0],["sumireko","pokemon","sumirekousami",0],["doremy","pokemon","doremysweet",0],["sagume","pokemon","sagumekishin",0],["clown","pokemon","clownpiece",0],["clownpin","pokemon","clownpiece",0],["piece","pokemon","clownpiece",5],["hecate","pokemon","hecatia",0],["otherworld","pokemon","hecatia",0],["earth","pokemon","hecatiaearth",7],["moon","pokemon","hecatiamoon",7],["joon","pokemon","joonyorigami",0],["shion","pokemon","shionyorigami",0],["eternity","pokemon","eternitylarva",0],["etarnity","pokemon","eternitylarva",0],["larva","pokemon","eternitylarva",8],["narumi","pokemon","narumiyatadera",0],["naruko","pokemon","narumiyatadera",0],["aunn","pokemon","aunnkomano",0],["nemuno","pokemon","nemunosakata",0],["mai","pokemon","maiteireida",0],["satono","pokemon","satononishida",0],["okina","pokemon","okinamatara",0],["eika","pokemon","eikaebisu",0],["ebisu","pokemon","eikaebisu",4],["urumi","pokemon","urumiushizaki",0],["kutaka","pokemon","kutakaniwatari",0],["chicken","pokemon","kutakaniwatari",0],["yachie","pokemon","yachiekicchou",0],["mayumi","pokemon","mayumijoutouguu",0],["keiki","pokemon","keikihaniyasushin",0],["saki","pokemon","sakikurokuma",0],["yuuma","pokemon","yuumatoutetsu",0],["mike","pokemon","mikegotoukuji",0],["michael","pokemon","mikegotoukuji",0],["takane","pokemon","takaneyamashiro",0],["sannyo","pokemon","sannyokomakusa",0],["sanyo","pokemon","sannyokomakusa",0],["misumaru","pokemon","misumarutamatsukuri",0],["tsukasa","pokemon","tsukasakudamaki",0],["fox","pokemon","tsukasakudamaki",0],["megumu","pokemon","megumuiizunamaru",0],["megu","pokemon","megumuiizunamaru",0],["chimata","pokemon","chimatatenkyuu",0],["tenkyuu","pokemon","chimatatenkyuu",7],["tenkyu","pokemon","chimatatenkyuu",7],["momoyo","pokemon","momoyohimemushi",0],["biten","pokemon","sonbiten",3],["goku","pokemon","sonbiten",0],["enoko","pokemon","enokomitsugashira",0],["chiyari","pokemon","chiyaritenkajin",0],["hisami","pokemon","hisamiyomotsu",0],["zanmu","pokemon","zanmunippaku",0],["ubame","pokemon","ubamechirizuka",0],["chimi","pokemon","chimihoujuu",0],["nareko","pokemon","narekomichigami",0],["yuiman","pokemon","yuimanasama",0],["ariya","pokemon","ariyaiwanaga",0],["nina","pokemon","ninawatari",0],["hecatiaotherworld","pokemon","hecatia",0],["ichirinandunzan","pokemon","ichirinkumoiunzan",0],["hakurei","pokemon","reimuhakurei",5],["kirisame","pokemon","marisakirisame",6],["knowledge","pokemon","patchouliknowledge",9],["izayoi","pokemon","sakuyaizayoi",6],["scarlet","pokemon","remiliascarlet",7],["scarlet","pokemon","flandrescarlet",7],["whiterock","pokemon","lettywhiterock",5],["margatroid","pokemon","alicemargatroid",5],["white","pokemon","lilywhite",4],["prismriver","pokemon","lunasaprismriver",6],["prismriver","pokemon","merlinprismriver",6],["prismriver","pokemon","lyricaprismriver",6],["konpaku","pokemon","youmukonpaku",5],["saigyouji","pokemon","yuyukosaigyouji",6],["yakumo","pokemon","ranyakumo",3],["yakumo","pokemon","yukariyakumo",6],["nightbug","pokemon","wrigglenightbug",7],["lorelei","pokemon","mystialorelei",6],["inaba","pokemon","tewiinaba",4],["inaba","pokemon","reiseninaba",6],["yagokoro","pokemon","eirinyagokoro",5],["houraisan","pokemon","kaguyahouraisan",6],["nomokou","pokemon","fujiwaranomokou",8],["melancholy","pokemon","medicinemelancholy",8],["kazami","pokemon","yuukakazami",5],["onozuka","pokemon","komachionozuka",7],["aki","pokemon","shizuhaaki",7],["aki","pokemon","minorikoaki",8],["kagiyama","pokemon","hinakagiyama",4],["kawashiro","pokemon","nitorikawashiro",6],["inubashiri","pokemon","momijiinubashiri",6],["kochiya","pokemon","sanaekochiya",5],["yasaka","pokemon","kanakoyasaka",6],["moriya","pokemon","suwakomoriya",6],["nagae","pokemon","ikunagae",3],["hinanawi","pokemon","tenshihinanawi",6],["kurodani","pokemon","yamamekurodani",6],["mizuhashi","pokemon","parseemizuhashi",6],["hoshiguma","pokemon","yuugihoshiguma",5],["komeiji","pokemon","satorikomeiji",6],["kaenbyou","pokemon","rinkaenbyou",3],["reiuji","pokemon","utsuhoreiuji",6],["komeiji","pokemon","koishikomeiji",6],["kumoi","pokemon","ichirinkumoi",7],["kumoiunzan","pokemon","ichirinkumoiunzan",7],["toramaru","pokemon","shoutoramaru",4],["houjuu","pokemon","nuehoujuu",3],["himekaidou","pokemon","hatatehimekaidou",6],["milk","pokemon","sunnymilk",5],["child","pokemon","lunachild",4],["sapphire","pokemon","starsapphire",4],["kasodani","pokemon","kyoukokasodani",6],["miyako","pokemon","yoshikamiyako",7],["kaku","pokemon","seigakaku",5],["notojiko","pokemon","soganotojiko",4],["nofuto","pokemon","mononobenofuto",8],["nomiko","pokemon","toyosatomiminomiko",12],["futatsuiwa","pokemon","mamizoufutatsuiwa",7],["ibaraki","pokemon","kasenibaraki",5],["nokokoro","pokemon","hatanokokoro",4],["imaizumi","pokemon","kagerouimaizumi",7],["tsukumo","pokemon","benbentsukumo",6],["tsukumo","pokemon","yatsuhashitsukumo",10],["kijin","pokemon","seijakijin",5],["horikawa","pokemon","raikohorikawa",5],["usami","pokemon","sumirekousami",8],["sweet","pokemon","doremysweet",6],["kishin","pokemon","sagumekishin",6],["yorigami","pokemon","joonyorigami",4],["yorigami","pokemon","shionyorigami",5],["sakata","pokemon","nemunosakata",6],["komano","pokemon","aunnkomano",4],["yatadera","pokemon","narumiyatadera",6],["teireida","pokemon","maiteireida",3],["nishida","pokemon","satononishida",6],["matara","pokemon","okinamatara",5],["mataraspring","pokemon","okinamataraspring",5],["spring","pokemon","okinamataraspring",11],["matarasummer","pokemon","okinamatarasummer",5],["summer","pokemon","okinamatarasummer",11],["mataraautumn","pokemon","okinamataraautumn",5],["autumn","pokemon","okinamataraautumn",11],["matarawinter","pokemon","okinamatarawinter",5],["winter","pokemon","okinamatarawinter",11],["ushizaki","pokemon","urumiushizaki",5],["niwatari","pokemon","kutakaniwatari",6],["kicchou","pokemon","yachiekicchou",6],["joutouguu","pokemon","mayumijoutouguu",6],["haniyasushin","pokemon","keikihaniyasushin",5],["kurokuma","pokemon","sakikurokuma",4],["toutetsu","pokemon","yuumatoutetsu",5],["gotoukuji","pokemon","mikegotoukuji",4],["yamashiro","pokemon","takaneyamashiro",6],["komakusa","pokemon","sannyokomakusa",6],["tamatsukuri","pokemon","misumarutamatsukuri",8],["kudamaki","pokemon","tsukasakudamaki",7],["iizunamaru","pokemon","megumuiizunamaru",6],["himemushi","pokemon","momoyohimemushi",6],["mitsugashira","pokemon","enokomitsugashira",5],["tenkajin","pokemon","chiyaritenkajin",7],["yomotsu","pokemon","hisamiyomotsu",6],["nippaku","pokemon","zanmunippaku",5],["chirizuka","pokemon","ubamechirizuka",5],["houjuu","pokemon","chimihoujuu",5],["michigami","pokemon","narekomichigami",6],["asama","pokemon","yuimanasama",6],["notoyohime","pokemon","watatsukinotoyohime",9],["noyorihime","pokemon","watatsukinoyorihime",9],["iwanaga","pokemon","ariyaiwanaga",5],["watari","pokemon","ninawatari",4],["banana","item","elementalbanana",9],["pact","item","brokenpact",6],["halloween","item","banettitehalloween",9],["pearl","item","abyssalpearl",7],["bell","item","shrinebell",6],["lotus","item","sanctuarylotus",9],["hourglass","item","warpedhourglass",6],["backdoor","item","summerbackdoor",6],["pagoda","item","jeweledpagoda",7],["shard","item","ultrashard",5],["orb","item","chillingorb",8],["ssnatch","move","witchssnatch",5],["snatch","move","witchssnatch",6],["maw","move","abyssalmaw",7],["crash","move","leviathancrash",9],["bellstrike","move","shrinebellstrike",6],["strike","move","shrinebellstrike",10],["thunder","move","spiritthunder",6],["pulse","move","sanctuarypulse",9],["quake","move","hallowedquake",8],["rite","move","sovereignrite",9],["corruption","move","datacorruption",4],["lament","move","solemnlament",6],["procession","move","butterflyprocession",9],["rites","move","lastrites",4],["seal","move","dreamseal",5],["dagger","move","silverdagger",6],["barrage","move","forbiddenbarrage",9],["rush","move","shikigamirush",9],["bullet","move","lunaticbullet",7],["poison","move","nervepoison",5],["scope3d","move","superscope3d",5],["3d","move","superscope3d",10],["fist","move","cloudfist",5],["plates","move","waterplates",5],["swap","move","bodyswap",4],["blow","move","dancingblow",7],["stacking","move","stonestacking",5],["armor","move","sculptedarmor",8],["chomp","move","ironchomp",4],["energy","move","wickedenergy",6],["upheaval","move","dustupheaval",4],["amaterasu","move","invokeamaterasu",6],["honoikazuchi","move","invokehonoikazuchi",6],["scall","move","fatescall",4],["call","move","fatescall",5],["ishikoridome","move","invokeishikoridome",6],["dome","move","invokeishikoridome",14],["rush","move","junglerush",6],["rush","move","cinderrush",6],["charge","move","wavecharge",4],["rush","move","torrentrush",7],["mist","move","chillingmist",8],["scall","move","merchantscall",8],["call","move","merchantscall",9],["feast","move","carrionfeast",7],["up","move","hustleup",6],["frenzy","move","hivefrenzy",4],["veil","move","chrysalisveil",9],["nectar","move","solarnectar",5],["whirl","move","hypnowhirl",5],["exit","move","twilightexit",8],["jab","move","shufflejab",7],["press","move","velvetpress",6],["guard","move","velvetguard",6],["maul","move","bulldogmaul",7],["scamper","move","sparkscamper",5],["lance","move","voltaiclance",7],["shot","move","tremorshot",6],["hammer","move","craghammer",4],["toll","move","soultoll",4],["cleaver","move","rimecleaver",4],["bouquet","move","thornedbouquet",7],["timber","move","eldertimber",5],["shell","move","tectonicshell",8],["squall","move","aurorasquall",6],["sagestrike","move","greatsagestrike",5],["strike","move","greatsagestrike",9],["strike","move","pyrestrike",4],["heave","move","continentalheave",11],["torrent","move","imperialtorrent",8],["decree","move","royaldecree",5],["surge","move","uilasurge",4],["pierce","move","manapierce",4],["rush","move","nahelerush",6],["wave","move","ohuwave",3],["feast","move","grandfeast",5],["hunger","move","endlesshunger",7],["wipe","move","memorywipe",6],["strike","move","resolutestrike",8],["resonance","move","soulresonance",4],["hour","ability","witchinghour",8],["oftheabyss","ability","calloftheabyss",4],["theabyss","ability","calloftheabyss",6],["abyss","ability","calloftheabyss",9],["oftheshrine","ability","calloftheshrine",4],["theshrine","ability","calloftheshrine",6],["shrine","ability","calloftheshrine",9],["ofthesanctuary","ability","callofthesanctuary",4],["thesanctuary","ability","callofthesanctuary",6],["sanctuary","ability","callofthesanctuary",9],["data","ability","glitcheddata",8],["counter","ability","qliphothcounter",8],["border","ability","darkborder",4],["step","ability","mistystep",5],["strick","ability","maidstrick",4],["trick","ability","maidstrick",5],["backing","ability","illusorybacking",8],["sspring","ability","netherworldsspring",11],["spring","ability","netherworldsspring",12],["parade","ability","demonparade",5],["song","ability","nightsong",5],["hakutaku","ability","werehakutaku",4],["ofthemoon","ability","brainofthemoon",5],["themoon","ability","brainofthemoon",7],["moon","ability","brainofthemoon",10],["andwhite","ability","blackandwhite",5],["white","ability","blackandwhite",8],["gathering","ability","cursegathering",5],["ofhisou","ability","swordofhisou",5],["hisou","ability","swordofhisou",7],["nyuudou","ability","summonnyuudou",6],["grave","ability","waterygrave",6],["srecitation","ability","devilsrecitation",5],["recitation","ability","devilsrecitation",6],["defense","ability","undefineddefense",9],["bydesire","ability","healbydesire",4],["desire","ability","healbydesire",6],["medicines","ability","100medicines",3],["power","ability","wickedpower",6],["bigger","ability","growbigger",4],["beat","ability","pristinebeat",8],["influence","ability","dangoinfluence",5],["torch","ability","lunatictorch",7],["sgold","ability","foolsgold",4],["gold","ability","foolsgold",5],["deep","ability","cutdeep",3],["hearth","ability","winterhearth",6],["seasons","ability","fourseasons",4],["stone","ability","heavystone",5],["orders","ability","marchingorders",8],["smoke","ability","blacksmoke",5],["eater","ability","dragoneater",6],["drive","ability","cactusdrive",6],["data","ability","corruptdata",7],["overload","ability","truthoverload",5],["sisters","ability","scarletsisters",7],["surge","ability","verdantsurge",7],["surge","ability","solarsurge",5],["surge","ability","tidalsurge",5],["grip","ability","bulldoggrip",7],["ambush","ability","mudflatambush",7],["legion","ability","keystonelegion",8],["turtle","ability","worldturtle",5],["mantle","ability","polarmantle",5],["core","ability","permafrostcore",10],["dust","ability","diamonddust",7],["fury","ability","kindledfury",7],["shell","ability","saplingshell",7],["hymn","ability","ribbonhymn",6],["offlame","ability","crownofflame",5],["flame","ability","crownofflame",7],["unbound","ability","colossusunbound",8],["needles","ability","staticneedles",6],["spride","ability","emperorspride",7],["pride","ability","emperorspride",8],["venom","ability","moonlitvenom",7],["core","ability","bedrockcore",7],["keeper","ability","mindkeeper",4],["will","ability","unbendingwill",9],["resolve","ability","heartfeltresolve",9],["crown","ability","kindlingcrown",8],["chick","ability","proudchick",5],["body","ability","liquidbody",6],["space","ability","rendingspace",7],["world","ability","distortionworld",10],["drift","ability","renegadedrift",8]],
-	newSpecies: {"makuro":{"num":2001,"name":"Makuro","types":["Water","Dark"],"gender":"N","baseStats":{"hp":120,"atk":160,"def":120,"spa":50,"spd":110,"spe":120},"abilities":{"0":"Call of the Abyss"},"heightm":5.2,"weightkg":398,"color":"Black","eggGroups":["Undiscovered"],"tags":["Restricted Legendary"],"tier":"Uber","gen":9},"raishin":{"num":2002,"name":"Raishin","types":["Electric","Ghost"],"gender":"N","baseStats":{"hp":100,"atk":160,"def":100,"spa":50,"spd":120,"spe":150},"abilities":{"0":"Call of the Shrine"},"heightm":2.1,"weightkg":88,"color":"White","eggGroups":["Undiscovered"],"tags":["Restricted Legendary"],"tier":"Uber","gen":9},"chimai":{"num":2003,"name":"Chimai","types":["Ground","Fairy"],"gender":"N","baseStats":{"hp":120,"atk":50,"def":120,"spa":160,"spd":120,"spe":110},"abilities":{"0":"Call of the Sanctuary"},"heightm":2.6,"weightkg":240,"color":"Brown","eggGroups":["Undiscovered"],"tags":["Restricted Legendary"],"tier":"Uber","gen":9},"missingno":{"num":0,"name":"MissingNo.","types":["Bird","Normal"],"baseStats":{"hp":33,"atk":136,"def":0,"spa":6,"spd":6,"spe":29},"abilities":{"0":"Glitched Data"},"heightm":3,"weightkg":1590.8,"color":"Gray","eggGroups":["Undiscovered"],"tags":[],"tier":"Uber","gen":1},"funerfly":{"num":2004,"name":"Funerfly","types":["Bug","Ghost"],"gender":"N","baseStats":{"hp":95,"atk":65,"def":100,"spa":115,"spd":110,"spe":85},"abilities":{"0":"Qliphoth Counter"},"heightm":1.9,"weightkg":81,"color":"Black","eggGroups":["Undiscovered"],"tags":[],"tier":"Collab","gen":9,"otherFormes":["Funerfly-Breach"],"formeOrder":["Funerfly","Funerfly-Breach"]},"funerflybreach":{"num":2004,"name":"Funerfly-Breach","types":["Bug","Ghost"],"gender":"N","baseStats":{"hp":95,"atk":75,"def":85,"spa":150,"spd":95,"spe":120},"abilities":{"0":"Qliphoth Counter"},"heightm":1.9,"weightkg":81,"color":"Black","eggGroups":["Undiscovered"],"tags":[],"tier":"Collab","gen":9,"baseSpecies":"Funerfly","forme":"Breach","battleOnly":"Funerfly","requiredAbility":"Qliphoth Counter","changesFrom":"Funerfly"},"reimuhakurei":{"num":2101,"name":"Reimu Hakurei","types":["Flying","Fighting"],"gender":"F","baseStats":{"hp":90,"atk":100,"def":70,"spa":115,"spd":125,"spe":60},"abilities":{"0":"Cloud Nine","1":"Justified","H":"Purifying Salt"},"heightm":1.5,"weightkg":50,"color":"Blue","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"marisakirisame":{"num":2102,"name":"Marisa Kirisame","types":["Fire","Normal"],"gender":"F","baseStats":{"hp":61,"atk":112,"def":45,"spa":120,"spd":87,"spe":125},"abilities":{"0":"Magician","1":"Hakkero","H":"Reckless"},"heightm":1.5,"weightkg":50,"color":"Red","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"rumia":{"num":2103,"name":"Rumia","types":["Dark"],"gender":"F","baseStats":{"hp":75,"atk":108,"def":116,"spa":60,"spd":95,"spe":78},"abilities":{"0":"Levitate","1":"Dark Aura","H":"Dark Border"},"heightm":1.5,"weightkg":50,"color":"Black","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"daiyousei":{"num":2104,"name":"Daiyousei","types":["Fairy"],"gender":"F","baseStats":{"hp":95,"atk":57,"def":45,"spa":120,"spd":78,"spe":100},"abilities":{"0":"Misty Step"},"heightm":1.5,"weightkg":50,"color":"Pink","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"cirno":{"num":2105,"name":"Cirno","types":["Ice","Fairy"],"gender":"F","baseStats":{"hp":60,"atk":99,"def":59,"spa":119,"spd":64,"spe":109},"abilities":{"0":"Hustle","1":"Ice Body","H":"Slush Rush"},"heightm":1.5,"weightkg":50,"color":"Blue","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9,"otherFormes":["Cirno-Tanned"],"formeOrder":["Cirno","Cirno-Tanned"]},"hongmeiling":{"num":2106,"name":"Hong Meiling","types":["Fighting","Dragon"],"gender":"F","baseStats":{"hp":80,"atk":125,"def":100,"spa":84,"spd":60,"spe":100},"abilities":{"0":"Steadfast","1":"Sand Rush","H":"Comatose"},"heightm":1.5,"weightkg":50,"color":"Red","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"koakuma":{"num":2107,"name":"Koakuma","types":["Dark"],"gender":"F","baseStats":{"hp":75,"atk":67,"def":71,"spa":102,"spd":80,"spe":95},"abilities":{"0":"Prankster","H":"Quick Feet"},"heightm":1.5,"weightkg":50,"color":"Black","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"patchouliknowledge":{"num":2108,"name":"Patchouli Knowledge","types":["Psychic"],"gender":"F","baseStats":{"hp":73,"atk":33,"def":38,"spa":140,"spd":101,"spe":95},"abilities":{"0":"Neuroforce","H":"Anemic"},"heightm":1.5,"weightkg":50,"color":"Pink","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"sakuyaizayoi":{"num":2109,"name":"Sakuya Izayoi","types":["Steel"],"gender":"F","baseStats":{"hp":100,"atk":95,"def":110,"spa":85,"spd":95,"spe":80},"abilities":{"0":"Own Tempo","1":"Insomnia","H":"Maid's Trick"},"heightm":1.5,"weightkg":50,"color":"Gray","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"remiliascarlet":{"num":2110,"name":"Remilia Scarlet","types":["Dark","Flying"],"gender":"F","baseStats":{"hp":50,"atk":125,"def":98,"spa":111,"spd":98,"spe":113},"abilities":{"0":"Vampirism","1":"Scarlet Sisters"},"heightm":1.5,"weightkg":50,"color":"Black","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"flandrescarlet":{"num":2111,"name":"Flandre Scarlet","types":["Dark","Fire"],"gender":"F","baseStats":{"hp":50,"atk":130,"def":83,"spa":135,"spd":98,"spe":99},"abilities":{"0":"Mold Breaker","1":"Pressure","H":"Moxie","V0":"Scarlet Sisters"},"heightm":1.5,"weightkg":50,"color":"Black","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"lettywhiterock":{"num":2112,"name":"Letty Whiterock","types":["Ice"],"gender":"F","baseStats":{"hp":132,"atk":70,"def":104,"spa":95,"spd":64,"spe":54},"abilities":{"0":"Snow Warning","H":"Heatproof"},"heightm":1.5,"weightkg":50,"color":"Blue","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"chen":{"num":2113,"name":"Chen","types":["Normal"],"gender":"F","baseStats":{"hp":70,"atk":100,"def":62,"spa":88,"spd":70,"spe":120},"abilities":{"0":"Quick Feet","1":"Technician","H":"Sheer Force"},"heightm":1.5,"weightkg":50,"color":"White","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"alicemargatroid":{"num":2114,"name":"Alice Margatroid","types":["Steel","Psychic"],"gender":"F","baseStats":{"hp":70,"atk":92,"def":80,"spa":118,"spd":130,"spe":70},"abilities":{"0":"Analytic","1":"Ice Body","H":"Competitive"},"heightm":1.5,"weightkg":50,"color":"Gray","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"lilywhite":{"num":2115,"name":"Lily White","types":["Fairy","Grass"],"gender":"F","baseStats":{"hp":94,"atk":30,"def":82,"spa":92,"spd":82,"spe":105},"abilities":{"0":"Regenerator","1":"Chlorophyll","H":"Grassy Surge"},"heightm":1.5,"weightkg":50,"color":"Pink","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"lunasaprismriver":{"num":2116,"name":"Lunasa Prismriver","types":["Ghost"],"gender":"F","baseStats":{"hp":80,"atk":65,"def":75,"spa":90,"spd":120,"spe":100},"abilities":{"0":"Soundproof","H":"Shadow Shield"},"heightm":1.5,"weightkg":50,"color":"Purple","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"merlinprismriver":{"num":2117,"name":"Merlin Prismriver","types":["Ghost"],"gender":"F","baseStats":{"hp":80,"atk":75,"def":65,"spa":120,"spd":90,"spe":100},"abilities":{"0":"Soundproof","H":"Berserk"},"heightm":1.5,"weightkg":50,"color":"Purple","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"lyricaprismriver":{"num":2118,"name":"Lyrica Prismriver","types":["Ghost"],"gender":"F","baseStats":{"hp":80,"atk":65,"def":65,"spa":110,"spd":110,"spe":100},"abilities":{"0":"Soundproof","H":"Illusory Backing"},"heightm":1.5,"weightkg":50,"color":"Purple","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"youmukonpaku":{"num":2119,"name":"Youmu Konpaku","types":["Fighting","Ghost"],"gender":"F","baseStats":{"hp":59,"atk":110,"def":84,"spa":90,"spd":62,"spe":130},"abilities":{"0":"Bulletproof","1":"Hyper Cutter","H":"Rattled"},"heightm":1.5,"weightkg":50,"color":"Red","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"yuyukosaigyouji":{"num":2120,"name":"Yuyuko Saigyouji","types":["Ghost","Fairy"],"gender":"F","baseStats":{"hp":115,"atk":91,"def":73,"spa":96,"spd":95,"spe":60},"abilities":{"0":"Gluttony","1":"Netherworld's Spring","H":"Flower Veil"},"heightm":1.5,"weightkg":50,"color":"Purple","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"ranyakumo":{"num":2121,"name":"Ran Yakumo","types":["Psychic"],"gender":"F","baseStats":{"hp":70,"atk":115,"def":75,"spa":115,"spd":75,"spe":115},"abilities":{"0":"Download","H":"Fluffy"},"heightm":1.5,"weightkg":50,"color":"Pink","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"yukariyakumo":{"num":2122,"name":"Yukari Yakumo","types":["Psychic","Dark"],"gender":"F","baseStats":{"hp":100,"atk":80,"def":100,"spa":140,"spd":100,"spe":80},"abilities":{"0":"Frisk","1":"Pressure","H":"Intimidate"},"heightm":1.5,"weightkg":50,"color":"Pink","eggGroups":["Undiscovered"],"tags":["Sub-Legendary"],"tier":"Touhou","gen":9},"suikaibuki":{"num":2123,"name":"Suika Ibuki","types":["Ground","Fighting"],"gender":"F","baseStats":{"hp":67,"atk":136,"def":117,"spa":117,"spd":85,"spe":78},"abilities":{"0":"Misty Surge","H":"Demon Parade"},"heightm":1.5,"weightkg":50,"color":"Brown","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"wrigglenightbug":{"num":2124,"name":"Wriggle Nightbug","types":["Bug"],"gender":"F","baseStats":{"hp":70,"atk":115,"def":70,"spa":107,"spd":70,"spe":105},"abilities":{"0":"Illuminate","1":"Swarm","H":"Opportunist"},"heightm":1.5,"weightkg":50,"color":"Green","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"mystialorelei":{"num":2125,"name":"Mystia Lorelei","types":["Dark","Flying"],"gender":"F","baseStats":{"hp":85,"atk":79,"def":70,"spa":110,"spd":98,"spe":108},"abilities":{"0":"Night Song","1":"Tough Claws","H":"Punk Rock"},"heightm":1.5,"weightkg":50,"color":"Black","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"keine":{"num":2126,"name":"Keine","types":["Steel","Normal"],"gender":"F","baseStats":{"hp":80,"atk":110,"def":92,"spa":100,"spd":88,"spe":80},"abilities":{"0":"Were-Hakutaku","H":"Stalwart"},"heightm":1.5,"weightkg":50,"color":"Gray","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9,"otherFormes":["Keine-Hakutaku"],"formeOrder":["Keine","Keine-Hakutaku"]},"tewiinaba":{"num":2127,"name":"Tewi Inaba","types":["Normal","Fairy"],"gender":"F","baseStats":{"hp":70,"atk":40,"def":60,"spa":80,"spd":95,"spe":105},"abilities":{"0":"Huge Power","1":"Super Luck","H":"Prankster"},"heightm":1.5,"weightkg":50,"color":"White","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"reiseninaba":{"num":2128,"name":"Reisen Inaba","types":["Psychic","Electric"],"gender":"F","baseStats":{"hp":76,"atk":94,"def":70,"spa":100,"spd":80,"spe":120},"abilities":{"0":"Unnerve","H":"Psychic Surge"},"heightm":1.5,"weightkg":50,"color":"Pink","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"eirinyagokoro":{"num":2129,"name":"Eirin Yagokoro","types":["Poison","Psychic"],"gender":"F","baseStats":{"hp":85,"atk":90,"def":65,"spa":95,"spd":200,"spe":55},"abilities":{"0":"Natural Cure","1":"Brain of the Moon","H":"Curious Medicine"},"heightm":1.5,"weightkg":50,"color":"Purple","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"kaguyahouraisan":{"num":2130,"name":"Kaguya Houraisan","types":["Fairy"],"gender":"F","baseStats":{"hp":120,"atk":60,"def":79,"spa":102,"spd":60,"spe":94},"abilities":{"0":"Magic Guard"},"heightm":1.5,"weightkg":50,"color":"Pink","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"fujiwaranomokou":{"num":2131,"name":"Fujiwara no Mokou","types":["Fire","Fighting"],"gender":"F","baseStats":{"hp":100,"atk":112,"def":55,"spa":91,"spd":63,"spe":94},"abilities":{"0":"Regenerator"},"heightm":1.5,"weightkg":50,"color":"Red","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"ayashameimaru":{"num":2132,"name":"Aya Shameimaru","types":["Flying"],"gender":"F","baseStats":{"hp":66,"atk":100,"def":72,"spa":100,"spd":72,"spe":170},"abilities":{"0":"Infiltrator","1":"Early Bird","H":"Forewarn"},"heightm":1.5,"weightkg":50,"color":"Blue","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"medicinemelancholy":{"num":2133,"name":"Medicine Melancholy","types":["Poison"],"gender":"F","baseStats":{"hp":74,"atk":75,"def":135,"spa":100,"spd":83,"spe":58},"abilities":{"0":"Liquid Ooze","1":"Poison Point","H":"Soul-Heart"},"heightm":1.5,"weightkg":50,"color":"Purple","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"yuukakazami":{"num":2134,"name":"Yuuka Kazami","types":["Grass"],"gender":"F","baseStats":{"hp":105,"atk":145,"def":115,"spa":120,"spd":95,"spe":20},"abilities":{"0":"Overgrow","1":"Solar Power","H":"Flower Veil"},"heightm":1.5,"weightkg":50,"color":"Green","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"komachionozuka":{"num":2135,"name":"Komachi Onozuka","types":["Water","Ghost"],"gender":"F","baseStats":{"hp":97,"atk":118,"def":100,"spa":88,"spd":77,"spe":30},"abilities":{"0":"Sharpness","1":"Truant","H":"Unaware"},"heightm":1.5,"weightkg":50,"color":"Blue","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"eikishiki":{"num":2136,"name":"Eiki Shiki","types":["Normal"],"gender":"F","baseStats":{"hp":75,"atk":100,"def":77,"spa":118,"spd":140,"spe":90},"abilities":{"0":"Black and White","H":"No Guard"},"heightm":1.5,"weightkg":50,"color":"White","eggGroups":["Undiscovered"],"tags":["Sub-Legendary"],"tier":"Touhou","gen":9},"shizuhaaki":{"num":2137,"name":"Shizuha Aki","types":["Grass"],"gender":"F","baseStats":{"hp":63,"atk":125,"def":50,"spa":135,"spd":40,"spe":117},"abilities":{"0":"Wind Rider","H":"Leaf Guard"},"heightm":1.5,"weightkg":50,"color":"Green","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"minorikoaki":{"num":2138,"name":"Minoriko Aki","types":["Grass","Ground"],"gender":"F","baseStats":{"hp":110,"atk":55,"def":110,"spa":90,"spd":85,"spe":44},"abilities":{"0":"Harvest","H":"Sap Sipper"},"heightm":1.5,"weightkg":50,"color":"Green","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"hinakagiyama":{"num":2139,"name":"Hina Kagiyama","types":["Poison","Dark"],"gender":"F","baseStats":{"hp":90,"atk":65,"def":80,"spa":95,"spd":110,"spe":75},"abilities":{"0":"Curse Gathering","H":"Flare Boost"},"heightm":1.5,"weightkg":50,"color":"Purple","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"nitorikawashiro":{"num":2140,"name":"Nitori Kawashiro","types":["Water","Steel"],"gender":"F","baseStats":{"hp":81,"atk":96,"def":92,"spa":110,"spd":61,"spe":70},"abilities":{"0":"Swift Swim","1":"Rain Dish","H":"Transistor"},"heightm":1.5,"weightkg":50,"color":"Blue","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"momijiinubashiri":{"num":2141,"name":"Momiji Inubashiri","types":["Steel","Fighting"],"gender":"F","baseStats":{"hp":70,"atk":115,"def":135,"spa":55,"spd":50,"spe":100},"abilities":{"0":"Keen Eye","1":"Guard Dog","H":"Strong Jaw"},"heightm":1.5,"weightkg":50,"color":"Gray","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"sanaekochiya":{"num":2142,"name":"Sanae Kochiya","types":["Flying","Water"],"gender":"F","baseStats":{"hp":80,"atk":70,"def":80,"spa":95,"spd":90,"spe":75},"abilities":{"0":"Drizzle","H":"Serene Grace"},"heightm":1.5,"weightkg":50,"color":"Blue","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"kanakoyasaka":{"num":2143,"name":"Kanako Yasaka","types":["Ground","Flying"],"gender":"F","baseStats":{"hp":100,"atk":115,"def":120,"spa":88,"spd":77,"spe":70},"abilities":{"0":"Storm Drain","H":"Mirror Armor"},"heightm":1.5,"weightkg":50,"color":"Brown","eggGroups":["Undiscovered"],"tags":["Sub-Legendary"],"tier":"Touhou","gen":9},"suwakomoriya":{"num":2144,"name":"Suwako Moriya","types":["Water","Ground"],"gender":"F","baseStats":{"hp":85,"atk":115,"def":70,"spa":115,"spd":120,"spe":65},"abilities":{"0":"Earth Eater","H":"Hydration"},"heightm":1.5,"weightkg":50,"color":"Blue","eggGroups":["Undiscovered"],"tags":["Sub-Legendary"],"tier":"Touhou","gen":9},"ikunagae":{"num":2145,"name":"Iku Nagae","types":["Dragon","Electric"],"gender":"F","baseStats":{"hp":75,"atk":100,"def":70,"spa":110,"spd":90,"spe":95},"abilities":{"0":"Swift Swim","1":"Levitate","H":"Multiscale"},"heightm":1.5,"weightkg":50,"color":"Blue","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"tenshihinanawi":{"num":2146,"name":"Tenshi Hinanawi","types":["Ground","Rock"],"gender":"F","baseStats":{"hp":105,"atk":115,"def":140,"spa":67,"spd":60,"spe":65},"abilities":{"0":"Sword of Hisou"},"heightm":1.5,"weightkg":50,"color":"Brown","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"kisume":{"num":2147,"name":"Kisume","types":["Rock","Dark"],"gender":"F","baseStats":{"hp":45,"atk":85,"def":130,"spa":80,"spd":125,"spe":45},"abilities":{"0":"Sturdy","1":"Guts","H":"Flash Fire"},"heightm":1.5,"weightkg":50,"color":"Brown","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"yamamekurodani":{"num":2148,"name":"Yamame Kurodani","types":["Poison","Bug"],"gender":"F","baseStats":{"hp":91,"atk":130,"def":70,"spa":74,"spd":60,"spe":96},"abilities":{"0":"Stakeout","1":"Poison Touch","H":"Dexterity"},"heightm":1.5,"weightkg":50,"color":"Purple","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"parseemizuhashi":{"num":2149,"name":"Parsee Mizuhashi","types":["Dark"],"gender":"F","baseStats":{"hp":93,"atk":100,"def":75,"spa":92,"spd":120,"spe":56},"abilities":{"0":"Jealous","H":"Aftermath"},"heightm":1.5,"weightkg":50,"color":"Black","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"yuugihoshiguma":{"num":2150,"name":"Yuugi Hoshiguma","types":["Fighting","Rock"],"gender":"F","baseStats":{"hp":90,"atk":132,"def":81,"spa":93,"spd":70,"spe":74},"abilities":{"0":"Sand Stream","1":"Mold Breaker","H":"Sheer Force"},"heightm":1.5,"weightkg":50,"color":"Red","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"satorikomeiji":{"num":2151,"name":"Satori Komeiji","types":["Psychic"],"gender":"F","baseStats":{"hp":60,"atk":100,"def":100,"spa":100,"spd":100,"spe":100},"abilities":{"0":"Trace","1":"Insomnia","H":"Recollection"},"heightm":1.5,"weightkg":50,"color":"Pink","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"rinkaenbyou":{"num":2152,"name":"Rin Kaenbyou","types":["Fire","Ghost"],"gender":"F","baseStats":{"hp":61,"atk":72,"def":55,"spa":114,"spd":65,"spe":128},"abilities":{"0":"Infiltrator","H":"Unburden"},"heightm":1.5,"weightkg":50,"color":"Red","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"utsuhoreiuji":{"num":2153,"name":"Utsuho Reiuji","types":["Fire","Flying"],"gender":"F","baseStats":{"hp":100,"atk":140,"def":90,"spa":155,"spd":95,"spe":100},"abilities":{"0":"Klutz"},"heightm":1.5,"weightkg":50,"color":"Red","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"koishikomeiji":{"num":2154,"name":"Koishi Komeiji","types":["Psychic","Normal"],"gender":"F","baseStats":{"hp":49,"atk":42,"def":118,"spa":96,"spd":157,"spe":108},"abilities":{"0":"Unaware","1":"Synchronize","H":"Delusion"},"heightm":1.5,"weightkg":50,"color":"Pink","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"nazrin":{"num":2155,"name":"Nazrin","types":["Ground","Steel"],"gender":"F","baseStats":{"hp":81,"atk":89,"def":80,"spa":95,"spd":80,"spe":130},"abilities":{"0":"Lightning Rod","H":"Pickup"},"heightm":1.5,"weightkg":50,"color":"Brown","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"kogasatatara":{"num":2156,"name":"Kogasa Tatara","types":["Water","Fairy"],"gender":"F","baseStats":{"hp":70,"atk":100,"def":81,"spa":83,"spd":73,"spe":113},"abilities":{"0":"Surprise","1":"Bulletproof","H":"Steelworker"},"heightm":1.5,"weightkg":50,"color":"Blue","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"ichirinkumoi":{"num":2157,"name":"Ichirin Kumoi","types":["Fighting"],"gender":"F","baseStats":{"hp":75,"atk":80,"def":55,"spa":45,"spd":65,"spe":85},"abilities":{"0":"Summon Nyuudou"},"heightm":1.5,"weightkg":50,"color":"Red","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9,"otherFormes":["Ichirin Kumoi-Unzan"],"formeOrder":["Ichirin Kumoi","Ichirin Kumoi-Unzan"]},"minamitsumurasa":{"num":2158,"name":"Minamitsu Murasa","types":["Water","Ghost"],"gender":"F","baseStats":{"hp":104,"atk":118,"def":50,"spa":82,"spd":43,"spe":108},"abilities":{"0":"Steelworker","1":"Aftermath","H":"Watery Grave"},"heightm":1.5,"weightkg":50,"color":"Blue","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"shoutoramaru":{"num":2159,"name":"Shou Toramaru","types":["Fairy","Electric"],"gender":"F","baseStats":{"hp":100,"atk":110,"def":61,"spa":110,"spd":79,"spe":95},"abilities":{"0":"Pressure","H":"Illuminate"},"heightm":1.5,"weightkg":50,"color":"Pink","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"byakurenhijiri":{"num":2160,"name":"Byakuren Hijiri","types":["Fighting","Psychic"],"gender":"F","baseStats":{"hp":83,"atk":110,"def":50,"spa":105,"spd":80,"spe":117},"abilities":{"0":"Inner Focus","H":"Devil's Recitation"},"heightm":1.5,"weightkg":50,"color":"Red","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"nuehoujuu":{"num":2161,"name":"Nue Houjuu","types":["Dark","Ghost"],"gender":"F","baseStats":{"hp":105,"atk":90,"def":60,"spa":120,"spd":80,"spe":70},"abilities":{"0":"Shed Skin","H":"Undefined Defense"},"heightm":1.5,"weightkg":50,"color":"Black","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"hatatehimekaidou":{"num":2162,"name":"Hatate Himekaidou","types":["Psychic","Flying"],"gender":"F","baseStats":{"hp":70,"atk":82,"def":60,"spa":108,"spd":78,"spe":140},"abilities":{"0":"Trace","1":"Anticipation","H":"Technician"},"heightm":1.5,"weightkg":50,"color":"Pink","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"sunnymilk":{"num":2163,"name":"Sunny Milk","types":["Fire","Fairy"],"gender":"F","baseStats":{"hp":65,"atk":125,"def":80,"spa":85,"spd":40,"spe":105},"abilities":{"0":"Solar Power","H":"Dazzling"},"heightm":1.5,"weightkg":50,"color":"Red","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"lunachild":{"num":2164,"name":"Luna Child","types":["Dark","Fairy"],"gender":"F","baseStats":{"hp":65,"atk":45,"def":50,"spa":100,"spd":130,"spe":110},"abilities":{"0":"Soundproof","H":"Insomnia"},"heightm":1.5,"weightkg":50,"color":"Black","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"starsapphire":{"num":2165,"name":"Star Sapphire","types":["Psychic","Fairy"],"gender":"F","baseStats":{"hp":65,"atk":55,"def":120,"spa":95,"spd":90,"spe":75},"abilities":{"0":"Telepathy","H":"Pixilate"},"heightm":1.5,"weightkg":50,"color":"Pink","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"kyoukokasodani":{"num":2166,"name":"Kyouko Kasodani","types":["Normal"],"gender":"F","baseStats":{"hp":74,"atk":76,"def":87,"spa":93,"spd":69,"spe":106},"abilities":{"0":"Echo"},"heightm":1.5,"weightkg":50,"color":"White","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"yoshikamiyako":{"num":2167,"name":"Yoshika Miyako","types":["Poison","Ghost"],"gender":"F","baseStats":{"hp":140,"atk":100,"def":80,"spa":60,"spd":45,"spe":75},"abilities":{"0":"Heal by Desire","1":"Gluttony","H":"Steadfast"},"heightm":1.5,"weightkg":50,"color":"Purple","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"seigakaku":{"num":2168,"name":"Seiga Kaku","types":["Dark"],"gender":"F","baseStats":{"hp":66,"atk":74,"def":70,"spa":130,"spd":80,"spe":120},"abilities":{"0":"Infiltrator","H":"Limber"},"heightm":1.5,"weightkg":50,"color":"Black","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"soganotojiko":{"num":2169,"name":"Soga no Tojiko","types":["Electric","Ghost"],"gender":"F","baseStats":{"hp":81,"atk":70,"def":73,"spa":116,"spd":50,"spe":125},"abilities":{"0":"Static","H":"Levitate"},"heightm":1.5,"weightkg":50,"color":"Yellow","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"mononobenofuto":{"num":2170,"name":"Mononobe no Futo","types":["Water","Fire"],"gender":"F","baseStats":{"hp":90,"atk":105,"def":70,"spa":110,"spd":100,"spe":70},"abilities":{"0":"Natural Cure","1":"Super Luck","H":"Power Spot"},"heightm":1.5,"weightkg":50,"color":"Blue","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"toyosatomiminomiko":{"num":2171,"name":"Toyosatomimi no Miko","types":["Fighting","Fairy"],"gender":"F","baseStats":{"hp":80,"atk":110,"def":55,"spa":126,"spd":112,"spe":102},"abilities":{"0":"Telepathy","H":"Soundproof"},"heightm":1.5,"weightkg":50,"color":"Red","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"mamizoufutatsuiwa":{"num":2172,"name":"Mamizou Futatsuiwa","types":["Grass","Normal"],"gender":"F","baseStats":{"hp":105,"atk":121,"def":80,"spa":83,"spd":61,"spe":50},"abilities":{"0":"Infiltrator","H":"Solid Rock"},"heightm":1.5,"weightkg":50,"color":"Green","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"kasenibaraki":{"num":2173,"name":"Kasen Ibaraki","types":["Grass","Fighting"],"gender":"F","baseStats":{"hp":70,"atk":130,"def":50,"spa":95,"spd":120,"spe":95},"abilities":{"0":"Steadfast","1":"100 Medicines","H":"Wicked Power"},"heightm":1.5,"weightkg":50,"color":"Green","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"hatanokokoro":{"num":2174,"name":"Hata no Kokoro","types":["Psychic","Ghost"],"gender":"F","baseStats":{"hp":80,"atk":112,"def":80,"spa":112,"spd":80,"spe":90},"abilities":{"0":"Libero"},"heightm":1.5,"weightkg":50,"color":"Pink","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"wakasagihime":{"num":2175,"name":"Wakasagihime","types":["Water"],"gender":"F","baseStats":{"hp":85,"atk":105,"def":75,"spa":95,"spd":80,"spe":55},"abilities":{"0":"Swift Swim","1":"Hydration","H":"Marvel Scale"},"heightm":1.5,"weightkg":50,"color":"Blue","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"sekibanki":{"num":2176,"name":"Sekibanki","types":["Ghost"],"gender":"F","baseStats":{"hp":70,"atk":57,"def":87,"spa":133,"spd":50,"spe":88},"abilities":{"0":"Intimidate","H":"Unnerve"},"heightm":1.5,"weightkg":50,"color":"Purple","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"kagerouimaizumi":{"num":2177,"name":"Kagerou Imaizumi","types":["Dark","Normal"],"gender":"F","baseStats":{"hp":78,"atk":112,"def":95,"spa":62,"spd":86,"spe":100},"abilities":{"0":"Fluffy","H":"Strong Jaw"},"heightm":1.5,"weightkg":50,"color":"Black","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"benbentsukumo":{"num":2178,"name":"Benben Tsukumo","types":["Normal","Electric"],"gender":"F","baseStats":{"hp":75,"atk":62,"def":99,"spa":105,"spd":70,"spe":99},"abilities":{"0":"Vital Spirit","1":"Volt Absorb","H":"Minus"},"heightm":1.5,"weightkg":50,"color":"White","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"yatsuhashitsukumo":{"num":2179,"name":"Yatsuhashi Tsukumo","types":["Normal","Electric"],"gender":"F","baseStats":{"hp":65,"atk":62,"def":99,"spa":115,"spd":70,"spe":99},"abilities":{"0":"Vital Spirit","1":"Motor Drive","H":"Plus"},"heightm":1.5,"weightkg":50,"color":"White","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"seijakijin":{"num":2180,"name":"Seija Kijin","types":["Dark"],"gender":"F","baseStats":{"hp":75,"atk":110,"def":60,"spa":75,"spd":95,"spe":110},"abilities":{"0":"Contrary"},"heightm":1.5,"weightkg":50,"color":"Black","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"shinmyoumarusukuna":{"num":2181,"name":"Shinmyoumaru Sukuna","types":["Steel","Fairy"],"gender":"F","baseStats":{"hp":20,"atk":105,"def":130,"spa":35,"spd":170,"spe":90},"abilities":{"0":"Grow Bigger"},"heightm":1.5,"weightkg":50,"color":"Gray","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"raikohorikawa":{"num":2182,"name":"Raiko Horikawa","types":["Electric"],"gender":"F","baseStats":{"hp":105,"atk":130,"def":75,"spa":130,"spd":68,"spe":40},"abilities":{"0":"Lightning Rod","1":"Inner Focus","H":"Pristine Beat"},"heightm":1.5,"weightkg":50,"color":"Yellow","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"sumirekousami":{"num":2183,"name":"Sumireko Usami","types":["Psychic"],"gender":"F","baseStats":{"hp":65,"atk":62,"def":76,"spa":130,"spd":69,"spe":110},"abilities":{"0":"Levitate","H":"Comatose"},"heightm":1.5,"weightkg":50,"color":"Pink","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"seiran":{"num":2184,"name":"Seiran","types":["Steel","Psychic"],"gender":"F","baseStats":{"hp":70,"atk":100,"def":45,"spa":110,"spd":55,"spe":120},"abilities":{"0":"Guts","1":"Synchronize","H":"Sniper"},"heightm":1.5,"weightkg":50,"color":"Gray","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"ringo":{"num":2185,"name":"Ringo","types":["Grass"],"gender":"F","baseStats":{"hp":87,"atk":120,"def":72,"spa":66,"spd":93,"spe":77},"abilities":{"0":"Cheek Pouch","H":"Dango Influence"},"heightm":1.5,"weightkg":50,"color":"Green","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"doremysweet":{"num":2186,"name":"Doremy Sweet","types":["Psychic"],"gender":"F","baseStats":{"hp":81,"atk":75,"def":122,"spa":94,"spd":73,"spe":40},"abilities":{"0":"Psychic Surge","H":"Bad Dreams"},"heightm":1.5,"weightkg":50,"color":"Pink","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"sagumekishin":{"num":2187,"name":"Sagume Kishin","types":["Poison","Flying"],"gender":"F","baseStats":{"hp":90,"atk":90,"def":69,"spa":90,"spd":125,"spe":81},"abilities":{"0":"Contrary","1":"Inner Focus","H":"Mind's Eye"},"heightm":1.5,"weightkg":50,"color":"Purple","eggGroups":["Undiscovered"],"tags":["Sub-Legendary"],"tier":"Touhou","gen":9},"clownpiece":{"num":2188,"name":"Clownpiece","types":["Fairy","Fire"],"gender":"F","baseStats":{"hp":150,"atk":40,"def":55,"spa":85,"spd":50,"spe":110},"abilities":{"0":"Flame Body","H":"Lunatic Torch"},"heightm":1.5,"weightkg":50,"color":"Pink","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"junko":{"num":2189,"name":"Junko","types":["Normal"],"gender":"F","baseStats":{"hp":100,"atk":100,"def":100,"spa":100,"spd":100,"spe":100},"abilities":{"0":"Mold Breaker"},"heightm":1.5,"weightkg":50,"color":"White","eggGroups":["Undiscovered"],"tags":["Sub-Legendary"],"tier":"Touhou","gen":9},"hecatia":{"num":2190,"name":"Hecatia","types":["Dark","Ghost"],"gender":"F","baseStats":{"hp":80,"atk":60,"def":120,"spa":90,"spd":120,"spe":100},"abilities":{"0":"Pressure"},"heightm":1.5,"weightkg":50,"color":"Black","eggGroups":["Undiscovered"],"tags":["Sub-Legendary"],"tier":"Touhou","gen":9,"baseForme":"Otherworld","otherFormes":["Hecatia-Earth","Hecatia-Moon"],"formeOrder":["Hecatia","Hecatia-Earth","Hecatia-Moon"]},"joonyorigami":{"num":2191,"name":"Joon Yorigami","types":["Steel","Poison"],"gender":"F","baseStats":{"hp":100,"atk":70,"def":88,"spa":118,"spd":62,"spe":92},"abilities":{"0":"Fool's Gold"},"heightm":1.5,"weightkg":50,"color":"Gray","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"shionyorigami":{"num":2192,"name":"Shion Yorigami","types":["Poison","Ghost"],"gender":"F","baseStats":{"hp":100,"atk":60,"def":77,"spa":130,"spd":88,"spe":75},"abilities":{"0":"Cursed Body","H":"Poison Touch"},"heightm":1.5,"weightkg":50,"color":"Purple","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"eternitylarva":{"num":2193,"name":"Eternity Larva","types":["Bug","Flying"],"gender":"F","baseStats":{"hp":60,"atk":56,"def":66,"spa":138,"spd":37,"spe":103},"abilities":{"0":"Flash Fire","1":"Regenerator","H":"Chlorophyll"},"heightm":1.5,"weightkg":50,"color":"Green","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"nemunosakata":{"num":2194,"name":"Nemuno Sakata","types":["Grass","Rock"],"gender":"F","baseStats":{"hp":71,"atk":110,"def":105,"spa":64,"spd":70,"spe":75},"abilities":{"0":"Cut Deep","H":"Intimidate"},"heightm":1.5,"weightkg":50,"color":"Green","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"aunnkomano":{"num":2195,"name":"Aunn Komano","types":["Rock","Fairy"],"gender":"F","baseStats":{"hp":80,"atk":115,"def":72,"spa":60,"spd":110,"spe":65},"abilities":{"0":"Rock Head","1":"Solid Rock","H":"Guard Dog"},"heightm":1.5,"weightkg":50,"color":"Brown","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"narumiyatadera":{"num":2196,"name":"Narumi Yatadera","types":["Ice","Rock"],"gender":"F","baseStats":{"hp":70,"atk":65,"def":70,"spa":120,"spd":70,"spe":100},"abilities":{"0":"Sturdy","H":"Winter Hearth"},"heightm":1.5,"weightkg":50,"color":"Blue","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"maiteireida":{"num":2197,"name":"Mai Teireida","types":["Fighting"],"gender":"F","baseStats":{"hp":70,"atk":100,"def":65,"spa":95,"spd":65,"spe":120},"abilities":{"0":"Dancer","H":"Vital Spirit"},"heightm":1.5,"weightkg":50,"color":"Red","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"satononishida":{"num":2198,"name":"Satono Nishida","types":["Fighting"],"gender":"F","baseStats":{"hp":70,"atk":110,"def":65,"spa":95,"spd":65,"spe":110},"abilities":{"0":"Dancer","H":"Wandering Spirit"},"heightm":1.5,"weightkg":50,"color":"Red","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"okinamatara":{"num":2199,"name":"Okina Matara","types":["Normal","Dark"],"gender":"F","baseStats":{"hp":85,"atk":120,"def":80,"spa":130,"spd":80,"spe":85},"abilities":{"0":"Four Seasons"},"heightm":1.5,"weightkg":50,"color":"White","eggGroups":["Undiscovered"],"tags":["Sub-Legendary"],"tier":"Touhou","gen":9,"otherFormes":["Okina Matara-Spring","Okina Matara-Summer","Okina Matara-Autumn","Okina Matara-Winter"],"formeOrder":["Okina Matara","Okina Matara-Spring","Okina Matara-Summer","Okina Matara-Autumn","Okina Matara-Winter"]},"eikaebisu":{"num":2200,"name":"Eika Ebisu","types":["Ghost","Rock"],"gender":"F","baseStats":{"hp":55,"atk":80,"def":140,"spa":95,"spd":100,"spe":50},"abilities":{"0":"Water Absorb","H":"Friend Guard"},"heightm":1.5,"weightkg":50,"color":"Purple","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"urumiushizaki":{"num":2201,"name":"Urumi Ushizaki","types":["Water","Rock"],"gender":"F","baseStats":{"hp":98,"atk":104,"def":82,"spa":71,"spd":60,"spe":60},"abilities":{"0":"Torrent","1":"Pressure","H":"Heavy Stone"},"heightm":1.5,"weightkg":50,"color":"Blue","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"kutakaniwatari":{"num":2202,"name":"Kutaka Niwatari","types":["Water","Flying"],"gender":"F","baseStats":{"hp":75,"atk":97,"def":70,"spa":114,"spd":80,"spe":95},"abilities":{"0":"Natural Cure","1":"Simple","H":"Steadfast"},"heightm":1.5,"weightkg":50,"color":"Blue","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"yachiekicchou":{"num":2203,"name":"Yachie Kicchou","types":["Dragon","Dark"],"gender":"F","baseStats":{"hp":95,"atk":90,"def":133,"spa":85,"spd":65,"spe":40},"abilities":{"0":"Shell Armor","1":"Pressure","H":"Beast Boost"},"heightm":1.5,"weightkg":50,"color":"Blue","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"mayumijoutouguu":{"num":2204,"name":"Mayumi Joutouguu","types":["Ground","Steel"],"gender":"F","baseStats":{"hp":100,"atk":115,"def":65,"spa":75,"spd":65,"spe":70},"abilities":{"0":"Stalwart","1":"Marching Orders","H":"Defiant"},"heightm":1.5,"weightkg":50,"color":"Brown","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"keikihaniyasushin":{"num":2205,"name":"Keiki Haniyasushin","types":["Ground","Electric"],"gender":"F","baseStats":{"hp":80,"atk":105,"def":80,"spa":115,"spd":92,"spe":100},"abilities":{"0":"Analytic","1":"Sand Force","H":"Electric Surge"},"heightm":1.5,"weightkg":50,"color":"Brown","eggGroups":["Undiscovered"],"tags":["Sub-Legendary"],"tier":"Touhou","gen":9},"sakikurokuma":{"num":2206,"name":"Saki Kurokuma","types":["Fighting","Flying"],"gender":"F","baseStats":{"hp":70,"atk":140,"def":87,"spa":85,"spd":49,"spe":97},"abilities":{"0":"Limber","1":"No Guard","H":"Beast Boost"},"heightm":1.5,"weightkg":50,"color":"Red","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"yuumatoutetsu":{"num":2207,"name":"Yuuma Toutetsu","types":["Water","Dark"],"gender":"F","baseStats":{"hp":130,"atk":100,"def":80,"spa":96,"spd":58,"spe":64},"abilities":{"0":"Gluttony","1":"Stamina","H":"Beast Boost"},"heightm":1.5,"weightkg":50,"color":"Blue","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"mikegotoukuji":{"num":2208,"name":"Mike Gotoukuji","types":["Steel"],"gender":"F","baseStats":{"hp":55,"atk":93,"def":72,"spa":109,"spd":70,"spe":115},"abilities":{"0":"Super Luck","H":"Competitive"},"heightm":1.5,"weightkg":50,"color":"Gray","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"takaneyamashiro":{"num":2209,"name":"Takane Yamashiro","types":["Grass","Water"],"gender":"F","baseStats":{"hp":90,"atk":58,"def":102,"spa":100,"spd":90,"spe":70},"abilities":{"0":"Pickpocket","1":"Overcoat","H":"Grass Pelt"},"heightm":1.5,"weightkg":50,"color":"Green","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"sannyokomakusa":{"num":2210,"name":"Sannyo Komakusa","types":["Fire","Dragon"],"gender":"F","baseStats":{"hp":84,"atk":60,"def":70,"spa":105,"spd":122,"spe":75},"abilities":{"0":"White Smoke","H":"Black Smoke"},"heightm":1.5,"weightkg":50,"color":"Red","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"misumarutamatsukuri":{"num":2211,"name":"Misumaru Tamatsukuri","types":["Rock"],"gender":"F","baseStats":{"hp":60,"atk":75,"def":65,"spa":120,"spd":102,"spe":102},"abilities":{"0":"Beads of Ruin"},"heightm":1.5,"weightkg":50,"color":"Brown","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"tsukasakudamaki":{"num":2212,"name":"Tsukasa Kudamaki","types":["Ghost","Normal"],"gender":"F","baseStats":{"hp":81,"atk":75,"def":42,"spa":104,"spd":70,"spe":118},"abilities":{"0":"Technician","1":"Infiltrator","H":"Prankster"},"heightm":1.5,"weightkg":50,"color":"Purple","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"megumuiizunamaru":{"num":2213,"name":"Megumu Iizunamaru","types":["Flying","Psychic"],"gender":"F","baseStats":{"hp":110,"atk":90,"def":55,"spa":100,"spd":85,"spe":110},"abilities":{"0":"Air Lock","H":"Pressure"},"heightm":1.5,"weightkg":50,"color":"Blue","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"chimatatenkyuu":{"num":2214,"name":"Chimata Tenkyuu","types":["Steel","Flying"],"gender":"F","baseStats":{"hp":95,"atk":70,"def":90,"spa":110,"spd":110,"spe":85},"abilities":{"0":"Property"},"heightm":1.5,"weightkg":50,"color":"Gray","eggGroups":["Undiscovered"],"tags":["Sub-Legendary"],"tier":"Touhou","gen":9},"momoyohimemushi":{"num":2215,"name":"Momoyo Himemushi","types":["Bug","Rock"],"gender":"F","baseStats":{"hp":90,"atk":134,"def":84,"spa":90,"spd":72,"spe":65},"abilities":{"0":"Swarm","1":"Dragon Eater","H":"Speed Boost"},"heightm":1.5,"weightkg":50,"color":"Green","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"sonbiten":{"num":2216,"name":"Son Biten","types":["Fighting"],"gender":"F","baseStats":{"hp":83,"atk":85,"def":60,"spa":127,"spd":60,"spe":105},"abilities":{"0":"Inner Focus","H":"Magic Guard"},"heightm":1.5,"weightkg":50,"color":"Red","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"enokomitsugashira":{"num":2217,"name":"Enoko Mitsugashira","types":["Steel","Dark"],"gender":"F","baseStats":{"hp":75,"atk":127,"def":102,"spa":73,"spd":60,"spe":58},"abilities":{"0":"Iron Barbs","1":"Scrappy","H":"Strong Jaw"},"heightm":1.5,"weightkg":50,"color":"Gray","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"chiyaritenkajin":{"num":2218,"name":"Chiyari Tenkajin","types":["Fire","Ghost"],"gender":"F","baseStats":{"hp":81,"atk":112,"def":83,"spa":70,"spd":70,"spe":84},"abilities":{"0":"Flame Body","1":"Cursed Body","H":"Bloodsucker"},"heightm":1.5,"weightkg":50,"color":"Red","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"hisamiyomotsu":{"num":2219,"name":"Hisami Yomotsu","types":["Grass","Ghost"],"gender":"F","baseStats":{"hp":85,"atk":60,"def":110,"spa":98,"spd":71,"spe":76},"abilities":{"0":"Sticky Hold","1":"Poison Point","H":"Oblivious"},"heightm":1.5,"weightkg":50,"color":"Green","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"zanmunippaku":{"num":2220,"name":"Zanmu Nippaku","types":["Dark"],"gender":"F","baseStats":{"hp":90,"atk":120,"def":80,"spa":120,"spd":90,"spe":100},"abilities":{"0":"Void"},"heightm":1.5,"weightkg":50,"color":"Black","eggGroups":["Undiscovered"],"tags":["Sub-Legendary"],"tier":"Touhou","gen":9},"vivit":{"num":2221,"name":"VIVIT","types":["Steel","Electric"],"gender":"F","baseStats":{"hp":60,"atk":110,"def":90,"spa":110,"spd":90,"spe":120},"abilities":{"0":"Cactus Drive"},"heightm":1.5,"weightkg":50,"color":"Gray","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"ubamechirizuka":{"num":2222,"name":"Ubame Chirizuka","types":["Ground"],"gender":"F","baseStats":{"hp":72,"atk":110,"def":103,"spa":95,"spd":70,"spe":110},"abilities":{"0":"Sand Force","H":"Mold Breaker"},"heightm":1.5,"weightkg":50,"color":"Brown","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"chimihoujuu":{"num":2223,"name":"Chimi Houjuu","types":["Grass","Dark"],"gender":"F","baseStats":{"hp":68,"atk":92,"def":64,"spa":100,"spd":100,"spe":120},"abilities":{"0":"Magic Guard"},"heightm":1.5,"weightkg":50,"color":"Green","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"narekomichigami":{"num":2224,"name":"Nareko Michigami","types":["Ground","Psychic"],"gender":"F","baseStats":{"hp":86,"atk":68,"def":83,"spa":105,"spd":130,"spe":73},"abilities":{"0":"Sand Force","1":"Synchronize","H":"Filter"},"heightm":1.5,"weightkg":50,"color":"Brown","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"yuimanasama":{"num":2225,"name":"Yuiman Asama","types":["Ghost"],"gender":"F","baseStats":{"hp":85,"atk":130,"def":100,"spa":65,"spd":65,"spe":100},"abilities":{"0":"Sniper","1":"Delusion","H":"Corrupt Data"},"heightm":1.5,"weightkg":50,"color":"Purple","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"watatsukinotoyohime":{"num":2226,"name":"Watatsuki no Toyohime","types":["Water"],"gender":"F","baseStats":{"hp":100,"atk":100,"def":100,"spa":100,"spd":100,"spe":100},"abilities":{"0":"Water Veil"},"heightm":1.5,"weightkg":50,"color":"Blue","eggGroups":["Undiscovered"],"tags":["Sub-Legendary"],"tier":"Touhou","gen":9},"watatsukinoyorihime":{"num":2227,"name":"Watatsuki no Yorihime","types":["Fighting"],"gender":"F","baseStats":{"hp":100,"atk":130,"def":89,"spa":96,"spd":79,"spe":106},"abilities":{"0":"Inner Focus"},"heightm":1.5,"weightkg":50,"color":"Red","eggGroups":["Undiscovered"],"tags":["Sub-Legendary"],"tier":"Touhou","gen":9},"ariyaiwanaga":{"num":2228,"name":"Ariya Iwanaga","types":["Rock"],"gender":"F","baseStats":{"hp":130,"atk":117,"def":86,"spa":130,"spd":86,"spe":46},"abilities":{"0":"Immovable","1":"Wonder Skin","H":"Sturdy"},"heightm":1.5,"weightkg":50,"color":"Brown","eggGroups":["Undiscovered"],"tags":["Sub-Legendary"],"tier":"Touhou","gen":9},"ninawatari":{"num":2229,"name":"Nina Watari","types":["Water","Electric"],"gender":"F","baseStats":{"hp":75,"atk":64,"def":150,"spa":99,"spd":70,"spe":82},"abilities":{"0":"Trace","1":"Surge Surfer","H":"Truth Overload"},"heightm":1.5,"weightkg":50,"color":"Blue","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"cirnotanned":{"num":2105,"name":"Cirno-Tanned","types":["Ice","Grass"],"gender":"F","baseStats":{"hp":60,"atk":139,"def":59,"spa":139,"spd":64,"spe":109},"abilities":{"0":"Drought"},"heightm":1.5,"weightkg":50,"color":"Blue","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9,"baseSpecies":"Cirno","forme":"Tanned","requiredItem":"Summer Backdoor","changesFrom":"Cirno"},"keinehakutaku":{"num":2126,"name":"Keine-Hakutaku","types":["Steel","Dragon"],"gender":"F","baseStats":{"hp":80,"atk":135,"def":92,"spa":155,"spd":108,"spe":110},"abilities":{"0":"Were-Hakutaku"},"heightm":1.5,"weightkg":50,"color":"Gray","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9,"baseSpecies":"Keine","forme":"Hakutaku"},"ichirinkumoiunzan":{"num":2157,"name":"Ichirin Kumoi-Unzan","types":["Fighting","Flying"],"baseStats":{"hp":75,"atk":140,"def":105,"spa":105,"spd":85,"spe":55},"abilities":{"0":"Iron Fist"},"heightm":1.5,"weightkg":50,"color":"Red","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9,"baseSpecies":"Ichirin Kumoi","forme":"Unzan"},"hecatiaearth":{"num":2190,"name":"Hecatia-Earth","types":["Water","Grass"],"gender":"F","baseStats":{"hp":80,"atk":60,"def":105,"spa":110,"spd":105,"spe":110},"abilities":{"0":"Natural Cure"},"heightm":1.5,"weightkg":50,"color":"Blue","eggGroups":["Undiscovered"],"tags":["Sub-Legendary"],"tier":"Touhou","gen":9,"baseSpecies":"Hecatia","forme":"Earth"},"hecatiamoon":{"num":2190,"name":"Hecatia-Moon","types":["Fairy","Dragon"],"gender":"F","baseStats":{"hp":80,"atk":60,"def":90,"spa":130,"spd":90,"spe":120},"abilities":{"0":"Dazzling"},"heightm":1.5,"weightkg":50,"color":"Pink","eggGroups":["Undiscovered"],"tags":["Sub-Legendary"],"tier":"Touhou","gen":9,"baseSpecies":"Hecatia","forme":"Moon"},"okinamataraspring":{"num":2199,"name":"Okina Matara-Spring","types":["Water","Dark"],"gender":"F","baseStats":{"hp":85,"atk":120,"def":80,"spa":130,"spd":80,"spe":85},"abilities":{"0":"Four Seasons"},"heightm":1.5,"weightkg":50,"color":"Blue","eggGroups":["Undiscovered"],"tags":["Sub-Legendary"],"tier":"Touhou","gen":9,"baseSpecies":"Okina Matara","forme":"Spring","battleOnly":"Okina Matara","requiredAbility":"Four Seasons","changesFrom":"Okina Matara"},"okinamatarasummer":{"num":2199,"name":"Okina Matara-Summer","types":["Fire","Dark"],"gender":"F","baseStats":{"hp":85,"atk":120,"def":80,"spa":130,"spd":80,"spe":85},"abilities":{"0":"Four Seasons"},"heightm":1.5,"weightkg":50,"color":"Red","eggGroups":["Undiscovered"],"tags":["Sub-Legendary"],"tier":"Touhou","gen":9,"baseSpecies":"Okina Matara","forme":"Summer","battleOnly":"Okina Matara","requiredAbility":"Four Seasons","changesFrom":"Okina Matara"},"okinamataraautumn":{"num":2199,"name":"Okina Matara-Autumn","types":["Rock","Dark"],"gender":"F","baseStats":{"hp":85,"atk":120,"def":80,"spa":130,"spd":80,"spe":85},"abilities":{"0":"Four Seasons"},"heightm":1.5,"weightkg":50,"color":"Brown","eggGroups":["Undiscovered"],"tags":["Sub-Legendary"],"tier":"Touhou","gen":9,"baseSpecies":"Okina Matara","forme":"Autumn","battleOnly":"Okina Matara","requiredAbility":"Four Seasons","changesFrom":"Okina Matara"},"okinamatarawinter":{"num":2199,"name":"Okina Matara-Winter","types":["Ice","Dark"],"gender":"F","baseStats":{"hp":85,"atk":120,"def":80,"spa":130,"spd":80,"spe":85},"abilities":{"0":"Four Seasons"},"heightm":1.5,"weightkg":50,"color":"Blue","eggGroups":["Undiscovered"],"tags":["Sub-Legendary"],"tier":"Touhou","gen":9,"baseSpecies":"Okina Matara","forme":"Winter","battleOnly":"Okina Matara","requiredAbility":"Four Seasons","changesFrom":"Okina Matara"}},
-	newLearnsets: {"makuro":{"abyssalmaw":"9a","leviathancrash":"9a","sovereignrite":"9a","wavecrash":"9a","liquidation":"9a","waterfall":"9a","aquajet":"9a","aquatail":"9a","razorshell":"9a","aquacutter":"9a","flipturn":"9a","dive":"9a","surf":"9a","hydropump":"9a","hydrocannon":"9a","scald":"9a","muddywater":"9a","whirlpool":"9a","raindance":"9a","knockoff":"9a","suckerpunch":"9a","throatchop":"9a","crunch":"9a","nightslash":"9a","jawlock":"9a","lashout":"9a","foulplay":"9a","partingshot":"9a","darkpulse":"9a","snarl":"9a","pursuit":"9a","taunt":"9a","torment":"9a","memento":"9a","icefang":"9a","psychicfangs":"9a","firefang":"9a","thunderfang":"9a","poisonfang":"9a","iciclecrash":"9a","icespinner":"9a","tripleaxel":"9a","icebeam":"9a","blizzard":"9a","earthquake":"9a","highhorsepower":"9a","stompingtantrum":"9a","stoneedge":"9a","rockslide":"9a","ironhead":"9a","heavyslam":"9a","bodypress":"9a","zenheadbutt":"9a","closecombat":"9a","superpower":"9a","outrage":"9a","dragontail":"9a","scaleshot":"9a","playrough":"9a","gunkshot":"9a","bodyslam":"9a","doubleedge":"9a","gigaimpact":"9a","hyperbeam":"9a","terablast":"9a","swordsdance":"9a","dragondance":"9a","bulkup":"9a","curse":"9a","haze":"9a","roar":"9a","whirlwind":"9a","yawn":"9a","encore":"9a","toxic":"9a","snowscape":"9a","cottonguard":"9a","velvetguard":"9a","velvetpress":"9a","tailglow":"9a","recover":"9a","protect":"9a","detect":"9a","rest":"9a","sleeptalk":"9a","substitute":"9a","endure":"9a","facade":"9a","helpinghand":"9a","scaryface":"9a","wavecharge":"9a","carrionfeast":"9a","rimecleaver":"9a","craghammer":"9a","hustleup":"9a","twilightexit":"9a","shufflejab":"9a","undertow":"9a","uturn":"9a","stealthrock":"9a","rapidspin":"9a","defog":"9a","courtchange":"9a","trick":"9a","trickroom":"9a"},"raishin":{"shrinebellstrike":"9a","spiritthunder":"9a","sovereignrite":"9a","supercellslam":"9a","wildcharge":"9a","thunderfang":"9a","voltswitch":"9a","nuzzle":"9a","thunderbolt":"9a","thunder":"9a","risingvoltage":"9a","discharge":"9a","electroweb":"9a","thunderwave":"9a","charge":"9a","electricterrain":"9a","magnetrise":"9a","poltergeist":"9a","shadowclaw":"9a","shadowsneak":"9a","phantomforce":"9a","shadowball":"9a","hex":"9a","nightshade":"9a","willowisp":"9a","destinybond":"9a","curse":"9a","spite":"9a","painsplit":"9a","confuseray":"9a","closecombat":"9a","sacredsword":"9a","playrough":"9a","crunch":"9a","knockoff":"9a","suckerpunch":"9a","psychicfangs":"9a","firefang":"9a","icefang":"9a","flareblitz":"9a","bravebird":"9a","acrobatics":"9a","uturn":"9a","irontail":"9a","zenheadbutt":"9a","psychocut":"9a","leafblade":"9a","xscissor":"9a","extrasensory":"9a","dazzlinggleam":"9a","darkpulse":"9a","quickattack":"9a","bodyslam":"9a","doubleedge":"9a","gigaimpact":"9a","hyperbeam":"9a","terablast":"9a","swordsdance":"9a","agility":"9a","bulkup":"9a","safeguard":"9a","reflect":"9a","lightscreen":"9a","roar":"9a","taunt":"9a","encore":"9a","toxic":"9a","trick":"9a","cottonguard":"9a","velvetguard":"9a","velvetpress":"9a","tailglow":"9a","recover":"9a","protect":"9a","detect":"9a","rest":"9a","sleeptalk":"9a","substitute":"9a","endure":"9a","facade":"9a","helpinghand":"9a","scaryface":"9a","voltaiclance":"9a","sparkscamper":"9a","carrionfeast":"9a","rimecleaver":"9a","craghammer":"9a","hivefrenzy":"9a","shufflejab":"9a","hustleup":"9a","twilightexit":"9a","partingshot":"9a","teleport":"9a","batonpass":"9a","defog":"9a","healbell":"9a","memento":"9a","trickroom":"9a"},"chimai":{"sanctuarypulse":"9a","hallowedquake":"9a","sovereignrite":"9a","earthpower":"9a","scorchingsands":"9a","mudshot":"9a","sandtomb":"9a","earthquake":"9a","bulldoze":"9a","highhorsepower":"9a","stompingtantrum":"9a","sandstorm":"9a","stealthrock":"9a","spikes":"9a","moonblast":"9a","dazzlinggleam":"9a","drainingkiss":"9a","mistyexplosion":"9a","playrough":"9a","mistyterrain":"9a","moonlight":"9a","charm":"9a","decorate":"9a","psychic":"9a","psyshock":"9a","futuresight":"9a","extrasensory":"9a","powergem":"9a","meteorbeam":"9a","flamethrower":"9a","fireblast":"9a","mysticalfire":"9a","heatwave":"9a","energyball":"9a","gigadrain":"9a","grassknot":"9a","shadowball":"9a","aurasphere":"9a","focusblast":"9a","sludgebomb":"9a","hypervoice":"9a","icebeam":"9a","thunderbolt":"9a","darkpulse":"9a","dragonpulse":"9a","bodypress":"9a","hyperbeam":"9a","terablast":"9a","calmmind":"9a","nastyplot":"9a","irondefense":"9a","amnesia":"9a","wish":"9a","healbell":"9a","safeguard":"9a","reflect":"9a","lightscreen":"9a","trickroom":"9a","gravity":"9a","sunnyday":"9a","roar":"9a","whirlwind":"9a","taunt":"9a","encore":"9a","toxic":"9a","yawn":"9a","trick":"9a","cottonguard":"9a","velvetguard":"9a","velvetpress":"9a","tailglow":"9a","recover":"9a","protect":"9a","detect":"9a","rest":"9a","sleeptalk":"9a","substitute":"9a","endure":"9a","facade":"9a","helpinghand":"9a","quiverdance":"9a","dragondance":"9a","victorydance":"9a","clangoroussoul":"9a","fierydance":"9a","revelationdance":"9a","aquastep":"9a","petaldance":"9a","featherdance":"9a","teeterdance":"9a","lunardance":"9a","swordsdance":"9a","raindance":"9a","tremorshot":"9a","oxidize":"9a","undertow":"9a","hypnowhirl":"9a","solarnectar":"9a","chrysalisveil":"9a","twilightexit":"9a","knockoff":"9a","uturn":"9a","teleport":"9a","batonpass":"9a","healingwish":"9a","memento":"9a","toxicspikes":"9a","defog":"9a","courtchange":"9a","thunderwave":"9a","penance":"9a"},"missingno":{"blizzard":"9a","bubblebeam":"9a","cut":"9a","doubleedge":"9a","earthquake":"9a","fissure":"9a","fly":"9a","icebeam":"9a","megakick":"9a","megapunch":"9a","psychic":"9a","rage":"9a","razorwind":"9a","rest":"9a","seismictoss":"9a","skyattack":"9a","submission":"9a","substitute":"9a","swordsdance":"9a","takedown":"9a","teleport":"9a","thunder":"9a","thunderwave":"9a","toxic":"9a","triattack":"9a","watergun":"9a","datacorruption":"9a","bodyslam":"9a","facade":"9a","return":"9a","frustration":"9a","hyperbeam":"9a","gigaimpact":"9a","quickattack":"9a","extremespeed":"9a","headbutt":"9a","payday":"9a","tackle":"9a","slam":"9a","thrash":"9a","bravebird":"9a","drillpeck":"9a","peck":"9a","wingattack":"9a","aerialace":"9a","acrobatics":"9a","dualwingbeat":"9a","hurricane":"9a","airslash":"9a","gust":"9a","knockoff":"9a","suckerpunch":"9a","shadowsneak":"9a","shadowclaw":"9a","phantomforce":"9a","rockslide":"9a","stoneedge":"9a","ironhead":"9a","drainpunch":"9a","superpower":"9a","uturn":"9a","waterfall":"9a","liquidation":"9a","surf":"9a","hydropump":"9a","bubble":"9a","thunderbolt":"9a","shadowball":"9a","terablast":"9a","leechlife":"9a","xscissor":"9a","lunge":"9a","firstimpression":"9a","pounce":"9a","bugbite":"9a","recycle":"9a","trick":"9a","switcheroo":"9a","fling":"9a","thief":"9a","covet":"9a","naturalgift":"9a","stuffcheeks":"9a","belch":"9a","embargo":"9a","magicroom":"9a","trickroom":"9a","bulkup":"9a","curse":"9a","agility":"9a","protect":"9a","sleeptalk":"9a","recover":"9a","roost":"9a","painsplit":"9a","taunt":"9a","encore":"9a","disable":"9a","glare":"9a","willowisp":"9a","confuseray":"9a","metronome":"9a","transform":"9a","conversion":"9a","conversion2":"9a","mimic":"9a","haze":"9a","stealthrock":"9a","spikes":"9a","defog":"9a","endure":"9a","endeavor":"9a","destinybond":"9a","trickortreat":"9a"},"funerfly":{"solemnlament":"9a","butterflyprocession":"9a","lastrites":"9a","shadowball":"9a","bugbuzz":"9a","hex":"9a","willowisp":"9a","quiverdance":"9a","calmmind":"9a","strengthsap":"9a","painsplit":"9a","destinybond":"9a","perishsong":"9a","memento":"9a","uturn":"9a","trickroom":"9a","psychic":"9a","silverwind":"9a","ominouswind":"9a","protect":"9a","terablast":"9a","rest":"9a","sleeptalk":"9a","substitute":"9a","endure":"9a"},"reimuhakurei":{"airslash":"9a","dreamseal":"9a","gust":"9a","focusblast":"9a","aurasphere":"9a","springtidestorm":"9a","dazzlinggleam":"9a","petaldance":"9a","grasspledge":"9a","magicalleaf":"9a","storedpower":"9a","triattack":"9a","acrobatics":"9a","fly":"9a","aerialace":"9a","focuspunch":"9a","closecombat":"9a","crosschop":"9a","thunderouskick":"9a","submission":"9a","brickbreak":"9a","forcepalm":"9a","spiritbreak":"9a","spiritshackle":"9a","shadowpunch":"9a","zenheadbutt":"9a","petalblizzard":"9a","doubleedge":"9a","facade":"9a","bind":"9a","quickattack":"9a","recover":"9a","whirlwind":"9a","calmmind":"9a","lightscreen":"9a","reflect":"9a","barrier":"9a","thunderwave":"9a","agility":"9a","meditate":"9a","defog":"9a","sunnyday":"9a","grassyterrain":"9a","wideguard":"9a","safeguard":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","roost":"9a","tailwind":"9a","featherdance":"9a","uturn":"9a","bravebird":"9a","drillpeck":"9a","dualwingbeat":"9a","cloudfist":"9a","hurricane":"9a","aircutter":"9a","bulkup":"9a","detect":"9a","quickguard":"9a","coaching":"9a","drainpunch":"9a","machpunch":"9a","superpower":"9a","lowkick":"9a","highjumpkick":"9a","bodypress":"9a","rocksmash":"9a","lowsweep":"9a","reversal":"9a","shufflejab":"9a","dancingblow":"9a","vacuumwave":"9a","magiccoat":"9a","psyshock":"9a","extrasensory":"9a"},"marisakirisame":{"blastburn":"9a","overheat":"9a","fireblast":"9a","flamethrower":"9a","firepledge":"9a","flameburst":"9a","ember":"9a","firespin":"9a","thunder":"9a","hyperbeam":"9a","triattack":"9a","swift":"9a","terrainpulse":"9a","weatherball":"9a","lightofruin":"9a","dazzlinggleam":"9a","dracometeor":"9a","icebeam":"9a","aurorabeam":"9a","signalbeam":"9a","venoshock":"9a","clearsmog":"9a","acid":"9a","darkpulse":"9a","flareblitz":"9a","firepunch":"9a","flamecharge":"9a","doubleedge":"9a","retaliate":"9a","facade":"9a","headbutt":"9a","covet":"9a","quickattack":"9a","feint":"9a","cometpunch":"9a","trailblaze":"9a","wildcharge":"9a","foulplay":"9a","suckerpunch":"9a","knockoff":"9a","thief":"9a","feintattack":"9a","uturn":"9a","batonpass":"9a","craftyshield":"9a","taunt":"9a","switcheroo":"9a","toxic":"9a","agility":"9a","raindance":"9a","focusenergy":"9a","workup":"9a","mimic":"9a","confide":"9a","laserfocus":"9a","stealthrock":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","willowisp":"9a","sunnyday":"9a","firefang":"9a","temperflare":"9a","heatcrash":"9a","blazekick":"9a","heatwave":"9a","mysticalfire":"9a","lavaplume":"9a","incinerate":"9a","encore":"9a","yawn":"9a","wish":"9a","healbell":"9a","charm":"9a","disable":"9a","screech":"9a","hustleup":"9a","uproar":"9a","swordsdance":"9a","crushclaw":"9a","thrash":"9a","hypervoice":"9a","echoedvoice":"9a","meteorbeam":"9a","powergem":"9a","energyball":"9a","nastyplot":"9a","acrobatics":"9a","bravebird":"9a"},"rumia":{"nightdaze":"9a","darkpulse":"9a","moongeistbeam":"9a","shadowball":"9a","hex":"9a","ominouswind":"9a","moonblast":"9a","airslash":"9a","icywind":"9a","hyperbeam":"9a","hiddenpower":"9a","crunch":"9a","jawlock":"9a","knockoff":"9a","bite":"9a","payback":"9a","pursuit":"9a","phantomforce":"9a","shadowclaw":"9a","focuspunch":"9a","superpower":"9a","forcepalm":"9a","playrough":"9a","acrobatics":"9a","fly":"9a","icefang":"9a","ironhead":"9a","doubleedge":"9a","hyperfang":"9a","bind":"9a","bulkup":"9a","meanlook":"9a","whirlwind":"9a","helpinghand":"9a","moonlight":"9a","raindance":"9a","mist":"9a","reflect":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","terablast":"9a","endure":"9a","facade":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","gigaimpact":"9a","takedown":"9a","bodyslam":"9a","curse":"9a","thief":"9a","foulplay":"9a","taunt":"9a","faketears":"9a","torment":"9a","quash":"9a","wickedenergy":"9a","suckerpunch":"9a","throatchop":"9a","nightslash":"9a","lashout":"9a","assurance":"9a","carrionfeast":"9a","shadowstrike":"9a","twilightexit":"9a","swordsdance":"9a","shadowsneak":"9a","psychicfangs":"9a","superfang":"9a","haze":"9a","silverdagger":"9a"},"daiyousei":{"moonblast":"9a","dazzlinggleam":"9a","drainingkiss":"9a","fairywind":"9a","energyball":"9a","gigadrain":"9a","icebeam":"9a","frostbreath":"9a","icywind":"9a","surf":"9a","chillingwater":"9a","storedpower":"9a","triattack":"9a","swift":"9a","echoedvoice":"9a","playrough":"9a","petalblizzard":"9a","iciclecrash":"9a","iceshard":"9a","waterfall":"9a","lastresort":"9a","return":"9a","facade":"9a","covet":"9a","quickattack":"9a","mistyterrain":"9a","fairylock":"9a","charm":"9a","watersport":"9a","raindance":"9a","snowscape":"9a","mist":"9a","haze":"9a","lightscreen":"9a","reflect":"9a","teleport":"9a","calmmind":"9a","nastyplot":"9a","confuseray":"9a","safeguard":"9a","naturepower":"9a","helpinghand":"9a","tearfullook":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","bodyslam":"9a","curse":"9a","sweetkiss":"9a","babydolleyes":"9a","craftyshield":"9a","mistyexplosion":"9a","alluringvoice":"9a","velvetpress":"9a","quiverdance":"9a","wish":"9a","healbell":"9a","pollenpuff":"9a","magicalleaf":"9a","psychic":"9a","lifedew":"9a"},"cirno":{"blizzard":"9a","icebeam":"9a","freezedry":"9a","aurorabeam":"9a","icywind":"9a","powdersnow":"9a","moonblast":"9a","dazzlinggleam":"9a","fairywind":"9a","solarbeam":"9a","grasspledge":"9a","surf":"9a","bubblebeam":"9a","chillingwater":"9a","weatherball":"9a","icehammer":"9a","iciclecrash":"9a","icepunch":"9a","iceshard":"9a","iceball":"9a","tripleaxel":"9a","playrough":"9a","jumpkick":"9a","upperhand":"9a","poweruppunch":"9a","aerialace":"9a","solarblade":"9a","seedbomb":"9a","trailblaze":"9a","liquidation":"9a","wingattack":"9a","doubleedge":"9a","megapunch":"9a","facade":"9a","quickattack":"9a","auroraveil":"9a","snowscape":"9a","haze":"9a","mist":"9a","defog":"9a","growth":"9a","focusenergy":"9a","helpinghand":"9a","endure":"9a","swagger":"9a","followme":"9a","sunnyday":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","hiddenpower":"9a","terablast":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","bodyslam":"9a","curse":"9a","hail":"9a","chillingmist":"9a","iciclespear":"9a","icefang":"9a","avalanche":"9a","rimecleaver":"9a","frostbreath":"9a","charm":"9a","sweetkiss":"9a","mistyterrain":"9a","babydolleyes":"9a","craftyshield":"9a","drainingkiss":"9a","mistyexplosion":"9a","alluringvoice":"9a","velvetpress":"9a","icespinner":"9a","uturn":"9a"},"hongmeiling":{"focusblast":"9a","aurasphere":"9a","vacuumwave":"9a","dragonpulse":"9a","dragonbreath":"9a","twister":"9a","flashcannon":"9a","mirrorshot":"9a","dazzlinggleam":"9a","triattack":"9a","snore":"9a","focuspunch":"9a","closecombat":"9a","hammerarm":"9a","crosschop":"9a","drainpunch":"9a","brickbreak":"9a","upperhand":"9a","lowsweep":"9a","circlethrow":"9a","machpunch":"9a","outrage":"9a","dragonrush":"9a","dragonclaw":"9a","breakingswipe":"9a","meteormash":"9a","metalclaw":"9a","petalblizzard":"9a","razorleaf":"9a","throatchop":"9a","knockoff":"9a","earthquake":"9a","bulldoze":"9a","stoneedge":"9a","rockslide":"9a","rocktomb":"9a","rockthrow":"9a","uturn":"9a","megakick":"9a","megapunch":"9a","facade":"9a","cometpunch":"9a","dragondance":"9a","taunt":"9a","quash":"9a","calmmind":"9a","meditate":"9a","reflect":"9a","lightscreen":"9a","stealthrock":"9a","sandstorm":"9a","focusenergy":"9a","block":"9a","luckychant":"9a","helpinghand":"9a","yawn":"9a","substitute":"9a","rest":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","sleeptalk":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","bodyslam":"9a","curse":"9a","bulkup":"9a","detect":"9a","quickguard":"9a","coaching":"9a","superpower":"9a","lowkick":"9a","highjumpkick":"9a","bodypress":"9a","rocksmash":"9a","reversal":"9a","shufflejab":"9a","dancingblow":"9a","dragontail":"9a","scaleshot":"9a","bellydrum":"9a","swordsdance":"9a","firepunch":"9a","icepunch":"9a","thunderpunch":"9a","blazekick":"9a","cloudfist":"9a","rapidspin":"9a"},"koakuma":{"darkpulse":"9a","snarl":"9a","shadowball":"9a","hurricane":"9a","airslash":"9a","aircutter":"9a","icebeam":"9a","icywind":"9a","fireblast":"9a","mysticalfire":"9a","triattack":"9a","swift":"9a","suckerpunch":"9a","knockoff":"9a","brutalswing":"9a","feintattack":"9a","shadowsneak":"9a","fly":"9a","acrobatics":"9a","dualwingbeat":"9a","thunderfang":"9a","leechlife":"9a","facade":"9a","quickattack":"9a","feint":"9a","memento":"9a","taunt":"9a","faketears":"9a","switcheroo":"9a","willowisp":"9a","destinybond":"9a","confuseray":"9a","calmmind":"9a","defog":"9a","tailwind":"9a","haze":"9a","whirlwind":"9a","confide":"9a","entrainment":"9a","sweetkiss":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","pursuit":"9a","thief":"9a","foulplay":"9a","torment":"9a","quash":"9a","wickedenergy":"9a","nastyplot":"9a","encore":"9a","partingshot":"9a","trick":"9a","flatter":"9a","hex":"9a","dazzlinggleam":"9a","psychic":"9a"},"patchouliknowledge":{"mistball":"9a","extrasensory":"9a","psychicnoise":"9a","psybeam":"9a","confusion":"9a","blueflare":"9a","firepledge":"9a","surf":"9a","energyball":"9a","flashcannon":"9a","earthpower":"9a","moongeistbeam":"9a","hyperbeam":"9a","triattack":"9a","swift":"9a","hiddenpower":"9a","terrainpulse":"9a","zenheadbutt":"9a","psychocut":"9a","bodyslam":"9a","tackle":"9a","flail":"9a","calmmind":"9a","recover":"9a","confide":"9a","haze":"9a","allyswitch":"9a","trickroom":"9a","imprison":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","terablast":"9a","endure":"9a","facade":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","curse":"9a","reflect":"9a","lightscreen":"9a","trick":"9a","magiccoat":"9a","teleport":"9a","gravity":"9a","psychicterrain":"9a","skillswap":"9a","magicroom":"9a","wonderroom":"9a","hypnosis":"9a","amnesia":"9a","agility":"9a","safeguard":"9a","psychic":"9a","psyshock":"9a","futuresight":"9a","expandingforce":"9a","storedpower":"9a","dreameater":"9a","hypnowhirl":"9a","fireblast":"9a","flamethrower":"9a","heatwave":"9a","overheat":"9a","hydropump":"9a","scald":"9a","gigadrain":"9a","leafstorm":"9a","solarbeam":"9a","steelbeam":"9a","scorchingsands":"9a","moonblast":"9a","sunnyday":"9a","raindance":"9a","sandstorm":"9a","snowscape":"9a","lunaticbullet":"9a"},"sakuyaizayoi":{"flashcannon":"9a","mirrorshot":"9a","psychic":"9a","psyshock":"9a","extrasensory":"9a","psybeam":"9a","mysticalfire":"9a","thunderbolt":"9a","shockwave":"9a","darkpulse":"9a","ironhead":"9a","smartstrike":"9a","silverdagger":"9a","metalclaw":"9a","bulletpunch":"9a","breakingswipe":"9a","selfdestruct":"9a","extremespeed":"9a","facade":"9a","quickattack":"9a","fakeout":"9a","feint":"9a","kowtowcleave":"9a","nightslash":"9a","knockoff":"9a","feintattack":"9a","shadowclaw":"9a","brickbreak":"9a","spikes":"9a","thunderwave":"9a","teleport":"9a","agility":"9a","trickroom":"9a","lifedew":"9a","swordsdance":"9a","tidyup":"9a","laserfocus":"9a","detect":"9a","quickguard":"9a","sandstorm":"9a","afteryou":"9a","safeguard":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","bitterblade":"9a","psychocut":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","irondefense":"9a","autotomize":"9a","metalsound":"9a","heavyslam":"9a","gyroball":"9a","missile":"9a","sacredsword":"9a","leafblade":"9a","aerialace":"9a","uturn":"9a","quash":"9a"},"remiliascarlet":{"nightdaze":"9a","darkpulse":"9a","snarl":"9a","hurricane":"9a","airslash":"9a","aircutter":"9a","gust":"9a","fireblast":"9a","heatwave":"9a","mysticalfire":"9a","shadowball":"9a","psychic":"9a","extrasensory":"9a","drainingkiss":"9a","gigadrain":"9a","megadrain":"9a","hyperbeam":"9a","bloodmoon":"9a","hypervoice":"9a","wringout":"9a","crunch":"9a","throatchop":"9a","suckerpunch":"9a","brutalswing":"9a","bite":"9a","bravebird":"9a","fly":"9a","aerialace":"9a","acrobatics":"9a","dualwingbeat":"9a","psychicfangs":"9a","icefang":"9a","iciclespear":"9a","firefang":"9a","leechlife":"9a","facade":"9a","quickattack":"9a","honeclaws":"9a","taunt":"9a","nastyplot":"9a","strengthsap":"9a","snowscape":"9a","toxic":"9a","agility":"9a","tailwind":"9a","moonlight":"9a","defog":"9a","quickguard":"9a","destinybond":"9a","swagger":"9a","focusenergy":"9a","whirlwind":"9a","screech":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","fatescall":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","pursuit":"9a","thief":"9a","foulplay":"9a","knockoff":"9a","faketears":"9a","torment":"9a","quash":"9a","wickedenergy":"9a","nightslash":"9a","lashout":"9a","payback":"9a","assurance":"9a","carrionfeast":"9a","roost":"9a","featherdance":"9a","uturn":"9a","drillpeck":"9a","cloudfist":"9a","shadowstrike":"9a","twilightexit":"9a","hustleup":"9a","dancingblow":"9a","moonblast":"9a","swordsdance":"9a","drainpunch":"9a","playrough":"9a","silverdagger":"9a"},"flandrescarlet":{"forbiddenbarrage":"9a","darkpulse":"9a","snarl":"9a","overheat":"9a","fireblast":"9a","inferno":"9a","searingshot":"9a","flamethrower":"9a","lavaplume":"9a","flameburst":"9a","burningjealousy":"9a","ember":"9a","firespin":"9a","scorchingsands":"9a","powergem":"9a","ancientpower":"9a","shadowball":"9a","hex":"9a","storedpower":"9a","signalbeam":"9a","mistyexplosion":"9a","megadrain":"9a","hyperbeam":"9a","hypervoice":"9a","swift":"9a","throatchop":"9a","crunch":"9a","nightslash":"9a","bite":"9a","payback":"9a","flareblitz":"9a","ragingfury":"9a","firelash":"9a","temperflare":"9a","firepunch":"9a","firefang":"9a","flamewheel":"9a","flamecharge":"9a","rockslide":"9a","rocktomb":"9a","revenge":"9a","circlethrow":"9a","leechlife":"9a","playrough":"9a","explosion":"9a","gigaimpact":"9a","doubleedge":"9a","megapunch":"9a","facade":"9a","slash":"9a","quickattack":"9a","crushgrip":"9a","willowisp":"9a","torment":"9a","snatch":"9a","mistyterrain":"9a","barrier":"9a","trick":"9a","imprison":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","pursuit":"9a","thief":"9a","foulplay":"9a","taunt":"9a","knockoff":"9a","faketears":"9a","quash":"9a","wickedenergy":"9a","suckerpunch":"9a","lashout":"9a","assurance":"9a","carrionfeast":"9a","nastyplot":"9a","sunnyday":"9a","heatcrash":"9a","blazekick":"9a","heatwave":"9a","mysticalfire":"9a","incinerate":"9a","shadowstrike":"9a","twilightexit":"9a","hustleup":"9a","dancingblow":"9a","cloudfist":"9a","moonblast":"9a","swordsdance":"9a","sacredsword":"9a","superpower":"9a","stompingtantrum":"9a","drainpunch":"9a","psychicfangs":"9a"},"lettywhiterock":{"blizzard":"9a","icebeam":"9a","freezedry":"9a","frostbreath":"9a","aurorabeam":"9a","icywind":"9a","powdersnow":"9a","bleakwindstorm":"9a","aircutter":"9a","psychic":"9a","psyshock":"9a","psybeam":"9a","mirrorcoat":"9a","waterpulse":"9a","chillingwater":"9a","powergem":"9a","shadowball":"9a","gigadrain":"9a","weatherball":"9a","swift":"9a","iciclecrash":"9a","icespinner":"9a","icepunch":"9a","iceshard":"9a","bodypress":"9a","payback":"9a","ironhead":"9a","bodyslam":"9a","chipaway":"9a","snowscape":"9a","auroraveil":"9a","toxic":"9a","irondefense":"9a","yawn":"9a","confide":"9a","lifedew":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","facade":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","curse":"9a","hail":"9a","haze":"9a","mist":"9a","chillingmist":"9a","roar":"9a","reflect":"9a","lightscreen":"9a","healbell":"9a","surf":"9a","wish":"9a","avalanche":"9a","calmmind":"9a","whirlwind":"9a"},"chen":{"triattack":"9a","swift":"9a","round":"9a","psychic":"9a","extrasensory":"9a","confusion":"9a","twinbeam":"9a","fireblast":"9a","flamethrower":"9a","incinerate":"9a","thunder":"9a","thunderbolt":"9a","shockwave":"9a","shadowball":"9a","doubleedge":"9a","return":"9a","eggbomb":"9a","rockclimb":"9a","facade":"9a","covet":"9a","rapidspin":"9a","fakeout":"9a","doublehit":"9a","tailslap":"9a","furyswipes":"9a","barrage":"9a","playrough":"9a","rocktomb":"9a","rockblast":"9a","uturn":"9a","acrobatics":"9a","aerialace":"9a","throatchop":"9a","suckerpunch":"9a","bite":"9a","rollingkick":"9a","doublekick":"9a","poweruppunch":"9a","flamecharge":"9a","metalclaw":"9a","nuzzle":"9a","acupressure":"9a","encore":"9a","endure":"9a","mefirst":"9a","copycat":"9a","whirlwind":"9a","tailwhip":"9a","helpinghand":"9a","charm":"9a","babydolleyes":"9a","taunt":"9a","torment":"9a","snatch":"9a","switcheroo":"9a","quash":"9a","stealthrock":"9a","thunderwave":"9a","charge":"9a","agility":"9a","quickguard":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","frustration":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","bodyslam":"9a","curse":"9a","yawn":"9a","wish":"9a","healbell":"9a","workup":"9a","batonpass":"9a","disable":"9a","screech":"9a","hustleup":"9a","uproar":"9a","quickattack":"9a","headbutt":"9a","swordsdance":"9a","retaliate":"9a","crushclaw":"9a","thrash":"9a","honeclaws":"9a","nightslash":"9a","knockoff":"9a","shadowclaw":"9a"},"alicemargatroid":{"steelbeam":"9a","flashcannon":"9a","mirrorshot":"9a","prismaticlaser":"9a","futuresight":"9a","psychic":"9a","psyshock":"9a","expandingforce":"9a","psychicnoise":"9a","psybeam":"9a","confusion":"9a","mistyexplosion":"9a","dazzlinggleam":"9a","blizzard":"9a","icebeam":"9a","aurorabeam":"9a","aurasphere":"9a","incinerate":"9a","solarbeam":"9a","energyball":"9a","hyperbeam":"9a","swift":"9a","terrainpulse":"9a","smartstrike":"9a","magnetbomb":"9a","metalclaw":"9a","psychocut":"9a","heartstamp":"9a","icepunch":"9a","iceshard":"9a","firepunch":"9a","brickbreak":"9a","selfdestruct":"9a","retaliate":"9a","facade":"9a","barrage":"9a","calmmind":"9a","auroraveil":"9a","reflect":"9a","lightscreen":"9a","trickroom":"9a","spikes":"9a","wideguard":"9a","recover":"9a","psychup":"9a","confide":"9a","helpinghand":"9a","snowscape":"9a","craftyshield":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","gigaimpact":"9a","takedown":"9a","bodyslam":"9a","curse":"9a","irondefense":"9a","autotomize":"9a","metalsound":"9a","ironhead":"9a","bulletpunch":"9a","heavyslam":"9a","gyroball":"9a","missile":"9a","trick":"9a","magiccoat":"9a","teleport":"9a","imprison":"9a","gravity":"9a","psychicterrain":"9a","skillswap":"9a","allyswitch":"9a","magicroom":"9a","wonderroom":"9a","hypnosis":"9a","amnesia":"9a","agility":"9a","safeguard":"9a","zenheadbutt":"9a","psychicfangs":"9a","extrasensory":"9a","storedpower":"9a","dreameater":"9a","hypnowhirl":"9a","stringshot":"9a","spite":"9a","magnetrise":"9a","lunaticbullet":"9a"},"lilywhite":{"springtidestorm":"9a","dazzlinggleam":"9a","fairywind":"9a","disarmingvoice":"9a","naturesmadness":"9a","leafstorm":"9a","solarbeam":"9a","petaldance":"9a","energyball":"9a","gigadrain":"9a","magicalleaf":"9a","megadrain":"9a","absorb":"9a","airslash":"9a","aircutter":"9a","uproar":"9a","hiddenpower":"9a","weatherball":"9a","playrough":"9a","petalblizzard":"9a","grassyglide":"9a","razorleaf":"9a","leafage":"9a","acrobatics":"9a","uturn":"9a","return":"9a","facade":"9a","fakeout":"9a","quickattack":"9a","flail":"9a","grassyterrain":"9a","aromatherapy":"9a","leechseed":"9a","lightscreen":"9a","reflect":"9a","growth":"9a","morningsun":"9a","wish":"9a","luckychant":"9a","safeguard":"9a","naturepower":"9a","helpinghand":"9a","tearfullook":"9a","ragepowder":"9a","sunnyday":"9a","charm":"9a","flowershield":"9a","mistyterrain":"9a","agility":"9a","teleport":"9a","powersplit":"9a","magiccoat":"9a","tailwind":"9a","defog":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","terablast":"9a","endure":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","bodyslam":"9a","curse":"9a","sweetkiss":"9a","babydolleyes":"9a","craftyshield":"9a","moonblast":"9a","drainingkiss":"9a","mistyexplosion":"9a","alluringvoice":"9a","velvetpress":"9a","synthesis":"9a","stunspore":"9a","ingrain":"9a","worryseed":"9a","trailblaze":"9a","grassknot":"9a","solarnectar":"9a","sweetscent":"9a","quiverdance":"9a","pollenpuff":"9a","healbell":"9a"},"lunasaprismriver":{"moonlight":"9a","shadowball":"9a","hex":"9a","nightshade":"9a","sparklingaria":"9a","waterpulse":"9a","moonblast":"9a","alluringvoice":"9a","disarmingvoice":"9a","clearsmog":"9a","smog":"9a","icywind":"9a","hypervoice":"9a","round":"9a","swift":"9a","echoedvoice":"9a","poltergeist":"9a","shadowpunch":"9a","shadowsneak":"9a","astonish":"9a","icepunch":"9a","spiritbreak":"9a","doubleedge":"9a","facade":"9a","covet":"9a","partingshot":"9a","memento":"9a","toxic":"9a","raindance":"9a","destinybond":"9a","calmmind":"9a","cosmicpower":"9a","telekinesis":"9a","perishsong":"9a","refresh":"9a","painsplit":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","willowisp":"9a","confuseray":"9a","spite":"9a","ominouswind":"9a","haze":"9a","torment":"9a","sing":"9a","psychic":"9a","psychicnoise":"9a","snarl":"9a","lunaticbullet":"9a"},"merlinprismriver":{"shadowball":"9a","hex":"9a","nightshade":"9a","psychicnoise":"9a","psybeam":"9a","confusion":"9a","psywave":"9a","shockwave":"9a","boomburst":"9a","hypervoice":"9a","uproar":"9a","round":"9a","swift":"9a","poltergeist":"9a","shadowclaw":"9a","shadowpunch":"9a","shadowsneak":"9a","astonish":"9a","thunderpunch":"9a","zenheadbutt":"9a","psychocut":"9a","doubleedge":"9a","facade":"9a","covet":"9a","taunt":"9a","torment":"9a","thunderwave":"9a","sunnyday":"9a","destinybond":"9a","agility":"9a","magiccoat":"9a","telekinesis":"9a","metalsound":"9a","encore":"9a","painsplit":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","willowisp":"9a","confuseray":"9a","spite":"9a","ominouswind":"9a","echoedvoice":"9a","alluringvoice":"9a","disarmingvoice":"9a","dazzlinggleam":"9a","teeterdance":"9a","nastyplot":"9a","sing":"9a","metronome":"9a","trick":"9a","lunaticbullet":"9a"},"lyricaprismriver":{"shadowball":"9a","hex":"9a","nightshade":"9a","torchsong":"9a","incinerate":"9a","airslash":"9a","alluringvoice":"9a","disarmingvoice":"9a","darkpulse":"9a","hypervoice":"9a","round":"9a","swift":"9a","echoedvoice":"9a","poltergeist":"9a","shadowpunch":"9a","shadowsneak":"9a","astonish":"9a","firepunch":"9a","suckerpunch":"9a","feintattack":"9a","doubleedge":"9a","facade":"9a","covet":"9a","snatch":"9a","embargo":"9a","willowisp":"9a","psychicterrain":"9a","destinybond":"9a","skillswap":"9a","barrier":"9a","healpulse":"9a","telekinesis":"9a","confide":"9a","painsplit":"9a","helpinghand":"9a","spotlight":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","bodyslam":"9a","curse":"9a","confuseray":"9a","spite":"9a","ominouswind":"9a","dazzlinggleam":"9a","uproar":"9a","calmmind":"9a","sing":"9a","teeterdance":"9a","psychicnoise":"9a","nastyplot":"9a","encore":"9a","trick":"9a","fakeout":"9a","lunaticbullet":"9a"},"youmukonpaku":{"icespinner":"9a","icepunch":"9a","focusblast":"9a","secretsword":"9a","aurasphere":"9a","vacuumwave":"9a","shadowball":"9a","ominouswind":"9a","aurorabeam":"9a","flashcannon":"9a","petaldance":"9a","magicalleaf":"9a","triattack":"9a","swift":"9a","terrainpulse":"9a","echoedvoice":"9a","sacredsword":"9a","submission":"9a","drainpunch":"9a","brickbreak":"9a","wakeupslap":"9a","forcepalm":"9a","phantomforce":"9a","shadowclaw":"9a","shadowpunch":"9a","shadowsneak":"9a","astonish":"9a","bulldoze":"9a","smartstrike":"9a","uturn":"9a","aerialace":"9a","acrobatics":"9a","knockoff":"9a","nightslash":"9a","leafblade":"9a","razorleaf":"9a","megakick":"9a","retaliate":"9a","quickattack":"9a","falseswipe":"9a","curse":"9a","calmmind":"9a","agility":"9a","gravity":"9a","skillswap":"9a","meditate":"9a","swordsdance":"9a","leer":"9a","disable":"9a","helpinghand":"9a","whirlwind":"9a","confuseray":"9a","snowscape":"9a","detect":"9a","quickguard":"9a","chillyreception":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","facade":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","bodyslam":"9a","bulkup":"9a","coaching":"9a","closecombat":"9a","machpunch":"9a","superpower":"9a","lowkick":"9a","highjumpkick":"9a","bodypress":"9a","rocksmash":"9a","lowsweep":"9a","reversal":"9a","focuspunch":"9a","shufflejab":"9a","dancingblow":"9a","willowisp":"9a","spite":"9a","painsplit":"9a","nightshade":"9a","destinybond":"9a","shadowstrike":"9a","hex":"9a","psychocut":"9a","xscissor":"9a","extremespeed":"9a","silverdagger":"9a","furycutter":"9a","cloudfist":"9a"},"yuyukosaigyouji":{"astralbarrage":"9a","shadowball":"9a","hex":"9a","nightshade":"9a","springtidestorm":"9a","moonblast":"9a","dazzlinggleam":"9a","drainingkiss":"9a","fairywind":"9a","leafstorm":"9a","petaldance":"9a","gigadrain":"9a","magicalleaf":"9a","megadrain":"9a","darkpulse":"9a","bugbuzz":"9a","icywind":"9a","shockwave":"9a","chillingwater":"9a","hyperbeam":"9a","round":"9a","weatherball":"9a","shadowforce":"9a","phantomforce":"9a","psychicnoise":"9a","shadowclaw":"9a","shadowpunch":"9a","shadowsneak":"9a","lick":"9a","spiritbreak":"9a","petalblizzard":"9a","razorleaf":"9a","doubleedge":"9a","bodyslam":"9a","megapunch":"9a","facade":"9a","falseswipe":"9a","stunspore":"9a","leechseed":"9a","grassyterrain":"9a","trickroom":"9a","mistyexplosion":"9a","mistyterrain":"9a","aromaticmist":"9a","haze":"9a","mist":"9a","curse":"9a","perishsong":"9a","disable":"9a","helpinghand":"9a","safeguard":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","gigaimpact":"9a","takedown":"9a","willowisp":"9a","confuseray":"9a","spite":"9a","painsplit":"9a","destinybond":"9a","shadowstrike":"9a","ominouswind":"9a","charm":"9a","sweetkiss":"9a","babydolleyes":"9a","craftyshield":"9a","playrough":"9a","alluringvoice":"9a","velvetpress":"9a","meanlook":"9a","calmmind":"9a","strengthsap":"9a","stockpile":"9a","swallow":"9a","spitup":"9a","belch":"9a","stuffcheeks":"9a","recycle":"9a","carrionfeast":"9a","grudge":"9a","lunaticbullet":"9a"},"ranyakumo":{"futuresight":"9a","psychic":"9a","psyshock":"9a","psybeam":"9a","storedpower":"9a","fireblast":"9a","flamethrower":"9a","incinerate":"9a","blizzard":"9a","icebeam":"9a","aurorabeam":"9a","thunder":"9a","thunderbolt":"9a","shockwave":"9a","darkpulse":"9a","snarl":"9a","shadowball":"9a","finalgambit":"9a","hyperbeam":"9a","triattack":"9a","swift":"9a","psychicfangs":"9a","psychocut":"9a","foulplay":"9a","crunch":"9a","bite":"9a","beatup":"9a","irontail":"9a","spinout":"9a","smartstrike":"9a","uturn":"9a","focuspunch":"9a","brickbreak":"9a","seismictoss":"9a","doubleedge":"9a","extremespeed":"9a","facade":"9a","rapidspin":"9a","tailslap":"9a","furyswipes":"9a","calmmind":"9a","meditate":"9a","skillswap":"9a","powerswap":"9a","magiccoat":"9a","lightscreen":"9a","reflect":"9a","teleport":"9a","healingwish":"9a","stealthrock":"9a","wideguard":"9a","taunt":"9a","sunnyday":"9a","raindance":"9a","disable":"9a","safeguard":"9a","endure":"9a","lockon":"9a","helpinghand":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","gigaimpact":"9a","takedown":"9a","bodyslam":"9a","curse":"9a","trickroom":"9a","trick":"9a","imprison":"9a","gravity":"9a","psychicterrain":"9a","allyswitch":"9a","magicroom":"9a","wonderroom":"9a","hypnosis":"9a","amnesia":"9a","agility":"9a","zenheadbutt":"9a","expandingforce":"9a","extrasensory":"9a","psychicnoise":"9a","confusion":"9a","dreameater":"9a","hypnowhirl":"9a","nastyplot":"9a","willowisp":"9a","mysticalfire":"9a","swordsdance":"9a","firepunch":"9a","lunaticbullet":"9a"},"yukariyakumo":{"spacialrend":"9a","futuresight":"9a","hyperspacehole":"9a","extrasensory":"9a","teleport":"9a","shikigamirush":"9a","psybeam":"9a","confusion":"9a","storedpower":"9a","psywave":"9a","darkpulse":"9a","shadowball":"9a","nightshade":"9a","earthpower":"9a","ancientpower":"9a","waterpledge":"9a","bubblebeam":"9a","chillingwater":"9a","bugbuzz":"9a","signalbeam":"9a","steelbeam":"9a","flashcannon":"9a","triattack":"9a","swift":"9a","psychocut":"9a","heartstamp":"9a","nightslash":"9a","knockoff":"9a","feintattack":"9a","payback":"9a","shadowsneak":"9a","earthquake":"9a","bulldoze":"9a","magnitude":"9a","rocktomb":"9a","steelroller":"9a","behemothbash":"9a","focuspunch":"9a","megapunch":"9a","covet":"9a","feint":"9a","spiderweb":"9a","eerieimpulse":"9a","taunt":"9a","snatch":"9a","switcheroo":"9a","heartswap":"9a","psychicterrain":"9a","trickroom":"9a","magicroom":"9a","wonderroom":"9a","raindance":"9a","fairylock":"9a","meanlook":"9a","glare":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","acrobatics":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","facade":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","calmmind":"9a","reflect":"9a","lightscreen":"9a","trick":"9a","magiccoat":"9a","imprison":"9a","gravity":"9a","skillswap":"9a","allyswitch":"9a","hypnosis":"9a","amnesia":"9a","agility":"9a","safeguard":"9a","psychic":"9a","psyshock":"9a","expandingforce":"9a","psychicnoise":"9a","dreameater":"9a","hypnowhirl":"9a","pursuit":"9a","thief":"9a","foulplay":"9a","faketears":"9a","torment":"9a","quash":"9a","wickedenergy":"9a","snarl":"9a","nastyplot":"9a","twilightexit":"9a","partingshot":"9a","barrier":"9a","lunaticbullet":"9a"},"suikaibuki":{"hiddenpower":"9a","earthpower":"9a","scorchingsands":"9a","mudbomb":"9a","focusblast":"9a","aurasphere":"9a","flamethrower":"9a","lavaplume":"9a","firespin":"9a","infernalparade":"9a","ancientpower":"9a","mistyexplosion":"9a","fairywind":"9a","hyperbeam":"9a","hypervoice":"9a","terrainpulse":"9a","wringout":"9a","earthquake":"9a","stompingtantrum":"9a","bulldoze":"9a","magnitude":"9a","focuspunch":"9a","closecombat":"9a","crosschop":"9a","brickbreak":"9a","drainpunch":"9a","upperhand":"9a","circlethrow":"9a","revenge":"9a","reversal":"9a","seismictoss":"9a","counter":"9a","megahorn":"9a","flareblitz":"9a","firepunch":"9a","playrough":"9a","stoneedge":"9a","rockslide":"9a","rocktomb":"9a","rockthrow":"9a","smackdown":"9a","gigaimpact":"9a","return":"9a","strength":"9a","facade":"9a","hornattack":"9a","visegrip":"9a","doublehit":"9a","calmmind":"9a","gravity":"9a","bulkup":"9a","curse":"9a","willowisp":"9a","sunnyday":"9a","stealthrock":"9a","mistyterrain":"9a","endure":"9a","focusenergy":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","terablast":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","spikes":"9a","sandstorm":"9a","sculptedarmor":"9a","highhorsepower":"9a","dig":"9a","drillrun":"9a","excavate":"9a","dustupheaval":"9a","mudshot":"9a","tremorshot":"9a","detect":"9a","quickguard":"9a","coaching":"9a","machpunch":"9a","superpower":"9a","lowkick":"9a","highjumpkick":"9a","bodypress":"9a","rocksmash":"9a","lowsweep":"9a","shufflejab":"9a","dancingblow":"9a","vacuumwave":"9a","icepunch":"9a","thunderpunch":"9a","cloudfist":"9a","heavyslam":"9a","mist":"9a","haze":"9a","growth":"9a"},"wrigglenightbug":{"bugbuzz":"9a","silverwind":"9a","strugglebug":"9a","blastburn":"9a","fireblast":"9a","inferno":"9a","mysticalfire":"9a","firespin":"9a","meteorbeam":"9a","darkpulse":"9a","dazzlinggleam":"9a","drainingkiss":"9a","sludgewave":"9a","venoshock":"9a","solarbeam":"9a","gigadrain":"9a","megadrain":"9a","storedpower":"9a","hyperbeam":"9a","swift":"9a","hiddenpower":"9a","firstimpression":"9a","attackorder":"9a","lunge":"9a","uturn":"9a","skittersmack":"9a","fellstinger":"9a","highjumpkick":"9a","jumpkick":"9a","drainpunch":"9a","nightslash":"9a","knockoff":"9a","poisonjab":"9a","crosspoison":"9a","poisonsting":"9a","fly":"9a","aerialace":"9a","acrobatics":"9a","dualwingbeat":"9a","blazekick":"9a","firepunch":"9a","flamecharge":"9a","trailblaze":"9a","doubleedge":"9a","megapunch":"9a","chipaway":"9a","retaliate":"9a","quickattack":"9a","tailglow":"9a","quiverdance":"9a","toxic":"9a","toxicspikes":"9a","willowisp":"9a","taunt":"9a","snatch":"9a","sandstorm":"9a","swagger":"9a","confide":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","weatherball":"9a","terablast":"9a","endure":"9a","facade":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","stringshot":"9a","ragepowder":"9a","chrysalisveil":"9a","xscissor":"9a","leechlife":"9a","megahorn":"9a","pounce":"9a","bugbite":"9a","hivefrenzy":"9a","signalbeam":"9a","pollenpuff":"9a","swordsdance":"9a","dancingblow":"9a"},"mystialorelei":{"darkpulse":"9a","snarl":"9a","hurricane":"9a","airslash":"9a","aircutter":"9a","gust":"9a","psychicnoise":"9a","sludgebomb":"9a","venoshock":"9a","smog":"9a","focusblast":"9a","bugbuzz":"9a","silverwind":"9a","incinerate":"9a","alluringvoice":"9a","disarmingvoice":"9a","hypervoice":"9a","uproar":"9a","round":"9a","foulplay":"9a","throatchop":"9a","suckerpunch":"9a","knockoff":"9a","feintattack":"9a","payback":"9a","bravebird":"9a","fly":"9a","drillpeck":"9a","wingattack":"9a","aerialace":"9a","dualwingbeat":"9a","peck":"9a","orderup":"9a","scaleshot":"9a","gunkshot":"9a","poisonjab":"9a","crosspoison":"9a","firstimpression":"9a","xscissor":"9a","uturn":"9a","drillrun":"9a","steelwing":"9a","lastresort":"9a","doubleedge":"9a","slash":"9a","fakeout":"9a","quickattack":"9a","taunt":"9a","roost":"9a","defog":"9a","tailwind":"9a","haze":"9a","toxic":"9a","followme":"9a","endure":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","facade":"9a","return":"9a","frustration":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","pursuit":"9a","thief":"9a","faketears":"9a","torment":"9a","quash":"9a","wickedenergy":"9a","nastyplot":"9a","featherdance":"9a","sing":"9a"},"keine":{"wideguard":"9a","roar":"9a","hypervoice":"9a","steelbeam":"9a","flashcannon":"9a","mirrorshot":"9a","tachyoncutter":"9a","hyperbeam":"9a","triattack":"9a","swift":"9a","terrainpulse":"9a","roaroftime":"9a","dracometeor":"9a","dragonpulse":"9a","twister":"9a","thunder":"9a","thunderbolt":"9a","risingvoltage":"9a","voltswitch":"9a","darkpulse":"9a","psychic":"9a","psychicnoise":"9a","mirrorcoat":"9a","earthpower":"9a","ancientpower":"9a","shadowball":"9a","steelroller":"9a","ironhead":"9a","metalclaw":"9a","metalburst":"9a","gigaimpact":"9a","lastresort":"9a","doubleedge":"9a","headbutt":"9a","facade":"9a","feint":"9a","outrage":"9a","dragonrush":"9a","dragonclaw":"9a","breakingswipe":"9a","zenheadbutt":"9a","nightslash":"9a","brutalswing":"9a","earthquake":"9a","bulldoze":"9a","hammerarm":"9a","sacredsword":"9a","brickbreak":"9a","thunderpunch":"9a","irondefense":"9a","metalsound":"9a","meanlook":"9a","instruct":"9a","nobleroar":"9a","healbell":"9a","moonlight":"9a","meditate":"9a","amnesia":"9a","lightscreen":"9a","reflect":"9a","agility":"9a","raindance":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","autotomize":"9a","bulletpunch":"9a","heavyslam":"9a","gyroball":"9a","smartstrike":"9a","missile":"9a","encore":"9a","yawn":"9a","wish":"9a","charm":"9a","workup":"9a","batonpass":"9a","disable":"9a","screech":"9a","hustleup":"9a","uproar":"9a","quickattack":"9a","swordsdance":"9a","retaliate":"9a","crushclaw":"9a","thrash":"9a","echoedvoice":"9a","headsmash":"9a","megahorn":"9a","hornattack":"9a","calmmind":"9a","futuresight":"9a","extrasensory":"9a","imprison":"9a","bodypress":"9a","silverdagger":"9a"},"tewiinaba":{"round":"9a","swift":"9a","trumpcard":"9a","wringout":"9a","moonblast":"9a","dazzlinggleam":"9a","drainingkiss":"9a","disarmingvoice":"9a","hex":"9a","grasspledge":"9a","magicalleaf":"9a","lastresort":"9a","doubleedge":"9a","return":"9a","megapunch":"9a","retaliate":"9a","facade":"9a","covet":"9a","quickattack":"9a","fakeout":"9a","feint":"9a","playrough":"9a","woodhammer":"9a","grassyglide":"9a","suckerpunch":"9a","feintattack":"9a","thief":"9a","bounce":"9a","pounce":"9a","taunt":"9a","faketears":"9a","nastyplot":"9a","snatch":"9a","torment":"9a","embargo":"9a","moonlight":"9a","craftyshield":"9a","charm":"9a","babydolleyes":"9a","thunderwave":"9a","spikes":"9a","quickguard":"9a","agility":"9a","roleplay":"9a","luckychant":"9a","encore":"9a","tearfullook":"9a","mefirst":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","frustration":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","yawn":"9a","wish":"9a","healbell":"9a","workup":"9a","batonpass":"9a","disable":"9a","screech":"9a","hustleup":"9a","uproar":"9a","headbutt":"9a","swordsdance":"9a","crushclaw":"9a","thrash":"9a","hypervoice":"9a","triattack":"9a","echoedvoice":"9a","sweetkiss":"9a","mistyterrain":"9a","mistyexplosion":"9a","fairywind":"9a","alluringvoice":"9a","velvetpress":"9a","highjumpkick":"9a","dig":"9a","doublekick":"9a","knockoff":"9a","trick":"9a","partingshot":"9a","superfang":"9a"},"reiseninaba":{"overdrive":"9a","voltswitch":"9a","shockwave":"9a","thundershock":"9a","futuresight":"9a","freezingglare":"9a","psychicnoise":"9a","psybeam":"9a","confusion":"9a","lunaticbullet":"9a","heatwave":"9a","signalbeam":"9a","vacuumwave":"9a","hyperbeam":"9a","hypervoice":"9a","swift":"9a","supercellslam":"9a","wildcharge":"9a","thunderpunch":"9a","spark":"9a","jumpkick":"9a","brickbreak":"9a","lastresort":"9a","doubleedge":"9a","megakick":"9a","facade":"9a","quickattack":"9a","feint":"9a","thunderwave":"9a","charge":"9a","electricterrain":"9a","eerieimpulse":"9a","psychicterrain":"9a","trick":"9a","agility":"9a","confuseray":"9a","confide":"9a","encore":"9a","glare":"9a","meanlook":"9a","endure":"9a","acupressure":"9a","yawn":"9a","disable":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","calmmind":"9a","reflect":"9a","lightscreen":"9a","trickroom":"9a","magiccoat":"9a","teleport":"9a","imprison":"9a","gravity":"9a","skillswap":"9a","allyswitch":"9a","magicroom":"9a","wonderroom":"9a","hypnosis":"9a","amnesia":"9a","safeguard":"9a","zenheadbutt":"9a","psychocut":"9a","psychicfangs":"9a","psychic":"9a","psyshock":"9a","expandingforce":"9a","extrasensory":"9a","storedpower":"9a","dreameater":"9a","hypnowhirl":"9a","magnetrise":"9a","thunderfang":"9a","voltaiclance":"9a","sparkscamper":"9a","thunderbolt":"9a","thunder":"9a","discharge":"9a","electroball":"9a","chargebeam":"9a","electroweb":"9a","nastyplot":"9a","uturn":"9a","aurasphere":"9a","lockon":"9a","zapcannon":"9a"},"eirinyagokoro":{"nervepoison":"9a","venoshock":"9a","clearsmog":"9a","psychic":"9a","psyshock":"9a","extrasensory":"9a","psychicnoise":"9a","confusion":"9a","moonblast":"9a","dazzlinggleam":"9a","surf":"9a","bubblebeam":"9a","chillingwater":"9a","shadowball":"9a","silverwind":"9a","hyperbeam":"9a","swift":"9a","terrainpulse":"9a","poisonjab":"9a","crosspoison":"9a","psychocut":"9a","heartstamp":"9a","thousandarrows":"9a","magnitude":"9a","smartstrike":"9a","nightslash":"9a","knockoff":"9a","toxic":"9a","corrosivegas":"9a","poisongas":"9a","purify":"9a","acidarmor":"9a","barrier":"9a","cosmicpower":"9a","powersplit":"9a","trickroom":"9a","miracleeye":"9a","healpulse":"9a","psychicterrain":"9a","lunarblessing":"9a","sunnyday":"9a","raindance":"9a","snowscape":"9a","craftyshield":"9a","recover":"9a","healbell":"9a","acupressure":"9a","safeguard":"9a","psychup":"9a","swordsdance":"9a","disable":"9a","helpinghand":"9a","metronome":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","facade":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","gigaimpact":"9a","takedown":"9a","bodyslam":"9a","curse":"9a","toxicspikes":"9a","gastroacid":"9a","gunkshot":"9a","poisonfang":"9a","sludgebomb":"9a","sludgewave":"9a","acidspray":"9a","sludge":"9a","oxidize":"9a","calmmind":"9a","reflect":"9a","lightscreen":"9a","trick":"9a","magiccoat":"9a","teleport":"9a","imprison":"9a","gravity":"9a","skillswap":"9a","allyswitch":"9a","magicroom":"9a","wonderroom":"9a","hypnosis":"9a","amnesia":"9a","agility":"9a","zenheadbutt":"9a","psychicfangs":"9a","psybeam":"9a","futuresight":"9a","expandingforce":"9a","storedpower":"9a","dreameater":"9a","hypnowhirl":"9a","refresh":"9a","wish":"9a","lunaticbullet":"9a"},"kaguyahouraisan":{"moonblast":"9a","dazzlinggleam":"9a","disarmingvoice":"9a","lusterpurge":"9a","psychic":"9a","expandingforce":"9a","confusion":"9a","mysticalfire":"9a","waterpledge":"9a","waterpulse":"9a","powergem":"9a","ancientpower":"9a","hyperbeam":"9a","swift":"9a","weatherball":"9a","spiritbreak":"9a","psychocut":"9a","rocktomb":"9a","smackdown":"9a","megapunch":"9a","retaliate":"9a","recover":"9a","confide":"9a","safeguard":"9a","mistyterrain":"9a","burningbulwark":"9a","sunnyday":"9a","auroraveil":"9a","magiccoat":"9a","cosmicpower":"9a","healingwish":"9a","lunarblessing":"9a","stealthrock":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","facade":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","charm":"9a","sweetkiss":"9a","babydolleyes":"9a","craftyshield":"9a","drainingkiss":"9a","mistyexplosion":"9a","fairywind":"9a","alluringvoice":"9a","velvetpress":"9a","moonlight":"9a","dragonpulse":"9a","flamethrower":"9a","airslash":"9a","calmmind":"9a","meteorbeam":"9a","earthpower":"9a"},"fujiwaranomokou":{"blastburn":"9a","burnup":"9a","overheat":"9a","fireblast":"9a","flamethrower":"9a","lavaplume":"9a","flameburst":"9a","inferno":"9a","ember":"9a","focusblast":"9a","aurasphere":"9a","shadowball":"9a","hex":"9a","ancientpower":"9a","hyperbeam":"9a","echoedvoice":"9a","flareblitz":"9a","blazekick":"9a","firepunch":"9a","flamewheel":"9a","flamecharge":"9a","meteorassault":"9a","highjumpkick":"9a","skyuppercut":"9a","brickbreak":"9a","stormthrow":"9a","poweruppunch":"9a","bravebird":"9a","aerialace":"9a","acrobatics":"9a","wildcharge":"9a","shadowclaw":"9a","explosion":"9a","gigaimpact":"9a","doubleedge":"9a","megakick":"9a","quickattack":"9a","defog":"9a","taunt":"9a","sunnyday":"9a","bulkup":"9a","agility":"9a","painsplit":"9a","recover":"9a","smokescreen":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","facade":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","willowisp":"9a","firefang":"9a","temperflare":"9a","heatcrash":"9a","heatwave":"9a","mysticalfire":"9a","incinerate":"9a","firespin":"9a","detect":"9a","quickguard":"9a","coaching":"9a","closecombat":"9a","drainpunch":"9a","machpunch":"9a","superpower":"9a","lowkick":"9a","bodypress":"9a","rocksmash":"9a","lowsweep":"9a","reversal":"9a","focuspunch":"9a","shufflejab":"9a","dancingblow":"9a","vacuumwave":"9a","roost":"9a","memento":"9a","cloudfist":"9a"},"ayashameimaru":{"hurricane":"9a","bleakwindstorm":"9a","airslash":"9a","aircutter":"9a","gust":"9a","leafstorm":"9a","magicalleaf":"9a","leaftornado":"9a","waterpulse":"9a","chillingwater":"9a","thunder":"9a","focusblast":"9a","vacuumwave":"9a","hyperbeam":"9a","hypervoice":"9a","uproar":"9a","skyattack":"9a","bravebird":"9a","fly":"9a","dualwingbeat":"9a","wingattack":"9a","aerialace":"9a","acrobatics":"9a","peck":"9a","focuspunch":"9a","skyuppercut":"9a","brickbreak":"9a","foulplay":"9a","knockoff":"9a","feintattack":"9a","razorleaf":"9a","xscissor":"9a","uturn":"9a","steelwing":"9a","gigaimpact":"9a","doubleedge":"9a","extremespeed":"9a","slash":"9a","quickattack":"9a","holdback":"9a","feint":"9a","roost":"9a","tailwind":"9a","defog":"9a","quickguard":"9a","raindance":"9a","agility":"9a","taunt":"9a","switcheroo":"9a","encore":"9a","workup":"9a","confide":"9a","entrainment":"9a","mimic":"9a","supersonic":"9a","helpinghand":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","facade":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","takedown":"9a","bodyslam":"9a","curse":"9a","featherdance":"9a","drillpeck":"9a","cloudfist":"9a","swordsdance":"9a","heatwave":"9a","whirlwind":"9a","twister":"9a","dancingblow":"9a"},"medicinemelancholy":{"sludgewave":"9a","sludgebomb":"9a","nervepoison":"9a","venoshock":"9a","sludge":"9a","clearsmog":"9a","acidspray":"9a","smog":"9a","darkpulse":"9a","petaldance":"9a","grasspledge":"9a","gigadrain":"9a","megadrain":"9a","pollenpuff":"9a","strugglebug":"9a","strangesteam":"9a","drainingkiss":"9a","hex":"9a","icywind":"9a","round":"9a","poisonjab":"9a","crosspoison":"9a","shadowpunch":"9a","shadowsneak":"9a","razorleaf":"9a","lashout":"9a","payback":"9a","gigaimpact":"9a","frustration":"9a","chipaway":"9a","covet":"9a","toxic":"9a","toxicspikes":"9a","venomdrench":"9a","corrosivegas":"9a","ragepowder":"9a","strengthsap":"9a","stunspore":"9a","haze":"9a","destinybond":"9a","spite":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","bodypress":"9a","acidarmor":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","facade":"9a","return":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","gastroacid":"9a","oxidize":"9a","calmmind":"9a","painsplit":"9a","leechseed":"9a","poisonpowder":"9a","synthesis":"9a","energyball":"9a"},"yuukakazami":{"frenzyplant":"9a","solarbeam":"9a","petaldance":"9a","energyball":"9a","grasspledge":"9a","gigadrain":"9a","magicalleaf":"9a","absorb":"9a","fleurcannon":"9a","dazzlinggleam":"9a","focusblast":"9a","twister":"9a","zapcannon":"9a","hyperbeam":"9a","swift":"9a","weatherball":"9a","solarblade":"9a","powerwhip":"9a","petalblizzard":"9a","razorleaf":"9a","vinewhip":"9a","superpower":"9a","dynamicpunch":"9a","revenge":"9a","temperflare":"9a","headlongrush":"9a","earthquake":"9a","magnitude":"9a","brutalswing":"9a","breakingswipe":"9a","gigaimpact":"9a","frustration":"9a","facade":"9a","falseswipe":"9a","grassyterrain":"9a","worryseed":"9a","sunnyday":"9a","growth":"9a","meanlook":"9a","bulkup":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","seedflare":"9a","toxic":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","leechseed":"9a","synthesis":"9a","stunspore":"9a","ingrain":"9a","trailblaze":"9a","leafblade":"9a","seedbomb":"9a","bulletseed":"9a","swordsdance":"9a","leafstorm":"9a","grassknot":"9a","solarnectar":"9a","woodhammer":"9a","trickroom":"9a","drainpunch":"9a","dancingblow":"9a"},"komachionozuka":{"swordsdance":"9a","surf":"9a","muddywater":"9a","brine":"9a","waterpulse":"9a","chillingwater":"9a","shadowball":"9a","nightshade":"9a","makeitrain":"9a","mirrorshot":"9a","mirrorcoat":"9a","icebeam":"9a","round":"9a","liquidation":"9a","aquacutter":"9a","spiritshackle":"9a","shadowpunch":"9a","astonish":"9a","throatchop":"9a","nightslash":"9a","payback":"9a","aerialace":"9a","icespinner":"9a","icepunch":"9a","furycutter":"9a","doubleedge":"9a","megapunch":"9a","slash":"9a","cut":"9a","curse":"9a","destinybond":"9a","trickroom":"9a","wideguard":"9a","detect":"9a","raindance":"9a","aquaring":"9a","snowscape":"9a","metalsound":"9a","skillswap":"9a","slackoff":"9a","yawn":"9a","courtchange":"9a","helpinghand":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","facade":"9a","return":"9a","frustration":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","bodyslam":"9a","soak":"9a","lifedew":"9a","flipturn":"9a","waterfall":"9a","aquajet":"9a","aquatail":"9a","dive":"9a","wavecharge":"9a","superscope3d":"9a","willowisp":"9a","confuseray":"9a","spite":"9a","painsplit":"9a","shadowclaw":"9a","shadowsneak":"9a","phantomforce":"9a","shadowstrike":"9a","psychocut":"9a","xscissor":"9a","razorshell":"9a","sacredsword":"9a","silverdagger":"9a","waterplates":"9a"},"eikishiki":{"judgment":"9a","hypervoice":"9a","triattack":"9a","swift":"9a","terrainpulse":"9a","focusblast":"9a","shadowball":"9a","fireblast":"9a","incinerate":"9a","dazzlinggleam":"9a","waterpulse":"9a","psychic":"9a","storedpower":"9a","mirrorcoat":"9a","gigaimpact":"9a","doubleedge":"9a","return":"9a","slash":"9a","cut":"9a","sacredsword":"9a","submission":"9a","woodhammer":"9a","leafblade":"9a","aquacutter":"9a","thunderpunch":"9a","shadowpunch":"9a","aerialace":"9a","swordsdance":"9a","perishsong":"9a","disable":"9a","confide":"9a","lifedew":"9a","calmmind":"9a","curse":"9a","irondefense":"9a","mistyterrain":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","facade":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","encore":"9a","yawn":"9a","wish":"9a","healbell":"9a","charm":"9a","workup":"9a","batonpass":"9a","screech":"9a","hustleup":"9a","uproar":"9a","quickattack":"9a","headbutt":"9a","retaliate":"9a","crushclaw":"9a","thrash":"9a","echoedvoice":"9a","psyshock":"9a","flashcannon":"9a","punishment":"9a","quash":"9a","torment":"9a","imprison":"9a","darkpulse":"9a","aurasphere":"9a"},"shizuhaaki":{"leafstorm":"9a","energyball":"9a","grasspledge":"9a","gigadrain":"9a","magicalleaf":"9a","leaftornado":"9a","absorb":"9a","heatwave":"9a","incinerate":"9a","venoshock":"9a","clearsmog":"9a","hurricane":"9a","bleakwindstorm":"9a","aircutter":"9a","extrasensory":"9a","icywind":"9a","hyperbeam":"9a","razorwind":"9a","swift":"9a","petalblizzard":"9a","gravapple":"9a","grassyglide":"9a","razorleaf":"9a","leafage":"9a","highjumpkick":"9a","jumpkick":"9a","suckerpunch":"9a","knockoff":"9a","uturn":"9a","thunderpunch":"9a","icepunch":"9a","shadowclaw":"9a","poisonjab":"9a","megakick":"9a","frustration":"9a","leechseed":"9a","synthesis":"9a","stunspore":"9a","toxic":"9a","poisonpowder":"9a","corrosivegas":"9a","tailwind":"9a","agility":"9a","recycle":"9a","afteryou":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","facade":"9a","return":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","grassyterrain":"9a","ingrain":"9a","worryseed":"9a","trailblaze":"9a","leafblade":"9a","seedbomb":"9a","powerwhip":"9a","bulletseed":"9a","swordsdance":"9a","solarbeam":"9a","grassknot":"9a","solarnectar":"9a","solarblade":"9a"},"minorikoaki":{"solarbeam":"9a","energyball":"9a","appleacid":"9a","magicalleaf":"9a","earthpower":"9a","mudshot":"9a","dazzlinggleam":"9a","ancientpower":"9a","hiddenpower":"9a","round":"9a","terrainpulse":"9a","weatherball":"9a","seedbomb":"9a","grassyglide":"9a","leafage":"9a","earthquake":"9a","bulldoze":"9a","rocktomb":"9a","rockthrow":"9a","seismictoss":"9a","doubleedge":"9a","takedown":"9a","facade":"9a","flail":"9a","synthesis":"9a","leechseed":"9a","cottonspore":"9a","grassyterrain":"9a","stunspore":"9a","stockpile":"9a","growth":"9a","recycle":"9a","stealthrock":"9a","wideguard":"9a","rototiller":"9a","sunnyday":"9a","raindance":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","ingrain":"9a","worryseed":"9a","trailblaze":"9a","gigadrain":"9a","leafstorm":"9a","grassknot":"9a","petalblizzard":"9a","solarnectar":"9a","spikes":"9a","sandstorm":"9a","sculptedarmor":"9a","scorchingsands":"9a","mudbomb":"9a","tremorshot":"9a","stuffcheeks":"9a"},"hinakagiyama":{"sludgewave":"9a","sludgebomb":"9a","venoshock":"9a","acidspray":"9a","smog":"9a","darkpulse":"9a","fireblast":"9a","flamethrower":"9a","firespin":"9a","shadowball":"9a","hex":"9a","triattack":"9a","round":"9a","gunkshot":"9a","noxioustorque":"9a","poisonjab":"9a","crosspoison":"9a","mortalspin":"9a","lashout":"9a","payback":"9a","fling":"9a","flamewheel":"9a","uturn":"9a","frustration":"9a","bodyslam":"9a","slash":"9a","quickattack":"9a","painsplit":"9a","safeguard":"9a","curse":"9a","toxic":"9a","venomdrench":"9a","willowisp":"9a","snowscape":"9a","quickguard":"9a","powersplit":"9a","trickroom":"9a","powerswap":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","facade":"9a","return":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","toxicspikes":"9a","acidarmor":"9a","gastroacid":"9a","clearsmog":"9a","sludge":"9a","oxidize":"9a","pursuit":"9a","thief":"9a","foulplay":"9a","taunt":"9a","knockoff":"9a","faketears":"9a","torment":"9a","quash":"9a","wickedenergy":"9a","snarl":"9a","nastyplot":"9a","rapidspin":"9a","teeterdance":"9a","grudge":"9a","spite":"9a","memento":"9a","haze":"9a","gyroball":"9a","nervepoison":"9a"},"nitorikawashiro":{"hydrocannon":"9a","hydropump":"9a","surf":"9a","snipeshot":"9a","bubblebeam":"9a","waterpulse":"9a","chillingwater":"9a","bubble":"9a","whirlpool":"9a","steelbeam":"9a","flashcannon":"9a","discharge":"9a","voltswitch":"9a","electroweb":"9a","icebeam":"9a","ancientpower":"9a","hyperbeam":"9a","waterfall":"9a","dive":"9a","flipturn":"9a","aquajet":"9a","superscope3d":"9a","ironhead":"9a","magnetbomb":"9a","supercellslam":"9a","spark":"9a","bulldoze":"9a","hammerarm":"9a","gigaimpact":"9a","lastresort":"9a","megapunch":"9a","facade":"9a","covet":"9a","quickattack":"9a","soak":"9a","raindance":"9a","aquaring":"9a","watersport":"9a","shiftgear":"9a","irondefense":"9a","spikes":"9a","charge":"9a","eerieimpulse":"9a","recycle":"9a","lockon":"9a","workup":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","risingvoltage":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","lifedew":"9a","liquidation":"9a","aquatail":"9a","wavecharge":"9a","scald":"9a","muddywater":"9a","brine":"9a","undertow":"9a","autotomize":"9a","metalsound":"9a","bulletpunch":"9a","heavyslam":"9a","gyroball":"9a","smartstrike":"9a","metalclaw":"9a","missile":"9a","mirrorshot":"9a","waterspout":"9a","thunderbolt":"9a","electroball":"9a","magnetrise":"9a","trick":"9a","zapcannon":"9a"},"momijiinubashiri":{"steelbeam":"9a","flashcannon":"9a","mirrorshot":"9a","focusblast":"9a","aurasphere":"9a","mirrorcoat":"9a","hurricane":"9a","airslash":"9a","aircutter":"9a","petaldance":"9a","magicalleaf":"9a","hyperbeam":"9a","hypervoice":"9a","round":"9a","behemothblade":"9a","ironhead":"9a","smartstrike":"9a","metalclaw":"9a","meteorassault":"9a","closecombat":"9a","sacredsword":"9a","bodypress":"9a","submission":"9a","brickbreak":"9a","vitalthrow":"9a","circlethrow":"9a","reversal":"9a","counter":"9a","bite":"9a","feintattack":"9a","payback":"9a","waterfall":"9a","thunderfang":"9a","aerialace":"9a","acrobatics":"9a","bugbite":"9a","poisonfang":"9a","gigaimpact":"9a","return":"9a","retaliate":"9a","facade":"9a","quickattack":"9a","feint":"9a","quickguard":"9a","detect":"9a","bulkup":"9a","irondefense":"9a","stealthrock":"9a","sandstorm":"9a","taunt":"9a","quash":"9a","embargo":"9a","helpinghand":"9a","swordsdance":"9a","leer":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","extremespeed":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","frustration":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","takedown":"9a","bodyslam":"9a","curse":"9a","autotomize":"9a","metalsound":"9a","bulletpunch":"9a","heavyslam":"9a","gyroball":"9a","missile":"9a","coaching":"9a","drainpunch":"9a","machpunch":"9a","superpower":"9a","lowkick":"9a","highjumpkick":"9a","rocksmash":"9a","lowsweep":"9a","focuspunch":"9a","shufflejab":"9a","dancingblow":"9a","crunch":"9a","firefang":"9a","icefang":"9a","psychicfangs":"9a","howl":"9a","roar":"9a","wideguard":"9a","nightslash":"9a","silverdagger":"9a","cloudfist":"9a","ironchomp":"9a"},"sanaekochiya":{"surf":"9a","waterpledge":"9a","bubblebeam":"9a","waterpulse":"9a","chillingwater":"9a","watergun":"9a","whirlpool":"9a","hurricane":"9a","airslash":"9a","aircutter":"9a","gust":"9a","thunder":"9a","thunderbolt":"9a","shockwave":"9a","energyball":"9a","dazzlinggleam":"9a","futuresight":"9a","psychic":"9a","psybeam":"9a","triattack":"9a","swift":"9a","weatherball":"9a","liquidation":"9a","waterfall":"9a","fly":"9a","acrobatics":"9a","spiritbreak":"9a","psychocut":"9a","trailblaze":"9a","return":"9a","facade":"9a","flail":"9a","wish":"9a","healbell":"9a","acupressure":"9a","helpinghand":"9a","safeguard":"9a","naturepower":"9a","psychup":"9a","healingwish":"9a","agility":"9a","lightscreen":"9a","reflect":"9a","calmmind":"9a","wideguard":"9a","aquaring":"9a","raindance":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","bodyslam":"9a","curse":"9a","roost":"9a","tailwind":"9a","defog":"9a","featherdance":"9a","uturn":"9a","soak":"9a","lifedew":"9a","flipturn":"9a","scald":"9a","hydropump":"9a","muddywater":"9a","brine":"9a","undertow":"9a","icebeam":"9a","miracleeye":"9a","meteorbeam":"9a"},"kanakoyasaka":{"earthpower":"9a","mudbomb":"9a","hurricane":"9a","aircutter":"9a","waterpulse":"9a","shadowball":"9a","flashcannon":"9a","mirrorshot":"9a","triattack":"9a","earthquake":"9a","stompingtantrum":"9a","bulldoze":"9a","magnitude":"9a","skyattack":"9a","fly":"9a","woodhammer":"9a","grassyglide":"9a","steelroller":"9a","smartstrike":"9a","thunderpunch":"9a","stoneedge":"9a","rockslide":"9a","steamroller":"9a","gigaimpact":"9a","frustration":"9a","facade":"9a","spikes":"9a","stealthrock":"9a","sandstorm":"9a","wideguard":"9a","taunt":"9a","raindance":"9a","lifedew":"9a","whirlwind":"9a","glare":"9a","naturepower":"9a","confide":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","sculptedarmor":"9a","highhorsepower":"9a","dig":"9a","drillrun":"9a","excavate":"9a","dustupheaval":"9a","roost":"9a","tailwind":"9a","defog":"9a","featherdance":"9a","uturn":"9a","bravebird":"9a","drillpeck":"9a","acrobatics":"9a","aerialace":"9a","dualwingbeat":"9a","cloudfist":"9a","heavyslam":"9a","coil":"9a","swordsdance":"9a","crunch":"9a","superpower":"9a","dancingblow":"9a"},"suwakomoriya":{"hydropump":"9a","surf":"9a","scald":"9a","muddywater":"9a","brine":"9a","bubblebeam":"9a","bubble":"9a","earthpower":"9a","mudshot":"9a","mudslap":"9a","sludgebomb":"9a","shadowball":"9a","hex":"9a","lavaplume":"9a","ancientpower":"9a","liquidation":"9a","waterfall":"9a","aquajet":"9a","earthquake":"9a","landswrath":"9a","dig":"9a","bounce":"9a","gunkshot":"9a","rockslide":"9a","rocktomb":"9a","geargrind":"9a","uturn":"9a","curse":"9a","toxic":"9a","stealthrock":"9a","calmmind":"9a","raindance":"9a","watersport":"9a","mudsport":"9a","yawn":"9a","naturepower":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","facade":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","aquaring":"9a","soak":"9a","lifedew":"9a","flipturn":"9a","aquatail":"9a","dive":"9a","wavecharge":"9a","superscope3d":"9a","waterpulse":"9a","whirlpool":"9a","chillingwater":"9a","undertow":"9a","spikes":"9a","sandstorm":"9a","sculptedarmor":"9a","highhorsepower":"9a","bulldoze":"9a","stompingtantrum":"9a","drillrun":"9a","excavate":"9a","dustupheaval":"9a","scorchingsands":"9a","mudbomb":"9a","tremorshot":"9a","hypnosis":"9a","grudge":"9a","flashcannon":"9a","waterplates":"9a"},"ikunagae":{"dracometeor":"9a","dragonpulse":"9a","twister":"9a","thunder":"9a","wildboltstorm":"9a","thunderbolt":"9a","discharge":"9a","thundershock":"9a","surf":"9a","fierydance":"9a","revelationdance":"9a","swift":"9a","weatherball":"9a","dragonrush":"9a","dragonclaw":"9a","dualchop":"9a","supercellslam":"9a","thunderpunch":"9a","spark":"9a","dragonascent":"9a","waterfall":"9a","flipturn":"9a","aquajet":"9a","gigaimpact":"9a","megapunch":"9a","rapidspin":"9a","dragondance":"9a","dragoncheer":"9a","charge":"9a","electricterrain":"9a","thunderwave":"9a","raindance":"9a","aquaring":"9a","watersport":"9a","agility":"9a","defog":"9a","tailwind":"9a","laserfocus":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","recover":"9a","toxic":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","facade":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","dragontail":"9a","outrage":"9a","scaleshot":"9a","breakingswipe":"9a","dragonbreath":"9a","eerieimpulse":"9a","magnetrise":"9a","voltswitch":"9a","wildcharge":"9a","thunderfang":"9a","voltaiclance":"9a","sparkscamper":"9a","electroball":"9a","shockwave":"9a","chargebeam":"9a","electroweb":"9a","calmmind":"9a","hydropump":"9a","aquatail":"9a","hurricane":"9a"},"tenshihinanawi":{"earthpower":"9a","scorchingsands":"9a","meteorbeam":"9a","powergem":"9a","ancientpower":"9a","hurricane":"9a","airslash":"9a","aircutter":"9a","lusterpurge":"9a","extrasensory":"9a","hyperbeam":"9a","earthquake":"9a","drillrun":"9a","bulldoze":"9a","magnitude":"9a","rockwrecker":"9a","stoneedge":"9a","mightycleave":"9a","rockslide":"9a","rocktomb":"9a","rockthrow":"9a","smackdown":"9a","rockblast":"9a","sacredsword":"9a","drainpunch":"9a","poweruppunch":"9a","skyattack":"9a","aerialace":"9a","temperflare":"9a","wildcharge":"9a","slash":"9a","stealthrock":"9a","rockpolish":"9a","sandstorm":"9a","snowscape":"9a","sunnyday":"9a","raindance":"9a","taunt":"9a","mistyterrain":"9a","defog":"9a","haze":"9a","morningsun":"9a","acupressure":"9a","luckychant":"9a","whirlwind":"9a","focusenergy":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","swordsdance":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","facade":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","spikes":"9a","sculptedarmor":"9a","highhorsepower":"9a","dig":"9a","stompingtantrum":"9a","excavate":"9a","dustupheaval":"9a","wideguard":"9a","craghammer":"9a","counter":"9a","metalburst":"9a","reversal":"9a","bodypress":"9a","irondefense":"9a","headsmash":"9a"},"kisume":{"powergem":"9a","ancientpower":"9a","darkpulse":"9a","fireblast":"9a","firepledge":"9a","incinerate":"9a","ember":"9a","firespin":"9a","shadowball":"9a","hex":"9a","uproar":"9a","razorwind":"9a","stoneedge":"9a","rockslide":"9a","rocktomb":"9a","smackdown":"9a","rockblast":"9a","foulplay":"9a","jawlock":"9a","crunch":"9a","suckerpunch":"9a","knockoff":"9a","nightslash":"9a","feintattack":"9a","payback":"9a","flareblitz":"9a","firepunch":"9a","flamecharge":"9a","bonerush":"9a","ironhead":"9a","bodypress":"9a","waterfall":"9a","playrough":"9a","firstimpression":"9a","lunge":"9a","pounce":"9a","gigaimpact":"9a","facade":"9a","fakeout":"9a","rockpolish":"9a","sandstorm":"9a","taunt":"9a","torment":"9a","snatch":"9a","spikes":"9a","mudsport":"9a","irondefense":"9a","amnesia":"9a","curse":"9a","willowisp":"9a","shellsmash":"9a","helpinghand":"9a","focusenergy":"9a","painsplit":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","takedown":"9a","bodyslam":"9a","stealthrock":"9a","wideguard":"9a","craghammer":"9a","pursuit":"9a","thief":"9a","faketears":"9a","quash":"9a","wickedenergy":"9a","bite":"9a","throatchop":"9a","lashout":"9a","assurance":"9a","carrionfeast":"9a","headsmash":"9a","heavyslam":"9a","withdraw":"9a","gyroball":"9a","rollout":"9a","silverdagger":"9a","sculptedarmor":"9a","dustupheaval":"9a"},"yamamekurodani":{"sludgewave":"9a","sludgebomb":"9a","venoshock":"9a","sludge":"9a","acidspray":"9a","smog":"9a","bugbuzz":"9a","strugglebug":"9a","darkpulse":"9a","snarl":"9a","shadowball":"9a","petaldance":"9a","gigadrain":"9a","megadrain":"9a","bubblebeam":"9a","wringout":"9a","gunkshot":"9a","poisonjab":"9a","crosspoison":"9a","poisonfang":"9a","poisonsting":"9a","firstimpression":"9a","leechlife":"9a","lunge":"9a","uturn":"9a","skittersmack":"9a","bugbite":"9a","twineedle":"9a","foulplay":"9a","suckerpunch":"9a","knockoff":"9a","nightslash":"9a","brutalswing":"9a","shadowclaw":"9a","seedbomb":"9a","crosschop":"9a","drainpunch":"9a","rockwrecker":"9a","stoneedge":"9a","rockslide":"9a","smackdown":"9a","dig":"9a","stompingtantrum":"9a","bulldoze":"9a","liquidation":"9a","gigaimpact":"9a","doubleedge":"9a","takedown":"9a","bodyslam":"9a","facade":"9a","cut":"9a","quickattack":"9a","fakeout":"9a","feint":"9a","toxic":"9a","toxicthread":"9a","venomdrench":"9a","acidarmor":"9a","toxicspikes":"9a","poisongas":"9a","corrosivegas":"9a","gastroacid":"9a","stickyweb":"9a","silktrap":"9a","spiderweb":"9a","ragepowder":"9a","stringshot":"9a","taunt":"9a","stealthrock":"9a","sandstorm":"9a","raindance":"9a","encore":"9a","helpinghand":"9a","leer":"9a","laserfocus":"9a","screech":"9a","acupressure":"9a","whirlwind":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","curse":"9a","chrysalisveil":"9a","xscissor":"9a","megahorn":"9a","pounce":"9a","hivefrenzy":"9a","swordsdance":"9a","infestation":"9a","earthquake":"9a","dancingblow":"9a"},"parseemizuhashi":{"darkpulse":"9a","snarl":"9a","shadowball":"9a","bittermalice":"9a","hex":"9a","petaldance":"9a","magicalleaf":"9a","burningjealousy":"9a","venoshock":"9a","waterpledge":"9a","chillingwater":"9a","icywind":"9a","hyperbeam":"9a","hiddenpower":"9a","foulplay":"9a","suckerpunch":"9a","nightslash":"9a","payback":"9a","punishment":"9a","spectralthief":"9a","shadowpunch":"9a","shadowsneak":"9a","firepunch":"9a","petalblizzard":"9a","razorleaf":"9a","waterfall":"9a","frustration":"9a","facade":"9a","slash":"9a","cut":"9a","meanlook":"9a","recover":"9a","curse":"9a","spite":"9a","destinybond":"9a","memento":"9a","topsyturvy":"9a","snatch":"9a","quash":"9a","imprison":"9a","haze":"9a","mist":"9a","toxic":"9a","metalsound":"9a","aquaring":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","weatherball":"9a","terablast":"9a","endure":"9a","return":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","pursuit":"9a","thief":"9a","taunt":"9a","knockoff":"9a","faketears":"9a","torment":"9a","wickedenergy":"9a","crunch":"9a","bite":"9a","throatchop":"9a","lashout":"9a","assurance":"9a","carrionfeast":"9a","nastyplot":"9a","grudge":"9a","willowisp":"9a","psychup":"9a","calmmind":"9a","silverdagger":"9a","dancingblow":"9a"},"yuugihoshiguma":{"focusblast":"9a","aurasphere":"9a","powergem":"9a","ancientpower":"9a","steameruption":"9a","scald":"9a","bubblebeam":"9a","strangesteam":"9a","shadowball":"9a","earthpower":"9a","mudshot":"9a","signalbeam":"9a","hypervoice":"9a","triattack":"9a","swift":"9a","meteorassault":"9a","focuspunch":"9a","closecombat":"9a","hammerarm":"9a","crosschop":"9a","submission":"9a","brickbreak":"9a","forcepalm":"9a","circlethrow":"9a","karatechop":"9a","armthrust":"9a","seismictoss":"9a","counter":"9a","stoneedge":"9a","rockslide":"9a","rocktomb":"9a","rockblast":"9a","shadowclaw":"9a","glaiverush":"9a","breakingswipe":"9a","megahorn":"9a","xscissor":"9a","earthquake":"9a","dig":"9a","ironhead":"9a","smartstrike":"9a","gigaimpact":"9a","doubleedge":"9a","takedown":"9a","retaliate":"9a","hornattack":"9a","quickattack":"9a","bulkup":"9a","quickguard":"9a","stealthrock":"9a","sandstorm":"9a","leer":"9a","swagger":"9a","watersport":"9a","raindance":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","surgingstrikes":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","facade":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","detect":"9a","coaching":"9a","drainpunch":"9a","machpunch":"9a","superpower":"9a","lowkick":"9a","highjumpkick":"9a","bodypress":"9a","rocksmash":"9a","lowsweep":"9a","reversal":"9a","shufflejab":"9a","dancingblow":"9a","vacuumwave":"9a","rockpolish":"9a","wideguard":"9a","smackdown":"9a","craghammer":"9a","meteorbeam":"9a","dynamicpunch":"9a","firepunch":"9a","icepunch":"9a","thunderpunch":"9a","cloudfist":"9a","headsmash":"9a","sculptedarmor":"9a","excavate":"9a","dustupheaval":"9a"},"satorikomeiji":{"psychoshift":"9a","futuresight":"9a","dreameater":"9a","psychic":"9a","psyshock":"9a","extrasensory":"9a","psychicnoise":"9a","psybeam":"9a","confusion":"9a","signalbeam":"9a","shadowball":"9a","nightshade":"9a","chillingwater":"9a","swift":"9a","psychocut":"9a","heartstamp":"9a","shadowclaw":"9a","brickbreak":"9a","return":"9a","facade":"9a","cut":"9a","quickattack":"9a","amnesia":"9a","barrier":"9a","psychicterrain":"9a","trick":"9a","nightmare":"9a","safeguard":"9a","workup":"9a","psychup":"9a","mindreader":"9a","confide":"9a","playnice":"9a","painsplit":"9a","mimic":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","calmmind":"9a","reflect":"9a","lightscreen":"9a","trickroom":"9a","magiccoat":"9a","teleport":"9a","imprison":"9a","gravity":"9a","skillswap":"9a","allyswitch":"9a","magicroom":"9a","wonderroom":"9a","hypnosis":"9a","agility":"9a","zenheadbutt":"9a","psychicfangs":"9a","expandingforce":"9a","storedpower":"9a","hypnowhirl":"9a","mefirst":"9a","copycat":"9a","mirrorcoat":"9a","counter":"9a","nastyplot":"9a","powersplit":"9a","guardsplit":"9a","lunaticbullet":"9a"},"rinkaenbyou":{"overheat":"9a","batonpass":"9a","fireblast":"9a","flamethrower":"9a","firepledge":"9a","flameburst":"9a","ember":"9a","firespin":"9a","shadowball":"9a","hex":"9a","ominouswind":"9a","darkpulse":"9a","psychic":"9a","psybeam":"9a","hyperbeam":"9a","triattack":"9a","round":"9a","flareblitz":"9a","firepunch":"9a","flamewheel":"9a","shadowclaw":"9a","astonish":"9a","crunch":"9a","bite":"9a","pursuit":"9a","pounce":"9a","zenheadbutt":"9a","thunderfang":"9a","playrough":"9a","slash":"9a","facade":"9a","rapidspin":"9a","fakeout":"9a","feint":"9a","sunnyday":"9a","willowisp":"9a","grudge":"9a","curse":"9a","spite":"9a","perishsong":"9a","copycat":"9a","screech":"9a","yawn":"9a","agility":"9a","skillswap":"9a","taunt":"9a","faketears":"9a","stealthrock":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","heatwave":"9a","mysticalfire":"9a","lavaplume":"9a","incinerate":"9a","confuseray":"9a","painsplit":"9a","nightshade":"9a","destinybond":"9a","nastyplot":"9a","uturn":"9a","partingshot":"9a","flamecharge":"9a","acrobatics":"9a","lunaticbullet":"9a"},"utsuhoreiuji":{"blastburn":"9a","overheat":"9a","fireblast":"9a","fusionflare":"9a","heatwave":"9a","flamethrower":"9a","lavaplume":"9a","incinerate":"9a","ember":"9a","firespin":"9a","airslash":"9a","aircutter":"9a","discharge":"9a","shockwave":"9a","dazzlinggleam":"9a","vacuumwave":"9a","steelbeam":"9a","flashcannon":"9a","mirrorshot":"9a","solarbeam":"9a","clearsmog":"9a","hyperbeam":"9a","flareblitz":"9a","blazekick":"9a","firepunch":"9a","flamecharge":"9a","bravebird":"9a","fly":"9a","aerialace":"9a","dualwingbeat":"9a","fusionbolt":"9a","supercellslam":"9a","thunderpunch":"9a","spark":"9a","sunsteelstrike":"9a","steelwing":"9a","jumpkick":"9a","brickbreak":"9a","fling":"9a","explosion":"9a","gigaimpact":"9a","facade":"9a","quickattack":"9a","sunnyday":"9a","roost":"9a","tailwind":"9a","charge":"9a","thunderwave":"9a","taunt":"9a","agility":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","willowisp":"9a","firefang":"9a","temperflare":"9a","heatcrash":"9a","mysticalfire":"9a","defog":"9a","featherdance":"9a","uturn":"9a","drillpeck":"9a","acrobatics":"9a","cloudfist":"9a","hurricane":"9a","gust":"9a","meteorbeam":"9a"},"koishikomeiji":{"psychic":"9a","expandingforce":"9a","psychicnoise":"9a","confusion":"9a","storedpower":"9a","mirrorcoat":"9a","hyperbeam":"9a","triattack":"9a","swift":"9a","petaldance":"9a","energyball":"9a","gigadrain":"9a","shadowball":"9a","signalbeam":"9a","drainingkiss":"9a","clearsmog":"9a","heartstamp":"9a","thrash":"9a","return":"9a","facade":"9a","covet":"9a","quickattack":"9a","uturn":"9a","playrough":"9a","powerwhip":"9a","vinewhip":"9a","shadowsneak":"9a","recover":"9a","encore":"9a","entrainment":"9a","simplebeam":"9a","lightscreen":"9a","reflect":"9a","amnesia":"9a","calmmind":"9a","heartswap":"9a","trickroom":"9a","psychicterrain":"9a","skillswap":"9a","magiccoat":"9a","thunderwave":"9a","confuseray":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","trick":"9a","teleport":"9a","imprison":"9a","gravity":"9a","allyswitch":"9a","magicroom":"9a","wonderroom":"9a","hypnosis":"9a","agility":"9a","safeguard":"9a","psyshock":"9a","psybeam":"9a","futuresight":"9a","extrasensory":"9a","dreameater":"9a","hypnowhirl":"9a","yawn":"9a","wish":"9a","healbell":"9a","charm":"9a","workup":"9a","batonpass":"9a","disable":"9a","screech":"9a","hustleup":"9a","uproar":"9a","hypervoice":"9a","echoedvoice":"9a","teeterdance":"9a","petalblizzard":"9a","magicalleaf":"9a","boomburst":"9a","spite":"9a","lunaticbullet":"9a"},"nazrin":{"earthpower":"9a","scorchingsands":"9a","mudshot":"9a","makeitrain":"9a","flashcannon":"9a","mirrorshot":"9a","dazzlinggleam":"9a","powergem":"9a","signalbeam":"9a","psychicnoise":"9a","confusion":"9a","thunder":"9a","discharge":"9a","risingvoltage":"9a","voltswitch":"9a","shockwave":"9a","round":"9a","echoedvoice":"9a","thousandwaves":"9a","drillrun":"9a","bulldoze":"9a","ironhead":"9a","smartstrike":"9a","magnetbomb":"9a","thunderpunch":"9a","spark":"9a","trailblaze":"9a","crunch":"9a","bite":"9a","thief":"9a","psychocut":"9a","playrough":"9a","return":"9a","slash":"9a","facade":"9a","cut":"9a","quickattack":"9a","populationbomb":"9a","spikes":"9a","metalsound":"9a","quickguard":"9a","thunderwave":"9a","charge":"9a","electricterrain":"9a","confuseray":"9a","torment":"9a","partingshot":"9a","leer":"9a","helpinghand":"9a","screech":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","stealthrock":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","frustration":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","bodyslam":"9a","curse":"9a","sandstorm":"9a","sculptedarmor":"9a","mudbomb":"9a","tremorshot":"9a","irondefense":"9a","autotomize":"9a","steelbeam":"9a","superfang":"9a","nuzzle":"9a","uturn":"9a","covet":"9a","knockoff":"9a","swordsdance":"9a","agility":"9a","foresight":"9a","mindreader":"9a","dig":"9a","rapidspin":"9a"},"kogasatatara":{"hydropump":"9a","surf":"9a","muddywater":"9a","bubblebeam":"9a","waterpulse":"9a","chillingwater":"9a","watergun":"9a","dazzlinggleam":"9a","disarmingvoice":"9a","steelbeam":"9a","flashcannon":"9a","icebeam":"9a","icywind":"9a","hurricane":"9a","airslash":"9a","shadowball":"9a","nightshade":"9a","uproar":"9a","swift":"9a","wavecrash":"9a","liquidation":"9a","waterfall":"9a","aquacutter":"9a","aquajet":"9a","playrough":"9a","steelroller":"9a","ironhead":"9a","metalclaw":"9a","firstimpression":"9a","uturn":"9a","acrobatics":"9a","shadowsneak":"9a","astonish":"9a","lick":"9a","gigaimpact":"9a","return":"9a","slash":"9a","quickattack":"9a","feint":"9a","agility":"9a","lightscreen":"9a","reflect":"9a","defog":"9a","tailwind":"9a","haze":"9a","craftyshield":"9a","charm":"9a","mistyterrain":"9a","raindance":"9a","soak":"9a","detect":"9a","metalsound":"9a","confuseray":"9a","helpinghand":"9a","confide":"9a","swordsdance":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","facade":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","takedown":"9a","bodyslam":"9a","curse":"9a","aquaring":"9a","lifedew":"9a","flipturn":"9a","aquatail":"9a","dive":"9a","wavecharge":"9a","superscope3d":"9a","sweetkiss":"9a","babydolleyes":"9a","fakeout":"9a","scaryface":"9a","suckerpunch":"9a","bulletpunch":"9a","heavyslam":"9a","smartstrike":"9a","bounce":"9a","waterplates":"9a"},"ichirinkumoi":{"focusblast":"9a","aurasphere":"9a","hurricane":"9a","aeroblast":"9a","airslash":"9a","gust":"9a","thunderbolt":"9a","chillingwater":"9a","hyperbeam":"9a","hypervoice":"9a","weatherball":"9a","wringout":"9a","focuspunch":"9a","closecombat":"9a","crosschop":"9a","hammerarm":"9a","drainpunch":"9a","brickbreak":"9a","forcepalm":"9a","circlethrow":"9a","karatechop":"9a","seismictoss":"9a","counter":"9a","cloudfist":"9a","fly":"9a","acrobatics":"9a","thunderpunch":"9a","firepunch":"9a","bulletpunch":"9a","gigaimpact":"9a","megapunch":"9a","facade":"9a","cut":"9a","bulkup":"9a","quickguard":"9a","agility":"9a","barrier":"9a","charge":"9a","defog":"9a","tailwind":"9a","taunt":"9a","trickroom":"9a","focusenergy":"9a","helpinghand":"9a","leer":"9a","whirlwind":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","takedown":"9a","bodyslam":"9a","curse":"9a","detect":"9a","coaching":"9a","machpunch":"9a","superpower":"9a","lowkick":"9a","highjumpkick":"9a","bodypress":"9a","rocksmash":"9a","lowsweep":"9a","reversal":"9a","shufflejab":"9a","dancingblow":"9a","dynamicpunch":"9a","icepunch":"9a","shadowpunch":"9a","skyuppercut":"9a","mist":"9a","haze":"9a"},"minamitsumurasa":{"hydrocannon":"9a","hydropump":"9a","surf":"9a","brine":"9a","waterpulse":"9a","chillingwater":"9a","whirlpool":"9a","shadowball":"9a","hex":"9a","nightshade":"9a","darkpulse":"9a","icebeam":"9a","icywind":"9a","round":"9a","wavecrash":"9a","liquidation":"9a","dive":"9a","aquacutter":"9a","poltergeist":"9a","shadowclaw":"9a","astonish":"9a","anchorshot":"9a","icespinner":"9a","icepunch":"9a","bonerush":"9a","throatchop":"9a","payback":"9a","gigaimpact":"9a","megakick":"9a","facade":"9a","slash":"9a","cut":"9a","fakeout":"9a","raindance":"9a","soak":"9a","curse":"9a","grudge":"9a","destinybond":"9a","memento":"9a","torment":"9a","embargo":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","aquaring":"9a","lifedew":"9a","flipturn":"9a","waterfall":"9a","aquajet":"9a","aquatail":"9a","wavecharge":"9a","superscope3d":"9a","willowisp":"9a","confuseray":"9a","spite":"9a","painsplit":"9a","shadowsneak":"9a","phantomforce":"9a","shadowpunch":"9a","shadowstrike":"9a","heavyslam":"9a","ironhead":"9a","swordsdance":"9a","waterplates":"9a"},"shoutoramaru":{"dazzlinggleam":"9a","fairywind":"9a","zapcannon":"9a","thunder":"9a","thunderbolt":"9a","discharge":"9a","voltswitch":"9a","chargebeam":"9a","aurorabeam":"9a","aurasphere":"9a","vacuumwave":"9a","triattack":"9a","swift":"9a","spiritbreak":"9a","wildcharge":"9a","zingzap":"9a","thunderpunch":"9a","thunderfang":"9a","icefang":"9a","psychicfangs":"9a","zenheadbutt":"9a","brickbreak":"9a","return":"9a","facade":"9a","slash":"9a","quickattack":"9a","superfang":"9a","charge":"9a","thunderwave":"9a","electricterrain":"9a","mistyterrain":"9a","psychicterrain":"9a","agility":"9a","purify":"9a","confide":"9a","leer":"9a","growl":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","swordsdance":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","charm":"9a","sweetkiss":"9a","babydolleyes":"9a","craftyshield":"9a","playrough":"9a","moonblast":"9a","drainingkiss":"9a","mistyexplosion":"9a","alluringvoice":"9a","velvetpress":"9a","eerieimpulse":"9a","magnetrise":"9a","spark":"9a","supercellslam":"9a","voltaiclance":"9a","sparkscamper":"9a","electroball":"9a","shockwave":"9a","electroweb":"9a","firefang":"9a","crunch":"9a","powergem":"9a","calmmind":"9a","bulkup":"9a","roar":"9a","sacredsword":"9a","missile":"9a"},"byakurenhijiri":{"focusblast":"9a","aurasphere":"9a","psychoboost":"9a","futuresight":"9a","psychic":"9a","psyshock":"9a","expandingforce":"9a","psybeam":"9a","darkpulse":"9a","shadowball":"9a","aeroblast":"9a","airslash":"9a","shockwave":"9a","hyperbeam":"9a","hypervoice":"9a","swift":"9a","focuspunch":"9a","meteorassault":"9a","highjumpkick":"9a","closecombat":"9a","superpower":"9a","jumpkick":"9a","crosschop":"9a","submission":"9a","drainpunch":"9a","brickbreak":"9a","upperhand":"9a","rollingkick":"9a","karatechop":"9a","machpunch":"9a","zenheadbutt":"9a","psychocut":"9a","nightslash":"9a","fly":"9a","acrobatics":"9a","thunderpunch":"9a","gigaimpact":"9a","doubleedge":"9a","megakick":"9a","return":"9a","facade":"9a","quickattack":"9a","victorydance":"9a","bulkup":"9a","quickguard":"9a","meditate":"9a","calmmind":"9a","psychicterrain":"9a","teleport":"9a","agility":"9a","defog":"9a","magnetrise":"9a","thunderwave":"9a","confide":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","detect":"9a","coaching":"9a","lowkick":"9a","bodypress":"9a","rocksmash":"9a","lowsweep":"9a","reversal":"9a","shufflejab":"9a","dancingblow":"9a","vacuumwave":"9a","reflect":"9a","lightscreen":"9a","trickroom":"9a","trick":"9a","magiccoat":"9a","imprison":"9a","gravity":"9a","skillswap":"9a","allyswitch":"9a","magicroom":"9a","wonderroom":"9a","hypnosis":"9a","amnesia":"9a","safeguard":"9a","psychicfangs":"9a","extrasensory":"9a","storedpower":"9a","psychicnoise":"9a","confusion":"9a","dreameater":"9a","hypnowhirl":"9a","extremespeed":"9a","healbell":"9a","dazzlinggleam":"9a","cloudfist":"9a"},"nuehoujuu":{"darkpulse":"9a","snarl":"9a","shadowball":"9a","hex":"9a","nightshade":"9a","zapcannon":"9a","discharge":"9a","flashcannon":"9a","signalbeam":"9a","silverwind":"9a","psyshock":"9a","psychicnoise":"9a","chillingwater":"9a","hyperbeam":"9a","hypervoice":"9a","swift":"9a","hiddenpower":"9a","echoedvoice":"9a","foulplay":"9a","crunch":"9a","suckerpunch":"9a","nightslash":"9a","poltergeist":"9a","spiritshackle":"9a","shadowsneak":"9a","wildcharge":"9a","gigaimpact":"9a","megapunch":"9a","covet":"9a","taunt":"9a","torment":"9a","snatch":"9a","spite":"9a","grudge":"9a","agility":"9a","trickroom":"9a","skillswap":"9a","guardswap":"9a","thunderwave":"9a","charge":"9a","irondefense":"9a","metalsound":"9a","swordsdance":"9a","glare":"9a","confide":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","terablast":"9a","endure":"9a","facade":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","pursuit":"9a","thief":"9a","knockoff":"9a","faketears":"9a","quash":"9a","wickedenergy":"9a","bite":"9a","throatchop":"9a","lashout":"9a","payback":"9a","assurance":"9a","carrionfeast":"9a","nastyplot":"9a","willowisp":"9a","confuseray":"9a","painsplit":"9a","destinybond":"9a","shadowclaw":"9a","phantomforce":"9a","shadowpunch":"9a","shadowstrike":"9a","ominouswind":"9a","thunderbolt":"9a","thunder":"9a","trick":"9a","partingshot":"9a","imprison":"9a","disable":"9a","lunaticbullet":"9a"},"hatatehimekaidou":{"futuresight":"9a","psychic":"9a","expandingforce":"9a","psychicnoise":"9a","confusion":"9a","storedpower":"9a","hurricane":"9a","airslash":"9a","aircutter":"9a","gust":"9a","shadowball":"9a","ominouswind":"9a","shockwave":"9a","dazzlinggleam":"9a","flashcannon":"9a","chillingwater":"9a","uproar":"9a","swift":"9a","echoedvoice":"9a","psychocut":"9a","heartstamp":"9a","bravebird":"9a","fly":"9a","aerialace":"9a","acrobatics":"9a","peck":"9a","uturn":"9a","pounce":"9a","forcepalm":"9a","vinewhip":"9a","thunderpunch":"9a","extremespeed":"9a","facade":"9a","fakeout":"9a","quickattack":"9a","calmmind":"9a","barrier":"9a","agility":"9a","skillswap":"9a","roost":"9a","tailwind":"9a","defog":"9a","haze":"9a","detect":"9a","confuseray":"9a","taunt":"9a","encore":"9a","confide":"9a","screech":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","reflect":"9a","lightscreen":"9a","trickroom":"9a","trick":"9a","magiccoat":"9a","teleport":"9a","imprison":"9a","gravity":"9a","psychicterrain":"9a","allyswitch":"9a","magicroom":"9a","wonderroom":"9a","hypnosis":"9a","amnesia":"9a","safeguard":"9a","psyshock":"9a","psybeam":"9a","extrasensory":"9a","dreameater":"9a","hypnowhirl":"9a","featherdance":"9a","nastyplot":"9a","foresight":"9a","mindreader":"9a","heatwave":"9a","lunaticbullet":"9a"},"sunnymilk":{"photongeyser":"9a","uturn":"9a","overheat":"9a","fireblast":"9a","inferno":"9a","flamethrower":"9a","incinerate":"9a","ember":"9a","firespin":"9a","dazzlinggleam":"9a","disarmingvoice":"9a","airslash":"9a","solarbeam":"9a","energyball":"9a","flashcannon":"9a","mirrorshot":"9a","storedpower":"9a","mirrorcoat":"9a","hypervoice":"9a","uproar":"9a","weatherball":"9a","flareblitz":"9a","firepunch":"9a","flamecharge":"9a","playrough":"9a","solarblade":"9a","suckerpunch":"9a","acrobatics":"9a","doubleedge":"9a","return":"9a","facade":"9a","quickattack":"9a","sunnyday":"9a","willowisp":"9a","charm":"9a","mistyterrain":"9a","defog":"9a","reflect":"9a","lightscreen":"9a","teleport":"9a","agility":"9a","morningsun":"9a","helpinghand":"9a","workup":"9a","encore":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","bodyslam":"9a","curse":"9a","firefang":"9a","temperflare":"9a","heatcrash":"9a","blazekick":"9a","sweetkiss":"9a","babydolleyes":"9a","craftyshield":"9a","thief":"9a","swordsdance":"9a"},"lunachild":{"lunardance":"9a","nightdaze":"9a","moonblast":"9a","fairywind":"9a","shadowball":"9a","nightshade":"9a","hurricane":"9a","airslash":"9a","thunderbolt":"9a","icywind":"9a","psychic":"9a","storedpower":"9a","triattack":"9a","swift":"9a","echoedvoice":"9a","knockoff":"9a","payback":"9a","playrough":"9a","uturn":"9a","shadowpunch":"9a","shadowsneak":"9a","acrobatics":"9a","doubleedge":"9a","return":"9a","facade":"9a","quickattack":"9a","torment":"9a","switcheroo":"9a","charm":"9a","moonlight":"9a","mistyterrain":"9a","calmmind":"9a","teleport":"9a","allyswitch":"9a","raindance":"9a","thunderwave":"9a","tailwind":"9a","defog":"9a","haze":"9a","whirlwind":"9a","helpinghand":"9a","workup":"9a","yawn":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","darkpulse":"9a","foulplay":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","bodyslam":"9a","curse":"9a","pursuit":"9a","thief":"9a","taunt":"9a","faketears":"9a","quash":"9a","wickedenergy":"9a","snarl":"9a","nastyplot":"9a","sweetkiss":"9a","babydolleyes":"9a","craftyshield":"9a","dazzlinggleam":"9a","drainingkiss":"9a","mistyexplosion":"9a","alluringvoice":"9a","velvetpress":"9a","disable":"9a"},"starsapphire":{"psychic":"9a","psyshock":"9a","expandingforce":"9a","psychicnoise":"9a","psybeam":"9a","storedpower":"9a","mistyexplosion":"9a","alluringvoice":"9a","airslash":"9a","aurasphere":"9a","waterpulse":"9a","terastarstorm":"9a","hypervoice":"9a","swift":"9a","echoedvoice":"9a","psychocut":"9a","playrough":"9a","uturn":"9a","doubleedge":"9a","return":"9a","facade":"9a","fakeout":"9a","cometpunch":"9a","cosmicpower":"9a","skillswap":"9a","speedswap":"9a","trick":"9a","psychicterrain":"9a","teleport":"9a","charm":"9a","mistyterrain":"9a","detect":"9a","wideguard":"9a","wish":"9a","workup":"9a","helpinghand":"9a","naturepower":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","bodyslam":"9a","curse":"9a","calmmind":"9a","reflect":"9a","lightscreen":"9a","trickroom":"9a","magiccoat":"9a","imprison":"9a","gravity":"9a","allyswitch":"9a","magicroom":"9a","wonderroom":"9a","hypnosis":"9a","amnesia":"9a","agility":"9a","safeguard":"9a","futuresight":"9a","extrasensory":"9a","confusion":"9a","dreameater":"9a","hypnowhirl":"9a","sweetkiss":"9a","babydolleyes":"9a","craftyshield":"9a","moonblast":"9a","dazzlinggleam":"9a","drainingkiss":"9a","fairywind":"9a","velvetpress":"9a","triattack":"9a","meteorbeam":"9a","foresight":"9a","miracleeye":"9a","lunaticbullet":"9a"},"kyoukokasodani":{"hyperbeam":"9a","boomburst":"9a","hypervoice":"9a","uproar":"9a","round":"9a","echoedvoice":"9a","sonicboom":"9a","darkpulse":"9a","snarl":"9a","sparklingaria":"9a","shadowball":"9a","focusblast":"9a","grasspledge":"9a","lastresort":"9a","doubleedge":"9a","return":"9a","rockclimb":"9a","facade":"9a","fakeout":"9a","quickattack":"9a","rockslide":"9a","headlongrush":"9a","magnitude":"9a","crunch":"9a","bite":"9a","shadowclaw":"9a","firefang":"9a","switcheroo":"9a","taunt":"9a","confide":"9a","screech":"9a","eerieimpulse":"9a","thunderwave":"9a","workup":"9a","perishsong":"9a","supersonic":"9a","safeguard":"9a","reflect":"9a","lightscreen":"9a","agility":"9a","partingshot":"9a","roar":"9a","stealthrock":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","frustration":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","encore":"9a","yawn":"9a","wish":"9a","healbell":"9a","charm":"9a","batonpass":"9a","disable":"9a","hustleup":"9a","triattack":"9a","swift":"9a","nobleroar":"9a","sing":"9a","mirrorcoat":"9a","mirrormove":"9a","copycat":"9a","alluringvoice":"9a","disarmingvoice":"9a"},"yoshikamiyako":{"sludgewave":"9a","sludgebomb":"9a","sludge":"9a","clearsmog":"9a","acidspray":"9a","shadowball":"9a","ominouswind":"9a","nightshade":"9a","darkpulse":"9a","icywind":"9a","drainingkiss":"9a","infestation":"9a","chillingwater":"9a","echoedvoice":"9a","gunkshot":"9a","poisonjab":"9a","poisonfang":"9a","shadowclaw":"9a","shadowsneak":"9a","crunch":"9a","knockoff":"9a","superpower":"9a","icefang":"9a","leechlife":"9a","gigaimpact":"9a","crushclaw":"9a","retaliate":"9a","bulkup":"9a","toxic":"9a","venomdrench":"9a","gastroacid":"9a","toxicspikes":"9a","curse":"9a","destinybond":"9a","recover":"9a","helpinghand":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","facade":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","takedown":"9a","bodyslam":"9a","acidarmor":"9a","crosspoison":"9a","willowisp":"9a","confuseray":"9a","spite":"9a","painsplit":"9a","phantomforce":"9a","shadowpunch":"9a","shadowstrike":"9a","carrionfeast":"9a","stockpile":"9a","swallow":"9a","belch":"9a","stuffcheeks":"9a","bounce":"9a","irondefense":"9a","drainpunch":"9a"},"seigakaku":{"darkpulse":"9a","snarl":"9a","hyperspacehole":"9a","psybeam":"9a","shadowball":"9a","fireblast":"9a","flamethrower":"9a","thunder":"9a","thunderbolt":"9a","blizzard":"9a","icebeam":"9a","hyperbeam":"9a","triattack":"9a","swift":"9a","foulplay":"9a","nightslash":"9a","suckerpunch":"9a","knockoff":"9a","feintattack":"9a","uturn":"9a","psychocut":"9a","shadowpunch":"9a","shadowsneak":"9a","frustration":"9a","secretpower":"9a","taunt":"9a","torment":"9a","nastyplot":"9a","trick":"9a","agility":"9a","trickroom":"9a","healingwish":"9a","confuseray":"9a","revivalblessing":"9a","meanlook":"9a","encore":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","facade":"9a","return":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","naturalgift":"9a","mimic":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","pursuit":"9a","thief":"9a","faketears":"9a","quash":"9a","wickedenergy":"9a","hex":"9a","sludgebomb":"9a","partingshot":"9a","hypnosis":"9a","dreameater":"9a","nightshade":"9a","focusblast":"9a","psychic":"9a","teleport":"9a"},"soganotojiko":{"memento":"9a","zapcannon":"9a","thunder":"9a","thunderbolt":"9a","discharge":"9a","voltswitch":"9a","shockwave":"9a","thundershock":"9a","shadowball":"9a","hex":"9a","nightshade":"9a","darkpulse":"9a","snarl":"9a","psychicnoise":"9a","disarmingvoice":"9a","hypervoice":"9a","uproar":"9a","echoedvoice":"9a","wildcharge":"9a","zingzap":"9a","spark":"9a","poltergeist":"9a","spiritshackle":"9a","astonish":"9a","feintattack":"9a","zenheadbutt":"9a","lastresort":"9a","doubleedge":"9a","takedown":"9a","facade":"9a","retaliate":"9a","quickattack":"9a","thunderwave":"9a","charge":"9a","electricterrain":"9a","destinybond":"9a","confuseray":"9a","spite":"9a","taunt":"9a","painsplit":"9a","screech":"9a","detect":"9a","agility":"9a","calmmind":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","eerieimpulse":"9a","magnetrise":"9a","electroball":"9a","chargebeam":"9a","electroweb":"9a","willowisp":"9a","ominouswind":"9a","nastyplot":"9a","grudge":"9a","raindance":"9a","hurricane":"9a","lunaticbullet":"9a"},"mononobenofuto":{"surf":"9a","muddywater":"9a","waterpledge":"9a","brine":"9a","waterpulse":"9a","watergun":"9a","fireblast":"9a","firepledge":"9a","ember":"9a","ancientpower":"9a","psychic":"9a","extrasensory":"9a","hurricane":"9a","aircutter":"9a","triattack":"9a","liquidation":"9a","waterplates":"9a","aquajet":"9a","blazekick":"9a","firepunch":"9a","rockslide":"9a","rocktomb":"9a","zenheadbutt":"9a","psychocut":"9a","acrobatics":"9a","doubleedge":"9a","megakick":"9a","megapunch":"9a","facade":"9a","fakeout":"9a","soak":"9a","aquaring":"9a","raindance":"9a","willowisp":"9a","sunnyday":"9a","sandstorm":"9a","stealthrock":"9a","agility":"9a","reflect":"9a","lightscreen":"9a","skillswap":"9a","tailwind":"9a","defog":"9a","aromatherapy":"9a","haze":"9a","whirlwind":"9a","acupressure":"9a","psychup":"9a","naturepower":"9a","helpinghand":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","bodyslam":"9a","curse":"9a","lifedew":"9a","flipturn":"9a","waterfall":"9a","aquatail":"9a","dive":"9a","wavecharge":"9a","superscope3d":"9a","scald":"9a","hydropump":"9a","whirlpool":"9a","chillingwater":"9a","undertow":"9a","flareblitz":"9a","firefang":"9a","flamecharge":"9a","temperflare":"9a","heatcrash":"9a","flamethrower":"9a","heatwave":"9a","overheat":"9a","mysticalfire":"9a","lavaplume":"9a","incinerate":"9a","firespin":"9a","calmmind":"9a","earthpower":"9a"},"toyosatomiminomiko":{"focusblast":"9a","aurasphere":"9a","dazzlinggleam":"9a","alluringvoice":"9a","disarmingvoice":"9a","thunder":"9a","thunderbolt":"9a","discharge":"9a","shockwave":"9a","shadowball":"9a","psychicnoise":"9a","hyperbeam":"9a","hypervoice":"9a","swift":"9a","echoedvoice":"9a","trumpcard":"9a","focuspunch":"9a","closecombat":"9a","dynamicpunch":"9a","sacredsword":"9a","brickbreak":"9a","upperhand":"9a","forcepalm":"9a","circlethrow":"9a","machpunch":"9a","counter":"9a","spiritbreak":"9a","wildcharge":"9a","thunderpunch":"9a","shadowclaw":"9a","psychocut":"9a","ironhead":"9a","smartstrike":"9a","gigaimpact":"9a","doubleedge":"9a","slash":"9a","rapidspin":"9a","quickattack":"9a","bulkup":"9a","detect":"9a","thunderwave":"9a","agility":"9a","trick":"9a","sunnyday":"9a","morningsun":"9a","swordsdance":"9a","confide":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","facade":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","quickguard":"9a","coaching":"9a","drainpunch":"9a","superpower":"9a","lowkick":"9a","highjumpkick":"9a","bodypress":"9a","rocksmash":"9a","lowsweep":"9a","reversal":"9a","shufflejab":"9a","dancingblow":"9a","vacuumwave":"9a","charm":"9a","sweetkiss":"9a","mistyterrain":"9a","babydolleyes":"9a","craftyshield":"9a","playrough":"9a","moonblast":"9a","drainingkiss":"9a","mistyexplosion":"9a","fairywind":"9a","velvetpress":"9a","calmmind":"9a","nastyplot":"9a","psychic":"9a","psyshock":"9a","flashcannon":"9a","mindreader":"9a","foresight":"9a","meteorbeam":"9a","healbell":"9a"},"mamizoufutatsuiwa":{"leafstorm":"9a","energyball":"9a","magicalleaf":"9a","leaftornado":"9a","hyperbeam":"9a","triattack":"9a","wringout":"9a","powergem":"9a","ancientpower":"9a","shadowball":"9a","woodhammer":"9a","leafblade":"9a","drumbeating":"9a","razorleaf":"9a","grassyglide":"9a","leafage":"9a","bulletseed":"9a","gigaimpact":"9a","doubleedge":"9a","bodyslam":"9a","strength":"9a","megapunch":"9a","facade":"9a","retaliate":"9a","covet":"9a","furyswipes":"9a","stoneedge":"9a","rockslide":"9a","rocktomb":"9a","bounce":"9a","stompingtantrum":"9a","bulldoze":"9a","crunch":"9a","bite":"9a","feintattack":"9a","shadowclaw":"9a","pounce":"9a","grassyterrain":"9a","bellydrum":"9a","transform":"9a","confide":"9a","recycle":"9a","taunt":"9a","torment":"9a","switcheroo":"9a","bulkup":"9a","stealthrock":"9a","sandstorm":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","takedown":"9a","helpinghand":"9a","curse":"9a","leechseed":"9a","synthesis":"9a","stunspore":"9a","ingrain":"9a","worryseed":"9a","trailblaze":"9a","seedbomb":"9a","powerwhip":"9a","swordsdance":"9a","encore":"9a","yawn":"9a","wish":"9a","healbell":"9a","charm":"9a","workup":"9a","batonpass":"9a","disable":"9a","screech":"9a","hustleup":"9a","uproar":"9a","quickattack":"9a","headbutt":"9a","crushclaw":"9a","thrash":"9a","fakeout":"9a","suckerpunch":"9a","knockoff":"9a","uturn":"9a","trick":"9a","copycat":"9a"},"kasenibaraki":{"petaldance":"9a","energyball":"9a","gigadrain":"9a","megadrain":"9a","absorb":"9a","focusblast":"9a","aurasphere":"9a","psychic":"9a","extrasensory":"9a","psychicnoise":"9a","darkpulse":"9a","snarl":"9a","hurricane":"9a","airslash":"9a","triattack":"9a","petalblizzard":"9a","hornleech":"9a","grassyglide":"9a","focuspunch":"9a","highjumpkick":"9a","crosschop":"9a","submission":"9a","brickbreak":"9a","drainpunch":"9a","upperhand":"9a","vitalthrow":"9a","circlethrow":"9a","machpunch":"9a","armthrust":"9a","wickedblow":"9a","throatchop":"9a","payback":"9a","zenheadbutt":"9a","earthquake":"9a","bulldoze":"9a","megahorn":"9a","fly":"9a","gigaimpact":"9a","doubleedge":"9a","megapunch":"9a","strength":"9a","facade":"9a","chipaway":"9a","cometpunch":"9a","grassyterrain":"9a","aromatherapy":"9a","cottonspore":"9a","coaching":"9a","bulkup":"9a","meditate":"9a","psychicterrain":"9a","healpulse":"9a","magiccoat":"9a","naturepower":"9a","safeguard":"9a","refresh":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","leechseed":"9a","synthesis":"9a","stunspore":"9a","ingrain":"9a","worryseed":"9a","trailblaze":"9a","leafblade":"9a","seedbomb":"9a","powerwhip":"9a","bulletseed":"9a","swordsdance":"9a","solarbeam":"9a","leafstorm":"9a","magicalleaf":"9a","grassknot":"9a","solarnectar":"9a","detect":"9a","quickguard":"9a","closecombat":"9a","superpower":"9a","lowkick":"9a","bodypress":"9a","rocksmash":"9a","lowsweep":"9a","reversal":"9a","shufflejab":"9a","dancingblow":"9a","vacuumwave":"9a","woodhammer":"9a","hammerarm":"9a","icepunch":"9a","thunderpunch":"9a","firepunch":"9a","bravebird":"9a","cloudfist":"9a"},"hatanokokoro":{"synchronoise":"9a","psychic":"9a","psyshock":"9a","psychicnoise":"9a","mysticalpower":"9a","confusion":"9a","shadowball":"9a","nightshade":"9a","solarbeam":"9a","petaldance":"9a","energyball":"9a","gigadrain":"9a","wildboltstorm":"9a","shockwave":"9a","heatwave":"9a","fierydance":"9a","burningjealousy":"9a","icywind":"9a","originpulse":"9a","chillingwater":"9a","dazzlinggleam":"9a","hurricane":"9a","aurasphere":"9a","vacuumwave":"9a","dragonpulse":"9a","darkpulse":"9a","signalbeam":"9a","revelationdance":"9a","weatherball":"9a","terrainpulse":"9a","zenheadbutt":"9a","psychocut":"9a","heartstamp":"9a","poltergeist":"9a","phantomforce":"9a","shadowsneak":"9a","petalblizzard":"9a","trailblaze":"9a","temperflare":"9a","tripleaxel":"9a","aquastep":"9a","stoneedge":"9a","rocktomb":"9a","spiritbreak":"9a","aerialace":"9a","acrobatics":"9a","closecombat":"9a","brickbreak":"9a","upperhand":"9a","outrage":"9a","lashout":"9a","suckerpunch":"9a","gigaimpact":"9a","return":"9a","megapunch":"9a","slash":"9a","facade":"9a","retaliate":"9a","cometpunch":"9a","quickattack":"9a","calmmind":"9a","agility":"9a","psychicterrain":"9a","roleplay":"9a","heartswap":"9a","magiccoat":"9a","destinybond":"9a","dragondance":"9a","eerieimpulse":"9a","charm":"9a","craftyshield":"9a","raindance":"9a","sunnyday":"9a","sandstorm":"9a","snowscape":"9a","detect":"9a","nastyplot":"9a","faketears":"9a","swordsdance":"9a","entrainment":"9a","metronome":"9a","refresh":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","reflect":"9a","lightscreen":"9a","trickroom":"9a","trick":"9a","teleport":"9a","imprison":"9a","gravity":"9a","skillswap":"9a","allyswitch":"9a","magicroom":"9a","wonderroom":"9a","hypnosis":"9a","amnesia":"9a","safeguard":"9a","psychicfangs":"9a","psybeam":"9a","futuresight":"9a","expandingforce":"9a","extrasensory":"9a","storedpower":"9a","dreameater":"9a","hypnowhirl":"9a","willowisp":"9a","confuseray":"9a","spite":"9a","painsplit":"9a","shadowclaw":"9a","shadowpunch":"9a","shadowstrike":"9a","hex":"9a","ominouswind":"9a","scaryface":"9a","tickle":"9a","flatter":"9a","torment":"9a","nightslash":"9a","sacredsword":"9a","teeterdance":"9a","lunaticbullet":"9a","dancingblow":"9a"},"wakasagihime":{"waterspout":"9a","hydropump":"9a","surf":"9a","muddywater":"9a","waterpulse":"9a","chillingwater":"9a","whirlpool":"9a","icebeam":"9a","aurorabeam":"9a","icywind":"9a","psychic":"9a","psychicnoise":"9a","alluringvoice":"9a","hypervoice":"9a","uproar":"9a","echoedvoice":"9a","wavecrash":"9a","aquatail":"9a","waterfall":"9a","flipturn":"9a","aquajet":"9a","headlongrush":"9a","dragontail":"9a","breakingswipe":"9a","doubleedge":"9a","bodyslam":"9a","facade":"9a","aquaring":"9a","raindance":"9a","watersport":"9a","calmmind":"9a","confide":"9a","splash":"9a","workup":"9a","helpinghand":"9a","perishsong":"9a","auroraveil":"9a","snowscape":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","curse":"9a","soak":"9a","lifedew":"9a","liquidation":"9a","dive":"9a","wavecharge":"9a","superscope3d":"9a","scald":"9a","brine":"9a","undertow":"9a","sing":"9a","swordsdance":"9a","dragondance":"9a","waterplates":"9a"},"sekibanki":{"fakeout":"9a","shadowball":"9a","hex":"9a","nightshade":"9a","mindblown":"9a","fireblast":"9a","mysticalfire":"9a","darkpulse":"9a","psybeam":"9a","twinbeam":"9a","clearsmog":"9a","hyperbeam":"9a","swift":"9a","phantomforce":"9a","shadowclaw":"9a","shadowsneak":"9a","temperflare":"9a","suckerpunch":"9a","nightslash":"9a","thief":"9a","beatup":"9a","doubleedge":"9a","megapunch":"9a","facade":"9a","feint":"9a","furyattack":"9a","destinybond":"9a","curse":"9a","spite":"9a","confuseray":"9a","willowisp":"9a","partingshot":"9a","taunt":"9a","snatch":"9a","painsplit":"9a","smokescreen":"9a","helpinghand":"9a","agility":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","gigaimpact":"9a","takedown":"9a","bodyslam":"9a","ominouswind":"9a","flashcannon":"9a","powergem":"9a","hypervoice":"9a","snarl":"9a","nastyplot":"9a","scaryface":"9a","chargebeam":"9a","signalbeam":"9a","dazzlinggleam":"9a","teleport":"9a","lunaticbullet":"9a"},"kagerouimaizumi":{"darkpulse":"9a","snarl":"9a","hyperbeam":"9a","hypervoice":"9a","swift":"9a","round":"9a","shadowball":"9a","nightshade":"9a","fireblast":"9a","flamethrower":"9a","mysticalfire":"9a","energyball":"9a","crunch":"9a","suckerpunch":"9a","knockoff":"9a","bite":"9a","brutalswing":"9a","feintattack":"9a","gigaimpact":"9a","doubleedge":"9a","takedown":"9a","hyperfang":"9a","facade":"9a","tackle":"9a","quickattack":"9a","superfang":"9a","firefang":"9a","shadowclaw":"9a","leafblade":"9a","icefang":"9a","lunge":"9a","pounce":"9a","taunt":"9a","honeclaws":"9a","moonlight":"9a","mistyterrain":"9a","agility":"9a","howl":"9a","roar":"9a","screech":"9a","helpinghand":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","bodyslam":"9a","curse":"9a","pursuit":"9a","thief":"9a","foulplay":"9a","faketears":"9a","torment":"9a","quash":"9a","wickedenergy":"9a","throatchop":"9a","nightslash":"9a","lashout":"9a","payback":"9a","assurance":"9a","carrionfeast":"9a","encore":"9a","yawn":"9a","wish":"9a","healbell":"9a","charm":"9a","workup":"9a","batonpass":"9a","disable":"9a","hustleup":"9a","uproar":"9a","headbutt":"9a","swordsdance":"9a","retaliate":"9a","crushclaw":"9a","thrash":"9a","thunderfang":"9a","psychicfangs":"9a","extremespeed":"9a","jawlock":"9a","uturn":"9a","silverdagger":"9a","ironchomp":"9a"},"benbentsukumo":{"hyperbeam":"9a","hypervoice":"9a","round":"9a","swift":"9a","hiddenpower":"9a","echoedvoice":"9a","thunder":"9a","thunderbolt":"9a","thundercage":"9a","discharge":"9a","voltswitch":"9a","shockwave":"9a","electroweb":"9a","thundershock":"9a","energyball":"9a","gigadrain":"9a","dazzlinggleam":"9a","icywind":"9a","psychicnoise":"9a","gigaimpact":"9a","return":"9a","frustration":"9a","facade":"9a","retaliate":"9a","quickattack":"9a","wildcharge":"9a","spark":"9a","petalblizzard":"9a","icepunch":"9a","charge":"9a","magneticflux":"9a","thunderwave":"9a","raindance":"9a","snowscape":"9a","calmmind":"9a","wish":"9a","screech":"9a","helpinghand":"9a","whirlwind":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","terablast":"9a","endure":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","takedown":"9a","bodyslam":"9a","curse":"9a","encore":"9a","yawn":"9a","healbell":"9a","charm":"9a","workup":"9a","batonpass":"9a","disable":"9a","hustleup":"9a","uproar":"9a","triattack":"9a","electricterrain":"9a","eerieimpulse":"9a","magnetrise":"9a","electroball":"9a","chargebeam":"9a","sing":"9a","nastyplot":"9a","alluringvoice":"9a"},"yatsuhashitsukumo":{"hyperbeam":"9a","hypervoice":"9a","round":"9a","swift":"9a","hiddenpower":"9a","echoedvoice":"9a","thunder":"9a","thunderbolt":"9a","thundercage":"9a","discharge":"9a","voltswitch":"9a","shockwave":"9a","electroweb":"9a","thundershock":"9a","hurricane":"9a","airslash":"9a","fireblast":"9a","shadowball":"9a","psychicnoise":"9a","gigaimpact":"9a","return":"9a","frustration":"9a","facade":"9a","retaliate":"9a","quickattack":"9a","wildcharge":"9a","spark":"9a","temperflare":"9a","shadowclaw":"9a","charge":"9a","magneticflux":"9a","thunderwave":"9a","raindance":"9a","sunnyday":"9a","calmmind":"9a","wish":"9a","screech":"9a","helpinghand":"9a","roar":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","terablast":"9a","endure":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","takedown":"9a","bodyslam":"9a","curse":"9a","encore":"9a","yawn":"9a","healbell":"9a","charm":"9a","workup":"9a","batonpass":"9a","disable":"9a","hustleup":"9a","uproar":"9a","triattack":"9a","electricterrain":"9a","eerieimpulse":"9a","magnetrise":"9a","electroball":"9a","chargebeam":"9a","sing":"9a","nastyplot":"9a","alluringvoice":"9a"},"seijakijin":{"darkpulse":"9a","overheat":"9a","fireblast":"9a","dazzlinggleam":"9a","psychic":"9a","expandingforce":"9a","hyperbeam":"9a","swift":"9a","falsesurrender":"9a","throatchop":"9a","suckerpunch":"9a","knockoff":"9a","thief":"9a","feintattack":"9a","payback":"9a","beatup":"9a","closecombat":"9a","hammerarm":"9a","triplearrows":"9a","counter":"9a","ironhead":"9a","smartstrike":"9a","megahorn":"9a","uturn":"9a","firepunch":"9a","thunderpunch":"9a","megakick":"9a","hornattack":"9a","taunt":"9a","torment":"9a","snatch":"9a","topsyturvy":"9a","teleport":"9a","skillswap":"9a","heartswap":"9a","allyswitch":"9a","agility":"9a","wish":"9a","confide":"9a","followme":"9a","perishsong":"9a","swordsdance":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","facade":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","pursuit":"9a","foulplay":"9a","faketears":"9a","quash":"9a","wickedenergy":"9a","crunch":"9a","bite":"9a","nightslash":"9a","lashout":"9a","assurance":"9a","carrionfeast":"9a","superpower":"9a","switcheroo":"9a","reversal":"9a","mirrorcoat":"9a","silverdagger":"9a"},"shinmyoumarusukuna":{"steelbeam":"9a","flashcannon":"9a","mirrorshot":"9a","dazzlinggleam":"9a","drainingkiss":"9a","fairywind":"9a","focusblast":"9a","psychic":"9a","energyball":"9a","swift":"9a","gigatonhammer":"9a","steelroller":"9a","behemothblade":"9a","meteormash":"9a","ironhead":"9a","metalclaw":"9a","playrough":"9a","spiritbreak":"9a","waterfall":"9a","zenheadbutt":"9a","psychocut":"9a","superpower":"9a","hammerarm":"9a","sacredsword":"9a","upperhand":"9a","forcepalm":"9a","icehammer":"9a","icespinner":"9a","doubleedge":"9a","return":"9a","retaliate":"9a","cometpunch":"9a","quickattack":"9a","spikes":"9a","meditate":"9a","disable":"9a","wish":"9a","confide":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","facade":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","irondefense":"9a","autotomize":"9a","metalsound":"9a","bulletpunch":"9a","heavyslam":"9a","gyroball":"9a","smartstrike":"9a","missile":"9a","charm":"9a","sweetkiss":"9a","mistyterrain":"9a","babydolleyes":"9a","craftyshield":"9a","pinmissile":"9a","furycutter":"9a","woodhammer":"9a","growth":"9a","swordsdance":"9a","endeavor":"9a","metalburst":"9a","reversal":"9a","counter":"9a","silverdagger":"9a"},"raikohorikawa":{"zapcannon":"9a","thunder":"9a","thunderbolt":"9a","discharge":"9a","thunderclap":"9a","shockwave":"9a","thundershock":"9a","hurricane":"9a","aircutter":"9a","boomburst":"9a","uproar":"9a","echoedvoice":"9a","sonicboom":"9a","volttackle":"9a","supercellslam":"9a","thunderpunch":"9a","spark":"9a","focuspunch":"9a","crosschop":"9a","submission":"9a","drumbeating":"9a","rockslide":"9a","rocktomb":"9a","dragonrush":"9a","megakick":"9a","return":"9a","facade":"9a","thunderwave":"9a","charge":"9a","electricterrain":"9a","raindance":"9a","defog":"9a","irondefense":"9a","workup":"9a","perishsong":"9a","confide":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","eerieimpulse":"9a","magnetrise":"9a","voltswitch":"9a","wildcharge":"9a","thunderfang":"9a","voltaiclance":"9a","sparkscamper":"9a","electroball":"9a","chargebeam":"9a","electroweb":"9a","hypervoice":"9a","bulkup":"9a","nastyplot":"9a","missile":"9a"},"sumirekousami":{"focusblast":"9a","futuresight":"9a","psystrike":"9a","dreameater":"9a","psychic":"9a","psyshock":"9a","expandingforce":"9a","extrasensory":"9a","psychicnoise":"9a","psybeam":"9a","confusion":"9a","storedpower":"9a","powergem":"9a","blizzard":"9a","icebeam":"9a","icywind":"9a","signalbeam":"9a","shadowball":"9a","triattack":"9a","snore":"9a","psychocut":"9a","heartstamp":"9a","uturn":"9a","fly":"9a","acrobatics":"9a","return":"9a","facade":"9a","covet":"9a","quickattack":"9a","psychicterrain":"9a","calmmind":"9a","agility":"9a","barrier":"9a","teleport":"9a","roleplay":"9a","lightscreen":"9a","reflect":"9a","miracleeye":"9a","taunt":"9a","confide":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","frustration":"9a","round":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","trickroom":"9a","trick":"9a","magiccoat":"9a","imprison":"9a","gravity":"9a","skillswap":"9a","allyswitch":"9a","magicroom":"9a","wonderroom":"9a","hypnosis":"9a","amnesia":"9a","safeguard":"9a","hypnowhirl":"9a","nastyplot":"9a","telekinesis":"9a","chargebeam":"9a","thunderbolt":"9a","lunaticbullet":"9a"},"seiran":{"focusenergy":"9a","steelbeam":"9a","flashcannon":"9a","mirrorshot":"9a","synchronoise":"9a","psychic":"9a","esperwing":"9a","expandingforce":"9a","psychicnoise":"9a","psybeam":"9a","lunaticbullet":"9a","thunderbolt":"9a","shockwave":"9a","electroweb":"9a","airslash":"9a","hypervoice":"9a","uproar":"9a","echoedvoice":"9a","steelroller":"9a","meteormash":"9a","steelwing":"9a","metalclaw":"9a","bulletpunch":"9a","psychocut":"9a","hammerarm":"9a","woodhammer":"9a","bulletseed":"9a","bounce":"9a","return":"9a","facade":"9a","covet":"9a","quickattack":"9a","metalsound":"9a","psychicterrain":"9a","skillswap":"9a","cosmicpower":"9a","speedswap":"9a","imprison":"9a","trickroom":"9a","teleport":"9a","tailwind":"9a","sunnyday":"9a","raindance":"9a","confide":"9a","helpinghand":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","bodyslam":"9a","curse":"9a","irondefense":"9a","autotomize":"9a","ironhead":"9a","heavyslam":"9a","gyroball":"9a","smartstrike":"9a","missile":"9a","calmmind":"9a","reflect":"9a","lightscreen":"9a","trick":"9a","magiccoat":"9a","gravity":"9a","allyswitch":"9a","magicroom":"9a","wonderroom":"9a","hypnosis":"9a","amnesia":"9a","agility":"9a","safeguard":"9a","zenheadbutt":"9a","psychicfangs":"9a","psyshock":"9a","futuresight":"9a","extrasensory":"9a","storedpower":"9a","confusion":"9a","dreameater":"9a","hypnowhirl":"9a","lockon":"9a","aurasphere":"9a","vacuumwave":"9a","highjumpkick":"9a","uturn":"9a"},"ringo":{"stuffcheeks":"9a","energyball":"9a","gigadrain":"9a","megadrain":"9a","absorb":"9a","moonblast":"9a","darkpulse":"9a","icywind":"9a","chillingwater":"9a","round":"9a","terrainpulse":"9a","woodhammer":"9a","leafblade":"9a","razorleaf":"9a","trailblaze":"9a","knockoff":"9a","powertrip":"9a","superpower":"9a","brickbreak":"9a","bounce":"9a","acrobatics":"9a","supercellslam":"9a","thunderpunch":"9a","gigaimpact":"9a","doubleedge":"9a","facade":"9a","rapidspin":"9a","naturalgift":"9a","leechseed":"9a","grassyterrain":"9a","worryseed":"9a","amnesia":"9a","skillswap":"9a","lightscreen":"9a","bulkup":"9a","moonlight":"9a","haze":"9a","recycle":"9a","confide":"9a","yawn":"9a","helpinghand":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","mimic":"9a","hyperbeam":"9a","takedown":"9a","bodyslam":"9a","curse":"9a","synthesis":"9a","stunspore":"9a","ingrain":"9a","seedbomb":"9a","powerwhip":"9a","bulletseed":"9a","swordsdance":"9a","belch":"9a","stockpile":"9a","swallow":"9a","uturn":"9a","quickattack":"9a","highjumpkick":"9a"},"doremysweet":{"futuresight":"9a","dreameater":"9a","psychic":"9a","psyshock":"9a","psybeam":"9a","confusion":"9a","darkpulse":"9a","snarl":"9a","hydropump":"9a","bubblebeam":"9a","chillingwater":"9a","hyperbeam":"9a","triattack":"9a","snore":"9a","zenheadbutt":"9a","heartstamp":"9a","bodypress":"9a","icespinner":"9a","doubleedge":"9a","bodyslam":"9a","facade":"9a","psychicterrain":"9a","calmmind":"9a","teleport":"9a","trickroom":"9a","amnesia":"9a","barrier":"9a","skillswap":"9a","magiccoat":"9a","miracleeye":"9a","meanlook":"9a","recover":"9a","confide":"9a","yawn":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","curse":"9a","reflect":"9a","lightscreen":"9a","trick":"9a","imprison":"9a","gravity":"9a","allyswitch":"9a","magicroom":"9a","wonderroom":"9a","hypnosis":"9a","agility":"9a","safeguard":"9a","expandingforce":"9a","extrasensory":"9a","storedpower":"9a","psychicnoise":"9a","hypnowhirl":"9a","nightmare":"9a","moonlight":"9a","shadowball":"9a","hex":"9a","nightshade":"9a","moonblast":"9a","lunaticbullet":"9a"},"sagumekishin":{"hurricane":"9a","oblivionwing":"9a","airslash":"9a","aircutter":"9a","hyperbeam":"9a","hypervoice":"9a","swift":"9a","round":"9a","echoedvoice":"9a","aurasphere":"9a","vacuumwave":"9a","nightshade":"9a","futuresight":"9a","venoshock":"9a","flashcannon":"9a","fly":"9a","wingattack":"9a","acrobatics":"9a","dualwingbeat":"9a","lastresort":"9a","doubleedge":"9a","return":"9a","facade":"9a","fakeout":"9a","quickattack":"9a","cometpunch":"9a","spiritbreak":"9a","shadowclaw":"9a","comeuppance":"9a","steelwing":"9a","uturn":"9a","partingshot":"9a","topsyturvy":"9a","curse":"9a","moonlight":"9a","agility":"9a","trick":"9a","trickroom":"9a","skillswap":"9a","poisongas":"9a","corrosivegas":"9a","stealthrock":"9a","defog":"9a","tailwind":"9a","roost":"9a","confide":"9a","perishsong":"9a","disable":"9a","focusenergy":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","boomburst":"9a","sludgewave":"9a","sludge":"9a","acidspray":"9a","poisonjab":"9a","crosspoison":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","frustration":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","toxicspikes":"9a","acidarmor":"9a","gastroacid":"9a","gunkshot":"9a","poisonfang":"9a","sludgebomb":"9a","clearsmog":"9a","oxidize":"9a","featherdance":"9a","bravebird":"9a","drillpeck":"9a","aerialace":"9a","cloudfist":"9a","gust":"9a","leafstorm":"9a","overheat":"9a","moonblast":"9a","psychic":"9a","nervepoison":"9a","dancingblow":"9a"},"clownpiece":{"moonblast":"9a","dazzlinggleam":"9a","fairywind":"9a","overheat":"9a","fireblast":"9a","inferno":"9a","flamethrower":"9a","mysticalfire":"9a","flameburst":"9a","incinerate":"9a","ember":"9a","firespin":"9a","expandingforce":"9a","shadowball":"9a","hyperbeam":"9a","uproar":"9a","swift":"9a","playrough":"9a","spiritbreak":"9a","flareblitz":"9a","firepunch":"9a","flamewheel":"9a","flamecharge":"9a","bulletpunch":"9a","heartstamp":"9a","gigaimpact":"9a","doubleedge":"9a","covet":"9a","quickattack":"9a","mistyterrain":"9a","moonlight":"9a","babydolleyes":"9a","sunnyday":"9a","quickguard":"9a","torment":"9a","confuseray":"9a","encore":"9a","flash":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","torchsong":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","facade":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","charm":"9a","sweetkiss":"9a","craftyshield":"9a","drainingkiss":"9a","mistyexplosion":"9a","alluringvoice":"9a","velvetpress":"9a","willowisp":"9a","heatwave":"9a","lavaplume":"9a","teeterdance":"9a","flatter":"9a","wish":"9a","meteorbeam":"9a","nastyplot":"9a","fakeout":"9a","uturn":"9a"},"junko":{"triattack":"9a","moongeistbeam":"9a","icebeam":"9a","thunderbolt":"9a","earthpower":"9a","selfdestruct":"9a","frustration":"9a","closecombat":"9a","hyperspacefury":"9a","earthquake":"9a","meteormash":"9a","recover":"9a","calmmind":"9a","bulkup":"9a","nastyplot":"9a","swordsdance":"9a","agility":"9a","barrier":"9a","amnesia":"9a","refresh":"9a","purify":"9a","laserfocus":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","facade":"9a","return":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","encore":"9a","yawn":"9a","wish":"9a","healbell":"9a","charm":"9a","workup":"9a","batonpass":"9a","disable":"9a","screech":"9a","hustleup":"9a","uproar":"9a","doubleedge":"9a","quickattack":"9a","headbutt":"9a","retaliate":"9a","crushclaw":"9a","thrash":"9a","hypervoice":"9a","swift":"9a","echoedvoice":"9a","boomburst":"9a","extremespeed":"9a","outrage":"9a","lashout":"9a","stompingtantrum":"9a","shadowball":"9a","darkpulse":"9a","moonblast":"9a","flamethrower":"9a","grudge":"9a","destinybond":"9a","taunt":"9a","spite":"9a"},"hecatia":{"darkpulse":"9a","shadowball":"9a","nightshade":"9a","hydropump":"9a","muddywater":"9a","brine":"9a","energyball":"9a","gigadrain":"9a","magicalleaf":"9a","moonblast":"9a","drainingkiss":"9a","dracometeor":"9a","coreenforcer":"9a","dragonrage":"9a","fireblast":"9a","flamethrower":"9a","triattack":"9a","throatchop":"9a","suckerpunch":"9a","shadowforce":"9a","shadowsneak":"9a","waterfall":"9a","petalblizzard":"9a","razorleaf":"9a","spiritbreak":"9a","dualchop":"9a","earthquake":"9a","doubleedge":"9a","facade":"9a","bodyswap":"9a","toxic":"9a","agility":"9a","substitute":"9a","sleeptalk":"9a","protect":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","rest":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","pursuit":"9a","thief":"9a","foulplay":"9a","taunt":"9a","knockoff":"9a","faketears":"9a","torment":"9a","quash":"9a","wickedenergy":"9a","snarl":"9a","nastyplot":"9a","willowisp":"9a","confuseray":"9a","spite":"9a","painsplit":"9a","destinybond":"9a","hex":"9a","ominouswind":"9a","calmmind":"9a","meanlook":"9a","trickroom":"9a","earthpower":"9a","scald":"9a","psychic":"9a","meteorbeam":"9a","partingshot":"9a","lunaticbullet":"9a"},"joonyorigami":{"makeitrain":"9a","flashcannon":"9a","sludgewave":"9a","sludgebomb":"9a","venoshock":"9a","clearsmog":"9a","acidspray":"9a","smog":"9a","overheat":"9a","fireblast":"9a","flamethrower":"9a","incinerate":"9a","shadowball":"9a","hex":"9a","darkpulse":"9a","snarl":"9a","muddywater":"9a","hyperbeam":"9a","wringout":"9a","swift":"9a","smartstrike":"9a","gunkshot":"9a","poisonjab":"9a","blazekick":"9a","firepunch":"9a","shadowclaw":"9a","thief":"9a","payback":"9a","frustration":"9a","facade":"9a","payday":"9a","toxic":"9a","corrosivegas":"9a","willowisp":"9a","nastyplot":"9a","snatch":"9a","quash":"9a","tarshot":"9a","spotlight":"9a","recover":"9a","entrainment":"9a","confide":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","irondefense":"9a","autotomize":"9a","metalsound":"9a","steelbeam":"9a","mirrorshot":"9a","toxicspikes":"9a","acidarmor":"9a","gastroacid":"9a","sludge":"9a","oxidize":"9a","powergem":"9a","dazzlinggleam":"9a","trick":"9a","switcheroo":"9a","fling":"9a","covet":"9a","recycle":"9a","charm":"9a","flatter":"9a","nervepoison":"9a"},"shionyorigami":{"malignantchain":"9a","sludgewave":"9a","sludgebomb":"9a","venoshock":"9a","clearsmog":"9a","acidspray":"9a","smog":"9a","shadowball":"9a","hex":"9a","nightshade":"9a","drainingkiss":"9a","darkpulse":"9a","ruination":"9a","fireblast":"9a","incinerate":"9a","flashcannon":"9a","psychicnoise":"9a","swift":"9a","terrainpulse":"9a","poisonjab":"9a","crosspoison":"9a","poltergeist":"9a","phantomforce":"9a","shadowpunch":"9a","shadowsneak":"9a","suckerpunch":"9a","knockoff":"9a","thief":"9a","uturn":"9a","frustration":"9a","facade":"9a","covet":"9a","toxic":"9a","corrosivegas":"9a","toxicspikes":"9a","venomdrench":"9a","taunt":"9a","snatch":"9a","calmmind":"9a","guardswap":"9a","skillswap":"9a","recover":"9a","confide":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","acidarmor":"9a","gastroacid":"9a","sludge":"9a","oxidize":"9a","willowisp":"9a","confuseray":"9a","spite":"9a","painsplit":"9a","destinybond":"9a","ominouswind":"9a","grudge":"9a","memento":"9a","trick":"9a","torment":"9a","nastyplot":"9a","lunaticbullet":"9a","nervepoison":"9a"},"eternitylarva":{"eternabeam":"9a","bugbuzz":"9a","pollenpuff":"9a","silverwind":"9a","strugglebug":"9a","hurricane":"9a","airslash":"9a","aircutter":"9a","gust":"9a","heatwave":"9a","clangingscales":"9a","incinerate":"9a","shadowball":"9a","solarbeam":"9a","energyball":"9a","swift":"9a","weatherball":"9a","xscissor":"9a","uturn":"9a","fly":"9a","aerialace":"9a","acrobatics":"9a","dualwingbeat":"9a","flamecharge":"9a","scaleshot":"9a","petalblizzard":"9a","trailblaze":"9a","return":"9a","facade":"9a","quickattack":"9a","quiverdance":"9a","stringshot":"9a","powder":"9a","ragepowder":"9a","tailwind":"9a","stunspore":"9a","poisonpowder":"9a","agility":"9a","sunnyday":"9a","morningsun":"9a","camouflage":"9a","simplebeam":"9a","flash":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","chrysalisveil":"9a","signalbeam":"9a","roost":"9a","defog":"9a","featherdance":"9a","gigadrain":"9a","dazzlinggleam":"9a","growth":"9a"},"nemunosakata":{"grassyglide":"9a","stompingtantrum":"9a","healpulse":"9a","leafstorm":"9a","grasspledge":"9a","magicalleaf":"9a","ancientpower":"9a","earthpower":"9a","flashcannon":"9a","darkpulse":"9a","uproar":"9a","echoedvoice":"9a","woodhammer":"9a","leafblade":"9a","razorleaf":"9a","vinewhip":"9a","rockwrecker":"9a","stoneedge":"9a","mightycleave":"9a","rockslide":"9a","smackdown":"9a","earthquake":"9a","nightslash":"9a","knockoff":"9a","aerialace":"9a","ironhead":"9a","smartstrike":"9a","metalclaw":"9a","doubleedge":"9a","takedown":"9a","slash":"9a","cut":"9a","leechseed":"9a","grassyterrain":"9a","stealthrock":"9a","wideguard":"9a","honeclaws":"9a","taunt":"9a","raindance":"9a","lifedew":"9a","swordsdance":"9a","focusenergy":"9a","laserfocus":"9a","entrainment":"9a","safeguard":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","facade":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","synthesis":"9a","stunspore":"9a","ingrain":"9a","worryseed":"9a","trailblaze":"9a","seedbomb":"9a","powerwhip":"9a","bulletseed":"9a","sandstorm":"9a","rockpolish":"9a","rocktomb":"9a","rockblast":"9a","craghammer":"9a","psychocut":"9a","xscissor":"9a","sacredsword":"9a","silverdagger":"9a","spikes":"9a","scaryface":"9a","roar":"9a","sculptedarmor":"9a","dustupheaval":"9a"},"aunnkomano":{"meteorbeam":"9a","powergem":"9a","springtidestorm":"9a","dazzlinggleam":"9a","fairywind":"9a","solarbeam":"9a","petaldance":"9a","gigadrain":"9a","discharge":"9a","swift":"9a","headsmash":"9a","stoneedge":"9a","rockslide":"9a","rocktomb":"9a","playrough":"9a","spiritbreak":"9a","wildcharge":"9a","thunderfang":"9a","hornleech":"9a","megahorn":"9a","pounce":"9a","psychicfangs":"9a","crunch":"9a","bite":"9a","submission":"9a","counter":"9a","doubleedge":"9a","return":"9a","takedown":"9a","facade":"9a","covet":"9a","furyswipes":"9a","stealthrock":"9a","sandstorm":"9a","rockpolish":"9a","mistyterrain":"9a","charm":"9a","thunderwave":"9a","tidyup":"9a","safeguard":"9a","tearfullook":"9a","helpinghand":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","stompingtantrum":"9a","recover":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","bodyslam":"9a","curse":"9a","wideguard":"9a","rockblast":"9a","smackdown":"9a","craghammer":"9a","sweetkiss":"9a","babydolleyes":"9a","craftyshield":"9a","firefang":"9a","icefang":"9a","howl":"9a","roar":"9a","quickguard":"9a","followme":"9a","bodypress":"9a","irondefense":"9a","swordsdance":"9a","dancingblow":"9a","sculptedarmor":"9a","dustupheaval":"9a"},"narumiyatadera":{"blizzard":"9a","icebeam":"9a","aurorabeam":"9a","icywind":"9a","powdersnow":"9a","powergem":"9a","ancientpower":"9a","fireblast":"9a","magmastorm":"9a","flamethrower":"9a","firepledge":"9a","ember":"9a","extrasensory":"9a","storedpower":"9a","mirrorcoat":"9a","shadowball":"9a","triattack":"9a","round":"9a","weatherball":"9a","icespinner":"9a","icepunch":"9a","rockslide":"9a","rocktomb":"9a","rockthrow":"9a","rockblast":"9a","firepunch":"9a","flamecharge":"9a","zenheadbutt":"9a","megakick":"9a","megapunch":"9a","facade":"9a","snowscape":"9a","auroraveil":"9a","haze":"9a","stealthrock":"9a","rockpolish":"9a","calmmind":"9a","healpulse":"9a","helpinghand":"9a","psychup":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","bodyslam":"9a","curse":"9a","hail":"9a","mist":"9a","chillingmist":"9a","frostbreath":"9a","sandstorm":"9a","wideguard":"9a","meteorbeam":"9a","earthpower":"9a","irondefense":"9a","wish":"9a","healbell":"9a","energyball":"9a","sculptedarmor":"9a"},"maiteireida":{"focusblast":"9a","aurasphere":"9a","shadowball":"9a","psychic":"9a","extrasensory":"9a","fierydance":"9a","petaldance":"9a","hyperbeam":"9a","uproar":"9a","focuspunch":"9a","highjumpkick":"9a","dancingblow":"9a","drainpunch":"9a","brickbreak":"9a","machpunch":"9a","reversal":"9a","acrobatics":"9a","firstimpression":"9a","uturn":"9a","shadowpunch":"9a","shadowsneak":"9a","throatchop":"9a","feintattack":"9a","gigaimpact":"9a","return":"9a","facade":"9a","retaliate":"9a","feint":"9a","wideguard":"9a","confuseray":"9a","workup":"9a","painsplit":"9a","helpinghand":"9a","encore":"9a","teeterdance":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","takedown":"9a","bodyslam":"9a","curse":"9a","bulkup":"9a","detect":"9a","quickguard":"9a","coaching":"9a","closecombat":"9a","superpower":"9a","lowkick":"9a","bodypress":"9a","rocksmash":"9a","lowsweep":"9a","shufflejab":"9a","vacuumwave":"9a","swordsdance":"9a","dragondance":"9a","featherdance":"9a","leafblade":"9a","bulletseed":"9a","tripleaxel":"9a","fakeout":"9a","afteryou":"9a","followme":"9a","cloudfist":"9a"},"satononishida":{"focusblast":"9a","shadowball":"9a","psychic":"9a","extrasensory":"9a","fierydance":"9a","petaldance":"9a","hyperbeam":"9a","uproar":"9a","focuspunch":"9a","highjumpkick":"9a","dancingblow":"9a","drainpunch":"9a","brickbreak":"9a","machpunch":"9a","reversal":"9a","spiritbreak":"9a","acrobatics":"9a","firstimpression":"9a","uturn":"9a","shadowpunch":"9a","shadowsneak":"9a","throatchop":"9a","feintattack":"9a","gigaimpact":"9a","return":"9a","facade":"9a","retaliate":"9a","feint":"9a","quickguard":"9a","confuseray":"9a","destinybond":"9a","workup":"9a","helpinghand":"9a","encore":"9a","teeterdance":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","takedown":"9a","bodyslam":"9a","curse":"9a","bulkup":"9a","detect":"9a","coaching":"9a","closecombat":"9a","superpower":"9a","lowkick":"9a","bodypress":"9a","rocksmash":"9a","lowsweep":"9a","shufflejab":"9a","aurasphere":"9a","vacuumwave":"9a","swordsdance":"9a","dragondance":"9a","featherdance":"9a","leafblade":"9a","bulletseed":"9a","tripleaxel":"9a","fakeout":"9a","afteryou":"9a","followme":"9a","cloudfist":"9a"},"okinamatara":{"hyperbeam":"9a","triattack":"9a","hiddenpower":"9a","weatherball":"9a","terrainpulse":"9a","echoedvoice":"9a","darkpulse":"9a","shadowball":"9a","hex":"9a","flashcannon":"9a","springtidestorm":"9a","fireblast":"9a","hydropump":"9a","sandsearstorm":"9a","powergem":"9a","blizzard":"9a","doubleedge":"9a","facade":"9a","doublehit":"9a","falsesurrender":"9a","knockoff":"9a","feintattack":"9a","payback":"9a","comeuppance":"9a","flareblitz":"9a","liquidation":"9a","earthquake":"9a","rockslide":"9a","iciclecrash":"9a","icespinner":"9a","torment":"9a","workup":"9a","confide":"9a","sunnyday":"9a","raindance":"9a","sandstorm":"9a","snowscape":"9a","teleport":"9a","gravity":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","bleakwindstorm":"9a","wildboltstorm":"9a","toxic":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","encore":"9a","yawn":"9a","wish":"9a","healbell":"9a","charm":"9a","batonpass":"9a","disable":"9a","screech":"9a","hustleup":"9a","uproar":"9a","quickattack":"9a","headbutt":"9a","swordsdance":"9a","retaliate":"9a","crushclaw":"9a","thrash":"9a","hypervoice":"9a","swift":"9a","pursuit":"9a","thief":"9a","foulplay":"9a","taunt":"9a","faketears":"9a","quash":"9a","wickedenergy":"9a","crunch":"9a","bite":"9a","suckerpunch":"9a","throatchop":"9a","nightslash":"9a","lashout":"9a","assurance":"9a","carrionfeast":"9a","snarl":"9a","nastyplot":"9a","uturn":"9a","partingshot":"9a","twilightexit":"9a","scald":"9a","flamethrower":"9a","stoneedge":"9a","icebeam":"9a","solarbeam":"9a"},"eikaebisu":{"stonestacking":"9a","shadowball":"9a","nightshade":"9a","powergem":"9a","ancientpower":"9a","hydropump":"9a","surf":"9a","bubblebeam":"9a","chillingwater":"9a","bubble":"9a","scorchingsands":"9a","icywind":"9a","venoshock":"9a","swift":"9a","echoedvoice":"9a","poltergeist":"9a","shadowpunch":"9a","stoneedge":"9a","rockslide":"9a","rocktomb":"9a","aquacutter":"9a","icespinner":"9a","return":"9a","facade":"9a","covet":"9a","bind":"9a","curse":"9a","destinybond":"9a","stealthrock":"9a","sandstorm":"9a","aquaring":"9a","raindance":"9a","soak":"9a","lifedew":"9a","spikes":"9a","toxic":"9a","acidarmor":"9a","recover":"9a","tearfullook":"9a","helpinghand":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","bodyslam":"9a","willowisp":"9a","confuseray":"9a","spite":"9a","painsplit":"9a","hex":"9a","ominouswind":"9a","rockpolish":"9a","wideguard":"9a","meteorbeam":"9a","irondefense":"9a","bodypress":"9a","calmmind":"9a","followme":"9a","scald":"9a","lunaticbullet":"9a","sculptedarmor":"9a"},"urumiushizaki":{"hydrocannon":"9a","hydropump":"9a","surf":"9a","waterpulse":"9a","chillingwater":"9a","whirlpool":"9a","ancientpower":"9a","darkpulse":"9a","mudshot":"9a","hyperbeam":"9a","weatherball":"9a","liquidation":"9a","dive":"9a","flipturn":"9a","stoneedge":"9a","rocktomb":"9a","smackdown":"9a","earthquake":"9a","stompingtantrum":"9a","megahorn":"9a","bodypress":"9a","nightslash":"9a","payback":"9a","doubleedge":"9a","return":"9a","facade":"9a","hornattack":"9a","soak":"9a","raindance":"9a","stealthrock":"9a","curse":"9a","psychicterrain":"9a","gravity":"9a","reflect":"9a","trickroom":"9a","milkdrink":"9a","roar":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","aquaring":"9a","lifedew":"9a","waterfall":"9a","aquajet":"9a","aquatail":"9a","wavecharge":"9a","superscope3d":"9a","sandstorm":"9a","rockpolish":"9a","wideguard":"9a","rockslide":"9a","rockblast":"9a","craghammer":"9a","highhorsepower":"9a","headsmash":"9a","heavyslam":"9a","wavecrash":"9a","bulkup":"9a","waterplates":"9a","sculptedarmor":"9a","dustupheaval":"9a"},"kutakaniwatari":{"hydropump":"9a","sparklingaria":"9a","scald":"9a","airslash":"9a","gust":"9a","dazzlinggleam":"9a","disarmingvoice":"9a","flashcannon":"9a","psychicnoise":"9a","storedpower":"9a","hex":"9a","hyperbeam":"9a","hypervoice":"9a","round":"9a","liquidation":"9a","aquajet":"9a","skyattack":"9a","bravebird":"9a","fly":"9a","aerialace":"9a","uturn":"9a","foulplay":"9a","throatchop":"9a","steelwing":"9a","astonish":"9a","facade":"9a","quickattack":"9a","fakeout":"9a","raindance":"9a","soak":"9a","tailwind":"9a","defog":"9a","featherdance":"9a","agility":"9a","healpulse":"9a","toxic":"9a","healbell":"9a","perishsong":"9a","confide":"9a","block":"9a","helpinghand":"9a","whirlwind":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","gigaimpact":"9a","takedown":"9a","bodyslam":"9a","curse":"9a","aquaring":"9a","lifedew":"9a","flipturn":"9a","waterfall":"9a","aquatail":"9a","dive":"9a","wavecharge":"9a","superscope3d":"9a","surf":"9a","muddywater":"9a","waterpulse":"9a","whirlpool":"9a","brine":"9a","chillingwater":"9a","undertow":"9a","roost":"9a","drillpeck":"9a","acrobatics":"9a","dualwingbeat":"9a","cloudfist":"9a","hurricane":"9a","aircutter":"9a","calmmind":"9a","icebeam":"9a","mirrormove":"9a","quickguard":"9a","wideguard":"9a"},"yachiekicchou":{"dracometeor":"9a","dragonpulse":"9a","dragonbreath":"9a","twister":"9a","darkpulse":"9a","snarl":"9a","flashcannon":"9a","heatwave":"9a","firepledge":"9a","flameburst":"9a","firespin":"9a","chillingwater":"9a","hyperbeam":"9a","dragonrush":"9a","dragonclaw":"9a","dragontail":"9a","scaleshot":"9a","foulplay":"9a","falsesurrender":"9a","knockoff":"9a","feintattack":"9a","payback":"9a","aquatail":"9a","irontail":"9a","megahorn":"9a","icespinner":"9a","bodypress":"9a","facade":"9a","rapidspin":"9a","dragoncheer":"9a","taunt":"9a","snatch":"9a","torment":"9a","irondefense":"9a","aquaring":"9a","raindance":"9a","sunnyday":"9a","eerieimpulse":"9a","charm":"9a","spikyshield":"9a","shellsmash":"9a","confide":"9a","whirlwind":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","outrage":"9a","dragondance":"9a","breakingswipe":"9a","pursuit":"9a","thief":"9a","faketears":"9a","quash":"9a","wickedenergy":"9a","crunch":"9a","bite":"9a","suckerpunch":"9a","throatchop":"9a","nightslash":"9a","lashout":"9a","assurance":"9a","carrionfeast":"9a","withdraw":"9a","partingshot":"9a","nobleroar":"9a","scaryface":"9a","trickroom":"9a","waterpulse":"9a","silverdagger":"9a"},"mayumijoutouguu":{"earthpower":"9a","mudshot":"9a","steelbeam":"9a","flashcannon":"9a","discharge":"9a","shockwave":"9a","ancientpower":"9a","hyperbeam":"9a","uproar":"9a","swift":"9a","earthquake":"9a","highhorsepower":"9a","bulldoze":"9a","ironhead":"9a","smartstrike":"9a","magnetbomb":"9a","wildcharge":"9a","thunderpunch":"9a","sacredsword":"9a","rocktomb":"9a","smackdown":"9a","gigaimpact":"9a","doubleedge":"9a","return":"9a","megapunch":"9a","facade":"9a","cut":"9a","spikes":"9a","irondefense":"9a","metalsound":"9a","stealthrock":"9a","rockpolish":"9a","sandstorm":"9a","wideguard":"9a","healingwish":"9a","swordsdance":"9a","helpinghand":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","takedown":"9a","bodyslam":"9a","curse":"9a","sculptedarmor":"9a","dig":"9a","stompingtantrum":"9a","drillrun":"9a","excavate":"9a","dustupheaval":"9a","autotomize":"9a","bulletpunch":"9a","heavyslam":"9a","gyroball":"9a","metalclaw":"9a","missile":"9a","bulkup":"9a","bodypress":"9a","quickguard":"9a","silverdagger":"9a"},"keikihaniyasushin":{"hiddenpower":"9a","earthpower":"9a","mudbomb":"9a","mudshot":"9a","thunderbolt":"9a","discharge":"9a","thundershock":"9a","dracometeor":"9a","flashcannon":"9a","powergem":"9a","hyperbeam":"9a","terastarstorm":"9a","swift":"9a","earthquake":"9a","bulldoze":"9a","magnitude":"9a","thunderpunch":"9a","spark":"9a","vcreate":"9a","meteormash":"9a","rockslide":"9a","rocktomb":"9a","facade":"9a","cometpunch":"9a","sculptedarmor":"9a","rototiller":"9a","thunderwave":"9a","charge":"9a","electricterrain":"9a","stealthrock":"9a","agility":"9a","cosmicpower":"9a","guardswap":"9a","irondefense":"9a","wish":"9a","acupressure":"9a","workup":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","shoreup":"9a","toxic":"9a","weatherball":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","spikes":"9a","sandstorm":"9a","highhorsepower":"9a","dig":"9a","stompingtantrum":"9a","drillrun":"9a","excavate":"9a","dustupheaval":"9a","scorchingsands":"9a","tremorshot":"9a","eerieimpulse":"9a","magnetrise":"9a","voltswitch":"9a","wildcharge":"9a","thunderfang":"9a","supercellslam":"9a","voltaiclance":"9a","sparkscamper":"9a","thunder":"9a","electroball":"9a","shockwave":"9a","chargebeam":"9a","electroweb":"9a","calmmind":"9a","meteorbeam":"9a"},"sakikurokuma":{"focusblast":"9a","hurricane":"9a","airslash":"9a","aircutter":"9a","gust":"9a","darkpulse":"9a","snarl":"9a","swift":"9a","meteorassault":"9a","highjumpkick":"9a","superpower":"9a","jumpkick":"9a","skyuppercut":"9a","submission":"9a","brickbreak":"9a","rollingkick":"9a","lowsweep":"9a","revenge":"9a","aerialace":"9a","highhorsepower":"9a","blazekick":"9a","nightslash":"9a","suckerpunch":"9a","rockwrecker":"9a","gigaimpact":"9a","megakick":"9a","facade":"9a","bulkup":"9a","coaching":"9a","quickguard":"9a","tailwind":"9a","roost":"9a","featherdance":"9a","sunnyday":"9a","agility":"9a","focusenergy":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","thunderouskick":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","detect":"9a","closecombat":"9a","drainpunch":"9a","machpunch":"9a","lowkick":"9a","bodypress":"9a","rocksmash":"9a","reversal":"9a","focuspunch":"9a","shufflejab":"9a","dancingblow":"9a","defog":"9a","uturn":"9a","bravebird":"9a","fly":"9a","drillpeck":"9a","acrobatics":"9a","dualwingbeat":"9a","cloudfist":"9a","axekick":"9a","doublekick":"9a","dynamicpunch":"9a","stomp":"9a","bounce":"9a","swordsdance":"9a","stoneedge":"9a"},"yuumatoutetsu":{"liquidation":"9a","hydropump":"9a","muddywater":"9a","scald":"9a","waterpulse":"9a","whirlpool":"9a","darkpulse":"9a","flameburst":"9a","sludgewave":"9a","sludgebomb":"9a","sludge":"9a","mudshot":"9a","hyperbeam":"9a","uproar":"9a","spitup":"9a","dive":"9a","aquacutter":"9a","crunch":"9a","bite":"9a","payback":"9a","powertrip":"9a","poisonjab":"9a","poisonfang":"9a","earthquake":"9a","stompingtantrum":"9a","temperflare":"9a","firefang":"9a","raindance":"9a","soak":"9a","taunt":"9a","snatch":"9a","tarshot":"9a","toxic":"9a","stockpile":"9a","swagger":"9a","swallow":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","facade":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","aquaring":"9a","lifedew":"9a","flipturn":"9a","waterfall":"9a","aquajet":"9a","aquatail":"9a","wavecharge":"9a","superscope3d":"9a","surf":"9a","brine":"9a","chillingwater":"9a","undertow":"9a","pursuit":"9a","thief":"9a","foulplay":"9a","knockoff":"9a","faketears":"9a","torment":"9a","quash":"9a","wickedenergy":"9a","suckerpunch":"9a","throatchop":"9a","nightslash":"9a","lashout":"9a","assurance":"9a","carrionfeast":"9a","snarl":"9a","nastyplot":"9a","belch":"9a","stuffcheeks":"9a","jawlock":"9a","wavecrash":"9a","bulkup":"9a","swordsdance":"9a","silverdagger":"9a","waterplates":"9a"},"mikegotoukuji":{"steelbeam":"9a","makeitrain":"9a","flashcannon":"9a","mirrorshot":"9a","psychic":"9a","expandingforce":"9a","dazzlinggleam":"9a","focusblast":"9a","vacuumwave":"9a","triattack":"9a","swift":"9a","steelroller":"9a","ironhead":"9a","bulletpunch":"9a","metalburst":"9a","psychocut":"9a","superpower":"9a","brickbreak":"9a","thunderpunch":"9a","firepunch":"9a","icepunch":"9a","uturn":"9a","doubleedge":"9a","return":"9a","slash":"9a","payday":"9a","scratch":"9a","metalsound":"9a","trick":"9a","agility":"9a","taunt":"9a","torment":"9a","thunderwave":"9a","focusenergy":"9a","charm":"9a","assist":"9a","afteryou":"9a","copycat":"9a","helpinghand":"9a","confide":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","followme":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","facade":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","bodyslam":"9a","curse":"9a","irondefense":"9a","autotomize":"9a","heavyslam":"9a","gyroball":"9a","smartstrike":"9a","metalclaw":"9a","missile":"9a","fakeout":"9a","nastyplot":"9a","powergem":"9a","covet":"9a","encore":"9a","furyswipes":"9a","playrough":"9a"},"takaneyamashiro":{"frenzyplant":"9a","leafstorm":"9a","energyball":"9a","gigadrain":"9a","magicalleaf":"9a","megadrain":"9a","absorb":"9a","surf":"9a","muddywater":"9a","chillingwater":"9a","shadowball":"9a","terrainpulse":"9a","echoedvoice":"9a","woodhammer":"9a","seedbomb":"9a","razorleaf":"9a","leafage":"9a","waterfall":"9a","suckerpunch":"9a","knockoff":"9a","thief":"9a","shadowpunch":"9a","uturn":"9a","pounce":"9a","doubleedge":"9a","facade":"9a","covet":"9a","cut":"9a","grassyterrain":"9a","synthesis":"9a","leechseed":"9a","raindance":"9a","sunnyday":"9a","taunt":"9a","embargo":"9a","flatter":"9a","switcheroo":"9a","supersonic":"9a","refresh":"9a","camouflage":"9a","helpinghand":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","bodyslam":"9a","curse":"9a","stunspore":"9a","ingrain":"9a","worryseed":"9a","trailblaze":"9a","solarbeam":"9a","grassknot":"9a","petalblizzard":"9a","solarnectar":"9a","aquaring":"9a","soak":"9a","lifedew":"9a","flipturn":"9a","scald":"9a","hydropump":"9a","waterpulse":"9a","whirlpool":"9a","brine":"9a","undertow":"9a","spikes":"9a","trick":"9a","calmmind":"9a"},"sannyokomakusa":{"overheat":"9a","dracometeor":"9a","fireblast":"9a","inferno":"9a","heatwave":"9a","flamethrower":"9a","incinerate":"9a","ember":"9a","firespin":"9a","dragonpulse":"9a","dragonbreath":"9a","twister":"9a","nervepoison":"9a","clearsmog":"9a","smog":"9a","mistyexplosion":"9a","scorchingsands":"9a","darkpulse":"9a","snarl":"9a","swift":"9a","flareblitz":"9a","firepunch":"9a","flamecharge":"9a","dragonclaw":"9a","breakingswipe":"9a","poisonjab":"9a","feintattack":"9a","megapunch":"9a","facade":"9a","willowisp":"9a","sunnyday":"9a","dragoncheer":"9a","poisongas":"9a","corrosivegas":"9a","mist":"9a","haze":"9a","snatch":"9a","lightscreen":"9a","trick":"9a","aromaticmist":"9a","mistyterrain":"9a","smokescreen":"9a","recover":"9a","helpinghand":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","bodyslam":"9a","curse":"9a","mysticalfire":"9a","lavaplume":"9a","dragontail":"9a","calmmind":"9a"},"misumarutamatsukuri":{"meteorbeam":"9a","powergem":"9a","ancientpower":"9a","futuresight":"9a","psychic":"9a","expandingforce":"9a","psychicnoise":"9a","psybeam":"9a","psywave":"9a","nightshade":"9a","signalbeam":"9a","triattack":"9a","terrainpulse":"9a","stoneedge":"9a","rockslide":"9a","rocktomb":"9a","smackdown":"9a","rockthrow":"9a","rockblast":"9a","zenheadbutt":"9a","psychocut":"9a","spiritbreak":"9a","bulldoze":"9a","focuspunch":"9a","facade":"9a","stealthrock":"9a","sandstorm":"9a","wideguard":"9a","calmmind":"9a","reflect":"9a","lightscreen":"9a","raindance":"9a","sunnyday":"9a","helpinghand":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","bodyslam":"9a","curse":"9a","rockpolish":"9a","magiccoat":"9a","storedpower":"9a","cosmicpower":"9a","irondefense":"9a","gravity":"9a","trickroom":"9a","psyshock":"9a","dazzlinggleam":"9a","earthpower":"9a","flashcannon":"9a","sculptedarmor":"9a"},"tsukasakudamaki":{"shadowball":"9a","hex":"9a","ominouswind":"9a","nightshade":"9a","triattack":"9a","swift":"9a","terrainpulse":"9a","blizzard":"9a","icywind":"9a","nightdaze":"9a","darkpulse":"9a","flamethrower":"9a","incinerate":"9a","risingvoltage":"9a","psychic":"9a","poltergeist":"9a","phantomforce":"9a","shadowsneak":"9a","doubleedge":"9a","frustration":"9a","facade":"9a","fakeout":"9a","doublehit":"9a","cometpunch":"9a","psychocut":"9a","heartstamp":"9a","knockoff":"9a","feintattack":"9a","icepunch":"9a","flamecharge":"9a","curse":"9a","confuseray":"9a","spite":"9a","haze":"9a","willowisp":"9a","taunt":"9a","torment":"9a","quash":"9a","switcheroo":"9a","faketears":"9a","snowscape":"9a","auroraveil":"9a","magicroom":"9a","painsplit":"9a","tearfullook":"9a","batonpass":"9a","helpinghand":"9a","confide":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","bodyslam":"9a","destinybond":"9a","encore":"9a","yawn":"9a","wish":"9a","healbell":"9a","charm":"9a","workup":"9a","disable":"9a","screech":"9a","hustleup":"9a","uproar":"9a","hypervoice":"9a","echoedvoice":"9a","partingshot":"9a","flatter":"9a","trick":"9a","nastyplot":"9a","sweetkiss":"9a","memento":"9a","foulplay":"9a","lunaticbullet":"9a"},"megumuiizunamaru":{"hurricane":"9a","bleakwindstorm":"9a","airslash":"9a","gust":"9a","futuresight":"9a","psychic":"9a","expandingforce":"9a","psyshock":"9a","psybeam":"9a","confusion":"9a","storedpower":"9a","powergem":"9a","aurasphere":"9a","vacuumwave":"9a","hyperbeam":"9a","swift":"9a","skyattack":"9a","bravebird":"9a","fly":"9a","wingattack":"9a","aerialace":"9a","dualwingbeat":"9a","psychocut":"9a","brickbreak":"9a","meteormash":"9a","steelwing":"9a","doubleedge":"9a","return":"9a","bodyslam":"9a","facade":"9a","cometpunch":"9a","tailwind":"9a","defog":"9a","calmmind":"9a","cosmicpower":"9a","agility":"9a","trickroom":"9a","wonderroom":"9a","speedswap":"9a","lightscreen":"9a","teleport":"9a","confuseray":"9a","raindance":"9a","snowscape":"9a","wish":"9a","confide":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","curse":"9a","roost":"9a","featherdance":"9a","uturn":"9a","drillpeck":"9a","acrobatics":"9a","cloudfist":"9a","aircutter":"9a","reflect":"9a","trick":"9a","magiccoat":"9a","imprison":"9a","gravity":"9a","psychicterrain":"9a","skillswap":"9a","allyswitch":"9a","magicroom":"9a","hypnosis":"9a","amnesia":"9a","safeguard":"9a","zenheadbutt":"9a","psychicfangs":"9a","extrasensory":"9a","psychicnoise":"9a","dreameater":"9a","hypnowhirl":"9a","meteorbeam":"9a","dazzlinggleam":"9a","lunaticbullet":"9a"},"chimatatenkyuu":{"makeitrain":"9a","flashcannon":"9a","mirrorshot":"9a","aircutter":"9a","gust":"9a","moonblast":"9a","dazzlinggleam":"9a","fairywind":"9a","thunderbolt":"9a","voltswitch":"9a","shockwave":"9a","prismaticlaser":"9a","mirrorcoat":"9a","hypervoice":"9a","weatherball":"9a","trumpcard":"9a","ironhead":"9a","magnetbomb":"9a","skyattack":"9a","fly":"9a","zenheadbutt":"9a","supercellslam":"9a","spark":"9a","doubleedge":"9a","facade":"9a","quickattack":"9a","payday":"9a","feint":"9a","metalsound":"9a","tailwind":"9a","defog":"9a","moonlight":"9a","craftyshield":"9a","lifedew":"9a","sunnyday":"9a","trick":"9a","skillswap":"9a","guardswap":"9a","thunderwave":"9a","whirlwind":"9a","helpinghand":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","bodyslam":"9a","curse":"9a","irondefense":"9a","autotomize":"9a","steelbeam":"9a","roost":"9a","featherdance":"9a","uturn":"9a","airslash":"9a","hurricane":"9a","switcheroo":"9a","bestow":"9a","fling":"9a","recycle":"9a","aurorabeam":"9a","calmmind":"9a","powergem":"9a"},"momoyohimemushi":{"bugbuzz":"9a","silverwind":"9a","strugglebug":"9a","ancientpower":"9a","earthpower":"9a","scorchingsands":"9a","dazzlinggleam":"9a","venoshock":"9a","acidspray":"9a","uproar":"9a","xscissor":"9a","leechlife":"9a","lunge":"9a","skittersmack":"9a","bugbite":"9a","fellstinger":"9a","pinmissile":"9a","rockwrecker":"9a","stoneedge":"9a","rockslide":"9a","rocktomb":"9a","excavate":"9a","smackdown":"9a","rockblast":"9a","drillrun":"9a","bulldoze":"9a","crunch":"9a","bite":"9a","fling":"9a","superpower":"9a","submission":"9a","seismictoss":"9a","firefang":"9a","ragepowder":"9a","stealthrock":"9a","sandstorm":"9a","rockpolish":"9a","poisonpowder":"9a","acidarmor":"9a","honeclaws":"9a","taunt":"9a","focusenergy":"9a","laserfocus":"9a","helpinghand":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","facade":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","bodyslam":"9a","curse":"9a","stringshot":"9a","uturn":"9a","chrysalisveil":"9a","megahorn":"9a","pounce":"9a","hivefrenzy":"9a","signalbeam":"9a","pollenpuff":"9a","wideguard":"9a","craghammer":"9a","powergem":"9a","meteorbeam":"9a","firstimpression":"9a","spikes":"9a","dig":"9a","poisonjab":"9a","poisonfang":"9a","dragonclaw":"9a","coil":"9a","swordsdance":"9a","sculptedarmor":"9a","dustupheaval":"9a"},"sonbiten":{"focusblast":"9a","aurasphere":"9a","vacuumwave":"9a","bleakwindstorm":"9a","aircutter":"9a","gust":"9a","extrasensory":"9a","psychicnoise":"9a","flashcannon":"9a","triattack":"9a","weatherball":"9a","focuspunch":"9a","highjumpkick":"9a","closecombat":"9a","jumpkick":"9a","submission":"9a","brickbreak":"9a","upperhand":"9a","lowsweep":"9a","forcepalm":"9a","circlethrow":"9a","machpunch":"9a","thunderpunch":"9a","blazekick":"9a","firepunch":"9a","bounce":"9a","acrobatics":"9a","metalclaw":"9a","coaching":"9a","quickguard":"9a","detect":"9a","calmmind":"9a","agility":"9a","reflect":"9a","magiccoat":"9a","snatch":"9a","quash":"9a","yawn":"9a","confide":"9a","focusenergy":"9a","acupressure":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","facade":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","bulkup":"9a","nastyplot":"9a","uturn":"9a","fakeout":"9a","knockoff":"9a","encore":"9a","taunt":"9a","screech":"9a","tickle":"9a","energyball":"9a","grassknot":"9a","rapidspin":"9a","psychic":"9a"},"enokomitsugashira":{"steelbeam":"9a","mirrorshot":"9a","darkpulse":"9a","snarl":"9a","energyball":"9a","gigadrain":"9a","razorwind":"9a","swift":"9a","steelroller":"9a","ironchomp":"9a","metalclaw":"9a","metalburst":"9a","crunch":"9a","suckerpunch":"9a","bite":"9a","payback":"9a","pursuit":"9a","seedbomb":"9a","snaptrap":"9a","poisonfang":"9a","icefang":"9a","superpower":"9a","submission":"9a","brickbreak":"9a","stoneedge":"9a","gigaimpact":"9a","doubleedge":"9a","hyperfang":"9a","facade":"9a","quickattack":"9a","superfang":"9a","irondefense":"9a","taunt":"9a","honeclaws":"9a","snatch":"9a","curse":"9a","sandstorm":"9a","stealthrock":"9a","sunnyday":"9a","detect":"9a","spikes":"9a","swordsdance":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","autotomize":"9a","metalsound":"9a","ironhead":"9a","bulletpunch":"9a","heavyslam":"9a","gyroball":"9a","smartstrike":"9a","missile":"9a","thief":"9a","foulplay":"9a","knockoff":"9a","faketears":"9a","torment":"9a","quash":"9a","wickedenergy":"9a","throatchop":"9a","nightslash":"9a","lashout":"9a","assurance":"9a","carrionfeast":"9a","howl":"9a","roar":"9a","jawlock":"9a","psychicfangs":"9a","firefang":"9a","thunderfang":"9a","uturn":"9a","nobleroar":"9a","silverdagger":"9a"},"chiyaritenkajin":{"burnup":"9a","fireblast":"9a","flamethrower":"9a","flameburst":"9a","incinerate":"9a","ember":"9a","shadowball":"9a","hex":"9a","nightshade":"9a","muddywater":"9a","drainingkiss":"9a","sludgewave":"9a","sludgebomb":"9a","acidspray":"9a","darkpulse":"9a","swift":"9a","flareblitz":"9a","firepunch":"9a","firefang":"9a","flamecharge":"9a","poltergeist":"9a","phantomforce":"9a","shadowclaw":"9a","shadowsneak":"9a","lick":"9a","megahorn":"9a","leechlife":"9a","gunkshot":"9a","crosspoison":"9a","drainpunch":"9a","acrobatics":"9a","crunch":"9a","bite":"9a","dragonclaw":"9a","dragontail":"9a","doubleedge":"9a","takedown":"9a","hornattack":"9a","quickattack":"9a","willowisp":"9a","destinybond":"9a","confuseray":"9a","dragondance":"9a","toxic":"9a","honeclaws":"9a","sandstorm":"9a","confide":"9a","focusenergy":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","facade":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","sunnyday":"9a","temperflare":"9a","heatcrash":"9a","blazekick":"9a","spite":"9a","painsplit":"9a","shadowpunch":"9a","shadowstrike":"9a","swordsdance":"9a","carrionfeast":"9a"},"hisamiyomotsu":{"petaldance":"9a","gigadrain":"9a","megadrain":"9a","absorb":"9a","shadowball":"9a","ominouswind":"9a","nightshade":"9a","icywind":"9a","darkpulse":"9a","extrasensory":"9a","psychicnoise":"9a","sludgebomb":"9a","venoshock":"9a","echoedvoice":"9a","powerwhip":"9a","seedbomb":"9a","grassyglide":"9a","vinewhip":"9a","shadowclaw":"9a","shadowpunch":"9a","astonish":"9a","crosspoison":"9a","feintattack":"9a","pursuit":"9a","facade":"9a","cut":"9a","wrap":"9a","bind":"9a","strengthsap":"9a","cottonspore":"9a","worryseed":"9a","grassyterrain":"9a","destinybond":"9a","curse":"9a","toxic":"9a","poisonpowder":"9a","venomdrench":"9a","calmmind":"9a","charm":"9a","confide":"9a","flatter":"9a","painsplit":"9a","helpinghand":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","bodyslam":"9a","leechseed":"9a","synthesis":"9a","stunspore":"9a","ingrain":"9a","trailblaze":"9a","energyball":"9a","solarbeam":"9a","leafstorm":"9a","magicalleaf":"9a","grassknot":"9a","petalblizzard":"9a","solarnectar":"9a","willowisp":"9a","confuseray":"9a","spite":"9a","hex":"9a","spikes":"9a","toxicspikes":"9a","meanlook":"9a","knockoff":"9a","lunaticbullet":"9a"},"zanmunippaku":{"darkpulse":"9a","shadowball":"9a","hex":"9a","focusblast":"9a","earthpower":"9a","triattack":"9a","hiddenpower":"9a","wickedblow":"9a","throatchop":"9a","nightslash":"9a","payback":"9a","fling":"9a","shadowforce":"9a","phantomforce":"9a","shadowclaw":"9a","earthquake":"9a","boneclub":"9a","bulldoze":"9a","bonerush":"9a","rocktomb":"9a","flamecharge":"9a","superpower":"9a","seismictoss":"9a","torment":"9a","memento":"9a","nastyplot":"9a","curse":"9a","purify":"9a","agility":"9a","magicroom":"9a","gravity":"9a","charm":"9a","eerieimpulse":"9a","swordsdance":"9a","painsplit":"9a","confide":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","terablast":"9a","endure":"9a","facade":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","pursuit":"9a","thief":"9a","foulplay":"9a","taunt":"9a","knockoff":"9a","faketears":"9a","quash":"9a","wickedenergy":"9a","crunch":"9a","bite":"9a","suckerpunch":"9a","lashout":"9a","assurance":"9a","carrionfeast":"9a","snarl":"9a","partingshot":"9a","haze":"9a","clearsmog":"9a","willowisp":"9a","destinybond":"9a","closecombat":"9a","icebeam":"9a","thunderbolt":"9a","twilightexit":"9a","silverdagger":"9a"},"vivit":{"steelbeam":"9a","flashcannon":"9a","mirrorshot":"9a","zapcannon":"9a","thunder":"9a","thunderbolt":"9a","discharge":"9a","voltswitch":"9a","shockwave":"9a","electroweb":"9a","thundershock":"9a","solarbeam":"9a","energyball":"9a","overheat":"9a","dazzlinggleam":"9a","hyperbeam":"9a","triattack":"9a","razorwind":"9a","swift":"9a","terrainpulse":"9a","steelroller":"9a","missile":"9a","smartstrike":"9a","bulletpunch":"9a","doubleshock":"9a","wildcharge":"9a","thunderpunch":"9a","powerwhip":"9a","needlearm":"9a","bulletseed":"9a","uturn":"9a","pinmissile":"9a","firepunch":"9a","skyattack":"9a","fly":"9a","wingattack":"9a","selfdestruct":"9a","doubleedge":"9a","return":"9a","facade":"9a","cut":"9a","cometpunch":"9a","metalsound":"9a","eerieimpulse":"9a","thunderwave":"9a","charge":"9a","electricterrain":"9a","sandstorm":"9a","grassyterrain":"9a","spikyshield":"9a","defog":"9a","charm":"9a","workup":"9a","helpinghand":"9a","tearfullook":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","growth":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","gigaimpact":"9a","takedown":"9a","bodyslam":"9a","curse":"9a","irondefense":"9a","autotomize":"9a","ironhead":"9a","heavyslam":"9a","gyroball":"9a","metalclaw":"9a","magnetrise":"9a","thunderfang":"9a","spark":"9a","supercellslam":"9a","voltaiclance":"9a","sparkscamper":"9a","electroball":"9a","chargebeam":"9a","lockon":"9a","rapidspin":"9a","agility":"9a","ironchomp":"9a"},"ubamechirizuka":{"earthpower":"9a","mudshot":"9a","dazzlinggleam":"9a","extrasensory":"9a","shadowball":"9a","meteorbeam":"9a","powergem":"9a","ancientpower":"9a","hyperbeam":"9a","wringout":"9a","uproar":"9a","swift":"9a","headlongrush":"9a","earthquake":"9a","landswrath":"9a","dustupheaval":"9a","bulldoze":"9a","magnitude":"9a","uturn":"9a","throatchop":"9a","nightslash":"9a","closecombat":"9a","crosschop":"9a","submission":"9a","brickbreak":"9a","waterfall":"9a","rockwrecker":"9a","stoneedge":"9a","rockslide":"9a","smackdown":"9a","rockblast":"9a","zenheadbutt":"9a","gigaimpact":"9a","doubleedge":"9a","megapunch":"9a","facade":"9a","cometpunch":"9a","stealthrock":"9a","sandstorm":"9a","bulkup":"9a","quickguard":"9a","confide":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","spikes":"9a","sculptedarmor":"9a","highhorsepower":"9a","dig":"9a","stompingtantrum":"9a","drillrun":"9a","excavate":"9a","scorchingsands":"9a","mudbomb":"9a","tremorshot":"9a","swordsdance":"9a","knockoff":"9a","suckerpunch":"9a","rapidspin":"9a"},"chimihoujuu":{"frenzyplant":"9a","leafstorm":"9a","energyball":"9a","gigadrain":"9a","leaftornado":"9a","magicalleaf":"9a","darkpulse":"9a","snarl":"9a","muddywater":"9a","chillingwater":"9a","earthpower":"9a","heatwave":"9a","firespin":"9a","thunder":"9a","sludgewave":"9a","sludgebomb":"9a","hex":"9a","hyperbeam":"9a","uproar":"9a","terrainpulse":"9a","echoedvoice":"9a","woodhammer":"9a","leafblade":"9a","grassyglide":"9a","razorleaf":"9a","nightslash":"9a","bite":"9a","payback":"9a","shadowclaw":"9a","liquidation":"9a","fly":"9a","acrobatics":"9a","bulldoze":"9a","stoneedge":"9a","rockblast":"9a","doubleedge":"9a","facade":"9a","rapidspin":"9a","fakeout":"9a","furyswipes":"9a","forestscurse":"9a","cottonspore":"9a","worryseed":"9a","grassyterrain":"9a","switcheroo":"9a","aquaring":"9a","raindance":"9a","sunnyday":"9a","agility":"9a","safeguard":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","leechseed":"9a","synthesis":"9a","stunspore":"9a","ingrain":"9a","trailblaze":"9a","seedbomb":"9a","powerwhip":"9a","bulletseed":"9a","swordsdance":"9a","solarbeam":"9a","grassknot":"9a","petalblizzard":"9a","solarnectar":"9a","pursuit":"9a","thief":"9a","foulplay":"9a","taunt":"9a","knockoff":"9a","faketears":"9a","torment":"9a","quash":"9a","wickedenergy":"9a","crunch":"9a","suckerpunch":"9a","throatchop":"9a","lashout":"9a","assurance":"9a","carrionfeast":"9a","nastyplot":"9a","partingshot":"9a","uturn":"9a"},"narekomichigami":{"earthpower":"9a","scorchingsands":"9a","mudshot":"9a","mudslap":"9a","futuresight":"9a","psychic":"9a","psyshock":"9a","extrasensory":"9a","psybeam":"9a","confusion":"9a","storedpower":"9a","mirrorcoat":"9a","dazzlinggleam":"9a","flashcannon":"9a","hex":"9a","risingvoltage":"9a","chargebeam":"9a","ancientpower":"9a","hyperbeam":"9a","swift":"9a","earthquake":"9a","bulldoze":"9a","zenheadbutt":"9a","psyshieldbash":"9a","shadowclaw":"9a","rockslide":"9a","rocktomb":"9a","rockblast":"9a","gigaimpact":"9a","doubleedge":"9a","return":"9a","facade":"9a","cometpunch":"9a","shoreup":"9a","calmmind":"9a","barrier":"9a","amnesia":"9a","guardswap":"9a","trickroom":"9a","wonderroom":"9a","imprison":"9a","sandstorm":"9a","stealthrock":"9a","wideguard":"9a","detect":"9a","encore":"9a","confide":"9a","focusenergy":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","spikes":"9a","sculptedarmor":"9a","mudbomb":"9a","tremorshot":"9a","reflect":"9a","lightscreen":"9a","trick":"9a","magiccoat":"9a","teleport":"9a","gravity":"9a","psychicterrain":"9a","skillswap":"9a","allyswitch":"9a","magicroom":"9a","hypnosis":"9a","agility":"9a","safeguard":"9a","expandingforce":"9a","psychicnoise":"9a","dreameater":"9a","hypnowhirl":"9a","powergem":"9a","wish":"9a","lunaticbullet":"9a"},"yuimanasama":{"shadowball":"9a","ominouswind":"9a","darkpulse":"9a","dazzlinggleam":"9a","psychic":"9a","psyshock":"9a","psywave":"9a","discharge":"9a","ancientpower":"9a","hyperbeam":"9a","uproar":"9a","swift":"9a","spiritshackle":"9a","shadowclaw":"9a","astonish":"9a","leechlife":"9a","uturn":"9a","pounce":"9a","crunch":"9a","bite":"9a","wildcharge":"9a","thunderfang":"9a","psychicfangs":"9a","bonerush":"9a","gigaimpact":"9a","doubleedge":"9a","facade":"9a","retaliate":"9a","scratch":"9a","quickattack":"9a","spite":"9a","confuseray":"9a","torment":"9a","thunderwave":"9a","toxic":"9a","skillswap":"9a","meditate":"9a","healblock":"9a","lightscreen":"9a","reflect":"9a","healingwish":"9a","painsplit":"9a","glare":"9a","focusenergy":"9a","recycle":"9a","leer":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","willowisp":"9a","nightshade":"9a","destinybond":"9a","shadowsneak":"9a","phantomforce":"9a","shadowpunch":"9a","shadowstrike":"9a","swordsdance":"9a","nightslash":"9a","psychocut":"9a","suckerpunch":"9a","knockoff":"9a","icepunch":"9a","thunderpunch":"9a","firepunch":"9a","earthquake":"9a"},"watatsukinotoyohime":{"hydrocannon":"9a","hydropump":"9a","surf":"9a","muddywater":"9a","brine":"9a","bubble":"9a","hurricane":"9a","aeroblast":"9a","airslash":"9a","gust":"9a","earthpower":"9a","mudshot":"9a","moonblast":"9a","dazzlinggleam":"9a","dracometeor":"9a","meteorbeam":"9a","ancientpower":"9a","hyperbeam":"9a","triattack":"9a","liquidation":"9a","aquajet":"9a","earthquake":"9a","magnitude":"9a","stoneedge":"9a","rockslide":"9a","rocktomb":"9a","skyattack":"9a","spiritbreak":"9a","gigaimpact":"9a","doubleedge":"9a","facade":"9a","quickattack":"9a","raindance":"9a","aquaring":"9a","mudsport":"9a","defog":"9a","lunarblessing":"9a","teleport":"9a","speedswap":"9a","aromatherapy":"9a","cottonspore":"9a","endure":"9a","confide":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","soak":"9a","lifedew":"9a","flipturn":"9a","waterfall":"9a","aquatail":"9a","dive":"9a","wavecharge":"9a","superscope3d":"9a","scald":"9a","waterpulse":"9a","whirlpool":"9a","chillingwater":"9a","undertow":"9a","calmmind":"9a","moonlight":"9a","psychic":"9a","futuresight":"9a","tailwind":"9a","icebeam":"9a","energyball":"9a","haze":"9a","waterplates":"9a"},"watatsukinoyorihime":{"leafblade":"9a","focusblast":"9a","secretsword":"9a","aurasphere":"9a","vacuumwave":"9a","moonblast":"9a","dazzlinggleam":"9a","photongeyser":"9a","psychic":"9a","thunder":"9a","fireblast":"9a","solarbeam":"9a","mirrorshot":"9a","hyperbeam":"9a","triattack":"9a","jumpkick":"9a","crosschop":"9a","sacredsword":"9a","drainpunch":"9a","stormthrow":"9a","poweruppunch":"9a","firepunch":"9a","thunderpunch":"9a","smartstrike":"9a","bulletpunch":"9a","dragonrush":"9a","aerialace":"9a","acrobatics":"9a","gigaimpact":"9a","doubleedge":"9a","facade":"9a","slash":"9a","cut":"9a","detect":"9a","invokeamaterasu":"9a","invokehonoikazuchi":"9a","invokeishikoridome":"9a","lunarblessing":"9a","agility":"9a","imprison":"9a","sunnyday":"9a","thunderwave":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","bulkup":"9a","quickguard":"9a","coaching":"9a","closecombat":"9a","brickbreak":"9a","machpunch":"9a","superpower":"9a","lowkick":"9a","highjumpkick":"9a","bodypress":"9a","rocksmash":"9a","lowsweep":"9a","reversal":"9a","focuspunch":"9a","shufflejab":"9a","dancingblow":"9a","swordsdance":"9a","nightslash":"9a","psychocut":"9a","xscissor":"9a","wideguard":"9a","cloudfist":"9a"},"ariyaiwanaga":{"powergem":"9a","ancientpower":"9a","blizzard":"9a","icebeam":"9a","freezedry":"9a","aurorabeam":"9a","moonblast":"9a","dazzlinggleam":"9a","heatwave":"9a","aircutter":"9a","hyperbeam":"9a","triattack":"9a","rockwrecker":"9a","stoneedge":"9a","rockslide":"9a","rocktomb":"9a","rockblast":"9a","iciclespear":"9a","bonerush":"9a","steelwing":"9a","acrobatics":"9a","dualwingbeat":"9a","shadowbone":"9a","shadowclaw":"9a","gigaimpact":"9a","doubleedge":"9a","bodyslam":"9a","facade":"9a","stealthrock":"9a","rockpolish":"9a","sandstorm":"9a","wideguard":"9a","snowscape":"9a","auroraveil":"9a","irondefense":"9a","willowisp":"9a","trickroom":"9a","powertrick":"9a","recover":"9a","workup":"9a","confide":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","takedown":"9a","helpinghand":"9a","curse":"9a","smackdown":"9a","craghammer":"9a","meteorbeam":"9a","wish":"9a","lifedew":"9a","bodypress":"9a","earthpower":"9a","calmmind":"9a","gravity":"9a","grudge":"9a","headsmash":"9a","heavyslam":"9a","sculptedarmor":"9a"},"ninawatari":{"hydrocannon":"9a","hydropump":"9a","surf":"9a","waterpledge":"9a","brine":"9a","bubble":"9a","whirlpool":"9a","zapcannon":"9a","thunder":"9a","electrodrift":"9a","thunderbolt":"9a","discharge":"9a","voltswitch":"9a","shockwave":"9a","electroweb":"9a","icywind":"9a","meteorbeam":"9a","powergem":"9a","psywave":"9a","bugbuzz":"9a","shadowball":"9a","hyperbeam":"9a","hypervoice":"9a","echoedvoice":"9a","waterfall":"9a","clamp":"9a","supercellslam":"9a","thunderpunch":"9a","spark":"9a","icepunch":"9a","bodypress":"9a","rockslide":"9a","skullbash":"9a","doubleedge":"9a","facade":"9a","rapidspin":"9a","bind":"9a","lifedew":"9a","aquaring":"9a","withdraw":"9a","thunderwave":"9a","charge":"9a","heartswap":"9a","amnesia":"9a","mist":"9a","confuseray":"9a","toxic":"9a","shelter":"9a","confide":"9a","painsplit":"9a","disable":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","raindance":"9a","soak":"9a","flipturn":"9a","scald":"9a","muddywater":"9a","waterpulse":"9a","chillingwater":"9a","undertow":"9a","electricterrain":"9a","eerieimpulse":"9a","magnetrise":"9a","electroball":"9a","chargebeam":"9a","calmmind":"9a","icebeam":"9a","paraboliccharge":"9a"},"cirnotanned":{"blizzard":"9a","icebeam":"9a","freezedry":"9a","aurorabeam":"9a","icywind":"9a","powdersnow":"9a","moonblast":"9a","dazzlinggleam":"9a","fairywind":"9a","solarbeam":"9a","grasspledge":"9a","surf":"9a","bubblebeam":"9a","chillingwater":"9a","weatherball":"9a","icehammer":"9a","iciclecrash":"9a","icepunch":"9a","iceshard":"9a","iceball":"9a","tripleaxel":"9a","playrough":"9a","jumpkick":"9a","upperhand":"9a","poweruppunch":"9a","aerialace":"9a","solarblade":"9a","seedbomb":"9a","trailblaze":"9a","liquidation":"9a","wingattack":"9a","doubleedge":"9a","megapunch":"9a","facade":"9a","quickattack":"9a","auroraveil":"9a","snowscape":"9a","haze":"9a","mist":"9a","defog":"9a","growth":"9a","focusenergy":"9a","helpinghand":"9a","endure":"9a","swagger":"9a","followme":"9a","sunnyday":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","hiddenpower":"9a","terablast":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","bodyslam":"9a","curse":"9a","hail":"9a","chillingmist":"9a","iciclespear":"9a","icefang":"9a","avalanche":"9a","rimecleaver":"9a","frostbreath":"9a","leechseed":"9a","synthesis":"9a","grassyterrain":"9a","stunspore":"9a","ingrain":"9a","worryseed":"9a","leafblade":"9a","powerwhip":"9a","bulletseed":"9a","swordsdance":"9a","gigadrain":"9a","energyball":"9a","leafstorm":"9a","magicalleaf":"9a","grassknot":"9a","petalblizzard":"9a","solarnectar":"9a","charm":"9a","sweetkiss":"9a","mistyterrain":"9a","babydolleyes":"9a","craftyshield":"9a","drainingkiss":"9a","mistyexplosion":"9a","alluringvoice":"9a","velvetpress":"9a","icespinner":"9a","uturn":"9a"},"keinehakutaku":{"steelbeam":"9a","flashcannon":"9a","mirrorshot":"9a","tachyoncutter":"9a","hyperbeam":"9a","triattack":"9a","swift":"9a","terrainpulse":"9a","roaroftime":"9a","dracometeor":"9a","dragonpulse":"9a","twister":"9a","thunder":"9a","thunderbolt":"9a","risingvoltage":"9a","voltswitch":"9a","darkpulse":"9a","psychic":"9a","psychicnoise":"9a","mirrorcoat":"9a","earthpower":"9a","ancientpower":"9a","shadowball":"9a","steelroller":"9a","ironhead":"9a","metalclaw":"9a","metalburst":"9a","gigaimpact":"9a","lastresort":"9a","doubleedge":"9a","headbutt":"9a","facade":"9a","feint":"9a","outrage":"9a","dragonrush":"9a","dragonclaw":"9a","breakingswipe":"9a","zenheadbutt":"9a","nightslash":"9a","brutalswing":"9a","earthquake":"9a","bulldoze":"9a","hammerarm":"9a","sacredsword":"9a","brickbreak":"9a","thunderpunch":"9a","irondefense":"9a","metalsound":"9a","meanlook":"9a","instruct":"9a","nobleroar":"9a","healbell":"9a","moonlight":"9a","meditate":"9a","amnesia":"9a","lightscreen":"9a","reflect":"9a","agility":"9a","raindance":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","hypervoice":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","autotomize":"9a","bulletpunch":"9a","heavyslam":"9a","gyroball":"9a","smartstrike":"9a","missile":"9a","dragontail":"9a","scaleshot":"9a","dragonbreath":"9a","encore":"9a","yawn":"9a","wish":"9a","charm":"9a","workup":"9a","batonpass":"9a","disable":"9a","screech":"9a","hustleup":"9a","uproar":"9a","quickattack":"9a","swordsdance":"9a","retaliate":"9a","crushclaw":"9a","thrash":"9a","echoedvoice":"9a","headsmash":"9a","megahorn":"9a","hornattack":"9a","calmmind":"9a","futuresight":"9a","extrasensory":"9a","imprison":"9a","bodypress":"9a"},"ichirinkumoiunzan":{"focusblast":"9a","aurasphere":"9a","hurricane":"9a","aeroblast":"9a","airslash":"9a","gust":"9a","thunderbolt":"9a","chillingwater":"9a","hyperbeam":"9a","hypervoice":"9a","weatherball":"9a","wringout":"9a","focuspunch":"9a","closecombat":"9a","crosschop":"9a","hammerarm":"9a","drainpunch":"9a","brickbreak":"9a","forcepalm":"9a","circlethrow":"9a","karatechop":"9a","seismictoss":"9a","counter":"9a","cloudfist":"9a","fly":"9a","acrobatics":"9a","thunderpunch":"9a","firepunch":"9a","bulletpunch":"9a","gigaimpact":"9a","megapunch":"9a","facade":"9a","cut":"9a","bulkup":"9a","quickguard":"9a","agility":"9a","barrier":"9a","charge":"9a","defog":"9a","tailwind":"9a","taunt":"9a","trickroom":"9a","focusenergy":"9a","helpinghand":"9a","leer":"9a","whirlwind":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","takedown":"9a","bodyslam":"9a","curse":"9a","detect":"9a","coaching":"9a","machpunch":"9a","superpower":"9a","lowkick":"9a","highjumpkick":"9a","bodypress":"9a","rocksmash":"9a","lowsweep":"9a","reversal":"9a","shufflejab":"9a","dancingblow":"9a","vacuumwave":"9a","roost":"9a","featherdance":"9a","uturn":"9a","bravebird":"9a","drillpeck":"9a","aerialace":"9a","dualwingbeat":"9a","aircutter":"9a","dynamicpunch":"9a","icepunch":"9a","shadowpunch":"9a","skyuppercut":"9a","mist":"9a","haze":"9a"},"hecatiaearth":{"darkpulse":"9a","shadowball":"9a","nightshade":"9a","hydropump":"9a","muddywater":"9a","brine":"9a","energyball":"9a","gigadrain":"9a","magicalleaf":"9a","moonblast":"9a","drainingkiss":"9a","dracometeor":"9a","coreenforcer":"9a","dragonrage":"9a","fireblast":"9a","flamethrower":"9a","triattack":"9a","throatchop":"9a","suckerpunch":"9a","shadowforce":"9a","shadowsneak":"9a","waterfall":"9a","petalblizzard":"9a","razorleaf":"9a","spiritbreak":"9a","dualchop":"9a","earthquake":"9a","doubleedge":"9a","facade":"9a","bodyswap":"9a","toxic":"9a","agility":"9a","substitute":"9a","sleeptalk":"9a","protect":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","rest":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","raindance":"9a","aquaring":"9a","soak":"9a","lifedew":"9a","flipturn":"9a","surf":"9a","scald":"9a","waterpulse":"9a","whirlpool":"9a","chillingwater":"9a","undertow":"9a","leechseed":"9a","synthesis":"9a","grassyterrain":"9a","stunspore":"9a","ingrain":"9a","worryseed":"9a","trailblaze":"9a","solarbeam":"9a","leafstorm":"9a","grassknot":"9a","solarnectar":"9a","pursuit":"9a","thief":"9a","foulplay":"9a","taunt":"9a","knockoff":"9a","faketears":"9a","torment":"9a","quash":"9a","wickedenergy":"9a","snarl":"9a","nastyplot":"9a","willowisp":"9a","confuseray":"9a","spite":"9a","painsplit":"9a","destinybond":"9a","hex":"9a","ominouswind":"9a","calmmind":"9a","meanlook":"9a","trickroom":"9a","earthpower":"9a","psychic":"9a","meteorbeam":"9a","partingshot":"9a"},"hecatiamoon":{"darkpulse":"9a","shadowball":"9a","nightshade":"9a","hydropump":"9a","muddywater":"9a","brine":"9a","energyball":"9a","gigadrain":"9a","magicalleaf":"9a","moonblast":"9a","drainingkiss":"9a","dracometeor":"9a","coreenforcer":"9a","dragonrage":"9a","fireblast":"9a","flamethrower":"9a","triattack":"9a","throatchop":"9a","suckerpunch":"9a","shadowforce":"9a","shadowsneak":"9a","waterfall":"9a","petalblizzard":"9a","razorleaf":"9a","spiritbreak":"9a","dualchop":"9a","earthquake":"9a","doubleedge":"9a","facade":"9a","bodyswap":"9a","toxic":"9a","agility":"9a","substitute":"9a","sleeptalk":"9a","protect":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","rest":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","charm":"9a","sweetkiss":"9a","mistyterrain":"9a","babydolleyes":"9a","craftyshield":"9a","dazzlinggleam":"9a","mistyexplosion":"9a","fairywind":"9a","alluringvoice":"9a","velvetpress":"9a","dragontail":"9a","dragonpulse":"9a","dragonbreath":"9a","twister":"9a","pursuit":"9a","thief":"9a","foulplay":"9a","taunt":"9a","knockoff":"9a","faketears":"9a","torment":"9a","quash":"9a","wickedenergy":"9a","snarl":"9a","nastyplot":"9a","willowisp":"9a","confuseray":"9a","spite":"9a","painsplit":"9a","destinybond":"9a","hex":"9a","ominouswind":"9a","calmmind":"9a","meanlook":"9a","trickroom":"9a","earthpower":"9a","scald":"9a","psychic":"9a","meteorbeam":"9a","partingshot":"9a"}},
+	newSpecies: {"makuro":{"num":2001,"name":"Makuro","types":["Water","Dark"],"gender":"N","baseStats":{"hp":120,"atk":160,"def":120,"spa":50,"spd":110,"spe":120},"abilities":{"0":"Call of the Abyss"},"heightm":5.2,"weightkg":398,"color":"Black","eggGroups":["Undiscovered"],"tags":["Restricted Legendary"],"tier":"Uber","gen":9},"raishin":{"num":2002,"name":"Raishin","types":["Electric","Ghost"],"gender":"N","baseStats":{"hp":100,"atk":160,"def":100,"spa":50,"spd":120,"spe":150},"abilities":{"0":"Call of the Shrine"},"heightm":2.1,"weightkg":88,"color":"White","eggGroups":["Undiscovered"],"tags":["Restricted Legendary"],"tier":"Uber","gen":9},"chimai":{"num":2003,"name":"Chimai","types":["Ground","Fairy"],"gender":"N","baseStats":{"hp":120,"atk":50,"def":120,"spa":160,"spd":120,"spe":110},"abilities":{"0":"Call of the Sanctuary"},"heightm":2.6,"weightkg":240,"color":"Brown","eggGroups":["Undiscovered"],"tags":["Restricted Legendary"],"tier":"Uber","gen":9},"missingno":{"num":0,"name":"MissingNo.","types":["Bird","Normal"],"baseStats":{"hp":33,"atk":136,"def":0,"spa":6,"spd":6,"spe":29},"abilities":{"0":"Glitched Data"},"heightm":3,"weightkg":1590.8,"color":"Gray","eggGroups":["Undiscovered"],"tags":[],"tier":"Uber","gen":1},"funerfly":{"num":2004,"name":"Funerfly","types":["Bug","Ghost"],"gender":"N","baseStats":{"hp":95,"atk":65,"def":100,"spa":115,"spd":110,"spe":85},"abilities":{"0":"Qliphoth Counter"},"heightm":1.9,"weightkg":81,"color":"Black","eggGroups":["Undiscovered"],"tags":[],"tier":"Collab","gen":9,"otherFormes":["Funerfly-Breach"],"formeOrder":["Funerfly","Funerfly-Breach"]},"funerflybreach":{"num":2004,"name":"Funerfly-Breach","types":["Bug","Ghost"],"gender":"N","baseStats":{"hp":95,"atk":75,"def":85,"spa":150,"spd":95,"spe":120},"abilities":{"0":"Qliphoth Counter"},"heightm":1.9,"weightkg":81,"color":"Black","eggGroups":["Undiscovered"],"tags":[],"tier":"Collab","gen":9,"baseSpecies":"Funerfly","forme":"Breach","battleOnly":"Funerfly","requiredAbility":"Qliphoth Counter","changesFrom":"Funerfly"},"reimuhakurei":{"num":2101,"name":"Reimu Hakurei","types":["Flying","Fighting"],"gender":"F","baseStats":{"hp":90,"atk":100,"def":70,"spa":115,"spd":125,"spe":60},"abilities":{"0":"Cloud Nine","1":"Justified","H":"Purifying Salt"},"heightm":1.5,"weightkg":50,"color":"Blue","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"marisakirisame":{"num":2102,"name":"Marisa Kirisame","types":["Fire","Normal"],"gender":"F","baseStats":{"hp":61,"atk":112,"def":45,"spa":120,"spd":87,"spe":125},"abilities":{"0":"Magician","1":"Hakkero","H":"Reckless"},"heightm":1.5,"weightkg":50,"color":"Red","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"rumia":{"num":2103,"name":"Rumia","types":["Dark"],"gender":"F","baseStats":{"hp":75,"atk":108,"def":116,"spa":60,"spd":95,"spe":78},"abilities":{"0":"Levitate","1":"Dark Aura","H":"Dark Border"},"heightm":1.5,"weightkg":50,"color":"Black","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"daiyousei":{"num":2104,"name":"Daiyousei","types":["Fairy","Flying"],"gender":"F","baseStats":{"hp":95,"atk":57,"def":45,"spa":120,"spd":78,"spe":100},"abilities":{"0":"Misty Step"},"heightm":1.5,"weightkg":50,"color":"Pink","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"cirno":{"num":2105,"name":"Cirno","types":["Ice","Fairy"],"gender":"F","baseStats":{"hp":60,"atk":99,"def":59,"spa":119,"spd":64,"spe":109},"abilities":{"0":"Hustle","1":"Ice Body","H":"Slush Rush"},"heightm":1.5,"weightkg":50,"color":"Blue","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9,"otherFormes":["Cirno-Tanned"],"formeOrder":["Cirno","Cirno-Tanned"]},"hongmeiling":{"num":2106,"name":"Hong Meiling","types":["Fighting","Dragon"],"gender":"F","baseStats":{"hp":80,"atk":125,"def":100,"spa":84,"spd":60,"spe":100},"abilities":{"0":"Steadfast","1":"Sand Rush","H":"Comatose"},"heightm":1.5,"weightkg":50,"color":"Red","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"koakuma":{"num":2107,"name":"Koakuma","types":["Dark"],"gender":"F","baseStats":{"hp":75,"atk":67,"def":71,"spa":102,"spd":80,"spe":95},"abilities":{"0":"Prankster","H":"Quick Feet"},"heightm":1.5,"weightkg":50,"color":"Black","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"patchouliknowledge":{"num":2108,"name":"Patchouli Knowledge","types":["Psychic"],"gender":"F","baseStats":{"hp":73,"atk":33,"def":38,"spa":140,"spd":101,"spe":95},"abilities":{"0":"Neuroforce","H":"Anemic"},"heightm":1.5,"weightkg":50,"color":"Pink","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"sakuyaizayoi":{"num":2109,"name":"Sakuya Izayoi","types":["Steel"],"gender":"F","baseStats":{"hp":100,"atk":95,"def":110,"spa":85,"spd":95,"spe":80},"abilities":{"0":"Own Tempo","1":"Insomnia","H":"Maid's Trick"},"heightm":1.5,"weightkg":50,"color":"Gray","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"remiliascarlet":{"num":2110,"name":"Remilia Scarlet","types":["Dark","Flying"],"gender":"F","baseStats":{"hp":50,"atk":125,"def":98,"spa":111,"spd":98,"spe":113},"abilities":{"0":"Vampirism","1":"Scarlet Sisters"},"heightm":1.5,"weightkg":50,"color":"Black","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"flandrescarlet":{"num":2111,"name":"Flandre Scarlet","types":["Dark","Fire"],"gender":"F","baseStats":{"hp":50,"atk":130,"def":83,"spa":135,"spd":98,"spe":99},"abilities":{"0":"Mold Breaker","1":"Pressure","H":"Moxie","V0":"Scarlet Sisters"},"heightm":1.5,"weightkg":50,"color":"Black","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"lettywhiterock":{"num":2112,"name":"Letty Whiterock","types":["Ice"],"gender":"F","baseStats":{"hp":132,"atk":70,"def":104,"spa":95,"spd":64,"spe":54},"abilities":{"0":"Snow Warning","H":"Heatproof"},"heightm":1.5,"weightkg":50,"color":"Blue","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"chen":{"num":2113,"name":"Chen","types":["Normal"],"gender":"F","baseStats":{"hp":70,"atk":100,"def":62,"spa":88,"spd":70,"spe":120},"abilities":{"0":"Quick Feet","1":"Technician","H":"Sheer Force"},"heightm":1.5,"weightkg":50,"color":"White","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"alicemargatroid":{"num":2114,"name":"Alice Margatroid","types":["Steel","Psychic"],"gender":"F","baseStats":{"hp":70,"atk":92,"def":80,"spa":118,"spd":130,"spe":70},"abilities":{"0":"Analytic","1":"Ice Body","H":"Competitive"},"heightm":1.5,"weightkg":50,"color":"Gray","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"lilywhite":{"num":2115,"name":"Lily White","types":["Fairy","Grass"],"gender":"F","baseStats":{"hp":94,"atk":30,"def":82,"spa":92,"spd":82,"spe":105},"abilities":{"0":"Regenerator","1":"Chlorophyll","H":"Grassy Surge"},"heightm":1.5,"weightkg":50,"color":"Pink","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"lunasaprismriver":{"num":2116,"name":"Lunasa Prismriver","types":["Ghost"],"gender":"F","baseStats":{"hp":80,"atk":65,"def":75,"spa":90,"spd":120,"spe":100},"abilities":{"0":"Soundproof","H":"Shadow Shield"},"heightm":1.5,"weightkg":50,"color":"Purple","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"merlinprismriver":{"num":2117,"name":"Merlin Prismriver","types":["Ghost"],"gender":"F","baseStats":{"hp":80,"atk":75,"def":65,"spa":120,"spd":90,"spe":100},"abilities":{"0":"Soundproof","H":"Berserk"},"heightm":1.5,"weightkg":50,"color":"Purple","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"lyricaprismriver":{"num":2118,"name":"Lyrica Prismriver","types":["Ghost"],"gender":"F","baseStats":{"hp":80,"atk":65,"def":65,"spa":110,"spd":110,"spe":100},"abilities":{"0":"Soundproof","H":"Illusory Backing"},"heightm":1.5,"weightkg":50,"color":"Purple","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"youmukonpaku":{"num":2119,"name":"Youmu Konpaku","types":["Fighting","Ghost"],"gender":"F","baseStats":{"hp":59,"atk":110,"def":84,"spa":90,"spd":62,"spe":130},"abilities":{"0":"Bulletproof","1":"Hyper Cutter","H":"Rattled"},"heightm":1.5,"weightkg":50,"color":"Red","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"yuyukosaigyouji":{"num":2120,"name":"Yuyuko Saigyouji","types":["Ghost","Fairy"],"gender":"F","baseStats":{"hp":115,"atk":91,"def":73,"spa":96,"spd":95,"spe":60},"abilities":{"0":"Gluttony","1":"Netherworld's Spring","H":"Flower Veil"},"heightm":1.5,"weightkg":50,"color":"Purple","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"ranyakumo":{"num":2121,"name":"Ran Yakumo","types":["Psychic"],"gender":"F","baseStats":{"hp":70,"atk":115,"def":75,"spa":115,"spd":75,"spe":115},"abilities":{"0":"Download","H":"Fluffy"},"heightm":1.5,"weightkg":50,"color":"Pink","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"yukariyakumo":{"num":2122,"name":"Yukari Yakumo","types":["Psychic","Dark"],"gender":"F","baseStats":{"hp":100,"atk":80,"def":100,"spa":140,"spd":100,"spe":80},"abilities":{"0":"Frisk","1":"Pressure","H":"Intimidate"},"heightm":1.5,"weightkg":50,"color":"Pink","eggGroups":["Undiscovered"],"tags":["Sub-Legendary"],"tier":"Touhou","gen":9},"suikaibuki":{"num":2123,"name":"Suika Ibuki","types":["Ground","Fighting"],"gender":"F","baseStats":{"hp":67,"atk":136,"def":117,"spa":117,"spd":85,"spe":78},"abilities":{"0":"Misty Surge","H":"Demon Parade"},"heightm":1.5,"weightkg":50,"color":"Brown","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"wrigglenightbug":{"num":2124,"name":"Wriggle Nightbug","types":["Bug"],"gender":"F","baseStats":{"hp":70,"atk":115,"def":70,"spa":107,"spd":70,"spe":105},"abilities":{"0":"Illuminate","1":"Swarm","H":"Opportunist"},"heightm":1.5,"weightkg":50,"color":"Green","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"mystialorelei":{"num":2125,"name":"Mystia Lorelei","types":["Dark","Flying"],"gender":"F","baseStats":{"hp":85,"atk":79,"def":70,"spa":110,"spd":98,"spe":108},"abilities":{"0":"Night Song","1":"Tough Claws","H":"Punk Rock"},"heightm":1.5,"weightkg":50,"color":"Black","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"keine":{"num":2126,"name":"Keine","types":["Steel","Normal"],"gender":"F","baseStats":{"hp":80,"atk":110,"def":92,"spa":100,"spd":88,"spe":80},"abilities":{"0":"Were-Hakutaku","H":"Stalwart"},"heightm":1.5,"weightkg":50,"color":"Gray","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9,"otherFormes":["Keine-Hakutaku"],"formeOrder":["Keine","Keine-Hakutaku"]},"tewiinaba":{"num":2127,"name":"Tewi Inaba","types":["Normal","Fairy"],"gender":"F","baseStats":{"hp":70,"atk":40,"def":60,"spa":80,"spd":95,"spe":105},"abilities":{"0":"Huge Power","1":"Super Luck","H":"Prankster"},"heightm":1.5,"weightkg":50,"color":"White","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"reiseninaba":{"num":2128,"name":"Reisen Inaba","types":["Psychic","Electric"],"gender":"F","baseStats":{"hp":76,"atk":94,"def":70,"spa":100,"spd":80,"spe":120},"abilities":{"0":"Unnerve","H":"Psychic Surge"},"heightm":1.5,"weightkg":50,"color":"Pink","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"eirinyagokoro":{"num":2129,"name":"Eirin Yagokoro","types":["Poison","Psychic"],"gender":"F","baseStats":{"hp":85,"atk":90,"def":65,"spa":95,"spd":200,"spe":55},"abilities":{"0":"Natural Cure","1":"Brain of the Moon","H":"Curious Medicine"},"heightm":1.5,"weightkg":50,"color":"Purple","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"kaguyahouraisan":{"num":2130,"name":"Kaguya Houraisan","types":["Fairy"],"gender":"F","baseStats":{"hp":120,"atk":60,"def":79,"spa":102,"spd":60,"spe":94},"abilities":{"0":"Magic Guard"},"heightm":1.5,"weightkg":50,"color":"Pink","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"fujiwaranomokou":{"num":2131,"name":"Fujiwara no Mokou","types":["Fire","Fighting"],"gender":"F","baseStats":{"hp":100,"atk":112,"def":55,"spa":91,"spd":63,"spe":94},"abilities":{"0":"Regenerator"},"heightm":1.5,"weightkg":50,"color":"Red","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"ayashameimaru":{"num":2132,"name":"Aya Shameimaru","types":["Flying"],"gender":"F","baseStats":{"hp":66,"atk":100,"def":72,"spa":100,"spd":72,"spe":170},"abilities":{"0":"Infiltrator","1":"Early Bird","H":"Forewarn"},"heightm":1.5,"weightkg":50,"color":"Blue","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"medicinemelancholy":{"num":2133,"name":"Medicine Melancholy","types":["Poison"],"gender":"F","baseStats":{"hp":74,"atk":75,"def":135,"spa":100,"spd":83,"spe":58},"abilities":{"0":"Liquid Ooze","1":"Poison Point","H":"Soul-Heart"},"heightm":1.5,"weightkg":50,"color":"Purple","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"yuukakazami":{"num":2134,"name":"Yuuka Kazami","types":["Grass"],"gender":"F","baseStats":{"hp":105,"atk":145,"def":115,"spa":120,"spd":95,"spe":20},"abilities":{"0":"Overgrow","1":"Solar Power","H":"Flower Veil"},"heightm":1.5,"weightkg":50,"color":"Green","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"komachionozuka":{"num":2135,"name":"Komachi Onozuka","types":["Water","Ghost"],"gender":"F","baseStats":{"hp":97,"atk":118,"def":100,"spa":88,"spd":77,"spe":30},"abilities":{"0":"Sharpness","1":"Truant","H":"Unaware"},"heightm":1.5,"weightkg":50,"color":"Blue","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"eikishiki":{"num":2136,"name":"Eiki Shiki","types":["Normal"],"gender":"F","baseStats":{"hp":75,"atk":100,"def":77,"spa":118,"spd":140,"spe":90},"abilities":{"0":"Black and White","H":"No Guard"},"heightm":1.5,"weightkg":50,"color":"White","eggGroups":["Undiscovered"],"tags":["Sub-Legendary"],"tier":"Touhou","gen":9},"shizuhaaki":{"num":2137,"name":"Shizuha Aki","types":["Grass"],"gender":"F","baseStats":{"hp":63,"atk":125,"def":50,"spa":135,"spd":40,"spe":117},"abilities":{"0":"Wind Rider","H":"Leaf Guard"},"heightm":1.5,"weightkg":50,"color":"Green","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"minorikoaki":{"num":2138,"name":"Minoriko Aki","types":["Grass","Ground"],"gender":"F","baseStats":{"hp":110,"atk":55,"def":110,"spa":90,"spd":85,"spe":44},"abilities":{"0":"Harvest","H":"Sap Sipper"},"heightm":1.5,"weightkg":50,"color":"Green","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"hinakagiyama":{"num":2139,"name":"Hina Kagiyama","types":["Poison","Dark"],"gender":"F","baseStats":{"hp":90,"atk":65,"def":80,"spa":95,"spd":110,"spe":75},"abilities":{"0":"Curse Gathering","H":"Flare Boost"},"heightm":1.5,"weightkg":50,"color":"Purple","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"nitorikawashiro":{"num":2140,"name":"Nitori Kawashiro","types":["Water","Steel"],"gender":"F","baseStats":{"hp":81,"atk":96,"def":92,"spa":110,"spd":61,"spe":70},"abilities":{"0":"Swift Swim","1":"Rain Dish","H":"Transistor"},"heightm":1.5,"weightkg":50,"color":"Blue","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"momijiinubashiri":{"num":2141,"name":"Momiji Inubashiri","types":["Steel","Fighting"],"gender":"F","baseStats":{"hp":70,"atk":115,"def":135,"spa":55,"spd":50,"spe":100},"abilities":{"0":"Keen Eye","1":"Guard Dog","H":"Strong Jaw"},"heightm":1.5,"weightkg":50,"color":"Gray","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"sanaekochiya":{"num":2142,"name":"Sanae Kochiya","types":["Flying","Water"],"gender":"F","baseStats":{"hp":80,"atk":70,"def":80,"spa":95,"spd":90,"spe":75},"abilities":{"0":"Drizzle","H":"Serene Grace"},"heightm":1.5,"weightkg":50,"color":"Blue","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"kanakoyasaka":{"num":2143,"name":"Kanako Yasaka","types":["Ground","Flying"],"gender":"F","baseStats":{"hp":100,"atk":115,"def":120,"spa":88,"spd":77,"spe":70},"abilities":{"0":"Storm Drain","H":"Mirror Armor"},"heightm":1.5,"weightkg":50,"color":"Brown","eggGroups":["Undiscovered"],"tags":["Sub-Legendary"],"tier":"Touhou","gen":9},"suwakomoriya":{"num":2144,"name":"Suwako Moriya","types":["Water","Ground"],"gender":"F","baseStats":{"hp":85,"atk":115,"def":70,"spa":115,"spd":120,"spe":65},"abilities":{"0":"Earth Eater","H":"Hydration"},"heightm":1.5,"weightkg":50,"color":"Blue","eggGroups":["Undiscovered"],"tags":["Sub-Legendary"],"tier":"Touhou","gen":9},"ikunagae":{"num":2145,"name":"Iku Nagae","types":["Dragon","Electric"],"gender":"F","baseStats":{"hp":75,"atk":100,"def":70,"spa":110,"spd":90,"spe":95},"abilities":{"0":"Swift Swim","1":"Levitate","H":"Multiscale"},"heightm":1.5,"weightkg":50,"color":"Blue","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"tenshihinanawi":{"num":2146,"name":"Tenshi Hinanawi","types":["Ground","Rock"],"gender":"F","baseStats":{"hp":105,"atk":115,"def":140,"spa":67,"spd":60,"spe":65},"abilities":{"0":"Sword of Hisou"},"heightm":1.5,"weightkg":50,"color":"Brown","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"kisume":{"num":2147,"name":"Kisume","types":["Rock","Dark"],"gender":"F","baseStats":{"hp":45,"atk":85,"def":130,"spa":80,"spd":125,"spe":45},"abilities":{"0":"Sturdy","1":"Guts","H":"Flash Fire"},"heightm":1.5,"weightkg":50,"color":"Brown","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"yamamekurodani":{"num":2148,"name":"Yamame Kurodani","types":["Poison","Bug"],"gender":"F","baseStats":{"hp":91,"atk":130,"def":70,"spa":74,"spd":60,"spe":96},"abilities":{"0":"Stakeout","1":"Poison Touch","H":"Dexterity"},"heightm":1.5,"weightkg":50,"color":"Purple","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"parseemizuhashi":{"num":2149,"name":"Parsee Mizuhashi","types":["Dark"],"gender":"F","baseStats":{"hp":93,"atk":100,"def":75,"spa":92,"spd":120,"spe":56},"abilities":{"0":"Jealous","H":"Aftermath"},"heightm":1.5,"weightkg":50,"color":"Black","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"yuugihoshiguma":{"num":2150,"name":"Yuugi Hoshiguma","types":["Fighting","Rock"],"gender":"F","baseStats":{"hp":90,"atk":132,"def":81,"spa":93,"spd":70,"spe":74},"abilities":{"0":"Sand Stream","1":"Mold Breaker","H":"Sheer Force"},"heightm":1.5,"weightkg":50,"color":"Red","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"satorikomeiji":{"num":2151,"name":"Satori Komeiji","types":["Psychic"],"gender":"F","baseStats":{"hp":60,"atk":100,"def":100,"spa":100,"spd":100,"spe":100},"abilities":{"0":"Trace","1":"Insomnia","H":"Recollection"},"heightm":1.5,"weightkg":50,"color":"Pink","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"rinkaenbyou":{"num":2152,"name":"Rin Kaenbyou","types":["Fire","Ghost"],"gender":"F","baseStats":{"hp":61,"atk":72,"def":55,"spa":114,"spd":65,"spe":128},"abilities":{"0":"Infiltrator","H":"Unburden"},"heightm":1.5,"weightkg":50,"color":"Red","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"utsuhoreiuji":{"num":2153,"name":"Utsuho Reiuji","types":["Fire","Flying"],"gender":"F","baseStats":{"hp":100,"atk":140,"def":90,"spa":155,"spd":95,"spe":100},"abilities":{"0":"Klutz"},"heightm":1.5,"weightkg":50,"color":"Red","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"koishikomeiji":{"num":2154,"name":"Koishi Komeiji","types":["Psychic","Normal"],"gender":"F","baseStats":{"hp":49,"atk":42,"def":118,"spa":96,"spd":157,"spe":108},"abilities":{"0":"Unaware","1":"Synchronize","H":"Delusion"},"heightm":1.5,"weightkg":50,"color":"Pink","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"nazrin":{"num":2155,"name":"Nazrin","types":["Ground","Steel"],"gender":"F","baseStats":{"hp":81,"atk":89,"def":80,"spa":95,"spd":80,"spe":130},"abilities":{"0":"Lightning Rod","H":"Pickup"},"heightm":1.5,"weightkg":50,"color":"Brown","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"kogasatatara":{"num":2156,"name":"Kogasa Tatara","types":["Water","Fairy"],"gender":"F","baseStats":{"hp":70,"atk":100,"def":81,"spa":83,"spd":73,"spe":113},"abilities":{"0":"Surprise","1":"Bulletproof","H":"Steelworker"},"heightm":1.5,"weightkg":50,"color":"Blue","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"ichirinkumoi":{"num":2157,"name":"Ichirin Kumoi","types":["Fighting"],"gender":"F","baseStats":{"hp":75,"atk":80,"def":55,"spa":45,"spd":65,"spe":85},"abilities":{"0":"Summon Nyuudou"},"heightm":1.5,"weightkg":50,"color":"Red","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9,"otherFormes":["Ichirin Kumoi-Unzan"],"formeOrder":["Ichirin Kumoi","Ichirin Kumoi-Unzan"]},"minamitsumurasa":{"num":2158,"name":"Minamitsu Murasa","types":["Water","Ghost"],"gender":"F","baseStats":{"hp":104,"atk":118,"def":50,"spa":82,"spd":43,"spe":108},"abilities":{"0":"Steelworker","1":"Aftermath","H":"Watery Grave"},"heightm":1.5,"weightkg":50,"color":"Blue","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"shoutoramaru":{"num":2159,"name":"Shou Toramaru","types":["Fairy","Electric"],"gender":"F","baseStats":{"hp":100,"atk":110,"def":61,"spa":110,"spd":79,"spe":95},"abilities":{"0":"Pressure","H":"Illuminate"},"heightm":1.5,"weightkg":50,"color":"Pink","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"byakurenhijiri":{"num":2160,"name":"Byakuren Hijiri","types":["Fighting","Psychic"],"gender":"F","baseStats":{"hp":83,"atk":110,"def":50,"spa":105,"spd":80,"spe":117},"abilities":{"0":"Inner Focus","H":"Devil's Recitation"},"heightm":1.5,"weightkg":50,"color":"Red","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"nuehoujuu":{"num":2161,"name":"Nue Houjuu","types":["Dark","Ghost"],"gender":"F","baseStats":{"hp":105,"atk":90,"def":60,"spa":120,"spd":80,"spe":70},"abilities":{"0":"Shed Skin","H":"Undefined Defense"},"heightm":1.5,"weightkg":50,"color":"Black","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"hatatehimekaidou":{"num":2162,"name":"Hatate Himekaidou","types":["Psychic","Flying"],"gender":"F","baseStats":{"hp":70,"atk":82,"def":60,"spa":108,"spd":78,"spe":140},"abilities":{"0":"Trace","1":"Anticipation","H":"Technician"},"heightm":1.5,"weightkg":50,"color":"Pink","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"sunnymilk":{"num":2163,"name":"Sunny Milk","types":["Fire","Fairy"],"gender":"F","baseStats":{"hp":65,"atk":125,"def":80,"spa":85,"spd":40,"spe":105},"abilities":{"0":"Solar Power","H":"Dazzling"},"heightm":1.5,"weightkg":50,"color":"Red","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"lunachild":{"num":2164,"name":"Luna Child","types":["Dark","Fairy"],"gender":"F","baseStats":{"hp":65,"atk":45,"def":50,"spa":100,"spd":130,"spe":110},"abilities":{"0":"Soundproof","H":"Insomnia"},"heightm":1.5,"weightkg":50,"color":"Black","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"starsapphire":{"num":2165,"name":"Star Sapphire","types":["Psychic","Fairy"],"gender":"F","baseStats":{"hp":65,"atk":55,"def":120,"spa":95,"spd":90,"spe":75},"abilities":{"0":"Telepathy","H":"Pixilate"},"heightm":1.5,"weightkg":50,"color":"Pink","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"kyoukokasodani":{"num":2166,"name":"Kyouko Kasodani","types":["Normal"],"gender":"F","baseStats":{"hp":74,"atk":76,"def":87,"spa":93,"spd":69,"spe":106},"abilities":{"0":"Echo"},"heightm":1.5,"weightkg":50,"color":"White","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"yoshikamiyako":{"num":2167,"name":"Yoshika Miyako","types":["Poison","Ghost"],"gender":"F","baseStats":{"hp":140,"atk":100,"def":80,"spa":60,"spd":45,"spe":75},"abilities":{"0":"Heal by Desire","1":"Gluttony","H":"Steadfast"},"heightm":1.5,"weightkg":50,"color":"Purple","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"seigakaku":{"num":2168,"name":"Seiga Kaku","types":["Dark"],"gender":"F","baseStats":{"hp":66,"atk":74,"def":70,"spa":130,"spd":80,"spe":120},"abilities":{"0":"Infiltrator","H":"Limber"},"heightm":1.5,"weightkg":50,"color":"Black","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"soganotojiko":{"num":2169,"name":"Soga no Tojiko","types":["Electric","Ghost"],"gender":"F","baseStats":{"hp":81,"atk":70,"def":73,"spa":116,"spd":50,"spe":125},"abilities":{"0":"Static","H":"Levitate"},"heightm":1.5,"weightkg":50,"color":"Yellow","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"mononobenofuto":{"num":2170,"name":"Mononobe no Futo","types":["Water","Fire"],"gender":"F","baseStats":{"hp":90,"atk":105,"def":70,"spa":110,"spd":100,"spe":70},"abilities":{"0":"Natural Cure","1":"Super Luck","H":"Power Spot"},"heightm":1.5,"weightkg":50,"color":"Blue","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"toyosatomiminomiko":{"num":2171,"name":"Toyosatomimi no Miko","types":["Fighting","Fairy"],"gender":"F","baseStats":{"hp":80,"atk":110,"def":55,"spa":126,"spd":112,"spe":102},"abilities":{"0":"Telepathy","H":"Soundproof"},"heightm":1.5,"weightkg":50,"color":"Red","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"mamizoufutatsuiwa":{"num":2172,"name":"Mamizou Futatsuiwa","types":["Grass","Normal"],"gender":"F","baseStats":{"hp":105,"atk":121,"def":80,"spa":83,"spd":61,"spe":50},"abilities":{"0":"Infiltrator","H":"Solid Rock"},"heightm":1.5,"weightkg":50,"color":"Green","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"kasenibaraki":{"num":2173,"name":"Kasen Ibaraki","types":["Grass","Fighting"],"gender":"F","baseStats":{"hp":70,"atk":130,"def":50,"spa":95,"spd":120,"spe":95},"abilities":{"0":"Steadfast","1":"100 Medicines","H":"Wicked Power"},"heightm":1.5,"weightkg":50,"color":"Green","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"hatanokokoro":{"num":2174,"name":"Hata no Kokoro","types":["Psychic","Ghost"],"gender":"F","baseStats":{"hp":80,"atk":112,"def":80,"spa":112,"spd":80,"spe":90},"abilities":{"0":"Libero"},"heightm":1.5,"weightkg":50,"color":"Pink","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"wakasagihime":{"num":2175,"name":"Wakasagihime","types":["Water"],"gender":"F","baseStats":{"hp":85,"atk":105,"def":75,"spa":95,"spd":80,"spe":55},"abilities":{"0":"Swift Swim","1":"Hydration","H":"Marvel Scale"},"heightm":1.5,"weightkg":50,"color":"Blue","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"sekibanki":{"num":2176,"name":"Sekibanki","types":["Ghost"],"gender":"F","baseStats":{"hp":70,"atk":57,"def":87,"spa":133,"spd":50,"spe":88},"abilities":{"0":"Intimidate","H":"Unnerve"},"heightm":1.5,"weightkg":50,"color":"Purple","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"kagerouimaizumi":{"num":2177,"name":"Kagerou Imaizumi","types":["Dark","Normal"],"gender":"F","baseStats":{"hp":78,"atk":112,"def":95,"spa":62,"spd":86,"spe":100},"abilities":{"0":"Fluffy","H":"Strong Jaw"},"heightm":1.5,"weightkg":50,"color":"Black","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"benbentsukumo":{"num":2178,"name":"Benben Tsukumo","types":["Normal","Electric"],"gender":"F","baseStats":{"hp":75,"atk":62,"def":99,"spa":105,"spd":70,"spe":99},"abilities":{"0":"Vital Spirit","1":"Volt Absorb","H":"Minus"},"heightm":1.5,"weightkg":50,"color":"White","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"yatsuhashitsukumo":{"num":2179,"name":"Yatsuhashi Tsukumo","types":["Normal","Electric"],"gender":"F","baseStats":{"hp":65,"atk":62,"def":99,"spa":115,"spd":70,"spe":99},"abilities":{"0":"Vital Spirit","1":"Motor Drive","H":"Plus"},"heightm":1.5,"weightkg":50,"color":"White","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"seijakijin":{"num":2180,"name":"Seija Kijin","types":["Dark"],"gender":"F","baseStats":{"hp":75,"atk":110,"def":60,"spa":75,"spd":95,"spe":110},"abilities":{"0":"Contrary"},"heightm":1.5,"weightkg":50,"color":"Black","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"shinmyoumarusukuna":{"num":2181,"name":"Shinmyoumaru Sukuna","types":["Steel","Fairy"],"gender":"F","baseStats":{"hp":20,"atk":105,"def":130,"spa":35,"spd":170,"spe":90},"abilities":{"0":"Grow Bigger"},"heightm":1.5,"weightkg":50,"color":"Gray","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"raikohorikawa":{"num":2182,"name":"Raiko Horikawa","types":["Electric"],"gender":"F","baseStats":{"hp":105,"atk":130,"def":75,"spa":130,"spd":68,"spe":40},"abilities":{"0":"Lightning Rod","1":"Inner Focus","H":"Pristine Beat"},"heightm":1.5,"weightkg":50,"color":"Yellow","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"sumirekousami":{"num":2183,"name":"Sumireko Usami","types":["Psychic"],"gender":"F","baseStats":{"hp":65,"atk":62,"def":76,"spa":130,"spd":69,"spe":110},"abilities":{"0":"Levitate","H":"Comatose"},"heightm":1.5,"weightkg":50,"color":"Pink","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"seiran":{"num":2184,"name":"Seiran","types":["Steel","Psychic"],"gender":"F","baseStats":{"hp":70,"atk":100,"def":45,"spa":110,"spd":55,"spe":120},"abilities":{"0":"Guts","1":"Synchronize","H":"Sniper"},"heightm":1.5,"weightkg":50,"color":"Gray","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"ringo":{"num":2185,"name":"Ringo","types":["Grass"],"gender":"F","baseStats":{"hp":87,"atk":120,"def":72,"spa":66,"spd":93,"spe":77},"abilities":{"0":"Cheek Pouch","H":"Dango Influence"},"heightm":1.5,"weightkg":50,"color":"Green","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"doremysweet":{"num":2186,"name":"Doremy Sweet","types":["Psychic"],"gender":"F","baseStats":{"hp":81,"atk":75,"def":122,"spa":94,"spd":73,"spe":40},"abilities":{"0":"Psychic Surge","H":"Bad Dreams"},"heightm":1.5,"weightkg":50,"color":"Pink","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"sagumekishin":{"num":2187,"name":"Sagume Kishin","types":["Poison","Flying"],"gender":"F","baseStats":{"hp":90,"atk":90,"def":69,"spa":90,"spd":125,"spe":81},"abilities":{"0":"Contrary","1":"Inner Focus","H":"Mind's Eye"},"heightm":1.5,"weightkg":50,"color":"Purple","eggGroups":["Undiscovered"],"tags":["Sub-Legendary"],"tier":"Touhou","gen":9},"clownpiece":{"num":2188,"name":"Clownpiece","types":["Fairy","Fire"],"gender":"F","baseStats":{"hp":150,"atk":40,"def":55,"spa":85,"spd":50,"spe":110},"abilities":{"0":"Flame Body","H":"Lunatic Torch"},"heightm":1.5,"weightkg":50,"color":"Pink","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"junko":{"num":2189,"name":"Junko","types":["Normal"],"gender":"F","baseStats":{"hp":100,"atk":100,"def":100,"spa":100,"spd":100,"spe":100},"abilities":{"0":"Mold Breaker"},"heightm":1.5,"weightkg":50,"color":"White","eggGroups":["Undiscovered"],"tags":["Sub-Legendary"],"tier":"Touhou","gen":9},"hecatia":{"num":2190,"name":"Hecatia","types":["Dark","Ghost"],"gender":"F","baseStats":{"hp":80,"atk":60,"def":120,"spa":90,"spd":120,"spe":100},"abilities":{"0":"Pressure"},"heightm":1.5,"weightkg":50,"color":"Black","eggGroups":["Undiscovered"],"tags":["Sub-Legendary"],"tier":"Touhou","gen":9,"baseForme":"Otherworld","otherFormes":["Hecatia-Earth","Hecatia-Moon"],"formeOrder":["Hecatia","Hecatia-Earth","Hecatia-Moon"]},"joonyorigami":{"num":2191,"name":"Joon Yorigami","types":["Steel","Poison"],"gender":"F","baseStats":{"hp":100,"atk":70,"def":88,"spa":118,"spd":62,"spe":92},"abilities":{"0":"Fool's Gold"},"heightm":1.5,"weightkg":50,"color":"Gray","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"shionyorigami":{"num":2192,"name":"Shion Yorigami","types":["Poison","Ghost"],"gender":"F","baseStats":{"hp":100,"atk":60,"def":77,"spa":130,"spd":88,"spe":75},"abilities":{"0":"Cursed Body","H":"Poison Touch"},"heightm":1.5,"weightkg":50,"color":"Purple","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"eternitylarva":{"num":2193,"name":"Eternity Larva","types":["Bug","Flying"],"gender":"F","baseStats":{"hp":60,"atk":56,"def":66,"spa":138,"spd":37,"spe":103},"abilities":{"0":"Flash Fire","1":"Regenerator","H":"Chlorophyll"},"heightm":1.5,"weightkg":50,"color":"Green","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"nemunosakata":{"num":2194,"name":"Nemuno Sakata","types":["Grass","Rock"],"gender":"F","baseStats":{"hp":71,"atk":110,"def":105,"spa":64,"spd":70,"spe":75},"abilities":{"0":"Cut Deep","H":"Intimidate"},"heightm":1.5,"weightkg":50,"color":"Green","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"aunnkomano":{"num":2195,"name":"Aunn Komano","types":["Rock","Fairy"],"gender":"F","baseStats":{"hp":80,"atk":115,"def":72,"spa":60,"spd":110,"spe":65},"abilities":{"0":"Rock Head","1":"Solid Rock","H":"Guard Dog"},"heightm":1.5,"weightkg":50,"color":"Brown","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"narumiyatadera":{"num":2196,"name":"Narumi Yatadera","types":["Ice","Rock"],"gender":"F","baseStats":{"hp":70,"atk":65,"def":70,"spa":120,"spd":70,"spe":100},"abilities":{"0":"Sturdy","H":"Winter Hearth"},"heightm":1.5,"weightkg":50,"color":"Blue","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"maiteireida":{"num":2197,"name":"Mai Teireida","types":["Fighting"],"gender":"F","baseStats":{"hp":70,"atk":100,"def":65,"spa":95,"spd":65,"spe":120},"abilities":{"0":"Dancer","H":"Vital Spirit"},"heightm":1.5,"weightkg":50,"color":"Red","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"satononishida":{"num":2198,"name":"Satono Nishida","types":["Fighting"],"gender":"F","baseStats":{"hp":70,"atk":110,"def":65,"spa":95,"spd":65,"spe":110},"abilities":{"0":"Dancer","H":"Wandering Spirit"},"heightm":1.5,"weightkg":50,"color":"Red","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"okinamatara":{"num":2199,"name":"Okina Matara","types":["Normal","Dark"],"gender":"F","baseStats":{"hp":85,"atk":120,"def":80,"spa":130,"spd":80,"spe":85},"abilities":{"0":"Four Seasons"},"heightm":1.5,"weightkg":50,"color":"White","eggGroups":["Undiscovered"],"tags":["Sub-Legendary"],"tier":"Touhou","gen":9,"otherFormes":["Okina Matara-Spring","Okina Matara-Summer","Okina Matara-Autumn","Okina Matara-Winter"],"formeOrder":["Okina Matara","Okina Matara-Spring","Okina Matara-Summer","Okina Matara-Autumn","Okina Matara-Winter"]},"eikaebisu":{"num":2200,"name":"Eika Ebisu","types":["Ghost","Rock"],"gender":"F","baseStats":{"hp":55,"atk":80,"def":140,"spa":95,"spd":100,"spe":50},"abilities":{"0":"Water Absorb","H":"Friend Guard"},"heightm":1.5,"weightkg":50,"color":"Purple","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"urumiushizaki":{"num":2201,"name":"Urumi Ushizaki","types":["Water","Rock"],"gender":"F","baseStats":{"hp":98,"atk":104,"def":82,"spa":71,"spd":60,"spe":60},"abilities":{"0":"Torrent","1":"Pressure","H":"Heavy Stone"},"heightm":1.5,"weightkg":50,"color":"Blue","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"kutakaniwatari":{"num":2202,"name":"Kutaka Niwatari","types":["Water","Flying"],"gender":"F","baseStats":{"hp":75,"atk":97,"def":70,"spa":114,"spd":80,"spe":95},"abilities":{"0":"Natural Cure","1":"Simple","H":"Steadfast"},"heightm":1.5,"weightkg":50,"color":"Blue","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"yachiekicchou":{"num":2203,"name":"Yachie Kicchou","types":["Dragon","Dark"],"gender":"F","baseStats":{"hp":95,"atk":90,"def":133,"spa":85,"spd":65,"spe":40},"abilities":{"0":"Shell Armor","1":"Pressure","H":"Beast Boost"},"heightm":1.5,"weightkg":50,"color":"Blue","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"mayumijoutouguu":{"num":2204,"name":"Mayumi Joutouguu","types":["Ground","Steel"],"gender":"F","baseStats":{"hp":100,"atk":115,"def":65,"spa":75,"spd":65,"spe":70},"abilities":{"0":"Stalwart","1":"Marching Orders","H":"Defiant"},"heightm":1.5,"weightkg":50,"color":"Brown","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"keikihaniyasushin":{"num":2205,"name":"Keiki Haniyasushin","types":["Ground","Electric"],"gender":"F","baseStats":{"hp":80,"atk":105,"def":80,"spa":115,"spd":92,"spe":100},"abilities":{"0":"Analytic","1":"Sand Force","H":"Electric Surge"},"heightm":1.5,"weightkg":50,"color":"Brown","eggGroups":["Undiscovered"],"tags":["Sub-Legendary"],"tier":"Touhou","gen":9},"sakikurokuma":{"num":2206,"name":"Saki Kurokuma","types":["Fighting","Flying"],"gender":"F","baseStats":{"hp":70,"atk":140,"def":87,"spa":85,"spd":49,"spe":97},"abilities":{"0":"Limber","1":"No Guard","H":"Beast Boost"},"heightm":1.5,"weightkg":50,"color":"Red","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"yuumatoutetsu":{"num":2207,"name":"Yuuma Toutetsu","types":["Water","Dark"],"gender":"F","baseStats":{"hp":130,"atk":100,"def":80,"spa":96,"spd":58,"spe":64},"abilities":{"0":"Gluttony","1":"Stamina","H":"Beast Boost"},"heightm":1.5,"weightkg":50,"color":"Blue","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"mikegotoukuji":{"num":2208,"name":"Mike Gotoukuji","types":["Steel"],"gender":"F","baseStats":{"hp":55,"atk":93,"def":72,"spa":109,"spd":70,"spe":115},"abilities":{"0":"Super Luck","H":"Competitive"},"heightm":1.5,"weightkg":50,"color":"Gray","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"takaneyamashiro":{"num":2209,"name":"Takane Yamashiro","types":["Grass","Water"],"gender":"F","baseStats":{"hp":90,"atk":58,"def":102,"spa":100,"spd":90,"spe":70},"abilities":{"0":"Pickpocket","1":"Overcoat","H":"Grass Pelt"},"heightm":1.5,"weightkg":50,"color":"Green","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"sannyokomakusa":{"num":2210,"name":"Sannyo Komakusa","types":["Fire","Dragon"],"gender":"F","baseStats":{"hp":84,"atk":60,"def":70,"spa":105,"spd":122,"spe":75},"abilities":{"0":"White Smoke","H":"Black Smoke"},"heightm":1.5,"weightkg":50,"color":"Red","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"misumarutamatsukuri":{"num":2211,"name":"Misumaru Tamatsukuri","types":["Rock"],"gender":"F","baseStats":{"hp":60,"atk":75,"def":65,"spa":120,"spd":102,"spe":102},"abilities":{"0":"Beads of Ruin"},"heightm":1.5,"weightkg":50,"color":"Brown","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"tsukasakudamaki":{"num":2212,"name":"Tsukasa Kudamaki","types":["Ghost","Normal"],"gender":"F","baseStats":{"hp":81,"atk":75,"def":42,"spa":104,"spd":70,"spe":118},"abilities":{"0":"Technician","1":"Infiltrator","H":"Prankster"},"heightm":1.5,"weightkg":50,"color":"Purple","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"megumuiizunamaru":{"num":2213,"name":"Megumu Iizunamaru","types":["Flying","Psychic"],"gender":"F","baseStats":{"hp":110,"atk":90,"def":55,"spa":100,"spd":85,"spe":110},"abilities":{"0":"Air Lock","H":"Pressure"},"heightm":1.5,"weightkg":50,"color":"Blue","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"chimatatenkyuu":{"num":2214,"name":"Chimata Tenkyuu","types":["Steel","Flying"],"gender":"F","baseStats":{"hp":95,"atk":70,"def":90,"spa":110,"spd":110,"spe":85},"abilities":{"0":"Property"},"heightm":1.5,"weightkg":50,"color":"Gray","eggGroups":["Undiscovered"],"tags":["Sub-Legendary"],"tier":"Touhou","gen":9},"momoyohimemushi":{"num":2215,"name":"Momoyo Himemushi","types":["Bug","Rock"],"gender":"F","baseStats":{"hp":90,"atk":134,"def":84,"spa":90,"spd":72,"spe":65},"abilities":{"0":"Swarm","1":"Dragon Eater","H":"Speed Boost"},"heightm":1.5,"weightkg":50,"color":"Green","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"sonbiten":{"num":2216,"name":"Son Biten","types":["Fighting"],"gender":"F","baseStats":{"hp":83,"atk":85,"def":60,"spa":127,"spd":60,"spe":105},"abilities":{"0":"Inner Focus","H":"Magic Guard"},"heightm":1.5,"weightkg":50,"color":"Red","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"enokomitsugashira":{"num":2217,"name":"Enoko Mitsugashira","types":["Steel","Dark"],"gender":"F","baseStats":{"hp":75,"atk":127,"def":102,"spa":73,"spd":60,"spe":58},"abilities":{"0":"Iron Barbs","1":"Scrappy","H":"Strong Jaw"},"heightm":1.5,"weightkg":50,"color":"Gray","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"chiyaritenkajin":{"num":2218,"name":"Chiyari Tenkajin","types":["Fire","Ghost"],"gender":"F","baseStats":{"hp":81,"atk":112,"def":83,"spa":70,"spd":70,"spe":84},"abilities":{"0":"Flame Body","1":"Cursed Body","H":"Bloodsucker"},"heightm":1.5,"weightkg":50,"color":"Red","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"hisamiyomotsu":{"num":2219,"name":"Hisami Yomotsu","types":["Grass","Ghost"],"gender":"F","baseStats":{"hp":85,"atk":60,"def":110,"spa":98,"spd":71,"spe":76},"abilities":{"0":"Sticky Hold","1":"Poison Point","H":"Oblivious"},"heightm":1.5,"weightkg":50,"color":"Green","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"zanmunippaku":{"num":2220,"name":"Zanmu Nippaku","types":["Dark"],"gender":"F","baseStats":{"hp":90,"atk":120,"def":80,"spa":120,"spd":90,"spe":100},"abilities":{"0":"Void"},"heightm":1.5,"weightkg":50,"color":"Black","eggGroups":["Undiscovered"],"tags":["Sub-Legendary"],"tier":"Touhou","gen":9},"vivit":{"num":2221,"name":"VIVIT","types":["Steel","Electric"],"gender":"F","baseStats":{"hp":60,"atk":110,"def":90,"spa":110,"spd":90,"spe":120},"abilities":{"0":"Cactus Drive"},"heightm":1.5,"weightkg":50,"color":"Gray","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"ubamechirizuka":{"num":2222,"name":"Ubame Chirizuka","types":["Ground"],"gender":"F","baseStats":{"hp":72,"atk":110,"def":103,"spa":95,"spd":70,"spe":110},"abilities":{"0":"Sand Force","H":"Mold Breaker"},"heightm":1.5,"weightkg":50,"color":"Brown","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"chimihoujuu":{"num":2223,"name":"Chimi Houjuu","types":["Grass","Dark"],"gender":"F","baseStats":{"hp":68,"atk":92,"def":64,"spa":100,"spd":100,"spe":120},"abilities":{"0":"Magic Guard"},"heightm":1.5,"weightkg":50,"color":"Green","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"narekomichigami":{"num":2224,"name":"Nareko Michigami","types":["Ground","Psychic"],"gender":"F","baseStats":{"hp":86,"atk":68,"def":83,"spa":105,"spd":130,"spe":73},"abilities":{"0":"Sand Force","1":"Synchronize","H":"Filter"},"heightm":1.5,"weightkg":50,"color":"Brown","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"yuimanasama":{"num":2225,"name":"Yuiman Asama","types":["Ghost"],"gender":"F","baseStats":{"hp":85,"atk":130,"def":100,"spa":65,"spd":65,"spe":100},"abilities":{"0":"Sniper","1":"Delusion","H":"Corrupt Data"},"heightm":1.5,"weightkg":50,"color":"Purple","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"watatsukinotoyohime":{"num":2226,"name":"Watatsuki no Toyohime","types":["Water"],"gender":"F","baseStats":{"hp":100,"atk":100,"def":100,"spa":100,"spd":100,"spe":100},"abilities":{"0":"Water Veil"},"heightm":1.5,"weightkg":50,"color":"Blue","eggGroups":["Undiscovered"],"tags":["Sub-Legendary"],"tier":"Touhou","gen":9},"watatsukinoyorihime":{"num":2227,"name":"Watatsuki no Yorihime","types":["Fighting"],"gender":"F","baseStats":{"hp":100,"atk":130,"def":89,"spa":96,"spd":79,"spe":106},"abilities":{"0":"Inner Focus"},"heightm":1.5,"weightkg":50,"color":"Red","eggGroups":["Undiscovered"],"tags":["Sub-Legendary"],"tier":"Touhou","gen":9},"ariyaiwanaga":{"num":2228,"name":"Ariya Iwanaga","types":["Rock"],"gender":"F","baseStats":{"hp":130,"atk":117,"def":86,"spa":130,"spd":86,"spe":46},"abilities":{"0":"Immovable","1":"Wonder Skin","H":"Sturdy"},"heightm":1.5,"weightkg":50,"color":"Brown","eggGroups":["Undiscovered"],"tags":["Sub-Legendary"],"tier":"Touhou","gen":9},"ninawatari":{"num":2229,"name":"Nina Watari","types":["Water","Electric"],"gender":"F","baseStats":{"hp":75,"atk":64,"def":150,"spa":99,"spd":70,"spe":82},"abilities":{"0":"Trace","1":"Surge Surfer","H":"Truth Overload"},"heightm":1.5,"weightkg":50,"color":"Blue","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9},"cirnotanned":{"num":2105,"name":"Cirno-Tanned","types":["Ice","Grass"],"gender":"F","baseStats":{"hp":60,"atk":139,"def":59,"spa":139,"spd":64,"spe":109},"abilities":{"0":"Drought"},"heightm":1.5,"weightkg":50,"color":"Blue","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9,"baseSpecies":"Cirno","forme":"Tanned","requiredItem":"Summer Backdoor","changesFrom":"Cirno"},"keinehakutaku":{"num":2126,"name":"Keine-Hakutaku","types":["Steel","Dragon"],"gender":"F","baseStats":{"hp":80,"atk":135,"def":92,"spa":155,"spd":108,"spe":110},"abilities":{"0":"Were-Hakutaku"},"heightm":1.5,"weightkg":50,"color":"Gray","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9,"baseSpecies":"Keine","forme":"Hakutaku"},"ichirinkumoiunzan":{"num":2157,"name":"Ichirin Kumoi-Unzan","types":["Fighting","Flying"],"baseStats":{"hp":75,"atk":140,"def":105,"spa":105,"spd":85,"spe":55},"abilities":{"0":"Iron Fist"},"heightm":1.5,"weightkg":50,"color":"Red","eggGroups":["Undiscovered"],"tags":[],"tier":"Touhou","gen":9,"baseSpecies":"Ichirin Kumoi","forme":"Unzan"},"hecatiaearth":{"num":2190,"name":"Hecatia-Earth","types":["Water","Grass"],"gender":"F","baseStats":{"hp":80,"atk":60,"def":105,"spa":110,"spd":105,"spe":110},"abilities":{"0":"Natural Cure"},"heightm":1.5,"weightkg":50,"color":"Blue","eggGroups":["Undiscovered"],"tags":["Sub-Legendary"],"tier":"Touhou","gen":9,"baseSpecies":"Hecatia","forme":"Earth"},"hecatiamoon":{"num":2190,"name":"Hecatia-Moon","types":["Fairy","Dragon"],"gender":"F","baseStats":{"hp":80,"atk":60,"def":90,"spa":130,"spd":90,"spe":120},"abilities":{"0":"Dazzling"},"heightm":1.5,"weightkg":50,"color":"Pink","eggGroups":["Undiscovered"],"tags":["Sub-Legendary"],"tier":"Touhou","gen":9,"baseSpecies":"Hecatia","forme":"Moon"},"okinamataraspring":{"num":2199,"name":"Okina Matara-Spring","types":["Water","Dark"],"gender":"F","baseStats":{"hp":85,"atk":120,"def":80,"spa":130,"spd":80,"spe":85},"abilities":{"0":"Four Seasons"},"heightm":1.5,"weightkg":50,"color":"Blue","eggGroups":["Undiscovered"],"tags":["Sub-Legendary"],"tier":"Touhou","gen":9,"baseSpecies":"Okina Matara","forme":"Spring","battleOnly":"Okina Matara","requiredAbility":"Four Seasons","changesFrom":"Okina Matara"},"okinamatarasummer":{"num":2199,"name":"Okina Matara-Summer","types":["Fire","Dark"],"gender":"F","baseStats":{"hp":85,"atk":120,"def":80,"spa":130,"spd":80,"spe":85},"abilities":{"0":"Four Seasons"},"heightm":1.5,"weightkg":50,"color":"Red","eggGroups":["Undiscovered"],"tags":["Sub-Legendary"],"tier":"Touhou","gen":9,"baseSpecies":"Okina Matara","forme":"Summer","battleOnly":"Okina Matara","requiredAbility":"Four Seasons","changesFrom":"Okina Matara"},"okinamataraautumn":{"num":2199,"name":"Okina Matara-Autumn","types":["Rock","Dark"],"gender":"F","baseStats":{"hp":85,"atk":120,"def":80,"spa":130,"spd":80,"spe":85},"abilities":{"0":"Four Seasons"},"heightm":1.5,"weightkg":50,"color":"Brown","eggGroups":["Undiscovered"],"tags":["Sub-Legendary"],"tier":"Touhou","gen":9,"baseSpecies":"Okina Matara","forme":"Autumn","battleOnly":"Okina Matara","requiredAbility":"Four Seasons","changesFrom":"Okina Matara"},"okinamatarawinter":{"num":2199,"name":"Okina Matara-Winter","types":["Ice","Dark"],"gender":"F","baseStats":{"hp":85,"atk":120,"def":80,"spa":130,"spd":80,"spe":85},"abilities":{"0":"Four Seasons"},"heightm":1.5,"weightkg":50,"color":"Blue","eggGroups":["Undiscovered"],"tags":["Sub-Legendary"],"tier":"Touhou","gen":9,"baseSpecies":"Okina Matara","forme":"Winter","battleOnly":"Okina Matara","requiredAbility":"Four Seasons","changesFrom":"Okina Matara"}},
+	newLearnsets: {"makuro":{"abyssalmaw":"9a","leviathancrash":"9a","sovereignrite":"9a","wavecrash":"9a","liquidation":"9a","waterfall":"9a","aquajet":"9a","aquatail":"9a","razorshell":"9a","aquacutter":"9a","flipturn":"9a","dive":"9a","surf":"9a","hydropump":"9a","hydrocannon":"9a","scald":"9a","muddywater":"9a","whirlpool":"9a","raindance":"9a","knockoff":"9a","suckerpunch":"9a","throatchop":"9a","crunch":"9a","nightslash":"9a","jawlock":"9a","lashout":"9a","foulplay":"9a","partingshot":"9a","darkpulse":"9a","snarl":"9a","pursuit":"9a","taunt":"9a","torment":"9a","memento":"9a","icefang":"9a","psychicfangs":"9a","firefang":"9a","thunderfang":"9a","poisonfang":"9a","iciclecrash":"9a","icespinner":"9a","tripleaxel":"9a","icebeam":"9a","blizzard":"9a","earthquake":"9a","highhorsepower":"9a","stompingtantrum":"9a","stoneedge":"9a","rockslide":"9a","ironhead":"9a","heavyslam":"9a","bodypress":"9a","zenheadbutt":"9a","closecombat":"9a","superpower":"9a","outrage":"9a","dragontail":"9a","scaleshot":"9a","playrough":"9a","gunkshot":"9a","bodyslam":"9a","doubleedge":"9a","gigaimpact":"9a","hyperbeam":"9a","terablast":"9a","swordsdance":"9a","dragondance":"9a","bulkup":"9a","curse":"9a","haze":"9a","roar":"9a","whirlwind":"9a","yawn":"9a","encore":"9a","toxic":"9a","snowscape":"9a","cottonguard":"9a","velvetguard":"9a","velvetpress":"9a","tailglow":"9a","recover":"9a","protect":"9a","detect":"9a","rest":"9a","sleeptalk":"9a","substitute":"9a","endure":"9a","facade":"9a","helpinghand":"9a","scaryface":"9a","wavecharge":"9a","carrionfeast":"9a","rimecleaver":"9a","craghammer":"9a","hustleup":"9a","twilightexit":"9a","shufflejab":"9a","undertow":"9a","uturn":"9a","stealthrock":"9a","rapidspin":"9a","defog":"9a","courtchange":"9a","trick":"9a","trickroom":"9a"},"raishin":{"shrinebellstrike":"9a","spiritthunder":"9a","sovereignrite":"9a","supercellslam":"9a","wildcharge":"9a","thunderfang":"9a","voltswitch":"9a","nuzzle":"9a","thunderbolt":"9a","thunder":"9a","risingvoltage":"9a","discharge":"9a","electroweb":"9a","thunderwave":"9a","charge":"9a","electricterrain":"9a","magnetrise":"9a","poltergeist":"9a","shadowclaw":"9a","shadowsneak":"9a","phantomforce":"9a","shadowball":"9a","hex":"9a","nightshade":"9a","willowisp":"9a","destinybond":"9a","curse":"9a","spite":"9a","painsplit":"9a","confuseray":"9a","closecombat":"9a","sacredsword":"9a","playrough":"9a","crunch":"9a","knockoff":"9a","suckerpunch":"9a","psychicfangs":"9a","firefang":"9a","icefang":"9a","flareblitz":"9a","bravebird":"9a","acrobatics":"9a","uturn":"9a","irontail":"9a","zenheadbutt":"9a","psychocut":"9a","leafblade":"9a","xscissor":"9a","extrasensory":"9a","dazzlinggleam":"9a","darkpulse":"9a","quickattack":"9a","bodyslam":"9a","doubleedge":"9a","gigaimpact":"9a","hyperbeam":"9a","terablast":"9a","swordsdance":"9a","agility":"9a","bulkup":"9a","safeguard":"9a","reflect":"9a","lightscreen":"9a","roar":"9a","taunt":"9a","encore":"9a","toxic":"9a","trick":"9a","cottonguard":"9a","velvetguard":"9a","velvetpress":"9a","tailglow":"9a","recover":"9a","protect":"9a","detect":"9a","rest":"9a","sleeptalk":"9a","substitute":"9a","endure":"9a","facade":"9a","helpinghand":"9a","scaryface":"9a","voltaiclance":"9a","sparkscamper":"9a","carrionfeast":"9a","rimecleaver":"9a","craghammer":"9a","hivefrenzy":"9a","shufflejab":"9a","hustleup":"9a","twilightexit":"9a","partingshot":"9a","teleport":"9a","batonpass":"9a","defog":"9a","healbell":"9a","memento":"9a","trickroom":"9a"},"chimai":{"sanctuarypulse":"9a","hallowedquake":"9a","sovereignrite":"9a","earthpower":"9a","scorchingsands":"9a","mudshot":"9a","sandtomb":"9a","earthquake":"9a","bulldoze":"9a","highhorsepower":"9a","stompingtantrum":"9a","sandstorm":"9a","stealthrock":"9a","spikes":"9a","moonblast":"9a","dazzlinggleam":"9a","drainingkiss":"9a","mistyexplosion":"9a","playrough":"9a","mistyterrain":"9a","moonlight":"9a","charm":"9a","decorate":"9a","psychic":"9a","psyshock":"9a","futuresight":"9a","extrasensory":"9a","powergem":"9a","meteorbeam":"9a","flamethrower":"9a","fireblast":"9a","mysticalfire":"9a","heatwave":"9a","energyball":"9a","gigadrain":"9a","grassknot":"9a","shadowball":"9a","aurasphere":"9a","focusblast":"9a","sludgebomb":"9a","hypervoice":"9a","icebeam":"9a","thunderbolt":"9a","darkpulse":"9a","dragonpulse":"9a","bodypress":"9a","hyperbeam":"9a","terablast":"9a","calmmind":"9a","nastyplot":"9a","irondefense":"9a","amnesia":"9a","wish":"9a","healbell":"9a","safeguard":"9a","reflect":"9a","lightscreen":"9a","trickroom":"9a","gravity":"9a","sunnyday":"9a","roar":"9a","whirlwind":"9a","taunt":"9a","encore":"9a","toxic":"9a","yawn":"9a","trick":"9a","cottonguard":"9a","velvetguard":"9a","velvetpress":"9a","tailglow":"9a","recover":"9a","protect":"9a","detect":"9a","rest":"9a","sleeptalk":"9a","substitute":"9a","endure":"9a","facade":"9a","helpinghand":"9a","quiverdance":"9a","dragondance":"9a","victorydance":"9a","clangoroussoul":"9a","fierydance":"9a","revelationdance":"9a","aquastep":"9a","petaldance":"9a","featherdance":"9a","teeterdance":"9a","lunardance":"9a","swordsdance":"9a","raindance":"9a","tremorshot":"9a","oxidize":"9a","undertow":"9a","hypnowhirl":"9a","solarnectar":"9a","chrysalisveil":"9a","twilightexit":"9a","knockoff":"9a","uturn":"9a","teleport":"9a","batonpass":"9a","healingwish":"9a","memento":"9a","toxicspikes":"9a","defog":"9a","courtchange":"9a","thunderwave":"9a","penance":"9a"},"missingno":{"blizzard":"9a","bubblebeam":"9a","cut":"9a","doubleedge":"9a","earthquake":"9a","fissure":"9a","fly":"9a","icebeam":"9a","megakick":"9a","megapunch":"9a","psychic":"9a","rage":"9a","razorwind":"9a","rest":"9a","seismictoss":"9a","skyattack":"9a","submission":"9a","substitute":"9a","swordsdance":"9a","takedown":"9a","teleport":"9a","thunder":"9a","thunderwave":"9a","toxic":"9a","triattack":"9a","watergun":"9a","datacorruption":"9a","bodyslam":"9a","facade":"9a","return":"9a","frustration":"9a","hyperbeam":"9a","gigaimpact":"9a","quickattack":"9a","extremespeed":"9a","headbutt":"9a","payday":"9a","tackle":"9a","slam":"9a","thrash":"9a","bravebird":"9a","drillpeck":"9a","peck":"9a","wingattack":"9a","aerialace":"9a","acrobatics":"9a","dualwingbeat":"9a","hurricane":"9a","airslash":"9a","gust":"9a","knockoff":"9a","suckerpunch":"9a","shadowsneak":"9a","shadowclaw":"9a","phantomforce":"9a","rockslide":"9a","stoneedge":"9a","ironhead":"9a","drainpunch":"9a","superpower":"9a","uturn":"9a","waterfall":"9a","liquidation":"9a","surf":"9a","hydropump":"9a","bubble":"9a","thunderbolt":"9a","shadowball":"9a","terablast":"9a","leechlife":"9a","xscissor":"9a","lunge":"9a","firstimpression":"9a","pounce":"9a","bugbite":"9a","recycle":"9a","trick":"9a","switcheroo":"9a","fling":"9a","thief":"9a","covet":"9a","naturalgift":"9a","stuffcheeks":"9a","belch":"9a","embargo":"9a","magicroom":"9a","trickroom":"9a","bulkup":"9a","curse":"9a","agility":"9a","protect":"9a","sleeptalk":"9a","recover":"9a","roost":"9a","painsplit":"9a","taunt":"9a","encore":"9a","disable":"9a","glare":"9a","willowisp":"9a","confuseray":"9a","metronome":"9a","transform":"9a","conversion":"9a","conversion2":"9a","mimic":"9a","haze":"9a","stealthrock":"9a","spikes":"9a","defog":"9a","endure":"9a","endeavor":"9a","destinybond":"9a","trickortreat":"9a"},"funerfly":{"solemnlament":"9a","butterflyprocession":"9a","lastrites":"9a","shadowball":"9a","bugbuzz":"9a","hex":"9a","willowisp":"9a","quiverdance":"9a","calmmind":"9a","strengthsap":"9a","painsplit":"9a","destinybond":"9a","perishsong":"9a","memento":"9a","uturn":"9a","trickroom":"9a","psychic":"9a","silverwind":"9a","ominouswind":"9a","protect":"9a","terablast":"9a","rest":"9a","sleeptalk":"9a","substitute":"9a","endure":"9a"},"reimuhakurei":{"airslash":"9a","dreamseal":"9a","gust":"9a","focusblast":"9a","aurasphere":"9a","springtidestorm":"9a","dazzlinggleam":"9a","petaldance":"9a","grasspledge":"9a","magicalleaf":"9a","storedpower":"9a","triattack":"9a","acrobatics":"9a","fly":"9a","aerialace":"9a","focuspunch":"9a","closecombat":"9a","crosschop":"9a","thunderouskick":"9a","submission":"9a","brickbreak":"9a","forcepalm":"9a","spiritbreak":"9a","spiritshackle":"9a","shadowpunch":"9a","zenheadbutt":"9a","petalblizzard":"9a","doubleedge":"9a","facade":"9a","bind":"9a","quickattack":"9a","recover":"9a","whirlwind":"9a","calmmind":"9a","lightscreen":"9a","reflect":"9a","barrier":"9a","thunderwave":"9a","agility":"9a","meditate":"9a","defog":"9a","sunnyday":"9a","grassyterrain":"9a","wideguard":"9a","safeguard":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","roost":"9a","tailwind":"9a","featherdance":"9a","uturn":"9a","bravebird":"9a","drillpeck":"9a","dualwingbeat":"9a","hurricane":"9a","aircutter":"9a","bulkup":"9a","detect":"9a","quickguard":"9a","coaching":"9a","drainpunch":"9a","machpunch":"9a","superpower":"9a","lowkick":"9a","highjumpkick":"9a","bodypress":"9a","rocksmash":"9a","lowsweep":"9a","reversal":"9a","shufflejab":"9a","vacuumwave":"9a","magiccoat":"9a","psyshock":"9a","extrasensory":"9a"},"marisakirisame":{"blastburn":"9a","overheat":"9a","fireblast":"9a","flamethrower":"9a","firepledge":"9a","flameburst":"9a","ember":"9a","firespin":"9a","thunder":"9a","hyperbeam":"9a","triattack":"9a","swift":"9a","terrainpulse":"9a","weatherball":"9a","lightofruin":"9a","dazzlinggleam":"9a","dracometeor":"9a","icebeam":"9a","aurorabeam":"9a","signalbeam":"9a","venoshock":"9a","clearsmog":"9a","acid":"9a","darkpulse":"9a","flareblitz":"9a","firepunch":"9a","flamecharge":"9a","doubleedge":"9a","retaliate":"9a","facade":"9a","headbutt":"9a","covet":"9a","quickattack":"9a","feint":"9a","cometpunch":"9a","trailblaze":"9a","wildcharge":"9a","foulplay":"9a","suckerpunch":"9a","knockoff":"9a","thief":"9a","feintattack":"9a","uturn":"9a","batonpass":"9a","craftyshield":"9a","taunt":"9a","switcheroo":"9a","toxic":"9a","agility":"9a","raindance":"9a","focusenergy":"9a","workup":"9a","mimic":"9a","confide":"9a","laserfocus":"9a","stealthrock":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","willowisp":"9a","sunnyday":"9a","firefang":"9a","temperflare":"9a","heatcrash":"9a","blazekick":"9a","heatwave":"9a","mysticalfire":"9a","lavaplume":"9a","incinerate":"9a","encore":"9a","yawn":"9a","wish":"9a","healbell":"9a","charm":"9a","disable":"9a","screech":"9a","hustleup":"9a","uproar":"9a","swordsdance":"9a","crushclaw":"9a","thrash":"9a","hypervoice":"9a","echoedvoice":"9a","meteorbeam":"9a","powergem":"9a","energyball":"9a","nastyplot":"9a","acrobatics":"9a","bravebird":"9a"},"rumia":{"nightdaze":"9a","darkpulse":"9a","moongeistbeam":"9a","shadowball":"9a","hex":"9a","ominouswind":"9a","moonblast":"9a","airslash":"9a","icywind":"9a","hyperbeam":"9a","hiddenpower":"9a","crunch":"9a","jawlock":"9a","knockoff":"9a","bite":"9a","payback":"9a","pursuit":"9a","phantomforce":"9a","shadowclaw":"9a","focuspunch":"9a","superpower":"9a","forcepalm":"9a","playrough":"9a","acrobatics":"9a","fly":"9a","icefang":"9a","ironhead":"9a","doubleedge":"9a","hyperfang":"9a","bind":"9a","bulkup":"9a","meanlook":"9a","whirlwind":"9a","helpinghand":"9a","moonlight":"9a","raindance":"9a","mist":"9a","reflect":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","terablast":"9a","endure":"9a","facade":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","gigaimpact":"9a","takedown":"9a","bodyslam":"9a","curse":"9a","thief":"9a","foulplay":"9a","taunt":"9a","faketears":"9a","torment":"9a","quash":"9a","suckerpunch":"9a","throatchop":"9a","nightslash":"9a","lashout":"9a","assurance":"9a","carrionfeast":"9a","shadowstrike":"9a","twilightexit":"9a","swordsdance":"9a","shadowsneak":"9a","psychicfangs":"9a","superfang":"9a","haze":"9a"},"daiyousei":{"moonblast":"9a","dazzlinggleam":"9a","drainingkiss":"9a","fairywind":"9a","energyball":"9a","gigadrain":"9a","icebeam":"9a","frostbreath":"9a","icywind":"9a","surf":"9a","chillingwater":"9a","storedpower":"9a","triattack":"9a","swift":"9a","echoedvoice":"9a","playrough":"9a","petalblizzard":"9a","iciclecrash":"9a","iceshard":"9a","waterfall":"9a","lastresort":"9a","return":"9a","facade":"9a","covet":"9a","quickattack":"9a","mistyterrain":"9a","fairylock":"9a","charm":"9a","watersport":"9a","raindance":"9a","snowscape":"9a","mist":"9a","haze":"9a","lightscreen":"9a","reflect":"9a","teleport":"9a","calmmind":"9a","nastyplot":"9a","confuseray":"9a","safeguard":"9a","naturepower":"9a","helpinghand":"9a","tearfullook":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","bodyslam":"9a","curse":"9a","sweetkiss":"9a","babydolleyes":"9a","craftyshield":"9a","mistyexplosion":"9a","alluringvoice":"9a","velvetpress":"9a","quiverdance":"9a","wish":"9a","healbell":"9a","pollenpuff":"9a","magicalleaf":"9a","psychic":"9a","lifedew":"9a"},"cirno":{"blizzard":"9a","icebeam":"9a","freezedry":"9a","aurorabeam":"9a","icywind":"9a","powdersnow":"9a","moonblast":"9a","dazzlinggleam":"9a","fairywind":"9a","solarbeam":"9a","grasspledge":"9a","surf":"9a","bubblebeam":"9a","chillingwater":"9a","weatherball":"9a","icehammer":"9a","iciclecrash":"9a","icepunch":"9a","iceshard":"9a","iceball":"9a","tripleaxel":"9a","playrough":"9a","jumpkick":"9a","upperhand":"9a","poweruppunch":"9a","aerialace":"9a","solarblade":"9a","seedbomb":"9a","trailblaze":"9a","liquidation":"9a","wingattack":"9a","doubleedge":"9a","megapunch":"9a","facade":"9a","quickattack":"9a","auroraveil":"9a","snowscape":"9a","haze":"9a","mist":"9a","defog":"9a","growth":"9a","focusenergy":"9a","helpinghand":"9a","endure":"9a","swagger":"9a","followme":"9a","sunnyday":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","hiddenpower":"9a","terablast":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","bodyslam":"9a","curse":"9a","hail":"9a","chillingmist":"9a","iciclespear":"9a","icefang":"9a","avalanche":"9a","rimecleaver":"9a","frostbreath":"9a","charm":"9a","sweetkiss":"9a","mistyterrain":"9a","babydolleyes":"9a","craftyshield":"9a","drainingkiss":"9a","mistyexplosion":"9a","alluringvoice":"9a","velvetpress":"9a","icespinner":"9a","uturn":"9a"},"hongmeiling":{"focusblast":"9a","aurasphere":"9a","vacuumwave":"9a","dragonpulse":"9a","dragonbreath":"9a","twister":"9a","flashcannon":"9a","mirrorshot":"9a","dazzlinggleam":"9a","triattack":"9a","snore":"9a","focuspunch":"9a","closecombat":"9a","hammerarm":"9a","crosschop":"9a","drainpunch":"9a","brickbreak":"9a","upperhand":"9a","lowsweep":"9a","circlethrow":"9a","machpunch":"9a","outrage":"9a","dragonrush":"9a","dragonclaw":"9a","breakingswipe":"9a","meteormash":"9a","metalclaw":"9a","petalblizzard":"9a","razorleaf":"9a","throatchop":"9a","knockoff":"9a","earthquake":"9a","bulldoze":"9a","stoneedge":"9a","rockslide":"9a","rocktomb":"9a","rockthrow":"9a","uturn":"9a","megakick":"9a","megapunch":"9a","facade":"9a","cometpunch":"9a","dragondance":"9a","taunt":"9a","quash":"9a","calmmind":"9a","meditate":"9a","reflect":"9a","lightscreen":"9a","stealthrock":"9a","sandstorm":"9a","focusenergy":"9a","block":"9a","luckychant":"9a","helpinghand":"9a","yawn":"9a","substitute":"9a","rest":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","sleeptalk":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","bodyslam":"9a","curse":"9a","bulkup":"9a","detect":"9a","quickguard":"9a","coaching":"9a","superpower":"9a","lowkick":"9a","highjumpkick":"9a","bodypress":"9a","rocksmash":"9a","reversal":"9a","shufflejab":"9a","dragontail":"9a","scaleshot":"9a","bellydrum":"9a","swordsdance":"9a","firepunch":"9a","icepunch":"9a","thunderpunch":"9a","blazekick":"9a","rapidspin":"9a"},"koakuma":{"darkpulse":"9a","snarl":"9a","shadowball":"9a","hurricane":"9a","airslash":"9a","aircutter":"9a","icebeam":"9a","icywind":"9a","fireblast":"9a","mysticalfire":"9a","triattack":"9a","swift":"9a","suckerpunch":"9a","knockoff":"9a","brutalswing":"9a","feintattack":"9a","shadowsneak":"9a","fly":"9a","acrobatics":"9a","dualwingbeat":"9a","thunderfang":"9a","leechlife":"9a","facade":"9a","quickattack":"9a","feint":"9a","memento":"9a","taunt":"9a","faketears":"9a","switcheroo":"9a","willowisp":"9a","destinybond":"9a","confuseray":"9a","calmmind":"9a","defog":"9a","tailwind":"9a","haze":"9a","whirlwind":"9a","confide":"9a","entrainment":"9a","sweetkiss":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","pursuit":"9a","thief":"9a","foulplay":"9a","torment":"9a","quash":"9a","nastyplot":"9a","encore":"9a","partingshot":"9a","trick":"9a","flatter":"9a","hex":"9a","dazzlinggleam":"9a","psychic":"9a"},"patchouliknowledge":{"mistball":"9a","extrasensory":"9a","psychicnoise":"9a","psybeam":"9a","confusion":"9a","blueflare":"9a","firepledge":"9a","surf":"9a","energyball":"9a","flashcannon":"9a","earthpower":"9a","moongeistbeam":"9a","hyperbeam":"9a","triattack":"9a","swift":"9a","hiddenpower":"9a","terrainpulse":"9a","zenheadbutt":"9a","psychocut":"9a","bodyslam":"9a","tackle":"9a","flail":"9a","calmmind":"9a","recover":"9a","confide":"9a","haze":"9a","allyswitch":"9a","trickroom":"9a","imprison":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","terablast":"9a","endure":"9a","facade":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","curse":"9a","reflect":"9a","lightscreen":"9a","trick":"9a","magiccoat":"9a","teleport":"9a","gravity":"9a","psychicterrain":"9a","skillswap":"9a","magicroom":"9a","wonderroom":"9a","hypnosis":"9a","amnesia":"9a","agility":"9a","safeguard":"9a","psychic":"9a","psyshock":"9a","futuresight":"9a","expandingforce":"9a","storedpower":"9a","dreameater":"9a","hypnowhirl":"9a","fireblast":"9a","flamethrower":"9a","heatwave":"9a","overheat":"9a","hydropump":"9a","scald":"9a","gigadrain":"9a","leafstorm":"9a","solarbeam":"9a","steelbeam":"9a","scorchingsands":"9a","moonblast":"9a","sunnyday":"9a","raindance":"9a","sandstorm":"9a","snowscape":"9a"},"sakuyaizayoi":{"flashcannon":"9a","mirrorshot":"9a","psychic":"9a","psyshock":"9a","extrasensory":"9a","psybeam":"9a","mysticalfire":"9a","thunderbolt":"9a","shockwave":"9a","darkpulse":"9a","ironhead":"9a","smartstrike":"9a","silverdagger":"9a","metalclaw":"9a","bulletpunch":"9a","breakingswipe":"9a","selfdestruct":"9a","extremespeed":"9a","facade":"9a","quickattack":"9a","fakeout":"9a","feint":"9a","kowtowcleave":"9a","nightslash":"9a","knockoff":"9a","feintattack":"9a","shadowclaw":"9a","brickbreak":"9a","spikes":"9a","thunderwave":"9a","teleport":"9a","agility":"9a","trickroom":"9a","lifedew":"9a","swordsdance":"9a","tidyup":"9a","laserfocus":"9a","detect":"9a","quickguard":"9a","sandstorm":"9a","afteryou":"9a","safeguard":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","bitterblade":"9a","psychocut":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","irondefense":"9a","autotomize":"9a","metalsound":"9a","heavyslam":"9a","gyroball":"9a","sacredsword":"9a","leafblade":"9a","aerialace":"9a","uturn":"9a","quash":"9a"},"remiliascarlet":{"nightdaze":"9a","darkpulse":"9a","snarl":"9a","hurricane":"9a","airslash":"9a","aircutter":"9a","gust":"9a","fireblast":"9a","heatwave":"9a","mysticalfire":"9a","shadowball":"9a","psychic":"9a","extrasensory":"9a","drainingkiss":"9a","gigadrain":"9a","megadrain":"9a","hyperbeam":"9a","bloodmoon":"9a","hypervoice":"9a","wringout":"9a","crunch":"9a","throatchop":"9a","suckerpunch":"9a","brutalswing":"9a","bite":"9a","bravebird":"9a","fly":"9a","aerialace":"9a","acrobatics":"9a","dualwingbeat":"9a","psychicfangs":"9a","icefang":"9a","iciclespear":"9a","firefang":"9a","leechlife":"9a","facade":"9a","quickattack":"9a","honeclaws":"9a","taunt":"9a","nastyplot":"9a","strengthsap":"9a","snowscape":"9a","toxic":"9a","agility":"9a","tailwind":"9a","moonlight":"9a","defog":"9a","quickguard":"9a","destinybond":"9a","swagger":"9a","focusenergy":"9a","whirlwind":"9a","screech":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","fatescall":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","pursuit":"9a","thief":"9a","foulplay":"9a","knockoff":"9a","faketears":"9a","torment":"9a","quash":"9a","nightslash":"9a","lashout":"9a","payback":"9a","assurance":"9a","carrionfeast":"9a","roost":"9a","featherdance":"9a","uturn":"9a","drillpeck":"9a","shadowstrike":"9a","twilightexit":"9a","hustleup":"9a","moonblast":"9a","swordsdance":"9a","drainpunch":"9a","playrough":"9a"},"flandrescarlet":{"forbiddenbarrage":"9a","darkpulse":"9a","snarl":"9a","overheat":"9a","fireblast":"9a","inferno":"9a","searingshot":"9a","flamethrower":"9a","lavaplume":"9a","flameburst":"9a","burningjealousy":"9a","ember":"9a","firespin":"9a","scorchingsands":"9a","powergem":"9a","ancientpower":"9a","shadowball":"9a","hex":"9a","storedpower":"9a","signalbeam":"9a","mistyexplosion":"9a","megadrain":"9a","hyperbeam":"9a","hypervoice":"9a","swift":"9a","throatchop":"9a","crunch":"9a","nightslash":"9a","bite":"9a","payback":"9a","flareblitz":"9a","ragingfury":"9a","firelash":"9a","temperflare":"9a","firepunch":"9a","firefang":"9a","flamewheel":"9a","flamecharge":"9a","rockslide":"9a","rocktomb":"9a","revenge":"9a","circlethrow":"9a","leechlife":"9a","playrough":"9a","explosion":"9a","gigaimpact":"9a","doubleedge":"9a","megapunch":"9a","facade":"9a","slash":"9a","quickattack":"9a","crushgrip":"9a","willowisp":"9a","torment":"9a","snatch":"9a","mistyterrain":"9a","barrier":"9a","trick":"9a","imprison":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","pursuit":"9a","thief":"9a","foulplay":"9a","taunt":"9a","knockoff":"9a","faketears":"9a","quash":"9a","suckerpunch":"9a","lashout":"9a","assurance":"9a","carrionfeast":"9a","nastyplot":"9a","sunnyday":"9a","heatcrash":"9a","blazekick":"9a","heatwave":"9a","mysticalfire":"9a","incinerate":"9a","shadowstrike":"9a","twilightexit":"9a","hustleup":"9a","moonblast":"9a","swordsdance":"9a","sacredsword":"9a","superpower":"9a","stompingtantrum":"9a","drainpunch":"9a","psychicfangs":"9a"},"lettywhiterock":{"blizzard":"9a","icebeam":"9a","freezedry":"9a","frostbreath":"9a","aurorabeam":"9a","icywind":"9a","powdersnow":"9a","bleakwindstorm":"9a","aircutter":"9a","psychic":"9a","psyshock":"9a","psybeam":"9a","mirrorcoat":"9a","waterpulse":"9a","chillingwater":"9a","powergem":"9a","shadowball":"9a","gigadrain":"9a","weatherball":"9a","swift":"9a","iciclecrash":"9a","icespinner":"9a","icepunch":"9a","iceshard":"9a","bodypress":"9a","payback":"9a","ironhead":"9a","bodyslam":"9a","chipaway":"9a","snowscape":"9a","auroraveil":"9a","toxic":"9a","irondefense":"9a","yawn":"9a","confide":"9a","lifedew":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","facade":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","curse":"9a","hail":"9a","haze":"9a","mist":"9a","chillingmist":"9a","roar":"9a","reflect":"9a","lightscreen":"9a","healbell":"9a","surf":"9a","wish":"9a","avalanche":"9a","calmmind":"9a","whirlwind":"9a"},"chen":{"triattack":"9a","swift":"9a","round":"9a","psychic":"9a","extrasensory":"9a","confusion":"9a","twinbeam":"9a","fireblast":"9a","flamethrower":"9a","incinerate":"9a","thunder":"9a","thunderbolt":"9a","shockwave":"9a","shadowball":"9a","doubleedge":"9a","return":"9a","eggbomb":"9a","rockclimb":"9a","facade":"9a","covet":"9a","rapidspin":"9a","fakeout":"9a","doublehit":"9a","tailslap":"9a","furyswipes":"9a","barrage":"9a","playrough":"9a","rocktomb":"9a","rockblast":"9a","uturn":"9a","acrobatics":"9a","aerialace":"9a","throatchop":"9a","suckerpunch":"9a","bite":"9a","rollingkick":"9a","doublekick":"9a","poweruppunch":"9a","flamecharge":"9a","metalclaw":"9a","nuzzle":"9a","acupressure":"9a","encore":"9a","endure":"9a","mefirst":"9a","copycat":"9a","whirlwind":"9a","tailwhip":"9a","helpinghand":"9a","charm":"9a","babydolleyes":"9a","taunt":"9a","torment":"9a","snatch":"9a","switcheroo":"9a","quash":"9a","stealthrock":"9a","thunderwave":"9a","charge":"9a","agility":"9a","quickguard":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","frustration":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","bodyslam":"9a","curse":"9a","yawn":"9a","wish":"9a","healbell":"9a","workup":"9a","batonpass":"9a","disable":"9a","screech":"9a","hustleup":"9a","uproar":"9a","quickattack":"9a","headbutt":"9a","swordsdance":"9a","retaliate":"9a","crushclaw":"9a","thrash":"9a","honeclaws":"9a","nightslash":"9a","knockoff":"9a","shadowclaw":"9a"},"alicemargatroid":{"steelbeam":"9a","flashcannon":"9a","mirrorshot":"9a","prismaticlaser":"9a","futuresight":"9a","psychic":"9a","psyshock":"9a","expandingforce":"9a","psychicnoise":"9a","psybeam":"9a","confusion":"9a","mistyexplosion":"9a","dazzlinggleam":"9a","blizzard":"9a","icebeam":"9a","aurorabeam":"9a","aurasphere":"9a","incinerate":"9a","solarbeam":"9a","energyball":"9a","hyperbeam":"9a","swift":"9a","terrainpulse":"9a","smartstrike":"9a","magnetbomb":"9a","metalclaw":"9a","psychocut":"9a","heartstamp":"9a","icepunch":"9a","iceshard":"9a","firepunch":"9a","brickbreak":"9a","selfdestruct":"9a","retaliate":"9a","facade":"9a","barrage":"9a","calmmind":"9a","auroraveil":"9a","reflect":"9a","lightscreen":"9a","trickroom":"9a","spikes":"9a","wideguard":"9a","recover":"9a","psychup":"9a","confide":"9a","helpinghand":"9a","snowscape":"9a","craftyshield":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","gigaimpact":"9a","takedown":"9a","bodyslam":"9a","curse":"9a","irondefense":"9a","autotomize":"9a","metalsound":"9a","ironhead":"9a","bulletpunch":"9a","heavyslam":"9a","gyroball":"9a","trick":"9a","magiccoat":"9a","teleport":"9a","imprison":"9a","gravity":"9a","psychicterrain":"9a","skillswap":"9a","allyswitch":"9a","magicroom":"9a","wonderroom":"9a","hypnosis":"9a","amnesia":"9a","agility":"9a","safeguard":"9a","zenheadbutt":"9a","psychicfangs":"9a","extrasensory":"9a","storedpower":"9a","dreameater":"9a","hypnowhirl":"9a","stringshot":"9a","spite":"9a","magnetrise":"9a"},"lilywhite":{"springtidestorm":"9a","dazzlinggleam":"9a","fairywind":"9a","disarmingvoice":"9a","naturesmadness":"9a","leafstorm":"9a","solarbeam":"9a","petaldance":"9a","energyball":"9a","gigadrain":"9a","magicalleaf":"9a","megadrain":"9a","absorb":"9a","airslash":"9a","aircutter":"9a","uproar":"9a","hiddenpower":"9a","weatherball":"9a","playrough":"9a","petalblizzard":"9a","grassyglide":"9a","razorleaf":"9a","leafage":"9a","acrobatics":"9a","uturn":"9a","return":"9a","facade":"9a","fakeout":"9a","quickattack":"9a","flail":"9a","grassyterrain":"9a","aromatherapy":"9a","leechseed":"9a","lightscreen":"9a","reflect":"9a","growth":"9a","morningsun":"9a","wish":"9a","luckychant":"9a","safeguard":"9a","naturepower":"9a","helpinghand":"9a","tearfullook":"9a","ragepowder":"9a","sunnyday":"9a","charm":"9a","flowershield":"9a","mistyterrain":"9a","agility":"9a","teleport":"9a","powersplit":"9a","magiccoat":"9a","tailwind":"9a","defog":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","terablast":"9a","endure":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","bodyslam":"9a","curse":"9a","sweetkiss":"9a","babydolleyes":"9a","craftyshield":"9a","moonblast":"9a","drainingkiss":"9a","mistyexplosion":"9a","alluringvoice":"9a","velvetpress":"9a","synthesis":"9a","stunspore":"9a","ingrain":"9a","worryseed":"9a","trailblaze":"9a","grassknot":"9a","solarnectar":"9a","sweetscent":"9a","quiverdance":"9a","pollenpuff":"9a","healbell":"9a"},"lunasaprismriver":{"moonlight":"9a","shadowball":"9a","hex":"9a","nightshade":"9a","sparklingaria":"9a","waterpulse":"9a","moonblast":"9a","alluringvoice":"9a","disarmingvoice":"9a","clearsmog":"9a","smog":"9a","icywind":"9a","hypervoice":"9a","round":"9a","swift":"9a","echoedvoice":"9a","poltergeist":"9a","shadowpunch":"9a","shadowsneak":"9a","astonish":"9a","icepunch":"9a","spiritbreak":"9a","doubleedge":"9a","facade":"9a","covet":"9a","partingshot":"9a","memento":"9a","toxic":"9a","raindance":"9a","destinybond":"9a","calmmind":"9a","cosmicpower":"9a","telekinesis":"9a","perishsong":"9a","refresh":"9a","painsplit":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","willowisp":"9a","confuseray":"9a","spite":"9a","ominouswind":"9a","haze":"9a","torment":"9a","sing":"9a","psychic":"9a","psychicnoise":"9a","snarl":"9a"},"merlinprismriver":{"shadowball":"9a","hex":"9a","nightshade":"9a","psychicnoise":"9a","psybeam":"9a","confusion":"9a","psywave":"9a","shockwave":"9a","boomburst":"9a","hypervoice":"9a","uproar":"9a","round":"9a","swift":"9a","poltergeist":"9a","shadowclaw":"9a","shadowpunch":"9a","shadowsneak":"9a","astonish":"9a","thunderpunch":"9a","zenheadbutt":"9a","psychocut":"9a","doubleedge":"9a","facade":"9a","covet":"9a","taunt":"9a","torment":"9a","thunderwave":"9a","sunnyday":"9a","destinybond":"9a","agility":"9a","magiccoat":"9a","telekinesis":"9a","metalsound":"9a","encore":"9a","painsplit":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","willowisp":"9a","confuseray":"9a","spite":"9a","ominouswind":"9a","echoedvoice":"9a","alluringvoice":"9a","disarmingvoice":"9a","dazzlinggleam":"9a","teeterdance":"9a","nastyplot":"9a","sing":"9a","metronome":"9a","trick":"9a"},"lyricaprismriver":{"shadowball":"9a","hex":"9a","nightshade":"9a","torchsong":"9a","incinerate":"9a","airslash":"9a","alluringvoice":"9a","disarmingvoice":"9a","darkpulse":"9a","hypervoice":"9a","round":"9a","swift":"9a","echoedvoice":"9a","poltergeist":"9a","shadowpunch":"9a","shadowsneak":"9a","astonish":"9a","firepunch":"9a","suckerpunch":"9a","feintattack":"9a","doubleedge":"9a","facade":"9a","covet":"9a","snatch":"9a","embargo":"9a","willowisp":"9a","psychicterrain":"9a","destinybond":"9a","skillswap":"9a","barrier":"9a","healpulse":"9a","telekinesis":"9a","confide":"9a","painsplit":"9a","helpinghand":"9a","spotlight":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","bodyslam":"9a","curse":"9a","confuseray":"9a","spite":"9a","ominouswind":"9a","dazzlinggleam":"9a","uproar":"9a","calmmind":"9a","sing":"9a","teeterdance":"9a","psychicnoise":"9a","nastyplot":"9a","encore":"9a","trick":"9a","fakeout":"9a"},"youmukonpaku":{"icespinner":"9a","icepunch":"9a","focusblast":"9a","secretsword":"9a","aurasphere":"9a","vacuumwave":"9a","shadowball":"9a","ominouswind":"9a","aurorabeam":"9a","flashcannon":"9a","petaldance":"9a","magicalleaf":"9a","triattack":"9a","swift":"9a","terrainpulse":"9a","echoedvoice":"9a","sacredsword":"9a","submission":"9a","drainpunch":"9a","brickbreak":"9a","wakeupslap":"9a","forcepalm":"9a","phantomforce":"9a","shadowclaw":"9a","shadowpunch":"9a","shadowsneak":"9a","astonish":"9a","bulldoze":"9a","smartstrike":"9a","uturn":"9a","aerialace":"9a","acrobatics":"9a","knockoff":"9a","nightslash":"9a","leafblade":"9a","razorleaf":"9a","megakick":"9a","retaliate":"9a","quickattack":"9a","falseswipe":"9a","curse":"9a","calmmind":"9a","agility":"9a","gravity":"9a","skillswap":"9a","meditate":"9a","swordsdance":"9a","leer":"9a","disable":"9a","helpinghand":"9a","whirlwind":"9a","confuseray":"9a","snowscape":"9a","detect":"9a","quickguard":"9a","chillyreception":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","facade":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","bodyslam":"9a","bulkup":"9a","coaching":"9a","closecombat":"9a","machpunch":"9a","superpower":"9a","lowkick":"9a","highjumpkick":"9a","bodypress":"9a","rocksmash":"9a","lowsweep":"9a","reversal":"9a","focuspunch":"9a","shufflejab":"9a","willowisp":"9a","spite":"9a","painsplit":"9a","nightshade":"9a","destinybond":"9a","shadowstrike":"9a","hex":"9a","psychocut":"9a","xscissor":"9a","extremespeed":"9a","furycutter":"9a"},"yuyukosaigyouji":{"astralbarrage":"9a","shadowball":"9a","hex":"9a","nightshade":"9a","springtidestorm":"9a","moonblast":"9a","dazzlinggleam":"9a","drainingkiss":"9a","fairywind":"9a","leafstorm":"9a","petaldance":"9a","gigadrain":"9a","magicalleaf":"9a","megadrain":"9a","darkpulse":"9a","bugbuzz":"9a","icywind":"9a","shockwave":"9a","chillingwater":"9a","hyperbeam":"9a","round":"9a","weatherball":"9a","shadowforce":"9a","phantomforce":"9a","psychicnoise":"9a","shadowclaw":"9a","shadowpunch":"9a","shadowsneak":"9a","lick":"9a","spiritbreak":"9a","petalblizzard":"9a","razorleaf":"9a","doubleedge":"9a","bodyslam":"9a","megapunch":"9a","facade":"9a","falseswipe":"9a","stunspore":"9a","leechseed":"9a","grassyterrain":"9a","trickroom":"9a","mistyexplosion":"9a","mistyterrain":"9a","aromaticmist":"9a","haze":"9a","mist":"9a","curse":"9a","perishsong":"9a","disable":"9a","helpinghand":"9a","safeguard":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","gigaimpact":"9a","takedown":"9a","willowisp":"9a","confuseray":"9a","spite":"9a","painsplit":"9a","destinybond":"9a","shadowstrike":"9a","ominouswind":"9a","charm":"9a","sweetkiss":"9a","babydolleyes":"9a","craftyshield":"9a","playrough":"9a","alluringvoice":"9a","velvetpress":"9a","meanlook":"9a","calmmind":"9a","strengthsap":"9a","stockpile":"9a","swallow":"9a","spitup":"9a","belch":"9a","stuffcheeks":"9a","recycle":"9a","carrionfeast":"9a","grudge":"9a"},"ranyakumo":{"futuresight":"9a","psychic":"9a","psyshock":"9a","psybeam":"9a","storedpower":"9a","fireblast":"9a","flamethrower":"9a","incinerate":"9a","blizzard":"9a","icebeam":"9a","aurorabeam":"9a","thunder":"9a","thunderbolt":"9a","shockwave":"9a","darkpulse":"9a","snarl":"9a","shadowball":"9a","finalgambit":"9a","hyperbeam":"9a","triattack":"9a","swift":"9a","psychicfangs":"9a","psychocut":"9a","foulplay":"9a","crunch":"9a","bite":"9a","beatup":"9a","irontail":"9a","spinout":"9a","smartstrike":"9a","uturn":"9a","focuspunch":"9a","brickbreak":"9a","seismictoss":"9a","doubleedge":"9a","extremespeed":"9a","facade":"9a","rapidspin":"9a","tailslap":"9a","furyswipes":"9a","calmmind":"9a","meditate":"9a","skillswap":"9a","powerswap":"9a","magiccoat":"9a","lightscreen":"9a","reflect":"9a","teleport":"9a","healingwish":"9a","stealthrock":"9a","wideguard":"9a","taunt":"9a","sunnyday":"9a","raindance":"9a","disable":"9a","safeguard":"9a","endure":"9a","lockon":"9a","helpinghand":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","gigaimpact":"9a","takedown":"9a","bodyslam":"9a","curse":"9a","trickroom":"9a","trick":"9a","imprison":"9a","gravity":"9a","psychicterrain":"9a","allyswitch":"9a","magicroom":"9a","wonderroom":"9a","hypnosis":"9a","amnesia":"9a","agility":"9a","zenheadbutt":"9a","expandingforce":"9a","extrasensory":"9a","psychicnoise":"9a","confusion":"9a","dreameater":"9a","hypnowhirl":"9a","nastyplot":"9a","willowisp":"9a","mysticalfire":"9a","swordsdance":"9a","firepunch":"9a"},"yukariyakumo":{"spacialrend":"9a","futuresight":"9a","hyperspacehole":"9a","extrasensory":"9a","teleport":"9a","shikigamirush":"9a","psybeam":"9a","confusion":"9a","storedpower":"9a","psywave":"9a","darkpulse":"9a","shadowball":"9a","nightshade":"9a","earthpower":"9a","ancientpower":"9a","waterpledge":"9a","bubblebeam":"9a","chillingwater":"9a","bugbuzz":"9a","signalbeam":"9a","steelbeam":"9a","flashcannon":"9a","triattack":"9a","swift":"9a","psychocut":"9a","heartstamp":"9a","nightslash":"9a","knockoff":"9a","feintattack":"9a","payback":"9a","shadowsneak":"9a","earthquake":"9a","bulldoze":"9a","magnitude":"9a","rocktomb":"9a","steelroller":"9a","behemothbash":"9a","focuspunch":"9a","megapunch":"9a","covet":"9a","feint":"9a","spiderweb":"9a","eerieimpulse":"9a","taunt":"9a","snatch":"9a","switcheroo":"9a","heartswap":"9a","psychicterrain":"9a","trickroom":"9a","magicroom":"9a","wonderroom":"9a","raindance":"9a","fairylock":"9a","meanlook":"9a","glare":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","acrobatics":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","facade":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","calmmind":"9a","reflect":"9a","lightscreen":"9a","trick":"9a","magiccoat":"9a","imprison":"9a","gravity":"9a","skillswap":"9a","allyswitch":"9a","hypnosis":"9a","amnesia":"9a","agility":"9a","safeguard":"9a","psychic":"9a","psyshock":"9a","expandingforce":"9a","psychicnoise":"9a","dreameater":"9a","hypnowhirl":"9a","pursuit":"9a","thief":"9a","foulplay":"9a","faketears":"9a","torment":"9a","quash":"9a","snarl":"9a","nastyplot":"9a","twilightexit":"9a","partingshot":"9a","barrier":"9a"},"suikaibuki":{"hiddenpower":"9a","earthpower":"9a","scorchingsands":"9a","mudbomb":"9a","focusblast":"9a","aurasphere":"9a","flamethrower":"9a","lavaplume":"9a","firespin":"9a","infernalparade":"9a","ancientpower":"9a","mistyexplosion":"9a","fairywind":"9a","hyperbeam":"9a","hypervoice":"9a","terrainpulse":"9a","wringout":"9a","earthquake":"9a","stompingtantrum":"9a","bulldoze":"9a","magnitude":"9a","focuspunch":"9a","closecombat":"9a","crosschop":"9a","brickbreak":"9a","drainpunch":"9a","upperhand":"9a","circlethrow":"9a","revenge":"9a","reversal":"9a","seismictoss":"9a","counter":"9a","megahorn":"9a","flareblitz":"9a","firepunch":"9a","playrough":"9a","stoneedge":"9a","rockslide":"9a","rocktomb":"9a","rockthrow":"9a","smackdown":"9a","gigaimpact":"9a","return":"9a","strength":"9a","facade":"9a","hornattack":"9a","visegrip":"9a","doublehit":"9a","calmmind":"9a","gravity":"9a","bulkup":"9a","curse":"9a","willowisp":"9a","sunnyday":"9a","stealthrock":"9a","mistyterrain":"9a","endure":"9a","focusenergy":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","terablast":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","spikes":"9a","sandstorm":"9a","highhorsepower":"9a","dig":"9a","drillrun":"9a","mudshot":"9a","tremorshot":"9a","detect":"9a","quickguard":"9a","coaching":"9a","machpunch":"9a","superpower":"9a","lowkick":"9a","highjumpkick":"9a","bodypress":"9a","rocksmash":"9a","lowsweep":"9a","shufflejab":"9a","vacuumwave":"9a","icepunch":"9a","thunderpunch":"9a","heavyslam":"9a","mist":"9a","haze":"9a","growth":"9a"},"wrigglenightbug":{"bugbuzz":"9a","silverwind":"9a","strugglebug":"9a","blastburn":"9a","fireblast":"9a","inferno":"9a","mysticalfire":"9a","firespin":"9a","meteorbeam":"9a","darkpulse":"9a","dazzlinggleam":"9a","drainingkiss":"9a","sludgewave":"9a","venoshock":"9a","solarbeam":"9a","gigadrain":"9a","megadrain":"9a","storedpower":"9a","hyperbeam":"9a","swift":"9a","hiddenpower":"9a","firstimpression":"9a","attackorder":"9a","lunge":"9a","uturn":"9a","skittersmack":"9a","fellstinger":"9a","highjumpkick":"9a","jumpkick":"9a","drainpunch":"9a","nightslash":"9a","knockoff":"9a","poisonjab":"9a","crosspoison":"9a","poisonsting":"9a","fly":"9a","aerialace":"9a","acrobatics":"9a","dualwingbeat":"9a","blazekick":"9a","firepunch":"9a","flamecharge":"9a","trailblaze":"9a","doubleedge":"9a","megapunch":"9a","chipaway":"9a","retaliate":"9a","quickattack":"9a","tailglow":"9a","quiverdance":"9a","toxic":"9a","toxicspikes":"9a","willowisp":"9a","taunt":"9a","snatch":"9a","sandstorm":"9a","swagger":"9a","confide":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","weatherball":"9a","terablast":"9a","endure":"9a","facade":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","stringshot":"9a","ragepowder":"9a","chrysalisveil":"9a","xscissor":"9a","leechlife":"9a","megahorn":"9a","pounce":"9a","bugbite":"9a","hivefrenzy":"9a","signalbeam":"9a","pollenpuff":"9a","swordsdance":"9a"},"mystialorelei":{"darkpulse":"9a","snarl":"9a","hurricane":"9a","airslash":"9a","aircutter":"9a","gust":"9a","psychicnoise":"9a","sludgebomb":"9a","venoshock":"9a","smog":"9a","focusblast":"9a","bugbuzz":"9a","silverwind":"9a","incinerate":"9a","alluringvoice":"9a","disarmingvoice":"9a","hypervoice":"9a","uproar":"9a","round":"9a","foulplay":"9a","throatchop":"9a","suckerpunch":"9a","knockoff":"9a","feintattack":"9a","payback":"9a","bravebird":"9a","fly":"9a","drillpeck":"9a","wingattack":"9a","aerialace":"9a","dualwingbeat":"9a","peck":"9a","orderup":"9a","scaleshot":"9a","gunkshot":"9a","poisonjab":"9a","crosspoison":"9a","firstimpression":"9a","xscissor":"9a","uturn":"9a","drillrun":"9a","steelwing":"9a","lastresort":"9a","doubleedge":"9a","slash":"9a","fakeout":"9a","quickattack":"9a","taunt":"9a","roost":"9a","defog":"9a","tailwind":"9a","haze":"9a","toxic":"9a","followme":"9a","endure":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","facade":"9a","return":"9a","frustration":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","pursuit":"9a","thief":"9a","faketears":"9a","torment":"9a","quash":"9a","nastyplot":"9a","featherdance":"9a","sing":"9a"},"keine":{"wideguard":"9a","roar":"9a","hypervoice":"9a","steelbeam":"9a","flashcannon":"9a","mirrorshot":"9a","tachyoncutter":"9a","hyperbeam":"9a","triattack":"9a","swift":"9a","terrainpulse":"9a","roaroftime":"9a","dracometeor":"9a","dragonpulse":"9a","twister":"9a","thunder":"9a","thunderbolt":"9a","risingvoltage":"9a","voltswitch":"9a","darkpulse":"9a","psychic":"9a","psychicnoise":"9a","mirrorcoat":"9a","earthpower":"9a","ancientpower":"9a","shadowball":"9a","steelroller":"9a","ironhead":"9a","metalclaw":"9a","metalburst":"9a","gigaimpact":"9a","lastresort":"9a","doubleedge":"9a","headbutt":"9a","facade":"9a","feint":"9a","outrage":"9a","dragonrush":"9a","dragonclaw":"9a","breakingswipe":"9a","zenheadbutt":"9a","nightslash":"9a","brutalswing":"9a","earthquake":"9a","bulldoze":"9a","hammerarm":"9a","sacredsword":"9a","brickbreak":"9a","thunderpunch":"9a","irondefense":"9a","metalsound":"9a","meanlook":"9a","instruct":"9a","nobleroar":"9a","healbell":"9a","moonlight":"9a","meditate":"9a","amnesia":"9a","lightscreen":"9a","reflect":"9a","agility":"9a","raindance":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","autotomize":"9a","bulletpunch":"9a","heavyslam":"9a","gyroball":"9a","smartstrike":"9a","encore":"9a","yawn":"9a","wish":"9a","charm":"9a","workup":"9a","batonpass":"9a","disable":"9a","screech":"9a","hustleup":"9a","uproar":"9a","quickattack":"9a","swordsdance":"9a","retaliate":"9a","crushclaw":"9a","thrash":"9a","echoedvoice":"9a","headsmash":"9a","megahorn":"9a","hornattack":"9a","calmmind":"9a","futuresight":"9a","extrasensory":"9a","imprison":"9a","bodypress":"9a"},"tewiinaba":{"round":"9a","swift":"9a","trumpcard":"9a","wringout":"9a","moonblast":"9a","dazzlinggleam":"9a","drainingkiss":"9a","disarmingvoice":"9a","hex":"9a","grasspledge":"9a","magicalleaf":"9a","lastresort":"9a","doubleedge":"9a","return":"9a","megapunch":"9a","retaliate":"9a","facade":"9a","covet":"9a","quickattack":"9a","fakeout":"9a","feint":"9a","playrough":"9a","woodhammer":"9a","grassyglide":"9a","suckerpunch":"9a","feintattack":"9a","thief":"9a","bounce":"9a","pounce":"9a","taunt":"9a","faketears":"9a","nastyplot":"9a","snatch":"9a","torment":"9a","embargo":"9a","moonlight":"9a","craftyshield":"9a","charm":"9a","babydolleyes":"9a","thunderwave":"9a","spikes":"9a","quickguard":"9a","agility":"9a","roleplay":"9a","luckychant":"9a","encore":"9a","tearfullook":"9a","mefirst":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","frustration":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","yawn":"9a","wish":"9a","healbell":"9a","workup":"9a","batonpass":"9a","disable":"9a","screech":"9a","hustleup":"9a","uproar":"9a","headbutt":"9a","swordsdance":"9a","crushclaw":"9a","thrash":"9a","hypervoice":"9a","triattack":"9a","echoedvoice":"9a","sweetkiss":"9a","mistyterrain":"9a","mistyexplosion":"9a","fairywind":"9a","alluringvoice":"9a","velvetpress":"9a","highjumpkick":"9a","dig":"9a","doublekick":"9a","knockoff":"9a","trick":"9a","partingshot":"9a","superfang":"9a"},"reiseninaba":{"overdrive":"9a","voltswitch":"9a","shockwave":"9a","thundershock":"9a","futuresight":"9a","freezingglare":"9a","psychicnoise":"9a","psybeam":"9a","confusion":"9a","lunaticbullet":"9a","heatwave":"9a","signalbeam":"9a","vacuumwave":"9a","hyperbeam":"9a","hypervoice":"9a","swift":"9a","supercellslam":"9a","wildcharge":"9a","thunderpunch":"9a","spark":"9a","jumpkick":"9a","brickbreak":"9a","lastresort":"9a","doubleedge":"9a","megakick":"9a","facade":"9a","quickattack":"9a","feint":"9a","thunderwave":"9a","charge":"9a","electricterrain":"9a","eerieimpulse":"9a","psychicterrain":"9a","trick":"9a","agility":"9a","confuseray":"9a","confide":"9a","encore":"9a","glare":"9a","meanlook":"9a","endure":"9a","acupressure":"9a","yawn":"9a","disable":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","calmmind":"9a","reflect":"9a","lightscreen":"9a","trickroom":"9a","magiccoat":"9a","teleport":"9a","imprison":"9a","gravity":"9a","skillswap":"9a","allyswitch":"9a","magicroom":"9a","wonderroom":"9a","hypnosis":"9a","amnesia":"9a","safeguard":"9a","zenheadbutt":"9a","psychocut":"9a","psychicfangs":"9a","psychic":"9a","psyshock":"9a","expandingforce":"9a","extrasensory":"9a","storedpower":"9a","dreameater":"9a","hypnowhirl":"9a","magnetrise":"9a","thunderfang":"9a","voltaiclance":"9a","sparkscamper":"9a","thunderbolt":"9a","thunder":"9a","discharge":"9a","electroball":"9a","chargebeam":"9a","electroweb":"9a","nastyplot":"9a","uturn":"9a","aurasphere":"9a","lockon":"9a","zapcannon":"9a"},"eirinyagokoro":{"nervepoison":"9a","venoshock":"9a","clearsmog":"9a","psychic":"9a","psyshock":"9a","extrasensory":"9a","psychicnoise":"9a","confusion":"9a","moonblast":"9a","dazzlinggleam":"9a","surf":"9a","bubblebeam":"9a","chillingwater":"9a","shadowball":"9a","silverwind":"9a","hyperbeam":"9a","swift":"9a","terrainpulse":"9a","poisonjab":"9a","crosspoison":"9a","psychocut":"9a","heartstamp":"9a","thousandarrows":"9a","magnitude":"9a","smartstrike":"9a","nightslash":"9a","knockoff":"9a","toxic":"9a","corrosivegas":"9a","poisongas":"9a","purify":"9a","acidarmor":"9a","barrier":"9a","cosmicpower":"9a","powersplit":"9a","trickroom":"9a","miracleeye":"9a","healpulse":"9a","psychicterrain":"9a","lunarblessing":"9a","sunnyday":"9a","raindance":"9a","snowscape":"9a","craftyshield":"9a","recover":"9a","healbell":"9a","acupressure":"9a","safeguard":"9a","psychup":"9a","swordsdance":"9a","disable":"9a","helpinghand":"9a","metronome":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","facade":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","gigaimpact":"9a","takedown":"9a","bodyslam":"9a","curse":"9a","toxicspikes":"9a","gastroacid":"9a","gunkshot":"9a","poisonfang":"9a","sludgebomb":"9a","sludgewave":"9a","acidspray":"9a","sludge":"9a","oxidize":"9a","calmmind":"9a","reflect":"9a","lightscreen":"9a","trick":"9a","magiccoat":"9a","teleport":"9a","imprison":"9a","gravity":"9a","skillswap":"9a","allyswitch":"9a","magicroom":"9a","wonderroom":"9a","hypnosis":"9a","amnesia":"9a","agility":"9a","zenheadbutt":"9a","psychicfangs":"9a","psybeam":"9a","futuresight":"9a","expandingforce":"9a","storedpower":"9a","dreameater":"9a","hypnowhirl":"9a","refresh":"9a","wish":"9a"},"kaguyahouraisan":{"moonblast":"9a","dazzlinggleam":"9a","disarmingvoice":"9a","lusterpurge":"9a","psychic":"9a","expandingforce":"9a","confusion":"9a","mysticalfire":"9a","waterpledge":"9a","waterpulse":"9a","powergem":"9a","ancientpower":"9a","hyperbeam":"9a","swift":"9a","weatherball":"9a","spiritbreak":"9a","psychocut":"9a","rocktomb":"9a","smackdown":"9a","megapunch":"9a","retaliate":"9a","recover":"9a","confide":"9a","safeguard":"9a","mistyterrain":"9a","burningbulwark":"9a","sunnyday":"9a","auroraveil":"9a","magiccoat":"9a","cosmicpower":"9a","healingwish":"9a","lunarblessing":"9a","stealthrock":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","facade":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","charm":"9a","sweetkiss":"9a","babydolleyes":"9a","craftyshield":"9a","drainingkiss":"9a","mistyexplosion":"9a","fairywind":"9a","alluringvoice":"9a","velvetpress":"9a","moonlight":"9a","dragonpulse":"9a","flamethrower":"9a","airslash":"9a","calmmind":"9a","meteorbeam":"9a","earthpower":"9a"},"fujiwaranomokou":{"blastburn":"9a","burnup":"9a","overheat":"9a","fireblast":"9a","flamethrower":"9a","lavaplume":"9a","flameburst":"9a","inferno":"9a","ember":"9a","focusblast":"9a","aurasphere":"9a","shadowball":"9a","hex":"9a","ancientpower":"9a","hyperbeam":"9a","echoedvoice":"9a","flareblitz":"9a","blazekick":"9a","firepunch":"9a","flamewheel":"9a","flamecharge":"9a","meteorassault":"9a","highjumpkick":"9a","skyuppercut":"9a","brickbreak":"9a","stormthrow":"9a","poweruppunch":"9a","bravebird":"9a","aerialace":"9a","acrobatics":"9a","wildcharge":"9a","shadowclaw":"9a","explosion":"9a","gigaimpact":"9a","doubleedge":"9a","megakick":"9a","quickattack":"9a","defog":"9a","taunt":"9a","sunnyday":"9a","bulkup":"9a","agility":"9a","painsplit":"9a","recover":"9a","smokescreen":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","facade":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","willowisp":"9a","firefang":"9a","temperflare":"9a","heatcrash":"9a","heatwave":"9a","mysticalfire":"9a","incinerate":"9a","firespin":"9a","detect":"9a","quickguard":"9a","coaching":"9a","closecombat":"9a","drainpunch":"9a","machpunch":"9a","superpower":"9a","lowkick":"9a","bodypress":"9a","rocksmash":"9a","lowsweep":"9a","reversal":"9a","focuspunch":"9a","shufflejab":"9a","vacuumwave":"9a","roost":"9a","memento":"9a"},"ayashameimaru":{"hurricane":"9a","bleakwindstorm":"9a","airslash":"9a","aircutter":"9a","gust":"9a","leafstorm":"9a","magicalleaf":"9a","leaftornado":"9a","waterpulse":"9a","chillingwater":"9a","thunder":"9a","focusblast":"9a","vacuumwave":"9a","hyperbeam":"9a","hypervoice":"9a","uproar":"9a","skyattack":"9a","bravebird":"9a","fly":"9a","dualwingbeat":"9a","wingattack":"9a","aerialace":"9a","acrobatics":"9a","peck":"9a","focuspunch":"9a","skyuppercut":"9a","brickbreak":"9a","foulplay":"9a","knockoff":"9a","feintattack":"9a","razorleaf":"9a","xscissor":"9a","uturn":"9a","steelwing":"9a","gigaimpact":"9a","doubleedge":"9a","extremespeed":"9a","slash":"9a","quickattack":"9a","holdback":"9a","feint":"9a","roost":"9a","tailwind":"9a","defog":"9a","quickguard":"9a","raindance":"9a","agility":"9a","taunt":"9a","switcheroo":"9a","encore":"9a","workup":"9a","confide":"9a","entrainment":"9a","mimic":"9a","supersonic":"9a","helpinghand":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","facade":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","takedown":"9a","bodyslam":"9a","curse":"9a","featherdance":"9a","drillpeck":"9a","swordsdance":"9a","heatwave":"9a","whirlwind":"9a","twister":"9a"},"medicinemelancholy":{"sludgewave":"9a","sludgebomb":"9a","nervepoison":"9a","venoshock":"9a","sludge":"9a","clearsmog":"9a","acidspray":"9a","smog":"9a","darkpulse":"9a","petaldance":"9a","grasspledge":"9a","gigadrain":"9a","megadrain":"9a","pollenpuff":"9a","strugglebug":"9a","strangesteam":"9a","drainingkiss":"9a","hex":"9a","icywind":"9a","round":"9a","poisonjab":"9a","crosspoison":"9a","shadowpunch":"9a","shadowsneak":"9a","razorleaf":"9a","lashout":"9a","payback":"9a","gigaimpact":"9a","frustration":"9a","chipaway":"9a","covet":"9a","toxic":"9a","toxicspikes":"9a","venomdrench":"9a","corrosivegas":"9a","ragepowder":"9a","strengthsap":"9a","stunspore":"9a","haze":"9a","destinybond":"9a","spite":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","bodypress":"9a","acidarmor":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","facade":"9a","return":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","gastroacid":"9a","oxidize":"9a","calmmind":"9a","painsplit":"9a","leechseed":"9a","poisonpowder":"9a","synthesis":"9a","energyball":"9a"},"yuukakazami":{"frenzyplant":"9a","solarbeam":"9a","petaldance":"9a","energyball":"9a","grasspledge":"9a","gigadrain":"9a","magicalleaf":"9a","absorb":"9a","fleurcannon":"9a","dazzlinggleam":"9a","focusblast":"9a","twister":"9a","zapcannon":"9a","hyperbeam":"9a","swift":"9a","weatherball":"9a","solarblade":"9a","powerwhip":"9a","petalblizzard":"9a","razorleaf":"9a","vinewhip":"9a","superpower":"9a","dynamicpunch":"9a","revenge":"9a","temperflare":"9a","headlongrush":"9a","earthquake":"9a","magnitude":"9a","brutalswing":"9a","breakingswipe":"9a","gigaimpact":"9a","frustration":"9a","facade":"9a","falseswipe":"9a","grassyterrain":"9a","worryseed":"9a","sunnyday":"9a","growth":"9a","meanlook":"9a","bulkup":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","seedflare":"9a","toxic":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","leechseed":"9a","synthesis":"9a","stunspore":"9a","ingrain":"9a","trailblaze":"9a","leafblade":"9a","seedbomb":"9a","bulletseed":"9a","swordsdance":"9a","leafstorm":"9a","grassknot":"9a","solarnectar":"9a","woodhammer":"9a","trickroom":"9a","drainpunch":"9a"},"komachionozuka":{"swordsdance":"9a","surf":"9a","muddywater":"9a","brine":"9a","waterpulse":"9a","chillingwater":"9a","shadowball":"9a","nightshade":"9a","makeitrain":"9a","mirrorshot":"9a","mirrorcoat":"9a","icebeam":"9a","round":"9a","liquidation":"9a","aquacutter":"9a","spiritshackle":"9a","shadowpunch":"9a","astonish":"9a","throatchop":"9a","nightslash":"9a","payback":"9a","aerialace":"9a","icespinner":"9a","icepunch":"9a","furycutter":"9a","doubleedge":"9a","megapunch":"9a","slash":"9a","cut":"9a","curse":"9a","destinybond":"9a","trickroom":"9a","wideguard":"9a","detect":"9a","raindance":"9a","aquaring":"9a","snowscape":"9a","metalsound":"9a","skillswap":"9a","slackoff":"9a","yawn":"9a","courtchange":"9a","helpinghand":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","facade":"9a","return":"9a","frustration":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","bodyslam":"9a","soak":"9a","lifedew":"9a","flipturn":"9a","waterfall":"9a","aquajet":"9a","aquatail":"9a","dive":"9a","wavecharge":"9a","willowisp":"9a","confuseray":"9a","spite":"9a","painsplit":"9a","shadowclaw":"9a","shadowsneak":"9a","phantomforce":"9a","shadowstrike":"9a","psychocut":"9a","xscissor":"9a","razorshell":"9a","sacredsword":"9a"},"eikishiki":{"judgment":"9a","hypervoice":"9a","triattack":"9a","swift":"9a","terrainpulse":"9a","focusblast":"9a","shadowball":"9a","fireblast":"9a","incinerate":"9a","dazzlinggleam":"9a","waterpulse":"9a","psychic":"9a","storedpower":"9a","mirrorcoat":"9a","gigaimpact":"9a","doubleedge":"9a","return":"9a","slash":"9a","cut":"9a","sacredsword":"9a","submission":"9a","woodhammer":"9a","leafblade":"9a","aquacutter":"9a","thunderpunch":"9a","shadowpunch":"9a","aerialace":"9a","swordsdance":"9a","perishsong":"9a","disable":"9a","confide":"9a","lifedew":"9a","calmmind":"9a","curse":"9a","irondefense":"9a","mistyterrain":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","facade":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","encore":"9a","yawn":"9a","wish":"9a","healbell":"9a","charm":"9a","workup":"9a","batonpass":"9a","screech":"9a","hustleup":"9a","uproar":"9a","quickattack":"9a","headbutt":"9a","retaliate":"9a","crushclaw":"9a","thrash":"9a","echoedvoice":"9a","psyshock":"9a","flashcannon":"9a","punishment":"9a","quash":"9a","torment":"9a","imprison":"9a","darkpulse":"9a","aurasphere":"9a"},"shizuhaaki":{"leafstorm":"9a","energyball":"9a","grasspledge":"9a","gigadrain":"9a","magicalleaf":"9a","leaftornado":"9a","absorb":"9a","heatwave":"9a","incinerate":"9a","venoshock":"9a","clearsmog":"9a","hurricane":"9a","bleakwindstorm":"9a","aircutter":"9a","extrasensory":"9a","icywind":"9a","hyperbeam":"9a","razorwind":"9a","swift":"9a","petalblizzard":"9a","gravapple":"9a","grassyglide":"9a","razorleaf":"9a","leafage":"9a","highjumpkick":"9a","jumpkick":"9a","suckerpunch":"9a","knockoff":"9a","uturn":"9a","thunderpunch":"9a","icepunch":"9a","shadowclaw":"9a","poisonjab":"9a","megakick":"9a","frustration":"9a","leechseed":"9a","synthesis":"9a","stunspore":"9a","toxic":"9a","poisonpowder":"9a","corrosivegas":"9a","tailwind":"9a","agility":"9a","recycle":"9a","afteryou":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","facade":"9a","return":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","grassyterrain":"9a","ingrain":"9a","worryseed":"9a","trailblaze":"9a","leafblade":"9a","seedbomb":"9a","powerwhip":"9a","bulletseed":"9a","swordsdance":"9a","solarbeam":"9a","grassknot":"9a","solarnectar":"9a","solarblade":"9a"},"minorikoaki":{"solarbeam":"9a","energyball":"9a","appleacid":"9a","magicalleaf":"9a","earthpower":"9a","mudshot":"9a","dazzlinggleam":"9a","ancientpower":"9a","hiddenpower":"9a","round":"9a","terrainpulse":"9a","weatherball":"9a","seedbomb":"9a","grassyglide":"9a","leafage":"9a","earthquake":"9a","bulldoze":"9a","rocktomb":"9a","rockthrow":"9a","seismictoss":"9a","doubleedge":"9a","takedown":"9a","facade":"9a","flail":"9a","synthesis":"9a","leechseed":"9a","cottonspore":"9a","grassyterrain":"9a","stunspore":"9a","stockpile":"9a","growth":"9a","recycle":"9a","stealthrock":"9a","wideguard":"9a","rototiller":"9a","sunnyday":"9a","raindance":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","ingrain":"9a","worryseed":"9a","trailblaze":"9a","gigadrain":"9a","leafstorm":"9a","grassknot":"9a","petalblizzard":"9a","solarnectar":"9a","spikes":"9a","sandstorm":"9a","scorchingsands":"9a","mudbomb":"9a","tremorshot":"9a","stuffcheeks":"9a"},"hinakagiyama":{"sludgewave":"9a","sludgebomb":"9a","venoshock":"9a","acidspray":"9a","smog":"9a","darkpulse":"9a","fireblast":"9a","flamethrower":"9a","firespin":"9a","shadowball":"9a","hex":"9a","triattack":"9a","round":"9a","gunkshot":"9a","noxioustorque":"9a","poisonjab":"9a","crosspoison":"9a","mortalspin":"9a","lashout":"9a","payback":"9a","fling":"9a","flamewheel":"9a","uturn":"9a","frustration":"9a","bodyslam":"9a","slash":"9a","quickattack":"9a","painsplit":"9a","safeguard":"9a","curse":"9a","toxic":"9a","venomdrench":"9a","willowisp":"9a","snowscape":"9a","quickguard":"9a","powersplit":"9a","trickroom":"9a","powerswap":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","facade":"9a","return":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","toxicspikes":"9a","acidarmor":"9a","gastroacid":"9a","clearsmog":"9a","sludge":"9a","oxidize":"9a","pursuit":"9a","thief":"9a","foulplay":"9a","taunt":"9a","knockoff":"9a","faketears":"9a","torment":"9a","quash":"9a","snarl":"9a","nastyplot":"9a","rapidspin":"9a","teeterdance":"9a","grudge":"9a","spite":"9a","memento":"9a","haze":"9a","gyroball":"9a"},"nitorikawashiro":{"hydrocannon":"9a","hydropump":"9a","surf":"9a","snipeshot":"9a","bubblebeam":"9a","waterpulse":"9a","chillingwater":"9a","bubble":"9a","whirlpool":"9a","steelbeam":"9a","flashcannon":"9a","discharge":"9a","voltswitch":"9a","electroweb":"9a","icebeam":"9a","ancientpower":"9a","hyperbeam":"9a","waterfall":"9a","dive":"9a","flipturn":"9a","aquajet":"9a","superscope3d":"9a","ironhead":"9a","magnetbomb":"9a","supercellslam":"9a","spark":"9a","bulldoze":"9a","hammerarm":"9a","gigaimpact":"9a","lastresort":"9a","megapunch":"9a","facade":"9a","covet":"9a","quickattack":"9a","soak":"9a","raindance":"9a","aquaring":"9a","watersport":"9a","shiftgear":"9a","irondefense":"9a","spikes":"9a","charge":"9a","eerieimpulse":"9a","recycle":"9a","lockon":"9a","workup":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","risingvoltage":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","lifedew":"9a","liquidation":"9a","aquatail":"9a","wavecharge":"9a","scald":"9a","muddywater":"9a","brine":"9a","undertow":"9a","autotomize":"9a","metalsound":"9a","bulletpunch":"9a","heavyslam":"9a","gyroball":"9a","smartstrike":"9a","metalclaw":"9a","mirrorshot":"9a","waterspout":"9a","thunderbolt":"9a","electroball":"9a","magnetrise":"9a","trick":"9a","zapcannon":"9a"},"momijiinubashiri":{"steelbeam":"9a","flashcannon":"9a","mirrorshot":"9a","focusblast":"9a","aurasphere":"9a","mirrorcoat":"9a","hurricane":"9a","airslash":"9a","aircutter":"9a","petaldance":"9a","magicalleaf":"9a","hyperbeam":"9a","hypervoice":"9a","round":"9a","behemothblade":"9a","ironhead":"9a","smartstrike":"9a","metalclaw":"9a","meteorassault":"9a","closecombat":"9a","sacredsword":"9a","bodypress":"9a","submission":"9a","brickbreak":"9a","vitalthrow":"9a","circlethrow":"9a","reversal":"9a","counter":"9a","bite":"9a","feintattack":"9a","payback":"9a","waterfall":"9a","thunderfang":"9a","aerialace":"9a","acrobatics":"9a","bugbite":"9a","poisonfang":"9a","gigaimpact":"9a","return":"9a","retaliate":"9a","facade":"9a","quickattack":"9a","feint":"9a","quickguard":"9a","detect":"9a","bulkup":"9a","irondefense":"9a","stealthrock":"9a","sandstorm":"9a","taunt":"9a","quash":"9a","embargo":"9a","helpinghand":"9a","swordsdance":"9a","leer":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","extremespeed":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","frustration":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","takedown":"9a","bodyslam":"9a","curse":"9a","autotomize":"9a","metalsound":"9a","bulletpunch":"9a","heavyslam":"9a","gyroball":"9a","coaching":"9a","drainpunch":"9a","machpunch":"9a","superpower":"9a","lowkick":"9a","highjumpkick":"9a","rocksmash":"9a","lowsweep":"9a","focuspunch":"9a","shufflejab":"9a","crunch":"9a","firefang":"9a","icefang":"9a","psychicfangs":"9a","howl":"9a","roar":"9a","wideguard":"9a","nightslash":"9a"},"sanaekochiya":{"surf":"9a","waterpledge":"9a","bubblebeam":"9a","waterpulse":"9a","chillingwater":"9a","watergun":"9a","whirlpool":"9a","hurricane":"9a","airslash":"9a","aircutter":"9a","gust":"9a","thunder":"9a","thunderbolt":"9a","shockwave":"9a","energyball":"9a","dazzlinggleam":"9a","futuresight":"9a","psychic":"9a","psybeam":"9a","triattack":"9a","swift":"9a","weatherball":"9a","liquidation":"9a","waterfall":"9a","fly":"9a","acrobatics":"9a","spiritbreak":"9a","psychocut":"9a","trailblaze":"9a","return":"9a","facade":"9a","flail":"9a","wish":"9a","healbell":"9a","acupressure":"9a","helpinghand":"9a","safeguard":"9a","naturepower":"9a","psychup":"9a","healingwish":"9a","agility":"9a","lightscreen":"9a","reflect":"9a","calmmind":"9a","wideguard":"9a","aquaring":"9a","raindance":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","bodyslam":"9a","curse":"9a","roost":"9a","tailwind":"9a","defog":"9a","featherdance":"9a","uturn":"9a","soak":"9a","lifedew":"9a","flipturn":"9a","scald":"9a","hydropump":"9a","muddywater":"9a","brine":"9a","undertow":"9a","icebeam":"9a","miracleeye":"9a","meteorbeam":"9a"},"kanakoyasaka":{"earthpower":"9a","mudbomb":"9a","hurricane":"9a","aircutter":"9a","waterpulse":"9a","shadowball":"9a","flashcannon":"9a","mirrorshot":"9a","triattack":"9a","earthquake":"9a","stompingtantrum":"9a","bulldoze":"9a","magnitude":"9a","skyattack":"9a","fly":"9a","woodhammer":"9a","grassyglide":"9a","steelroller":"9a","smartstrike":"9a","thunderpunch":"9a","stoneedge":"9a","rockslide":"9a","steamroller":"9a","gigaimpact":"9a","frustration":"9a","facade":"9a","spikes":"9a","stealthrock":"9a","sandstorm":"9a","wideguard":"9a","taunt":"9a","raindance":"9a","lifedew":"9a","whirlwind":"9a","glare":"9a","naturepower":"9a","confide":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","highhorsepower":"9a","dig":"9a","drillrun":"9a","roost":"9a","tailwind":"9a","defog":"9a","featherdance":"9a","uturn":"9a","bravebird":"9a","drillpeck":"9a","acrobatics":"9a","aerialace":"9a","dualwingbeat":"9a","heavyslam":"9a","coil":"9a","swordsdance":"9a","crunch":"9a","superpower":"9a"},"suwakomoriya":{"hydropump":"9a","surf":"9a","scald":"9a","muddywater":"9a","brine":"9a","bubblebeam":"9a","bubble":"9a","earthpower":"9a","mudshot":"9a","mudslap":"9a","sludgebomb":"9a","shadowball":"9a","hex":"9a","lavaplume":"9a","ancientpower":"9a","liquidation":"9a","waterfall":"9a","aquajet":"9a","earthquake":"9a","landswrath":"9a","dig":"9a","bounce":"9a","gunkshot":"9a","rockslide":"9a","rocktomb":"9a","geargrind":"9a","uturn":"9a","curse":"9a","toxic":"9a","stealthrock":"9a","calmmind":"9a","raindance":"9a","watersport":"9a","mudsport":"9a","yawn":"9a","naturepower":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","facade":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","aquaring":"9a","soak":"9a","lifedew":"9a","flipturn":"9a","aquatail":"9a","dive":"9a","wavecharge":"9a","waterpulse":"9a","whirlpool":"9a","chillingwater":"9a","undertow":"9a","spikes":"9a","sandstorm":"9a","highhorsepower":"9a","bulldoze":"9a","stompingtantrum":"9a","drillrun":"9a","scorchingsands":"9a","mudbomb":"9a","tremorshot":"9a","hypnosis":"9a","grudge":"9a","flashcannon":"9a"},"ikunagae":{"dracometeor":"9a","dragonpulse":"9a","twister":"9a","thunder":"9a","wildboltstorm":"9a","thunderbolt":"9a","discharge":"9a","thundershock":"9a","surf":"9a","fierydance":"9a","revelationdance":"9a","swift":"9a","weatherball":"9a","dragonrush":"9a","dragonclaw":"9a","dualchop":"9a","supercellslam":"9a","thunderpunch":"9a","spark":"9a","dragonascent":"9a","waterfall":"9a","flipturn":"9a","aquajet":"9a","gigaimpact":"9a","megapunch":"9a","rapidspin":"9a","dragondance":"9a","dragoncheer":"9a","charge":"9a","electricterrain":"9a","thunderwave":"9a","raindance":"9a","aquaring":"9a","watersport":"9a","agility":"9a","defog":"9a","tailwind":"9a","laserfocus":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","recover":"9a","toxic":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","facade":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","dragontail":"9a","outrage":"9a","scaleshot":"9a","breakingswipe":"9a","dragonbreath":"9a","eerieimpulse":"9a","magnetrise":"9a","voltswitch":"9a","wildcharge":"9a","thunderfang":"9a","voltaiclance":"9a","sparkscamper":"9a","electroball":"9a","shockwave":"9a","chargebeam":"9a","electroweb":"9a","calmmind":"9a","hydropump":"9a","aquatail":"9a","hurricane":"9a"},"tenshihinanawi":{"earthpower":"9a","scorchingsands":"9a","meteorbeam":"9a","powergem":"9a","ancientpower":"9a","hurricane":"9a","airslash":"9a","aircutter":"9a","lusterpurge":"9a","extrasensory":"9a","hyperbeam":"9a","earthquake":"9a","drillrun":"9a","bulldoze":"9a","magnitude":"9a","rockwrecker":"9a","stoneedge":"9a","mightycleave":"9a","rockslide":"9a","rocktomb":"9a","rockthrow":"9a","smackdown":"9a","rockblast":"9a","sacredsword":"9a","drainpunch":"9a","poweruppunch":"9a","skyattack":"9a","aerialace":"9a","temperflare":"9a","wildcharge":"9a","slash":"9a","stealthrock":"9a","rockpolish":"9a","sandstorm":"9a","snowscape":"9a","sunnyday":"9a","raindance":"9a","taunt":"9a","mistyterrain":"9a","defog":"9a","haze":"9a","morningsun":"9a","acupressure":"9a","luckychant":"9a","whirlwind":"9a","focusenergy":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","swordsdance":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","facade":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","spikes":"9a","highhorsepower":"9a","dig":"9a","stompingtantrum":"9a","wideguard":"9a","craghammer":"9a","counter":"9a","metalburst":"9a","reversal":"9a","bodypress":"9a","irondefense":"9a","headsmash":"9a"},"kisume":{"powergem":"9a","ancientpower":"9a","darkpulse":"9a","fireblast":"9a","firepledge":"9a","incinerate":"9a","ember":"9a","firespin":"9a","shadowball":"9a","hex":"9a","uproar":"9a","razorwind":"9a","stoneedge":"9a","rockslide":"9a","rocktomb":"9a","smackdown":"9a","rockblast":"9a","foulplay":"9a","jawlock":"9a","crunch":"9a","suckerpunch":"9a","knockoff":"9a","nightslash":"9a","feintattack":"9a","payback":"9a","flareblitz":"9a","firepunch":"9a","flamecharge":"9a","bonerush":"9a","ironhead":"9a","bodypress":"9a","waterfall":"9a","playrough":"9a","firstimpression":"9a","lunge":"9a","pounce":"9a","gigaimpact":"9a","facade":"9a","fakeout":"9a","rockpolish":"9a","sandstorm":"9a","taunt":"9a","torment":"9a","snatch":"9a","spikes":"9a","mudsport":"9a","irondefense":"9a","amnesia":"9a","curse":"9a","willowisp":"9a","shellsmash":"9a","helpinghand":"9a","focusenergy":"9a","painsplit":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","takedown":"9a","bodyslam":"9a","stealthrock":"9a","wideguard":"9a","craghammer":"9a","pursuit":"9a","thief":"9a","faketears":"9a","quash":"9a","bite":"9a","throatchop":"9a","lashout":"9a","assurance":"9a","carrionfeast":"9a","headsmash":"9a","heavyslam":"9a","withdraw":"9a","gyroball":"9a","rollout":"9a"},"yamamekurodani":{"sludgewave":"9a","sludgebomb":"9a","venoshock":"9a","sludge":"9a","acidspray":"9a","smog":"9a","bugbuzz":"9a","strugglebug":"9a","darkpulse":"9a","snarl":"9a","shadowball":"9a","petaldance":"9a","gigadrain":"9a","megadrain":"9a","bubblebeam":"9a","wringout":"9a","gunkshot":"9a","poisonjab":"9a","crosspoison":"9a","poisonfang":"9a","poisonsting":"9a","firstimpression":"9a","leechlife":"9a","lunge":"9a","uturn":"9a","skittersmack":"9a","bugbite":"9a","twineedle":"9a","foulplay":"9a","suckerpunch":"9a","knockoff":"9a","nightslash":"9a","brutalswing":"9a","shadowclaw":"9a","seedbomb":"9a","crosschop":"9a","drainpunch":"9a","rockwrecker":"9a","stoneedge":"9a","rockslide":"9a","smackdown":"9a","dig":"9a","stompingtantrum":"9a","bulldoze":"9a","liquidation":"9a","gigaimpact":"9a","doubleedge":"9a","takedown":"9a","bodyslam":"9a","facade":"9a","cut":"9a","quickattack":"9a","fakeout":"9a","feint":"9a","toxic":"9a","toxicthread":"9a","venomdrench":"9a","acidarmor":"9a","toxicspikes":"9a","poisongas":"9a","corrosivegas":"9a","gastroacid":"9a","stickyweb":"9a","silktrap":"9a","spiderweb":"9a","ragepowder":"9a","stringshot":"9a","taunt":"9a","stealthrock":"9a","sandstorm":"9a","raindance":"9a","encore":"9a","helpinghand":"9a","leer":"9a","laserfocus":"9a","screech":"9a","acupressure":"9a","whirlwind":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","curse":"9a","chrysalisveil":"9a","xscissor":"9a","megahorn":"9a","pounce":"9a","hivefrenzy":"9a","swordsdance":"9a","infestation":"9a","earthquake":"9a"},"parseemizuhashi":{"darkpulse":"9a","snarl":"9a","shadowball":"9a","bittermalice":"9a","hex":"9a","petaldance":"9a","magicalleaf":"9a","burningjealousy":"9a","venoshock":"9a","waterpledge":"9a","chillingwater":"9a","icywind":"9a","hyperbeam":"9a","hiddenpower":"9a","foulplay":"9a","suckerpunch":"9a","nightslash":"9a","payback":"9a","punishment":"9a","spectralthief":"9a","shadowpunch":"9a","shadowsneak":"9a","firepunch":"9a","petalblizzard":"9a","razorleaf":"9a","waterfall":"9a","frustration":"9a","facade":"9a","slash":"9a","cut":"9a","meanlook":"9a","recover":"9a","curse":"9a","spite":"9a","destinybond":"9a","memento":"9a","topsyturvy":"9a","snatch":"9a","quash":"9a","imprison":"9a","haze":"9a","mist":"9a","toxic":"9a","metalsound":"9a","aquaring":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","weatherball":"9a","terablast":"9a","endure":"9a","return":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","pursuit":"9a","thief":"9a","taunt":"9a","knockoff":"9a","faketears":"9a","torment":"9a","crunch":"9a","bite":"9a","throatchop":"9a","lashout":"9a","assurance":"9a","carrionfeast":"9a","nastyplot":"9a","grudge":"9a","willowisp":"9a","psychup":"9a","calmmind":"9a"},"yuugihoshiguma":{"focusblast":"9a","aurasphere":"9a","powergem":"9a","ancientpower":"9a","steameruption":"9a","scald":"9a","bubblebeam":"9a","strangesteam":"9a","shadowball":"9a","earthpower":"9a","mudshot":"9a","signalbeam":"9a","hypervoice":"9a","triattack":"9a","swift":"9a","meteorassault":"9a","focuspunch":"9a","closecombat":"9a","hammerarm":"9a","crosschop":"9a","submission":"9a","brickbreak":"9a","forcepalm":"9a","circlethrow":"9a","karatechop":"9a","armthrust":"9a","seismictoss":"9a","counter":"9a","stoneedge":"9a","rockslide":"9a","rocktomb":"9a","rockblast":"9a","shadowclaw":"9a","glaiverush":"9a","breakingswipe":"9a","megahorn":"9a","xscissor":"9a","earthquake":"9a","dig":"9a","ironhead":"9a","smartstrike":"9a","gigaimpact":"9a","doubleedge":"9a","takedown":"9a","retaliate":"9a","hornattack":"9a","quickattack":"9a","bulkup":"9a","quickguard":"9a","stealthrock":"9a","sandstorm":"9a","leer":"9a","swagger":"9a","watersport":"9a","raindance":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","surgingstrikes":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","facade":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","detect":"9a","coaching":"9a","drainpunch":"9a","machpunch":"9a","superpower":"9a","lowkick":"9a","highjumpkick":"9a","bodypress":"9a","rocksmash":"9a","lowsweep":"9a","reversal":"9a","shufflejab":"9a","vacuumwave":"9a","rockpolish":"9a","wideguard":"9a","smackdown":"9a","craghammer":"9a","meteorbeam":"9a","dynamicpunch":"9a","firepunch":"9a","icepunch":"9a","thunderpunch":"9a","headsmash":"9a"},"satorikomeiji":{"psychoshift":"9a","futuresight":"9a","dreameater":"9a","psychic":"9a","psyshock":"9a","extrasensory":"9a","psychicnoise":"9a","psybeam":"9a","confusion":"9a","signalbeam":"9a","shadowball":"9a","nightshade":"9a","chillingwater":"9a","swift":"9a","psychocut":"9a","heartstamp":"9a","shadowclaw":"9a","brickbreak":"9a","return":"9a","facade":"9a","cut":"9a","quickattack":"9a","amnesia":"9a","barrier":"9a","psychicterrain":"9a","trick":"9a","nightmare":"9a","safeguard":"9a","workup":"9a","psychup":"9a","mindreader":"9a","confide":"9a","playnice":"9a","painsplit":"9a","mimic":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","calmmind":"9a","reflect":"9a","lightscreen":"9a","trickroom":"9a","magiccoat":"9a","teleport":"9a","imprison":"9a","gravity":"9a","skillswap":"9a","allyswitch":"9a","magicroom":"9a","wonderroom":"9a","hypnosis":"9a","agility":"9a","zenheadbutt":"9a","psychicfangs":"9a","expandingforce":"9a","storedpower":"9a","hypnowhirl":"9a","mefirst":"9a","copycat":"9a","mirrorcoat":"9a","counter":"9a","nastyplot":"9a","powersplit":"9a","guardsplit":"9a"},"rinkaenbyou":{"overheat":"9a","batonpass":"9a","fireblast":"9a","flamethrower":"9a","firepledge":"9a","flameburst":"9a","ember":"9a","firespin":"9a","shadowball":"9a","hex":"9a","ominouswind":"9a","darkpulse":"9a","psychic":"9a","psybeam":"9a","hyperbeam":"9a","triattack":"9a","round":"9a","flareblitz":"9a","firepunch":"9a","flamewheel":"9a","shadowclaw":"9a","astonish":"9a","crunch":"9a","bite":"9a","pursuit":"9a","pounce":"9a","zenheadbutt":"9a","thunderfang":"9a","playrough":"9a","slash":"9a","facade":"9a","rapidspin":"9a","fakeout":"9a","feint":"9a","sunnyday":"9a","willowisp":"9a","grudge":"9a","curse":"9a","spite":"9a","perishsong":"9a","copycat":"9a","screech":"9a","yawn":"9a","agility":"9a","skillswap":"9a","taunt":"9a","faketears":"9a","stealthrock":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","heatwave":"9a","mysticalfire":"9a","lavaplume":"9a","incinerate":"9a","confuseray":"9a","painsplit":"9a","nightshade":"9a","destinybond":"9a","nastyplot":"9a","uturn":"9a","partingshot":"9a","flamecharge":"9a","acrobatics":"9a"},"utsuhoreiuji":{"blastburn":"9a","overheat":"9a","fireblast":"9a","fusionflare":"9a","heatwave":"9a","flamethrower":"9a","lavaplume":"9a","incinerate":"9a","ember":"9a","firespin":"9a","airslash":"9a","aircutter":"9a","discharge":"9a","shockwave":"9a","dazzlinggleam":"9a","vacuumwave":"9a","steelbeam":"9a","flashcannon":"9a","mirrorshot":"9a","solarbeam":"9a","clearsmog":"9a","hyperbeam":"9a","flareblitz":"9a","blazekick":"9a","firepunch":"9a","flamecharge":"9a","bravebird":"9a","fly":"9a","aerialace":"9a","dualwingbeat":"9a","fusionbolt":"9a","supercellslam":"9a","thunderpunch":"9a","spark":"9a","sunsteelstrike":"9a","steelwing":"9a","jumpkick":"9a","brickbreak":"9a","fling":"9a","explosion":"9a","gigaimpact":"9a","facade":"9a","quickattack":"9a","sunnyday":"9a","roost":"9a","tailwind":"9a","charge":"9a","thunderwave":"9a","taunt":"9a","agility":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","willowisp":"9a","firefang":"9a","temperflare":"9a","heatcrash":"9a","mysticalfire":"9a","defog":"9a","featherdance":"9a","uturn":"9a","drillpeck":"9a","acrobatics":"9a","hurricane":"9a","gust":"9a","meteorbeam":"9a"},"koishikomeiji":{"psychic":"9a","expandingforce":"9a","psychicnoise":"9a","confusion":"9a","storedpower":"9a","mirrorcoat":"9a","hyperbeam":"9a","triattack":"9a","swift":"9a","petaldance":"9a","energyball":"9a","gigadrain":"9a","shadowball":"9a","signalbeam":"9a","drainingkiss":"9a","clearsmog":"9a","heartstamp":"9a","thrash":"9a","return":"9a","facade":"9a","covet":"9a","quickattack":"9a","uturn":"9a","playrough":"9a","powerwhip":"9a","vinewhip":"9a","shadowsneak":"9a","recover":"9a","encore":"9a","entrainment":"9a","simplebeam":"9a","lightscreen":"9a","reflect":"9a","amnesia":"9a","calmmind":"9a","heartswap":"9a","trickroom":"9a","psychicterrain":"9a","skillswap":"9a","magiccoat":"9a","thunderwave":"9a","confuseray":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","trick":"9a","teleport":"9a","imprison":"9a","gravity":"9a","allyswitch":"9a","magicroom":"9a","wonderroom":"9a","hypnosis":"9a","agility":"9a","safeguard":"9a","psyshock":"9a","psybeam":"9a","futuresight":"9a","extrasensory":"9a","dreameater":"9a","hypnowhirl":"9a","yawn":"9a","wish":"9a","healbell":"9a","charm":"9a","workup":"9a","batonpass":"9a","disable":"9a","screech":"9a","hustleup":"9a","uproar":"9a","hypervoice":"9a","echoedvoice":"9a","teeterdance":"9a","petalblizzard":"9a","magicalleaf":"9a","boomburst":"9a","spite":"9a"},"nazrin":{"earthpower":"9a","scorchingsands":"9a","mudshot":"9a","makeitrain":"9a","flashcannon":"9a","mirrorshot":"9a","dazzlinggleam":"9a","powergem":"9a","signalbeam":"9a","psychicnoise":"9a","confusion":"9a","thunder":"9a","discharge":"9a","risingvoltage":"9a","voltswitch":"9a","shockwave":"9a","round":"9a","echoedvoice":"9a","thousandwaves":"9a","drillrun":"9a","bulldoze":"9a","ironhead":"9a","smartstrike":"9a","magnetbomb":"9a","thunderpunch":"9a","spark":"9a","trailblaze":"9a","crunch":"9a","bite":"9a","thief":"9a","psychocut":"9a","playrough":"9a","return":"9a","slash":"9a","facade":"9a","cut":"9a","quickattack":"9a","populationbomb":"9a","spikes":"9a","metalsound":"9a","quickguard":"9a","thunderwave":"9a","charge":"9a","electricterrain":"9a","confuseray":"9a","torment":"9a","partingshot":"9a","leer":"9a","helpinghand":"9a","screech":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","stealthrock":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","frustration":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","bodyslam":"9a","curse":"9a","sandstorm":"9a","mudbomb":"9a","tremorshot":"9a","irondefense":"9a","autotomize":"9a","steelbeam":"9a","superfang":"9a","nuzzle":"9a","uturn":"9a","covet":"9a","knockoff":"9a","swordsdance":"9a","agility":"9a","foresight":"9a","mindreader":"9a","dig":"9a","rapidspin":"9a"},"kogasatatara":{"hydropump":"9a","surf":"9a","muddywater":"9a","bubblebeam":"9a","waterpulse":"9a","chillingwater":"9a","watergun":"9a","dazzlinggleam":"9a","disarmingvoice":"9a","steelbeam":"9a","flashcannon":"9a","icebeam":"9a","icywind":"9a","hurricane":"9a","airslash":"9a","shadowball":"9a","nightshade":"9a","uproar":"9a","swift":"9a","wavecrash":"9a","liquidation":"9a","waterfall":"9a","aquacutter":"9a","aquajet":"9a","playrough":"9a","steelroller":"9a","ironhead":"9a","metalclaw":"9a","firstimpression":"9a","uturn":"9a","acrobatics":"9a","shadowsneak":"9a","astonish":"9a","lick":"9a","gigaimpact":"9a","return":"9a","slash":"9a","quickattack":"9a","feint":"9a","agility":"9a","lightscreen":"9a","reflect":"9a","defog":"9a","tailwind":"9a","haze":"9a","craftyshield":"9a","charm":"9a","mistyterrain":"9a","raindance":"9a","soak":"9a","detect":"9a","metalsound":"9a","confuseray":"9a","helpinghand":"9a","confide":"9a","swordsdance":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","facade":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","takedown":"9a","bodyslam":"9a","curse":"9a","aquaring":"9a","lifedew":"9a","flipturn":"9a","aquatail":"9a","dive":"9a","wavecharge":"9a","sweetkiss":"9a","babydolleyes":"9a","fakeout":"9a","scaryface":"9a","suckerpunch":"9a","bulletpunch":"9a","heavyslam":"9a","smartstrike":"9a","bounce":"9a"},"ichirinkumoi":{"focusblast":"9a","aurasphere":"9a","hurricane":"9a","aeroblast":"9a","airslash":"9a","gust":"9a","thunderbolt":"9a","chillingwater":"9a","hyperbeam":"9a","hypervoice":"9a","weatherball":"9a","wringout":"9a","focuspunch":"9a","closecombat":"9a","crosschop":"9a","hammerarm":"9a","drainpunch":"9a","brickbreak":"9a","forcepalm":"9a","circlethrow":"9a","karatechop":"9a","seismictoss":"9a","counter":"9a","cloudfist":"9a","fly":"9a","acrobatics":"9a","thunderpunch":"9a","firepunch":"9a","bulletpunch":"9a","gigaimpact":"9a","megapunch":"9a","facade":"9a","cut":"9a","bulkup":"9a","quickguard":"9a","agility":"9a","barrier":"9a","charge":"9a","defog":"9a","tailwind":"9a","taunt":"9a","trickroom":"9a","focusenergy":"9a","helpinghand":"9a","leer":"9a","whirlwind":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","takedown":"9a","bodyslam":"9a","curse":"9a","detect":"9a","coaching":"9a","machpunch":"9a","superpower":"9a","lowkick":"9a","highjumpkick":"9a","bodypress":"9a","rocksmash":"9a","lowsweep":"9a","reversal":"9a","shufflejab":"9a","dynamicpunch":"9a","icepunch":"9a","shadowpunch":"9a","skyuppercut":"9a","mist":"9a","haze":"9a"},"minamitsumurasa":{"hydrocannon":"9a","hydropump":"9a","surf":"9a","brine":"9a","waterpulse":"9a","chillingwater":"9a","whirlpool":"9a","shadowball":"9a","hex":"9a","nightshade":"9a","darkpulse":"9a","icebeam":"9a","icywind":"9a","round":"9a","wavecrash":"9a","liquidation":"9a","dive":"9a","aquacutter":"9a","poltergeist":"9a","shadowclaw":"9a","astonish":"9a","anchorshot":"9a","icespinner":"9a","icepunch":"9a","bonerush":"9a","throatchop":"9a","payback":"9a","gigaimpact":"9a","megakick":"9a","facade":"9a","slash":"9a","cut":"9a","fakeout":"9a","raindance":"9a","soak":"9a","curse":"9a","grudge":"9a","destinybond":"9a","memento":"9a","torment":"9a","embargo":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","aquaring":"9a","lifedew":"9a","flipturn":"9a","waterfall":"9a","aquajet":"9a","aquatail":"9a","wavecharge":"9a","willowisp":"9a","confuseray":"9a","spite":"9a","painsplit":"9a","shadowsneak":"9a","phantomforce":"9a","shadowpunch":"9a","shadowstrike":"9a","heavyslam":"9a","ironhead":"9a","swordsdance":"9a"},"shoutoramaru":{"dazzlinggleam":"9a","fairywind":"9a","zapcannon":"9a","thunder":"9a","thunderbolt":"9a","discharge":"9a","voltswitch":"9a","chargebeam":"9a","aurorabeam":"9a","aurasphere":"9a","vacuumwave":"9a","triattack":"9a","swift":"9a","spiritbreak":"9a","wildcharge":"9a","zingzap":"9a","thunderpunch":"9a","thunderfang":"9a","icefang":"9a","psychicfangs":"9a","zenheadbutt":"9a","brickbreak":"9a","return":"9a","facade":"9a","slash":"9a","quickattack":"9a","superfang":"9a","charge":"9a","thunderwave":"9a","electricterrain":"9a","mistyterrain":"9a","psychicterrain":"9a","agility":"9a","purify":"9a","confide":"9a","leer":"9a","growl":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","swordsdance":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","charm":"9a","sweetkiss":"9a","babydolleyes":"9a","craftyshield":"9a","playrough":"9a","moonblast":"9a","drainingkiss":"9a","mistyexplosion":"9a","alluringvoice":"9a","velvetpress":"9a","eerieimpulse":"9a","magnetrise":"9a","spark":"9a","supercellslam":"9a","voltaiclance":"9a","sparkscamper":"9a","electroball":"9a","shockwave":"9a","electroweb":"9a","firefang":"9a","crunch":"9a","powergem":"9a","calmmind":"9a","bulkup":"9a","roar":"9a","sacredsword":"9a"},"byakurenhijiri":{"focusblast":"9a","aurasphere":"9a","psychoboost":"9a","futuresight":"9a","psychic":"9a","psyshock":"9a","expandingforce":"9a","psybeam":"9a","darkpulse":"9a","shadowball":"9a","aeroblast":"9a","airslash":"9a","shockwave":"9a","hyperbeam":"9a","hypervoice":"9a","swift":"9a","focuspunch":"9a","meteorassault":"9a","highjumpkick":"9a","closecombat":"9a","superpower":"9a","jumpkick":"9a","crosschop":"9a","submission":"9a","drainpunch":"9a","brickbreak":"9a","upperhand":"9a","rollingkick":"9a","karatechop":"9a","machpunch":"9a","zenheadbutt":"9a","psychocut":"9a","nightslash":"9a","fly":"9a","acrobatics":"9a","thunderpunch":"9a","gigaimpact":"9a","doubleedge":"9a","megakick":"9a","return":"9a","facade":"9a","quickattack":"9a","victorydance":"9a","bulkup":"9a","quickguard":"9a","meditate":"9a","calmmind":"9a","psychicterrain":"9a","teleport":"9a","agility":"9a","defog":"9a","magnetrise":"9a","thunderwave":"9a","confide":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","detect":"9a","coaching":"9a","lowkick":"9a","bodypress":"9a","rocksmash":"9a","lowsweep":"9a","reversal":"9a","shufflejab":"9a","vacuumwave":"9a","reflect":"9a","lightscreen":"9a","trickroom":"9a","trick":"9a","magiccoat":"9a","imprison":"9a","gravity":"9a","skillswap":"9a","allyswitch":"9a","magicroom":"9a","wonderroom":"9a","hypnosis":"9a","amnesia":"9a","safeguard":"9a","psychicfangs":"9a","extrasensory":"9a","storedpower":"9a","psychicnoise":"9a","confusion":"9a","dreameater":"9a","hypnowhirl":"9a","extremespeed":"9a","healbell":"9a","dazzlinggleam":"9a"},"nuehoujuu":{"darkpulse":"9a","snarl":"9a","shadowball":"9a","hex":"9a","nightshade":"9a","zapcannon":"9a","discharge":"9a","flashcannon":"9a","signalbeam":"9a","silverwind":"9a","psyshock":"9a","psychicnoise":"9a","chillingwater":"9a","hyperbeam":"9a","hypervoice":"9a","swift":"9a","hiddenpower":"9a","echoedvoice":"9a","foulplay":"9a","crunch":"9a","suckerpunch":"9a","nightslash":"9a","poltergeist":"9a","spiritshackle":"9a","shadowsneak":"9a","wildcharge":"9a","gigaimpact":"9a","megapunch":"9a","covet":"9a","taunt":"9a","torment":"9a","snatch":"9a","spite":"9a","grudge":"9a","agility":"9a","trickroom":"9a","skillswap":"9a","guardswap":"9a","thunderwave":"9a","charge":"9a","irondefense":"9a","metalsound":"9a","swordsdance":"9a","glare":"9a","confide":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","terablast":"9a","endure":"9a","facade":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","pursuit":"9a","thief":"9a","knockoff":"9a","faketears":"9a","quash":"9a","bite":"9a","throatchop":"9a","lashout":"9a","payback":"9a","assurance":"9a","carrionfeast":"9a","nastyplot":"9a","willowisp":"9a","confuseray":"9a","painsplit":"9a","destinybond":"9a","shadowclaw":"9a","phantomforce":"9a","shadowpunch":"9a","shadowstrike":"9a","ominouswind":"9a","thunderbolt":"9a","thunder":"9a","trick":"9a","partingshot":"9a","imprison":"9a","disable":"9a"},"hatatehimekaidou":{"futuresight":"9a","psychic":"9a","expandingforce":"9a","psychicnoise":"9a","confusion":"9a","storedpower":"9a","hurricane":"9a","airslash":"9a","aircutter":"9a","gust":"9a","shadowball":"9a","ominouswind":"9a","shockwave":"9a","dazzlinggleam":"9a","flashcannon":"9a","chillingwater":"9a","uproar":"9a","swift":"9a","echoedvoice":"9a","psychocut":"9a","heartstamp":"9a","bravebird":"9a","fly":"9a","aerialace":"9a","acrobatics":"9a","peck":"9a","uturn":"9a","pounce":"9a","forcepalm":"9a","vinewhip":"9a","thunderpunch":"9a","extremespeed":"9a","facade":"9a","fakeout":"9a","quickattack":"9a","calmmind":"9a","barrier":"9a","agility":"9a","skillswap":"9a","roost":"9a","tailwind":"9a","defog":"9a","haze":"9a","detect":"9a","confuseray":"9a","taunt":"9a","encore":"9a","confide":"9a","screech":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","reflect":"9a","lightscreen":"9a","trickroom":"9a","trick":"9a","magiccoat":"9a","teleport":"9a","imprison":"9a","gravity":"9a","psychicterrain":"9a","allyswitch":"9a","magicroom":"9a","wonderroom":"9a","hypnosis":"9a","amnesia":"9a","safeguard":"9a","psyshock":"9a","psybeam":"9a","extrasensory":"9a","dreameater":"9a","hypnowhirl":"9a","featherdance":"9a","nastyplot":"9a","foresight":"9a","mindreader":"9a","heatwave":"9a"},"sunnymilk":{"photongeyser":"9a","uturn":"9a","overheat":"9a","fireblast":"9a","inferno":"9a","flamethrower":"9a","incinerate":"9a","ember":"9a","firespin":"9a","dazzlinggleam":"9a","disarmingvoice":"9a","airslash":"9a","solarbeam":"9a","energyball":"9a","flashcannon":"9a","mirrorshot":"9a","storedpower":"9a","mirrorcoat":"9a","hypervoice":"9a","uproar":"9a","weatherball":"9a","flareblitz":"9a","firepunch":"9a","flamecharge":"9a","playrough":"9a","solarblade":"9a","suckerpunch":"9a","acrobatics":"9a","doubleedge":"9a","return":"9a","facade":"9a","quickattack":"9a","sunnyday":"9a","willowisp":"9a","charm":"9a","mistyterrain":"9a","defog":"9a","reflect":"9a","lightscreen":"9a","teleport":"9a","agility":"9a","morningsun":"9a","helpinghand":"9a","workup":"9a","encore":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","bodyslam":"9a","curse":"9a","firefang":"9a","temperflare":"9a","heatcrash":"9a","blazekick":"9a","sweetkiss":"9a","babydolleyes":"9a","craftyshield":"9a","thief":"9a","swordsdance":"9a"},"lunachild":{"lunardance":"9a","nightdaze":"9a","moonblast":"9a","fairywind":"9a","shadowball":"9a","nightshade":"9a","hurricane":"9a","airslash":"9a","thunderbolt":"9a","icywind":"9a","psychic":"9a","storedpower":"9a","triattack":"9a","swift":"9a","echoedvoice":"9a","knockoff":"9a","payback":"9a","playrough":"9a","uturn":"9a","shadowpunch":"9a","shadowsneak":"9a","acrobatics":"9a","doubleedge":"9a","return":"9a","facade":"9a","quickattack":"9a","torment":"9a","switcheroo":"9a","charm":"9a","moonlight":"9a","mistyterrain":"9a","calmmind":"9a","teleport":"9a","allyswitch":"9a","raindance":"9a","thunderwave":"9a","tailwind":"9a","defog":"9a","haze":"9a","whirlwind":"9a","helpinghand":"9a","workup":"9a","yawn":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","darkpulse":"9a","foulplay":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","bodyslam":"9a","curse":"9a","pursuit":"9a","thief":"9a","taunt":"9a","faketears":"9a","quash":"9a","snarl":"9a","nastyplot":"9a","sweetkiss":"9a","babydolleyes":"9a","craftyshield":"9a","dazzlinggleam":"9a","drainingkiss":"9a","mistyexplosion":"9a","alluringvoice":"9a","velvetpress":"9a","disable":"9a"},"starsapphire":{"psychic":"9a","psyshock":"9a","expandingforce":"9a","psychicnoise":"9a","psybeam":"9a","storedpower":"9a","mistyexplosion":"9a","alluringvoice":"9a","airslash":"9a","aurasphere":"9a","waterpulse":"9a","terastarstorm":"9a","hypervoice":"9a","swift":"9a","echoedvoice":"9a","psychocut":"9a","playrough":"9a","uturn":"9a","doubleedge":"9a","return":"9a","facade":"9a","fakeout":"9a","cometpunch":"9a","cosmicpower":"9a","skillswap":"9a","speedswap":"9a","trick":"9a","psychicterrain":"9a","teleport":"9a","charm":"9a","mistyterrain":"9a","detect":"9a","wideguard":"9a","wish":"9a","workup":"9a","helpinghand":"9a","naturepower":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","bodyslam":"9a","curse":"9a","calmmind":"9a","reflect":"9a","lightscreen":"9a","trickroom":"9a","magiccoat":"9a","imprison":"9a","gravity":"9a","allyswitch":"9a","magicroom":"9a","wonderroom":"9a","hypnosis":"9a","amnesia":"9a","agility":"9a","safeguard":"9a","futuresight":"9a","extrasensory":"9a","confusion":"9a","dreameater":"9a","hypnowhirl":"9a","sweetkiss":"9a","babydolleyes":"9a","craftyshield":"9a","moonblast":"9a","dazzlinggleam":"9a","drainingkiss":"9a","fairywind":"9a","velvetpress":"9a","triattack":"9a","meteorbeam":"9a","foresight":"9a","miracleeye":"9a"},"kyoukokasodani":{"hyperbeam":"9a","boomburst":"9a","hypervoice":"9a","uproar":"9a","round":"9a","echoedvoice":"9a","sonicboom":"9a","darkpulse":"9a","snarl":"9a","sparklingaria":"9a","shadowball":"9a","focusblast":"9a","grasspledge":"9a","lastresort":"9a","doubleedge":"9a","return":"9a","rockclimb":"9a","facade":"9a","fakeout":"9a","quickattack":"9a","rockslide":"9a","headlongrush":"9a","magnitude":"9a","crunch":"9a","bite":"9a","shadowclaw":"9a","firefang":"9a","switcheroo":"9a","taunt":"9a","confide":"9a","screech":"9a","eerieimpulse":"9a","thunderwave":"9a","workup":"9a","perishsong":"9a","supersonic":"9a","safeguard":"9a","reflect":"9a","lightscreen":"9a","agility":"9a","partingshot":"9a","roar":"9a","stealthrock":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","frustration":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","encore":"9a","yawn":"9a","wish":"9a","healbell":"9a","charm":"9a","batonpass":"9a","disable":"9a","hustleup":"9a","triattack":"9a","swift":"9a","nobleroar":"9a","sing":"9a","mirrorcoat":"9a","mirrormove":"9a","copycat":"9a","alluringvoice":"9a","disarmingvoice":"9a"},"yoshikamiyako":{"sludgewave":"9a","sludgebomb":"9a","sludge":"9a","clearsmog":"9a","acidspray":"9a","shadowball":"9a","ominouswind":"9a","nightshade":"9a","darkpulse":"9a","icywind":"9a","drainingkiss":"9a","infestation":"9a","chillingwater":"9a","echoedvoice":"9a","gunkshot":"9a","poisonjab":"9a","poisonfang":"9a","shadowclaw":"9a","shadowsneak":"9a","crunch":"9a","knockoff":"9a","superpower":"9a","icefang":"9a","leechlife":"9a","gigaimpact":"9a","crushclaw":"9a","retaliate":"9a","bulkup":"9a","toxic":"9a","venomdrench":"9a","gastroacid":"9a","toxicspikes":"9a","curse":"9a","destinybond":"9a","recover":"9a","helpinghand":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","facade":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","takedown":"9a","bodyslam":"9a","acidarmor":"9a","crosspoison":"9a","willowisp":"9a","confuseray":"9a","spite":"9a","painsplit":"9a","phantomforce":"9a","shadowpunch":"9a","shadowstrike":"9a","carrionfeast":"9a","stockpile":"9a","swallow":"9a","belch":"9a","stuffcheeks":"9a","bounce":"9a","irondefense":"9a","drainpunch":"9a"},"seigakaku":{"darkpulse":"9a","snarl":"9a","hyperspacehole":"9a","psybeam":"9a","shadowball":"9a","fireblast":"9a","flamethrower":"9a","thunder":"9a","thunderbolt":"9a","blizzard":"9a","icebeam":"9a","hyperbeam":"9a","triattack":"9a","swift":"9a","foulplay":"9a","nightslash":"9a","suckerpunch":"9a","knockoff":"9a","feintattack":"9a","uturn":"9a","psychocut":"9a","shadowpunch":"9a","shadowsneak":"9a","frustration":"9a","secretpower":"9a","taunt":"9a","torment":"9a","nastyplot":"9a","trick":"9a","agility":"9a","trickroom":"9a","healingwish":"9a","confuseray":"9a","revivalblessing":"9a","meanlook":"9a","encore":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","facade":"9a","return":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","naturalgift":"9a","mimic":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","pursuit":"9a","thief":"9a","faketears":"9a","quash":"9a","hex":"9a","sludgebomb":"9a","partingshot":"9a","hypnosis":"9a","dreameater":"9a","nightshade":"9a","focusblast":"9a","psychic":"9a","teleport":"9a"},"soganotojiko":{"memento":"9a","zapcannon":"9a","thunder":"9a","thunderbolt":"9a","discharge":"9a","voltswitch":"9a","shockwave":"9a","thundershock":"9a","shadowball":"9a","hex":"9a","nightshade":"9a","darkpulse":"9a","snarl":"9a","psychicnoise":"9a","disarmingvoice":"9a","hypervoice":"9a","uproar":"9a","echoedvoice":"9a","wildcharge":"9a","zingzap":"9a","spark":"9a","poltergeist":"9a","spiritshackle":"9a","astonish":"9a","feintattack":"9a","zenheadbutt":"9a","lastresort":"9a","doubleedge":"9a","takedown":"9a","facade":"9a","retaliate":"9a","quickattack":"9a","thunderwave":"9a","charge":"9a","electricterrain":"9a","destinybond":"9a","confuseray":"9a","spite":"9a","taunt":"9a","painsplit":"9a","screech":"9a","detect":"9a","agility":"9a","calmmind":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","eerieimpulse":"9a","magnetrise":"9a","electroball":"9a","chargebeam":"9a","electroweb":"9a","willowisp":"9a","ominouswind":"9a","nastyplot":"9a","grudge":"9a","raindance":"9a","hurricane":"9a"},"mononobenofuto":{"surf":"9a","muddywater":"9a","waterpledge":"9a","brine":"9a","waterpulse":"9a","watergun":"9a","fireblast":"9a","firepledge":"9a","ember":"9a","ancientpower":"9a","psychic":"9a","extrasensory":"9a","hurricane":"9a","aircutter":"9a","triattack":"9a","liquidation":"9a","waterplates":"9a","aquajet":"9a","blazekick":"9a","firepunch":"9a","rockslide":"9a","rocktomb":"9a","zenheadbutt":"9a","psychocut":"9a","acrobatics":"9a","doubleedge":"9a","megakick":"9a","megapunch":"9a","facade":"9a","fakeout":"9a","soak":"9a","aquaring":"9a","raindance":"9a","willowisp":"9a","sunnyday":"9a","sandstorm":"9a","stealthrock":"9a","agility":"9a","reflect":"9a","lightscreen":"9a","skillswap":"9a","tailwind":"9a","defog":"9a","aromatherapy":"9a","haze":"9a","whirlwind":"9a","acupressure":"9a","psychup":"9a","naturepower":"9a","helpinghand":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","bodyslam":"9a","curse":"9a","lifedew":"9a","flipturn":"9a","waterfall":"9a","aquatail":"9a","dive":"9a","wavecharge":"9a","scald":"9a","hydropump":"9a","whirlpool":"9a","chillingwater":"9a","undertow":"9a","flareblitz":"9a","firefang":"9a","flamecharge":"9a","temperflare":"9a","heatcrash":"9a","flamethrower":"9a","heatwave":"9a","overheat":"9a","mysticalfire":"9a","lavaplume":"9a","incinerate":"9a","firespin":"9a","calmmind":"9a","earthpower":"9a"},"toyosatomiminomiko":{"focusblast":"9a","aurasphere":"9a","dazzlinggleam":"9a","alluringvoice":"9a","disarmingvoice":"9a","thunder":"9a","thunderbolt":"9a","discharge":"9a","shockwave":"9a","shadowball":"9a","psychicnoise":"9a","hyperbeam":"9a","hypervoice":"9a","swift":"9a","echoedvoice":"9a","trumpcard":"9a","focuspunch":"9a","closecombat":"9a","dynamicpunch":"9a","sacredsword":"9a","brickbreak":"9a","upperhand":"9a","forcepalm":"9a","circlethrow":"9a","machpunch":"9a","counter":"9a","spiritbreak":"9a","wildcharge":"9a","thunderpunch":"9a","shadowclaw":"9a","psychocut":"9a","ironhead":"9a","smartstrike":"9a","gigaimpact":"9a","doubleedge":"9a","slash":"9a","rapidspin":"9a","quickattack":"9a","bulkup":"9a","detect":"9a","thunderwave":"9a","agility":"9a","trick":"9a","sunnyday":"9a","morningsun":"9a","swordsdance":"9a","confide":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","facade":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","quickguard":"9a","coaching":"9a","drainpunch":"9a","superpower":"9a","lowkick":"9a","highjumpkick":"9a","bodypress":"9a","rocksmash":"9a","lowsweep":"9a","reversal":"9a","shufflejab":"9a","vacuumwave":"9a","charm":"9a","sweetkiss":"9a","mistyterrain":"9a","babydolleyes":"9a","craftyshield":"9a","playrough":"9a","moonblast":"9a","drainingkiss":"9a","mistyexplosion":"9a","fairywind":"9a","velvetpress":"9a","calmmind":"9a","nastyplot":"9a","psychic":"9a","psyshock":"9a","flashcannon":"9a","mindreader":"9a","foresight":"9a","meteorbeam":"9a","healbell":"9a"},"mamizoufutatsuiwa":{"leafstorm":"9a","energyball":"9a","magicalleaf":"9a","leaftornado":"9a","hyperbeam":"9a","triattack":"9a","wringout":"9a","powergem":"9a","ancientpower":"9a","shadowball":"9a","woodhammer":"9a","leafblade":"9a","drumbeating":"9a","razorleaf":"9a","grassyglide":"9a","leafage":"9a","bulletseed":"9a","gigaimpact":"9a","doubleedge":"9a","bodyslam":"9a","strength":"9a","megapunch":"9a","facade":"9a","retaliate":"9a","covet":"9a","furyswipes":"9a","stoneedge":"9a","rockslide":"9a","rocktomb":"9a","bounce":"9a","stompingtantrum":"9a","bulldoze":"9a","crunch":"9a","bite":"9a","feintattack":"9a","shadowclaw":"9a","pounce":"9a","grassyterrain":"9a","bellydrum":"9a","transform":"9a","confide":"9a","recycle":"9a","taunt":"9a","torment":"9a","switcheroo":"9a","bulkup":"9a","stealthrock":"9a","sandstorm":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","takedown":"9a","helpinghand":"9a","curse":"9a","leechseed":"9a","synthesis":"9a","stunspore":"9a","ingrain":"9a","worryseed":"9a","trailblaze":"9a","seedbomb":"9a","powerwhip":"9a","swordsdance":"9a","encore":"9a","yawn":"9a","wish":"9a","healbell":"9a","charm":"9a","workup":"9a","batonpass":"9a","disable":"9a","screech":"9a","hustleup":"9a","uproar":"9a","quickattack":"9a","headbutt":"9a","crushclaw":"9a","thrash":"9a","fakeout":"9a","suckerpunch":"9a","knockoff":"9a","uturn":"9a","trick":"9a","copycat":"9a"},"kasenibaraki":{"petaldance":"9a","energyball":"9a","gigadrain":"9a","megadrain":"9a","absorb":"9a","focusblast":"9a","aurasphere":"9a","psychic":"9a","extrasensory":"9a","psychicnoise":"9a","darkpulse":"9a","snarl":"9a","hurricane":"9a","airslash":"9a","triattack":"9a","petalblizzard":"9a","hornleech":"9a","grassyglide":"9a","focuspunch":"9a","highjumpkick":"9a","crosschop":"9a","submission":"9a","brickbreak":"9a","drainpunch":"9a","upperhand":"9a","vitalthrow":"9a","circlethrow":"9a","machpunch":"9a","armthrust":"9a","wickedblow":"9a","throatchop":"9a","payback":"9a","zenheadbutt":"9a","earthquake":"9a","bulldoze":"9a","megahorn":"9a","fly":"9a","gigaimpact":"9a","doubleedge":"9a","megapunch":"9a","strength":"9a","facade":"9a","chipaway":"9a","cometpunch":"9a","grassyterrain":"9a","aromatherapy":"9a","cottonspore":"9a","coaching":"9a","bulkup":"9a","meditate":"9a","psychicterrain":"9a","healpulse":"9a","magiccoat":"9a","naturepower":"9a","safeguard":"9a","refresh":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","wickedenergy":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","leechseed":"9a","synthesis":"9a","stunspore":"9a","ingrain":"9a","worryseed":"9a","trailblaze":"9a","leafblade":"9a","seedbomb":"9a","powerwhip":"9a","bulletseed":"9a","swordsdance":"9a","solarbeam":"9a","leafstorm":"9a","magicalleaf":"9a","grassknot":"9a","solarnectar":"9a","detect":"9a","quickguard":"9a","closecombat":"9a","superpower":"9a","lowkick":"9a","bodypress":"9a","rocksmash":"9a","lowsweep":"9a","reversal":"9a","shufflejab":"9a","vacuumwave":"9a","woodhammer":"9a","hammerarm":"9a","icepunch":"9a","thunderpunch":"9a","firepunch":"9a","bravebird":"9a"},"hatanokokoro":{"synchronoise":"9a","psychic":"9a","psyshock":"9a","psychicnoise":"9a","mysticalpower":"9a","confusion":"9a","shadowball":"9a","nightshade":"9a","solarbeam":"9a","petaldance":"9a","energyball":"9a","gigadrain":"9a","wildboltstorm":"9a","shockwave":"9a","heatwave":"9a","fierydance":"9a","burningjealousy":"9a","icywind":"9a","originpulse":"9a","chillingwater":"9a","dazzlinggleam":"9a","hurricane":"9a","aurasphere":"9a","vacuumwave":"9a","dragonpulse":"9a","darkpulse":"9a","signalbeam":"9a","revelationdance":"9a","weatherball":"9a","terrainpulse":"9a","zenheadbutt":"9a","psychocut":"9a","heartstamp":"9a","poltergeist":"9a","phantomforce":"9a","shadowsneak":"9a","petalblizzard":"9a","trailblaze":"9a","temperflare":"9a","tripleaxel":"9a","aquastep":"9a","stoneedge":"9a","rocktomb":"9a","spiritbreak":"9a","aerialace":"9a","acrobatics":"9a","closecombat":"9a","brickbreak":"9a","upperhand":"9a","outrage":"9a","lashout":"9a","suckerpunch":"9a","gigaimpact":"9a","return":"9a","megapunch":"9a","slash":"9a","facade":"9a","retaliate":"9a","cometpunch":"9a","quickattack":"9a","calmmind":"9a","agility":"9a","psychicterrain":"9a","roleplay":"9a","heartswap":"9a","magiccoat":"9a","destinybond":"9a","dragondance":"9a","eerieimpulse":"9a","charm":"9a","craftyshield":"9a","raindance":"9a","sunnyday":"9a","sandstorm":"9a","snowscape":"9a","detect":"9a","nastyplot":"9a","faketears":"9a","swordsdance":"9a","entrainment":"9a","metronome":"9a","refresh":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","reflect":"9a","lightscreen":"9a","trickroom":"9a","trick":"9a","teleport":"9a","imprison":"9a","gravity":"9a","skillswap":"9a","allyswitch":"9a","magicroom":"9a","wonderroom":"9a","hypnosis":"9a","amnesia":"9a","safeguard":"9a","psychicfangs":"9a","psybeam":"9a","futuresight":"9a","expandingforce":"9a","extrasensory":"9a","storedpower":"9a","dreameater":"9a","hypnowhirl":"9a","willowisp":"9a","confuseray":"9a","spite":"9a","painsplit":"9a","shadowclaw":"9a","shadowpunch":"9a","shadowstrike":"9a","hex":"9a","ominouswind":"9a","scaryface":"9a","tickle":"9a","flatter":"9a","torment":"9a","nightslash":"9a","sacredsword":"9a","teeterdance":"9a"},"wakasagihime":{"waterspout":"9a","hydropump":"9a","surf":"9a","muddywater":"9a","waterpulse":"9a","chillingwater":"9a","whirlpool":"9a","icebeam":"9a","aurorabeam":"9a","icywind":"9a","psychic":"9a","psychicnoise":"9a","alluringvoice":"9a","hypervoice":"9a","uproar":"9a","echoedvoice":"9a","wavecrash":"9a","aquatail":"9a","waterfall":"9a","flipturn":"9a","aquajet":"9a","headlongrush":"9a","dragontail":"9a","breakingswipe":"9a","doubleedge":"9a","bodyslam":"9a","facade":"9a","aquaring":"9a","raindance":"9a","watersport":"9a","calmmind":"9a","confide":"9a","splash":"9a","workup":"9a","helpinghand":"9a","perishsong":"9a","auroraveil":"9a","snowscape":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","curse":"9a","soak":"9a","lifedew":"9a","liquidation":"9a","dive":"9a","wavecharge":"9a","scald":"9a","brine":"9a","undertow":"9a","sing":"9a","swordsdance":"9a","dragondance":"9a"},"sekibanki":{"fakeout":"9a","shadowball":"9a","hex":"9a","nightshade":"9a","mindblown":"9a","fireblast":"9a","mysticalfire":"9a","darkpulse":"9a","psybeam":"9a","twinbeam":"9a","clearsmog":"9a","hyperbeam":"9a","swift":"9a","phantomforce":"9a","shadowclaw":"9a","shadowsneak":"9a","temperflare":"9a","suckerpunch":"9a","nightslash":"9a","thief":"9a","beatup":"9a","doubleedge":"9a","megapunch":"9a","facade":"9a","feint":"9a","furyattack":"9a","destinybond":"9a","curse":"9a","spite":"9a","confuseray":"9a","willowisp":"9a","partingshot":"9a","taunt":"9a","snatch":"9a","painsplit":"9a","smokescreen":"9a","helpinghand":"9a","agility":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","gigaimpact":"9a","takedown":"9a","bodyslam":"9a","ominouswind":"9a","flashcannon":"9a","powergem":"9a","hypervoice":"9a","snarl":"9a","nastyplot":"9a","scaryface":"9a","chargebeam":"9a","signalbeam":"9a","dazzlinggleam":"9a","teleport":"9a"},"kagerouimaizumi":{"darkpulse":"9a","snarl":"9a","hyperbeam":"9a","hypervoice":"9a","swift":"9a","round":"9a","shadowball":"9a","nightshade":"9a","fireblast":"9a","flamethrower":"9a","mysticalfire":"9a","energyball":"9a","crunch":"9a","suckerpunch":"9a","knockoff":"9a","bite":"9a","brutalswing":"9a","feintattack":"9a","gigaimpact":"9a","doubleedge":"9a","takedown":"9a","hyperfang":"9a","facade":"9a","tackle":"9a","quickattack":"9a","superfang":"9a","firefang":"9a","shadowclaw":"9a","leafblade":"9a","icefang":"9a","lunge":"9a","pounce":"9a","taunt":"9a","honeclaws":"9a","moonlight":"9a","mistyterrain":"9a","agility":"9a","howl":"9a","roar":"9a","screech":"9a","helpinghand":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","bodyslam":"9a","curse":"9a","pursuit":"9a","thief":"9a","foulplay":"9a","faketears":"9a","torment":"9a","quash":"9a","throatchop":"9a","nightslash":"9a","lashout":"9a","payback":"9a","assurance":"9a","carrionfeast":"9a","encore":"9a","yawn":"9a","wish":"9a","healbell":"9a","charm":"9a","workup":"9a","batonpass":"9a","disable":"9a","hustleup":"9a","uproar":"9a","headbutt":"9a","swordsdance":"9a","retaliate":"9a","crushclaw":"9a","thrash":"9a","thunderfang":"9a","psychicfangs":"9a","extremespeed":"9a","jawlock":"9a","uturn":"9a"},"benbentsukumo":{"hyperbeam":"9a","hypervoice":"9a","round":"9a","swift":"9a","hiddenpower":"9a","echoedvoice":"9a","thunder":"9a","thunderbolt":"9a","thundercage":"9a","discharge":"9a","voltswitch":"9a","shockwave":"9a","electroweb":"9a","thundershock":"9a","energyball":"9a","gigadrain":"9a","dazzlinggleam":"9a","icywind":"9a","psychicnoise":"9a","gigaimpact":"9a","return":"9a","frustration":"9a","facade":"9a","retaliate":"9a","quickattack":"9a","wildcharge":"9a","spark":"9a","petalblizzard":"9a","icepunch":"9a","charge":"9a","magneticflux":"9a","thunderwave":"9a","raindance":"9a","snowscape":"9a","calmmind":"9a","wish":"9a","screech":"9a","helpinghand":"9a","whirlwind":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","terablast":"9a","endure":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","takedown":"9a","bodyslam":"9a","curse":"9a","encore":"9a","yawn":"9a","healbell":"9a","charm":"9a","workup":"9a","batonpass":"9a","disable":"9a","hustleup":"9a","uproar":"9a","triattack":"9a","electricterrain":"9a","eerieimpulse":"9a","magnetrise":"9a","electroball":"9a","chargebeam":"9a","sing":"9a","nastyplot":"9a","alluringvoice":"9a"},"yatsuhashitsukumo":{"hyperbeam":"9a","hypervoice":"9a","round":"9a","swift":"9a","hiddenpower":"9a","echoedvoice":"9a","thunder":"9a","thunderbolt":"9a","thundercage":"9a","discharge":"9a","voltswitch":"9a","shockwave":"9a","electroweb":"9a","thundershock":"9a","hurricane":"9a","airslash":"9a","fireblast":"9a","shadowball":"9a","psychicnoise":"9a","gigaimpact":"9a","return":"9a","frustration":"9a","facade":"9a","retaliate":"9a","quickattack":"9a","wildcharge":"9a","spark":"9a","temperflare":"9a","shadowclaw":"9a","charge":"9a","magneticflux":"9a","thunderwave":"9a","raindance":"9a","sunnyday":"9a","calmmind":"9a","wish":"9a","screech":"9a","helpinghand":"9a","roar":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","terablast":"9a","endure":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","takedown":"9a","bodyslam":"9a","curse":"9a","encore":"9a","yawn":"9a","healbell":"9a","charm":"9a","workup":"9a","batonpass":"9a","disable":"9a","hustleup":"9a","uproar":"9a","triattack":"9a","electricterrain":"9a","eerieimpulse":"9a","magnetrise":"9a","electroball":"9a","chargebeam":"9a","sing":"9a","nastyplot":"9a","alluringvoice":"9a"},"seijakijin":{"darkpulse":"9a","overheat":"9a","fireblast":"9a","dazzlinggleam":"9a","psychic":"9a","expandingforce":"9a","hyperbeam":"9a","swift":"9a","falsesurrender":"9a","throatchop":"9a","suckerpunch":"9a","knockoff":"9a","thief":"9a","feintattack":"9a","payback":"9a","beatup":"9a","closecombat":"9a","hammerarm":"9a","triplearrows":"9a","counter":"9a","ironhead":"9a","smartstrike":"9a","megahorn":"9a","uturn":"9a","firepunch":"9a","thunderpunch":"9a","megakick":"9a","hornattack":"9a","taunt":"9a","torment":"9a","snatch":"9a","topsyturvy":"9a","teleport":"9a","skillswap":"9a","heartswap":"9a","allyswitch":"9a","agility":"9a","wish":"9a","confide":"9a","followme":"9a","perishsong":"9a","swordsdance":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","facade":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","pursuit":"9a","foulplay":"9a","faketears":"9a","quash":"9a","crunch":"9a","bite":"9a","nightslash":"9a","lashout":"9a","assurance":"9a","carrionfeast":"9a","superpower":"9a","switcheroo":"9a","reversal":"9a","mirrorcoat":"9a"},"shinmyoumarusukuna":{"steelbeam":"9a","flashcannon":"9a","mirrorshot":"9a","dazzlinggleam":"9a","drainingkiss":"9a","fairywind":"9a","focusblast":"9a","psychic":"9a","energyball":"9a","swift":"9a","gigatonhammer":"9a","steelroller":"9a","behemothblade":"9a","meteormash":"9a","ironhead":"9a","metalclaw":"9a","playrough":"9a","spiritbreak":"9a","waterfall":"9a","zenheadbutt":"9a","psychocut":"9a","superpower":"9a","hammerarm":"9a","sacredsword":"9a","upperhand":"9a","forcepalm":"9a","icehammer":"9a","icespinner":"9a","doubleedge":"9a","return":"9a","retaliate":"9a","cometpunch":"9a","quickattack":"9a","spikes":"9a","meditate":"9a","disable":"9a","wish":"9a","confide":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","facade":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","irondefense":"9a","autotomize":"9a","metalsound":"9a","bulletpunch":"9a","heavyslam":"9a","gyroball":"9a","smartstrike":"9a","charm":"9a","sweetkiss":"9a","mistyterrain":"9a","babydolleyes":"9a","craftyshield":"9a","pinmissile":"9a","furycutter":"9a","woodhammer":"9a","growth":"9a","swordsdance":"9a","endeavor":"9a","metalburst":"9a","reversal":"9a","counter":"9a"},"raikohorikawa":{"zapcannon":"9a","thunder":"9a","thunderbolt":"9a","discharge":"9a","thunderclap":"9a","shockwave":"9a","thundershock":"9a","hurricane":"9a","aircutter":"9a","boomburst":"9a","uproar":"9a","echoedvoice":"9a","sonicboom":"9a","volttackle":"9a","supercellslam":"9a","thunderpunch":"9a","spark":"9a","focuspunch":"9a","crosschop":"9a","submission":"9a","drumbeating":"9a","rockslide":"9a","rocktomb":"9a","dragonrush":"9a","megakick":"9a","return":"9a","facade":"9a","thunderwave":"9a","charge":"9a","electricterrain":"9a","raindance":"9a","defog":"9a","irondefense":"9a","workup":"9a","perishsong":"9a","confide":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","eerieimpulse":"9a","magnetrise":"9a","voltswitch":"9a","wildcharge":"9a","thunderfang":"9a","voltaiclance":"9a","sparkscamper":"9a","electroball":"9a","chargebeam":"9a","electroweb":"9a","hypervoice":"9a","bulkup":"9a","nastyplot":"9a"},"sumirekousami":{"focusblast":"9a","futuresight":"9a","psystrike":"9a","dreameater":"9a","psychic":"9a","psyshock":"9a","expandingforce":"9a","extrasensory":"9a","psychicnoise":"9a","psybeam":"9a","confusion":"9a","storedpower":"9a","powergem":"9a","blizzard":"9a","icebeam":"9a","icywind":"9a","signalbeam":"9a","shadowball":"9a","triattack":"9a","snore":"9a","psychocut":"9a","heartstamp":"9a","uturn":"9a","fly":"9a","acrobatics":"9a","return":"9a","facade":"9a","covet":"9a","quickattack":"9a","psychicterrain":"9a","calmmind":"9a","agility":"9a","barrier":"9a","teleport":"9a","roleplay":"9a","lightscreen":"9a","reflect":"9a","miracleeye":"9a","taunt":"9a","confide":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","frustration":"9a","round":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","trickroom":"9a","trick":"9a","magiccoat":"9a","imprison":"9a","gravity":"9a","skillswap":"9a","allyswitch":"9a","magicroom":"9a","wonderroom":"9a","hypnosis":"9a","amnesia":"9a","safeguard":"9a","hypnowhirl":"9a","nastyplot":"9a","telekinesis":"9a","chargebeam":"9a","thunderbolt":"9a"},"seiran":{"focusenergy":"9a","steelbeam":"9a","flashcannon":"9a","mirrorshot":"9a","synchronoise":"9a","psychic":"9a","esperwing":"9a","expandingforce":"9a","psychicnoise":"9a","psybeam":"9a","lunaticbullet":"9a","thunderbolt":"9a","shockwave":"9a","electroweb":"9a","airslash":"9a","hypervoice":"9a","uproar":"9a","echoedvoice":"9a","steelroller":"9a","meteormash":"9a","steelwing":"9a","metalclaw":"9a","bulletpunch":"9a","psychocut":"9a","hammerarm":"9a","woodhammer":"9a","bulletseed":"9a","bounce":"9a","return":"9a","facade":"9a","covet":"9a","quickattack":"9a","metalsound":"9a","psychicterrain":"9a","skillswap":"9a","cosmicpower":"9a","speedswap":"9a","imprison":"9a","trickroom":"9a","teleport":"9a","tailwind":"9a","sunnyday":"9a","raindance":"9a","confide":"9a","helpinghand":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","bodyslam":"9a","curse":"9a","irondefense":"9a","autotomize":"9a","ironhead":"9a","heavyslam":"9a","gyroball":"9a","smartstrike":"9a","calmmind":"9a","reflect":"9a","lightscreen":"9a","trick":"9a","magiccoat":"9a","gravity":"9a","allyswitch":"9a","magicroom":"9a","wonderroom":"9a","hypnosis":"9a","amnesia":"9a","agility":"9a","safeguard":"9a","zenheadbutt":"9a","psychicfangs":"9a","psyshock":"9a","futuresight":"9a","extrasensory":"9a","storedpower":"9a","confusion":"9a","dreameater":"9a","hypnowhirl":"9a","lockon":"9a","aurasphere":"9a","vacuumwave":"9a","highjumpkick":"9a","uturn":"9a"},"ringo":{"stuffcheeks":"9a","energyball":"9a","gigadrain":"9a","megadrain":"9a","absorb":"9a","moonblast":"9a","darkpulse":"9a","icywind":"9a","chillingwater":"9a","round":"9a","terrainpulse":"9a","woodhammer":"9a","leafblade":"9a","razorleaf":"9a","trailblaze":"9a","knockoff":"9a","powertrip":"9a","superpower":"9a","brickbreak":"9a","bounce":"9a","acrobatics":"9a","supercellslam":"9a","thunderpunch":"9a","gigaimpact":"9a","doubleedge":"9a","facade":"9a","rapidspin":"9a","naturalgift":"9a","leechseed":"9a","grassyterrain":"9a","worryseed":"9a","amnesia":"9a","skillswap":"9a","lightscreen":"9a","bulkup":"9a","moonlight":"9a","haze":"9a","recycle":"9a","confide":"9a","yawn":"9a","helpinghand":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","mimic":"9a","hyperbeam":"9a","takedown":"9a","bodyslam":"9a","curse":"9a","synthesis":"9a","stunspore":"9a","ingrain":"9a","seedbomb":"9a","powerwhip":"9a","bulletseed":"9a","swordsdance":"9a","belch":"9a","stockpile":"9a","swallow":"9a","uturn":"9a","quickattack":"9a","highjumpkick":"9a"},"doremysweet":{"futuresight":"9a","dreameater":"9a","psychic":"9a","psyshock":"9a","psybeam":"9a","confusion":"9a","darkpulse":"9a","snarl":"9a","hydropump":"9a","bubblebeam":"9a","chillingwater":"9a","hyperbeam":"9a","triattack":"9a","snore":"9a","zenheadbutt":"9a","heartstamp":"9a","bodypress":"9a","icespinner":"9a","doubleedge":"9a","bodyslam":"9a","facade":"9a","psychicterrain":"9a","calmmind":"9a","teleport":"9a","trickroom":"9a","amnesia":"9a","barrier":"9a","skillswap":"9a","magiccoat":"9a","miracleeye":"9a","meanlook":"9a","recover":"9a","confide":"9a","yawn":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","curse":"9a","reflect":"9a","lightscreen":"9a","trick":"9a","imprison":"9a","gravity":"9a","allyswitch":"9a","magicroom":"9a","wonderroom":"9a","hypnosis":"9a","agility":"9a","safeguard":"9a","expandingforce":"9a","extrasensory":"9a","storedpower":"9a","psychicnoise":"9a","hypnowhirl":"9a","nightmare":"9a","moonlight":"9a","shadowball":"9a","hex":"9a","nightshade":"9a","moonblast":"9a"},"sagumekishin":{"hurricane":"9a","oblivionwing":"9a","airslash":"9a","aircutter":"9a","hyperbeam":"9a","hypervoice":"9a","swift":"9a","round":"9a","echoedvoice":"9a","aurasphere":"9a","vacuumwave":"9a","nightshade":"9a","futuresight":"9a","venoshock":"9a","flashcannon":"9a","fly":"9a","wingattack":"9a","acrobatics":"9a","dualwingbeat":"9a","lastresort":"9a","doubleedge":"9a","return":"9a","facade":"9a","fakeout":"9a","quickattack":"9a","cometpunch":"9a","spiritbreak":"9a","shadowclaw":"9a","comeuppance":"9a","steelwing":"9a","uturn":"9a","partingshot":"9a","topsyturvy":"9a","curse":"9a","moonlight":"9a","agility":"9a","trick":"9a","trickroom":"9a","skillswap":"9a","poisongas":"9a","corrosivegas":"9a","stealthrock":"9a","defog":"9a","tailwind":"9a","roost":"9a","confide":"9a","perishsong":"9a","disable":"9a","focusenergy":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","boomburst":"9a","sludgewave":"9a","sludge":"9a","acidspray":"9a","poisonjab":"9a","crosspoison":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","frustration":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","toxicspikes":"9a","acidarmor":"9a","gastroacid":"9a","gunkshot":"9a","poisonfang":"9a","sludgebomb":"9a","clearsmog":"9a","oxidize":"9a","featherdance":"9a","bravebird":"9a","drillpeck":"9a","aerialace":"9a","gust":"9a","leafstorm":"9a","overheat":"9a","moonblast":"9a","psychic":"9a"},"clownpiece":{"moonblast":"9a","dazzlinggleam":"9a","fairywind":"9a","overheat":"9a","fireblast":"9a","inferno":"9a","flamethrower":"9a","mysticalfire":"9a","flameburst":"9a","incinerate":"9a","ember":"9a","firespin":"9a","expandingforce":"9a","shadowball":"9a","hyperbeam":"9a","uproar":"9a","swift":"9a","playrough":"9a","spiritbreak":"9a","flareblitz":"9a","firepunch":"9a","flamewheel":"9a","flamecharge":"9a","bulletpunch":"9a","heartstamp":"9a","gigaimpact":"9a","doubleedge":"9a","covet":"9a","quickattack":"9a","mistyterrain":"9a","moonlight":"9a","babydolleyes":"9a","sunnyday":"9a","quickguard":"9a","torment":"9a","confuseray":"9a","encore":"9a","flash":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","torchsong":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","facade":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","charm":"9a","sweetkiss":"9a","craftyshield":"9a","drainingkiss":"9a","mistyexplosion":"9a","alluringvoice":"9a","velvetpress":"9a","willowisp":"9a","heatwave":"9a","lavaplume":"9a","teeterdance":"9a","flatter":"9a","wish":"9a","meteorbeam":"9a","nastyplot":"9a","fakeout":"9a","uturn":"9a"},"junko":{"triattack":"9a","moongeistbeam":"9a","icebeam":"9a","thunderbolt":"9a","earthpower":"9a","selfdestruct":"9a","frustration":"9a","closecombat":"9a","hyperspacefury":"9a","earthquake":"9a","meteormash":"9a","recover":"9a","calmmind":"9a","bulkup":"9a","nastyplot":"9a","swordsdance":"9a","agility":"9a","barrier":"9a","amnesia":"9a","refresh":"9a","purify":"9a","laserfocus":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","facade":"9a","return":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","encore":"9a","yawn":"9a","wish":"9a","healbell":"9a","charm":"9a","workup":"9a","batonpass":"9a","disable":"9a","screech":"9a","hustleup":"9a","uproar":"9a","doubleedge":"9a","quickattack":"9a","headbutt":"9a","retaliate":"9a","crushclaw":"9a","thrash":"9a","hypervoice":"9a","swift":"9a","echoedvoice":"9a","boomburst":"9a","extremespeed":"9a","outrage":"9a","lashout":"9a","stompingtantrum":"9a","shadowball":"9a","darkpulse":"9a","moonblast":"9a","flamethrower":"9a","grudge":"9a","destinybond":"9a","taunt":"9a","spite":"9a"},"hecatia":{"darkpulse":"9a","shadowball":"9a","nightshade":"9a","hydropump":"9a","muddywater":"9a","brine":"9a","energyball":"9a","gigadrain":"9a","magicalleaf":"9a","moonblast":"9a","drainingkiss":"9a","dracometeor":"9a","coreenforcer":"9a","dragonrage":"9a","fireblast":"9a","flamethrower":"9a","triattack":"9a","throatchop":"9a","suckerpunch":"9a","shadowforce":"9a","shadowsneak":"9a","waterfall":"9a","petalblizzard":"9a","razorleaf":"9a","spiritbreak":"9a","dualchop":"9a","earthquake":"9a","doubleedge":"9a","facade":"9a","bodyswap":"9a","toxic":"9a","agility":"9a","substitute":"9a","sleeptalk":"9a","protect":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","rest":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","pursuit":"9a","thief":"9a","foulplay":"9a","taunt":"9a","knockoff":"9a","faketears":"9a","torment":"9a","quash":"9a","snarl":"9a","nastyplot":"9a","willowisp":"9a","confuseray":"9a","spite":"9a","painsplit":"9a","destinybond":"9a","hex":"9a","ominouswind":"9a","calmmind":"9a","meanlook":"9a","trickroom":"9a","earthpower":"9a","scald":"9a","psychic":"9a","meteorbeam":"9a","partingshot":"9a"},"joonyorigami":{"makeitrain":"9a","flashcannon":"9a","sludgewave":"9a","sludgebomb":"9a","venoshock":"9a","clearsmog":"9a","acidspray":"9a","smog":"9a","overheat":"9a","fireblast":"9a","flamethrower":"9a","incinerate":"9a","shadowball":"9a","hex":"9a","darkpulse":"9a","snarl":"9a","muddywater":"9a","hyperbeam":"9a","wringout":"9a","swift":"9a","smartstrike":"9a","gunkshot":"9a","poisonjab":"9a","blazekick":"9a","firepunch":"9a","shadowclaw":"9a","thief":"9a","payback":"9a","frustration":"9a","facade":"9a","payday":"9a","toxic":"9a","corrosivegas":"9a","willowisp":"9a","nastyplot":"9a","snatch":"9a","quash":"9a","tarshot":"9a","spotlight":"9a","recover":"9a","entrainment":"9a","confide":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","irondefense":"9a","autotomize":"9a","metalsound":"9a","steelbeam":"9a","mirrorshot":"9a","toxicspikes":"9a","acidarmor":"9a","gastroacid":"9a","sludge":"9a","oxidize":"9a","powergem":"9a","dazzlinggleam":"9a","trick":"9a","switcheroo":"9a","fling":"9a","covet":"9a","recycle":"9a","charm":"9a","flatter":"9a"},"shionyorigami":{"malignantchain":"9a","sludgewave":"9a","sludgebomb":"9a","venoshock":"9a","clearsmog":"9a","acidspray":"9a","smog":"9a","shadowball":"9a","hex":"9a","nightshade":"9a","drainingkiss":"9a","darkpulse":"9a","ruination":"9a","fireblast":"9a","incinerate":"9a","flashcannon":"9a","psychicnoise":"9a","swift":"9a","terrainpulse":"9a","poisonjab":"9a","crosspoison":"9a","poltergeist":"9a","phantomforce":"9a","shadowpunch":"9a","shadowsneak":"9a","suckerpunch":"9a","knockoff":"9a","thief":"9a","uturn":"9a","frustration":"9a","facade":"9a","covet":"9a","toxic":"9a","corrosivegas":"9a","toxicspikes":"9a","venomdrench":"9a","taunt":"9a","snatch":"9a","calmmind":"9a","guardswap":"9a","skillswap":"9a","recover":"9a","confide":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","acidarmor":"9a","gastroacid":"9a","sludge":"9a","oxidize":"9a","willowisp":"9a","confuseray":"9a","spite":"9a","painsplit":"9a","destinybond":"9a","ominouswind":"9a","grudge":"9a","memento":"9a","trick":"9a","torment":"9a","nastyplot":"9a"},"eternitylarva":{"eternabeam":"9a","bugbuzz":"9a","pollenpuff":"9a","silverwind":"9a","strugglebug":"9a","hurricane":"9a","airslash":"9a","aircutter":"9a","gust":"9a","heatwave":"9a","clangingscales":"9a","incinerate":"9a","shadowball":"9a","solarbeam":"9a","energyball":"9a","swift":"9a","weatherball":"9a","xscissor":"9a","uturn":"9a","fly":"9a","aerialace":"9a","acrobatics":"9a","dualwingbeat":"9a","flamecharge":"9a","scaleshot":"9a","petalblizzard":"9a","trailblaze":"9a","return":"9a","facade":"9a","quickattack":"9a","quiverdance":"9a","stringshot":"9a","powder":"9a","ragepowder":"9a","tailwind":"9a","stunspore":"9a","poisonpowder":"9a","agility":"9a","sunnyday":"9a","morningsun":"9a","camouflage":"9a","simplebeam":"9a","flash":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","chrysalisveil":"9a","signalbeam":"9a","roost":"9a","defog":"9a","featherdance":"9a","gigadrain":"9a","dazzlinggleam":"9a","growth":"9a"},"nemunosakata":{"grassyglide":"9a","stompingtantrum":"9a","healpulse":"9a","leafstorm":"9a","grasspledge":"9a","magicalleaf":"9a","ancientpower":"9a","earthpower":"9a","flashcannon":"9a","darkpulse":"9a","uproar":"9a","echoedvoice":"9a","woodhammer":"9a","leafblade":"9a","razorleaf":"9a","vinewhip":"9a","rockwrecker":"9a","stoneedge":"9a","mightycleave":"9a","rockslide":"9a","smackdown":"9a","earthquake":"9a","nightslash":"9a","knockoff":"9a","aerialace":"9a","ironhead":"9a","smartstrike":"9a","metalclaw":"9a","doubleedge":"9a","takedown":"9a","slash":"9a","cut":"9a","leechseed":"9a","grassyterrain":"9a","stealthrock":"9a","wideguard":"9a","honeclaws":"9a","taunt":"9a","raindance":"9a","lifedew":"9a","swordsdance":"9a","focusenergy":"9a","laserfocus":"9a","entrainment":"9a","safeguard":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","facade":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","synthesis":"9a","stunspore":"9a","ingrain":"9a","worryseed":"9a","trailblaze":"9a","seedbomb":"9a","powerwhip":"9a","bulletseed":"9a","sandstorm":"9a","rockpolish":"9a","rocktomb":"9a","rockblast":"9a","craghammer":"9a","psychocut":"9a","xscissor":"9a","sacredsword":"9a","spikes":"9a","scaryface":"9a","roar":"9a"},"aunnkomano":{"meteorbeam":"9a","powergem":"9a","springtidestorm":"9a","dazzlinggleam":"9a","fairywind":"9a","solarbeam":"9a","petaldance":"9a","gigadrain":"9a","discharge":"9a","swift":"9a","headsmash":"9a","stoneedge":"9a","rockslide":"9a","rocktomb":"9a","playrough":"9a","spiritbreak":"9a","wildcharge":"9a","thunderfang":"9a","hornleech":"9a","megahorn":"9a","pounce":"9a","psychicfangs":"9a","crunch":"9a","bite":"9a","submission":"9a","counter":"9a","doubleedge":"9a","return":"9a","takedown":"9a","facade":"9a","covet":"9a","furyswipes":"9a","stealthrock":"9a","sandstorm":"9a","rockpolish":"9a","mistyterrain":"9a","charm":"9a","thunderwave":"9a","tidyup":"9a","safeguard":"9a","tearfullook":"9a","helpinghand":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","stompingtantrum":"9a","recover":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","bodyslam":"9a","curse":"9a","wideguard":"9a","rockblast":"9a","smackdown":"9a","craghammer":"9a","sweetkiss":"9a","babydolleyes":"9a","craftyshield":"9a","firefang":"9a","icefang":"9a","howl":"9a","roar":"9a","quickguard":"9a","followme":"9a","bodypress":"9a","irondefense":"9a","swordsdance":"9a"},"narumiyatadera":{"blizzard":"9a","icebeam":"9a","aurorabeam":"9a","icywind":"9a","powdersnow":"9a","powergem":"9a","ancientpower":"9a","fireblast":"9a","magmastorm":"9a","flamethrower":"9a","firepledge":"9a","ember":"9a","extrasensory":"9a","storedpower":"9a","mirrorcoat":"9a","shadowball":"9a","triattack":"9a","round":"9a","weatherball":"9a","icespinner":"9a","icepunch":"9a","rockslide":"9a","rocktomb":"9a","rockthrow":"9a","rockblast":"9a","firepunch":"9a","flamecharge":"9a","zenheadbutt":"9a","megakick":"9a","megapunch":"9a","facade":"9a","snowscape":"9a","auroraveil":"9a","haze":"9a","stealthrock":"9a","rockpolish":"9a","calmmind":"9a","healpulse":"9a","helpinghand":"9a","psychup":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","bodyslam":"9a","curse":"9a","hail":"9a","mist":"9a","chillingmist":"9a","frostbreath":"9a","sandstorm":"9a","wideguard":"9a","meteorbeam":"9a","earthpower":"9a","irondefense":"9a","wish":"9a","healbell":"9a","energyball":"9a"},"maiteireida":{"focusblast":"9a","aurasphere":"9a","shadowball":"9a","psychic":"9a","extrasensory":"9a","fierydance":"9a","petaldance":"9a","hyperbeam":"9a","uproar":"9a","focuspunch":"9a","highjumpkick":"9a","dancingblow":"9a","drainpunch":"9a","brickbreak":"9a","machpunch":"9a","reversal":"9a","acrobatics":"9a","firstimpression":"9a","uturn":"9a","shadowpunch":"9a","shadowsneak":"9a","throatchop":"9a","feintattack":"9a","gigaimpact":"9a","return":"9a","facade":"9a","retaliate":"9a","feint":"9a","wideguard":"9a","confuseray":"9a","workup":"9a","painsplit":"9a","helpinghand":"9a","encore":"9a","teeterdance":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","takedown":"9a","bodyslam":"9a","curse":"9a","bulkup":"9a","detect":"9a","quickguard":"9a","coaching":"9a","closecombat":"9a","superpower":"9a","lowkick":"9a","bodypress":"9a","rocksmash":"9a","lowsweep":"9a","shufflejab":"9a","vacuumwave":"9a","swordsdance":"9a","dragondance":"9a","featherdance":"9a","leafblade":"9a","bulletseed":"9a","tripleaxel":"9a","fakeout":"9a","afteryou":"9a","followme":"9a"},"satononishida":{"focusblast":"9a","shadowball":"9a","psychic":"9a","extrasensory":"9a","fierydance":"9a","petaldance":"9a","hyperbeam":"9a","uproar":"9a","focuspunch":"9a","highjumpkick":"9a","dancingblow":"9a","drainpunch":"9a","brickbreak":"9a","machpunch":"9a","reversal":"9a","spiritbreak":"9a","acrobatics":"9a","firstimpression":"9a","uturn":"9a","shadowpunch":"9a","shadowsneak":"9a","throatchop":"9a","feintattack":"9a","gigaimpact":"9a","return":"9a","facade":"9a","retaliate":"9a","feint":"9a","quickguard":"9a","confuseray":"9a","destinybond":"9a","workup":"9a","helpinghand":"9a","encore":"9a","teeterdance":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","takedown":"9a","bodyslam":"9a","curse":"9a","bulkup":"9a","detect":"9a","coaching":"9a","closecombat":"9a","superpower":"9a","lowkick":"9a","bodypress":"9a","rocksmash":"9a","lowsweep":"9a","shufflejab":"9a","aurasphere":"9a","vacuumwave":"9a","swordsdance":"9a","dragondance":"9a","featherdance":"9a","leafblade":"9a","bulletseed":"9a","tripleaxel":"9a","fakeout":"9a","afteryou":"9a","followme":"9a"},"okinamatara":{"hyperbeam":"9a","triattack":"9a","hiddenpower":"9a","weatherball":"9a","terrainpulse":"9a","echoedvoice":"9a","darkpulse":"9a","shadowball":"9a","hex":"9a","flashcannon":"9a","springtidestorm":"9a","fireblast":"9a","hydropump":"9a","sandsearstorm":"9a","powergem":"9a","blizzard":"9a","doubleedge":"9a","facade":"9a","doublehit":"9a","falsesurrender":"9a","knockoff":"9a","feintattack":"9a","payback":"9a","comeuppance":"9a","flareblitz":"9a","liquidation":"9a","earthquake":"9a","rockslide":"9a","iciclecrash":"9a","icespinner":"9a","torment":"9a","workup":"9a","confide":"9a","sunnyday":"9a","raindance":"9a","sandstorm":"9a","snowscape":"9a","teleport":"9a","gravity":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","bleakwindstorm":"9a","wildboltstorm":"9a","toxic":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","encore":"9a","yawn":"9a","wish":"9a","healbell":"9a","charm":"9a","batonpass":"9a","disable":"9a","screech":"9a","hustleup":"9a","uproar":"9a","quickattack":"9a","headbutt":"9a","swordsdance":"9a","retaliate":"9a","crushclaw":"9a","thrash":"9a","hypervoice":"9a","swift":"9a","pursuit":"9a","thief":"9a","foulplay":"9a","taunt":"9a","faketears":"9a","quash":"9a","crunch":"9a","bite":"9a","suckerpunch":"9a","throatchop":"9a","nightslash":"9a","lashout":"9a","assurance":"9a","carrionfeast":"9a","snarl":"9a","nastyplot":"9a","uturn":"9a","partingshot":"9a","twilightexit":"9a","scald":"9a","flamethrower":"9a","stoneedge":"9a","icebeam":"9a","solarbeam":"9a"},"eikaebisu":{"stonestacking":"9a","shadowball":"9a","nightshade":"9a","powergem":"9a","ancientpower":"9a","hydropump":"9a","surf":"9a","bubblebeam":"9a","chillingwater":"9a","bubble":"9a","scorchingsands":"9a","icywind":"9a","venoshock":"9a","swift":"9a","echoedvoice":"9a","poltergeist":"9a","shadowpunch":"9a","stoneedge":"9a","rockslide":"9a","rocktomb":"9a","aquacutter":"9a","icespinner":"9a","return":"9a","facade":"9a","covet":"9a","bind":"9a","curse":"9a","destinybond":"9a","stealthrock":"9a","sandstorm":"9a","aquaring":"9a","raindance":"9a","soak":"9a","lifedew":"9a","spikes":"9a","toxic":"9a","acidarmor":"9a","recover":"9a","tearfullook":"9a","helpinghand":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","bodyslam":"9a","willowisp":"9a","confuseray":"9a","spite":"9a","painsplit":"9a","hex":"9a","ominouswind":"9a","rockpolish":"9a","wideguard":"9a","meteorbeam":"9a","irondefense":"9a","bodypress":"9a","calmmind":"9a","followme":"9a","scald":"9a"},"urumiushizaki":{"hydrocannon":"9a","hydropump":"9a","surf":"9a","waterpulse":"9a","chillingwater":"9a","whirlpool":"9a","ancientpower":"9a","darkpulse":"9a","mudshot":"9a","hyperbeam":"9a","weatherball":"9a","liquidation":"9a","dive":"9a","flipturn":"9a","stoneedge":"9a","rocktomb":"9a","smackdown":"9a","earthquake":"9a","stompingtantrum":"9a","megahorn":"9a","bodypress":"9a","nightslash":"9a","payback":"9a","doubleedge":"9a","return":"9a","facade":"9a","hornattack":"9a","soak":"9a","raindance":"9a","stealthrock":"9a","curse":"9a","psychicterrain":"9a","gravity":"9a","reflect":"9a","trickroom":"9a","milkdrink":"9a","roar":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","aquaring":"9a","lifedew":"9a","waterfall":"9a","aquajet":"9a","aquatail":"9a","wavecharge":"9a","sandstorm":"9a","rockpolish":"9a","wideguard":"9a","rockslide":"9a","rockblast":"9a","craghammer":"9a","highhorsepower":"9a","headsmash":"9a","heavyslam":"9a","wavecrash":"9a","bulkup":"9a"},"kutakaniwatari":{"hydropump":"9a","sparklingaria":"9a","scald":"9a","airslash":"9a","gust":"9a","dazzlinggleam":"9a","disarmingvoice":"9a","flashcannon":"9a","psychicnoise":"9a","storedpower":"9a","hex":"9a","hyperbeam":"9a","hypervoice":"9a","round":"9a","liquidation":"9a","aquajet":"9a","skyattack":"9a","bravebird":"9a","fly":"9a","aerialace":"9a","uturn":"9a","foulplay":"9a","throatchop":"9a","steelwing":"9a","astonish":"9a","facade":"9a","quickattack":"9a","fakeout":"9a","raindance":"9a","soak":"9a","tailwind":"9a","defog":"9a","featherdance":"9a","agility":"9a","healpulse":"9a","toxic":"9a","healbell":"9a","perishsong":"9a","confide":"9a","block":"9a","helpinghand":"9a","whirlwind":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","gigaimpact":"9a","takedown":"9a","bodyslam":"9a","curse":"9a","aquaring":"9a","lifedew":"9a","flipturn":"9a","waterfall":"9a","aquatail":"9a","dive":"9a","wavecharge":"9a","surf":"9a","muddywater":"9a","waterpulse":"9a","whirlpool":"9a","brine":"9a","chillingwater":"9a","undertow":"9a","roost":"9a","drillpeck":"9a","acrobatics":"9a","dualwingbeat":"9a","hurricane":"9a","aircutter":"9a","calmmind":"9a","icebeam":"9a","mirrormove":"9a","quickguard":"9a","wideguard":"9a"},"yachiekicchou":{"dracometeor":"9a","dragonpulse":"9a","dragonbreath":"9a","twister":"9a","darkpulse":"9a","snarl":"9a","flashcannon":"9a","heatwave":"9a","firepledge":"9a","flameburst":"9a","firespin":"9a","chillingwater":"9a","hyperbeam":"9a","dragonrush":"9a","dragonclaw":"9a","dragontail":"9a","scaleshot":"9a","foulplay":"9a","falsesurrender":"9a","knockoff":"9a","feintattack":"9a","payback":"9a","aquatail":"9a","irontail":"9a","megahorn":"9a","icespinner":"9a","bodypress":"9a","facade":"9a","rapidspin":"9a","dragoncheer":"9a","taunt":"9a","snatch":"9a","torment":"9a","irondefense":"9a","aquaring":"9a","raindance":"9a","sunnyday":"9a","eerieimpulse":"9a","charm":"9a","spikyshield":"9a","shellsmash":"9a","confide":"9a","whirlwind":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","outrage":"9a","dragondance":"9a","breakingswipe":"9a","pursuit":"9a","thief":"9a","faketears":"9a","quash":"9a","crunch":"9a","bite":"9a","suckerpunch":"9a","throatchop":"9a","nightslash":"9a","lashout":"9a","assurance":"9a","carrionfeast":"9a","withdraw":"9a","partingshot":"9a","nobleroar":"9a","scaryface":"9a","trickroom":"9a","waterpulse":"9a"},"mayumijoutouguu":{"earthpower":"9a","mudshot":"9a","steelbeam":"9a","flashcannon":"9a","discharge":"9a","shockwave":"9a","ancientpower":"9a","hyperbeam":"9a","uproar":"9a","swift":"9a","earthquake":"9a","highhorsepower":"9a","bulldoze":"9a","ironhead":"9a","smartstrike":"9a","magnetbomb":"9a","wildcharge":"9a","thunderpunch":"9a","sacredsword":"9a","rocktomb":"9a","smackdown":"9a","gigaimpact":"9a","doubleedge":"9a","return":"9a","megapunch":"9a","facade":"9a","cut":"9a","spikes":"9a","irondefense":"9a","metalsound":"9a","stealthrock":"9a","rockpolish":"9a","sandstorm":"9a","wideguard":"9a","healingwish":"9a","swordsdance":"9a","helpinghand":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","takedown":"9a","bodyslam":"9a","curse":"9a","dig":"9a","stompingtantrum":"9a","drillrun":"9a","autotomize":"9a","bulletpunch":"9a","heavyslam":"9a","gyroball":"9a","metalclaw":"9a","bulkup":"9a","bodypress":"9a","quickguard":"9a"},"keikihaniyasushin":{"hiddenpower":"9a","earthpower":"9a","mudbomb":"9a","mudshot":"9a","thunderbolt":"9a","discharge":"9a","thundershock":"9a","dracometeor":"9a","flashcannon":"9a","powergem":"9a","hyperbeam":"9a","terastarstorm":"9a","swift":"9a","earthquake":"9a","bulldoze":"9a","magnitude":"9a","thunderpunch":"9a","spark":"9a","vcreate":"9a","meteormash":"9a","rockslide":"9a","rocktomb":"9a","facade":"9a","cometpunch":"9a","sculptedarmor":"9a","rototiller":"9a","thunderwave":"9a","charge":"9a","electricterrain":"9a","stealthrock":"9a","agility":"9a","cosmicpower":"9a","guardswap":"9a","irondefense":"9a","wish":"9a","acupressure":"9a","workup":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","shoreup":"9a","toxic":"9a","weatherball":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","spikes":"9a","sandstorm":"9a","highhorsepower":"9a","dig":"9a","stompingtantrum":"9a","drillrun":"9a","scorchingsands":"9a","tremorshot":"9a","eerieimpulse":"9a","magnetrise":"9a","voltswitch":"9a","wildcharge":"9a","thunderfang":"9a","supercellslam":"9a","voltaiclance":"9a","sparkscamper":"9a","thunder":"9a","electroball":"9a","shockwave":"9a","chargebeam":"9a","electroweb":"9a","calmmind":"9a","meteorbeam":"9a"},"sakikurokuma":{"focusblast":"9a","hurricane":"9a","airslash":"9a","aircutter":"9a","gust":"9a","darkpulse":"9a","snarl":"9a","swift":"9a","meteorassault":"9a","highjumpkick":"9a","superpower":"9a","jumpkick":"9a","skyuppercut":"9a","submission":"9a","brickbreak":"9a","rollingkick":"9a","lowsweep":"9a","revenge":"9a","aerialace":"9a","highhorsepower":"9a","blazekick":"9a","nightslash":"9a","suckerpunch":"9a","rockwrecker":"9a","gigaimpact":"9a","megakick":"9a","facade":"9a","bulkup":"9a","coaching":"9a","quickguard":"9a","tailwind":"9a","roost":"9a","featherdance":"9a","sunnyday":"9a","agility":"9a","focusenergy":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","thunderouskick":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","detect":"9a","closecombat":"9a","drainpunch":"9a","machpunch":"9a","lowkick":"9a","bodypress":"9a","rocksmash":"9a","reversal":"9a","focuspunch":"9a","shufflejab":"9a","defog":"9a","uturn":"9a","bravebird":"9a","fly":"9a","drillpeck":"9a","acrobatics":"9a","dualwingbeat":"9a","axekick":"9a","doublekick":"9a","dynamicpunch":"9a","stomp":"9a","bounce":"9a","swordsdance":"9a","stoneedge":"9a"},"yuumatoutetsu":{"liquidation":"9a","hydropump":"9a","muddywater":"9a","scald":"9a","waterpulse":"9a","whirlpool":"9a","darkpulse":"9a","flameburst":"9a","sludgewave":"9a","sludgebomb":"9a","sludge":"9a","mudshot":"9a","hyperbeam":"9a","uproar":"9a","spitup":"9a","dive":"9a","aquacutter":"9a","crunch":"9a","bite":"9a","payback":"9a","powertrip":"9a","poisonjab":"9a","poisonfang":"9a","earthquake":"9a","stompingtantrum":"9a","temperflare":"9a","firefang":"9a","raindance":"9a","soak":"9a","taunt":"9a","snatch":"9a","tarshot":"9a","toxic":"9a","stockpile":"9a","swagger":"9a","swallow":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","facade":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","aquaring":"9a","lifedew":"9a","flipturn":"9a","waterfall":"9a","aquajet":"9a","aquatail":"9a","wavecharge":"9a","surf":"9a","brine":"9a","chillingwater":"9a","undertow":"9a","pursuit":"9a","thief":"9a","foulplay":"9a","knockoff":"9a","faketears":"9a","torment":"9a","quash":"9a","suckerpunch":"9a","throatchop":"9a","nightslash":"9a","lashout":"9a","assurance":"9a","carrionfeast":"9a","snarl":"9a","nastyplot":"9a","belch":"9a","stuffcheeks":"9a","jawlock":"9a","wavecrash":"9a","bulkup":"9a","swordsdance":"9a"},"mikegotoukuji":{"steelbeam":"9a","makeitrain":"9a","flashcannon":"9a","mirrorshot":"9a","psychic":"9a","expandingforce":"9a","dazzlinggleam":"9a","focusblast":"9a","vacuumwave":"9a","triattack":"9a","swift":"9a","steelroller":"9a","ironhead":"9a","bulletpunch":"9a","metalburst":"9a","psychocut":"9a","superpower":"9a","brickbreak":"9a","thunderpunch":"9a","firepunch":"9a","icepunch":"9a","uturn":"9a","doubleedge":"9a","return":"9a","slash":"9a","payday":"9a","scratch":"9a","metalsound":"9a","trick":"9a","agility":"9a","taunt":"9a","torment":"9a","thunderwave":"9a","focusenergy":"9a","charm":"9a","assist":"9a","afteryou":"9a","copycat":"9a","helpinghand":"9a","confide":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","followme":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","facade":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","bodyslam":"9a","curse":"9a","irondefense":"9a","autotomize":"9a","heavyslam":"9a","gyroball":"9a","smartstrike":"9a","metalclaw":"9a","fakeout":"9a","nastyplot":"9a","powergem":"9a","covet":"9a","encore":"9a","furyswipes":"9a","playrough":"9a"},"takaneyamashiro":{"frenzyplant":"9a","leafstorm":"9a","energyball":"9a","gigadrain":"9a","magicalleaf":"9a","megadrain":"9a","absorb":"9a","surf":"9a","muddywater":"9a","chillingwater":"9a","shadowball":"9a","terrainpulse":"9a","echoedvoice":"9a","woodhammer":"9a","seedbomb":"9a","razorleaf":"9a","leafage":"9a","waterfall":"9a","suckerpunch":"9a","knockoff":"9a","thief":"9a","shadowpunch":"9a","uturn":"9a","pounce":"9a","doubleedge":"9a","facade":"9a","covet":"9a","cut":"9a","grassyterrain":"9a","synthesis":"9a","leechseed":"9a","raindance":"9a","sunnyday":"9a","taunt":"9a","embargo":"9a","flatter":"9a","switcheroo":"9a","supersonic":"9a","refresh":"9a","camouflage":"9a","helpinghand":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","bodyslam":"9a","curse":"9a","stunspore":"9a","ingrain":"9a","worryseed":"9a","trailblaze":"9a","solarbeam":"9a","grassknot":"9a","petalblizzard":"9a","solarnectar":"9a","aquaring":"9a","soak":"9a","lifedew":"9a","flipturn":"9a","scald":"9a","hydropump":"9a","waterpulse":"9a","whirlpool":"9a","brine":"9a","undertow":"9a","spikes":"9a","trick":"9a","calmmind":"9a"},"sannyokomakusa":{"overheat":"9a","dracometeor":"9a","fireblast":"9a","inferno":"9a","heatwave":"9a","flamethrower":"9a","incinerate":"9a","ember":"9a","firespin":"9a","dragonpulse":"9a","dragonbreath":"9a","twister":"9a","nervepoison":"9a","clearsmog":"9a","smog":"9a","mistyexplosion":"9a","scorchingsands":"9a","darkpulse":"9a","snarl":"9a","swift":"9a","flareblitz":"9a","firepunch":"9a","flamecharge":"9a","dragonclaw":"9a","breakingswipe":"9a","poisonjab":"9a","feintattack":"9a","megapunch":"9a","facade":"9a","willowisp":"9a","sunnyday":"9a","dragoncheer":"9a","poisongas":"9a","corrosivegas":"9a","mist":"9a","haze":"9a","snatch":"9a","lightscreen":"9a","trick":"9a","aromaticmist":"9a","mistyterrain":"9a","smokescreen":"9a","recover":"9a","helpinghand":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","bodyslam":"9a","curse":"9a","mysticalfire":"9a","lavaplume":"9a","dragontail":"9a","calmmind":"9a"},"misumarutamatsukuri":{"meteorbeam":"9a","powergem":"9a","ancientpower":"9a","futuresight":"9a","psychic":"9a","expandingforce":"9a","psychicnoise":"9a","psybeam":"9a","psywave":"9a","nightshade":"9a","signalbeam":"9a","triattack":"9a","terrainpulse":"9a","stoneedge":"9a","rockslide":"9a","rocktomb":"9a","smackdown":"9a","rockthrow":"9a","rockblast":"9a","zenheadbutt":"9a","psychocut":"9a","spiritbreak":"9a","bulldoze":"9a","focuspunch":"9a","facade":"9a","stealthrock":"9a","sandstorm":"9a","wideguard":"9a","calmmind":"9a","reflect":"9a","lightscreen":"9a","raindance":"9a","sunnyday":"9a","helpinghand":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","bodyslam":"9a","curse":"9a","rockpolish":"9a","magiccoat":"9a","storedpower":"9a","cosmicpower":"9a","irondefense":"9a","gravity":"9a","trickroom":"9a","psyshock":"9a","dazzlinggleam":"9a","earthpower":"9a","flashcannon":"9a"},"tsukasakudamaki":{"shadowball":"9a","hex":"9a","ominouswind":"9a","nightshade":"9a","triattack":"9a","swift":"9a","terrainpulse":"9a","blizzard":"9a","icywind":"9a","nightdaze":"9a","darkpulse":"9a","flamethrower":"9a","incinerate":"9a","risingvoltage":"9a","psychic":"9a","poltergeist":"9a","phantomforce":"9a","shadowsneak":"9a","doubleedge":"9a","frustration":"9a","facade":"9a","fakeout":"9a","doublehit":"9a","cometpunch":"9a","psychocut":"9a","heartstamp":"9a","knockoff":"9a","feintattack":"9a","icepunch":"9a","flamecharge":"9a","curse":"9a","confuseray":"9a","spite":"9a","haze":"9a","willowisp":"9a","taunt":"9a","torment":"9a","quash":"9a","switcheroo":"9a","faketears":"9a","snowscape":"9a","auroraveil":"9a","magicroom":"9a","painsplit":"9a","tearfullook":"9a","batonpass":"9a","helpinghand":"9a","confide":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","bodyslam":"9a","destinybond":"9a","encore":"9a","yawn":"9a","wish":"9a","healbell":"9a","charm":"9a","workup":"9a","disable":"9a","screech":"9a","hustleup":"9a","uproar":"9a","hypervoice":"9a","echoedvoice":"9a","partingshot":"9a","flatter":"9a","trick":"9a","nastyplot":"9a","sweetkiss":"9a","memento":"9a","foulplay":"9a"},"megumuiizunamaru":{"hurricane":"9a","bleakwindstorm":"9a","airslash":"9a","gust":"9a","futuresight":"9a","psychic":"9a","expandingforce":"9a","psyshock":"9a","psybeam":"9a","confusion":"9a","storedpower":"9a","powergem":"9a","aurasphere":"9a","vacuumwave":"9a","hyperbeam":"9a","swift":"9a","skyattack":"9a","bravebird":"9a","fly":"9a","wingattack":"9a","aerialace":"9a","dualwingbeat":"9a","psychocut":"9a","brickbreak":"9a","meteormash":"9a","steelwing":"9a","doubleedge":"9a","return":"9a","bodyslam":"9a","facade":"9a","cometpunch":"9a","tailwind":"9a","defog":"9a","calmmind":"9a","cosmicpower":"9a","agility":"9a","trickroom":"9a","wonderroom":"9a","speedswap":"9a","lightscreen":"9a","teleport":"9a","confuseray":"9a","raindance":"9a","snowscape":"9a","wish":"9a","confide":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","curse":"9a","roost":"9a","featherdance":"9a","uturn":"9a","drillpeck":"9a","acrobatics":"9a","aircutter":"9a","reflect":"9a","trick":"9a","magiccoat":"9a","imprison":"9a","gravity":"9a","psychicterrain":"9a","skillswap":"9a","allyswitch":"9a","magicroom":"9a","hypnosis":"9a","amnesia":"9a","safeguard":"9a","zenheadbutt":"9a","psychicfangs":"9a","extrasensory":"9a","psychicnoise":"9a","dreameater":"9a","hypnowhirl":"9a","meteorbeam":"9a","dazzlinggleam":"9a"},"chimatatenkyuu":{"makeitrain":"9a","flashcannon":"9a","mirrorshot":"9a","aircutter":"9a","gust":"9a","moonblast":"9a","dazzlinggleam":"9a","fairywind":"9a","thunderbolt":"9a","voltswitch":"9a","shockwave":"9a","prismaticlaser":"9a","mirrorcoat":"9a","hypervoice":"9a","weatherball":"9a","trumpcard":"9a","ironhead":"9a","magnetbomb":"9a","skyattack":"9a","fly":"9a","zenheadbutt":"9a","supercellslam":"9a","spark":"9a","doubleedge":"9a","facade":"9a","quickattack":"9a","payday":"9a","feint":"9a","metalsound":"9a","tailwind":"9a","defog":"9a","moonlight":"9a","craftyshield":"9a","lifedew":"9a","sunnyday":"9a","trick":"9a","skillswap":"9a","guardswap":"9a","thunderwave":"9a","whirlwind":"9a","helpinghand":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","bodyslam":"9a","curse":"9a","irondefense":"9a","autotomize":"9a","steelbeam":"9a","roost":"9a","featherdance":"9a","uturn":"9a","airslash":"9a","hurricane":"9a","switcheroo":"9a","bestow":"9a","fling":"9a","recycle":"9a","aurorabeam":"9a","calmmind":"9a","powergem":"9a"},"momoyohimemushi":{"bugbuzz":"9a","silverwind":"9a","strugglebug":"9a","ancientpower":"9a","earthpower":"9a","scorchingsands":"9a","dazzlinggleam":"9a","venoshock":"9a","acidspray":"9a","uproar":"9a","xscissor":"9a","leechlife":"9a","lunge":"9a","skittersmack":"9a","bugbite":"9a","fellstinger":"9a","pinmissile":"9a","rockwrecker":"9a","stoneedge":"9a","rockslide":"9a","rocktomb":"9a","excavate":"9a","smackdown":"9a","rockblast":"9a","drillrun":"9a","bulldoze":"9a","crunch":"9a","bite":"9a","fling":"9a","superpower":"9a","submission":"9a","seismictoss":"9a","firefang":"9a","ragepowder":"9a","stealthrock":"9a","sandstorm":"9a","rockpolish":"9a","poisonpowder":"9a","acidarmor":"9a","honeclaws":"9a","taunt":"9a","focusenergy":"9a","laserfocus":"9a","helpinghand":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","facade":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","bodyslam":"9a","curse":"9a","stringshot":"9a","uturn":"9a","chrysalisveil":"9a","megahorn":"9a","pounce":"9a","hivefrenzy":"9a","signalbeam":"9a","pollenpuff":"9a","wideguard":"9a","craghammer":"9a","powergem":"9a","meteorbeam":"9a","firstimpression":"9a","spikes":"9a","dig":"9a","poisonjab":"9a","poisonfang":"9a","dragonclaw":"9a","coil":"9a","swordsdance":"9a"},"sonbiten":{"focusblast":"9a","aurasphere":"9a","vacuumwave":"9a","bleakwindstorm":"9a","aircutter":"9a","gust":"9a","extrasensory":"9a","psychicnoise":"9a","flashcannon":"9a","triattack":"9a","weatherball":"9a","focuspunch":"9a","highjumpkick":"9a","closecombat":"9a","jumpkick":"9a","submission":"9a","brickbreak":"9a","upperhand":"9a","lowsweep":"9a","forcepalm":"9a","circlethrow":"9a","machpunch":"9a","thunderpunch":"9a","blazekick":"9a","firepunch":"9a","bounce":"9a","acrobatics":"9a","metalclaw":"9a","coaching":"9a","quickguard":"9a","detect":"9a","calmmind":"9a","agility":"9a","reflect":"9a","magiccoat":"9a","snatch":"9a","quash":"9a","yawn":"9a","confide":"9a","focusenergy":"9a","acupressure":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","facade":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","bulkup":"9a","nastyplot":"9a","uturn":"9a","fakeout":"9a","knockoff":"9a","encore":"9a","taunt":"9a","screech":"9a","tickle":"9a","energyball":"9a","grassknot":"9a","rapidspin":"9a","psychic":"9a"},"enokomitsugashira":{"steelbeam":"9a","mirrorshot":"9a","darkpulse":"9a","snarl":"9a","energyball":"9a","gigadrain":"9a","razorwind":"9a","swift":"9a","steelroller":"9a","ironchomp":"9a","metalclaw":"9a","metalburst":"9a","crunch":"9a","suckerpunch":"9a","bite":"9a","payback":"9a","pursuit":"9a","seedbomb":"9a","snaptrap":"9a","poisonfang":"9a","icefang":"9a","superpower":"9a","submission":"9a","brickbreak":"9a","stoneedge":"9a","gigaimpact":"9a","doubleedge":"9a","hyperfang":"9a","facade":"9a","quickattack":"9a","superfang":"9a","irondefense":"9a","taunt":"9a","honeclaws":"9a","snatch":"9a","curse":"9a","sandstorm":"9a","stealthrock":"9a","sunnyday":"9a","detect":"9a","spikes":"9a","swordsdance":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","autotomize":"9a","metalsound":"9a","ironhead":"9a","bulletpunch":"9a","heavyslam":"9a","gyroball":"9a","smartstrike":"9a","thief":"9a","foulplay":"9a","knockoff":"9a","faketears":"9a","torment":"9a","quash":"9a","throatchop":"9a","nightslash":"9a","lashout":"9a","assurance":"9a","carrionfeast":"9a","howl":"9a","roar":"9a","jawlock":"9a","psychicfangs":"9a","firefang":"9a","thunderfang":"9a","uturn":"9a","nobleroar":"9a"},"chiyaritenkajin":{"burnup":"9a","fireblast":"9a","flamethrower":"9a","flameburst":"9a","incinerate":"9a","ember":"9a","shadowball":"9a","hex":"9a","nightshade":"9a","muddywater":"9a","drainingkiss":"9a","sludgewave":"9a","sludgebomb":"9a","acidspray":"9a","darkpulse":"9a","swift":"9a","flareblitz":"9a","firepunch":"9a","firefang":"9a","flamecharge":"9a","poltergeist":"9a","phantomforce":"9a","shadowclaw":"9a","shadowsneak":"9a","lick":"9a","megahorn":"9a","leechlife":"9a","gunkshot":"9a","crosspoison":"9a","drainpunch":"9a","acrobatics":"9a","crunch":"9a","bite":"9a","dragonclaw":"9a","dragontail":"9a","doubleedge":"9a","takedown":"9a","hornattack":"9a","quickattack":"9a","willowisp":"9a","destinybond":"9a","confuseray":"9a","dragondance":"9a","toxic":"9a","honeclaws":"9a","sandstorm":"9a","confide":"9a","focusenergy":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","facade":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","sunnyday":"9a","temperflare":"9a","heatcrash":"9a","blazekick":"9a","spite":"9a","painsplit":"9a","shadowpunch":"9a","shadowstrike":"9a","swordsdance":"9a","carrionfeast":"9a"},"hisamiyomotsu":{"petaldance":"9a","gigadrain":"9a","megadrain":"9a","absorb":"9a","shadowball":"9a","ominouswind":"9a","nightshade":"9a","icywind":"9a","darkpulse":"9a","extrasensory":"9a","psychicnoise":"9a","sludgebomb":"9a","venoshock":"9a","echoedvoice":"9a","powerwhip":"9a","seedbomb":"9a","grassyglide":"9a","vinewhip":"9a","shadowclaw":"9a","shadowpunch":"9a","astonish":"9a","crosspoison":"9a","feintattack":"9a","pursuit":"9a","facade":"9a","cut":"9a","wrap":"9a","bind":"9a","strengthsap":"9a","cottonspore":"9a","worryseed":"9a","grassyterrain":"9a","destinybond":"9a","curse":"9a","toxic":"9a","poisonpowder":"9a","venomdrench":"9a","calmmind":"9a","charm":"9a","confide":"9a","flatter":"9a","painsplit":"9a","helpinghand":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","bodyslam":"9a","leechseed":"9a","synthesis":"9a","stunspore":"9a","ingrain":"9a","trailblaze":"9a","energyball":"9a","solarbeam":"9a","leafstorm":"9a","magicalleaf":"9a","grassknot":"9a","petalblizzard":"9a","solarnectar":"9a","willowisp":"9a","confuseray":"9a","spite":"9a","hex":"9a","spikes":"9a","toxicspikes":"9a","meanlook":"9a","knockoff":"9a"},"zanmunippaku":{"darkpulse":"9a","shadowball":"9a","hex":"9a","focusblast":"9a","earthpower":"9a","triattack":"9a","hiddenpower":"9a","wickedblow":"9a","throatchop":"9a","nightslash":"9a","payback":"9a","fling":"9a","shadowforce":"9a","phantomforce":"9a","shadowclaw":"9a","earthquake":"9a","boneclub":"9a","bulldoze":"9a","bonerush":"9a","rocktomb":"9a","flamecharge":"9a","superpower":"9a","seismictoss":"9a","torment":"9a","memento":"9a","nastyplot":"9a","curse":"9a","purify":"9a","agility":"9a","magicroom":"9a","gravity":"9a","charm":"9a","eerieimpulse":"9a","swordsdance":"9a","painsplit":"9a","confide":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","terablast":"9a","endure":"9a","facade":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","pursuit":"9a","thief":"9a","foulplay":"9a","taunt":"9a","knockoff":"9a","faketears":"9a","quash":"9a","crunch":"9a","bite":"9a","suckerpunch":"9a","lashout":"9a","assurance":"9a","carrionfeast":"9a","snarl":"9a","partingshot":"9a","haze":"9a","clearsmog":"9a","willowisp":"9a","destinybond":"9a","closecombat":"9a","icebeam":"9a","thunderbolt":"9a","twilightexit":"9a"},"vivit":{"steelbeam":"9a","flashcannon":"9a","mirrorshot":"9a","zapcannon":"9a","thunder":"9a","thunderbolt":"9a","discharge":"9a","voltswitch":"9a","shockwave":"9a","electroweb":"9a","thundershock":"9a","solarbeam":"9a","energyball":"9a","overheat":"9a","dazzlinggleam":"9a","hyperbeam":"9a","triattack":"9a","razorwind":"9a","swift":"9a","terrainpulse":"9a","steelroller":"9a","missile":"9a","smartstrike":"9a","bulletpunch":"9a","doubleshock":"9a","wildcharge":"9a","thunderpunch":"9a","powerwhip":"9a","needlearm":"9a","bulletseed":"9a","uturn":"9a","pinmissile":"9a","firepunch":"9a","skyattack":"9a","fly":"9a","wingattack":"9a","selfdestruct":"9a","doubleedge":"9a","return":"9a","facade":"9a","cut":"9a","cometpunch":"9a","metalsound":"9a","eerieimpulse":"9a","thunderwave":"9a","charge":"9a","electricterrain":"9a","sandstorm":"9a","grassyterrain":"9a","spikyshield":"9a","defog":"9a","charm":"9a","workup":"9a","helpinghand":"9a","tearfullook":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","growth":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","gigaimpact":"9a","takedown":"9a","bodyslam":"9a","curse":"9a","irondefense":"9a","autotomize":"9a","ironhead":"9a","heavyslam":"9a","gyroball":"9a","metalclaw":"9a","magnetrise":"9a","thunderfang":"9a","spark":"9a","supercellslam":"9a","voltaiclance":"9a","sparkscamper":"9a","electroball":"9a","chargebeam":"9a","lockon":"9a","rapidspin":"9a","agility":"9a"},"ubamechirizuka":{"earthpower":"9a","mudshot":"9a","dazzlinggleam":"9a","extrasensory":"9a","shadowball":"9a","meteorbeam":"9a","powergem":"9a","ancientpower":"9a","hyperbeam":"9a","wringout":"9a","uproar":"9a","swift":"9a","headlongrush":"9a","earthquake":"9a","landswrath":"9a","dustupheaval":"9a","bulldoze":"9a","magnitude":"9a","uturn":"9a","throatchop":"9a","nightslash":"9a","closecombat":"9a","crosschop":"9a","submission":"9a","brickbreak":"9a","waterfall":"9a","rockwrecker":"9a","stoneedge":"9a","rockslide":"9a","smackdown":"9a","rockblast":"9a","zenheadbutt":"9a","gigaimpact":"9a","doubleedge":"9a","megapunch":"9a","facade":"9a","cometpunch":"9a","stealthrock":"9a","sandstorm":"9a","bulkup":"9a","quickguard":"9a","confide":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","spikes":"9a","highhorsepower":"9a","dig":"9a","stompingtantrum":"9a","drillrun":"9a","scorchingsands":"9a","mudbomb":"9a","tremorshot":"9a","swordsdance":"9a","knockoff":"9a","suckerpunch":"9a","rapidspin":"9a"},"chimihoujuu":{"frenzyplant":"9a","leafstorm":"9a","energyball":"9a","gigadrain":"9a","leaftornado":"9a","magicalleaf":"9a","darkpulse":"9a","snarl":"9a","muddywater":"9a","chillingwater":"9a","earthpower":"9a","heatwave":"9a","firespin":"9a","thunder":"9a","sludgewave":"9a","sludgebomb":"9a","hex":"9a","hyperbeam":"9a","uproar":"9a","terrainpulse":"9a","echoedvoice":"9a","woodhammer":"9a","leafblade":"9a","grassyglide":"9a","razorleaf":"9a","nightslash":"9a","bite":"9a","payback":"9a","shadowclaw":"9a","liquidation":"9a","fly":"9a","acrobatics":"9a","bulldoze":"9a","stoneedge":"9a","rockblast":"9a","doubleedge":"9a","facade":"9a","rapidspin":"9a","fakeout":"9a","furyswipes":"9a","forestscurse":"9a","cottonspore":"9a","worryseed":"9a","grassyterrain":"9a","switcheroo":"9a","aquaring":"9a","raindance":"9a","sunnyday":"9a","agility":"9a","safeguard":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","leechseed":"9a","synthesis":"9a","stunspore":"9a","ingrain":"9a","trailblaze":"9a","seedbomb":"9a","powerwhip":"9a","bulletseed":"9a","swordsdance":"9a","solarbeam":"9a","grassknot":"9a","petalblizzard":"9a","solarnectar":"9a","pursuit":"9a","thief":"9a","foulplay":"9a","taunt":"9a","knockoff":"9a","faketears":"9a","torment":"9a","quash":"9a","crunch":"9a","suckerpunch":"9a","throatchop":"9a","lashout":"9a","assurance":"9a","carrionfeast":"9a","nastyplot":"9a","partingshot":"9a","uturn":"9a"},"narekomichigami":{"earthpower":"9a","scorchingsands":"9a","mudshot":"9a","mudslap":"9a","futuresight":"9a","psychic":"9a","psyshock":"9a","extrasensory":"9a","psybeam":"9a","confusion":"9a","storedpower":"9a","mirrorcoat":"9a","dazzlinggleam":"9a","flashcannon":"9a","hex":"9a","risingvoltage":"9a","chargebeam":"9a","ancientpower":"9a","hyperbeam":"9a","swift":"9a","earthquake":"9a","bulldoze":"9a","zenheadbutt":"9a","psyshieldbash":"9a","shadowclaw":"9a","rockslide":"9a","rocktomb":"9a","rockblast":"9a","gigaimpact":"9a","doubleedge":"9a","return":"9a","facade":"9a","cometpunch":"9a","shoreup":"9a","calmmind":"9a","barrier":"9a","amnesia":"9a","guardswap":"9a","trickroom":"9a","wonderroom":"9a","imprison":"9a","sandstorm":"9a","stealthrock":"9a","wideguard":"9a","detect":"9a","encore":"9a","confide":"9a","focusenergy":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","spikes":"9a","mudbomb":"9a","tremorshot":"9a","reflect":"9a","lightscreen":"9a","trick":"9a","magiccoat":"9a","teleport":"9a","gravity":"9a","psychicterrain":"9a","skillswap":"9a","allyswitch":"9a","magicroom":"9a","hypnosis":"9a","agility":"9a","safeguard":"9a","expandingforce":"9a","psychicnoise":"9a","dreameater":"9a","hypnowhirl":"9a","powergem":"9a","wish":"9a"},"yuimanasama":{"shadowball":"9a","ominouswind":"9a","darkpulse":"9a","dazzlinggleam":"9a","psychic":"9a","psyshock":"9a","psywave":"9a","discharge":"9a","ancientpower":"9a","hyperbeam":"9a","uproar":"9a","swift":"9a","spiritshackle":"9a","shadowclaw":"9a","astonish":"9a","leechlife":"9a","uturn":"9a","pounce":"9a","crunch":"9a","bite":"9a","wildcharge":"9a","thunderfang":"9a","psychicfangs":"9a","bonerush":"9a","gigaimpact":"9a","doubleedge":"9a","facade":"9a","retaliate":"9a","scratch":"9a","quickattack":"9a","spite":"9a","confuseray":"9a","torment":"9a","thunderwave":"9a","toxic":"9a","skillswap":"9a","meditate":"9a","healblock":"9a","lightscreen":"9a","reflect":"9a","healingwish":"9a","painsplit":"9a","glare":"9a","focusenergy":"9a","recycle":"9a","leer":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","willowisp":"9a","nightshade":"9a","destinybond":"9a","shadowsneak":"9a","phantomforce":"9a","shadowpunch":"9a","shadowstrike":"9a","swordsdance":"9a","nightslash":"9a","psychocut":"9a","suckerpunch":"9a","knockoff":"9a","icepunch":"9a","thunderpunch":"9a","firepunch":"9a","earthquake":"9a"},"watatsukinotoyohime":{"hydrocannon":"9a","hydropump":"9a","surf":"9a","muddywater":"9a","brine":"9a","bubble":"9a","hurricane":"9a","aeroblast":"9a","airslash":"9a","gust":"9a","earthpower":"9a","mudshot":"9a","moonblast":"9a","dazzlinggleam":"9a","dracometeor":"9a","meteorbeam":"9a","ancientpower":"9a","hyperbeam":"9a","triattack":"9a","liquidation":"9a","aquajet":"9a","earthquake":"9a","magnitude":"9a","stoneedge":"9a","rockslide":"9a","rocktomb":"9a","skyattack":"9a","spiritbreak":"9a","gigaimpact":"9a","doubleedge":"9a","facade":"9a","quickattack":"9a","raindance":"9a","aquaring":"9a","mudsport":"9a","defog":"9a","lunarblessing":"9a","teleport":"9a","speedswap":"9a","aromatherapy":"9a","cottonspore":"9a","endure":"9a","confide":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","soak":"9a","lifedew":"9a","flipturn":"9a","waterfall":"9a","aquatail":"9a","dive":"9a","wavecharge":"9a","scald":"9a","waterpulse":"9a","whirlpool":"9a","chillingwater":"9a","undertow":"9a","calmmind":"9a","moonlight":"9a","psychic":"9a","futuresight":"9a","tailwind":"9a","icebeam":"9a","energyball":"9a","haze":"9a"},"watatsukinoyorihime":{"leafblade":"9a","focusblast":"9a","secretsword":"9a","aurasphere":"9a","vacuumwave":"9a","moonblast":"9a","dazzlinggleam":"9a","photongeyser":"9a","psychic":"9a","thunder":"9a","fireblast":"9a","solarbeam":"9a","mirrorshot":"9a","hyperbeam":"9a","triattack":"9a","jumpkick":"9a","crosschop":"9a","sacredsword":"9a","drainpunch":"9a","stormthrow":"9a","poweruppunch":"9a","firepunch":"9a","thunderpunch":"9a","smartstrike":"9a","bulletpunch":"9a","dragonrush":"9a","aerialace":"9a","acrobatics":"9a","gigaimpact":"9a","doubleedge":"9a","facade":"9a","slash":"9a","cut":"9a","detect":"9a","invokeamaterasu":"9a","invokehonoikazuchi":"9a","invokeishikoridome":"9a","lunarblessing":"9a","agility":"9a","imprison":"9a","sunnyday":"9a","thunderwave":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","bulkup":"9a","quickguard":"9a","coaching":"9a","closecombat":"9a","brickbreak":"9a","machpunch":"9a","superpower":"9a","lowkick":"9a","highjumpkick":"9a","bodypress":"9a","rocksmash":"9a","lowsweep":"9a","reversal":"9a","focuspunch":"9a","shufflejab":"9a","swordsdance":"9a","nightslash":"9a","psychocut":"9a","xscissor":"9a","wideguard":"9a"},"ariyaiwanaga":{"powergem":"9a","ancientpower":"9a","blizzard":"9a","icebeam":"9a","freezedry":"9a","aurorabeam":"9a","moonblast":"9a","dazzlinggleam":"9a","heatwave":"9a","aircutter":"9a","hyperbeam":"9a","triattack":"9a","rockwrecker":"9a","stoneedge":"9a","rockslide":"9a","rocktomb":"9a","rockblast":"9a","iciclespear":"9a","bonerush":"9a","steelwing":"9a","acrobatics":"9a","dualwingbeat":"9a","shadowbone":"9a","shadowclaw":"9a","gigaimpact":"9a","doubleedge":"9a","bodyslam":"9a","facade":"9a","stealthrock":"9a","rockpolish":"9a","sandstorm":"9a","wideguard":"9a","snowscape":"9a","auroraveil":"9a","irondefense":"9a","willowisp":"9a","trickroom":"9a","powertrick":"9a","recover":"9a","workup":"9a","confide":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","takedown":"9a","helpinghand":"9a","curse":"9a","smackdown":"9a","craghammer":"9a","meteorbeam":"9a","wish":"9a","lifedew":"9a","bodypress":"9a","earthpower":"9a","calmmind":"9a","gravity":"9a","grudge":"9a","headsmash":"9a","heavyslam":"9a"},"ninawatari":{"hydrocannon":"9a","hydropump":"9a","surf":"9a","waterpledge":"9a","brine":"9a","bubble":"9a","whirlpool":"9a","zapcannon":"9a","thunder":"9a","electrodrift":"9a","thunderbolt":"9a","discharge":"9a","voltswitch":"9a","shockwave":"9a","electroweb":"9a","icywind":"9a","meteorbeam":"9a","powergem":"9a","psywave":"9a","bugbuzz":"9a","shadowball":"9a","hyperbeam":"9a","hypervoice":"9a","echoedvoice":"9a","waterfall":"9a","clamp":"9a","supercellslam":"9a","thunderpunch":"9a","spark":"9a","icepunch":"9a","bodypress":"9a","rockslide":"9a","skullbash":"9a","doubleedge":"9a","facade":"9a","rapidspin":"9a","bind":"9a","lifedew":"9a","aquaring":"9a","withdraw":"9a","thunderwave":"9a","charge":"9a","heartswap":"9a","amnesia":"9a","mist":"9a","confuseray":"9a","toxic":"9a","shelter":"9a","confide":"9a","painsplit":"9a","disable":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","raindance":"9a","soak":"9a","flipturn":"9a","scald":"9a","muddywater":"9a","waterpulse":"9a","chillingwater":"9a","undertow":"9a","electricterrain":"9a","eerieimpulse":"9a","magnetrise":"9a","electroball":"9a","chargebeam":"9a","calmmind":"9a","icebeam":"9a","paraboliccharge":"9a"},"cirnotanned":{"blizzard":"9a","icebeam":"9a","freezedry":"9a","aurorabeam":"9a","icywind":"9a","powdersnow":"9a","moonblast":"9a","dazzlinggleam":"9a","fairywind":"9a","solarbeam":"9a","grasspledge":"9a","surf":"9a","bubblebeam":"9a","chillingwater":"9a","weatherball":"9a","icehammer":"9a","iciclecrash":"9a","icepunch":"9a","iceshard":"9a","iceball":"9a","tripleaxel":"9a","playrough":"9a","jumpkick":"9a","upperhand":"9a","poweruppunch":"9a","aerialace":"9a","solarblade":"9a","seedbomb":"9a","trailblaze":"9a","liquidation":"9a","wingattack":"9a","doubleedge":"9a","megapunch":"9a","facade":"9a","quickattack":"9a","auroraveil":"9a","snowscape":"9a","haze":"9a","mist":"9a","defog":"9a","growth":"9a","focusenergy":"9a","helpinghand":"9a","endure":"9a","swagger":"9a","followme":"9a","sunnyday":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","hiddenpower":"9a","terablast":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","bodyslam":"9a","curse":"9a","hail":"9a","chillingmist":"9a","iciclespear":"9a","icefang":"9a","avalanche":"9a","rimecleaver":"9a","frostbreath":"9a","leechseed":"9a","synthesis":"9a","grassyterrain":"9a","stunspore":"9a","ingrain":"9a","worryseed":"9a","leafblade":"9a","powerwhip":"9a","bulletseed":"9a","swordsdance":"9a","gigadrain":"9a","energyball":"9a","leafstorm":"9a","magicalleaf":"9a","grassknot":"9a","petalblizzard":"9a","solarnectar":"9a","charm":"9a","sweetkiss":"9a","mistyterrain":"9a","babydolleyes":"9a","craftyshield":"9a","drainingkiss":"9a","mistyexplosion":"9a","alluringvoice":"9a","velvetpress":"9a","icespinner":"9a","uturn":"9a"},"keinehakutaku":{"steelbeam":"9a","flashcannon":"9a","mirrorshot":"9a","tachyoncutter":"9a","hyperbeam":"9a","triattack":"9a","swift":"9a","terrainpulse":"9a","roaroftime":"9a","dracometeor":"9a","dragonpulse":"9a","twister":"9a","thunder":"9a","thunderbolt":"9a","risingvoltage":"9a","voltswitch":"9a","darkpulse":"9a","psychic":"9a","psychicnoise":"9a","mirrorcoat":"9a","earthpower":"9a","ancientpower":"9a","shadowball":"9a","steelroller":"9a","ironhead":"9a","metalclaw":"9a","metalburst":"9a","gigaimpact":"9a","lastresort":"9a","doubleedge":"9a","headbutt":"9a","facade":"9a","feint":"9a","outrage":"9a","dragonrush":"9a","dragonclaw":"9a","breakingswipe":"9a","zenheadbutt":"9a","nightslash":"9a","brutalswing":"9a","earthquake":"9a","bulldoze":"9a","hammerarm":"9a","sacredsword":"9a","brickbreak":"9a","thunderpunch":"9a","irondefense":"9a","metalsound":"9a","meanlook":"9a","instruct":"9a","nobleroar":"9a","healbell":"9a","moonlight":"9a","meditate":"9a","amnesia":"9a","lightscreen":"9a","reflect":"9a","agility":"9a","raindance":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","hypervoice":"9a","toxic":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","autotomize":"9a","bulletpunch":"9a","heavyslam":"9a","gyroball":"9a","smartstrike":"9a","dragontail":"9a","scaleshot":"9a","dragonbreath":"9a","encore":"9a","yawn":"9a","wish":"9a","charm":"9a","workup":"9a","batonpass":"9a","disable":"9a","screech":"9a","hustleup":"9a","uproar":"9a","quickattack":"9a","swordsdance":"9a","retaliate":"9a","crushclaw":"9a","thrash":"9a","echoedvoice":"9a","headsmash":"9a","megahorn":"9a","hornattack":"9a","calmmind":"9a","futuresight":"9a","extrasensory":"9a","imprison":"9a","bodypress":"9a"},"ichirinkumoiunzan":{"focusblast":"9a","aurasphere":"9a","hurricane":"9a","aeroblast":"9a","airslash":"9a","gust":"9a","thunderbolt":"9a","chillingwater":"9a","hyperbeam":"9a","hypervoice":"9a","weatherball":"9a","wringout":"9a","focuspunch":"9a","closecombat":"9a","crosschop":"9a","hammerarm":"9a","drainpunch":"9a","brickbreak":"9a","forcepalm":"9a","circlethrow":"9a","karatechop":"9a","seismictoss":"9a","counter":"9a","cloudfist":"9a","fly":"9a","acrobatics":"9a","thunderpunch":"9a","firepunch":"9a","bulletpunch":"9a","gigaimpact":"9a","megapunch":"9a","facade":"9a","cut":"9a","bulkup":"9a","quickguard":"9a","agility":"9a","barrier":"9a","charge":"9a","defog":"9a","tailwind":"9a","taunt":"9a","trickroom":"9a","focusenergy":"9a","helpinghand":"9a","leer":"9a","whirlwind":"9a","substitute":"9a","rest":"9a","sleeptalk":"9a","protect":"9a","toxic":"9a","hiddenpower":"9a","terablast":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","takedown":"9a","bodyslam":"9a","curse":"9a","detect":"9a","coaching":"9a","machpunch":"9a","superpower":"9a","lowkick":"9a","highjumpkick":"9a","bodypress":"9a","rocksmash":"9a","lowsweep":"9a","reversal":"9a","shufflejab":"9a","vacuumwave":"9a","roost":"9a","featherdance":"9a","uturn":"9a","bravebird":"9a","drillpeck":"9a","aerialace":"9a","dualwingbeat":"9a","aircutter":"9a","dynamicpunch":"9a","icepunch":"9a","shadowpunch":"9a","skyuppercut":"9a","mist":"9a","haze":"9a"},"hecatiaearth":{"darkpulse":"9a","shadowball":"9a","nightshade":"9a","hydropump":"9a","muddywater":"9a","brine":"9a","energyball":"9a","gigadrain":"9a","magicalleaf":"9a","moonblast":"9a","drainingkiss":"9a","dracometeor":"9a","coreenforcer":"9a","dragonrage":"9a","fireblast":"9a","flamethrower":"9a","triattack":"9a","throatchop":"9a","suckerpunch":"9a","shadowforce":"9a","shadowsneak":"9a","waterfall":"9a","petalblizzard":"9a","razorleaf":"9a","spiritbreak":"9a","dualchop":"9a","earthquake":"9a","doubleedge":"9a","facade":"9a","bodyswap":"9a","toxic":"9a","agility":"9a","substitute":"9a","sleeptalk":"9a","protect":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","rest":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","raindance":"9a","aquaring":"9a","soak":"9a","lifedew":"9a","flipturn":"9a","surf":"9a","scald":"9a","waterpulse":"9a","whirlpool":"9a","chillingwater":"9a","undertow":"9a","leechseed":"9a","synthesis":"9a","grassyterrain":"9a","stunspore":"9a","ingrain":"9a","worryseed":"9a","trailblaze":"9a","solarbeam":"9a","leafstorm":"9a","grassknot":"9a","solarnectar":"9a","pursuit":"9a","thief":"9a","foulplay":"9a","taunt":"9a","knockoff":"9a","faketears":"9a","torment":"9a","quash":"9a","snarl":"9a","nastyplot":"9a","willowisp":"9a","confuseray":"9a","spite":"9a","painsplit":"9a","destinybond":"9a","hex":"9a","ominouswind":"9a","calmmind":"9a","meanlook":"9a","trickroom":"9a","earthpower":"9a","psychic":"9a","meteorbeam":"9a","partingshot":"9a"},"hecatiamoon":{"darkpulse":"9a","shadowball":"9a","nightshade":"9a","hydropump":"9a","muddywater":"9a","brine":"9a","energyball":"9a","gigadrain":"9a","magicalleaf":"9a","moonblast":"9a","drainingkiss":"9a","dracometeor":"9a","coreenforcer":"9a","dragonrage":"9a","fireblast":"9a","flamethrower":"9a","triattack":"9a","throatchop":"9a","suckerpunch":"9a","shadowforce":"9a","shadowsneak":"9a","waterfall":"9a","petalblizzard":"9a","razorleaf":"9a","spiritbreak":"9a","dualchop":"9a","earthquake":"9a","doubleedge":"9a","facade":"9a","bodyswap":"9a","toxic":"9a","agility":"9a","substitute":"9a","sleeptalk":"9a","protect":"9a","weatherball":"9a","hiddenpower":"9a","terablast":"9a","rest":"9a","endure":"9a","return":"9a","frustration":"9a","round":"9a","snore":"9a","attract":"9a","doubleteam":"9a","swagger":"9a","confide":"9a","secretpower":"9a","naturalgift":"9a","mimic":"9a","hyperbeam":"9a","gigaimpact":"9a","takedown":"9a","helpinghand":"9a","bodyslam":"9a","curse":"9a","charm":"9a","sweetkiss":"9a","mistyterrain":"9a","babydolleyes":"9a","craftyshield":"9a","dazzlinggleam":"9a","mistyexplosion":"9a","fairywind":"9a","alluringvoice":"9a","velvetpress":"9a","dragontail":"9a","dragonpulse":"9a","dragonbreath":"9a","twister":"9a","pursuit":"9a","thief":"9a","foulplay":"9a","taunt":"9a","knockoff":"9a","faketears":"9a","torment":"9a","quash":"9a","snarl":"9a","nastyplot":"9a","willowisp":"9a","confuseray":"9a","spite":"9a","painsplit":"9a","destinybond":"9a","hex":"9a","ominouswind":"9a","calmmind":"9a","meanlook":"9a","trickroom":"9a","earthpower":"9a","scald":"9a","psychic":"9a","meteorbeam":"9a","partingshot":"9a"}},
 
 	/** What this Pokemon gained, or an empty record. */
 	get: function (speciesid) {
