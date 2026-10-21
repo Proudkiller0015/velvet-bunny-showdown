@@ -110,6 +110,14 @@ exports.learnsets = (data) => {
 	// and Zanmu Nippaku; they no longer learn it.
 	for (const id of Object.keys(DATA.learnsets)) if (id !== 'flandrescarlet' && data[id]) delete data[id].learnset.forbiddenbarrage;
 	if (data.flandrescarlet) data.flandrescarlet.learnset.forbiddenbarrage = ['9L1'];
+	// The Scarlet sisters' Awakened moves (the owner, 21 Oct 2026): the vampire's drain, a ghostly
+	// strike, a Trick Room exit, the server's shared set-up and the scarlet moon's Moonblast.
+	for (const id of ['remiliascarlet', 'flandrescarlet']) {
+		if (!data[id]) continue;
+		for (const move of ['carrionfeast', 'shadowstrike', 'twilightexit', 'hustleup', 'dancingblow', 'cloudfist', 'moonblast']) {
+			if (!data[id].learnset[move]) data[id].learnset[move] = ['9M'];
+		}
+	}
 	return data;
 };
 
