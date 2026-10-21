@@ -82,8 +82,10 @@ function movesOf(species) {
 	return { all, gens };
 }
 
-// Makuro, Raishin and Chimai (data/velvet/abyss-shrine.js).
-const TRIO = new Set(['makuro', 'raishin', 'chimai']);
+// Makuro, Raishin and Chimai (data/velvet/abyss-shrine.js), and the collab Pokemon
+// (data/velvet/collab.js): movepools of ours, so they own only what is named in CHOSEN.
+const collab = require(require.resolve('pokemon-showdown/dist/data/velvet/collab.js'));
+const TRIO = new Set(['makuro', 'raishin', 'chimai', ...collab.SPECIES]);
 
 function build() {
 	const familyMoves = new Map();     // family id -> Set of move ids it can get at all
@@ -218,6 +220,7 @@ function build() {
 	// (data/velvet/halloween.js), so the builder files it under Banette's own.
 	// Makuro, Raishin and Chimai (abyss-shrine.js): their own moves, which nothing else learns.
 	const CHOSEN = { shuppet: ['poltergeist'], makuro: ['abyssalmaw', 'leviathancrash', 'sovereignrite'], raishin: ['shrinebellstrike', 'spiritthunder', 'sovereignrite'], chimai: ['sanctuarypulse', 'hallowedquake', 'sovereignrite'] };
+	for (const [id, { signature }] of Object.entries(collab.LEARNSETS)) CHOSEN[id] = signature;
 	for (const [family, moves] of Object.entries(CHOSEN)) {
 		signatures[family] = [...new Set([...(TRIO.has(family) ? [] : signatures[family] || []), ...moves])]
 			.sort((a, b) => Dex.moves.get(a).name.localeCompare(Dex.moves.get(b).name));

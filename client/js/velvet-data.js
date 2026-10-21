@@ -1017,6 +1017,13 @@
 		 * the client reads that line's text off the ability. Without one it fell back to the
 		 * default and printed "({EFFECT} activated!)" in chat (12 Oct 2026).
 		 */
+		// Funerfly (data/velvet/collab.js): its binding move and its counter, which the server
+		// sends as -activate lines the default text would print as "(... activated!)".
+		var procession = en.Moves.butterflyprocession || (en.Moves.butterflyprocession = { name: 'Butterfly Procession' });
+		procession.activate = '  {POKEMON} was caught in the butterfly procession!';
+		procession.end = '  {POKEMON} was freed from the butterfly procession!';
+		var qliphoth = en.Abilities.qliphothcounter || (en.Abilities.qliphothcounter = { name: 'Qliphoth Counter' });
+		qliphoth.activate = '  The Qliphoth Counter ticks.';
 		var care = en.Abilities.caretaker || (en.Abilities.caretaker = { name: 'Caretaker' });
 		care.activate = "  [Caretaker] The team's status conditions were cured!";
 		en.__velvetDescriptions = true;
@@ -1285,6 +1292,8 @@
 		 */
 		gen9rpbattle: 'gen9nationaldexag',
 		gen9rpag: 'gen9nationaldexag',
+		// RP AG plus the collab Pokemon, which are listed on top under their own heading (collabRows).
+		gen9rpcollab: 'gen9nationaldexag',
 		// The draft: everything National Dex has, then narrowed to the pool below (draftRows).
 		gen9rpdraft: 'gen9nationaldexag',
 		gen9rpou: 'gen9nationaldex',
@@ -1348,6 +1357,17 @@
 			 * The draft lists its pool and nothing else, under the draft's price tiers:
 			 * the viability ranking coaches prep with (the owner, 12 Oct 2026).
 			 */
+			/*
+			 * Collab Pokemon (data/velvet/collab.js) are in no tier list at all, so every RP
+			 * format shows them under "Illegal results"; RP Collab lists them first, under a
+			 * Collab heading above AG, which also makes them legal in its search.
+			 */
+			if (typed && searchType === 'pokemon' && asked === 'gen9rpcollab') {
+				var ownBase = typed.getBaseResults;
+				typed.getBaseResults = function () {
+					return collabRows().concat(ownBase.apply(this, arguments));
+				};
+			}
 			if (typed && searchType === 'pokemon' && draftFor(asked)) {
 				typed.getBaseResults = function () { return draftRows(asked); };
 				// And the tier column says the draft letter, not the Pokemon's usual tier.
@@ -1360,6 +1380,19 @@
 			return typed;
 		};
 		return true;
+	}
+
+	/** The Collab heading and its Pokemon, from the RP tier table (src/rp-tiers.json). */
+	function collabRows() {
+		var tiers = window.VelvetRpTiers || {};
+		var dex = window.BattlePokedex || {};
+		var ids = [];
+		for (var id in tiers) if (tiers[id] === 'Collab' && dex[id] && !dex[id].battleOnly) ids.push(id);
+		if (!ids.length) return [];
+		ids.sort();
+		var rows = [['header', 'Collab']];
+		for (var i = 0; i < ids.length; i++) rows.push(['pokemon', ids[i]]);
+		return rows;
 	}
 
 	function draftFor(format) {

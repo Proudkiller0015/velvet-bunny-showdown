@@ -349,7 +349,8 @@ const RP_GEMS = ['normal', 'fire', 'water', 'electric', 'grass', 'ice', 'fightin
  * teambuilder uses to split National Dex RU into NU, PU and ZU headings, so the
  * list you scroll and the check you pass agree.
  */
-const LOW_LADDER = ['AG', 'Uber', 'OU', 'UUBL', 'UU', 'RUBL', 'RU', 'NUBL', 'NU', 'PUBL', 'PU', 'ZUBL', 'ZU', 'NFE', 'LC'];
+// Collab tops it: crossover Pokemon, banned everywhere but RP Collab (see COLLAB below).
+const LOW_LADDER = ['Collab', 'AG', 'Uber', 'OU', 'UUBL', 'UU', 'RUBL', 'RU', 'NUBL', 'NU', 'PUBL', 'PU', 'ZUBL', 'ZU', 'NFE', 'LC'];
 function lowTierOf(dex, species) {
 	const nd = LOW_LADDER.indexOf(species.natDexTier);
 	if (nd >= 0 && nd < LOW_LADDER.indexOf('RU')) return species.natDexTier;
@@ -1230,6 +1231,8 @@ exports.Formats = [
 			installItems(this);
 		},
 		...RP_TURN_ACTIONS,
+		// Nothing is checked, collab Pokemon included (see COLLAB below).
+		allowsCollab: true,
 
 		searchShow: false,
 		challengeShow: true,
@@ -1553,6 +1556,11 @@ exports.Formats = [
 
 	// Above Ubers: the tier with nothing taken out of it.
 	rpTier('AG', '[Gen 9] National Dex AG', { rules: ['+Light of Ruin'] }),
+	// Above AG: RP AG's rules, plus the crossover Pokemon every other format bans (data/velvet/collab.js).
+	rpTier('Collab', '[Gen 9] National Dex AG', {
+		desc: "RP AG plus the collab (crossover) Pokémon, which no other format allows.",
+		rules: ['+Light of Ruin'], allowsCollab: true,
+	}),
 	// Every RP tier checks our own tier table (lowTierOf, species and Mega), not only National Dex's
 	// banlists: the owner (30 Sep 2026) "RP tier should be independent". It caught Mega Floette (Uber)
 	// passing RP OU, and Shedinja (Uber here) refused by National Dex Ubers' own ban.
@@ -1664,11 +1672,33 @@ function witchStoneRule(set) {
 	}
 }
 
+/*
+ * Collab Pokemon (data/velvet/collab.js): crossover guests, banned from every RP
+ * format but RP Collab - not for their strength, for being guests. A banlist entry
+ * rather than a set check, so the rule table itself refuses them and everything
+ * reading it (the validator, the bot's draft pool) agrees. RP Custom Game checks
+ * nothing and keeps taking them. Only the RP mods know these Pokemon at all; the
+ * official formats never see them. The file sits beside this one's data/ both in
+ * the project and in the package's dist.
+ */
+const COLLAB = require(require('path').join(__dirname, '..', 'data', 'velvet', 'collab.js'));
+for (const format of exports.Formats) {
+	// Not where the teams are generated (RP Random Battle, the tutorial): the generator
+	// refuses any custom ban, and it never hands out a collab Pokemon anyway.
+	if (!format.name || !String(format.mod || '').endsWith('rp') || format.allowsCollab || format.team) continue;
+	format.banlist = [...(format.banlist || []), ...COLLAB.NAMES];
+}
+function collabRule(set) {
+	const species = this.dex.species.get(set.species);
+	if (species.tier !== COLLAB.TIER || this.format.allowsCollab || !String(this.format.mod || '').endsWith('rp')) return [];
+	return [`${species.baseSpecies} is a Collab Pokémon: crossover Pokémon are legal only in [Gen 9] RP Collab.`];
+}
+
 for (const format of exports.Formats) {
 	if (!format.name) continue;
 	const own = format.onValidateSet;
 	format.onValidateSet = function (set, fmt, setHas, teamHas) {
-		const problems = [...((own && own.call(this, set, fmt, setHas, teamHas)) || []), ...witchStoneRule.call(this, set)];
+		const problems = [...((own && own.call(this, set, fmt, setHas, teamHas)) || []), ...witchStoneRule.call(this, set), ...collabRule.call(this, set)];
 		return problems.length ? problems : undefined;
 	};
 	/*

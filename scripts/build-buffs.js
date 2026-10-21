@@ -69,8 +69,12 @@ OUR_ITEMS.push(...abyssShrine.ITEM_IDS);
 const missingno = require(path.join(PACKAGE, 'dist', 'data', 'velvet', 'missingno.js'));
 OUR_MOVES.push(...missingno.MOVE_IDS);
 OUR_ABILITIES.push(...missingno.ABILITY_IDS);
+// Collab (data/velvet/collab.js): crossover Pokemon, their formes, signatures and abilities.
+const collab = require(path.join(PACKAGE, 'dist', 'data', 'velvet', 'collab.js'));
+OUR_MOVES.push(...collab.MOVE_IDS);
+OUR_ABILITIES.push(...collab.ABILITY_IDS);
 // Whole Pokemon the client has no usable row for: shipped from here (newSpecies below).
-const NEW_SPECIES = [...abyssShrine.SPECIES, ...missingno.SPECIES];
+const NEW_SPECIES = [...abyssShrine.SPECIES, ...missingno.SPECIES, ...collab.SPECIES, ...collab.FORMES];
 OUR_ITEMS.push(...require(path.join(PACKAGE, 'dist', 'data', 'velvet', 'new-items.js')).ITEM_IDS);
 for (const buff of Object.values(Buffs)) {
 	for (const name of buff.moves || []) {
@@ -348,6 +352,7 @@ for (const id of Object.keys(OUR_MEGAS)) search.push([id, 'pokemon', offsetsFor(
 const searchAliases = [];
 for (const [alias, at] of halloween.SEARCH_ALIASES || []) searchAliases.push([alias, 'pokemon', Dex.species.get(halloween.FORME).id, at]);
 for (const [alias, at] of missingno.SEARCH_ALIASES || []) searchAliases.push([alias, 'pokemon', missingno.ID, at]);
+for (const [alias, target, at] of collab.SEARCH_ALIASES || []) searchAliases.push([alias, 'pokemon', target, at]);
 
 // Event Pokemon, for "event" in the search: every event file lists its own.
 const EVENT_FILES = ['halloween.js', 'missingno.js'];
@@ -372,12 +377,18 @@ for (const id of NEW_SPECIES) {
 		heightm: sp.heightm, weightkg: sp.weightkg, color: sp.color, eggGroups: sp.eggGroups.slice(),
 		tags: sp.tags.slice(), tier: sp.natDexTier, gen: sp.gen || 9,
 	};
+	// A forme of ours (Funerfly-Breach) needs what makes it a forme: battle-only, base, the list it is in.
+	for (const key of ['baseSpecies', 'forme', 'otherFormes', 'formeOrder', 'battleOnly', 'requiredAbility']) {
+		if (sp[key] && (key !== 'baseSpecies' || sp.baseSpecies !== sp.name)) newSpecies[id][key] = Array.isArray(sp[key]) ? sp[key].slice() : sp[key];
+	}
+	search.push([id, 'pokemon', offsetsFor(sp.name)]);
+	// A battle-only forme learns what its base learns: no learnset of its own to ship.
+	if (sp.battleOnly) continue;
 	const learnset = Dex.species.getLearnsetData(id).learnset || {};
 	// Signatures first: the builder lists moves in the order the keys were added.
 	const order = Object.keys(learnset).sort((a, b) => (learnset[b][0].includes('L') ? 1 : 0) - (learnset[a][0].includes('L') ? 1 : 0));
 	newLearnsets[id] = {};
 	for (const move of order) newLearnsets[id][move] = '9a';
-	search.push([id, 'pokemon', offsetsFor(sp.name)]);
 }
 for (const [id, row] of Object.entries(moves)) search.push([id, 'move', offsetsFor(row.name)]);
 for (const [id, row] of Object.entries(abilities)) search.push([id, 'ability', offsetsFor(row.name)]);

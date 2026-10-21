@@ -39,7 +39,9 @@ const Dex = require(path.join(PACKAGE, 'dist', 'sim', 'dex.js')).Dex.mod('gen9rp
 // Banette-Mega-Halloween (24 Sep 2026): the Halloween 2026 Mega, Ghost/Dark. The
 // calculator knows Mega Banette, but not this one's stats or second type.
 // Makuro, Raishin and Chimai (29 Sep 2026): whole new Pokemon, legal in RP Ubers.
-const SPECIES = ['samantha', 'nuzleafsold', 'banettemegahalloween', 'makuro', 'raishin', 'chimai'];
+// The collab Pokemon and their formes (data/velvet/collab.js): Funerfly and Funerfly-Breach.
+const collab = require(path.join(PACKAGE, 'dist', 'data', 'velvet', 'collab.js'));
+const SPECIES = ['samantha', 'nuzleafsold', 'banettemegahalloween', 'makuro', 'raishin', 'chimai', ...collab.SPECIES, ...collab.FORMES];
 /*
  * Moves and abilities are worked out rather than listed: anything with a
  * negative number is ours. A hand-written list is how Balance Patch 1's eleven

@@ -787,11 +787,18 @@ class TeamBuilder {
 	 * Missing is not an error: on a plain checkout with no buffs installed this
 	 * is an empty object and everything below it quietly does nothing.
 	 */
-	/** Whole new Pokemon this server added (data/velvet/abyss-shrine.js), by id. */
+	/**
+	 * Whole new Pokemon this server added (data/velvet/abyss-shrine.js, collab.js), by id.
+	 * The collab ones only ever reach the draft in RP Collab: every other RP format bans
+	 * them by name, so context() leaves them out of its pool.
+	 */
 	newSpecies() {
 		if (this._newSpecies) return this._newSpecies;
 		try {
-			this._newSpecies = new Set(require('pokemon-showdown/dist/data/velvet/abyss-shrine.js').SPECIES);
+			this._newSpecies = new Set([
+				...require('pokemon-showdown/dist/data/velvet/abyss-shrine.js').SPECIES,
+				...require('pokemon-showdown/dist/data/velvet/collab.js').SPECIES,
+			]);
 		} catch (e) {
 			this._newSpecies = new Set();
 		}
@@ -2254,6 +2261,38 @@ class TeamBuilder {
 	 * @returns {string|null} packed team, or null when the server generates it
 	 */
 	build(formatId, seed, options = {}) {
+		const packed = this.buildAny(formatId, seed, options);
+		return packed && /rpcollab$/.test(Dex.formats.get(formatId).id) ? this.withCollab(formatId, packed, seed) : packed;
+	}
+
+	/**
+	 * RP Collab exists for its collab Pokemon, and a 470-stat Funerfly drawn by strength
+	 * against the AG pool almost never made the six: a team there brings one, in place
+	 * of another member, whenever the team stays legal with it.
+	 */
+	withCollab(formatId, packed, seed) {
+		const ctx = this.context(formatId);
+		const collab = new Set(require('pokemon-showdown/dist/data/velvet/collab.js').SPECIES);
+		const team = Teams.unpack(packed);
+		if (team.some(set => collab.has(toID(ctx.dex.species.get(set.species).baseSpecies)))) return packed;
+		const choices = ctx.pool.filter(s => collab.has(s.id));
+		if (!choices.length) return packed;
+		let s = ((seed ?? Date.now()) ^ 0x5bd1e995) >>> 0;
+		const rng = () => { s ^= s << 13; s >>>= 0; s ^= s >> 17; s ^= s << 5; s >>>= 0; return s / 0x100000000; };
+		const set = this.buildSet(ctx, choices[Math.floor(rng() * choices.length)], {}, rng, {});
+		if (!set) return packed;
+		// Never the lead; the others from the back, keeping the first swap that validates.
+		for (let i = team.length - 1; i > 0; i--) {
+			const trial = team.slice();
+			trial[i] = { ...set, item: team.some((t, j) => j !== i && t.item && t.item === set.item) ? team[i].item : set.item };
+			let problems;
+			try { problems = ctx.validator.validateTeam(trial); } catch (e) { problems = [String(e.message || e)]; }
+			if (!problems || !problems.length) return Teams.pack(trial);
+		}
+		return packed;
+	}
+
+	buildAny(formatId, seed, options = {}) {
 		if (!this.needsTeam(formatId)) return null;
 		const ctx = this.context(formatId);
 		let s = (seed === undefined || seed === null ? (Date.now() ^ (Math.random() * 0xffffffff)) : seed) >>> 0;

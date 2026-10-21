@@ -48,6 +48,8 @@ const Classic = require('./classic-mechanics.js');
 const Stall = require('./stall.js');
 // The creation trio's buff: Shadow Force hunts switches, and the normal forms' abilities.
 const CreationTrio = require('./creation-trio.js');
+// Collab: crossover Pokemon, refused by every RP tier but RP Collab (Funerfly).
+const Collab = require('./collab.js');
 
 // The buffed Pokemon are Showdown's own, so they are changed in place rather
 // than added - and the learnsets they need are added when that file is loaded,
@@ -73,13 +75,14 @@ exports.pokedex = data => {
 	Halloween.pokedex(data);
 	Missingno.pokedex(data);
 	AbyssShrine.pokedex(data);
+	Collab.pokedex(data);
 	buffedPokedex = data;
 	buffWhatWeHave();
 };
-exports.abilities = data => CreationTrio.abilities(Stall.abilities(AbyssShrine.abilities(Missingno.abilities(Halloween.abilities(require('./balance-patch-1.js').patchAbsorbers(patchAbilities(unnerfAbilities(Object.assign(data, Abilities)))))))));
+exports.abilities = data => Collab.abilities(CreationTrio.abilities(Stall.abilities(AbyssShrine.abilities(Missingno.abilities(Halloween.abilities(require('./balance-patch-1.js').patchAbsorbers(patchAbilities(unnerfAbilities(Object.assign(data, Abilities))))))))));
 let moveTable = null;
 exports.moves = data => {
-	moveTable = CreationTrio.moves(Classic.moves(Frostbite.moves(AbyssShrine.moves(Missingno.moves(Halloween.moves(patchMoves(unnerfMoves(Object.assign(data, Moves)))))))));
+	moveTable = Collab.moves(CreationTrio.moves(Classic.moves(Frostbite.moves(AbyssShrine.moves(Missingno.moves(Halloween.moves(patchMoves(unnerfMoves(Object.assign(data, Moves))))))))));
 	teachHerEverything();
 	return moveTable;
 };
@@ -88,6 +91,7 @@ exports.formatsData = data => {
 	Halloween.formatsData(data);
 	Missingno.formatsData(data);
 	AbyssShrine.formatsData(data);
+	Collab.formatsData(data);
 	tierTable = data;
 	buffWhatWeHave();
 };
@@ -96,6 +100,7 @@ exports.learnsets = data => {
 	Halloween.learnsets(data);
 	Missingno.learnsets(data);
 	AbyssShrine.learnsets(data);
+	Collab.learnsets(data);
 	buffedLearnsets = data;
 	teachHerEverything();
 	buffWhatWeHave();

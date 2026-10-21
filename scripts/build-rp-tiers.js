@@ -18,6 +18,8 @@ const { buildPool } = require('../src/tier-sim/pool');
 
 const out = {};
 for (const e of buildPool(dex, { includeNfe: false })) out[e.id] = e.tier;
+// Collab (data/velvet/collab.js): above AG, never tiered by the pool, and legal only in RP Collab.
+for (const id of require('pokemon-showdown/dist/data/velvet/collab.js').SPECIES) out[id] = 'Collab';
 const json = JSON.stringify(out, Object.keys(out).sort(), 0);
 const here = path.join(__dirname, '..', 'src', 'rp-tiers.json');
 fs.writeFileSync(here, json + '\n');

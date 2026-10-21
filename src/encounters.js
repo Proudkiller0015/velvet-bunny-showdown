@@ -46,6 +46,8 @@ function isLegendary(species) {
 function encounterable(s) {
 	return s && s.exists && s.num > 0 &&
 		s.isNonstandard !== 'Custom' && s.isNonstandard !== 'CAP' && s.isNonstandard !== 'LGPE' &&
+		// Collab (crossover) Pokemon are not out in the grass (data/velvet/collab.js).
+		s.tier !== 'Collab' &&
 		!s.battleOnly && !s.isMega && !s.isPrimal && !/Gmax|Totem|Eternamax/.test(s.forme || '');
 }
 
