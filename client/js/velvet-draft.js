@@ -57,7 +57,6 @@ window.VelvetDraft = {
 				"tapufini",
 				"ragingbolt",
 				"tapubulu",
-				"luxray",
 				"empoleon",
 				"registeel"
 			]
@@ -105,6 +104,7 @@ window.VelvetDraft = {
 			"price": 50,
 			"ids": [
 				"aerodactylmega",
+				"talonflame",
 				"greninja",
 				"azelf",
 				"gengar",
@@ -134,7 +134,6 @@ window.VelvetDraft = {
 				"scizor",
 				"tyranitar",
 				"goodrahisui",
-				"clefable",
 				"blissey",
 				"aggronmega",
 				"tangrowth",
@@ -200,9 +199,10 @@ window.VelvetDraft = {
 				"clefablemega",
 				"vaporeon",
 				"alomomola",
+				"clefable",
 				"primarina",
+				"nuzleaf",
 				"crawdaunt",
-				"regirock",
 				"ampharosmega",
 				"toxapex",
 				"mudsdale",
@@ -265,6 +265,7 @@ window.VelvetDraft = {
 				"golurkmega",
 				"machamp",
 				"arctozolt",
+				"regirock",
 				"regice",
 				"marowakalola",
 				"hydrapple",
@@ -277,8 +278,7 @@ window.VelvetDraft = {
 				"slowbromega",
 				"steelix",
 				"clodsire",
-				"sableyemega",
-				"escavalier"
+				"sableyemega"
 			]
 		},
 		{
@@ -289,7 +289,6 @@ window.VelvetDraft = {
 				"raichumegay",
 				"crobat",
 				"pyroarmega",
-				"talonflame",
 				"swellow",
 				"meowsticmmega",
 				"ribombee",
@@ -362,6 +361,7 @@ window.VelvetDraft = {
 				"avalugghisui",
 				"amoonguss",
 				"reuniclus",
+				"escavalier",
 				"cameruptmega",
 				"stakataka"
 			]
@@ -418,6 +418,7 @@ window.VelvetDraft = {
 				"drednaw",
 				"slurpuff",
 				"tyrantrum",
+				"luxray",
 				"decidueye",
 				"cloyster",
 				"politoed",
@@ -813,7 +814,6 @@ window.VelvetDraft = {
 				"dewott",
 				"bayleef",
 				"herdier",
-				"nuzleaf",
 				"vanillish",
 				"zweilous",
 				"wartortle",
