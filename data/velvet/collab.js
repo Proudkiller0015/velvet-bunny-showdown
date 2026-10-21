@@ -164,6 +164,7 @@ exports.moves = (data) => {
 		category: 'Special',
 		name: 'Butterfly Procession',
 		pp: 8,
+		noPPBoosts: true,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
 		// Infestation's binding, held to four turns whatever the user holds.

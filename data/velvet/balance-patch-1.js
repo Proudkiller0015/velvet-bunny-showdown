@@ -351,13 +351,14 @@ exports.MOVES = {
 	/*
 	 * The lake trio: knowledge, emotion and willpower. Each signature is a
 	 * 110 power Psychic attack with an effect that always happens, paid for with
-	 * 90-95% accuracy and 5-8 PP.
+	 * 90-95% accuracy and 5-8 PP. 8 PP is flat (noPPBoosts): with PP Ups it was
+	 * 8 * 8/5 = 12.8, shown in battle as "12.8/12.8".
 	 */
 	// Uxie's: knowledge taken back. Always resets the target's stat changes, and
 	// clears the user's own drops too.
 	memorywipe: {
 		num: -22, gen: 9, name: "Memory Wipe", type: "Psychic", category: "Special",
-		basePower: 110, accuracy: 95, pp: 8, priority: 0,
+		basePower: 110, accuracy: 95, pp: 8, noPPBoosts: true, priority: 0,
 		onHit(target, source) {
 			target.clearBoosts();
 			this.add('-clearboost', target);
@@ -376,7 +377,7 @@ exports.MOVES = {
 	// Mesprit's: shared feeling. Heals the user for all of the damage it deals. Same accuracy and PP as her sisters (the owner, 12 Oct 2026).
 	soulresonance: {
 		num: -23, gen: 9, name: "Soul Resonance", type: "Psychic", category: "Special",
-		basePower: 110, accuracy: 95, pp: 8, priority: 0,
+		basePower: 110, accuracy: 95, pp: 8, noPPBoosts: true, priority: 0,
 		drain: [1, 1],
 		flags: { protect: 1, mirror: 1, heal: 1, metronome: 1, nosketch: 1 },
 		secondary: null, target: "normal", contestType: "Beautiful",
@@ -388,7 +389,7 @@ exports.MOVES = {
 	// stronger, and it always ignores the target's defensive boosts and evasion.
 	resolutestrike: {
 		num: -24, gen: 9, name: "Resolute Strike", type: "Psychic", category: "Special",
-		basePower: 110, accuracy: 95, pp: 8, priority: 0,
+		basePower: 110, accuracy: 95, pp: 8, noPPBoosts: true, priority: 0,
 		ignoreDefensive: true,
 		ignoreEvasion: true,
 		onModifyMove(move, pokemon) {

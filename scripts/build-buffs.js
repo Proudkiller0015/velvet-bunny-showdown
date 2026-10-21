@@ -116,6 +116,9 @@ function moveRow(move) {
 	return {
 		num: move.num, name: move.name, type: move.type, category: move.category,
 		basePower: move.basePower, accuracy: move.accuracy, pp: move.pp,
+		// The client works out max PP from these two (pp * 8/5 unless noPPBoosts), in the
+		// move list and the battle tooltips; without the flag a flat 8 PP reads as 12.8.
+		noPPBoosts: move.noPPBoosts || undefined,
 		priority: move.priority, target: move.target, flags: move.flags,
 		secondary: move.secondary || null,
 		shortDesc: move.shortDesc, desc: move.desc,
@@ -313,6 +316,9 @@ for (const id of CHANGED.species || []) {
 	overrides.species[id] = { baseStats: Object.assign({}, Dex.species.get(id).baseStats), types: Dex.species.get(id).types.slice(), abilities: Object.assign({}, Dex.species.get(id).abilities) };
 }
 for (const id of CHANGED.moves) overrides.moves[id] = moveRow(Dex.moves.get(id));
+// Shadow Strike (data/velvet/touhou.js): a CAP move made an ordinary one, so the builder must stop
+// hiding it as CAP. An empty string, because correct() skips null.
+overrides.moves.shadowstrike = { ...moveRow(Dex.moves.get('shadowstrike')), isNonstandard: '' };
 // Old-generation Belly Drum and recharge rules (data/velvet/classic-mechanics.js).
 for (const id of require(path.join(PACKAGE, 'dist', 'data', 'velvet', 'classic-mechanics.js')).CHANGED_MOVES) overrides.moves[id] = moveRow(Dex.moves.get(id));
 // The creation trio's Shadow Force (data/velvet/creation-trio.js).

@@ -110,16 +110,473 @@ exports.learnsets = (data) => {
 	// and Zanmu Nippaku; they no longer learn it.
 	for (const id of Object.keys(DATA.learnsets)) if (id !== 'flandrescarlet' && data[id]) delete data[id].learnset.forbiddenbarrage;
 	if (data.flandrescarlet) data.flandrescarlet.learnset.forbiddenbarrage = ['9L1'];
-	// The Scarlet sisters' Awakened moves (the owner, 21 Oct 2026): the vampire's drain, a ghostly
-	// strike, a Trick Room exit, the server's shared set-up and the scarlet moon's Moonblast.
-	for (const id of ['remiliascarlet', 'flandrescarlet']) {
+	// Full movepools (the owner, 21 Oct 2026): the classic machines, their types' kits and
+	// their own canon, as machines ('9M'). See UNIVERSAL, TYPE_TMS and THEMATIC below.
+	for (const id of Object.keys(DATA.learnsets)) {
 		if (!data[id]) continue;
-		for (const move of ['carrionfeast', 'shadowstrike', 'twilightexit', 'hustleup', 'dancingblow', 'cloudfist', 'moonblast']) {
-			if (!data[id].learnset[move]) data[id].learnset[move] = ['9M'];
-		}
+		const learnset = data[id].learnset;
+		for (const move of grantsFor(id)) if (!learnset[move]) learnset[move] = ['9M'];
 	}
 	return data;
 };
+
+/*
+ * ------------------------------------------------------------- full movepools
+ *
+ * The mod gave them 26 to 89 moves each, about half a real Pokemon's, and none of the
+ * machines every Pokemon knows (the owner, 21 Oct 2026: "you need to MASSIVELY increase
+ * their pools to fit standard mons", "I want them to feel strong"). Three layers, every
+ * one a machine ('9M', the server's form; build-buffs ships them to the builder as '9a'):
+ *
+ *   UNIVERSAL  the TMs nearly every Pokemon learns.
+ *   TYPE_TMS   what a Pokemon of each type normally gets: status moves for every one
+ *              of the type, attacks by the side it attacks from (PHYSICAL / SPECIAL).
+ *   THEMATIC   each character's own canon: spell cards, abilities, what they are.
+ *
+ * Nothing here is anyone's signature, ours or the games' (test/touhou.test.js checks
+ * every entry against velvet-signatures.js and the moves of ours that are not shared).
+ * Past-generation moves (Pursuit, Hidden Power, Return) are fine: RP Touhou and the RP
+ * Battle formats are National Dex, which allows them. One exception to the signature rule,
+ * by the owner's own list: Confide, a universal TM in Generations 6 and 7 that
+ * velvet-signatures.js files under Impidimp only because nothing else kept it in Gen 9.
+ */
+const UNIVERSAL = ['toxic', 'weatherball', 'hiddenpower', 'terablast', 'protect', 'substitute', 'rest', 'sleeptalk',
+	'endure', 'facade', 'return', 'frustration', 'round', 'snore', 'attract', 'doubleteam', 'swagger', 'confide',
+	'secretpower', 'naturalgift', 'mimic', 'hyperbeam', 'gigaimpact', 'takedown', 'helpinghand', 'bodyslam', 'curse'];
+
+/*
+ * By type. `status` goes to every Boneka of the type; `physical` to the ones that hit
+ * physically, `special` to the ones that hit specially (both when they do both; see
+ * sides()). The server's own shared moves for the type (Wave Charge, Undertow, Hive
+ * Frenzy...) are in here too, the way buffs.js hands them to regular Pokemon.
+ */
+const TYPE_TMS = {
+	Normal: {
+		status: ['encore', 'yawn', 'wish', 'healbell', 'charm', 'workup', 'batonpass', 'disable', 'screech', 'hustleup', 'uproar'],
+		physical: ['doubleedge', 'quickattack', 'headbutt', 'swordsdance', 'retaliate', 'crushclaw', 'thrash'],
+		special: ['hypervoice', 'triattack', 'swift', 'echoedvoice'],
+	},
+	Fire: {
+		status: ['willowisp', 'sunnyday'],
+		physical: ['flareblitz', 'firepunch', 'firefang', 'flamecharge', 'temperflare', 'heatcrash', 'blazekick'],
+		special: ['flamethrower', 'fireblast', 'heatwave', 'overheat', 'mysticalfire', 'lavaplume', 'incinerate', 'firespin', 'ember'],
+	},
+	Water: {
+		status: ['raindance', 'aquaring', 'soak', 'lifedew', 'flipturn'],
+		physical: ['waterfall', 'liquidation', 'aquajet', 'aquatail', 'dive', 'wavecharge', 'superscope3d'],
+		special: ['surf', 'scald', 'hydropump', 'muddywater', 'waterpulse', 'whirlpool', 'brine', 'chillingwater', 'undertow'],
+	},
+	Grass: {
+		status: ['leechseed', 'synthesis', 'grassyterrain', 'stunspore', 'ingrain', 'worryseed', 'trailblaze'],
+		physical: ['leafblade', 'seedbomb', 'powerwhip', 'bulletseed', 'swordsdance'],
+		special: ['gigadrain', 'energyball', 'solarbeam', 'leafstorm', 'magicalleaf', 'grassknot', 'petalblizzard', 'solarnectar'],
+	},
+	Electric: {
+		status: ['thunderwave', 'electricterrain', 'charge', 'eerieimpulse', 'magnetrise', 'voltswitch'],
+		physical: ['wildcharge', 'thunderpunch', 'thunderfang', 'spark', 'supercellslam', 'voltaiclance', 'sparkscamper'],
+		special: ['thunderbolt', 'thunder', 'discharge', 'electroball', 'shockwave', 'chargebeam', 'electroweb'],
+	},
+	Ice: {
+		status: ['snowscape', 'hail', 'haze', 'mist', 'auroraveil', 'chillingmist'],
+		physical: ['iciclecrash', 'iciclespear', 'icepunch', 'icefang', 'iceshard', 'avalanche', 'rimecleaver'],
+		special: ['icebeam', 'blizzard', 'icywind', 'frostbreath', 'powdersnow'],
+	},
+	Psychic: {
+		status: ['calmmind', 'reflect', 'lightscreen', 'trickroom', 'trick', 'magiccoat', 'teleport', 'imprison', 'gravity',
+			'psychicterrain', 'skillswap', 'allyswitch', 'magicroom', 'wonderroom', 'hypnosis', 'amnesia', 'agility', 'safeguard'],
+		physical: ['zenheadbutt', 'psychocut', 'psychicfangs'],
+		special: ['psychic', 'psyshock', 'psybeam', 'futuresight', 'expandingforce', 'extrasensory', 'storedpower',
+			'psychicnoise', 'confusion', 'dreameater', 'hypnowhirl'],
+	},
+	Ghost: {
+		status: ['willowisp', 'confuseray', 'spite', 'painsplit', 'nightshade', 'destinybond'],
+		physical: ['shadowclaw', 'shadowsneak', 'phantomforce', 'shadowpunch', 'shadowstrike'],
+		special: ['shadowball', 'hex', 'ominouswind'],
+	},
+	Fairy: {
+		status: ['charm', 'sweetkiss', 'mistyterrain', 'babydolleyes', 'craftyshield'],
+		physical: ['playrough'],
+		special: ['moonblast', 'dazzlinggleam', 'drainingkiss', 'mistyexplosion', 'fairywind', 'alluringvoice', 'velvetpress'],
+	},
+	Flying: {
+		status: ['roost', 'tailwind', 'defog', 'featherdance', 'uturn'],
+		physical: ['bravebird', 'fly', 'drillpeck', 'acrobatics', 'aerialace', 'dualwingbeat', 'cloudfist'],
+		special: ['airslash', 'hurricane', 'aircutter', 'gust'],
+	},
+	Fighting: {
+		status: ['bulkup', 'detect', 'quickguard', 'coaching'],
+		physical: ['closecombat', 'drainpunch', 'brickbreak', 'machpunch', 'superpower', 'lowkick', 'highjumpkick', 'bodypress',
+			'rocksmash', 'lowsweep', 'reversal', 'focuspunch', 'shufflejab', 'dancingblow'],
+		special: ['aurasphere', 'focusblast', 'vacuumwave'],
+	},
+	Ground: {
+		status: ['stealthrock', 'spikes', 'sandstorm', 'sculptedarmor'],
+		physical: ['earthquake', 'highhorsepower', 'bulldoze', 'dig', 'stompingtantrum', 'drillrun', 'excavate', 'dustupheaval'],
+		special: ['earthpower', 'mudshot', 'scorchingsands', 'mudbomb', 'tremorshot'],
+	},
+	Rock: {
+		status: ['stealthrock', 'sandstorm', 'rockpolish', 'wideguard'],
+		physical: ['stoneedge', 'rockslide', 'rocktomb', 'rockblast', 'smackdown', 'craghammer'],
+		special: ['powergem', 'ancientpower', 'meteorbeam'],
+	},
+	Steel: {
+		status: ['irondefense', 'autotomize', 'metalsound'],
+		physical: ['ironhead', 'bulletpunch', 'heavyslam', 'gyroball', 'smartstrike', 'metalclaw', 'missile'],
+		special: ['flashcannon', 'steelbeam', 'mirrorshot'],
+	},
+	Poison: {
+		status: ['toxicspikes', 'acidarmor', 'gastroacid'],
+		physical: ['poisonjab', 'gunkshot', 'crosspoison', 'poisonfang'],
+		special: ['sludgebomb', 'sludgewave', 'venoshock', 'acidspray', 'clearsmog', 'sludge', 'oxidize'],
+	},
+	Bug: {
+		status: ['stringshot', 'ragepowder', 'uturn', 'chrysalisveil'],
+		physical: ['xscissor', 'leechlife', 'lunge', 'megahorn', 'pounce', 'bugbite', 'hivefrenzy'],
+		special: ['bugbuzz', 'signalbeam', 'strugglebug', 'pollenpuff'],
+	},
+	Dragon: {
+		status: ['dragontail'],
+		physical: ['outrage', 'dragonclaw', 'dragonrush', 'scaleshot', 'dragondance', 'breakingswipe'],
+		special: ['dragonpulse', 'dracometeor', 'dragonbreath', 'twister'],
+	},
+	Dark: {
+		// The owner's own list (Pursuit, Thief, Foul Play, Taunt, Knock Off), for all of them:
+		// Foul Play hits with the target's Attack and Knock Off is utility either way.
+		status: ['pursuit', 'thief', 'foulplay', 'taunt', 'knockoff', 'faketears', 'torment', 'quash', 
+			'wickedenergy'],
+		physical: ['crunch', 'bite', 'suckerpunch', 'throatchop', 'nightslash', 'lashout', 'payback', 'assurance', 'carrionfeast'],
+		special: ['darkpulse', 'snarl', 'nastyplot'],
+	},
+};
+
+/*
+ * Per character: a short reason, then the moves. Signatures that are theirs already
+ * (Dream Seal, Fate's Call...) come from the mod's learnsets above, not from here.
+ * Strong grants are marked RISK with what to watch.
+ */
+const THEMATIC = {
+	// Shrine maiden: barriers and wards (Fantasy Seal's Psyshock, not Mewtwo's Psystrike), the yin-yang orb.
+	reimuhakurei: ['barrier', 'reflect', 'lightscreen', 'safeguard', 'magiccoat', 'psyshock', 'calmmind', 'extrasensory', 'dazzlinggleam', 'aurasphere', 'vacuumwave'],
+	// Master Spark (Hyper Beam is universal), the stars of her magic, the broom, the books she "borrows".
+	marisakirisame: ['dracometeor', 'meteorbeam', 'swift', 'dazzlinggleam', 'powergem', 'mysticalfire', 'energyball', 'nastyplot', 'thief', 'covet', 'acrobatics', 'bravebird'],
+	// The youkai of darkness who eats people: the moonless night and its Moonlight Ray.
+	rumia: ['carrionfeast', 'shadowstrike', 'twilightexit', 'swordsdance', 'shadowsneak', 'shadowclaw', 'moonlight', 'psychicfangs', 'superfang', 'haze', 'playrough'],
+	// The great fairy of the misty lake: teleporting, healing, a fairy's dance.
+	daiyousei: ['teleport', 'calmmind', 'quiverdance', 'wish', 'healbell', 'pollenpuff', 'energyball', 'magicalleaf', 'psychic', 'lifedew'],
+	// The ice fairy (owner: Ice moves, Freeze-Dry). Perfect Freeze, the misty lake's chill.
+	cirno: ['freezedry', 'iceshard', 'iciclecrash', 'tripleaxel', 'icespinner', 'auroraveil', 'frostbreath', 'chillingmist', 'rimecleaver', 'uturn', 'mist'],
+	// The gatekeeper martial artist, rainbow qi, asleep on duty (owner: Belly Drum, "hi meiling").
+	// RISK: Belly Drum with Mach Punch; no Extreme Speed on top, which would be Azumarill with a Dragon STAB.
+	hongmeiling: ['bellydrum', 'bulkup', 'dragondance', 'machpunch', 'drainpunch', 'firepunch', 'icepunch', 'thunderpunch', 'highjumpkick', 'blazekick', 'cloudfist', 'dancingblow', 'shufflejab', 'focuspunch', 'rapidspin'],
+	// The library's little devil: tricks, Prankster mischief, bat wings.
+	koakuma: ['nastyplot', 'encore', 'partingshot', 'memento', 'trick', 'faketears', 'flatter', 'willowisp', 'hex', 'dazzlinggleam', 'airslash', 'psychic'],
+	// The magician of five elements and sun and moon (owner: all five, special, Calm Mind).
+	// Royal Flare's Overheat, Silent Selene's Moonblast. RISK: Neuroforce on full coverage.
+	patchouliknowledge: ['fireblast', 'flamethrower', 'heatwave', 'overheat', 'hydropump', 'surf', 'scald', 'gigadrain', 'energyball', 'leafstorm', 'solarbeam',
+		'flashcannon', 'steelbeam', 'earthpower', 'scorchingsands', 'moonblast', 'sunnyday', 'raindance', 'sandstorm', 'snowscape', 'calmmind'],
+	// The maid who stops time (owner: knives, Trick Room, Steel slicers). Time stop's Extreme Speed.
+	// RISK: Extreme Speed with Swords Dance.
+	sakuyaizayoi: ['nightslash', 'psychocut', 'sacredsword', 'leafblade', 'smartstrike', 'aerialace', 'trickroom', 'extremespeed', 'swordsdance', 'quickattack',
+		'uturn', 'knockoff', 'agility', 'quash', 'feint'],
+	// The scarlet devil (the owner's example set) and her set-up ("OH MY GOD NO SETUPS?"): Nasty Plot,
+	// Swords Dance, a vampire's drain, Gungnir's flight. RISK: Nasty Plot beside Fate's Call and Roost.
+	remiliascarlet: ['carrionfeast', 'shadowstrike', 'twilightexit', 'hustleup', 'dancingblow', 'cloudfist', 'moonblast', 'nastyplot', 'swordsdance', 'bravebird',
+		'hurricane', 'airslash', 'drainpunch', 'leechlife', 'psychicfangs', 'playrough', 'dualwingbeat'],
+	// Her sister: Laevateinn's fire, destroying everything, the same vampire kit and set-up.
+	// RISK: 130/135 attacks with Nasty Plot and Swords Dance both.
+	flandrescarlet: ['carrionfeast', 'shadowstrike', 'twilightexit', 'hustleup', 'dancingblow', 'cloudfist', 'moonblast', 'nastyplot', 'swordsdance', 'overheat',
+		'fireblast', 'flareblitz', 'flamethrower', 'heatwave', 'sacredsword', 'superpower', 'stompingtantrum', 'lashout', 'explosion', 'leechlife', 'drainpunch', 'psychicfangs'],
+	// The winter youkai: the long snow, its wind and its weight.
+	lettywhiterock: ['roar', 'reflect', 'lightscreen', 'mirrorcoat', 'healbell', 'surf', 'auroraveil', 'blizzard', 'wish', 'haze', 'avalanche', 'bodypress', 'frostbreath', 'chillingmist', 'calmmind', 'yawn', 'whirlwind'],
+	// Ran's cat shikigami: claws, a cat's speed, her endless spinning.
+	chen: ['fakeout', 'uturn', 'rapidspin', 'furyswipes', 'honeclaws', 'crushclaw', 'nightslash', 'playrough', 'knockoff', 'suckerpunch', 'acrobatics', 'shadowclaw'],
+	// The puppeteer: dolls on strings, decoys, the exploding Artful Sacrifice.
+	alicemargatroid: ['calmmind', 'trick', 'stringshot', 'spite', 'mistyexplosion', 'dazzlinggleam', 'flashcannon', 'magiccoat', 'teleport', 'allyswitch', 'magnetrise', 'irondefense'],
+	// The fairy who heralds spring: blossoms, sun, a spring dance.
+	lilywhite: ['grassyterrain', 'synthesis', 'sunnyday', 'petalblizzard', 'petaldance', 'sweetscent', 'quiverdance', 'pollenpuff', 'healbell', 'wish', 'solarnectar'],
+	// The Prismriver sisters, poltergeist musicians. Lunasa's violin is the gloomy one.
+	lunasaprismriver: ['echoedvoice', 'alluringvoice', 'icywind', 'haze', 'torment', 'calmmind', 'hypervoice', 'sing', 'perishsong', 'painsplit', 'willowisp', 'psychic', 'psychicnoise', 'disarmingvoice', 'snarl'],
+	// Merlin's trumpet is the manic one.
+	merlinprismriver: ['echoedvoice', 'alluringvoice', 'disarmingvoice', 'psychicnoise', 'dazzlinggleam', 'teeterdance', 'nastyplot', 'hypervoice', 'boomburst', 'uproar', 'sing', 'willowisp', 'metronome', 'trick', 'encore'],
+	// Lyrica's keyboard plays the illusory sounds.
+	lyricaprismriver: ['alluringvoice', 'disarmingvoice', 'dazzlinggleam', 'uproar', 'calmmind', 'hypervoice', 'sing', 'teeterdance', 'psychicnoise', 'echoedvoice', 'nastyplot', 'encore', 'trick', 'fakeout'],
+	// The half-phantom gardener and her two swords (owner: slicing moves, Swords Dance). RISK: Extreme Speed on 130 Speed.
+	youmukonpaku: ['swordsdance', 'sacredsword', 'leafblade', 'nightslash', 'psychocut', 'xscissor', 'aerialace', 'shadowsneak', 'shadowclaw', 'phantomforce',
+		'extremespeed', 'agility', 'uturn', 'shadowstrike', 'silverdagger', 'furycutter'],
+	// The ghost princess who invites death (owner: Destiny Bond, Perish Song), cherry blossoms, endless appetite.
+	yuyukosaigyouji: ['destinybond', 'perishsong', 'meanlook', 'willowisp', 'calmmind', 'strengthsap', 'petalblizzard', 'stockpile', 'swallow', 'spitup', 'belch',
+		'stuffcheeks', 'recycle', 'carrionfeast', 'grudge'],
+	// Yukari's nine-tailed fox shikigami, the calculator: foxfire and a fox's speed.
+	ranyakumo: ['nastyplot', 'flamethrower', 'fireblast', 'willowisp', 'mysticalfire', 'extrasensory', 'futuresight', 'uturn', 'swordsdance', 'firepunch', 'tailslap', 'agility'],
+	// The gap youkai: boundaries, rooms that change the rules, Twilight's exit. RISK: Nasty Plot on a 600 legend.
+	yukariyakumo: ['nastyplot', 'trickroom', 'wonderroom', 'magicroom', 'gravity', 'teleport', 'allyswitch', 'twilightexit', 'partingshot', 'trick', 'barrier', 'storedpower'],
+	// The oni of the gourd: strength, density and mist, boulders thrown.
+	suikaibuki: ['bulkup', 'drainpunch', 'firepunch', 'icepunch', 'thunderpunch', 'cloudfist', 'dancingblow', 'stoneedge', 'rockslide', 'heavyslam', 'mist', 'haze', 'growth', 'focusblast'],
+	// The firefly youkai: insect swarms and her light. RISK: Quiver Dance on mixed 115/107.
+	wrigglenightbug: ['quiverdance', 'hivefrenzy', 'chrysalisveil', 'firstimpression', 'lunge', 'pollenpuff', 'dazzlinggleam', 'signalbeam', 'swordsdance', 'megahorn', 'skittersmack'],
+	// The night sparrow: songs that blind at night.
+	mystialorelei: ['sing', 'hypervoice', 'alluringvoice', 'nastyplot', 'roost', 'hurricane', 'tailwind', 'featherdance', 'snarl', 'torment'],
+	// The history teacher, a were-hakutaku: her headbutts, her horns, history hidden and remembered.
+	keine: ['headsmash', 'zenheadbutt', 'headbutt', 'megahorn', 'hornattack', 'amnesia', 'calmmind', 'futuresight', 'extrasensory', 'imprison', 'bodypress', 'irondefense'],
+	// The lucky rabbit trickster. Huge Power, so she hits physically too.
+	tewiinaba: ['quickattack', 'highjumpkick', 'bounce', 'dig', 'doublekick', 'playrough', 'knockoff', 'thief', 'trick', 'encore', 'partingshot', 'charm', 'fakeout', 'superfang'],
+	// The lunar rabbit: Lunatic Red Eyes' madness, her gun and the bullets of light.
+	reiseninaba: ['nastyplot', 'hypnosis', 'confuseray', 'psybeam', 'psychicnoise', 'voltswitch', 'uturn', 'aurasphere', 'vacuumwave', 'lockon', 'zapcannon', 'electroweb', 'teleport'],
+	// The lunar genius pharmacist and archer: medicine and the moon. RISK: Recover and Calm Mind on 200 Sp. Def.
+	eirinyagokoro: ['recover', 'healpulse', 'healbell', 'refresh', 'wish', 'calmmind', 'storedpower', 'futuresight', 'moonblast', 'acupressure', 'magicroom', 'trickroom'],
+	// The moon princess and her five impossible requests: the jeweled branch, the fire-rat robe,
+	// the dragon's jewel, the swallow's shell. Moonlight, with Magic Guard (Clefable's set).
+	kaguyahouraisan: ['moonblast', 'moonlight', 'dragonpulse', 'powergem', 'flamethrower', 'airslash', 'calmmind', 'meteorbeam', 'psychic', 'earthpower'],
+	// The immortal phoenix: Rising Phoenix, burning herself and rising again.
+	fujiwaranomokou: ['flareblitz', 'blazekick', 'firepunch', 'bravebird', 'roost', 'bulkup', 'flamecharge', 'overheat', 'reversal', 'memento', 'explosion', 'temperflare'],
+	// The crow tengu reporter, fastest in Gensokyo (owner: Brave Bird, Hurricane, Tailwind); her fan, her camera's flash.
+	// RISK: Extreme Speed and Swords Dance on 170 Speed.
+	ayashameimaru: ['bravebird', 'hurricane', 'tailwind', 'extremespeed', 'uturn', 'defog', 'roost', 'acrobatics', 'agility', 'swordsdance', 'heatwave', 'whirlwind', 'quickattack', 'twister'],
+	// The poison doll among the lilies of the valley.
+	medicinemelancholy: ['calmmind', 'painsplit', 'leechseed', 'toxicspikes', 'gastroacid', 'acidarmor', 'poisonpowder', 'stunspore', 'synthesis', 'gigadrain', 'energyball', 'oxidize', 'hex', 'clearsmog'],
+	// The flower master, strongest of youkai, whose Master Spark Marisa copied (Hyper Beam is universal).
+	yuukakazami: ['frenzyplant', 'solarblade', 'solarbeam', 'leafstorm', 'petalblizzard', 'petaldance', 'woodhammer', 'powerwhip', 'growth', 'swordsdance', 'trickroom',
+		'ingrain', 'drainpunch', 'solarnectar'],
+	// The lazy shinigami ferrywoman: her scythe, the Sanzu's water, distance manipulation.
+	komachionozuka: ['slackoff', 'yawn', 'nightslash', 'psychocut', 'xscissor', 'razorshell', 'aquacutter', 'sacredsword', 'swordsdance', 'phantomforce', 'shadowsneak', 'destinybond', 'shadowstrike'],
+	// The Yama: the Rod of Remorse, the Mirror of Judgment, black and white, her long sermons.
+	eikishiki: ['calmmind', 'psychic', 'psyshock', 'mirrorcoat', 'flashcannon', 'punishment', 'quash', 'torment', 'imprison', 'darkpulse', 'dazzlinggleam', 'hypervoice', 'focusblast', 'aurasphere'],
+	// The goddess of autumn leaves. RISK: Tailwind sets off her own Wind Rider (+1 Attack).
+	shizuhaaki: ['leaftornado', 'leafblade', 'leafstorm', 'magicalleaf', 'razorleaf', 'petalblizzard', 'tailwind', 'aircutter', 'hurricane', 'swordsdance', 'uturn', 'solarblade'],
+	// The goddess of the harvest: crops, sweet potatoes, a good table.
+	minorikoaki: ['synthesis', 'rototiller', 'growth', 'ingrain', 'leechseed', 'stuffcheeks', 'recycle', 'seedbomb', 'earthpower', 'gigadrain'],
+	// The goddess of misfortune, who spins to gather it.
+	hinakagiyama: ['rapidspin', 'teeterdance', 'grudge', 'spite', 'hex', 'memento', 'nastyplot', 'toxicspikes', 'clearsmog', 'haze', 'gyroball'],
+	// The kappa engineer (owner: water and tech): gadgets, optical camouflage, Kappa's Pororoca.
+	nitorikawashiro: ['hydropump', 'waterspout', 'scald', 'flashcannon', 'steelbeam', 'thunderbolt', 'voltswitch', 'electroball', 'magnetrise', 'trick', 'autotomize', 'zapcannon', 'lockon', 'flipturn', 'raindance', 'icebeam'],
+	// The white wolf tengu on guard (owner: dog moves): fangs, howls, sword and shield. RISK: Strong Jaw fangs with Extreme Speed.
+	momijiinubashiri: ['crunch', 'firefang', 'icefang', 'thunderfang', 'psychicfangs', 'howl', 'roar', 'extremespeed', 'sacredsword', 'swordsdance', 'bulkup', 'bodypress',
+		'irondefense', 'wideguard', 'quickguard', 'retaliate', 'nightslash'],
+	// The wind priestess of miracles: Serene Grace's flinches and the Moriya's rain.
+	sanaekochiya: ['hurricane', 'thunder', 'thunderbolt', 'icebeam', 'calmmind', 'wish', 'healbell', 'miracleeye', 'tailwind', 'psychic', 'dazzlinggleam', 'swift', 'meteorbeam', 'gust', 'aircutter'],
+	// The goddess of wind and war: the onbashira pillars and the serpent.
+	kanakoyasaka: ['woodhammer', 'heavyslam', 'coil', 'glare', 'swordsdance', 'bravebird', 'tailwind', 'roost', 'defog', 'stoneedge', 'rockslide', 'crunch', 'superpower'],
+	// The frog goddess and the Mishaguji's curses, her iron rings.
+	suwakomoriya: ['hypnosis', 'bounce', 'muddywater', 'mudshot', 'scald', 'earthpower', 'hydropump', 'calmmind', 'hex', 'grudge', 'sludgebomb', 'flashcannon', 'stealthrock', 'spikes'],
+	// The oarfish envoy of the dragon palace: storm clouds and lightning. RISK: Dragon Dance with Multiscale.
+	ikunagae: ['dragondance', 'calmmind', 'raindance', 'surf', 'hydropump', 'waterfall', 'aquatail', 'hurricane', 'thunder', 'dracometeor', 'twister', 'dragontail', 'wildcharge', 'thunderpunch'],
+	// The celestial with the Sword of Hisou, earthquakes and keystones, who wants to be hit.
+	tenshihinanawi: ['sacredsword', 'swordsdance', 'counter', 'metalburst', 'reversal', 'bodypress', 'irondefense', 'craghammer', 'sculptedarmor', 'headsmash', 'highhorsepower', 'stealthrock', 'rockpolish'],
+	// The well-bucket youkai who drops on heads; her onibi. Shell Smash: the bucket is a shell.
+	kisume: ['headsmash', 'heavyslam', 'smackdown', 'withdraw', 'shellsmash', 'willowisp', 'gyroball', 'rollout', 'bodypress', 'stealthrock'],
+	// The earth spider who spreads disease.
+	yamamekurodani: ['stickyweb', 'stringshot', 'lunge', 'firstimpression', 'leechlife', 'poisonjab', 'gunkshot', 'xscissor', 'uturn', 'swordsdance', 'toxicspikes', 'infestation', 'earthquake', 'spiderweb'],
+	// The bridge princess, the green-eyed monster.
+	parseemizuhashi: ['torment', 'grudge', 'spite', 'hex', 'willowisp', 'nastyplot', 'psychup', 'faketears', 'lashout', 'shadowball', 'calmmind'],
+	// The oni of strength and her Three Steps of Certain Kill.
+	yuugihoshiguma: ['hammerarm', 'dynamicpunch', 'focuspunch', 'drainpunch', 'superpower', 'firepunch', 'icepunch', 'thunderpunch', 'cloudfist', 'shufflejab', 'craghammer', 'earthquake', 'bulkup', 'headsmash', 'stealthrock'],
+	// The mind reader and her third eye.
+	satorikomeiji: ['mindreader', 'mefirst', 'copycat', 'psychup', 'hypnosis', 'dreameater', 'nightmare', 'imprison', 'skillswap', 'mirrorcoat', 'counter', 'nastyplot', 'trick', 'powersplit', 'guardsplit'],
+	// The kasha cat who steals corpses, with her zombie fairies.
+	rinkaenbyou: ['willowisp', 'hex', 'overheat', 'mysticalfire', 'nastyplot', 'uturn', 'fakeout', 'partingshot', 'destinybond', 'nightshade', 'flamecharge', 'acrobatics'],
+	// The hell raven with the sun inside her (owner: nuclear moves, but no Blue Flare or Fusion Flare):
+	// Overheat, Flare Blitz, the meltdown's Explosion, the control rod's Steel Beam, Giga Flare's Meteor Beam.
+	// RISK: 680 base stats; no set-up at all, and Klutz keeps her off the Choice items.
+	utsuhoreiuji: ['overheat', 'flareblitz', 'fireblast', 'heatwave', 'sunnyday', 'solarbeam', 'explosion', 'steelbeam', 'flashcannon', 'meteorbeam', 'bravebird'],
+	// The closed eye, the unconscious: roses, unnoticed approach. RISK: Calm Mind and Stored Power with Unaware on 157 Sp. Def.
+	koishikomeiji: ['hypnosis', 'teeterdance', 'confuseray', 'petalblizzard', 'magicalleaf', 'calmmind', 'storedpower', 'wish', 'boomburst', 'hypervoice', 'encore', 'trick', 'spite', 'imprison'],
+	// The mouse dowser of Bishamonten: treasure-finding.
+	nazrin: ['superfang', 'nuzzle', 'quickattack', 'uturn', 'thief', 'covet', 'knockoff', 'crunch', 'powergem', 'swordsdance', 'agility', 'foresight', 'mindreader', 'dig', 'rapidspin'],
+	// The karakasa umbrella who wants to surprise, and the blacksmith she is.
+	kogasatatara: ['fakeout', 'astonish', 'lick', 'scaryface', 'suckerpunch', 'aquajet', 'liquidation', 'playrough', 'ironhead', 'bulletpunch', 'heavyslam', 'smartstrike', 'bounce', 'raindance', 'swordsdance'],
+	// The nun and Unzan, the cloud nyuudou who throws her punches.
+	ichirinkumoi: ['machpunch', 'drainpunch', 'dynamicpunch', 'focuspunch', 'hammerarm', 'firepunch', 'icepunch', 'thunderpunch', 'shadowpunch', 'bulkup', 'skyuppercut', 'megapunch', 'mist', 'haze'],
+	// The ghost captain who sinks ships with her anchor.
+	minamitsumurasa: ['wavecrash', 'liquidation', 'aquajet', 'dive', 'whirlpool', 'phantomforce', 'shadowsneak', 'heavyslam', 'ironhead', 'swordsdance', 'destinybond', 'soak', 'shadowstrike'],
+	// Bishamonten's avatar: the tiger and the jeweled pagoda's light.
+	shoutoramaru: ['thunderfang', 'firefang', 'icefang', 'crunch', 'wildcharge', 'playrough', 'powergem', 'calmmind', 'bulkup', 'roar', 'sacredsword'],
+	// The magician monk whose magic strengthens the body. RISK: Extreme Speed beside Bulk Up and Calm Mind.
+	byakurenhijiri: ['bulkup', 'calmmind', 'agility', 'highjumpkick', 'drainpunch', 'machpunch', 'zenheadbutt', 'aurasphere', 'vacuumwave', 'extremespeed', 'meditate', 'healbell', 'dazzlinggleam', 'dancingblow'],
+	// The unidentifiable nue, a thunder-beast, with her UFOs.
+	nuehoujuu: ['nastyplot', 'thunderbolt', 'thunder', 'confuseray', 'trick', 'partingshot', 'spite', 'imprison', 'disable'],
+	// The crow tengu who photographs from afar.
+	hatatehimekaidou: ['airslash', 'hurricane', 'tailwind', 'roost', 'uturn', 'defog', 'nastyplot', 'foresight', 'mindreader', 'heatwave', 'gust', 'aircutter', 'extrasensory'],
+	// The three light fairies. Sunny Milk bends sunlight.
+	sunnymilk: ['solarblade', 'sunnyday', 'morningsun', 'flareblitz', 'firepunch', 'flamecharge', 'playrough', 'uturn', 'thief', 'swordsdance', 'temperflare'],
+	// Luna Child silences sound under moonlight.
+	lunachild: ['moonblast', 'moonlight', 'calmmind', 'snarl', 'disable', 'torment', 'yawn', 'teleport', 'foulplay'],
+	// Star Sapphire senses every living thing by starlight. Pixilate's Hyper Voice, as Sylveon's.
+	starsapphire: ['hypervoice', 'swift', 'triattack', 'meteorbeam', 'cosmicpower', 'storedpower', 'calmmind', 'foresight', 'miracleeye', 'futuresight'],
+	// The yamabiko punk singer: every echo, and what she throws back.
+	kyoukokasodani: ['boomburst', 'hypervoice', 'echoedvoice', 'uproar', 'screech', 'snarl', 'supersonic', 'nobleroar', 'sing', 'mirrorcoat', 'mirrormove', 'copycat', 'alluringvoice', 'disarmingvoice'],
+	// The jiang-shi, stiff and always hungry.
+	yoshikamiyako: ['carrionfeast', 'stockpile', 'swallow', 'belch', 'stuffcheeks', 'poisonjab', 'gunkshot', 'poisonfang', 'crunch', 'shadowclaw', 'shadowsneak', 'painsplit', 'bounce', 'irondefense', 'bulkup', 'drainpunch'],
+	// The wicked hermit who walks through walls and raises the dead.
+	seigakaku: ['nastyplot', 'shadowball', 'hex', 'sludgebomb', 'trick', 'partingshot', 'hypnosis', 'dreameater', 'nightshade', 'focusblast', 'psychic', 'teleport', 'faketears'],
+	// The vengeful ghost of the Soga clan, a thunderstorm.
+	soganotojiko: ['nastyplot', 'thunder', 'thunderbolt', 'discharge', 'hex', 'willowisp', 'grudge', 'destinybond', 'raindance', 'electroweb', 'zapcannon', 'hurricane'],
+	// The Taoist who sets temples alight, rides boats and reads feng shui.
+	mononobenofuto: ['flamethrower', 'fireblast', 'overheat', 'scald', 'hydropump', 'flareblitz', 'liquidation', 'willowisp', 'calmmind', 'earthpower', 'psychic', 'sunnyday', 'raindance', 'aquajet', 'flamecharge'],
+	// The saint who hears ten voices at once: her sword, her mantle's light.
+	// RISK: 585 base stats, mixed, with Nasty Plot and Swords Dance both.
+	toyosatomiminomiko: ['calmmind', 'nastyplot', 'swordsdance', 'sacredsword', 'aurasphere', 'vacuumwave', 'focusblast', 'psychic', 'psyshock', 'flashcannon', 'mindreader', 'foresight', 'meteorbeam', 'healbell', 'drainpunch'],
+	// The bake-danuki of Sado: a tanuki's belly drum, transformation tricks. RISK: Belly Drum with Sucker Punch (but 50 Speed).
+	mamizoufutatsuiwa: ['bellydrum', 'fakeout', 'leafblade', 'seedbomb', 'woodhammer', 'doubleedge', 'suckerpunch', 'knockoff', 'uturn', 'swordsdance', 'trick', 'copycat', 'leechseed', 'synthesis'],
+	// The one-armed hermit: an oni's arm, a hundred medicines, her eagle.
+	kasenibaraki: ['drainpunch', 'bulkup', 'swordsdance', 'hornleech', 'woodhammer', 'machpunch', 'hammerarm', 'icepunch', 'thunderpunch', 'firepunch', 'powerwhip', 'synthesis', 'bravebird', 'cloudfist'],
+	// The menreiki of sixty-six masks, one per emotion, and her naginata. RISK: Libero makes all of it STAB.
+	hatanokokoro: ['charm', 'scaryface', 'faketears', 'tickle', 'flatter', 'torment', 'psychocut', 'nightslash', 'sacredsword', 'swordsdance', 'calmmind', 'teeterdance', 'shadowsneak', 'lashout'],
+	// The mermaid of the lake, who sings.
+	wakasagihime: ['sing', 'alluringvoice', 'aquaring', 'lifedew', 'wavecrash', 'liquidation', 'aquajet', 'flipturn', 'dive', 'whirlpool', 'icebeam', 'undertow', 'wavecharge', 'swordsdance', 'dragondance'],
+	// The rokurokubi whose flying heads fire lasers.
+	sekibanki: ['flashcannon', 'powergem', 'hypervoice', 'snarl', 'spite', 'nastyplot', 'hex', 'willowisp', 'confuseray', 'scaryface', 'psybeam', 'darkpulse', 'chargebeam', 'signalbeam', 'dazzlinggleam', 'partingshot', 'teleport', 'ominouswind'],
+	// The shy werewolf. RISK: Strong Jaw fangs, Swords Dance and a Normal-STAB Extreme Speed.
+	kagerouimaizumi: ['crunch', 'firefang', 'icefang', 'thunderfang', 'psychicfangs', 'howl', 'roar', 'moonlight', 'honeclaws', 'crushclaw', 'nightslash', 'shadowclaw', 'quickattack',
+		'extremespeed', 'swordsdance', 'jawlock', 'uturn'],
+	// The tsukumogami sisters. Benben's biwa (Minus).
+	benbentsukumo: ['hypervoice', 'echoedvoice', 'sing', 'uproar', 'voltswitch', 'thunder', 'discharge', 'nastyplot', 'magneticflux', 'electroweb', 'alluringvoice', 'charge', 'eerieimpulse'],
+	// Yatsuhashi's koto (Plus).
+	yatsuhashitsukumo: ['hypervoice', 'echoedvoice', 'sing', 'uproar', 'voltswitch', 'thunder', 'discharge', 'nastyplot', 'magneticflux', 'electroweb', 'alluringvoice', 'charge', 'eerieimpulse'],
+	// The amanojaku who turns everything upside down: Contrary's reversed drops.
+	// RISK: Contrary turns Superpower, Close Combat and Hammer Arm into boosts.
+	seijakijin: ['superpower', 'closecombat', 'hammerarm', 'switcheroo', 'reversal', 'counter', 'mirrorcoat', 'skillswap', 'knockoff', 'uturn'],
+	// The inchling: her needle sword and the Miracle Mallet that grants wishes and growth.
+	shinmyoumarusukuna: ['pinmissile', 'smartstrike', 'sacredsword', 'furycutter', 'woodhammer', 'hammerarm', 'heavyslam', 'growth', 'swordsdance', 'wish', 'endeavor', 'metalburst', 'reversal', 'counter', 'silverdagger'],
+	// The taiko drum tsukumogami: thunder, rhythm, the drum's roar.
+	raikohorikawa: ['thunder', 'thunderpunch', 'wildcharge', 'supercellslam', 'boomburst', 'hypervoice', 'uproar', 'echoedvoice', 'electricterrain', 'charge', 'bulkup', 'nastyplot'],
+	// The outside-world psychic: telekinesis, Zener cards, the urban legends' occult balls, her phone.
+	sumirekousami: ['nastyplot', 'calmmind', 'telekinesis', 'gravity', 'trick', 'teleport', 'shadowball', 'focusblast', 'chargebeam', 'thunderbolt', 'powergem', 'magicroom', 'psychicnoise'],
+	// The lunar rabbit soldier: her gun, her mochi mallet. RISK: Sniper with Focus Energy.
+	seiran: ['lockon', 'focusenergy', 'flashcannon', 'aurasphere', 'vacuumwave', 'psybeam', 'heavyslam', 'ironhead', 'bulletpunch', 'quickattack', 'highjumpkick', 'uturn', 'agility', 'zenheadbutt'],
+	// The lunar rabbit dango seller (Cheek Pouch).
+	ringo: ['stuffcheeks', 'belch', 'recycle', 'stockpile', 'swallow', 'bulletseed', 'seedbomb', 'powerwhip', 'uturn', 'quickattack', 'highjumpkick', 'swordsdance', 'knockoff', 'bounce'],
+	// The baku who eats dreams.
+	doremysweet: ['dreameater', 'hypnosis', 'nightmare', 'yawn', 'calmmind', 'moonlight', 'shadowball', 'hex', 'nightshade', 'moonblast', 'storedpower'],
+	// The Lunarian goddess whose words reverse fate. RISK: Contrary Leaf Storm and Overheat.
+	sagumekishin: ['skillswap', 'leafstorm', 'overheat', 'hurricane', 'roost', 'defog', 'tailwind', 'moonblast', 'psychic', 'futuresight'],
+	// The hell fairy and her torch of lunacy; the stars and stripes.
+	clownpiece: ['flamethrower', 'fireblast', 'lavaplume', 'willowisp', 'mysticalfire', 'confuseray', 'teeterdance', 'flatter', 'encore', 'wish', 'swift', 'meteorbeam', 'nastyplot', 'fakeout', 'uturn'],
+	// Pure fury: a divine spirit of vengeance. RISK: 600 base stats with Extreme Speed, Swords Dance,
+	// Nasty Plot and Boomburst, and Mold Breaker.
+	junko: ['boomburst', 'hypervoice', 'extremespeed', 'swordsdance', 'nastyplot', 'thrash', 'outrage', 'lashout', 'stompingtantrum', 'doubleedge', 'shadowball', 'darkpulse',
+		'moonblast', 'flamethrower', 'icebeam', 'thunderbolt', 'earthquake', 'grudge', 'destinybond', 'taunt', 'spite'],
+	// The goddess of hell with a body on each world: hell's fire, the Earth's and the Moon's moves.
+	hecatia: ['nastyplot', 'calmmind', 'willowisp', 'painsplit', 'destinybond', 'meanlook', 'trickroom', 'moonblast', 'earthpower', 'gigadrain', 'scald', 'dracometeor', 'flamethrower',
+		'fireblast', 'psychic', 'meteorbeam', 'partingshot'],
+	// The pestilence goddess who spends: jewellery, fashion, other people's things.
+	joonyorigami: ['nastyplot', 'powergem', 'dazzlinggleam', 'trick', 'switcheroo', 'fling', 'thief', 'covet', 'recycle', 'charm', 'flatter', 'steelbeam', 'sludgewave', 'oxidize'],
+	// Her sister, the goddess of poverty: misfortune and loss.
+	shionyorigami: ['spite', 'grudge', 'destinybond', 'memento', 'hex', 'painsplit', 'trick', 'gastroacid', 'torment', 'nastyplot', 'willowisp', 'nightshade', 'clearsmog', 'toxicspikes'],
+	// The swallowtail butterfly fairy. RISK: Quiver Dance on 138 Sp. Atk with Regenerator.
+	eternitylarva: ['quiverdance', 'bugbuzz', 'pollenpuff', 'stunspore', 'silverwind', 'gigadrain', 'energyball', 'solarbeam', 'sunnyday', 'hurricane', 'roost', 'tailwind', 'uturn', 'dazzlinggleam', 'growth'],
+	// The mountain hag and her cleaver (Cut Deep).
+	nemunosakata: ['nightslash', 'psychocut', 'leafblade', 'xscissor', 'sacredsword', 'silverdagger', 'swordsdance', 'stoneedge', 'stealthrock', 'spikes', 'woodhammer', 'synthesis', 'rockpolish', 'scaryface', 'roar'],
+	// The komainu guardian: a lion-dog's fangs and a shrine guard's shields. RISK: Rock Head Head Smash.
+	aunnkomano: ['crunch', 'firefang', 'icefang', 'thunderfang', 'psychicfangs', 'howl', 'roar', 'playrough', 'wideguard', 'quickguard', 'followme', 'bodypress', 'irondefense', 'headsmash', 'doubleedge', 'swordsdance'],
+	// The jizo statue of the Forest of Magic, guarding the living and the dead.
+	narumiyatadera: ['powergem', 'meteorbeam', 'earthpower', 'frostbreath', 'calmmind', 'stealthrock', 'irondefense', 'wish', 'healbell', 'energyball', 'shadowball', 'auroraveil', 'sandstorm', 'snowscape'],
+	// Okina's backup dancers, with their bamboo. Mai: every dance there is.
+	maiteireida: ['swordsdance', 'dragondance', 'featherdance', 'teeterdance', 'petaldance', 'leafblade', 'bulletseed', 'tripleaxel', 'highjumpkick', 'fakeout', 'uturn', 'afteryou', 'followme', 'cloudfist'],
+	// Satono, her twin, with the ginger.
+	satononishida: ['swordsdance', 'dragondance', 'featherdance', 'teeterdance', 'petaldance', 'leafblade', 'bulletseed', 'tripleaxel', 'highjumpkick', 'fakeout', 'uturn', 'afteryou', 'followme', 'shufflejab'],
+	// The secret god of back doors and the four seasons (her formes): each season's weather and moves.
+	// RISK: a 580 legend with Nasty Plot and Swords Dance.
+	okinamatara: ['nastyplot', 'swordsdance', 'uturn', 'partingshot', 'twilightexit', 'teleport', 'sunnyday', 'raindance', 'sandstorm', 'snowscape', 'hydropump', 'scald', 'fireblast',
+		'flamethrower', 'powergem', 'stoneedge', 'icebeam', 'blizzard', 'iciclecrash', 'solarbeam'],
+	// The child spirit stacking stones by the Sanzu, and its water.
+	eikaebisu: ['stealthrock', 'spikes', 'irondefense', 'bodypress', 'powergem', 'meteorbeam', 'hex', 'willowisp', 'painsplit', 'calmmind', 'sandstorm', 'followme', 'lifedew', 'surf', 'scald'],
+	// The ushi-oni, a cow, with her ever-heavier stone baby.
+	urumiushizaki: ['highhorsepower', 'headsmash', 'megahorn', 'heavyslam', 'gravity', 'stoneedge', 'rockslide', 'liquidation', 'wavecrash', 'aquatail', 'stealthrock', 'bulkup', 'smackdown'],
+	// The niwatari god, a chicken guarding the checkpoint. RISK: Simple doubles Calm Mind (no Nasty Plot here).
+	kutakaniwatari: ['calmmind', 'roost', 'featherdance', 'hurricane', 'tailwind', 'defog', 'scald', 'hydropump', 'icebeam', 'uturn', 'bravebird', 'dualwingbeat', 'mirrormove', 'quickguard', 'wideguard'],
+	// The jidiao turtle-dragon boss of the Kiketsu family, all intimidation. No Shell Smash: Beast Boost.
+	yachiekicchou: ['withdraw', 'irondefense', 'bodypress', 'dragontail', 'dracometeor', 'knockoff', 'taunt', 'torment', 'partingshot', 'nobleroar', 'scaryface', 'snarl', 'trickroom', 'aquatail', 'waterpulse'],
+	// The haniwa soldier who follows Keiki's orders.
+	mayumijoutouguu: ['irondefense', 'swordsdance', 'bulkup', 'sacredsword', 'smartstrike', 'ironhead', 'heavyslam', 'highhorsepower', 'bodypress', 'stealthrock', 'wideguard', 'quickguard', 'sculptedarmor', 'gyroball'],
+	// The goddess of creation who sculpts the haniwa: clay reshaped, and her own Electric Surge.
+	// RISK: Shore Up and Calm Mind on a 572 legend with Rising Voltage in her own terrain.
+	keikihaniyasushin: ['shoreup', 'calmmind', 'earthpower', 'voltswitch', 'stealthrock', 'meteorbeam', 'powergem', 'flashcannon', 'sandstorm', 'electricterrain', 'wildcharge',
+		'highhorsepower', 'thunderpunch', 'irondefense'],
+	// The black pegasus boss of the Keiga family and her kicks. RISK: No Guard Dynamic Punch, Mega Kick and Stone Edge.
+	sakikurokuma: ['highjumpkick', 'blazekick', 'axekick', 'megakick', 'doublekick', 'dynamicpunch', 'highhorsepower', 'stomp', 'bounce', 'bravebird', 'dualwingbeat', 'roost', 'swordsdance', 'bulkup', 'stoneedge'],
+	// The taotie boss of the Gouyoku alliance, who devours everything.
+	yuumatoutetsu: ['carrionfeast', 'stockpile', 'swallow', 'spitup', 'belch', 'stuffcheeks', 'jawlock', 'suckerpunch', 'wavecrash', 'liquidation', 'bulkup', 'swordsdance', 'whirlpool', 'thief'],
+	// The maneki-neko who beckons customers and money.
+	mikegotoukuji: ['followme', 'fakeout', 'uturn', 'nastyplot', 'flashcannon', 'powergem', 'charm', 'covet', 'encore', 'furyswipes', 'slash', 'playrough'],
+	// The mountain kappa broker of the forest (Pickpocket).
+	takaneyamashiro: ['leechseed', 'synthesis', 'gigadrain', 'energyball', 'scald', 'surf', 'raindance', 'spikes', 'trick', 'switcheroo', 'flipturn', 'grassknot', 'aquaring', 'lifedew', 'calmmind'],
+	// The mountain hag who sells tobacco: her smoke.
+	sannyokomakusa: ['smokescreen', 'haze', 'clearsmog', 'smog', 'willowisp', 'lavaplume', 'flamethrower', 'dragonpulse', 'calmmind', 'mysticalfire', 'dragontail', 'incinerate', 'heatwave'],
+	// The goddess who makes the magatama and the yin-yang orbs.
+	misumarutamatsukuri: ['magiccoat', 'storedpower', 'cosmicpower', 'irondefense', 'gravity', 'trickroom', 'powergem', 'meteorbeam', 'ancientpower', 'rockpolish', 'calmmind', 'stealthrock', 'psychic', 'psyshock', 'dazzlinggleam', 'earthpower', 'flashcannon', 'reflect', 'lightscreen', 'sandstorm'],
+	// The kuda-gitsune pipe fox, a whispering manipulator (Prankster).
+	tsukasakudamaki: ['partingshot', 'taunt', 'encore', 'torment', 'flatter', 'faketears', 'trick', 'willowisp', 'hex', 'nastyplot', 'sweetkiss', 'disable', 'memento', 'foulplay', 'hypervoice'],
+	// The great tengu chief, and her starlight.
+	megumuiizunamaru: ['meteorbeam', 'swift', 'airslash', 'hurricane', 'calmmind', 'roost', 'tailwind', 'defog', 'bravebird', 'skyattack', 'extrasensory', 'dazzlinggleam', 'powergem', 'agility', 'futuresight'],
+	// The goddess of the market and of ownerlessness, of the rainbow.
+	chimatatenkyuu: ['trick', 'switcheroo', 'bestow', 'fling', 'recycle', 'aurorabeam', 'dazzlinggleam', 'calmmind', 'roost', 'tailwind', 'defog', 'powergem', 'hurricane'],
+	// The great centipede who mines and eats dragons. RISK: Speed Boost with Swords Dance and Coil.
+	momoyohimemushi: ['firstimpression', 'lunge', 'megahorn', 'xscissor', 'uturn', 'pounce', 'stoneedge', 'stealthrock', 'spikes', 'drillrun', 'dig', 'poisonjab', 'poisonfang', 'crunch', 'dragonclaw', 'coil', 'swordsdance'],
+	// The monkey and her extending staff. RISK: Magic Guard with Nasty Plot.
+	sonbiten: ['nastyplot', 'focusblast', 'aurasphere', 'vacuumwave', 'uturn', 'fakeout', 'knockoff', 'encore', 'taunt', 'screech', 'tickle', 'energyball', 'grassknot', 'rapidspin', 'psychic'],
+	// The hunting wolf pack's leader (Strong Jaw).
+	enokomitsugashira: ['howl', 'roar', 'crunch', 'jawlock', 'psychicfangs', 'firefang', 'icefang', 'thunderfang', 'swordsdance', 'suckerpunch', 'knockoff', 'bulletpunch', 'uturn', 'quickattack', 'nobleroar'],
+	// The blood pool's bloodsucker.
+	chiyaritenkajin: ['leechlife', 'drainpunch', 'flareblitz', 'firefang', 'firepunch', 'temperflare', 'shadowclaw', 'shadowsneak', 'willowisp', 'painsplit', 'swordsdance', 'flamecharge', 'carrionfeast', 'shadowstrike'],
+	// The yomotsu-shikome, Zanmu's devoted hag of the underworld.
+	hisamiyomotsu: ['willowisp', 'hex', 'gigadrain', 'leechseed', 'spikes', 'toxicspikes', 'painsplit', 'meanlook', 'spite', 'synthesis', 'ingrain', 'sludgebomb', 'energyball', 'strengthsap', 'knockoff'],
+	// The oni of nothingness who runs Hell. RISK: a 600 legend, mixed, with Nasty Plot and Swords Dance.
+	zanmunippaku: ['nastyplot', 'swordsdance', 'knockoff', 'suckerpunch', 'partingshot', 'haze', 'clearsmog', 'shadowball', 'shadowclaw', 'phantomforce', 'willowisp', 'destinybond', 'focusblast',
+		'closecombat', 'earthquake', 'icebeam', 'thunderbolt', 'twilightexit'],
+	// The robot maid (Cactus Drive): machinery, missiles, tea.
+	vivit: ['autotomize', 'magnetrise', 'voltswitch', 'thunderbolt', 'flashcannon', 'steelbeam', 'zapcannon', 'lockon', 'thunderpunch', 'wildcharge', 'bulletpunch', 'ironhead', 'gyroball', 'supercellslam',
+		'rapidspin', 'agility'],
+	// The earth's sand and stone (Sand Force).
+	ubamechirizuka: ['highhorsepower', 'stoneedge', 'rockslide', 'sandstorm', 'stealthrock', 'spikes', 'swordsdance', 'knockoff', 'suckerpunch', 'scorchingsands', 'drillrun', 'nightslash', 'rapidspin'],
+	// The chimi of the mountains (Magic Guard: no recoil from Wood Hammer).
+	chimihoujuu: ['leafblade', 'woodhammer', 'leafstorm', 'gigadrain', 'nastyplot', 'swordsdance', 'knockoff', 'suckerpunch', 'partingshot', 'uturn', 'leechseed', 'synthesis', 'taunt', 'nightslash', 'grassknot'],
+	// The god of the roads, who guides travellers.
+	narekomichigami: ['earthpower', 'calmmind', 'stealthrock', 'spikes', 'teleport', 'allyswitch', 'futuresight', 'trickroom', 'gravity', 'sandstorm', 'scorchingsands', 'mudshot', 'powergem', 'mirrorcoat', 'wish'],
+	// The corrupted spirit (Sniper, Corrupt Data).
+	yuimanasama: ['shadowclaw', 'shadowsneak', 'phantomforce', 'shadowstrike', 'swordsdance', 'nightslash', 'psychocut', 'suckerpunch', 'knockoff', 'uturn', 'icepunch', 'thunderpunch', 'firepunch',
+		'earthquake', 'willowisp', 'destinybond'],
+	// The Lunarian who links sea and mountain, and the fan that clears whole forests.
+	watatsukinotoyohime: ['calmmind', 'moonblast', 'moonlight', 'psychic', 'futuresight', 'hurricane', 'tailwind', 'defog', 'icebeam', 'energyball', 'haze', 'raindance', 'whirlpool', 'teleport'],
+	// Her sister, who calls down any god, with Gion's sword. RISK: the Invokes retype her slicers, with Swords Dance.
+	watatsukinoyorihime: ['sacredsword', 'swordsdance', 'leafblade', 'nightslash', 'psychocut', 'xscissor', 'aerialace', 'smartstrike', 'bulkup', 'drainpunch', 'machpunch', 'closecombat',
+		'aurasphere', 'vacuumwave', 'agility', 'wideguard', 'quickguard'],
+	// Iwanaga-hime, goddess of stone and long life, who cursed the lives of those who spurned her.
+	ariyaiwanaga: ['wish', 'lifedew', 'irondefense', 'bodypress', 'stealthrock', 'stoneedge', 'powergem', 'meteorbeam', 'earthpower', 'calmmind', 'rockpolish', 'sandstorm', 'gravity', 'grudge', 'headsmash', 'heavyslam'],
+	// The water-and-lightning spirit (Surge Surfer).
+	ninawatari: ['scald', 'hydropump', 'thunderbolt', 'voltswitch', 'discharge', 'raindance', 'electricterrain', 'calmmind', 'flipturn', 'icebeam', 'aquaring', 'chargebeam', 'paraboliccharge'],
+};
+// A forme with a learnset of its own gets its character's, and its own types' kits (formeTypes).
+const FORME_OF = { cirnotanned: 'cirno', keinehakutaku: 'keine', ichirinkumoiunzan: 'ichirinkumoi', hecatiaearth: 'hecatia', hecatiamoon: 'hecatia' };
+// Taken back out where a type's kit is too much on that body. Keine's full-moon forme has 680
+// base stats and needs no item: no Dragon Dance on top of that.
+const TYPE_EXCEPT = { keinehakutaku: ['dragondance'] };
+
+/** Which sides it attacks from: Huge Power doubles Tewi's 40 Attack, so she counts as physical. */
+function sides(species) {
+	const { atk, spa } = species.baseStats;
+	const doubled = Object.values(species.abilities || {}).some(a => a === 'Huge Power' || a === 'Pure Power');
+	return { physical: atk >= 90 || atk >= spa || doubled, special: spa >= 90 || spa >= atk };
+}
+
+/** Everything the three layers give one species id (a forme too). */
+function grantsFor(id) {
+	const species = DATA.species[id];
+	if (!species) return [];
+	const base = FORME_OF[id];
+	const types = new Set([...species.types, ...(base ? DATA.species[base].types : [])]);
+	const { physical, special } = sides(species);
+	const out = new Set(UNIVERSAL);
+	for (const type of types) {
+		const kit = TYPE_TMS[type];
+		if (!kit) continue;
+		for (const move of kit.status) out.add(move);
+		if (physical) for (const move of kit.physical) out.add(move);
+		if (special) for (const move of kit.special) out.add(move);
+	}
+	for (const move of TYPE_EXCEPT[id] || []) out.delete(move);
+	for (const move of THEMATIC[base || id] || []) out.add(move);
+	return [...out];
+}
 
 // ------------------------------------------------------------------ moves
 
@@ -174,8 +631,10 @@ const MOVES = {
 	},
 	// Flandre Scarlet's signature (the owner, 21 Oct 2026): raised to match her sister's
 	// Fate's Call - 120 power, never misses, 8 PP - and hers alone (learnsets above).
+	// 8 PP flat (noPPBoosts): PP Ups make a move's PP 8/5 of itself, and 8 * 8/5 is 12.8, which
+	// the battle showed as "12.8/12.8" and counted down as "11.8/12.8".
 	forbiddenbarrage: {
-		num: -203, accuracy: true, basePower: 120, category: 'Special', name: 'Forbidden Barrage', pp: 8, priority: 0,
+		num: -203, accuracy: true, basePower: 120, category: 'Special', name: 'Forbidden Barrage', pp: 8, noPPBoosts: true, priority: 0,
 		flags: { protect: 1, mirror: 1, bullet: 1 },
 		onPrepareHit: anim('Astral Barrage'),
 		secondary: { chance: 10, volatileStatus: 'flinch' },
@@ -433,7 +892,7 @@ const MOVES = {
 	 * still up for the next move. Never a machine (not in TMS).
 	 */
 	fatescall: {
-		num: -222, accuracy: true, basePower: 120, category: 'Special', name: "Fate's Call", pp: 8, priority: 0,
+		num: -222, accuracy: true, basePower: 120, category: 'Special', name: "Fate's Call", pp: 8, noPPBoosts: true, priority: 0,
 		flags: { mirror: 1, metronome: 1 },
 		onPrepareHit: anim('Dark Pulse'),
 		secondary: null, target: 'normal', type: 'Dark',
@@ -482,19 +941,11 @@ const DANCES = ['quiverdance', 'featherdance', 'teeterdance', 'petaldance', 'fie
 	'lunardance', 'victorydance', 'aquastep'];
 const BITES = ['bite', 'crunch', 'firefang', 'icefang', 'thunderfang', 'poisonfang', 'psychicfangs', 'hyperfang',
 	'jawlock', 'fishiousrend'];
-// A flat half of the user's HP, which is all Body Swap does for anyone but Hecatia.
-const HALF_HEALS = ['recover', 'slackoff', 'softboiled', 'roost', 'milkdrink', 'shoreup', 'healorder'];
-// Sword-bearers, for the two Invokes that are not Yorihime's alone.
-const SWORDS = ['gallade', 'ceruledge', 'samurott', 'samurotthisui', 'kleavor', 'sirfetchd', 'farfetchd',
-	'scyther', 'kabutops', 'bisharp', 'decidueyehisui', 'veluza', 'aegislash'];
 
 const TMS = {
-	// Reimu Hakurei's own (the move says so): kept narrow, to the mystic special
-	// birds. A never-missing trap is a lot to hand out further than that.
-	dreamseal: {
-		when: () => false,
-		also: ['xatu', 'sigilyph', 'noctowl', 'swoobat', 'oricoriopau', 'oricoriosensu', 'togekiss', 'articunogalar'],
-	},
+	// Reimu Hakurei's spell card, hers alone (the owner, 21 Oct 2026: a character's spell card
+	// is that character's signature). It used to go to eight mystic birds.
+	dreamseal: null,
 	// The physical Steel and Dark types with a blade or claw (any slicing move), and
 	// every Sharpness user. Not Chien-Pao or Kartana: a 97.5 power hit for outspeeding
 	// is a free upgrade on the fastest blades in the game.
@@ -504,11 +955,9 @@ const TMS = {
 	},
 	// Flandre Scarlet's signature (the owner): never a machine.
 	forbiddenbarrage: null,
-	// The special Psychic types. Off Yukari it is a plain 70 power Psychic move (the
-	// priority only comes with Ran Yakumo beside her), so it costs nothing to share.
-	shikigamirush: {
-		when: s => s.special && s.has('Psychic'),
-	},
+	// Yukari Yakumo's, with her shikigami Ran: hers alone (the owner). It used to go to every
+	// special Psychic type.
+	shikigamirush: null,
 	// The special Psychic and Ghost types: a 40 power shot that goes first among
 	// equals, Vacuum Wave for the mind.
 	lunaticbullet: {
@@ -536,11 +985,9 @@ const TMS = {
 	waterplates: {
 		when: s => s.physical && s.has('Water') && !s.ability('Sniper'),
 	},
-	// Psychic and Ghost types (a soul changing bodies) that already heal half their HP:
-	// to them it is Recover under another name. The forme change is Hecatia's alone.
-	bodyswap: {
-		when: (s, k) => (s.has('Psychic') || s.has('Ghost')) && k(HALF_HEALS),
-	},
+	// Hecatia's: "100% signature" (the owner, 21 Oct 2026). It used to go to the Psychic and
+	// Ghost types that heal half their HP, 63 of them.
+	bodyswap: null,
 	// The physical Fighting types and the physical dancers (any dance move but Swords
 	// and Dragon Dance, which nearly everything knows), and every Dancer.
 	// Not Annihilape or Urshifu (Ubers).
@@ -548,13 +995,9 @@ const TMS = {
 		when: (s, k) => s.physical && (s.has('Fighting') || k(DANCES)) || s.ability('Dancer'),
 		except: ['annihilape', 'urshifu'],
 	},
-	// Eika Ebisu's, at the Sanzu river: kept narrow. 140 power Ghost on a fast special
-	// Ghost (Dragapult, Chandelure, Gholdengo, Flutter Mane) is far too much; it goes to
-	// the slow stone-and-tomb Ghosts, for whom Stealth Rock on their own side really costs.
-	stonestacking: {
-		when: () => false,
-		also: ['spiritomb', 'runerigus', 'cofagrigus', 'palossand', 'dusknoir', 'golurk'],
-	},
+	// Eika Ebisu's, at the Sanzu river, and now hers alone (the owner: a spell card is its
+	// character's). It used to go to six slow stone-and-tomb Ghosts.
+	stonestacking: null,
 	// Ground and Rock types, and the clay and stone statues. Not Garganacl, Gliscor,
 	// Ting-Lu or Landorus: Cosmic Power plus an Electric immunity on a top-tier wall
 	// (Gliscor with Poison Heal above all) is a tier review.
@@ -601,9 +1044,9 @@ const TMS = {
 		when: s => s.physical && (s.has('Ground') || s.has('Rock')) && !s.ability('Sand Rush') && !s.ability('Sand Veil'),
 		except: ['landorus', 'garchomp', 'gliscor'],
 	},
-	// Yorihime's: a god's type for the user and its blade. Kept to the sword-bearers.
-	invokeamaterasu: { when: () => false, also: SWORDS },
-	invokehonoikazuchi: { when: () => false, also: SWORDS },
+	// Yorihime's: she channels the gods, nobody else does (the owner). They used to go to the sword-bearers.
+	invokeamaterasu: null,
+	invokehonoikazuchi: null,
 	// Yorihime's alone: it hands out Magic Bounce, which no TM should.
 	invokeishikoridome: null,
 };
@@ -625,6 +1068,11 @@ exports.moves = (data) => {
 	// `velvetShared`: handed out as machines (TMS above), so not anyone's signature by
 	// learnset, and the bot treats them as ordinary moves rather than a Pokemon's own.
 	for (const [id, move] of Object.entries(MOVES)) data[id] = { gen: 9, ...move, ...(TMS[id] ? { velvetShared: true } : {}) };
+	// Shadow Strike: a CAP move in Showdown's data (num -2), which the owner hands the Boneka as an
+	// Awakened move (Remilia, Flandre, the physical Ghosts). As CAP the validator refused it outright
+	// ("made up for Smogon CAP"), so the Scarlets' grant never worked. Here it is an ordinary shared
+	// move; build-buffs ships the corrected row so the builder lists it too.
+	if (data.shadowstrike) data.shadowstrike = { ...data.shadowstrike, isNonstandard: null, gen: 9, velvetShared: true };
 	// Dexterity (Yamame Kurodani): Toxic Spikes and Sticky Web pass it by as well.
 	for (const id of ['toxicspikes', 'stickyweb']) if (data[id] && data[id].condition) data[id] = dexterous(data[id]);
 	// Hyperspace Fury: Junko can use it, as Hoopa-Unbound can.
@@ -689,7 +1137,16 @@ const ABILITIES = {
 		onBasePowerPriority: 19,
 		onBasePower(basePower, attacker, defender, move) {
 			if (move.category !== 'Special') return;
-			for (const moveSlot of attacker.moveSlots) if (moveSlot.id === move.id && moveSlot.pp > 0) moveSlot.pp--;
+			// Once per use, though a spread move asks once per target (it took 3 PP off a
+			// two-target hit). Said aloud, so the client's PP count can follow it.
+			if (!move.anemicPaid) {
+				move.anemicPaid = true;
+				const slot = attacker.moveSlots.find(m => m.id === move.id && m.pp > 0);
+				if (slot) {
+					slot.pp--;
+					this.add('-activate', attacker, 'ability: Anemic');
+				}
+			}
 			return this.chainModify(1.2);
 		},
 		name: 'Anemic',
@@ -843,6 +1300,7 @@ const ABILITIES = {
 		onSwitchIn(source) {
 			const target = source.side.foe.active[source.side.foe.active.length - 1 - source.position];
 			if (!target) return;
+			const borrowed = [];
 			for (const moveSlot of target.moveSlots.slice(0, 4)) {
 				if (!moveSlot || source.moveSlots.some(m => m.id === moveSlot.id)) continue;
 				const move = this.dex.moves.get(moveSlot.id);
@@ -850,7 +1308,11 @@ const ABILITIES = {
 					move: move.name, id: move.id, pp: 5, maxpp: 5, target: move.target,
 					disabled: false, disabledSource: '', used: false,
 				});
+				borrowed.push(move.name);
 			}
+			// Named, so the client tracks them as borrowed moves at 5 PP rather than as her own
+			// at full PP (client/js/velvet-data.js, installTouhouPP).
+			if (borrowed.length) this.add('-activate', source, 'ability: Recollection', borrowed.join(', '), '[of] ' + target);
 		},
 		name: 'Recollection',
 		shortDesc: 'On switch-in, learns the opposing Pokemon\'s moves (5 PP each).',
@@ -1435,6 +1897,10 @@ exports.LEGENDS = LEGENDS;
 exports.NAMES = NAMES;
 exports.MOVE_IDS = Object.keys(MOVES);
 exports.TMS = TMS;
+exports.UNIVERSAL = UNIVERSAL;
+exports.TYPE_TMS = TYPE_TMS;
+exports.THEMATIC = THEMATIC;
+exports.grantsFor = grantsFor;
 // Awakened abilities for the guests, added beside the mod's (buffs.js, addAbilities).
 exports.GRANTS = { remiliascarlet: ['Scarlet Sisters'], flandrescarlet: ['Scarlet Sisters'] };
 // The spell cards that stay one character's signature though a few others learn them.
@@ -1445,7 +1911,7 @@ exports.PERSONAL = {
 exports.ABILITY_IDS = Object.keys(ABILITIES);
 exports.ITEM_IDS = Object.keys(ITEMS);
 // The vanilla entries changed above, for anything that lists what we changed.
-exports.CHANGED_MOVES = ['toxicspikes', 'stickyweb', 'hyperspacefury'];
+exports.CHANGED_MOVES = ['toxicspikes', 'stickyweb', 'hyperspacefury', 'shadowstrike'];
 exports.CHANGED_ITEMS = ['boosterenergy', 'waterstone', 'moonstone', ...PLATES];
 /**
  * For the builder's search: [alias, species id, where in the id it starts]. The mod's

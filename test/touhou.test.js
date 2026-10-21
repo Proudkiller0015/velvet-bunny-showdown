@@ -271,10 +271,66 @@ const turn = (b, p1, p2) => { b.choose('p1', p1); b.choose('p2', p2); };
 	const learns = (id, move) => !problems('gen9rptouhou', [{ ...setFor(id), moves: [move] }]).length;
 	ok(learns('metagross', 'Missile') && learns('beldum', 'Missile'), 'Missile: Metagross and Beldum learn it');
 	ok(!learns('kingambit', 'Missile'), 'Missile: not Kingambit');
-	ok(learns('xatu', 'Dream Seal') && !learns('alakazam', 'Dream Seal'), 'Dream Seal: kept narrow');
+	ok(learns('reimuhakurei', 'Dream Seal') && !learns('xatu', 'Dream Seal') && !learns('alakazam', 'Dream Seal'), "Dream Seal: Reimu's alone");
+	// A character's spell card is that character's alone (the owner, 21 Oct 2026).
+	for (const [move, own] of [['bodyswap', ['hecatia', 'hecatiaearth', 'hecatiamoon']], ['shikigamirush', ['yukariyakumo']], ['stonestacking', ['eikaebisu']],
+		['invokeamaterasu', ['watatsukinoyorihime']], ['invokehonoikazuchi', ['watatsukinoyorihime']], ['dreamseal', ['reimuhakurei']]]) {
+		const learners = dex.species.all().filter(s => (dex.species.getLearnsetData(s.id).learnset || {})[move]).map(s => s.id).filter(id => !['samantha', 'mew', 'smeargle'].includes(id));
+		ok(learners.length && learners.every(id => own.includes(id)), `${move}: ${own[0]}'s alone (${learners})`);
+		ok(!dex.moves.get(move).velvetShared, `${move}: not a shared move, so the builder files it as a signature`);
+	}
 	ok(learns('regice', 'Sculpted Armor'), 'Sculpted Armor reaches Regice past its hand-written buff');
 	ok(learns('cirno', 'Wicked Energy') === dex.species.get('cirno').types.includes('Dark'), 'Wicked Energy follows type on the guests too');
 	ok(!learns('reimuhakurei', 'Invoke Ishikori-Dome'), 'Invoke Ishikori-Dome stays Yorihime\'s');
+}
+{
+	// Full movepools (touhou.js UNIVERSAL, TYPE_TMS, THEMATIC; the owner, 21 Oct 2026).
+	const learnsAll = (id, moves) => problems('gen9rptouhou', [{ ...setFor(id), moves }]);
+	for (const id of ALL.filter(id => !dex.species.get(id).battleOnly)) {
+		const p = learnsAll(id, ['Toxic', 'Protect', 'Tera Blast', 'Hidden Power Fire']);
+		ok(!p.length, `${id} learns Toxic, Protect, Tera Blast and Hidden Power (${p})`);
+		const q = learnsAll(id, ['Substitute', 'Return', 'Rest', 'Sleep Talk']);
+		ok(!q.length, `${id} learns Substitute, Return, Rest and Sleep Talk (${q})`);
+		const size = Object.keys(dex.species.getLearnsetData(id).learnset).length;
+		ok(size >= 70, `${id}: a standard-sized movepool (${size} moves)`);
+	}
+	ok(!learnsAll('rumia', ['Pursuit', 'Knock Off', 'Foul Play', 'Taunt']).length, 'a Dark type gets the Dark kit, Pursuit (a past move) included');
+	ok(!learnsAll('remiliascarlet', ['Nasty Plot', 'Swords Dance', 'Shadow Strike', 'Carrion Feast']).length, 'the Scarlets have their set-up, and Shadow Strike is legal now');
+	ok(!learnsAll('patchouliknowledge', ['Psyshock', 'Calm Mind', 'Future Sight', 'Trick Room']).length, 'Patchouli has the Psychic kit');
+	ok(learnsAll('patchouliknowledge', ['Swords Dance']).length, 'and not Swords Dance (33 Attack: no physical kit)');
+	// The table itself: real moves, legal in RP Touhou, nobody's signature.
+	global.window = global.window || {};
+	require('../client/js/velvet-signatures.js');
+	const signatures = new Set(window.VelvetSignatureMoves.lists.flat());
+	const ours = new Set(dex.moves.all().filter(m => m.num < 0 && !m.velvetShared).map(m => m.id));
+	const tables = [...touhou.UNIVERSAL.filter(m => m !== 'confide'), ...Object.values(touhou.TYPE_TMS).flatMap(k => [...k.status, ...k.physical, ...k.special]),
+		...Object.values(touhou.THEMATIC).flat()];
+	for (const id of new Set(tables)) {
+		const m = dex.moves.get(id);
+		ok(m.exists && m.id === id && !m.isZ && !m.isMax && (!m.isNonstandard || m.isNonstandard === 'Past'), `${id}: a real, legal move`);
+		ok(!signatures.has(id) && !ours.has(id), `${id}: nobody's signature`);
+	}
+	ok(touhou.SPECIES.every(id => touhou.THEMATIC[id] && touhou.THEMATIC[id].length >= 4), 'every character has its own thematic moves');
+}
+{
+	// PP that shows as a whole number: 8 PP flat, not 8 * 8/5 = 12.8 (the "PP glitch").
+	for (const m of dex.moves.all().filter(m => m.num < 0)) {
+		const max = m.noPPBoosts ? m.pp : m.pp * 8 / 5;
+		ok(Number.isInteger(max), `${m.name}: max PP ${max} is a whole number`);
+	}
+	const b = battle([mon('Remilia Scarlet', ["Fate's Call"]), mon('Patchouli Knowledge', ['Psychic'], { ability: 'Anemic' })], [mon('Blissey', ['Splash'])]);
+	const slot = b.p1.active[0].moveSlots[0];
+	ok(slot.pp === 8 && slot.maxpp === 8, `Fate's Call: 8/8 PP in battle (${slot.pp}/${slot.maxpp})`);
+	turn(b, 'move 1', 'move 1');
+	ok(slot.pp === 7, 'and 7/8 after one use');
+	turn(b, 'switch 2', 'move 1');
+	turn(b, 'move 1', 'move 1');
+	const psychic = b.p1.active[0].moveSlots[0];
+	ok(psychic.pp === psychic.maxpp - 2 && b.log.some(l => /\|-activate\|p1a: Patchouli Knowledge\|ability: Anemic/.test(l)), `Anemic: 2 PP a special hit, and said so (${psychic.pp}/${psychic.maxpp})`);
+	// Recollection names the moves it borrows, for the client's PP count.
+	const r = battle([mon('Satori Komeiji', ['Psychic'], { ability: 'Recollection' })], [mon('Garchomp', ['Earthquake', 'Swords Dance'])]);
+	ok(r.log.some(l => /\|-activate\|p1a: Satori Komeiji\|ability: Recollection\|Earthquake, Swords Dance\|\[of\] p2a: Garchomp/.test(l)), 'Recollection: names the borrowed moves');
+	ok(r.p1.active[0].moveSlots.filter(m => m.maxpp === 5).length === 2, 'and they have 5 PP each');
 }
 {
 	// Junko can use Hyperspace Fury.

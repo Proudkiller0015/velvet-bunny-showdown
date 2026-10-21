@@ -542,8 +542,84 @@
 		var gemIn = installGemItems();
 		var switchIn = installRpSwitch();
 		var caughtIn = installCaughtMark();
-		return caughtIn && switchIn && tableIn && orderIn && spritesIn && iconIn && builderIn && tipsIn && rpIn &&
+		var ppIn = installTouhouPP();
+		return ppIn && caughtIn && switchIn && tableIn && orderIn && spritesIn && iconIn && builderIn && tipsIn && rpIn &&
 			cutIn && listIn && buffsIn && abilitiesIn && itemIn && sigItemIn && powerIn && dmaxIn && awakenedIn && textIn && zMaxIn && eternaIn && defaultIn && bagIn && usefulIn && frbIn && sureIn && gemIn;
+	}
+
+	/*
+	 * PP the battle's own tracking cannot see (the Touhou abilities, data/velvet/touhou.js).
+	 *
+	 * The client counts a Pokemon's PP itself from the |move| lines, for the opponent's
+	 * tooltip and for your own bench: max PP from the dex row, one per use. Two of ours
+	 * spend PP it never heard about, and it showed them wrong:
+	 *
+	 *   Recollection (Satori) borrows the foe's moves with 5 PP each. They were tracked as
+	 *   her own, at full PP (Swords Dance "31/32" when 4 of 5 were left), and four of them
+	 *   brought up the "more than 4 moves is usually Illusion" note. The server now names
+	 *   the borrowed moves when she switches in; here they are tracked the way a
+	 *   Transformed Pokemon's are, starred, at 5 PP, and dropped when she switches out.
+	 *   Anemic (Patchouli) takes a second PP when a special move hits. The server says so
+	 *   when it happens; here that PP is added to the move she just used.
+	 */
+	function installTouhouPP() {
+		var B = window.Battle, P = window.Pokemon;
+		if (!B || !P || !B.prototype.run || !P.prototype.rememberMove) return false;
+		if (B.prototype.__velvetTouhouPP) return touhouPPText();
+		B.prototype.__velvetTouhouPP = true;
+		var ids = function (list) {
+			var out = {};
+			String(list || '').split(', ').forEach(function (name) { if (name) out[window.toID(name)] = true; });
+			return out;
+		};
+		var run = B.prototype.run;
+		B.prototype.run = function (str) {
+			if (typeof str === 'string' && str.indexOf('|-activate|') === 0) {
+				// |-activate|POKEMON|ability: Recollection|MOVES|[of] FOE  (the parser drops MOVES)
+				var parts = str.split('|');
+				var poke = (parts[3] === 'ability: Recollection' || parts[3] === 'ability: Anemic') && this.getPokemon(parts[2]);
+				if (poke && parts[3] === 'ability: Recollection') {
+					poke.velvetBorrowed = ids(parts[4] && parts[4].charAt(0) !== '[' ? parts[4] : '');
+				} else if (poke) {
+					var last = poke.lastMove && window.Dex.moves.get(poke.lastMove).name;
+					for (var i = 0; last && i < poke.moveTrack.length; i++) {
+						var row = poke.moveTrack[i];
+						if (row[0] === last || row[0] === '*' + last) { row[1] = poke.mergePP(row, 1); break; }
+					}
+				}
+			}
+			return run.apply(this, arguments);
+		};
+		var remember = P.prototype.rememberMove;
+		P.prototype.rememberMove = function (moveName, pp) {
+			var borrowed = this.velvetBorrowed;
+			if (!borrowed || this.volatiles.transform || !borrowed[window.toID(moveName)]) return remember.apply(this, arguments);
+			var name = '*' + window.Dex.moves.get(moveName).name;
+			if (pp === undefined) pp = 1;
+			for (var i = 0; i < this.moveTrack.length; i++) {
+				if (this.moveTrack[i][0] === name) { this.moveTrack[i][1] = this.mergePP(this.moveTrack[i], pp); return; }
+			}
+			this.moveTrack.push([name, pp]);
+		};
+		var clear = P.prototype.clearVolatile;
+		P.prototype.clearVolatile = function () {
+			this.velvetBorrowed = null;
+			return clear.apply(this, arguments);
+		};
+		return touhouPPText();
+	}
+
+	/** The battle log's lines for the two (the default is "(Anemic activated!)"), once the language file is in. */
+	function touhouPPText() {
+		var en = window.BattleText && window.BattleText.en;
+		if (!en || !en.Abilities) return false;
+		var line = function (id, name, text) {
+			var entry = en.Abilities[id] || (en.Abilities[id] = { name: name });
+			if (!entry.activate) entry.activate = text;
+		};
+		line('recollection', 'Recollection', "  [POKEMON] read [TARGET]'s mind and recalled its moves!");
+		line('anemic', 'Anemic', '  [POKEMON] spent an extra PP!');
+		return true;
 	}
 
 	/*
