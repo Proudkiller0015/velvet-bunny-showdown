@@ -1157,6 +1157,8 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 9] RP Battle",
+		// Collab Pokemon are part of the RP, so every RP battle takes them; only the tiers refuse them.
+		allowsCollab: true,
 
 		/**
 		 * The one with no rules at all.
@@ -1292,6 +1294,7 @@ exports.Formats = [
 	},
 	WILD = {
 		name: "[Gen 9] RP Battle (Wild Encounter)",
+		allowsCollab: true,
 		desc: "A wild Pokémon from the RP. Beat it, or weaken it and throw a ball.",
 
 		/**
@@ -1358,6 +1361,7 @@ exports.Formats = [
 
 	{
 		name: "[Gen 9] RP Battle (Wild Doubles)",
+		allowsCollab: true,
 		desc: "Two wild Pokémon at once. Knock one out, then catch the other.",
 		/*
 		 * The same as RP Wild Encounter in every respect but the number of
@@ -1378,6 +1382,7 @@ exports.Formats = [
 	},
 	{
 		name: "[Gen 9] RP Raid",
+		allowsCollab: true,
 		desc: "Three trainers against one Dynamaxed raid boss. Wear it down, then throw.",
 		/*
 		 * Free-for-all, which is four sides: the boss and three trainers. The rules
@@ -1450,6 +1455,7 @@ exports.Formats = [
 
 	{
 		name: "[Gen 9] RP Battle (Doubles)",
+		allowsCollab: true,
 		desc: "RP Battle as a double battle: no rules, two Pokémon out a side.",
 		gameType: 'doubles',
 		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
@@ -1691,7 +1697,7 @@ for (const format of exports.Formats) {
 function collabRule(set) {
 	const species = this.dex.species.get(set.species);
 	if (species.tier !== COLLAB.TIER || this.format.allowsCollab || !String(this.format.mod || '').endsWith('rp')) return [];
-	return [`${species.baseSpecies} is a Collab Pokémon: crossover Pokémon are legal only in [Gen 9] RP Collab.`];
+	return [`${species.baseSpecies} is a Collab Pokémon: crossover Pokémon are legal only in [Gen 9] RP Collab and the RP Battle formats.`];
 }
 
 for (const format of exports.Formats) {

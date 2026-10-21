@@ -338,6 +338,8 @@ class TeamBuilder {
 			if (species.forme && species.forme.startsWith('Mega')) continue;
 			if (species.requiredItem || species.requiredMove) continue;
 			if (ruleTable.isBannedSpecies(species)) continue;
+			// Collab Pokemon are legal in the RP Battle formats too, but the bot only brings them to RP Collab.
+			if (species.tier === 'Collab' && !/rpcollab$/.test(format.id)) continue;
 			if (!dex.species.getMovePool(species.id).size) continue;
 			pool.push(species);
 		}
@@ -789,8 +791,8 @@ class TeamBuilder {
 	 */
 	/**
 	 * Whole new Pokemon this server added (data/velvet/abyss-shrine.js, collab.js), by id.
-	 * The collab ones only ever reach the draft in RP Collab: every other RP format bans
-	 * them by name, so context() leaves them out of its pool.
+	 * The collab ones only ever reach the draft in RP Collab: context() leaves them out of
+	 * every other format's pool, the RP Battle formats included.
 	 */
 	newSpecies() {
 		if (this._newSpecies) return this._newSpecies;

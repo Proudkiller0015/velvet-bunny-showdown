@@ -32,11 +32,12 @@ const ok = (cond, what) => { assert.ok(cond, what); n++; };
 // ---- Legality: RP Collab only.
 const problems = f => new TeamValidator(f).validateTeam([funerfly()]);
 ok(!problems('gen9rpcollab'), `legal in RP Collab (${problems('gen9rpcollab')})`);
-for (const f of ['gen9rpag', 'gen9rpubers', 'gen9rpou', 'gen9rpuu', 'gen9rpru', 'gen9rpnu', 'gen9rppu', 'gen9rpzu', 'gen9rplc', 'gen9rpbattle', 'gen9rpbattledoubles', 'gen9rpdraft', 'gen8rpou']) {
+for (const f of ['gen9rpag', 'gen9rpubers', 'gen9rpou', 'gen9rpuu', 'gen9rpru', 'gen9rpnu', 'gen9rppu', 'gen9rpzu', 'gen9rplc', 'gen9rpdraft', 'gen8rpou']) {
 	const p = problems(f) || [];
 	ok(p.length && /Funerfly/.test(p.join(' ')), `refused in ${f}: ${p[0]}`);
 }
 ok(/RP Collab/.test((problems('gen9rpag') || []).join(' ')), 'the refusal names RP Collab');
+for (const f of ['gen9rpbattle', 'gen9rpbattledoubles']) ok(!(problems(f) || []).some(x => /Funerfly|Collab/.test(x)), `accepted in ${f}, the RP's own battles`);
 {
 	// The breached forme is battle-only: brought as it, it starts the battle contained.
 	const breach = funerfly({ species: 'Funerfly-Breach', name: 'Funerfly-Breach' });
