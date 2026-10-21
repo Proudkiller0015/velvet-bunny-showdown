@@ -73,12 +73,29 @@ const PRIZED = new Set([
 	'toxel',                         // Gen 8
 	'gimmighoul',                    // Gen 9
 ]);
-const CLASSES = ['common', 'medium', 'rare', 'prized', 'starter', 'pseudo', 'ub', 'paradox', 'legendary', 'mythical', 'boxart'];
+/*
+ * Touhou: the Boneka, the Touhou Pokemon met in Gensokyo (21 Oct 2026). Each is a
+ * one-in-a-hundred find wherever it lives and carries a near-legendary stat total, so
+ * it sits just above the pseudo-legendaries. The legendary ones (TOUHOU_LEGENDS) are
+ * legendary like any other.
+ */
+const CLASSES = ['common', 'medium', 'rare', 'prized', 'starter', 'pseudo', 'touhou', 'ub', 'paradox', 'legendary', 'mythical', 'boxart'];
 const RANK = Object.fromEntries(CLASSES.map((c, i) => [c, i]));
 /** Classes that are never met in the wild: story events and the Legendary Signal only. */
 const NEVER_WILD = new Set(['legendary', 'mythical', 'boxart']);
 /** Classes that only appear at a place that lists them. */
-const HEADLINERS = new Set(['prized', 'starter', 'pseudo', 'ub', 'paradox', 'legendary', 'mythical', 'boxart']);
+const HEADLINERS = new Set(['prized', 'starter', 'pseudo', 'touhou', 'ub', 'paradox', 'legendary', 'mythical', 'boxart']);
+
+/*
+ * The legendary Touhou Pokemon, by base species id. The server's dex tags them
+ * Sub-Legendary (data/velvet/touhou.js LEGENDS); the RP bot's dex has never heard of
+ * any Touhou Pokemon, so it reads this list and the RP tier table instead.
+ * test/gensokyo-encounters.test.js keeps the two lists equal.
+ */
+const TOUHOU_LEGENDS = new Set(['yukariyakumo', 'okinamatara', 'kanakoyasaka', 'suwakomoriya', 'eikishiki', 'hecatia',
+	'junko', 'sagumekishin', 'watatsukinotoyohime', 'watatsukinoyorihime', 'keikihaniyasushin', 'chimatatenkyuu',
+	'zanmunippaku', 'ariyaiwanaga']);
+const toID = s => String(s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
 
 /** Ordinary lines, by the base stat total of what they become. */
 const RARE_FROM = 540;
@@ -88,6 +105,8 @@ const MEDIUM_FROM = 430;
 const TIER_VALUE = {
 	LC: 0, NFE: 0, ZU: 0, ZUBL: 0.5, PU: 1, PUBL: 1.5, NU: 2, NUBL: 2.5, RU: 3, RUBL: 3.5,
 	UU: 4, UUBL: 4.5, OU: 5, UBER: 6, AG: 6,
+	// The Touhou tier tops the RP ladder (Touhou > Collab > AG > Uber); usage among Boneka is flat.
+	TOUHOU: 6,
 };
 function tierValue(tier) {
 	const t = String(tier || '').toUpperCase().replace(/[()]/g, '').trim();
@@ -99,7 +118,7 @@ function tierValue(tier) {
  * quarters the odds - still possible on day one, as it should be in an open
  * world, just not likely.
  */
-const BADGE_HOME = { common: 0, medium: 0, rare: 0, prized: 0, starter: 0, pseudo: 2, ub: 4, paradox: 5 };
+const BADGE_HOME = { common: 0, medium: 0, rare: 0, prized: 0, starter: 0, pseudo: 2, touhou: 0, ub: 4, paradox: 5 };
 
 const species = s => (typeof s === 'string' ? Dex.species.get(s) : s);
 const bst = s => Object.values(s.baseStats).reduce((a, b) => a + b, 0);
@@ -120,10 +139,27 @@ function lineOf(s) {
 	return out;
 }
 
+/**
+ * 'legendary' or 'touhou' for a Touhou Pokemon, null for anything else. Works without
+ * the server's dex (the RP bot's has no Touhou Pokemon): the RP tier table names every
+ * one a player can pick, and a forme reads as its base ("hecatiaearth" is Hecatia's).
+ */
+function touhouClass(s, name) {
+	const known = !!(s && s.exists);
+	const id = toID(known ? s.name : (typeof name === 'string' ? name : name && name.name));
+	const base = known ? toID(s.baseSpecies) : '';
+	const touhou = (known && s.tier === 'Touhou') || RP_TIERS[id] === 'Touhou' || (!!base && RP_TIERS[base] === 'Touhou');
+	const legend = [...TOUHOU_LEGENDS].some(l => (base || id) === l || (base || id).startsWith(l));
+	if (legend && (touhou || !known)) return 'legendary';
+	return touhou ? 'touhou' : null;
+}
+
 const classCache = new Map();
 /** A Pokemon's class. Forms take their base species' class. */
 function classOf(name) {
 	let s = species(name);
+	const guest = touhouClass(s, name);
+	if (guest) return guest;
 	if (!s || !s.exists) return 'common';
 	if (classCache.has(s.id)) return classCache.get(s.id);
 	const base = Dex.species.get(s.baseSpecies);
@@ -170,7 +206,8 @@ const usageCache = new Map();
  */
 function usageOf(name) {
 	const s = species(name);
-	if (!s || !s.exists) return 0;
+	// A Pokemon this dex does not know (a Touhou one, in the RP bot): its RP tier, if it has one.
+	if (!s || !s.exists) return tierValue(RP_TIERS[toID(typeof name === 'string' ? name : name && name.name)]) || 0;
 	if (usageCache.has(s.id)) return usageCache.get(s.id);
 	let best = null;
 	// The RP tier first: our own tier list (scripts/build-rp-tiers.js), so a tier
@@ -208,7 +245,8 @@ const compare = (a, b) => score(b) - score(a);
  * a class, every usage step above ZU takes a little more off, so a Garchomp line
  * is rarer than a Goodra line and a Flutter Mane rarer than a Sandy Shocks.
  */
-const WILD_WEIGHT = { common: 1, medium: 1, rare: 1, prized: 1, starter: 0.03, pseudo: 0.02, ub: 0.012, paradox: 0.01 };
+// Touhou: never weighed here - a Boneka is met only where a Gensokyo table names it, at a flat 1% (encounters.js).
+const WILD_WEIGHT = { common: 1, medium: 1, rare: 1, prized: 1, starter: 0.03, pseudo: 0.02, touhou: 0, ub: 0.012, paradox: 0.01 };
 function wildWeight(name, badges = 8) {
 	const c = classOf(name);
 	if (NEVER_WILD.has(c)) return 0;
@@ -220,6 +258,6 @@ function wildWeight(name, badges = 8) {
 }
 
 module.exports = {
-	STARTERS, PSEUDOS, PSEUDO_LINES, PRIZED, isPseudoLine, PARADOXES, CLASSES, RANK, NEVER_WILD, HEADLINERS, BADGE_HOME, WILD_WEIGHT, RARE_FROM, MEDIUM_FROM,
+	STARTERS, PSEUDOS, PSEUDO_LINES, PRIZED, isPseudoLine, PARADOXES, TOUHOU_LEGENDS, touhouClass, CLASSES, RANK, NEVER_WILD, HEADLINERS, BADGE_HOME, WILD_WEIGHT, RARE_FROM, MEDIUM_FROM,
 	tierValue, classOf, usageOf, score, compare, wildWeight,
 };

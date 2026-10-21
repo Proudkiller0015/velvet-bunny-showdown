@@ -14,9 +14,9 @@ const E = require('../src/encounters');
 
 const ROLLS = Number(process.argv[2]) || 1;
 const places = [];
-for (const regionId of ['kagura', 'sinnoh']) {
+for (const regionId of ['kagura', 'sinnoh', 'gensokyo']) {
 	const tables = require(`../src/encounter-tables/${regionId}`);
-	for (const [id, place] of Object.entries(tables.locations || {})) places.push({ id: `${regionId}/${id}`, place });
+	for (const [id, place] of Object.entries(tables.locations || {})) places.push({ id: `${regionId}/${id}`, place, region: regionId });
 }
 const PARTIES = [null, { size: 3, avg: 13, max: 13 }, { size: 6, avg: 48, max: 62 }];
 const BADGES = [0, 3, 8];
@@ -32,16 +32,16 @@ const attempt = (what, fn) => {
 		if (!failures.has(key)) failures.set(key, what);
 	}
 };
-for (const { id, place } of places) {
+for (const { id, place, region } of places) {
 	for (const badges of BADGES) {
 		for (const party of PARTIES) {
 			const ace = party ? party.max : null;
 			const levelCap = party ? Math.max(5, party.max) : null;
 			for (let i = 0; i < ROLLS; i++) {
 				if ((place.wild || []).length) {
-					attempt(`wild ${id} badges ${badges}`, () => E.rollWild({ place, badges, levelCap, ace, shiny: {} }));
+					attempt(`wild ${id} badges ${badges}`, () => E.rollWild({ place, badges, levelCap, ace, shiny: {}, region }));
 					for (const [channel, spot] of Object.entries(place.spots || {})) {
-						attempt(`wild ${id} #${channel}`, () => E.rollWild({ place: { ...place, types: spot.types || place.types, common: spot.common || place.common, rare: spot.rare || place.rare }, badges, levelCap, ace, shiny: {} }));
+						attempt(`wild ${id} #${channel}`, () => E.rollWild({ place: { ...place, types: spot.types || place.types, common: spot.common || place.common, rare: spot.rare || place.rare, boneka: spot.boneka || place.boneka }, badges, levelCap, ace, shiny: {}, region }));
 					}
 				}
 				if ((place.trainers || []).length) {

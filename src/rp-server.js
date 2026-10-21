@@ -34,6 +34,7 @@ const Roamer = require('./roamer');
 const REGIONS = {
 	kagura: () => require('./encounter-tables/kagura'),
 	sinnoh: () => require('./encounter-tables/sinnoh'),
+	gensokyo: () => require('./encounter-tables/gensokyo'),
 };
 const PUBLIC_KEY_FILE = path.join(__dirname, '..', 'config', 'rp-encounter-key.pub.pem');
 const RP_ROOM = 'roleplay';
@@ -68,15 +69,24 @@ function verify(body, key = publicKey()) {
 
 // ------------------------------------------------------------------- places
 
-/** Which place a Discord channel is in. Channel names are unique across the region. */
+/**
+ * Which place a Discord channel is in, and its region. Channel names are unique across
+ * the whole map, so a channel the asked-for region does not have is looked for in the
+ * others: the Discord bot said "kagura" for every channel until Gensokyo (21 Oct 2026),
+ * and a Gensokyo channel must still find Gensokyo's table, never Kagura's.
+ */
 function placeFor(region, channel) {
-	const load = REGIONS[toID(region || 'kagura')];
-	if (!load) return null;
-	const tables = load();
+	const asked = toID(region || 'kagura');
 	const name = String(channel || '').replace(/^#/, '').toLowerCase();
-	for (const [id, place] of Object.entries(tables.locations)) {
-		const channels = new Set([...(place.wild || []), ...(place.noTrainers || []), ...(place.channels || [])]);
-		if (channels.has(name) || id === name) return { id, place, channel: name };
+	const order = [asked, ...Object.keys(REGIONS).filter(r => r !== asked)];
+	for (const regionId of order) {
+		const load = REGIONS[regionId];
+		if (!load) continue;
+		const tables = load();
+		for (const [id, place] of Object.entries(tables.locations)) {
+			const channels = new Set([...(place.wild || []), ...(place.noTrainers || []), ...(place.channels || [])]);
+			if (channels.has(name) || id === name) return { id, place, channel: name, region: tables.region || regionId };
+		}
 	}
 	return null;
 }
@@ -168,7 +178,11 @@ function requestEncounter(payload, deps) {
 	 * wild Pokémon or trainers, the levels - is still the place's.
 	 */
 	const spot = place.spots && place.spots[found.channel];
-	const wildPlace = spot ? { ...place, types: spot.types || place.types, common: spot.common || place.common, rare: spot.rare || place.rare } : place;
+	const wildPlace = spot ? {
+		...place, types: spot.types || place.types, common: spot.common || place.common, rare: spot.rare || place.rare,
+		// A spot can have Boneka of its own (Gensokyo: Patchouli in the library); otherwise the place's.
+		boneka: spot.boneka || place.boneka,
+	} : place;
 	const wildHere = (place.wild || []).includes(found.channel);
 	const trainersHere = (place.trainers || []).length && !(place.noTrainers || []).includes(found.channel);
 
@@ -231,7 +245,7 @@ function requestEncounter(payload, deps) {
 	 * The roaming Suicune (src/roamer.js), Kagura only: anybody looking for an encounter in
 	 * the place it is in meets it, wild or trainer, anywhere but a gym.
 	 */
-	const region = toID(payload.region || 'kagura');
+	const region = toID(found.region || payload.region || 'kagura');
 	const roamer = !payload.summon && region === 'kagura' && !E.gymPlace(place, found.channel).gymType && Roamer.roll({
 		encounterId: id, userid, discord: payload.discord, badges, wildFormat: E.WILD_FORMAT,
 		place: found.id, places: Object.keys(REGIONS.kagura().locations),
@@ -241,14 +255,14 @@ function requestEncounter(payload, deps) {
 		rolled = roamer;
 	} else if (payload.summon) {
 		// Staff choosing what appears. The Discord bot only signs this for admins.
-		rolled = summoned(payload.summon, { place, badges, levelCap, ace });
+		rolled = summoned(payload.summon, { place, badges, levelCap, ace, region });
 		if (rolled.error) return { ok: false, code: 'summon', message: rolled.error };
 	} else if (E.audinoOn() && Math.random() < 0.5) {
 		rolled = audinoMeme({ badges, levelCap, shiny: payload.shiny || {}, ace });
 	} else {
 		rolled = kind === 'wild'
-			? E.rollWild({ place: wildPlace, badges, levelCap, shiny: payload.shiny || {}, ace })
-			: E.rollTrainer({ place: E.gymPlace(place, found.channel), badges, levelCap, ace, party: partyOf(payload) });
+			? E.rollWild({ place: wildPlace, badges, levelCap, shiny: payload.shiny || {}, ace, region })
+			: E.rollTrainer({ place: E.gymPlace(place, found.channel), badges, levelCap, ace, party: partyOf(payload), region });
 	}
 	if (!rolled.team.length) return { ok: false, code: 'empty', message: 'Nothing turned up. Try again.' };
 	// An arranged encounter can decide its first throws miss (rp-bot rigs.js failBalls). Never shown.
@@ -438,12 +452,12 @@ function audinoMeme({ badges, levelCap, shiny, ace }) {
 	};
 }
 
-function summoned(summon, { place, badges, levelCap, ace = null }) {
+function summoned(summon, { place, badges, levelCap, ace = null, region = null }) {
 	if (summon.kind === 'trainer') {
 		// A class the list doesn't have is the one staff typed, under the title they typed.
 		const asked = summon.classTitle || summon.classId;
 		const cls = asked ? (E.findClass(asked) || E.findClass(summon.classId) || E.customClass(asked)) : null;
-		const rolled = E.rollTrainer({ place, badges, levelCap, ace, cls, double: summon.double === undefined ? null : !!summon.double });
+		const rolled = E.rollTrainer({ place, badges, levelCap, ace, cls, double: summon.double === undefined ? null : !!summon.double, region });
 		/*
 		 * A trainer the story has decided about: their name, and a Pokémon they
 		 * must be carrying. The rest of the team is rolled as usual, so they still
@@ -522,12 +536,15 @@ function summoned(summon, { place, badges, levelCap, ace = null }) {
 			const size = Math.max(written.length, rolled.team.length);
 			const rest = rolled.team.filter(m => !written.some(w => toID(w.species) === toID(m.species)));
 			rolled.team = [...written, ...rest].slice(0, Math.min(6, size));
+			// Gensokyo's trainers always carry a Boneka, even when staff wrote the rest of the team.
+			if (E.TOUHOU_REGIONS.has(toID(region))) E.ensureBoneka(rolled.team, { place, cls: E.findClass(rolled.classId), badges });
 		}
 		return rolled;
 	}
 	const Dex = require('./rp-dex')();
 	const species = Dex.species.get(summon.species);
-	if (!species.exists || !E.encounterable(species)) return { error: `No Pokémon called "${summon.species}".` };
+	// A Touhou Pokemon only in Gensokyo, as in its tables (E.encounterable).
+	if (!species.exists || !E.encounterable(species, { region })) return { error: `No Pokémon called "${summon.species}"${species.tier === 'Touhou' ? ' outside Gensokyo' : ''}.` };
 	// A written level ignores the badge cap on purpose; "cap" asks for it.
 	const level = E.clampLevel(summon.level === 'cap' ? (levelCap || 5) : (summon.level || levelCap || 5));
 	const set = E.wildSet(species, level);
@@ -552,7 +569,7 @@ function summoned(summon, { place, badges, levelCap, ace = null }) {
 	// Staff can summon two at once: a wild double battle (a second species, or two of the same).
 	if (summon.double) {
 		const second = Dex.species.get(summon.species2 || summon.species);
-		if (!second.exists || !E.encounterable(second)) return { error: `No Pokémon called "${summon.species2}".` };
+		if (!second.exists || !E.encounterable(second, { region })) return { error: `No Pokémon called "${summon.species2}".` };
 		return {
 			kind: 'wild', double: true, name: 'Wild Pokemon', avatar: '', team: [set, E.wildSet(second, level)],
 			ai: badges >= 6 ? 'hard' : badges >= 3 ? 'normal' : 'easy', format: E.WILD_DOUBLE_FORMAT, badges,
@@ -797,7 +814,7 @@ function musicTables() {
  * met anywhere. Not the ladder's plain "rare" class: that is lifted by tier, and played the
  * rare theme for one wild Pokemon in five - Pelipper, Horsea, Wingull (1 Oct 2026).
  */
-const RARE_CLASSES = new Set(['prized', 'starter', 'pseudo', 'ub', 'paradox', 'legendary', 'mythical', 'boxart']);
+const RARE_CLASSES = new Set(['prized', 'starter', 'pseudo', 'touhou', 'ub', 'paradox', 'legendary', 'mythical', 'boxart']);
 function musicFor(enc) {
 	if (!enc || !Array.isArray(enc.team)) return null;
 	const { legendOf, event } = musicTables();
@@ -840,6 +857,8 @@ function publicView(enc) {
 		double: enc.double,
 		name: enc.name,
 		className: enc.className || null,
+		// A line to open the scene with, for the classes that have one (the Gap Wanderer).
+		intro: enc.intro || null,
 		place: enc.placeName,
 		channel: enc.channel,
 		badges: enc.badges,
@@ -894,7 +913,14 @@ function normaliseBox(box) {
 
 function checkTeam(enc, sets) {
 	if (!enc || !enc.box || !Array.isArray(sets)) return { ok: true, problems: [] };
-	const { Dex } = require('pokemon-showdown');
+	/*
+	 * The base dex, and the RP dex for what only it has: the Touhou Pokemon (a caught
+	 * Boneka, data/velvet/touhou.js) are not in the base dex at all, so a Keine in the box
+	 * did not cover her Hakutaku forme (21 Oct 2026).
+	 */
+	const Base = require('pokemon-showdown').Dex;
+	const RP = require('./rp-dex')();
+	const Dex = { species: { get: name => { const s = Base.species.get(name); return s.exists ? s : RP.species.get(name); } } };
 	const idsFor = name => {
 		const s = Dex.species.get(name);
 		if (!s.exists) return [toID(name)];
@@ -997,7 +1023,7 @@ function thrownInLog(lines, side, ballName) {
  * a lucky throw looks like anyway. Nothing says it, in the battle or out of it.
  */
 const FREE_CATCHES = 5;
-const NOT_FREE = new Set(['boxart', 'legendary', 'mythical', 'paradox', 'ub', 'pseudo']);
+const NOT_FREE = new Set(['boxart', 'legendary', 'mythical', 'paradox', 'ub', 'touhou', 'pseudo']);
 function freeCatch(enc, species) {
 	if (!enc || !species) return false;
 	if ((enc.caught || 0) >= FREE_CATCHES) return false;

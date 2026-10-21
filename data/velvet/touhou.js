@@ -57,9 +57,37 @@ const FORMES = Object.keys(DATA.species).filter(id => DATA.species[id].baseSpeci
 const SPECIES = Object.keys(DATA.species).filter(id => !DATA.species[id].baseSpecies);
 const NAMES = Object.values(DATA.species).map(s => s.name);
 
+/*
+ * The legendary ones (owner, 21 Oct 2026: "all Boneka are 1% encounters (legendary ones
+ * are excluded)"). Gods of real standing, the rulers of whole realms and Gensokyo's
+ * sages: the ones the story hands out, never the grass. Tagged Sub-Legendary, so every
+ * rule that keeps legendaries out of the wild and out of a ball (src/encounters.js
+ * isLegendary) keeps these out too, and the rarity ladder rates them legendary. A forme
+ * is legendary when its base is. src/rarity.js TOUHOU_LEGENDS is the same list, for
+ * the RP bot, which cannot load this dex; test/gensokyo-encounters.test.js keeps them equal.
+ */
+const LEGENDS = [
+	'yukariyakumo',        // the youkai sage who drew the Great Barrier
+	'okinamatara',         // the hidden god of the back door, a founding sage
+	'kanakoyasaka',        // goddess of wind and war, the Moriya Shrine's god
+	'suwakomoriya',        // the native god of the Moriya, mistress of the Mishaguji
+	'eikishiki',           // the Yama: judge of the dead
+	'hecatia',             // goddess of hell, with a body on each world
+	'junko',               // a divine spirit of vengeance, LoLK's mastermind
+	'sagumekishin',        // a Lunarian goddess of the Lunar Capital's command
+	'watatsukinotoyohime', // ruler of the Lunar Capital's defence
+	'watatsukinoyorihime', // her sister, who channels any god at will
+	'keikihaniyasushin',   // goddess of creation, maker of the haniwa
+	'chimatatenkyuu',      // goddess of the market and of ownerlessness
+	'zanmunippaku',        // the oni who rules over Hell's underworld politics
+	'ariyaiwanaga',        // Iwanaga-hime, goddess of stone and long life
+];
+
 exports.pokedex = (data) => {
 	for (const [id, s] of Object.entries(DATA.species)) {
 		data[id] = clone(s);
+		const base = String(s.baseSpecies || s.name).toLowerCase().replace(/[^a-z0-9]/g, '');
+		if (LEGENDS.includes(base) && !(data[id].tags || []).includes('Sub-Legendary')) data[id].tags = [...(data[id].tags || []), 'Sub-Legendary'];
 		// The Summer Backdoor's forme (see the items below): the validator's message for
 		// a Cirno-Tanned without one names the Pokemon it changes from.
 		if (id === 'cirnotanned') data[id].changesFrom = 'Cirno';
@@ -1394,6 +1422,7 @@ exports.conditions = (data) => {
 exports.TIER = TIER;
 exports.SPECIES = SPECIES;
 exports.FORMES = FORMES;
+exports.LEGENDS = LEGENDS;
 // What config/custom-formats.js bans by name from every RP format but RP Touhou and the RP Battle ones.
 exports.NAMES = NAMES;
 exports.MOVE_IDS = Object.keys(MOVES);

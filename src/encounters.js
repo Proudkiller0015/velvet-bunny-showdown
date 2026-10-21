@@ -42,13 +42,34 @@ function isLegendary(species) {
 	return [s, base].some(x => (x.tags || []).some(t => LEGEND_TAGS.includes(t)));
 }
 
-/** A real, battle-ready Pokemon somebody could meet in the wild. */
-function encounterable(s) {
-	return s && s.exists && s.num > 0 &&
+/*
+ * The regions whose tables may hold Touhou Pokemon (the Boneka): Gensokyo is where they
+ * live, and nowhere else (owner, 21 Oct 2026). Everywhere else they are not in the grass.
+ */
+const TOUHOU_REGIONS = new Set(['gensokyo']);
+
+/**
+ * A real, battle-ready Pokemon somebody could meet in the wild.
+ *
+ * `region`: the region asking. Touhou Pokemon are only ever met in a TOUHOU_REGIONS
+ * region, and only by name from its tables (`boneka`), never as "any Pokemon of the
+ * right type" - so the line and type pools below, which ask without a region, never
+ * see them.
+ */
+function encounterable(s, { region = null } = {}) {
+	return !!s && s.exists && s.num > 0 &&
 		s.isNonstandard !== 'Custom' && s.isNonstandard !== 'CAP' && s.isNonstandard !== 'LGPE' &&
-		// Collab (crossover) and Touhou Pokemon are not out in the grass (data/velvet/collab.js, touhou.js).
-		s.tier !== 'Collab' && s.tier !== 'Touhou' &&
+		// Collab (crossover) Pokemon are not out in the grass anywhere (data/velvet/collab.js).
+		s.tier !== 'Collab' &&
+		// Touhou Pokemon only in Gensokyo (data/velvet/touhou.js, src/encounter-tables/gensokyo.js).
+		(s.tier !== 'Touhou' || TOUHOU_REGIONS.has(toID(region))) &&
 		!s.battleOnly && !s.isMega && !s.isPrimal && !/Gmax|Totem|Eternamax/.test(s.forme || '');
+}
+
+/** A Touhou Pokemon a player can meet and catch: a Touhou species that is not one of the legendary ones. */
+function isBoneka(species) {
+	const s = typeof species === 'string' ? Dex.species.get(species) : species;
+	return !!s && s.exists && s.tier === 'Touhou' && !isLegendary(s);
 }
 
 /**
@@ -199,6 +220,61 @@ function wildSet(species, level, rng = Math.random) {
 	};
 }
 
+/*
+ * The Boneka: Touhou Pokemon met in the wild in Gensokyo (owner, 21 Oct 2026: "all
+ * Boneka are 1% encounters"). Each one a place names is exactly BONEKA_SHARE of what
+ * turns up there, whatever the badges, the hour or the season; the rest of the table
+ * shares what is left in its usual proportions. The legendary ones (touhou.js
+ * LEGENDS, tagged Sub-Legendary) are never met, like every other legendary.
+ */
+const BONEKA_SHARE = 0.01;
+const BONEKA_CATCH_RATE = 25;
+
+/*
+ * A Boneka's moves. Their movepools (the Touhoumons mod's) are all "learned at level 1",
+ * so the games' "last four learned" would hand a level 8 Cirno Blizzard, Ice Beam,
+ * Freeze-Dry and Aurora Beam. Instead it knows what a wild one of that level plausibly
+ * would: its own types' attacks up to a power that grows with level, one attack of
+ * another type, and one move that is not an attack - four in all.
+ */
+const BONEKA_STATUS = new Set(['calmmind', 'nastyplot', 'swordsdance', 'bulkup', 'dragondance', 'quiverdance', 'agility',
+	'thunderwave', 'willowisp', 'toxic', 'hypnosis', 'sleeppowder', 'stunspore', 'confuseray', 'taunt', 'encore',
+	'recover', 'roost', 'softboiled', 'moonlight', 'synthesis', 'slackoff', 'substitute', 'protect', 'leechseed',
+	'reflect', 'lightscreen', 'haze', 'charm', 'growl', 'leer', 'tailwhip', 'sandattack', 'smokescreen', 'yawn']);
+function bonekaPower(level) {
+	return level < 20 ? 60 : level < 35 ? 80 : level < 50 ? 95 : 150;
+}
+function bonekaMoves(species, level, rng) {
+	const cap = bonekaPower(level);
+	const learnable = Object.keys(learnsetOf(species)).map(id => Dex.moves.get(id))
+		.filter(m => m.exists && !m.isZ && !m.isMax && !(m.isNonstandard && m.num > 0));
+	const attacks = learnable.filter(m => m.category !== 'Status' && m.basePower > 0 && m.basePower <= cap &&
+		(m.accuracy === true || m.accuracy >= 75) && !(m.flags && (m.flags.charge || m.flags.recharge)) && !m.selfdestruct &&
+		!m.ohko && m.id !== 'struggle')
+		// Shuffled, then strongest first: equal powers come out in a different order each time.
+		.map(m => ({ m, r: rng() })).sort((a, b) => b.m.basePower - a.m.basePower || a.r - b.r).map(x => x.m);
+	const moves = [];
+	const add = m => { if (m && moves.length < 4 && !moves.includes(m.name)) moves.push(m.name); };
+	for (const type of species.types) add(attacks.find(m => m.type === type));
+	add(attacks.find(m => !species.types.includes(m.type)));
+	const status = learnable.filter(m => m.category === 'Status' && BONEKA_STATUS.has(m.id));
+	if (status.length) add(status[Math.floor(rng() * status.length)]);
+	for (const m of attacks) {
+		if (moves.length >= 4) break;
+		if (!moves.some(n => Dex.moves.get(n).type === m.type)) add(m);
+	}
+	for (const m of attacks) add(m);
+	return moves.length ? moves : levelUpMoves(species, level);
+}
+
+/** A wild Boneka: wildSet, with moves for its level (bonekaMoves) and its own ability. */
+function bonekaSet(species, level, rng = Math.random) {
+	const set = wildSet(species, level, rng);
+	set.moves = bonekaMoves(species, set.level, rng);
+	set.boneka = true;
+	return set;
+}
+
 /**
  * The side name a wild Pokemon battles under. The battle checks for "Wild ". It no longer
  * names the species (owner, 16 Oct 2026): the challenge on Showdown came from "Wild Audino",
@@ -218,6 +294,9 @@ function wildName() {
  * starter is 45, a pseudo-legendary is 45.
  */
 function catchRate(species) {
+	// A Boneka is a one-in-a-hundred find with a near-legendary stat total: harder than a
+	// pseudo-legendary (45), so weakening and status matter, but never a lottery.
+	if (species && species.tier === 'Touhou') return BONEKA_CATCH_RATE;
 	const bst = species.bst;
 	if (bst <= 300) return 255;
 	if (bst <= 350) return 190;
@@ -390,6 +469,15 @@ const TRAINER_CLASSES = [
 	{ id: 'larper', title: 'Larper', avatar: 'harlequin', types: [], sex: 'm', troll: true, aliases: ['larp', 'troll', 'trolltrainer'] },
 	// The Larper's dark-humour cousin (owner, 12 Oct 2026): only ever the Explosion squad.
 	{ id: 'terrorist', title: 'Terrorist', avatar: 'burglar', types: [], sex: 'm', troll: true, trollTheme: 'explosion', bombers: true, aliases: ['bomber', 'bombsquad'] },
+	/*
+	 * The Gap Wanderer (owner, 21 Oct 2026): somebody who slipped through one of Yukari's
+	 * gaps and is still finding their way home, with six Boneka who came along. The one
+	 * trainer who brings Touhou Pokemon to Kagura too; met very rarely on any route, in
+	 * either region (GAP_WANDERER_CHANCE), and summonable by name.
+	 */
+	{ id: 'gapwanderer', title: 'Gap Wanderer', avatar: 'kimonogirl-gen2', types: [], sex: 'f', gap: true, short: 'Wanderer',
+		aliases: ['gap', 'wanderer', 'gapyoukai', 'sukima'],
+		intro: 'The air tears open like a ribbon pulled loose, and someone steps out of a gap full of eyes.' },
 	{ id: 'twins', title: 'Twins', avatar: 'twins-gen4', types: ['Normal', 'Fairy', 'Electric', 'Bug'], sex: 'pair', pair: true },
 	{ id: 'youngcouple', title: 'Young Couple', avatar: 'youngcouple-gen4dp', types: ['Normal', 'Fairy', 'Psychic', 'Water'], sex: 'pair', pair: true, short: 'Couple' },
 ];
@@ -409,6 +497,15 @@ const ACE_STALL_CHANCE = 0.25;
  */
 const LARPER_CHANCE = 0.1;
 const TROLL_HOME_CHANCE = 0.45;
+/*
+ * The Gap Wanderer's odds (owner, 21 Oct 2026): very rare with no badges, a little
+ * likelier with each one, and still rare at eight - 0.3% of route trainers plus 0.3%
+ * a badge: 0.3% at 0, 1.5% at 4, 2.7% at 8. Any route in Kagura or Gensokyo, never a gym.
+ * Taken off the top of the same roll as the trolls, so it costs no extra random number.
+ */
+const GAP_WANDERER_BASE = 0.003;
+const GAP_WANDERER_PER_BADGE = 0.003;
+const gapWandererChance = badges => GAP_WANDERER_BASE + GAP_WANDERER_PER_BADGE * clampBadges(badges);
 
 /**
  * A class staff typed that the list doesn't have ("Team Rocket Grunt"): its own
@@ -775,7 +872,29 @@ function shinyChance({ charm = false, spray = false } = {}) {
 // Prized Pokemon (rarity.js PRIZED): a place that lists one as common gets it as a rare find.
 const isPrized = root => Rarity.classOf(root) === 'prized';
 
-function rollWild({ place, badges, levelCap = null, rng = Math.random, double = null, shiny = {}, now = Date.now(), ace = null }) {
+/**
+ * The Boneka a place's table names (`boneka`), as species, for a region that has them.
+ * Unknown names, legendary ones and anything that is not a Touhou Pokemon are dropped,
+ * and outside TOUHOU_REGIONS there are none at all, whatever a table says.
+ */
+function bonekaOf(place, region) {
+	if (!TOUHOU_REGIONS.has(toID(region))) return [];
+	const out = [];
+	for (const name of (place && place.boneka) || []) {
+		const s = Dex.species.get(name);
+		if (!isBoneka(s) || !encounterable(s, { region }) || out.includes(s)) continue;
+		out.push(s);
+	}
+	return out;
+}
+
+/**
+ * What can turn up at a place, as weighted entries for the first (or only) wild Pokemon:
+ * { entries: [{ item, w }], boneka: Set of ids, fromRare: Set of ids, lo, hi }. With
+ * Boneka the weights add up to exactly 1 and each Boneka's is BONEKA_SHARE; without,
+ * they are the plain pools' weights, untouched, as they have always been.
+ */
+function wildPool({ place, badges, levelCap = null, now = Date.now(), ace = null, region = null }) {
 	badges = clampBadges(badges);
 	const [lo, hi] = levelRange(badges, levelCap, ace);
 	const rootsOf = list => (list || []).map(n => Dex.species.get(n)).filter(s => s.exists && !isLegendary(s)).map(rootOf);
@@ -817,20 +936,45 @@ function rollWild({ place, badges, levelCap = null, rng = Math.random, double = 
 	const rarePool = pool(rare, []);
 	const rareMean = rarePool.length ? rarePool.reduce((n, e) => n + e.w, 0) / rarePool.length : 0;
 	const fromRare = new Set(rarePool.map(e => e.item.id));
-	const entries = [
+	let entries = [
 		...scale(pool(common, []), common.length ? 0.55 : 0),
 		...scale(rarePool, 0.04 * Math.min(1, rareMean * 25)),
 		...scale(typed, 0.41),
 	];
+	const boneka = bonekaOf(place, region);
+	if (boneka.length) {
+		// Each Boneka exactly BONEKA_SHARE; everything else keeps its proportions in what is left.
+		const left = Math.max(0, 1 - BONEKA_SHARE * boneka.length);
+		const total = entries.reduce((n, e) => n + e.w, 0);
+		entries = [
+			...entries.map(e => ({ item: e.item, w: total > 0 ? e.w / total * left : 0 })),
+			...boneka.map(s => ({ item: s, w: BONEKA_SHARE })),
+		];
+	}
+	return { entries, boneka: new Set(boneka.map(s => s.id)), fromRare, lo, hi, badges };
+}
 
+function rollWild({ place, badges, levelCap = null, rng = Math.random, double = null, shiny = {}, now = Date.now(), ace = null, region = null }) {
+	const pooled = wildPool({ place, badges, levelCap, now, ace, region });
+	const { entries, fromRare, lo, hi } = pooled;
+	badges = pooled.badges;
 	const count = double === null ? (badges >= 1 && rng() < 0.12 ? 2 : 1) : (double ? 2 : 1);
 	const team = [];
 	const taken = new Set();
 	for (let i = 0; i < count; i++) {
-		const root = weightedPick(entries.filter(e => !taken.has(e.item.id)), rng);
+		// A Boneka is met alone: never as the second of a double (that would make it more than 1%).
+		const root = weightedPick(entries.filter(e => !taken.has(e.item.id) && !(i > 0 && pooled.boneka.has(e.item.id))), rng);
 		if (!root) break;
 		taken.add(root.id);
 		const level = randInt(lo, hi, rng);
+		if (pooled.boneka.has(root.id)) {
+			const set = bonekaSet(root, level, rng);
+			if (rng() < shinyChance(shiny)) set.shiny = true;
+			// The rare wild theme where the client has no theme for it (it plays the character's own).
+			set.rare = true;
+			team.push(set);
+			break;
+		}
 		const species = stageFor(root, level, rng, { ahead: 0.04 });
 		const set = wildSet(species, level, rng);
 		if (rng() < shinyChance(shiny)) set.shiny = true;
@@ -879,6 +1023,9 @@ const GYM_TYPES = {
 	// Sinnoh
 	'oreburgh-gym': 'Rock', 'eterna-gym': 'Grass', 'veilstone-gym': 'Fighting', 'pastoria-gym': 'Water',
 	'hearthome-gym': 'Ghost', 'canalave-gym': 'Steel', 'snowpoint-gym': 'Ice', 'sunyshore-gym': 'Electric',
+	// Gensokyo (the atlas's first draft, regions/gensokyo.js GYMS)
+	'hakurei-gym': 'Fairy', 'scarlet-gym': 'Dark', 'moriya-gym': 'Flying', 'eientei-gym': 'Psychic',
+	'hakugyokurou-gym': 'Ghost', 'chireiden-gym': 'Fire', 'myouren-gym': 'Fighting', 'sunflower-gym': 'Grass',
 };
 /** The place as a gym's trainers see it, or the place unchanged outside a gym. */
 function gymPlace(place, channel) {
@@ -912,11 +1059,12 @@ function tierForLevel(level) {
  */
 const recentAt = new Map();
 
-function rollTrainer({ place, badges, levelCap = null, rng = Math.random, classId = null, cls: givenClass = null, double = null, ace = null, party = null }) {
-	badges = clampBadges(badges);
-	const realBadges = badges;
-	const grown = party && party.size >= 3 ? party : null;
-	if (grown) badges = Math.max(badges, tierForLevel(grown.avg));
+/**
+ * Which class a trainer met at a place is: the one asked for, or one of the place's,
+ * then the troll and Gap Wanderer rolls off the same random number (route trainers only).
+ * `badges` are the player's own.
+ */
+function trainerClassFor({ place, badges = 0, rng = Math.random, classId = null, cls: givenClass = null }) {
 	const classes = (place && place.trainers && place.trainers.length ? place.trainers : ['youngster', 'lass', 'hiker', 'backpacker'])
 		.map(findClass).filter(c => c && !c.story);   // a route never sends a Champion at random
 	let cls = givenClass || (classId && findClass(classId)) || pick(classes, rng);
@@ -928,12 +1076,83 @@ function rollTrainer({ place, badges, levelCap = null, rng = Math.random, classI
 		const roll = rng();
 		if (roll < bombers) cls = findClass('terrorist');
 		else if (roll < bombers + larpers) cls = findClass('larper');
+		else if (roll >= 1 - gapWandererChance(badges)) cls = findClass('gapwanderer');
 	}
+	return cls;
+}
+
+/*
+ * Gensokyo is the hard-mode region (owner, 21 Oct 2026): every trainer there brings a
+ * full six, whatever the badges, and at least one of them is a Boneka (ensureBoneka).
+ * Levels still follow the badges. Kagura is unchanged.
+ */
+function rollTrainer(opts) {
+	const gensokyo = TOUHOU_REGIONS.has(toID(opts.region));
+	const rolled = rollTrainerTeam({ ...opts, fullTeam: gensokyo });
+	if (gensokyo && rolled && Array.isArray(rolled.team)) {
+		ensureBoneka(rolled.team, { place: opts.place, cls: findClass(rolled.classId), badges: clampBadges(opts.badges), rng: opts.rng || Math.random });
+	}
+	return rolled;
+}
+
+let bonekaCache = null;
+/** Every Boneka a trainer could carry: Touhou base species, not legendary, no item needed. */
+function allBoneka() {
+	if (!bonekaCache) bonekaCache = Dex.species.all().filter(s => isBoneka(s) && s.baseSpecies === s.name && !s.battleOnly && !s.requiredItem);
+	return bonekaCache;
+}
+
+/** A trainer's Boneka: bonekaMoves for its level, IVs, EVs and items by badges as trainerSet deals them. */
+function bonekaTrainerSet(species, level, badges, rng) {
+	const iv = Math.min(31, 8 + badges * 3);
+	let item = '';
+	if (badges >= 6) item = pick(['Sitrus Berry', 'Leftovers', 'Lum Berry', TYPE_ITEMS[species.types[0]]], rng);
+	else if (badges >= 3 && rng() < 0.5) item = 'Oran Berry';
+	const set = {
+		name: species.name, species: species.name, level: clampLevel(level),
+		moves: bonekaMoves(species, clampLevel(level), rng),
+		ability: abilityFor(species, rng, badges >= 6 ? 0.3 : 0.05),
+		nature: pick(NATURES, rng), item,
+		ivs: { hp: iv, atk: iv, def: iv, spa: iv, spd: iv, spe: iv },
+	};
+	set.evs = EV.spreadFor(Dex, set, EV.trainerBudget(badges));
+	set.evs = EV.fitToLevel(Dex, set);
+	return set;
+}
+
+/**
+ * At least one Boneka on a Gensokyo trainer's team (owner, 21 Oct 2026). One that lives
+ * at this place and fits the class (or gym) type first, then one that lives here, then
+ * any that fits the type, then any. It takes a slot other than the ace's, at that
+ * slot's level. Changes the team in place and returns it.
+ */
+function ensureBoneka(team, { place = null, cls = null, badges = 0, rng = Math.random } = {}) {
+	if (!Array.isArray(team) || !team.length || team.some(m => isBoneka(m.species))) return team;
+	const home = [...((place && place.boneka) || []), ...Object.values((place && place.spots) || {}).flatMap(sp => sp.boneka || [])]
+		.map(n => Dex.species.get(n)).filter(s => isBoneka(s));
+	const want = place && place.gymType ? [place.gymType] : ((cls && cls.types) || []);
+	const fits = list => list.filter(s => s.types.some(t => want.includes(t)));
+	const pool = [fits(home), home, fits(allBoneka()), allBoneka()].find(l => l.length);
+	if (!pool) return team;
+	const taken = new Set(team.map(m => toID(m.species)));
+	const choices = pool.filter(s => !taken.has(s.id));
+	const species = pick(choices.length ? choices : pool, rng);
+	const slot = team.length > 1 ? randInt(0, team.length - 2, rng) : 0;
+	team[slot] = bonekaTrainerSet(species, team[slot].level, badges, rng);
+	return team;
+}
+
+function rollTrainerTeam({ place, badges, levelCap = null, rng = Math.random, classId = null, cls: givenClass = null, double = null, ace = null, party = null, fullTeam = false }) {
+	badges = clampBadges(badges);
+	const realBadges = badges;
+	const grown = party && party.size >= 3 ? party : null;
+	if (grown) badges = Math.max(badges, tierForLevel(grown.avg));
+	const cls = trainerClassFor({ place, badges: realBadges, rng, classId, cls: givenClass });
 	const tier = BADGE_TIERS[badges];
 	// The stall Ace Trainer battles single unless a double is asked for: stall is a singles game.
 	const isDouble = cls.pair || (double === null ? !cls.stall && !cls.troll && badges >= 1 && rng() < 0.15 : !!double);
 	// A troll always brings six, whatever the badges (owner, 12 Oct 2026).
-	const size = cls.troll ? 6 : Math.min(6, Math.max(isDouble ? 2 : 1, tier.size, grown ? (grown.size >= 6 ? (rng() < 0.5 ? 5 : 6) : grown.size) : 0));
+	const size = cls.troll || cls.gap || fullTeam ? 6 : Math.min(6, Math.max(isDouble ? 2 : 1, tier.size, grown ? (grown.size >= 6 ? (rng() < 0.5 ? 5 : 6) : grown.size) : 0));
 
 	// The ace pulls a trainer down the same way it pulls the wild: somebody whose best
 	// Pokemon is far under their cap is not handed a full-cap team to lose to.
@@ -1004,6 +1223,19 @@ function rollTrainer({ place, badges, levelCap = null, rng = Math.random, classI
 			};
 		}
 		levels.length = 0;
+	}
+	// The Gap Wanderer: six different Boneka, levelled like any trainer's team.
+	if (cls.gap) {
+		for (let i = 0; i < size; i++) levels.push(i === size - 1 ? hi : randInt(Math.max(lo, hi - 5), Math.max(lo, hi - 1), rng));
+		levels.sort((a, b) => a - b);
+		const left = allBoneka().slice();
+		const gapTeam = levels.map(level => bonekaTrainerSet(left.splice(Math.floor(rng() * left.length), 1)[0], level, badges, rng));
+		let ai = tier.ai;
+		if (grown) ai = AI_ORDER[Math.min(AI_ORDER.length - 1, AI_ORDER.indexOf(ai) + (grown.size >= 6 ? 2 : grown.size >= 4 ? 1 : 0))] || ai;
+		return {
+			kind: 'trainer', double: isDouble, name: trainerName(cls, rng), avatar: cls.avatar, className: cls.title, classId: cls.id,
+			team: gapTeam, ai, format: isDouble ? TRAINER_DOUBLE_FORMAT : TRAINER_FORMAT, badges: realBadges, intro: cls.intro,
+		};
 	}
 	if (cls.troll) {
 		for (let i = 0; i < size; i++) levels.push(i === size - 1 ? hi : randInt(Math.max(lo, hi - 5), Math.max(lo, hi - 1), rng));
@@ -1706,7 +1938,8 @@ function describe(enc) {
 module.exports = {
 	weatherItem,
 	BATTLE_ITEMS, findBattleItem, itemHelps,
-	toID, LEGEND_TAGS, isLegendary, encounterable, findSpecies,
+	toID, LEGEND_TAGS, isLegendary, encounterable, findSpecies, TOUHOU_REGIONS, isBoneka, bonekaOf, bonekaSet, bonekaMoves, BONEKA_SHARE, BONEKA_CATCH_RATE, wildPool,
+	allBoneka, bonekaTrainerSet, trainerClassFor, ensureBoneka, gapWandererChance, GAP_WANDERER_BASE, GAP_WANDERER_PER_BADGE,
 	levelUpMoves, wildSet, wildName, clampLevel, clampBadges, levelRange, shinyChance,
 	catchRate, BALLS, findBall, catchChance, shakesFor, CATCH_BOOST, PITY_PER_MISS,
 	TRAINER_CLASSES, GYM_TYPES, gymPlace, findClass, trainerName, minLevel, rootOf, lineOf, lineWeight, BADGE_TIERS, Rarity,
