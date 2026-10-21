@@ -1,0 +1,1874 @@
+{
+	"note": "Touhou character battle themes (owner, 21 Oct 2026): a Touhou Pokemon in battle plays its character's theme, like a legendary's. Rendered from the MIDI transcriptions in git.psf.lt/80486DX2-66/touhou-midi-collection by tools/music/touhou.py (gm.dls, mono 64 kbps, -14 LUFS) into client/audio/touhou/<file>.mp3. folder/match = where the theme is in the collection; midi = the transcription used (the best-looping, fullest one); loop = [start ms, end ms] for the client, measured from the score (method); species = who it plays for (a forme shares its base's); source = which theme and why. A character with no theme of her own plays her stage's theme.",
+	"tracks": [
+		{
+			"file": "maidens-capriccio",
+			"title": "Maiden's Capriccio ~ Dream Battle",
+			"character": "Reimu Hakurei",
+			"folder": "1 - Shooter Games/8 - Imperishable Night",
+			"match": "9. Maiden's Capriccio",
+			"species": [
+				"reimuhakurei"
+			],
+			"source": "Reimu's boss theme, Imperishable Night (also in IaMP). Spring Lane ~ Colorful Path (PoFV) is her other theme and is in the collection too.",
+			"midi": "1 - Shooter Games/8 - Imperishable Night/9. Maiden's Capriccio ~ Dream Battle (icebhm23230).mid",
+			"method": "marker",
+			"loop": [
+				13375,
+				164115
+			]
+		},
+		{
+			"file": "love-colored-master-spark",
+			"title": "Love-Colored Master Spark",
+			"character": "Marisa Kirisame",
+			"folder": "1 - Shooter Games/8 - Imperishable Night",
+			"match": "10. Love-colored Master Spark",
+			"species": [
+				"marisakirisame"
+			],
+			"source": "Marisa's boss theme, Imperishable Night.",
+			"midi": "1 - Shooter Games/8 - Imperishable Night/10. Love-colored Master Spark (ZUN, edited by LeastLPZ).mid",
+			"method": "marker",
+			"loop": [
+				1000,
+				118143
+			]
+		},
+		{
+			"file": "apparitions-stalk-the-night",
+			"title": "Apparitions Stalk the Night",
+			"character": "Rumia",
+			"folder": "1 - Shooter Games/6 - The Embodiment of Scarlet Devil",
+			"match": "3. Apparitions Stalk the Night",
+			"species": [
+				"rumia"
+			],
+			"source": "Rumia's boss theme, EoSD stage 1.",
+			"midi": "1 - Shooter Games/6 - The Embodiment of Scarlet Devil/3. Apparitions Stalk the Night (sagittarius shikoku).mid",
+			"method": "repeat",
+			"loop": [
+				1500,
+				54466
+			]
+		},
+		{
+			"file": "lunate-elf",
+			"title": "Lunate Elf",
+			"character": "Daiyousei",
+			"folder": "1 - Shooter Games/6 - The Embodiment of Scarlet Devil",
+			"match": "4. Lunate Elf",
+			"species": [
+				"daiyousei"
+			],
+			"source": "No theme of her own: the EoSD stage 2 theme, where she is the midboss.",
+			"midi": "1 - Shooter Games/6 - The Embodiment of Scarlet Devil/4. Lunate Elf (ZUN).mid",
+			"method": "whole",
+			"loop": [
+				2667,
+				88298
+			]
+		},
+		{
+			"file": "beloved-tomboyish-girl",
+			"title": "Beloved Tomboyish Girl",
+			"character": "Cirno",
+			"folder": "1 - Shooter Games/6 - The Embodiment of Scarlet Devil",
+			"match": "5. Tomboyish Girl in Love",
+			"species": [
+				"cirno",
+				"cirnotanned"
+			],
+			"source": "Cirno's boss theme, EoSD stage 2 (the collection names it 'Tomboyish Girl in Love'). Cirno-Tanned shares it.",
+			"midi": "1 - Shooter Games/6 - The Embodiment of Scarlet Devil/5. Tomboyish Girl in Love (unknown 2).mid",
+			"method": "repeat",
+			"loop": [
+				6158,
+				89842
+			]
+		},
+		{
+			"file": "shanghai-teahouse",
+			"title": "Shanghai Teahouse ~ Chinese Tea",
+			"character": "Hong Meiling",
+			"folder": "1 - Shooter Games/6 - The Embodiment of Scarlet Devil",
+			"match": "6. Shanghai Scarlet Teahouse",
+			"species": [
+				"hongmeiling"
+			],
+			"source": "Meiling's boss theme, EoSD stage 3.",
+			"midi": "1 - Shooter Games/6 - The Embodiment of Scarlet Devil/6. Shanghai Scarlet Teahouse ~ Chinese Tea (ZUN).mid",
+			"method": "whole",
+			"loop": [
+				2678,
+				140690
+			]
+		},
+		{
+			"file": "voile-the-magic-library",
+			"title": "Voile, the Magic Library",
+			"character": "Koakuma",
+			"folder": "1 - Shooter Games/6 - The Embodiment of Scarlet Devil",
+			"match": "8. Voile, the Magic Library",
+			"species": [
+				"koakuma"
+			],
+			"source": "No theme of her own: the EoSD stage 4 theme, where she is the midboss.",
+			"midi": "1 - Shooter Games/6 - The Embodiment of Scarlet Devil/8. Voile, the Magic Library (ZUN).mid",
+			"method": "whole",
+			"loop": [
+				2600,
+				110836
+			]
+		},
+		{
+			"file": "locked-girl",
+			"title": "Locked Girl ~ The Girl's Secret Room",
+			"character": "Patchouli Knowledge",
+			"folder": "1 - Shooter Games/6 - The Embodiment of Scarlet Devil",
+			"match": "9. Locked Girl",
+			"species": [
+				"patchouliknowledge"
+			],
+			"source": "Patchouli's boss theme, EoSD stage 4.",
+			"midi": "1 - Shooter Games/6 - The Embodiment of Scarlet Devil/9. Locked Girl ~ The Girl's Secret Room (sweetmusic).mid",
+			"method": "repeat",
+			"loop": [
+				28263,
+				116684
+			]
+		},
+		{
+			"file": "lunar-clock",
+			"title": "Lunar Clock ~ Luna Dial",
+			"character": "Sakuya Izayoi",
+			"folder": "1 - Shooter Games/6 - The Embodiment of Scarlet Devil",
+			"match": "11. Lunar Clock",
+			"species": [
+				"sakuyaizayoi"
+			],
+			"source": "Sakuya's boss theme, EoSD stage 5 (also IaMP).",
+			"midi": "1 - Shooter Games/6 - The Embodiment of Scarlet Devil/11. Lunar Clock ~ Luna Dial (sweetmusic).mid",
+			"method": "repeat",
+			"loop": [
+				3000,
+				83000
+			]
+		},
+		{
+			"file": "septette-for-the-dead-princess",
+			"title": "Septette for the Dead Princess",
+			"character": "Remilia Scarlet",
+			"folder": "1 - Shooter Games/6 - The Embodiment of Scarlet Devil",
+			"match": "13. Septette for a Dead Princess",
+			"species": [
+				"remiliascarlet"
+			],
+			"source": "Remilia's boss theme, EoSD stage 6.",
+			"midi": "1 - Shooter Games/6 - The Embodiment of Scarlet Devil/13. Septette for a Dead Princess (yoimutu).mid",
+			"method": "repeat",
+			"loop": [
+				31138,
+				137897
+			]
+		},
+		{
+			"file": "un-owen-was-her",
+			"title": "U.N. Owen Was Her?",
+			"character": "Flandre Scarlet",
+			"folder": "1 - Shooter Games/6 - The Embodiment of Scarlet Devil",
+			"match": "15. U.N. Owen was",
+			"species": [
+				"flandrescarlet"
+			],
+			"source": "Flandre's boss theme, EoSD Extra.",
+			"midi": "1 - Shooter Games/6 - The Embodiment of Scarlet Devil/15. U.N. Owen was her (icebhm23230).mid",
+			"method": "marker",
+			"loop": [
+				1000,
+				123012
+			]
+		},
+		{
+			"file": "crystallized-silver",
+			"title": "Crystallized Silver",
+			"character": "Letty Whiterock",
+			"folder": "1 - Shooter Games/7 - Perfect Cherry Blossom",
+			"match": "3. Crystallized Silver",
+			"species": [
+				"lettywhiterock"
+			],
+			"source": "Letty's boss theme, PCB stage 1.",
+			"midi": "1 - Shooter Games/7 - Perfect Cherry Blossom/3. Crystallized Silver (ZUN).mid",
+			"method": "whole",
+			"loop": [
+				2633,
+				72837
+			]
+		},
+		{
+			"file": "diao-ye-zong",
+			"title": "Diao Ye Zong (Withered Leaf)",
+			"character": "Chen",
+			"folder": "1 - Shooter Games/7 - Perfect Cherry Blossom",
+			"match": "5. Diao Ye Zong",
+			"species": [
+				"chen"
+			],
+			"source": "Chen's boss theme, PCB stage 2.",
+			"midi": "1 - Shooter Games/7 - Perfect Cherry Blossom/5. Diao Ye Zong (withered leaf) (hisaraito).mid",
+			"method": "repeat",
+			"loop": [
+				2938,
+				55541
+			]
+		},
+		{
+			"file": "doll-judgement",
+			"title": "Doll Judgement ~ The Girl Who Played with People's Shapes",
+			"character": "Alice Margatroid",
+			"folder": "1 - Shooter Games/7 - Perfect Cherry Blossom",
+			"match": "7. Doll Judgement",
+			"species": [
+				"alicemargatroid"
+			],
+			"source": "Alice's boss theme, PCB stage 3 (Doll Judgment in IaMP).",
+			"midi": "1 - Shooter Games/7 - Perfect Cherry Blossom/7. Doll Judgement ~ The Girl Who Played with People's Shapes (icebhm23230).mid",
+			"method": "marker",
+			"loop": [
+				27497,
+				178669
+			]
+		},
+		{
+			"file": "capital-city-of-flowers",
+			"title": "The Capital City of Flowers in the Sky",
+			"character": "Lily White",
+			"folder": "1 - Shooter Games/7 - Perfect Cherry Blossom",
+			"match": "8. The Capital City of Flowers",
+			"species": [
+				"lilywhite"
+			],
+			"source": "No theme of her own: the PCB stage 4 theme, where she is the midboss.",
+			"midi": "1 - Shooter Games/7 - Perfect Cherry Blossom/8. The Capital City of Flowers in the Sky (ZUN).mid",
+			"method": "whole",
+			"loop": [
+				2633,
+				237735
+			]
+		},
+		{
+			"file": "phantom-ensemble",
+			"title": "Phantom Ensemble",
+			"character": "Prismriver Sisters",
+			"folder": "1 - Shooter Games/7 - Perfect Cherry Blossom",
+			"match": "9. Phantom Band",
+			"species": [
+				"lunasaprismriver",
+				"merlinprismriver",
+				"lyricaprismriver"
+			],
+			"source": "The Prismriver sisters' boss theme, PCB stage 4 (they share it).",
+			"midi": "1 - Shooter Games/7 - Perfect Cherry Blossom/9. Phantom Band ~ Phantom Ensemble (sweetmusic).mid",
+			"method": "repeat",
+			"loop": [
+				3000,
+				139923
+			]
+		},
+		{
+			"file": "hiroari-shoots-a-strange-bird",
+			"title": "Hiroari Shoots a Strange Bird ~ Till When?",
+			"character": "Youmu Konpaku",
+			"folder": "1 - Shooter Games/7 - Perfect Cherry Blossom",
+			"match": "11. Hiroari Shoots",
+			"species": [
+				"youmukonpaku"
+			],
+			"source": "Youmu's boss theme, PCB stage 5.",
+			"midi": "1 - Shooter Games/7 - Perfect Cherry Blossom/11. Hiroari Shoots a Strange Bird ~ Till When (ZUN).mid",
+			"method": "whole",
+			"loop": [
+				2548,
+				107839
+			]
+		},
+		{
+			"file": "border-of-life",
+			"title": "Bloom Nobly, Ink-Black Cherry Blossom ~ Border of Life",
+			"character": "Yuyuko Saigyouji",
+			"folder": "1 - Shooter Games/7 - Perfect Cherry Blossom",
+			"match": "13. Bloom Nobly",
+			"species": [
+				"yuyukosaigyouji"
+			],
+			"source": "Yuyuko's boss theme, PCB stage 6.",
+			"midi": "1 - Shooter Games/7 - Perfect Cherry Blossom/13. Bloom Nobly, Ink-black Cherry Blossom ~ Border of Life (yoimutu).mid",
+			"method": "repeat",
+			"loop": [
+				17897,
+				144527
+			]
+		},
+		{
+			"file": "charming-domination",
+			"title": "Charming Domination ~ Who Done It!",
+			"character": "Ran Yakumo",
+			"folder": "1 - Shooter Games/7 - Perfect Cherry Blossom",
+			"match": "17. Spiritual Domination",
+			"species": [
+				"ranyakumo"
+			],
+			"source": "Ran's boss theme, PCB Extra (the collection names it 'Spiritual Domination').",
+			"midi": "1 - Shooter Games/7 - Perfect Cherry Blossom/17. Spiritual Domination ~ Who done it! (ZUN).mid",
+			"method": "whole",
+			"loop": [
+				1769,
+				141769
+			]
+		},
+		{
+			"file": "necrofantasia",
+			"title": "Necrofantasia",
+			"character": "Yukari Yakumo",
+			"folder": "1 - Shooter Games/7 - Perfect Cherry Blossom",
+			"match": "18. Necrofantasia",
+			"species": [
+				"yukariyakumo"
+			],
+			"source": "Yukari's boss theme, PCB Phantasm.",
+			"midi": "1 - Shooter Games/7 - Perfect Cherry Blossom/18. Necrofantasia (icebhm23230).mid",
+			"method": "marker",
+			"loop": [
+				1366,
+				166735
+			]
+		},
+		{
+			"file": "broken-moon",
+			"title": "Broken Moon",
+			"character": "Suika Ibuki",
+			"folder": "3 - Fighting Games/7.5 - Immaterial and Missing Power",
+			"match": "34. Broken Moon",
+			"species": [
+				"suikaibuki"
+			],
+			"source": "Suika's theme, Immaterial and Missing Power (also SWR).",
+			"midi": "3 - Fighting Games/7.5 - Immaterial and Missing Power/34. Broken Moon (unknown).mid",
+			"method": "repeat",
+			"loop": [
+				3375,
+				48375
+			]
+		},
+		{
+			"file": "wriggling-autumn-moon",
+			"title": "Wriggling Autumn Moon ~ Mooned Insect",
+			"character": "Wriggle Nightbug",
+			"folder": "1 - Shooter Games/8 - Imperishable Night",
+			"match": "3. Wriggling Autumn Moon",
+			"species": [
+				"wrigglenightbug"
+			],
+			"source": "Wriggle's boss theme, IN stage 1.",
+			"midi": "1 - Shooter Games/8 - Imperishable Night/3. Wriggling Autumn Moon ~ Mooned Insect (icebhm23230).mid",
+			"method": "marker",
+			"loop": [
+				18612,
+				80718
+			]
+		},
+		{
+			"file": "deaf-to-all-but-the-song",
+			"title": "Deaf to All but the Song",
+			"character": "Mystia Lorelei",
+			"folder": "1 - Shooter Games/8 - Imperishable Night",
+			"match": "5. Deaf to All but the Song",
+			"species": [
+				"mystialorelei"
+			],
+			"source": "Mystia's boss theme, IN stage 2.",
+			"midi": "1 - Shooter Games/8 - Imperishable Night/5. Deaf to All but the Song (SONARLE).mid",
+			"method": "whole",
+			"loop": [
+				1240,
+				142590
+			]
+		},
+		{
+			"file": "plain-asia",
+			"title": "Plain Asia",
+			"character": "Keine Kamishirasawa",
+			"folder": "1 - Shooter Games/8 - Imperishable Night",
+			"match": "7. Plain Asia",
+			"species": [
+				"keine",
+				"keinehakutaku"
+			],
+			"source": "Keine's boss theme, IN stage 3. Keine-Hakutaku shares it.",
+			"midi": "1 - Shooter Games/8 - Imperishable Night/7. Plain Asia (hisaraito).mid",
+			"method": "whole",
+			"loop": [
+				1500,
+				102145
+			]
+		},
+		{
+			"file": "white-flag-of-usa-shrine",
+			"title": "White Flag of Usa Shrine",
+			"character": "Tewi Inaba",
+			"folder": "1 - Shooter Games/9 - Phantasmagoria of Flower View",
+			"match": "10. White Flag of Usa Shrine",
+			"species": [
+				"tewiinaba"
+			],
+			"source": "Tewi's theme, PoFV.",
+			"midi": "1 - Shooter Games/9 - Phantasmagoria of Flower View/10. White Flag of Usa Shrine (Kanade_KND34).mid",
+			"method": "repeat",
+			"loop": [
+				2644,
+				106628
+			]
+		},
+		{
+			"file": "lunatic-eyes",
+			"title": "Lunatic Eyes ~ Invisible Full Moon",
+			"character": "Reisen Udongein Inaba",
+			"folder": "1 - Shooter Games/8 - Imperishable Night",
+			"match": "12. Lunatic Eyes",
+			"species": [
+				"reiseninaba"
+			],
+			"source": "Reisen's boss theme, IN stage 5.",
+			"midi": "1 - Shooter Games/8 - Imperishable Night/12. Lunatic Eyes ~ Invisible Full Moon (Baka94).mid",
+			"method": "repeat",
+			"loop": [
+				2139,
+				119305
+			]
+		},
+		{
+			"file": "voyage-1969",
+			"title": "Voyage 1969",
+			"character": "Eirin Yagokoro",
+			"folder": "1 - Shooter Games/8 - Imperishable Night",
+			"match": "13. Voyage 1969",
+			"species": [
+				"eirinyagokoro"
+			],
+			"source": "Eirin's boss theme, IN stage 6A.",
+			"midi": "1 - Shooter Games/8 - Imperishable Night/13. Voyage 1969 (yoimutu).mid",
+			"method": "whole",
+			"loop": [
+				5000,
+				162037
+			]
+		},
+		{
+			"file": "flight-of-the-bamboo-cutter",
+			"title": "Flight of the Bamboo Cutter ~ Lunatic Princess",
+			"character": "Kaguya Houraisan",
+			"folder": "1 - Shooter Games/8 - Imperishable Night",
+			"match": "15. Flight in the Bamboo Cutter",
+			"species": [
+				"kaguyahouraisan"
+			],
+			"source": "Kaguya's boss theme, IN stage 6B.",
+			"midi": "1 - Shooter Games/8 - Imperishable Night/15. Flight in the Bamboo Cutter ~ Lunatic Princess (sweetmusic).mid",
+			"method": "repeat",
+			"loop": [
+				25495,
+				158572
+			]
+		},
+		{
+			"file": "reach-for-the-moon",
+			"title": "Reach for the Moon, Immortal Smoke",
+			"character": "Fujiwara no Mokou",
+			"folder": "1 - Shooter Games/8 - Imperishable Night",
+			"match": "18. Reach for the Moon",
+			"species": [
+				"fujiwaranomokou"
+			],
+			"source": "Mokou's boss theme, IN Extra.",
+			"midi": "1 - Shooter Games/8 - Imperishable Night/18. Reach for the Moon, Immortal Smoke (icebhm23230).mid",
+			"method": "marker",
+			"loop": [
+				13508,
+				182752
+			]
+		},
+		{
+			"file": "wind-god-girl",
+			"title": "Wind God Girl",
+			"character": "Aya Shameimaru",
+			"folder": "1 - Shooter Games/9 - Phantasmagoria of Flower View",
+			"match": "11. Wind God Girl",
+			"species": [
+				"ayashameimaru"
+			],
+			"source": "Aya's theme, PoFV (also Shoot the Bullet).",
+			"midi": "1 - Shooter Games/9 - Phantasmagoria of Flower View/11. Wind God Girl (Kanade_KND34).mid",
+			"method": "repeat",
+			"loop": [
+				8792,
+				172133
+			]
+		},
+		{
+			"file": "poison-body",
+			"title": "Poison Body ~ Forsaken Doll",
+			"character": "Medicine Melancholy",
+			"folder": "1 - Shooter Games/9 - Phantasmagoria of Flower View",
+			"match": "12. Poison Body",
+			"species": [
+				"medicinemelancholy"
+			],
+			"source": "Medicine's theme, PoFV.",
+			"midi": "1 - Shooter Games/9 - Phantasmagoria of Flower View/12. Poison Body ~ Forsaken Doll (aoba-ss).mid",
+			"method": "marker",
+			"loop": [
+				3323,
+				114806
+			]
+		},
+		{
+			"file": "flower-land",
+			"title": "Gensokyo, Past and Present ~ Flower Land",
+			"character": "Yuuka Kazami",
+			"folder": "1 - Shooter Games/9 - Phantasmagoria of Flower View",
+			"match": "13. Gensokyo, Past and Present",
+			"species": [
+				"yuukakazami"
+			],
+			"source": "Yuuka's theme, PoFV.",
+			"midi": "1 - Shooter Games/9 - Phantasmagoria of Flower View/13. Gensokyo, Past and Present ~ Flower Land (Ezequiel-TM).mid",
+			"method": "repeat",
+			"loop": [
+				1000,
+				146500
+			]
+		},
+		{
+			"file": "higan-retour",
+			"title": "Higan Retour ~ Riverside View",
+			"character": "Komachi Onozuka",
+			"folder": "1 - Shooter Games/9 - Phantasmagoria of Flower View",
+			"match": "14. Higan Retour",
+			"species": [
+				"komachionozuka"
+			],
+			"source": "Komachi's theme, PoFV (also SWR).",
+			"midi": "1 - Shooter Games/9 - Phantasmagoria of Flower View/14. Higan Retour ~ Riverside View (wrbk - GS).mid",
+			"method": "marker",
+			"loop": [
+				11839,
+				167838
+			]
+		},
+		{
+			"file": "fate-of-sixty-years",
+			"title": "Eastern Judgement in the Sixtieth Year ~ Fate of Sixty Years",
+			"character": "Eiki Shiki",
+			"folder": "1 - Shooter Games/9 - Phantasmagoria of Flower View",
+			"match": "15. Eastern Judgement",
+			"species": [
+				"eikishiki"
+			],
+			"source": "Eiki's theme, PoFV.",
+			"midi": "1 - Shooter Games/9 - Phantasmagoria of Flower View/15. Eastern Judgement in the Sixtieth Year ~ Fate of Sixty Years (Kanade_KND34).mid",
+			"method": "phrase",
+			"loop": [
+				11701,
+				87369
+			]
+		},
+		{
+			"file": "romantic-fall",
+			"title": "A God That Misses People ~ Romantic Fall",
+			"character": "Shizuha Aki",
+			"folder": "1 - Shooter Games/10 - Mountain of Faith",
+			"match": "2. A God That Misses People",
+			"species": [
+				"shizuhaaki"
+			],
+			"source": "No theme of her own: the MoF stage 1 theme, where she is the midboss.",
+			"midi": "1 - Shooter Games/10 - Mountain of Faith/2. A God That Misses People ~ Romantic Fall (hisaraito).mid",
+			"method": "whole",
+			"loop": [
+				1500,
+				150518
+			]
+		},
+		{
+			"file": "princess-inada",
+			"title": "Because Princess Inada Is Scolding Me",
+			"character": "Minoriko Aki",
+			"folder": "1 - Shooter Games/10 - Mountain of Faith",
+			"match": "3. Because Princess Inada",
+			"species": [
+				"minorikoaki"
+			],
+			"source": "Minoriko's boss theme, MoF stage 1.",
+			"midi": "1 - Shooter Games/10 - Mountain of Faith/3. Because Princess Inada is Scolding Me (Ezequiel-TM).mid",
+			"method": "repeat",
+			"loop": [
+				45172,
+				85663
+			]
+		},
+		{
+			"file": "dark-side-of-fate",
+			"title": "Dark Side of Fate",
+			"character": "Hina Kagiyama",
+			"folder": "1 - Shooter Games/10 - Mountain of Faith",
+			"match": "5. Dark Side of Fate",
+			"species": [
+				"hinakagiyama"
+			],
+			"source": "Hina's boss theme, MoF stage 2.",
+			"midi": "1 - Shooter Games/10 - Mountain of Faith/5. Dark Side of Fate (rongns_2).mid",
+			"method": "whole",
+			"loop": [
+				2500,
+				166785
+			]
+		},
+		{
+			"file": "candid-friend",
+			"title": "Akutagawa Ryuunosuke's \"Kappa\" ~ Candid Friend",
+			"character": "Nitori Kawashiro",
+			"folder": "1 - Shooter Games/10 - Mountain of Faith",
+			"match": "7. Akutagawa",
+			"species": [
+				"nitorikawashiro"
+			],
+			"source": "Nitori's boss theme, MoF stage 3.",
+			"midi": "1 - Shooter Games/10 - Mountain of Faith/7. Akutagawa Ryuunosuke's Kappa ~ Candid Friend (LeastLPZ).mid",
+			"method": "marker",
+			"loop": [
+				10711,
+				147012
+			]
+		},
+		{
+			"file": "mysterious-mountain",
+			"title": "The Youkai Mountain ~ Mysterious Mountain",
+			"character": "Momiji Inubashiri / Hatate Himekaidou",
+			"folder": "1 - Shooter Games/10 - Mountain of Faith",
+			"match": "9. The Youkai Mountain",
+			"species": [
+				"momijiinubashiri",
+				"hatatehimekaidou"
+			],
+			"source": "Neither has a theme of her own: the MoF stage 4 theme (Momiji is its midboss); Double Spoiler reuses it for Hatate.",
+			"midi": "1 - Shooter Games/10 - Mountain of Faith/9. The Youkai Mountain ~ Mysterious Mountain (Dekyo ongen).mid",
+			"method": "marker",
+			"loop": [
+				9661,
+				83946
+			]
+		},
+		{
+			"file": "faith-is-for-the-transient-people",
+			"title": "Faith Is for the Transient People",
+			"character": "Sanae Kochiya",
+			"folder": "1 - Shooter Games/10 - Mountain of Faith",
+			"match": "11. Faith",
+			"species": [
+				"sanaekochiya"
+			],
+			"source": "Sanae's boss theme, MoF stage 5.",
+			"midi": "1 - Shooter Games/10 - Mountain of Faith/11. Faith is for the Transient People (rongns_2).mid",
+			"method": "repeat",
+			"loop": [
+				3977,
+				73795
+			]
+		},
+		{
+			"file": "suwa-foughten-field",
+			"title": "The Venerable Ancient Battlefield ~ Suwa Foughten Field",
+			"character": "Kanako Yasaka",
+			"folder": "1 - Shooter Games/10 - Mountain of Faith",
+			"match": "13. The Venerable Ancient Battlefield",
+			"species": [
+				"kanakoyasaka"
+			],
+			"source": "Kanako's boss theme, MoF stage 6.",
+			"midi": "1 - Shooter Games/10 - Mountain of Faith/13. The Venerable Ancient Battlefield ~ Suwa Foughten Field (unknown).mid",
+			"method": "repeat",
+			"loop": [
+				23857,
+				156714
+			]
+		},
+		{
+			"file": "native-faith",
+			"title": "Native Faith",
+			"character": "Suwako Moriya",
+			"folder": "1 - Shooter Games/10 - Mountain of Faith",
+			"match": "15. Native Faith",
+			"species": [
+				"suwakomoriya"
+			],
+			"source": "Suwako's boss theme, MoF Extra.",
+			"midi": "1 - Shooter Games/10 - Mountain of Faith/15. Native Faith (Shirai Yuki - GM).mid",
+			"method": "repeat",
+			"loop": [
+				2463,
+				170024
+			]
+		},
+		{
+			"file": "legendary-fish",
+			"title": "Fish of the Deep Sea ~ Legendary Fish",
+			"character": "Iku Nagae",
+			"folder": "3 - Fighting Games/10.5 - Scarlet Weather Rhapsody",
+			"match": "13. Crimson in the Black Sea",
+			"species": [
+				"ikunagae"
+			],
+			"source": "Iku's theme, Scarlet Weather Rhapsody (not the [arrange] files).",
+			"midi": "3 - Fighting Games/10.5 - Scarlet Weather Rhapsody/13. Crimson in the Black Sea ~ Legendary Fish (TouhouMIDICreator).mid",
+			"method": "phrase",
+			"loop": [
+				72273,
+				165363
+			]
+		},
+		{
+			"file": "flawless-clothing-of-the-celestials",
+			"title": "Flawless Clothing of the Celestials",
+			"character": "Tenshi Hinanawi",
+			"folder": "3 - Fighting Games/10.5 - Scarlet Weather Rhapsody",
+			"match": "14. Flawless as Clothing",
+			"species": [
+				"tenshihinanawi"
+			],
+			"source": "Tenshi's theme, Scarlet Weather Rhapsody.",
+			"midi": "3 - Fighting Games/10.5 - Scarlet Weather Rhapsody/14. Flawless as Clothing of the Celestials (adazakura - GS).mid",
+			"method": "repeat",
+			"loop": [
+				5667,
+				69667
+			]
+		},
+		{
+			"file": "the-dark-blowhole",
+			"title": "The Dark Blowhole",
+			"character": "Kisume",
+			"folder": "1 - Shooter Games/11 - Subterranean Animism",
+			"match": "2. The Dark Blowhole",
+			"species": [
+				"kisume"
+			],
+			"source": "No theme of her own: the SA stage 1 theme, where she is the midboss.",
+			"midi": "1 - Shooter Games/11 - Subterranean Animism/2. The Dark Blowhole (leastLPZ).mid",
+			"method": "marker",
+			"loop": [
+				1000,
+				97750
+			]
+		},
+		{
+			"file": "lost-place",
+			"title": "The Sealed-Away Youkai ~ Lost Place",
+			"character": "Yamame Kurodani",
+			"folder": "1 - Shooter Games/11 - Subterranean Animism",
+			"match": "3. The Sealed-Away Youkai",
+			"species": [
+				"yamamekurodani"
+			],
+			"source": "Yamame's boss theme, SA stage 1.",
+			"midi": "1 - Shooter Games/11 - Subterranean Animism/3. The Sealed-Away Youkai ~ Lost Place (yosiyosi).mid",
+			"method": "repeat",
+			"loop": [
+				6818,
+				57727
+			]
+		},
+		{
+			"file": "green-eyed-jealousy",
+			"title": "Green-Eyed Jealousy",
+			"character": "Parsee Mizuhashi",
+			"folder": "1 - Shooter Games/11 - Subterranean Animism",
+			"match": "5. Green-Eyed Jealousy",
+			"species": [
+				"parseemizuhashi"
+			],
+			"source": "Parsee's boss theme, SA stage 2.",
+			"midi": "1 - Shooter Games/11 - Subterranean Animism/5. Green-Eyed Jealousy (icebhm23230).mid",
+			"method": "marker",
+			"loop": [
+				3240,
+				110573
+			]
+		},
+		{
+			"file": "sake-dish-on-mt-ooe",
+			"title": "A Flower-Studded Sake Dish on Mt. Ooe",
+			"character": "Yuugi Hoshiguma",
+			"folder": "1 - Shooter Games/11 - Subterranean Animism",
+			"match": "7. A Flower-Studded Sake Dish",
+			"species": [
+				"yuugihoshiguma"
+			],
+			"source": "Yuugi's boss theme, SA stage 3.",
+			"midi": "1 - Shooter Games/11 - Subterranean Animism/7. A Flower-Studded Sake Dish on Mt. Ooe (hailstone).mid",
+			"method": "marker",
+			"loop": [
+				8947,
+				111117
+			]
+		},
+		{
+			"file": "satori-maiden",
+			"title": "Satori Maiden ~ 3rd Eye",
+			"character": "Satori Komeiji",
+			"folder": "1 - Shooter Games/11 - Subterranean Animism",
+			"match": "9. Satori Maiden",
+			"species": [
+				"satorikomeiji"
+			],
+			"source": "Satori's boss theme, SA stage 4.",
+			"midi": "1 - Shooter Games/11 - Subterranean Animism/9. Satori Maiden ~ 3rd eye (Kitaichi Rei).mid",
+			"method": "repeat",
+			"loop": [
+				1500,
+				122536
+			]
+		},
+		{
+			"file": "corpse-voyage",
+			"title": "Corpse Voyage ~ Be of Good Cheer!",
+			"character": "Rin Kaenbyou",
+			"folder": "1 - Shooter Games/11 - Subterranean Animism",
+			"match": "11. Corpse Voyage",
+			"species": [
+				"rinkaenbyou"
+			],
+			"source": "Orin's boss theme, SA stage 5.",
+			"midi": "1 - Shooter Games/11 - Subterranean Animism/11. Corpse Voyage ~ Be of good cheer! (Shirai Yuki - GM).mid",
+			"method": "repeat",
+			"loop": [
+				3981,
+				102366
+			]
+		},
+		{
+			"file": "nuclear-fusion",
+			"title": "Solar Sect of Mystic Wisdom ~ Nuclear Fusion",
+			"character": "Utsuho Reiuji",
+			"folder": "1 - Shooter Games/11 - Subterranean Animism",
+			"match": "13. Solar Sect",
+			"species": [
+				"utsuhoreiuji"
+			],
+			"source": "Okuu's boss theme, SA stage 6.",
+			"midi": "1 - Shooter Games/11 - Subterranean Animism/13. Solar Sect of Mystic Wisdom ~ Nuclear Fusion (Unknown).mid",
+			"method": "repeat",
+			"loop": [
+				1000,
+				167104
+			]
+		},
+		{
+			"file": "hartmanns-youkai-girl",
+			"title": "Hartmann's Youkai Girl",
+			"character": "Koishi Komeiji",
+			"folder": "1 - Shooter Games/11 - Subterranean Animism",
+			"match": "15. Hartmann",
+			"species": [
+				"koishikomeiji"
+			],
+			"source": "Koishi's boss theme, SA Extra.",
+			"midi": "1 - Shooter Games/11 - Subterranean Animism/15. Hartmann's Youkai Girl (sweetmusic).mid",
+			"method": "repeat",
+			"loop": [
+				3000,
+				122686
+			]
+		},
+		{
+			"file": "clever-commander",
+			"title": "A Tiny, Tiny, Clever Commander",
+			"character": "Nazrin",
+			"folder": "1 - Shooter Games/12 - Undefined Fantastic Object",
+			"match": "3. A Tiny",
+			"species": [
+				"nazrin"
+			],
+			"source": "Nazrin's boss theme, UFO stage 1.",
+			"midi": "1 - Shooter Games/12 - Undefined Fantastic Object/3. A Tiny, Tiny, Clever Commander (terebi).mid",
+			"method": "marker",
+			"loop": [
+				17235,
+				96647
+			]
+		},
+		{
+			"file": "beware-the-umbrella",
+			"title": "Beware the Umbrella Left There Forever",
+			"character": "Kogasa Tatara",
+			"folder": "1 - Shooter Games/12 - Undefined Fantastic Object",
+			"match": "5. Beware The Umbrella",
+			"species": [
+				"kogasatatara"
+			],
+			"source": "Kogasa's boss theme, UFO stage 2.",
+			"midi": "1 - Shooter Games/12 - Undefined Fantastic Object/5. Beware The Umbrella Left There Forever (icebhm23230).mid",
+			"method": "marker",
+			"loop": [
+				14841,
+				139321
+			]
+		},
+		{
+			"file": "old-man-and-stylish-girl",
+			"title": "The Traditional Old Man and the Stylish Girl",
+			"character": "Ichirin Kumoi",
+			"folder": "1 - Shooter Games/12 - Undefined Fantastic Object",
+			"match": "7. The Traditional Old Man",
+			"species": [
+				"ichirinkumoi",
+				"ichirinkumoiunzan"
+			],
+			"source": "Ichirin's boss theme, UFO stage 3. Ichirin Kumoi-Unzan shares it.",
+			"midi": "1 - Shooter Games/12 - Undefined Fantastic Object/7. The Traditional Old Man And The Stylish Girl (terebi).mid",
+			"method": "marker",
+			"loop": [
+				6647,
+				106882
+			]
+		},
+		{
+			"file": "captain-murasa",
+			"title": "Captain Murasa",
+			"character": "Minamitsu Murasa",
+			"folder": "1 - Shooter Games/12 - Undefined Fantastic Object",
+			"match": "9. Captain Murasa",
+			"species": [
+				"minamitsumurasa"
+			],
+			"source": "Murasa's boss theme, UFO stage 4.",
+			"midi": "1 - Shooter Games/12 - Undefined Fantastic Object/9. Captain Murasa (terebi).mid",
+			"method": "marker",
+			"loop": [
+				8453,
+				127708
+			]
+		},
+		{
+			"file": "tiger-patterned-bishamonten",
+			"title": "The Tiger-Patterned Vaisravana",
+			"character": "Shou Toramaru",
+			"folder": "1 - Shooter Games/12 - Undefined Fantastic Object",
+			"match": "11. The Tiger-Patterned",
+			"species": [
+				"shoutoramaru"
+			],
+			"source": "Shou's boss theme, UFO stage 5.",
+			"midi": "1 - Shooter Games/12 - Undefined Fantastic Object/11. The Tiger-Patterned Bishamonten (terebi).mid",
+			"method": "marker",
+			"loop": [
+				29680,
+				210626
+			]
+		},
+		{
+			"file": "cosmic-mind",
+			"title": "Emotional Skyscraper ~ Cosmic Mind",
+			"character": "Byakuren Hijiri",
+			"folder": "1 - Shooter Games/12 - Undefined Fantastic Object",
+			"match": "13. Emotional Skyscraper",
+			"species": [
+				"byakurenhijiri"
+			],
+			"source": "Byakuren's boss theme, UFO stage 6.",
+			"midi": "1 - Shooter Games/12 - Undefined Fantastic Object/13. Emotional Skyscraper ~ Cosmic Mind (sweetmusic).mid",
+			"method": "repeat",
+			"loop": [
+				16714,
+				208258
+			]
+		},
+		{
+			"file": "heian-alien",
+			"title": "Heian Alien",
+			"character": "Nue Houjuu",
+			"folder": "1 - Shooter Games/12 - Undefined Fantastic Object",
+			"match": "15. Heian Alien",
+			"species": [
+				"nuehoujuu"
+			],
+			"source": "Nue's boss theme, UFO Extra.",
+			"midi": "1 - Shooter Games/12 - Undefined Fantastic Object/15. Heian Alien (sweetmusic).mid",
+			"method": "repeat",
+			"loop": [
+				3000,
+				180572
+			]
+		},
+		{
+			"file": "staking-your-life-on-a-prank",
+			"title": "Staking Your Life on a Prank",
+			"character": "Three Fairies of Light",
+			"folder": "2 - Spin-offs/12.8 - Fairy Wars",
+			"match": "3. Staking Your Life",
+			"species": [
+				"sunnymilk",
+				"lunachild",
+				"starsapphire"
+			],
+			"source": "The three fairies' boss theme, Fairy Wars (they share it).",
+			"midi": "2 - Spin-offs/12.8 - Fairy Wars/3. Staking Your Life on a Prank (shiratoriha).mid",
+			"method": "marker",
+			"loop": [
+				2519,
+				75430
+			]
+		},
+		{
+			"file": "youkai-girl-at-the-gate",
+			"title": "Youkai Girl at the Gate",
+			"character": "Kyouko Kasodani",
+			"folder": "1 - Shooter Games/13 - Ten Desires",
+			"match": "5. Youkai Girl at the Gate",
+			"species": [
+				"kyoukokasodani"
+			],
+			"source": "Kyouko's boss theme, TD stage 2.",
+			"midi": "1 - Shooter Games/13 - Ten Desires/5. Youkai Girl at the Gate (unknown).mid",
+			"method": "whole",
+			"loop": [
+				1000,
+				83597
+			]
+		},
+		{
+			"file": "rigid-paradise",
+			"title": "Rigid Paradise",
+			"character": "Yoshika Miyako",
+			"folder": "1 - Shooter Games/13 - Ten Desires",
+			"match": "7. Rigid Paradise",
+			"species": [
+				"yoshikamiyako"
+			],
+			"source": "Yoshika's boss theme, TD stage 3.",
+			"midi": "1 - Shooter Games/13 - Ten Desires/7. Rigid Paradise (unknown).mid",
+			"method": "marker-start",
+			"loop": [
+				1400,
+				85400
+			]
+		},
+		{
+			"file": "old-yuanxian",
+			"title": "Old Yuanxian",
+			"character": "Seiga Kaku",
+			"folder": "1 - Shooter Games/13 - Ten Desires",
+			"match": "9. Old Yuanxian",
+			"species": [
+				"seigakaku"
+			],
+			"source": "Seiga's boss theme, TD stage 4.",
+			"midi": "1 - Shooter Games/13 - Ten Desires/9. Old Yuanxian (hisaraito).mid",
+			"method": "repeat",
+			"loop": [
+				7017,
+				102189
+			]
+		},
+		{
+			"file": "great-mausoleum",
+			"title": "The Hall of Dreams' Great Mausoleum",
+			"character": "Soga no Tojiko",
+			"folder": "1 - Shooter Games/13 - Ten Desires",
+			"match": "10. The Hall of Dreams",
+			"species": [
+				"soganotojiko"
+			],
+			"source": "No theme of her own: the TD stage 5 theme, where she is the midboss.",
+			"midi": "1 - Shooter Games/13 - Ten Desires/10. The Hall of Dreams' Great Mausoleum (hisaraito).mid",
+			"method": "whole",
+			"loop": [
+				1500,
+				116630
+			]
+		},
+		{
+			"file": "omiwa-legend",
+			"title": "Omiwa Legend",
+			"character": "Mononobe no Futo",
+			"folder": "1 - Shooter Games/13 - Ten Desires",
+			"match": "11. Omiwa Legend",
+			"species": [
+				"mononobenofuto"
+			],
+			"source": "Futo's boss theme, TD stage 5.",
+			"midi": "1 - Shooter Games/13 - Ten Desires/11. Omiwa Legend (icebhm23230 - GM).mid",
+			"method": "repeat",
+			"loop": [
+				6628,
+				154753
+			]
+		},
+		{
+			"file": "shoutoku-legend",
+			"title": "Shoutoku Legend ~ True Administrator",
+			"character": "Toyosatomimi no Miko",
+			"folder": "1 - Shooter Games/13 - Ten Desires",
+			"match": "13. Shoutoku Legend",
+			"species": [
+				"toyosatomiminomiko"
+			],
+			"source": "Miko's boss theme, TD stage 6.",
+			"midi": "1 - Shooter Games/13 - Ten Desires/13. Shoutoku Legend ~ True Administrator (unknown).mid",
+			"method": "whole",
+			"loop": [
+				2472,
+				193527
+			]
+		},
+		{
+			"file": "futatsuiwa-from-sado",
+			"title": "Futatsuiwa from Sado",
+			"character": "Mamizou Futatsuiwa",
+			"folder": "1 - Shooter Games/13 - Ten Desires",
+			"match": "15. Futatsuiwa from Sado",
+			"species": [
+				"mamizoufutatsuiwa"
+			],
+			"source": "Mamizou's boss theme, TD Extra.",
+			"midi": "1 - Shooter Games/13 - Ten Desires/15. Futatsuiwa from Sado (Shirai Yuki).mid",
+			"method": "phrase",
+			"loop": [
+				12925,
+				144106
+			]
+		},
+		{
+			"file": "the-lost-emotion",
+			"title": "The Lost Emotion",
+			"character": "Hata no Kokoro",
+			"folder": "3 - Fighting Games/13.5 - Hopeless Masquerade",
+			"match": "17. The Lost Emotion",
+			"species": [
+				"hatanokokoro"
+			],
+			"source": "Kokoro's theme, Hopeless Masquerade.",
+			"midi": "3 - Fighting Games/13.5 - Hopeless Masquerade/17. The Lost Emotion (Ezequiel-TM).mid",
+			"method": "repeat",
+			"loop": [
+				2529,
+				253230
+			]
+		},
+		{
+			"file": "mermaid-from-the-uncharted-land",
+			"title": "Mermaid from the Uncharted Land",
+			"character": "Wakasagihime",
+			"folder": "1 - Shooter Games/14 - Double Dealing Character",
+			"match": "3. Mermaid",
+			"species": [
+				"wakasagihime"
+			],
+			"source": "Wakasagihime's boss theme, DDC stage 1.",
+			"midi": "1 - Shooter Games/14 - Double Dealing Character/3. Mermaid from the Uncharted Land (leastLPZ).mid",
+			"method": "marker",
+			"loop": [
+				1000,
+				88273
+			]
+		},
+		{
+			"file": "dullahan-under-the-willows",
+			"title": "Dullahan Under the Willows",
+			"character": "Sekibanki",
+			"folder": "1 - Shooter Games/14 - Double Dealing Character",
+			"match": "5. Dullahan",
+			"species": [
+				"sekibanki"
+			],
+			"source": "Sekibanki's boss theme, DDC stage 2.",
+			"midi": "1 - Shooter Games/14 - Double Dealing Character/5. Dullahan Under the Willows (unknown 2).mid",
+			"method": "repeat",
+			"loop": [
+				1500,
+				102833
+			]
+		},
+		{
+			"file": "lonesome-werewolf",
+			"title": "Lonesome Werewolf",
+			"character": "Kagerou Imaizumi",
+			"folder": "1 - Shooter Games/14 - Double Dealing Character",
+			"match": "7. Lonesome Werewolf",
+			"species": [
+				"kagerouimaizumi"
+			],
+			"source": "Kagerou's boss theme, DDC stage 3.",
+			"midi": "1 - Shooter Games/14 - Double Dealing Character/7. Lonesome Werewolf (Kitaichi Rei).mid",
+			"method": "repeat",
+			"loop": [
+				12663,
+				104756
+			]
+		},
+		{
+			"file": "illusionary-joururi",
+			"title": "Illusionary Joururi",
+			"character": "Tsukumo Sisters",
+			"folder": "1 - Shooter Games/14 - Double Dealing Character",
+			"match": "9. Illusionary Joururi",
+			"species": [
+				"benbentsukumo",
+				"yatsuhashitsukumo"
+			],
+			"source": "The Tsukumo sisters' boss theme, DDC stage 4 (they share it).",
+			"midi": "1 - Shooter Games/14 - Double Dealing Character/9. Illusionary Joururi (pieordie1).mid",
+			"method": "repeat",
+			"loop": [
+				13000,
+				127000
+			]
+		},
+		{
+			"file": "reverse-ideology",
+			"title": "Reverse Ideology",
+			"character": "Seija Kijin",
+			"folder": "1 - Shooter Games/14 - Double Dealing Character",
+			"match": "11. Reverse Ideology",
+			"species": [
+				"seijakijin"
+			],
+			"source": "Seija's boss theme, DDC stage 5.",
+			"midi": "1 - Shooter Games/14 - Double Dealing Character/11. Reverse Ideology (TouhouMIDICreator).mid",
+			"method": "whole",
+			"loop": [
+				2500,
+				128500
+			]
+		},
+		{
+			"file": "little-princess",
+			"title": "Kobito of the Shining Needle ~ Little Princess",
+			"character": "Shinmyoumaru Sukuna",
+			"folder": "1 - Shooter Games/14 - Double Dealing Character",
+			"match": "13. Kobito",
+			"species": [
+				"shinmyoumarusukuna"
+			],
+			"source": "Shinmyoumaru's boss theme, DDC stage 6.",
+			"midi": "1 - Shooter Games/14 - Double Dealing Character/13. Kobito of the Shining Needle ~ Little Princess (Hisaraito).mid",
+			"method": "whole",
+			"loop": [
+				1500,
+				232720
+			]
+		},
+		{
+			"file": "pristine-beat",
+			"title": "Primordial Beat ~ Pristine Beat",
+			"character": "Raiko Horikawa",
+			"folder": "1 - Shooter Games/14 - Double Dealing Character",
+			"match": "15. Primordial Beat",
+			"species": [
+				"raikohorikawa"
+			],
+			"source": "Raiko's boss theme, DDC Extra.",
+			"midi": "1 - Shooter Games/14 - Double Dealing Character/15. Primordial Beat ~ Pristine Beat (Unknown).mid",
+			"method": "repeat",
+			"loop": [
+				14671,
+				209101
+			]
+		},
+		{
+			"file": "last-occultism",
+			"title": "Last Occultism ~ Esotericist of the Present World",
+			"character": "Sumireko Usami",
+			"folder": "3 - Fighting Games/14.5 - Urban Legend in Limbo",
+			"match": "30. Last Occultism",
+			"species": [
+				"sumirekousami"
+			],
+			"source": "Sumireko's theme, Urban Legend in Limbo.",
+			"midi": "3 - Fighting Games/14.5 - Urban Legend in Limbo/30. Last Occultism ~ Esotericist of the Present World (Kitaichi Rei).mid",
+			"method": "phrase",
+			"loop": [
+				58676,
+				159975
+			]
+		},
+		{
+			"file": "the-rabbit-has-landed",
+			"title": "The Rabbit Has Landed",
+			"character": "Seiran",
+			"folder": "1 - Shooter Games/15 - Legacy of Lunatic Kingdom",
+			"match": "3. The Rabbit Has Landed",
+			"species": [
+				"seiran"
+			],
+			"source": "Seiran's boss theme, LoLK stage 1.",
+			"midi": "1 - Shooter Games/15 - Legacy of Lunatic Kingdom/3. The Rabbit Has Landed (LeastLPZ).mid",
+			"method": "marker",
+			"loop": [
+				6486,
+				94257
+			]
+		},
+		{
+			"file": "september-pumpkin",
+			"title": "September Pumpkin",
+			"character": "Ringo",
+			"folder": "1 - Shooter Games/15 - Legacy of Lunatic Kingdom",
+			"match": "5. September Pumpkin",
+			"species": [
+				"ringo"
+			],
+			"source": "Ringo's boss theme, LoLK stage 2.",
+			"midi": "1 - Shooter Games/15 - Legacy of Lunatic Kingdom/5. September Pumpkin (ryoya1295).mid",
+			"method": "phrase",
+			"loop": [
+				1723,
+				105819
+			]
+		},
+		{
+			"file": "eternal-spring-dream",
+			"title": "Eternal Spring Dream",
+			"character": "Doremy Sweet",
+			"folder": "1 - Shooter Games/15 - Legacy of Lunatic Kingdom",
+			"match": "7. Eternal Spring Dream",
+			"species": [
+				"doremysweet"
+			],
+			"source": "Doremy's boss theme, LoLK stage 3.",
+			"midi": "1 - Shooter Games/15 - Legacy of Lunatic Kingdom/7. Eternal Spring Dream (LeastLPZ).mid",
+			"method": "marker",
+			"loop": [
+				22453,
+				172620
+			]
+		},
+		{
+			"file": "reversed-wheel-of-fortune",
+			"title": "Reversed Wheel of Fortune",
+			"character": "Sagume Kishin",
+			"folder": "1 - Shooter Games/15 - Legacy of Lunatic Kingdom",
+			"match": "9. Reversed Wheel",
+			"species": [
+				"sagumekishin"
+			],
+			"source": "Sagume's boss theme, LoLK stage 4.",
+			"midi": "1 - Shooter Games/15 - Legacy of Lunatic Kingdom/9. Reversed Wheel of Fortune (TouhouMIDICreator).mid",
+			"method": "whole",
+			"loop": [
+				2371,
+				169686
+			]
+		},
+		{
+			"file": "pierrot-of-the-star-spangled-banner",
+			"title": "Pierrot of the Star-Spangled Banner",
+			"character": "Clownpiece",
+			"folder": "1 - Shooter Games/15 - Legacy of Lunatic Kingdom",
+			"match": "11. Pierrot",
+			"species": [
+				"clownpiece"
+			],
+			"source": "Clownpiece's boss theme, LoLK stage 5.",
+			"midi": "1 - Shooter Games/15 - Legacy of Lunatic Kingdom/11. Pierrot of the Star-Spangled Banner (Unknown).mid",
+			"method": "repeat",
+			"loop": [
+				2333,
+				215666
+			]
+		},
+		{
+			"file": "pure-furies",
+			"title": "Pure Furies ~ Whereabouts of the Heart",
+			"character": "Junko",
+			"folder": "1 - Shooter Games/15 - Legacy of Lunatic Kingdom",
+			"match": "13. Pure Furies",
+			"species": [
+				"junko"
+			],
+			"source": "Junko's boss theme, LoLK stage 6.",
+			"midi": "1 - Shooter Games/15 - Legacy of Lunatic Kingdom/13. Pure Furies ~ Whereabouts of the Heart (Kitaichi Rei).mid",
+			"method": "repeat",
+			"loop": [
+				1500,
+				276556
+			]
+		},
+		{
+			"file": "pandemonic-planet",
+			"title": "Pandemonic Planet",
+			"character": "Hecatia Lapislazuli",
+			"folder": "1 - Shooter Games/15 - Legacy of Lunatic Kingdom",
+			"match": "15. Pandemonic Planet",
+			"species": [
+				"hecatia",
+				"hecatiaearth",
+				"hecatiamoon"
+			],
+			"source": "Hecatia's boss theme, LoLK Extra. Every forme shares it.",
+			"midi": "1 - Shooter Games/15 - Legacy of Lunatic Kingdom/15. Pandemonic Planet (Kitaichi Rei).mid",
+			"method": "repeat",
+			"loop": [
+				6924,
+				219805
+			]
+		},
+		{
+			"file": "midsummer-fairys-dream",
+			"title": "A Midsummer Fairy's Dream",
+			"character": "Eternity Larva",
+			"folder": "1 - Shooter Games/16 - Hidden Star in Four Seasons",
+			"match": "3. A Midsummer Fairy",
+			"species": [
+				"eternitylarva"
+			],
+			"source": "Larva's boss theme, HSiFS stage 1.",
+			"midi": "1 - Shooter Games/16 - Hidden Star in Four Seasons/3. A Midsummer Fairy's Dream (ryoya1295).mid",
+			"method": "whole",
+			"loop": [
+				1714,
+				122428
+			]
+		},
+		{
+			"file": "deep-mountain-encounter",
+			"title": "Deep-Mountain Encounter",
+			"character": "Nemuno Sakata",
+			"folder": "1 - Shooter Games/16 - Hidden Star in Four Seasons",
+			"match": "5. Deep-Mountain Encounter",
+			"species": [
+				"nemunosakata"
+			],
+			"source": "Nemuno's boss theme, HSiFS stage 2.",
+			"midi": "1 - Shooter Games/16 - Hidden Star in Four Seasons/5. Deep-Mountain Encounter (sou1).mid",
+			"method": "whole",
+			"loop": [
+				2404,
+				114684
+			]
+		},
+		{
+			"file": "a-pair-of-divine-beasts",
+			"title": "A Pair of Divine Beasts",
+			"character": "Aunn Komano",
+			"folder": "1 - Shooter Games/16 - Hidden Star in Four Seasons",
+			"match": "7. A Pair of Divine Beasts",
+			"species": [
+				"aunnkomano"
+			],
+			"source": "Aunn's boss theme, HSiFS stage 3.",
+			"midi": "1 - Shooter Games/16 - Hidden Star in Four Seasons/7. A Pair of Divine Beasts (Kitaichi Rei).mid",
+			"method": "repeat",
+			"loop": [
+				1500,
+				128559
+			]
+		},
+		{
+			"file": "magic-straw-hat-jizo",
+			"title": "The Magic Straw-Hat Jizo",
+			"character": "Narumi Yatadera",
+			"folder": "1 - Shooter Games/16 - Hidden Star in Four Seasons",
+			"match": "9. The Magic Straw-Hat Jizo",
+			"species": [
+				"narumiyatadera"
+			],
+			"source": "Narumi's boss theme, HSiFS stage 4.",
+			"midi": "1 - Shooter Games/16 - Hidden Star in Four Seasons/9. The Magic Straw-Hat Jizo (ryoya1295).mid",
+			"method": "whole",
+			"loop": [
+				1694,
+				112676
+			]
+		},
+		{
+			"file": "crazy-backup-dancers",
+			"title": "Crazy Backup Dancers",
+			"character": "Mai & Satono",
+			"folder": "1 - Shooter Games/16 - Hidden Star in Four Seasons",
+			"match": "11. Crazy Backup Dancers",
+			"species": [
+				"maiteireida",
+				"satononishida"
+			],
+			"source": "Mai and Satono's boss theme, HSiFS stage 5 (they share it).",
+			"midi": "1 - Shooter Games/16 - Hidden Star in Four Seasons/11. Crazy Backup Dancers (TouhouMIDICreator).mid",
+			"method": "whole",
+			"loop": [
+				2395,
+				133558
+			]
+		},
+		{
+			"file": "secret-god-matara",
+			"title": "Secret God Matara ~ Hidden Star in All Seasons",
+			"character": "Okina Matara",
+			"folder": "1 - Shooter Games/16 - Hidden Star in Four Seasons",
+			"match": "15. Secret God Matara",
+			"species": [
+				"okinamatara",
+				"okinamataraspring",
+				"okinamatarasummer",
+				"okinamataraautumn",
+				"okinamatarawinter"
+			],
+			"source": "Okina's boss theme, HSiFS Extra. Every forme shares it.",
+			"midi": "1 - Shooter Games/16 - Hidden Star in Four Seasons/15. Secret God Matara ~ Hidden Star in All Seasons (Hisaraito - Ver. 2).mid",
+			"method": "whole",
+			"loop": [
+				1500,
+				176500
+			]
+		},
+		{
+			"file": "egoistic-flower",
+			"title": "Tonight Stars an Easygoing Egoist ~ Egoistic Flower",
+			"character": "Yorigami Sisters",
+			"folder": "3 - Fighting Games/15.5 - Antinomy of Common Flowers",
+			"match": "37. Tonight Stars",
+			"species": [
+				"joonyorigami",
+				"shionyorigami"
+			],
+			"source": "The Yorigami sisters' theme, Antinomy of Common Flowers (they share it).",
+			"midi": "3 - Fighting Games/15.5 - Antinomy of Common Flowers/37. Tonight Stars an Easygoing Egoist (Live ver.) ~ Egoistic Flowers. (ryoya1295).mid",
+			"method": "phrase",
+			"loop": [
+				52724,
+				146517
+			]
+		},
+		{
+			"file": "jelly-stone",
+			"title": "Jelly Stone",
+			"character": "Eika Ebisu",
+			"folder": "1 - Shooter Games/17 - Wily Beast and Weakest Creature",
+			"match": "3. Jelly Stone",
+			"species": [
+				"eikaebisu"
+			],
+			"source": "Eika's boss theme, WBaWC stage 1.",
+			"midi": "1 - Shooter Games/17 - Wily Beast and Weakest Creature/3. Jelly Stone (ryoya1295).mid",
+			"method": "whole",
+			"loop": [
+				1690,
+				130655
+			]
+		},
+		{
+			"file": "stone-baby-and-submerged-bovine",
+			"title": "The Stone Baby and the Submerged Bovine",
+			"character": "Urumi Ushizaki",
+			"folder": "1 - Shooter Games/17 - Wily Beast and Weakest Creature",
+			"match": "5. The Stone Baby",
+			"species": [
+				"urumiushizaki"
+			],
+			"source": "Urumi's boss theme, WBaWC stage 2.",
+			"midi": "1 - Shooter Games/17 - Wily Beast and Weakest Creature/5. The Stone Baby and the Submerged Bovine (ShinkoNet).mid",
+			"method": "repeat",
+			"loop": [
+				9623,
+				118844
+			]
+		},
+		{
+			"file": "seraphic-chicken",
+			"title": "Seraphic Chicken",
+			"character": "Kutaka Niwatari",
+			"folder": "1 - Shooter Games/17 - Wily Beast and Weakest Creature",
+			"match": "7. Seraphic Chicken",
+			"species": [
+				"kutakaniwatari"
+			],
+			"source": "Kutaka's boss theme, WBaWC stage 3.",
+			"midi": "1 - Shooter Games/17 - Wily Beast and Weakest Creature/7. Seraphic Chicken (ShinkoNet).mid",
+			"method": "repeat",
+			"loop": [
+				1000,
+				135823
+			]
+		},
+		{
+			"file": "tortoise-dragon",
+			"title": "Tortoise Dragon ~ Fortune and Misfortune",
+			"character": "Yachie Kicchou",
+			"folder": "1 - Shooter Games/17 - Wily Beast and Weakest Creature",
+			"match": "9. Tortoise Dragon",
+			"species": [
+				"yachiekicchou"
+			],
+			"source": "Yachie's boss theme, WBaWC stage 4.",
+			"midi": "1 - Shooter Games/17 - Wily Beast and Weakest Creature/9. Tortoise Dragon ~ Fortune and Misfortune (ryoya1295).mid",
+			"method": "whole",
+			"loop": [
+				1694,
+				184815
+			]
+		},
+		{
+			"file": "joutounin-of-ceramics",
+			"title": "Joutounin of Ceramics",
+			"character": "Mayumi Joutouguu",
+			"folder": "1 - Shooter Games/17 - Wily Beast and Weakest Creature",
+			"match": "11. Joutounin",
+			"species": [
+				"mayumijoutouguu"
+			],
+			"source": "Mayumi's boss theme, WBaWC stage 5.",
+			"midi": "1 - Shooter Games/17 - Wily Beast and Weakest Creature/11. Joutounin of Ceramics (leastLPZ).mid",
+			"method": "marker",
+			"loop": [
+				24133,
+				141241
+			]
+		},
+		{
+			"file": "electric-heritage",
+			"title": "Electric Heritage",
+			"character": "Keiki Haniyasushin",
+			"folder": "1 - Shooter Games/17 - Wily Beast and Weakest Creature",
+			"match": "12. Electric Heritage",
+			"species": [
+				"keikihaniyasushin"
+			],
+			"source": "Keiki's boss theme, WBaWC stage 6.",
+			"midi": "1 - Shooter Games/17 - Wily Beast and Weakest Creature/12. Electric Heritage (hisaraito).mid",
+			"method": "whole",
+			"loop": [
+				1500,
+				117864
+			]
+		},
+		{
+			"file": "dark-pegasus",
+			"title": "Prince Shoutoku's Pegasus ~ Dark Pegasus",
+			"character": "Saki Kurokoma",
+			"folder": "1 - Shooter Games/17 - Wily Beast and Weakest Creature",
+			"match": "15. Prince Shoutoku",
+			"species": [
+				"sakikurokuma"
+			],
+			"source": "Saki's boss theme, WBaWC Extra.",
+			"midi": "1 - Shooter Games/17 - Wily Beast and Weakest Creature/15. Prince Shoutoku's Pegasus ~ Dark Pegasus (TouhouMIDICreator).mid",
+			"method": "whole",
+			"loop": [
+				1000,
+				228294
+			]
+		},
+		{
+			"file": "memento-of-all-organisms",
+			"title": "Memento of All Organisms ~ Memory of Fossil Energy",
+			"character": "Yuuma Toutetsu",
+			"folder": "3 - Fighting Games/17.5 - Touhou Gouyoku Ibun",
+			"match": "25. Memento of All Organisms",
+			"species": [
+				"yuumatoutetsu"
+			],
+			"source": "Yuuma's theme, Touhou Gouyoku Ibun (final boss).",
+			"midi": "3 - Fighting Games/17.5 - Touhou Gouyoku Ibun/25. Memento of All Organisms ~ Memory of Fossil Energy. (Karl Zuñiga).mid",
+			"method": "repeat",
+			"loop": [
+				23857,
+				256714
+			]
+		},
+		{
+			"file": "kitten-of-great-fortune",
+			"title": "Kitten of Great Fortune",
+			"character": "Mike Goutokuji",
+			"folder": "1 - Shooter Games/18 - Unconnected Marketeers",
+			"match": "3. Kitten of Great Fortune",
+			"species": [
+				"mikegotoukuji"
+			],
+			"source": "Mike's boss theme, UM stage 1.",
+			"midi": "1 - Shooter Games/18 - Unconnected Marketeers/3. Kitten of Great Fortune (Karl Zuñiga).mid",
+			"method": "repeat",
+			"loop": [
+				1000,
+				94122
+			]
+		},
+		{
+			"file": "banditry-technology",
+			"title": "Banditry Technology",
+			"character": "Takane Yamashiro",
+			"folder": "1 - Shooter Games/18 - Unconnected Marketeers",
+			"match": "5. Banditry Technology",
+			"species": [
+				"takaneyamashiro"
+			],
+			"source": "Takane's boss theme, UM stage 2.",
+			"midi": "1 - Shooter Games/18 - Unconnected Marketeers/5. Banditry Technology (Karl Zuñiga).mid",
+			"method": "phrase",
+			"loop": [
+				44374,
+				149916
+			]
+		},
+		{
+			"file": "smoking-dragon",
+			"title": "Smoking Dragon",
+			"character": "Sannyo Komakusa",
+			"folder": "1 - Shooter Games/18 - Unconnected Marketeers",
+			"match": "7. Smoking Dragon",
+			"species": [
+				"sannyokomakusa"
+			],
+			"source": "Sannyo's boss theme, UM stage 3.",
+			"midi": "1 - Shooter Games/18 - Unconnected Marketeers/7. Smoking Dragon (Karl Zuñiga).mid",
+			"method": "repeat",
+			"loop": [
+				1000,
+				126714
+			]
+		},
+		{
+			"file": "ore-from-the-age-of-the-gods",
+			"title": "Ore from the Age of the Gods",
+			"character": "Misumaru Tamatsukuri",
+			"folder": "1 - Shooter Games/18 - Unconnected Marketeers",
+			"match": "9. Ore from the Age",
+			"species": [
+				"misumarutamatsukuri"
+			],
+			"source": "Misumaru's boss theme, UM stage 4.",
+			"midi": "1 - Shooter Games/18 - Unconnected Marketeers/9. Ore from the Age of the Gods (Karl Zuñiga).mid",
+			"method": "repeat",
+			"loop": [
+				1000,
+				140059
+			]
+		},
+		{
+			"file": "long-awaited-oumagatoki",
+			"title": "The Long-Awaited Oumagatoki",
+			"character": "Tsukasa Kudamaki",
+			"folder": "1 - Shooter Games/18 - Unconnected Marketeers",
+			"match": "10. The Long-Awaited Oumagatoki",
+			"species": [
+				"tsukasakudamaki"
+			],
+			"source": "No theme of her own: the UM stage 5 theme, where she is the midboss.",
+			"midi": "1 - Shooter Games/18 - Unconnected Marketeers/10. The Long-Awaited Oumagatoki (Karl Zuñiga).mid",
+			"method": "repeat",
+			"loop": [
+				1000,
+				171182
+			]
+		},
+		{
+			"file": "starry-mountain-of-tenma",
+			"title": "Starry Mountain of Tenma",
+			"character": "Megumu Iizunamaru",
+			"folder": "1 - Shooter Games/18 - Unconnected Marketeers",
+			"match": "11. Starry Mountain",
+			"species": [
+				"megumuiizunamaru"
+			],
+			"source": "Megumu's boss theme, UM stage 5.",
+			"midi": "1 - Shooter Games/18 - Unconnected Marketeers/11. Starry Mountain of Tenma (Karl Zuñiga).mid",
+			"method": "repeat",
+			"loop": [
+				1000,
+				142350
+			]
+		},
+		{
+			"file": "lunar-rainbow",
+			"title": "Lunar Rainbow",
+			"character": "Chimata Tenkyuu",
+			"folder": "1 - Shooter Games/18 - Unconnected Marketeers",
+			"match": "12. Lunar Rainbow",
+			"species": [
+				"chimatatenkyuu"
+			],
+			"source": "Chimata's boss theme, UM stage 6.",
+			"midi": "1 - Shooter Games/18 - Unconnected Marketeers/12. Lunar Rainbow (Dekyo ongen).mid",
+			"method": "marker",
+			"loop": [
+				1000,
+				161714
+			]
+		},
+		{
+			"file": "princess-who-slays-dragon-kings",
+			"title": "The Princess Who Slays Dragon Kings",
+			"character": "Momoyo Himemushi",
+			"folder": "1 - Shooter Games/18 - Unconnected Marketeers",
+			"match": "15. The Princess Who Slays",
+			"species": [
+				"momoyohimemushi"
+			],
+			"source": "Momoyo's boss theme, UM Extra.",
+			"midi": "1 - Shooter Games/18 - Unconnected Marketeers/15. The Princess Who Slays Dragon Kings (Karl Zuñiga).mid",
+			"method": "repeat",
+			"loop": [
+				1000,
+				153471
+			]
+		},
+		{
+			"file": "my-maid-sweet-maid",
+			"title": "My Maid, Sweet Maid",
+			"character": "VIVIT",
+			"folder": "7 - Fan and Related Games/Related Games/Seihou 2 - Kioh Gyoku",
+			"match": "07 - My Maid",
+			"species": [
+				"vivit"
+			],
+			"source": "VIVIT's theme, Kioh Gyoku (Seihou Project).",
+			"midi": "7 - Fan and Related Games/Related Games/Seihou 2 - Kioh Gyoku/07 - My Maid, Sweet Maid (ZUN).mid",
+			"method": "repeat",
+			"loop": [
+				2818,
+				97920
+			]
+		},
+		{
+			"file": "lunatic-blue",
+			"title": "Watatsuki's Spell Card ~ Lunatic Blue",
+			"character": "Watatsuki Sisters",
+			"folder": "4 - Music CDs/Bonus CDs in Fanbooks and Manga/Silent Sinner in Blue",
+			"match": "3. Watatsuki",
+			"species": [
+				"watatsukinotoyohime",
+				"watatsukinoyorihime"
+			],
+			"source": "The Watatsuki sisters' theme, from the Silent Sinner in Blue CD (they share it).",
+			"midi": "4 - Music CDs/Bonus CDs in Fanbooks and Manga/Silent Sinner in Blue/3. Watatsuki's Spell Card ~ Lunatic Blue (Fraston & BusiedGem).mid",
+			"method": "repeat",
+			"loop": [
+				1000,
+				98297
+			]
+		}
+	],
+	"missingNote": "Touhou species with no theme here: the collection (last updated Jan 2025) has nothing from UDoALG or Fossilized Wonders and only three Urban Legend in Limbo tracks.",
+	"missing": {
+		"kasenibaraki": "Kasen Ibaraki: her Urban Legend in Limbo theme is not in the collection (it has only three ULiL tracks).",
+		"sonbiten": "Son Biten: Unfinished Dream of All Living Ghost (TH19), not in the collection.",
+		"enokomitsugashira": "Enoko Mitsugashira: UDoALG (TH19), not in the collection.",
+		"chiyaritenkajin": "Chiyari Tenkajin: UDoALG (TH19), not in the collection.",
+		"hisamiyomotsu": "Hisami Yomotsu: UDoALG (TH19), not in the collection.",
+		"zanmunippaku": "Zanmu Nippaku: UDoALG (TH19), not in the collection.",
+		"ubamechirizuka": "Ubame Chirizuka: Fossilized Wonders (TH20), not in the collection.",
+		"chimihoujuu": "Chimi Houjuu: Fossilized Wonders (TH20), not in the collection.",
+		"narekomichigami": "Nareko Michigami: Fossilized Wonders (TH20), not in the collection.",
+		"yuimanasama": "Yuiman Asama: Fossilized Wonders (TH20), not in the collection.",
+		"ariyaiwanaga": "Ariya Iwanaga: Fossilized Wonders (TH20), not in the collection.",
+		"ninawatari": "Nina Watari: Fossilized Wonders (TH20), not in the collection."
+	}
+}
