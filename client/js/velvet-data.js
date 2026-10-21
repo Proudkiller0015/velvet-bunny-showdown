@@ -3115,7 +3115,8 @@
 		var file = TOUHOU_OF[ids[0]] || TOUHOU_OF[ids[1]];
 		return file ? { kind: 'touhou', file: file } : null;
 	}
-	// What the scene should play for this Pokemon coming out, or null for no change.
+	// What the scene should play for this Pokemon coming out, or null for no change. A Touhou
+	// Pokemon's theme plays only when it is met in the wild (the owner, 21 Oct 2026).
 	function musicFor(pokemon) {
 		var side = pokemon && pokemon.side;
 		if (!side) return null;
@@ -3128,9 +3129,6 @@
 			if (pokemon.shiny || RARE_WILD[ids[0]] || RARE_WILD[ids[1]]) return { kind: 'rarewild', file: MUSIC_EVENT.rarewild };
 			return { kind: 'wild', file: MUSIC_EVENT.wild };
 		}
-		// Any side's Touhou Pokemon, in any battle (RP Touhou, the RP Battle formats, Custom
-		// Game): MUSIC_RANK decides whether it replaces what is playing.
-		if (touhou) return touhou;
 		var role = npcRole(side);
 		if (role === 'gym' || role === 'elitefour' || role === 'champion') return MUSIC_EVENT[role] ? { kind: role, file: MUSIC_EVENT[role] } : null;
 		// Larpers and Terrorists: Trololo, whatever they send out (their "Wild Lugia" included).

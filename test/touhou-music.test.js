@@ -72,14 +72,14 @@ vm.runInNewContext(block + client.slice(a, b) + '; out.musicFor = musicFor; out.
 const { musicFor, RANK } = sandbox.out;
 const side = (name, avatar) => ({ name, avatar, battle: { tier: '[Gen 9] RP Touhou' } });
 const mon = (sp, s) => ({ speciesForme: sp, side: s });
-const pick = (sp, s) => musicFor(mon(sp, s || side('Player', '1')));
-ok(pick('Reimu Hakurei').file === 'touhou/maidens-capriccio', 'Reimu Hakurei -> Maiden\'s Capriccio');
+const pick = (sp, s) => musicFor(mon(sp, s || side('Wild ' + sp, '')));
+// Themes play only for a wild Touhou Pokemon (the owner, 21 Oct 2026).
+ok(pick('Reimu Hakurei').file === 'touhou/maidens-capriccio', 'Reimu Hakurei -> Maiden's Capriccio');
 ok(pick('Flandre Scarlet').file === 'touhou/un-owen-was-her', 'Flandre Scarlet -> U.N. Owen Was Her?');
 ok(pick('Cirno').file === 'touhou/beloved-tomboyish-girl' && pick('Cirno-Tanned').file === 'touhou/beloved-tomboyish-girl', 'Cirno and Cirno-Tanned -> Beloved Tomboyish Girl');
-ok(pick('Hecatia-Moon').file === 'touhou/pandemonic-planet', 'a forme plays its base\'s theme');
-ok(pick('Pikachu') === null, 'a Pokemon in a player battle changes nothing');
-ok(pick('Sakuya Izayoi').kind === 'touhou', 'a Touhou Pokemon, player-vs-player');
-ok(pick('Remilia Scarlet', side('Wild Remilia Scarlet', '')).file === 'touhou/septette-for-the-dead-princess', 'a wild one too');
+ok(pick('Hecatia-Moon').file === 'touhou/pandemonic-planet', 'a forme plays its base's theme');
+ok(pick('Pikachu', side('Player', '1')) === null, 'a Pokemon in a player battle changes nothing');
+ok(pick('Sakuya Izayoi', side('Player', '1')) === null, 'a player's own Touhou Pokemon plays nothing');
 ok(pick('Mewtwo', side('Wild Mewtwo', '')).kind === 'legend', 'a wild legendary keeps its theme');
 // Ranks: over wild and trainer music, tied with gym/E4/Champion/troll (they stay), under a legendary.
 ok(RANK.touhou > RANK.wild && RANK.touhou > RANK.trainer && RANK.touhou > RANK.rarewild, 'over wild and trainer music');
