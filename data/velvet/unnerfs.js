@@ -129,6 +129,22 @@ function unnerfBattleBond(ability) {
 }
 
 /**
+ * Gale Wings, back to Generation 6.
+ *
+ * Sun and Moon made it work only at full HP, which turned Talonflame's Brave Bird from a threat
+ * into a once-per-switch-in trick. Restored: Flying moves always go first.
+ */
+function unnerfGaleWings(ability) {
+	if (!ability) return;
+	ability.onModifyPriority = function (priority, pokemon, target, move) {
+		if (move && move.type === 'Flying') return priority + 1;
+	};
+	ability.rating = 4;
+	ability.shortDesc = "This Pokemon's Flying-type moves have their priority increased by 1.";
+	ability.desc = "This Pokemon's Flying-type moves have their priority increased by 1.";
+}
+
+/**
  * Transistor, back to 1.5x.
  *
  * Scarlet and Violet's DLC cut it from 1.5x to 1.3x Electric power, with Regieleki the only
@@ -184,6 +200,7 @@ function unnerfAbilities(Abilities) {
 	unnerfProtean(Abilities.libero, 'Libero');
 	unnerfBattleBond(Abilities.battlebond);
 	unnerfTransistor(Abilities.transistor);
+	unnerfGaleWings(Abilities.galewings);
 	return Abilities;
 }
 
@@ -272,7 +289,7 @@ function unnerfSpecies(Pokedex) {
 
 exports.CHANGED = {
 	moves: ['darkvoid', ...Object.keys(RECOVERY_PP)],
-	abilities: ['protean', 'libero', 'battlebond', 'normalize', 'transistor'],
+	abilities: ['protean', 'libero', 'battlebond', 'normalize', 'transistor', 'galewings'],
 	species: [...new Set([...Object.keys(SPECIES_STATS), ...Object.keys(SPECIES_TYPES), ...Object.keys(SPECIES_ABILITIES)])],
 };
 exports.unnerfSpecies = unnerfSpecies;
