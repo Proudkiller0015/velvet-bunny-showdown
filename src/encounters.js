@@ -228,7 +228,7 @@ function wildSet(species, level, rng = Math.random) {
  * LEGENDS, tagged Sub-Legendary) are never met, like every other legendary.
  */
 const BONEKA_SHARE = 0.01;
-const BONEKA_CATCH_RATE = 25;
+const BONEKA_CATCH_RATE = 3;
 
 /*
  * A Boneka's moves. Their movepools (the Touhoumons mod's) are all "learned at level 1",
@@ -294,8 +294,7 @@ function wildName() {
  * starter is 45, a pseudo-legendary is 45.
  */
 function catchRate(species) {
-	// A Boneka is a one-in-a-hundred find with a near-legendary stat total: harder than a
-	// pseudo-legendary (45), so weakening and status matter, but never a lottery.
+	// A Boneka is caught like a Mythical: catch rate 3 (the owner, 21 Oct 2026).
 	if (species && species.tier === 'Touhou') return BONEKA_CATCH_RATE;
 	const bst = species.bst;
 	if (bst <= 300) return 255;
