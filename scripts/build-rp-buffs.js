@@ -46,6 +46,7 @@ const PATCHES = [
 	['updates-22', '2.2.1'], ['updates-23', '2.2.2'], ['updates-24', '2.3'], ['updates-24-complete', '2.3'],
 	['updates-25', '2.4'], ['updates-26', '2.4.1'], ['updates-27', '2.4.2'], ['updates-28', '2.5'], ['updates-28b', '2.5b'],
 	['updates-29', '2.6'], ['updates-29b', '2.6b'], ['updates-29c', '2.6c'], ['updates-29d', '2.6d'], ['updates-29e', '2.6e'],
+	['updates-29f', '2.6f'], ['updates-29g', '2.6g'], ['updates-29h', '2.6h'], ['updates-29i', '2.6i'], ['updates-31', '3.0'],
 ].map(([file, label]) => {
 	const id = BigInt(JSON.parse(fs.readFileSync(path.join(GUIDES, `${file}.ids.json`), 'utf8'))[0]);
 	return { label, at: Number((id >> 22n) + 1420070400000n) };
