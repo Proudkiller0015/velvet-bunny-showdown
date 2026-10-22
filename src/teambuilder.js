@@ -2289,6 +2289,9 @@ class TeamBuilder {
 		if (!choices.length) return packed;
 		let s = ((seed ?? Date.now()) ^ 0x5bd1e995) >>> 0;
 		const rng = () => { s ^= s << 13; s >>>= 0; s ^= s >> 17; s ^= s << 5; s >>>= 0; return s / 0x100000000; };
+		// The first draws of neighbouring seeds (1, 2, 3... or two clock readings) land together:
+		// without these the bot brought the same guest to every RP Collab team.
+		for (let i = 0; i < 3; i++) rng();
 		const set = this.buildSet(ctx, choices[Math.floor(rng() * choices.length)], {}, rng, {});
 		if (!set) return packed;
 		// Never the lead; the others from the back, keeping the first swap that validates.

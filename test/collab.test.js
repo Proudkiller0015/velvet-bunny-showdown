@@ -1,13 +1,14 @@
 'use strict';
 /**
  * Collab (data/velvet/collab.js): crossover Pokemon, refused by every RP format but
- * RP Collab. Funerfly's Qliphoth Counter (two super-effective hits, or a teammate
- * fainting beside it, and it breaches for good), Solemn Lament's two Ghost hits, Butterfly
- * Procession's four-turn bind, Last Rites (a special Last Respects) and the
- * ability's Technician.
+ * RP Collab - all five of them, and the bot that drafts them. Then Funerfly's
+ * Qliphoth Counter (two super-effective hits, or a teammate fainting beside it, and
+ * it breaches for good), Solemn Lament's two Ghost hits, Butterfly Procession's
+ * four-turn bind, Last Rites (a special Last Respects) and the ability's Technician.
+ * The other four's own mechanics are in test/collab-mons.test.js.
  */
 const assert = require('assert');
-const { Battle, Dex, Teams, TeamValidator } = require('pokemon-showdown');
+const { Battle, Dex, Teams, TeamValidator, toID } = require('pokemon-showdown');
 
 const funerfly = (extra = {}) => ({
 	name: 'Funerfly', species: 'Funerfly', item: '', ability: 'Qliphoth Counter',
@@ -30,20 +31,32 @@ const logSince = (b, from) => b.log.slice(from).join('\n');
 let n = 0;
 const ok = (cond, what) => { assert.ok(cond, what); n++; };
 
-// ---- Legality: RP Collab only.
-const problems = f => new TeamValidator(f).validateTeam([funerfly()]);
-ok(!problems('gen9rpcollab'), `legal in RP Collab (${problems('gen9rpcollab')})`);
-for (const f of ['gen9rpag', 'gen9rpubers', 'gen9rpou', 'gen9rpuu', 'gen9rpru', 'gen9rpnu', 'gen9rppu', 'gen9rpzu', 'gen9rplc', 'gen9rpdraft', 'gen8rpou']) {
-	const p = problems(f) || [];
-	ok(p.length && /Funerfly/.test(p.join(' ')), `refused in ${f}: ${p[0]}`);
+// ---- Legality: RP Collab only, for every one of them.
+const COLLAB = require('pokemon-showdown/dist/data/velvet/collab.js');
+const rpDex = Dex.forFormat('gen9rpcollab');
+const GUESTS = [
+	funerfly(),
+	mon('Punibird', ['Peck of Sin', 'Brave Bird'], { ability: 'Punishment' }),
+	mon('Laetitia', ["Wee Witch's Gift", 'Play Rough'], { ability: 'Dear Friends' }),
+	mon('Freischutz', ['Magic Bullet', 'Iron Head'], { ability: "The Devil's Seventh" }),
+	mon('Hatrequeen', ['Arcana Slave', 'Moonblast'], { ability: 'Love and Justice' }),
+];
+ok(GUESTS.map(set => rpDex.species.get(set.species).id).join() === COLLAB.SPECIES.join(), `five collab Pokemon (${COLLAB.SPECIES.join(', ')})`);
+const problems = (f, set = funerfly()) => new TeamValidator(f).validateTeam([set]);
+for (const set of GUESTS) {
+	ok(!problems('gen9rpcollab', set), `${set.species} legal in RP Collab (${problems('gen9rpcollab', set)})`);
+	for (const f of ['gen9rpag', 'gen9rpubers', 'gen9rpou', 'gen9rpuu', 'gen9rpru', 'gen9rpnu', 'gen9rppu', 'gen9rpzu', 'gen9rplc', 'gen9rpdraft', 'gen8rpou']) {
+		const p = problems(f, set) || [];
+		ok(p.length && p.join(' ').includes(set.species), `${set.species} refused in ${f}: ${p[0]}`);
+	}
+	ok(/RP Collab/.test((problems('gen9rpag', set) || []).join(' ')), `the refusal names RP Collab (${set.species})`);
+	for (const f of ['gen9rpbattle', 'gen9rpbattledoubles']) ok(!(problems(f, set) || []).some(x => x.includes(set.species) || /Collab/.test(x)), `${set.species} accepted in ${f}, the RP's own battles`);
 }
-ok(/RP Collab/.test((problems('gen9rpag') || []).join(' ')), 'the refusal names RP Collab');
-for (const f of ['gen9rpbattle', 'gen9rpbattledoubles']) ok(!(problems(f) || []).some(x => /Funerfly|Collab/.test(x)), `accepted in ${f}, the RP's own battles`);
-{
-	// The breached forme is battle-only: brought as it, it starts the battle contained.
-	const breach = funerfly({ species: 'Funerfly-Breach', name: 'Funerfly-Breach' });
-	ok(!new TeamValidator('gen9rpcollab').validateTeam([breach]) && breach.species === 'Funerfly', 'Funerfly-Breach on a team starts as Funerfly');
-	ok((new TeamValidator('gen9rpag').validateTeam([funerfly({ species: 'Funerfly-Breach' })]) || []).length, 'and is refused outside RP Collab too');
+// The battle-only formes: brought as one, each starts the battle as its base, and is refused outside RP Collab too.
+for (const [forme, set] of [['Funerfly-Breach', GUESTS[0]], ['Punibird-Angry', GUESTS[1]], ['Hatrequeen-Hatred', GUESTS[4]]]) {
+	const brought = { ...set, species: forme, name: forme };
+	ok(!new TeamValidator('gen9rpcollab').validateTeam([brought]) && brought.species === set.species, `${forme} on a team starts as ${set.species}`);
+	ok((new TeamValidator('gen9rpag').validateTeam([{ ...set, species: forme }]) || []).length, `${forme} is refused outside RP Collab`);
 }
 // Everything else RP AG takes, RP Collab takes too.
 ok(!new TeamValidator('gen9rpcollab').validateTeam([mon('Zacian-Crowned', ['Behemoth Blade'], { item: 'Rusted Sword', ability: 'Intrepid Sword' })]), 'RP Collab is RP AG plus the collab Pokemon');
@@ -51,20 +64,30 @@ ok(!new TeamValidator('gen9rpcollab').validateTeam([mon('Zacian-Crowned', ['Behe
 for (const f of Dex.formats.all()) if (f.effectType === 'Format') Dex.formats.getRuleTable(f);
 ok(true, 'every format builds its rule table');
 // The RP tier table and the builder's copy of it say Collab.
-ok(require('../src/rp-tiers.json').funerfly === 'Collab', 'src/rp-tiers.json files it under Collab');
+const rpTiers = require('../src/rp-tiers.json');
+ok(COLLAB.SPECIES.every(id => rpTiers[id] === 'Collab'), 'src/rp-tiers.json files every one under Collab');
+// Numbers of their own: 2004 on, clear of the Touhou Pokemon's 2101 and up.
+ok(COLLAB.SPECIES.map(id => rpDex.species.get(id).num).join() === '2004,2005,2006,2007,2008', 'dex numbers 2004-2008');
 
-// ---- The bot drafts it in RP Collab and nowhere else.
+// ---- The bot drafts one in RP Collab and nowhere else.
 {
 	const { TeamBuilder } = require('../src/teambuilder');
 	const tb = new TeamBuilder();
-	ok(tb.context('gen9rpcollab').pool.some(s => s.id === 'funerfly'), 'in the bot\'s RP Collab pool');
-	for (const f of ['gen9rpag', 'gen9rpubers', 'gen9rpou', 'gen9rpbattle']) ok(!tb.context(f).pool.some(s => s.id === 'funerfly'), `not in the bot's ${f} pool`);
-	ok(tb.newSpecies().has('funerfly'), 'drafted like our other new Pokemon');
-	for (let seed = 1; seed <= 3; seed++) {
-		const team = Teams.unpack(tb.build('gen9rpcollab', seed));
-		ok(team.some(s => s.species === 'Funerfly') && !new TeamValidator('gen9rpcollab').validateTeam(team), `the bot's RP Collab team ${seed} brings Funerfly, legally`);
-		ok(!Teams.unpack(tb.build('gen9rpag', seed)).some(s => s.species.startsWith('Funerfly')), `its RP AG team ${seed} does not`);
+	const isGuest = set => COLLAB.SPECIES.includes(toID(rpDex.species.get(set.species).baseSpecies));
+	for (const id of COLLAB.SPECIES) {
+		ok(tb.context('gen9rpcollab').pool.some(s => s.id === id), `${id} in the bot's RP Collab pool`);
+		for (const f of ['gen9rpag', 'gen9rpubers', 'gen9rpou', 'gen9rpbattle']) ok(!tb.context(f).pool.some(s => s.id === id), `${id} not in the bot's ${f} pool`);
+		ok(tb.newSpecies().has(id), `${id} drafted like our other new Pokemon`);
 	}
+	const brought = new Set();
+	for (let seed = 1; seed <= 10; seed++) {
+		const team = Teams.unpack(tb.build('gen9rpcollab', seed));
+		const guests = team.filter(isGuest);
+		guests.forEach(set => brought.add(set.species));
+		ok(guests.length && !new TeamValidator('gen9rpcollab').validateTeam(team), `the bot's RP Collab team ${seed} brings ${guests.map(s => s.species).join(', ')}, legally`);
+		if (seed <= 3) ok(!Teams.unpack(tb.build('gen9rpag', seed)).some(isGuest), `its RP AG team ${seed} does not`);
+	}
+	ok(brought.size >= 3, `and not always the same one (${[...brought].join(', ')})`);
 }
 
 // ---- Qliphoth Counter: two super-effective hits and it breaches, for good.

@@ -48,7 +48,8 @@ const Classic = require('./classic-mechanics.js');
 const Stall = require('./stall.js');
 // The creation trio's buff: Shadow Force hunts switches, and the normal forms' abilities.
 const CreationTrio = require('./creation-trio.js');
-// Collab: crossover Pokemon, refused by every RP tier but RP Collab (Funerfly).
+// Collab: crossover Pokemon, refused by every RP tier but RP Collab (Funerfly, Punibird, Laetitia,
+// Freischutz, Hatrequeen; one file each, collab-*.js).
 const Collab = require('./collab.js');
 // Touhou: the Touhoumons solomod's characters (DH2, MIT), a guest tier above Collab.
 const Touhou = require('./touhou.js');

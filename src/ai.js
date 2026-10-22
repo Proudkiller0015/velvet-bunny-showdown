@@ -487,14 +487,17 @@ class BattleAI {
 		const status = (/ (brn|psn|tox|par|slp|frz)/.exec(entry.condition || '') || [])[1];
 		// Look the live state up by the Pokemon's own name - that is what the
 		// protocol calls it even after it has transformed.
-		const live = state && state.mine && Object.values(state.mine).find(m => m && m.species === ownSpecies);
+		// An in-battle forme (Aegislash-Blade, Punibird-Angry) keeps its base's name in the
+		// request; the battle log has the forme, and that is what it fights as.
+		const live = state && state.mine && (Object.values(state.mine).find(m => m && m.species === ownSpecies) ||
+			Object.values(state.mine).find(m => m && String(m.species || '').startsWith(ownSpecies + '-')));
 
 		// A transformed Pokemon fights with the copied species' stats, types and
 		// moves. Modelling it as its own species (Ditto: base 48 across the board)
 		// makes it look useless, and the bot throws it away or refuses to send it
 		// in. Its HP stays its own, which is why the condition is still applied.
 		const transformed = live && live.transformed ? live.transformed : null;
-		const species = transformed || ownSpecies;
+		const species = transformed || (live && live.species) || ownSpecies;
 
 		const opts = {
 			level: level ? +level : 100,
@@ -516,6 +519,7 @@ class BattleAI {
 		try {
 			const mon = new calc.Pokemon(gen, species, opts);
 			if (live && live.charged) mon.velvetCharged = true;
+			if (live && live.volatiles && live.volatiles.has('weewitchsgift')) mon.velvetGift = true;
 			if (entry.stats && !transformed) {
 				for (const k of ['atk', 'def', 'spa', 'spd', 'spe']) if (entry.stats[k]) mon.stats[k] = entry.stats[k];
 				/*
@@ -689,6 +693,8 @@ class BattleAI {
 			// No item shown and none knocked off: it probably holds one (Witch's Snatch in damagePct).
 			if (!foe.item && !foe.itemGone) mon.velvetItemUnknown = true;
 			mon.velvetFoe = true;
+			// Carrying Laetitia's gift (data/velvet/collab-laetitia.js): Dear Friends in damagePct.
+			if (foe.volatiles && foe.volatiles.has('weewitchsgift')) mon.velvetGift = true;
 			if (guess && !bare) {
 				const scale = this.foeScale(foe, guess);
 				if (scale) mon.velvetScale = scale;
@@ -1150,6 +1156,19 @@ class BattleAI {
 				if (String(attacker.ability || '') === 'Scarlet Sisters' && move.category !== 'Status') scale *= 1.5;
 				// Transistor is Gen 8's 1.5x here (data/velvet/unnerfs.js); the calculator's Gen 9 is 1.3x.
 				if (String(attacker.ability || '') === 'Transistor' && move.type === 'Electric') scale *= 1.5 / 1.3;
+				/*
+				 * The collab Pokemon's (data/velvet/collab-*.js), which the calculator knows only the
+				 * listed power and category of. Peck of Sin is 120, not 20, from Punibird-Angry. Dear
+				 * Friends is 1.3x into a gift carrier. Arcana Slave is physical when Attack is the
+				 * higher, as Photon Geyser (which the calculator knows only by name), and takes two
+				 * turns to land except from Hatrequeen-Hatred: half its hit a turn.
+				 */
+				if (move.name === 'Peck of Sin' && attacker.name === 'Punibird-Angry') scale *= 6;
+				if (String(attacker.ability || '') === 'Dear Friends' && defender.velvetGift) scale *= 1.3;
+				if (move.name === 'Arcana Slave') {
+					if (attacker.stats && attacker.stats.atk > attacker.stats.spa) { move = move.clone(); move.category = 'Physical'; }
+					if (attacker.name !== 'Hatrequeen-Hatred') scale *= 0.5;
+				}
 				if (move.name === "Witch's Snatch") {
 					const item = String(defender.item || '');
 					const data = item ? PkmnDex.forGen(9).items.get(item) : null;
@@ -2297,6 +2316,11 @@ class BattleAI {
 		const foeAbility = String((foe && foe.ability) || '').toLowerCase().replace(/[^a-z]/g, '');
 		const foeSpecies = String((foe && foe.name) || '').toLowerCase().replace(/[^a-z]/g, '');
 		if (move.flags && move.flags.reflectable && (BOUNCES.has(foeAbility) || foeSpecies === 'espeon')) return -30;
+		// Wee Witch's Gift (Laetitia): a third of the foe's HP three turns on. A second fails.
+		if (move.id === 'weewitchsgift') {
+			const theirs = (ctx.foes || [])[0];
+			return theirs && theirs.volatiles && theirs.volatiles.has('weewitchsgift') ? -30 : 30;
+		}
 		// Gleamstalk (Luxray): paralysis, +2 Speed and a Charge. Best early; spent
 		// once Luxray is already fast and charged.
 		if (move.id === 'gleamstalk') {

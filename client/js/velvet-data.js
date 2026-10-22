@@ -1139,6 +1139,20 @@
 		procession.end = '  {POKEMON} was freed from the butterfly procession!';
 		var qliphoth = en.Abilities.qliphothcounter || (en.Abilities.qliphothcounter = { name: 'Qliphoth Counter' });
 		qliphoth.activate = '  The Qliphoth Counter ticks.';
+		// The other collab Pokemon (data/velvet/collab-*.js), the same way: every -activate, and
+		// the gift's -start, -end and burst. Their other lines are -message, printed as sent.
+		var punishment = en.Abilities.punishment || (en.Abilities.punishment = { name: 'Punishment' });
+		punishment.activate = "  {POKEMON}'s anger flares up again!";
+		var gift = en.Moves.weewitchsgift || (en.Moves.weewitchsgift = { name: "Wee Witch's Gift" });
+		gift.start = '  {POKEMON} was given a gift!';
+		gift.end = "  {POKEMON}'s gift burst open!";
+		gift.damage = "  {POKEMON} was hurt by the witch's friend!";
+		var seventh = en.Abilities.thedevilsseventh || (en.Abilities.thedevilsseventh = { name: "The Devil's Seventh" });
+		seventh.activate = '  The seventh bullet belongs to the devil!';
+		var arcana = en.Moves.arcanaslave || (en.Moves.arcanaslave = { name: 'Arcana Slave' });
+		arcana.prepare = '  {POKEMON} is gathering love and justice!';
+		var justice = en.Abilities.loveandjustice || (en.Abilities.loveandjustice = { name: 'Love and Justice' });
+		justice.activate = '  {POKEMON} has no villains left to fight...';
 		var care = en.Abilities.caretaker || (en.Abilities.caretaker = { name: 'Caretaker' });
 		care.activate = "  [Caretaker] The team's status conditions were cured!";
 		en.__velvetDescriptions = true;
@@ -3749,6 +3763,14 @@
 				// Qliphoth Counter is also Technician: 1.5x on 60 power or less.
 				if (ability === 'qliphothcounter' && move && move.category !== 'Status' && out && out.modify && out.value && out.value <= 60) {
 					out.modify(1.5, 'Qliphoth Counter (Technician)');
+				}
+				// Peck of Sin (Punibird, data/velvet/collab-punibird.js): 120 from Punibird-Angry.
+				if (sigId === 'peckofsin' && pokemon && window.toID(pokemon.speciesForme || '') === 'punibirdangry' && out && out.set) {
+					out.set(120, 'Punibird-Angry');
+				}
+				// Dear Friends (Laetitia): 1.3x damage into a target carrying her gift, shown in the power.
+				if (ability === 'dearfriends' && target && target.volatiles && target.volatiles.weewitchsgift && move && move.category !== 'Status' && out && out.modify) {
+					out.modify(1.3, 'Dear Friends');
 				}
 				/*
 				 * Super effective against the Pokemon in front of you: Expert Belt's 1.2x, and
