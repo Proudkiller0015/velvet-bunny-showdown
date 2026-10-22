@@ -11,7 +11,8 @@ const { BattleAI } = require('../src/ai');
 const { BattleState } = require('../src/battle');
 const E = require('../src/encounters');
 
-const GAMES = Number(process.argv[2] || 4);
+// Four games was too few to judge a share by: memento swung from 18% to 30% between runs.
+const GAMES = Number(process.argv[2] || 16);
 let failed = 0;
 const check = (ok, what) => { console.log(`${ok ? 'ok  ' : 'FAIL'} ${what}`); if (!ok) failed++; };
 

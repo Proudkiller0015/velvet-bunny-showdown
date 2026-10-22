@@ -463,7 +463,8 @@ const TRAINER_CLASSES = [
 	/*
 	 * The Larper (owner, 12 Oct 2026: "they bring troll teams like full explosion
 	 * squads"). Always a troll team (trollTrainerTeam), met now and then on any
-	 * route from one badge (LARPER_CHANCE) and summonable by name.
+	 * route from one badge (LARPER_CHANCE) and summonable by name. Explosion went to
+	 * the Terrorist alone (owner, 22 Oct 2026): half of all Larpers brought it too.
 	 */
 	{ id: 'larper', title: 'Larper', avatar: 'harlequin', types: [], sex: 'm', troll: true, aliases: ['larp', 'troll', 'trolltrainer'] },
 	// The Larper's dark-humour cousin (owner, 12 Oct 2026): only ever the Explosion squad.
@@ -1529,26 +1530,6 @@ function armBombers(team, rng, badges = 0) {
 }
 
 /*
- * A bomb snuck into a Larper team that isn't about bombs (owner, 12 Oct 2026): one Pokemon
- * that learns it swaps its weakest spare move for the boom.
- */
-function sneakBomb(team, theme, rng) {
-	const carriers = team.filter(set => {
-		const all = trainerMoves(Dex.species.get(set.species), set.level, 6);
-		return EXPLOSIONS.some(k => all.has(k));
-	});
-	if (!carriers.length) return;
-	const set = carriers[Math.floor(rng() * carriers.length)];
-	const all = trainerMoves(Dex.species.get(set.species), set.level, 6);
-	const bomb = Dex.moves.get(EXPLOSIONS.find(k => all.has(k))).name;
-	const keep = new Set([...(theme.keys || []), ...(theme.slots || []).flat()]);
-	const spare = set.moves.map((m, i) => ({ m: Dex.moves.get(m), i })).filter(x => !keep.has(x.m.id))
-		.sort((a, b) => (a.m.basePower || 0) - (b.m.basePower || 0))[0];
-	if (set.moves.length < 4) set.moves.push(bomb);
-	else if (spare) set.moves[spare.i] = bomb;
-}
-
-/*
  * A frail Final Gambit or Destiny Bond user wears a Choice Scarf at full Speed: it goes
  * first and takes the foe with it (owner, 12 Oct 2026).
  */
@@ -1575,7 +1556,7 @@ function scarfGamblers(team, badges = 0) {
  */
 const BOXART_TROLL_CHANCE = 0.05;
 let boxartCache = null;
-function trollLegend(team, rng) {
+function trollLegend(team, rng, { bombs = false } = {}) {
 	if (!boxartCache) {
 		boxartCache = Dex.species.all().filter(sp => sp.exists && !sp.battleOnly && !sp.isMega && sp.baseSpecies === sp.name &&
 			!sp.isNonstandard && Rarity.classOf(sp.name) === 'boxart');
@@ -1596,7 +1577,7 @@ function trollLegend(team, rng) {
 		moves = [status, shield, heal, first(['meanlook', 'block', 'spiderweb', 'whirlwind', 'roar', 'haze']) || first(['perishsong', 'substitute'])];
 	} else if (first(['perishsong']) && first(['meanlook', 'block', 'spiderweb']) && shield) {
 		moves = ['perishsong', first(['meanlook', 'block', 'spiderweb']), shield, heal];
-	} else if (first(EXPLOSIONS)) {
+	} else if (bombs && first(EXPLOSIONS)) {
 		moves = [first(EXPLOSIONS), first(['doubleteam', 'minimize']), shield, first(DARK_COVERAGE)];
 	}
 	if (!moves) {
@@ -1617,7 +1598,8 @@ function trollLegend(team, rng) {
 function trollTrainerTeam(entries, levels, badges, rng, only = null, { bombers = false } = {}) {
 	const top = levels[levels.length - 1];
 	const size = levels.length;
-	const themes = only ? TROLL_THEMES.filter(t => t.id === only) : TROLL_THEMES.slice().sort(() => rng() - 0.5);
+	// Explosion is the Terrorist's (bombers): a Larper never builds around it.
+	const themes = only ? TROLL_THEMES.filter(t => t.id === only) : TROLL_THEMES.filter(t => bombers || t.id !== 'explosion').sort(() => rng() - 0.5);
 	for (const theme of themes) {
 		let built = null;
 		if (theme.id === 'ditto') {
@@ -1683,6 +1665,8 @@ function trollTrainerTeam(entries, levels, badges, rng, only = null, { bombers =
 				for (const m of base.moves) {
 					if (moves.length >= 4) break;
 					const move = Dex.moves.get(m);
+					// Not a boom on a team that isn't about one: Explosion is the Terrorist's.
+					if (theme.id !== 'explosion' && EXPLOSIONS.includes(move.id)) continue;
 					if (!moves.includes(move.id) && !theme.keys.includes(move.id) && move.id !== 'sketch' && (move.category !== 'Status' || taught.has(move.id))) moves.push(move.id);
 				}
 				// A Ghost takes nothing from Explosion: the bomber carries a Dark move for it.
@@ -1703,8 +1687,7 @@ function trollTrainerTeam(entries, levels, badges, rng, only = null, { bombers =
 		for (const set of team) if (set.species === 'Ditto') set.ability = 'Imposter';
 		if (bombers && theme.id === 'explosion') armBombers(team, rng, badges);
 		if (theme.id === 'memento') scarfGamblers(team, badges);
-		if (!['explosion', 'ditto', 'splash'].includes(theme.id)) sneakBomb(team, theme, rng);
-		if (rng() < BOXART_TROLL_CHANCE) trollLegend(team, rng);
+		if (rng() < BOXART_TROLL_CHANCE) trollLegend(team, rng, { bombs: theme.id === 'explosion' });
 		for (const set of team) set.evs = EV.fitToLevel(Dex, set);
 		return { team, theme: theme.id };
 	}

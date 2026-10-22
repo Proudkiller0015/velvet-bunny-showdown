@@ -84,7 +84,7 @@ for (let seed = 1; seed <= 60; seed++) {
 }
 check(terrorist && squads === 60, `60 Terrorists at 1-8 badges all bring an Explosion squad on the troll AI (${squads})`);
 
-// Trap sets stall (Block, Toxic, Protect, a heal); Perish singers bring their own trap; bombs sneak in elsewhere.
+// Trap sets stall (Block, Toxic, Protect, a heal); Perish singers bring their own trap; no Larper team carries a bomb.
 {
 	const theme = id => ({ ...larper, trollTheme: id });
 	let stallSets = 0, trapSets = 0, singers = 0, trapped = 0, sneaky = 0, sneakTeams = 0;
@@ -109,7 +109,7 @@ check(terrorist && squads === 60, `60 Terrorists at 1-8 badges all bring an Expl
 	}
 	check(trapSets > 0 && stallSets / trapSets >= 0.8, `trap sets stall: a status move and a Protect (${stallSets}/${trapSets})`);
 	check(singers > 0 && trapped === singers, `every Perish singer can trap (${trapped}/${singers})`);
-	check(sneaky / sneakTeams >= 0.5, `a bomb sneaks into most other Larper teams (${sneaky}/${sneakTeams})`);
+	check(sneakTeams > 0 && sneaky === 0, `Explosion is the Terrorist's: no Larper team carries a bomb (${sneaky}/${sneakTeams})`);
 }
 
 // One troll in twenty brings a box-art legendary, as "Wild <name>".
