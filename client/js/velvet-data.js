@@ -3736,9 +3736,9 @@
 				if (ability === 'verdantsurge' && moveType === 'Grass' && grassy && grounded && out && out.modify) {
 					out.modify(4726 / 4096, 'Verdant Surge');
 				}
-				// Ribbon Hymn (Sylveon) is Pixilate: 1.2x on the Normal moves it turns Fairy.
+				// Ribbon Hymn (Sylveon) is Pixilate: 1.3x on the Normal moves it turns Fairy.
 				if (ability === 'ribbonhymn' && move && move.type === 'Normal' && moveType === 'Fairy' && out && out.modify) {
-					out.modify(4915 / 4096, 'Ribbon Hymn');
+					out.modify(5325 / 4096, 'Ribbon Hymn');
 				}
 				/*
 				 * Our abilities that raise a move's power by its type or kind (data/velvet,
@@ -3822,6 +3822,9 @@
 					if (moveId === 'witchssnatch' && target && target.item) out.set(150, 'target holds an item');
 					// Normalize is 1.3x here, not 1.2x: the tooltip already applied its 1.2.
 					if (ability === 'normalize' && moveType === 'Normal' && String(out.comment || '').indexOf('Normalize') >= 0) out.modify(5325 / 4915, 'Normalize (1.3x here)');
+					// The -ate abilities too: 1.3x here, on top of the tooltip's own 1.2.
+					var ATE = { aerilate: 'Aerilate', galvanize: 'Galvanize', pixilate: 'Pixilate', refrigerate: 'Refrigerate' };
+					if (ATE[ability] && String(out.comment || '').indexOf(ATE[ability]) >= 0) out.modify(5325 / 4915, ATE[ability] + ' (1.3x here)');
 				}
 			} catch (e) {
 				// A tooltip is never worth throwing over.

@@ -295,6 +295,15 @@
 		if (String(attacker.ability || '') === 'Verdant Surge' && move.type === 'Grass') {
 			out.push([4726, 4096]);
 		}
+		/*
+		 * The -ate abilities (and Ribbon Hymn, Pixilate to the calculator) are 1.3x here, not
+		 * the 1.2x the calculator applies on the Normal moves they retype, so the rest is added.
+		 */
+		var ATE = { Aerilate: 1, Galvanize: 1, Pixilate: 1, Refrigerate: 1, 'Ribbon Hymn': 1 };
+		var NOT_RETYPED = { Judgment: 1, 'Multi-Attack': 1, 'Natural Gift': 1, 'Revelation Dance': 1, 'Techno Blast': 1, 'Terrain Pulse': 1, 'Weather Ball': 1 };
+		if (ATE[String(attacker.ability || '')] && move.type === 'Normal' && !NOT_RETYPED[String(move.name || '')]) {
+			out.push([5325, 4915]);
+		}
 		// Crown of Flame (Infernape): Fire and Fighting 1.3x, punches 1.2x, both stack.
 		if (String(attacker.ability || '') === 'Crown of Flame') {
 			// One modifier, rounded the way the server chains the two.

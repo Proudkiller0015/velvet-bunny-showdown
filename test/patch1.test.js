@@ -923,5 +923,20 @@ check(['dragapult', 'dragonitemega', 'lucariomegaz', 'greninjabond', 'magearna',
 	check(Dex.moves.get('kingsshield').desc === require('pokemon-showdown').Dex.moves.get('kingsshield').desc, 'King\'s Shield untouched');
 }
 
+// The -ate abilities and Ribbon Hymn (23 Oct 2026): back to 1.3x on the Normal moves they retype.
+{
+	const power = (species, ability) => {
+		const b = battle([{ species, ability, moves: ['hypervoice'] }], [{ species: 'Blissey', ability: 'Natural Cure', moves: ['splash'] }]);
+		const move = b.dex.getActiveMove('hypervoice');
+		b.runEvent('ModifyType', b.p1.active[0], b.p2.active[0], move, move);
+		return `${move.type} ${b.runEvent('BasePower', b.p1.active[0], b.p2.active[0], move, move.basePower, true)}`;
+	};
+	for (const [species, ability, type] of [['Sylveon', 'Pixilate', 'Fairy'], ['Salamence-Mega', 'Aerilate', 'Flying'],
+		['Glalie-Mega', 'Refrigerate', 'Ice'], ['Golem-Alola', 'Galvanize', 'Electric'], ['Sylveon', 'Ribbon Hymn', 'Fairy']]) {
+		const got = power(species, ability);
+		check(got === `${type} 117`, `${ability} Hyper Voice is ${type} at 117 power (${got})`);
+	}
+}
+
 console.log(failed ? `\n${failed} failed` : '\nall passed');
 process.exit(failed ? 1 : 0);

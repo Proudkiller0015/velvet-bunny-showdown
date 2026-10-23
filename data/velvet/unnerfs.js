@@ -193,8 +193,28 @@ function buffNormalize(ability) {
 		"This effect comes after other effects that change a move's type, but before Ion Deluge and Electrify's effects.";
 }
 
+/**
+ * Aerilate, Galvanize, Pixilate and Refrigerate, back to 1.3x (the owner's call).
+ *
+ * Sun and Moon cut the boost on the Normal moves they retype from 1.3x to 1.2x.
+ * Galvanize arrived after the cut, so it gets the Generation 6 number with the rest.
+ */
+function unnerfAte(ability, type) {
+	if (!ability) return;
+	ability.onBasePower = function (basePower, pokemon, target, move) {
+		if (move.typeChangerBoosted === this.effect) return this.chainModify([5325, 4096]);
+	};
+	ability.shortDesc = `This Pokemon's Normal-type moves become ${type} type and have 1.3x power.`;
+	ability.desc = `This Pokemon's Normal-type moves become ${type}-type moves and have their power multiplied by 1.3. ` +
+		"This effect comes after other effects that change a move's type, but before Ion Deluge and Electrify's effects.";
+}
+
 function unnerfAbilities(Abilities) {
 	if (!Abilities) return Abilities;
+	unnerfAte(Abilities.aerilate, 'Flying');
+	unnerfAte(Abilities.galvanize, 'Electric');
+	unnerfAte(Abilities.pixilate, 'Fairy');
+	unnerfAte(Abilities.refrigerate, 'Ice');
 	buffNormalize(Abilities.normalize);
 	unnerfProtean(Abilities.protean, 'Protean');
 	unnerfProtean(Abilities.libero, 'Libero');
@@ -289,7 +309,7 @@ function unnerfSpecies(Pokedex) {
 
 exports.CHANGED = {
 	moves: ['darkvoid', ...Object.keys(RECOVERY_PP)],
-	abilities: ['protean', 'libero', 'battlebond', 'normalize', 'transistor', 'galewings'],
+	abilities: ['protean', 'libero', 'battlebond', 'normalize', 'transistor', 'galewings', 'aerilate', 'galvanize', 'pixilate', 'refrigerate'],
 	species: [...new Set([...Object.keys(SPECIES_STATS), ...Object.keys(SPECIES_TYPES), ...Object.keys(SPECIES_ABILITIES)])],
 };
 exports.unnerfSpecies = unnerfSpecies;

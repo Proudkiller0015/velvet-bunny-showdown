@@ -1289,7 +1289,7 @@ exports.ABILITIES = {
 		desc: "This Pokemon is immune to Electric-type moves; when hit by one it heals 1/4 of its maximum HP and its Speed rises by 1 stage. Pokemon making contact with it have a 30% chance to be paralyzed.",
 	},
 	/*
-	 * Ribbon Hymn - Sylveon's. Its Normal moves become Fairy with a 1.2x boost
+	 * Ribbon Hymn - Sylveon's. Its Normal moves become Fairy with a 1.3x boost
 	 * (Pixilate), and its ribbons hush sound moves aimed at it (Soundproof).
 	 */
 	ribbonhymn: {
@@ -1305,7 +1305,7 @@ exports.ABILITIES = {
 		},
 		onBasePowerPriority: 23,
 		onBasePower(basePower, pokemon, target, move) {
-			if (move.typeChangerBoosted === this.effect) return this.chainModify([4915, 4096]);
+			if (move.typeChangerBoosted === this.effect) return this.chainModify([5325, 4096]);
 		},
 		onTryHit(target, source, move) {
 			if (target !== source && move.flags['sound']) {
@@ -1322,7 +1322,7 @@ exports.ABILITIES = {
 		gen: 9,
 		flavor: "Sylveon's ribbons sing a quiet hymn that turns every sound it makes to a Fairy's, and hushes any aimed at it.",
 		shortDesc: "Pixilate + Soundproof.",
-		desc: "This Pokemon's Normal-type moves become Fairy type and have 1.2x power. It is immune to sound-based moves.",
+		desc: "This Pokemon's Normal-type moves become Fairy type and have 1.3x power. It is immune to sound-based moves.",
 	},
 	colossusunbound: {
 		name: "Colossus Unbound",
