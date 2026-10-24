@@ -384,6 +384,19 @@ const CALC_ABILITY = {
 	"Maid's Trick": 'Sharpness',
 };
 /*
+ * Normalize and the -ate abilities are 1.3x here (data/velvet/unnerfs.js); the calculator
+ * applies Generation 7's 1.2x. The moves it skips are its own list, so both agree on which.
+ */
+const TYPE_CHANGERS = new Set(['Aerilate', 'Galvanize', 'Pixilate', 'Refrigerate', 'Normalize']);
+const NO_TYPE_CHANGE = new Set(['Revelation Dance', 'Judgment', 'Nature Power', 'Techno Blast', 'Multi-Attack', 'Natural Gift', 'Weather Ball', 'Terrain Pulse', 'Struggle']);
+function typeChangerBoost(attacker, move, result) {
+	const ability = String(attacker.ability || '');
+	if (!TYPE_CHANGERS.has(ability) || move.isZ || move.isMax || NO_TYPE_CHANGE.has(move.name)) return 1;
+	if (move.name === 'Tera Blast' && attacker.teraType) return 1;
+	const changed = ability === 'Normalize' ? result.move.type === 'Normal' : move.type === 'Normal' && result.move.type !== 'Normal';
+	return changed ? 1.3 / 1.2 : 1;
+}
+/*
  * Signatures that pick their type against the target (data/velvet/touhou.js): Marisa's Master
  * Spark and Meiling's Rainbow Wind Chime. The calculator only knows the type they are listed
  * as, so it is set to the one the battle will choose: the most damaging, STAB counted.
@@ -1243,7 +1256,7 @@ class BattleAI {
 			const dmg = result.damage;
 			const rolls = Array.isArray(dmg) ? dmg.flat().filter(n => typeof n === 'number') : [dmg];
 			if (!rolls.length) return 0;
-			let avg = birdStab * charged * scale * rolls.reduce((a, b) => a + b, 0) / rolls.length;
+			let avg = birdStab * charged * scale * typeChangerBoost(attacker, move, result) * rolls.reduce((a, b) => a + b, 0) / rolls.length;
 			// Glitched Data: a hit takes at most a quarter of its maximum HP, unless the attacker ignores abilities.
 			if (String(defender.ability || '') === 'Glitched Data' && !/^(Mold Breaker|Teravolt|Turboblaze)$/.test(String(attacker.ability || ''))) {
 				avg = Math.min(avg, Math.floor(defender.maxHP() / 4));

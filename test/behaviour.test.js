@@ -390,6 +390,9 @@ console.log('\n--- the AI knows our moves ---');
 	check('Oxidize is super effective on Steel (Metagross)', onSteel > 40, true);
 	check('and neutral on Steel/Ghost Gholdengo', onGholdengo > 10 && onGholdengo < onSteel, true);
 	check('a lake trio ability lets Psychic hit Dark', ai.damagePct(gen, mon('Azelf', 'Unbending Will'), foe('Umbreon'), 'Psychic') > 5, true);
+	// Pixilate Hyper Voice is a 117 power Fairy move here (90 x 1.3), Moonblast a 95 one: 1.23 apart, 1.14 at 1.2x.
+	const ate = ai.damagePct(gen, mon('Sylveon', 'Pixilate'), foe('Snorlax'), 'Hyper Voice') / ai.damagePct(gen, mon('Sylveon', 'Pixilate'), foe('Snorlax'), 'Moonblast');
+	check('it counts Pixilate at 1.3x, not the calculator 1.2x', ate > 1.2, true);
 	const pd = require('@pkmn/dex').Dex.forGen(9);
 	check('its move data knows Royal Decree goes last', pd.moves.get('royaldecree').priority, -6);
 }
