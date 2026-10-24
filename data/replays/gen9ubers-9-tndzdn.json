@@ -1,0 +1,12 @@
+{
+	"id": "gen9ubers-9-tndzdn",
+	"format": "[Gen 9] Ubers",
+	"players": [
+		"Bunny Easy",
+		"Jazmin Itzel"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆Jazmin Itzel\n|t:|1792881295\n|gametype|singles\n|badge|p1|silver|gen9ubers|2-2\n|badge|p2|gold|gen9ubers|1-1\n|player|p1|Bunny Easy|bunny.png|1003\n|player|p2|Jazmin Itzel|265|1200\n|gen|9\n|tier|[Gen 9] Ubers\n|rated|\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Endless Battle Clause: Forcing endless battles is banned\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Species Clause: Limit one of each Pokémon\n|rule|OHKO Clause: OHKO moves are banned\n|rule|Evasion Items Clause: Evasion items are banned\n|rule|Evasion Moves Clause: Evasion moves are banned\n|clearpoke\n|poke|p1|Landorus-Therian, M|\n|poke|p1|Urshifu-*, M|\n|poke|p1|Terapagos, M|\n|poke|p1|Lunala|\n|poke|p1|Chi-Yu|\n|poke|p1|Skarmory, M|\n|poke|p2|Regieleki|\n|poke|p2|Arceus|\n|poke|p2|Lugia|\n|poke|p2|Zacian-*|\n|poke|p2|Mewtwo|\n|poke|p2|Zamazenta-*|\n|teampreview\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1792881303\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Chi-Yu|Chi-Yu|100/100\n|switch|p2a: Regieleki|Regieleki|100/100\n|-item|p2a: Regieleki|Air Balloon\n|-ability|p1a: Chi-Yu|Beads of Ruin\n|turn|1\n|\n|t:|1792881313\n|-terastallize|p1a: Chi-Yu|Fire\n|move|p2a: Regieleki|Volt Switch|p1a: Chi-Yu\n|-damage|p1a: Chi-Yu|55/100\n|\n|t:|1792881325\n|switch|p2a: Lugia|Lugia|100/100|[from] Volt Switch\n|move|p1a: Chi-Yu|Overheat|p2a: Lugia\n|-damage|p2a: Lugia|61/100\n|-unboost|p1a: Chi-Yu|spa|2\n|\n|upkeep\n|turn|2\n|\n|t:|1792881335\n|move|p1a: Chi-Yu|Overheat|p2a: Lugia\n|-damage|p2a: Lugia|19/100\n|-unboost|p1a: Chi-Yu|spa|2\n|move|p2a: Lugia|Recover|p2a: Lugia\n|-heal|p2a: Lugia|69/100\n|\n|upkeep\n|turn|3\n|\n|t:|1792881344\n|move|p1a: Chi-Yu|Overheat|p2a: Lugia\n|-damage|p2a: Lugia|43/100\n|-unboost|p1a: Chi-Yu|spa|2\n|move|p2a: Lugia|Recover|p2a: Lugia\n|-heal|p2a: Lugia|93/100\n|\n|upkeep\n|turn|4\n|\n|t:|1792881352\n|move|p1a: Chi-Yu|Overheat|p2a: Lugia\n|-damage|p2a: Lugia|73/100\n|move|p2a: Lugia|Recover|p2a: Lugia\n|-heal|p2a: Lugia|100/100\n|\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1792881353
+}
