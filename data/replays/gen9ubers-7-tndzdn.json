@@ -1,0 +1,12 @@
+{
+	"id": "gen9ubers-7-tndzdn",
+	"format": "[Gen 9] Ubers",
+	"players": [
+		"Bunny Easy",
+		"Jazmin Itzel"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆Jazmin Itzel\n|t:|1792880826\n|gametype|singles\n|badge|p1|silver|gen9ubers|2-2\n|badge|p2|gold|gen9ubers|1-1\n|player|p1|Bunny Easy|bunny.png|1003\n|player|p2|Jazmin Itzel|265|1171\n|gen|9\n|tier|[Gen 9] Ubers\n|rated|\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Endless Battle Clause: Forcing endless battles is banned\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Species Clause: Limit one of each Pokémon\n|rule|OHKO Clause: OHKO moves are banned\n|rule|Evasion Items Clause: Evasion items are banned\n|rule|Evasion Moves Clause: Evasion moves are banned\n|clearpoke\n|poke|p1|Rayquaza|\n|poke|p1|Necrozma-Dusk-Mane|\n|poke|p1|Hatterene, F|\n|poke|p1|Ho-Oh|\n|poke|p1|Deoxys-Speed|\n|poke|p1|Magearna-Original|\n|poke|p2|Regieleki|\n|poke|p2|Arceus|\n|poke|p2|Lugia|\n|poke|p2|Zacian-*|\n|poke|p2|Mewtwo|\n|poke|p2|Zamazenta-*|\n|teampreview\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1792880846\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Deoxys|Deoxys-Speed|100/100\n|switch|p2a: Arceus|Arceus|100/100\n|-ability|p1a: Deoxys|Pressure\n|turn|1\n|\n|t:|1792880855\n|move|p1a: Deoxys|Psycho Boost|p2a: Arceus\n|-damage|p2a: Arceus|66/100\n|-unboost|p1a: Deoxys|spa|2\n|move|p2a: Arceus|Stealth Rock|p1a: Deoxys\n|-sidestart|p1: Bunny Easy|move: Stealth Rock\n|\n|upkeep\n|turn|2\n|\n|t:|1792880865\n|move|p1a: Deoxys|Psycho Boost|p2a: Arceus\n|-damage|p2a: Arceus|47/100\n|-unboost|p1a: Deoxys|spa|2\n|move|p2a: Arceus|Swords Dance|p2a: Arceus\n|-boost|p2a: Arceus|atk|2\n|\n|upkeep\n|turn|3\n|\n|t:|1792880874\n|move|p1a: Deoxys|Stealth Rock|p2a: Arceus\n|-sidestart|p2: Jazmin Itzel|move: Stealth Rock\n|move|p2a: Arceus|Swords Dance|p2a: Arceus\n|-boost|p2a: Arceus|atk|2\n|\n|upkeep\n|turn|4\n|\n|t:|1792880882\n|move|p1a: Deoxys|Psycho Boost|p2a: Arceus\n|-damage|p2a: Arceus|36/100\n|-unboost|p1a: Deoxys|spa|2\n|move|p2a: Arceus|Swords Dance|p2a: Arceus\n|-boost|p2a: Arceus|atk|2\n|\n|upkeep\n|turn|5\n|\n|t:|1792880891\n|move|p2a: Arceus|Extreme Speed|p1a: Deoxys\n|-damage|p1a: Deoxys|0 fnt\n|faint|p1a: Deoxys\n|\n|upkeep\n|\n|t:|1792880891\n|switch|p1a: Necrozma|Necrozma-Dusk-Mane|100/100\n|-damage|p1a: Necrozma|95/100|[from] Stealth Rock\n|turn|6\n",
+	"inputlog": null,
+	"uploadtime": 1792880893
+}
