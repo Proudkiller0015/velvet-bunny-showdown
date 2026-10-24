@@ -1,0 +1,162 @@
+'use strict';
+/**
+ * Everything this server adds to the game, and how it gets in.
+ *
+ * Showdown loads its dex from compiled files inside its own package, and offers
+ * no hook for adding a species to them. A mod would be the tidy answer, except
+ * that a Pokemon inside a mod does not exist anywhere else *at all* - she would
+ * not be searchable, would not appear in the builder, and could not be looked
+ * up. What was wanted is the opposite: findable everywhere, legal almost
+ * nowhere, which is how Showdown already treats MissingNo.
+ *
+ * So the data goes into the base dex and is marked `isNonstandard: 'Custom'`
+ * with `tier: 'Illegal'`. Every format that enforces legality refuses her on
+ * those grounds; Custom Game enforces none and lets her in.
+ *
+ * Each function here is handed the live data object from the corresponding file
+ * in the package and adds to it. scripts/setup-config.js appends a single line
+ * to each of those files calling the matching one, so the package's own contents
+ * are never rewritten - only extended, on every boot, and harmlessly again if
+ * the package is reinstalled.
+ */
+
+const { Pokedex } = require('./pokedex.js');
+const { Abilities, patchAbilities } = require('./abilities.js');
+const { Moves, patchMoves } = require('./moves.js');
+const { FormatsData } = require('./formats-data.js');
+const { Learnsets } = require('./learnsets.js');
+const { patchItems } = require('./items.js');
+const { applyBuffs } = require('./buffs.js');
+const { applyZaMegas, applyZaStones } = require('./za-megas.js');
+const { applyTiers } = require('./tiering.js');
+const { unnerfMoves, unnerfAbilities, unnerfSpecies } = require('./unnerfs.js');
+// Halloween 2026: the Witching Hour Mega Banette skin, its stone, ability and signature.
+const Halloween = require('./halloween.js');
+// Halloween 2026, second board: MissingNo., made standard, with an ability and a move of its own.
+const Missingno = require('./missingno.js');
+// Makuro and Raishin, the Abyss and the Shrine: two legendaries and their terrains.
+const AbyssShrine = require('./abyss-shrine.js');
+// Frostbite, the sixth major status (and the Aspear Berry that cures it).
+const Frostbite = require('./frostbite.js');
+// Type Gems, legal again.
+const Gems = require('./gems.js');
+// New items for every Pokemon (Ultra Shard).
+const NewItems = require('./new-items.js');
+// Old-generation Belly Drum and recharge rules.
+const Classic = require('./classic-mechanics.js');
+// Help for stall: Caretaker.
+const Stall = require('./stall.js');
+// The creation trio's buff: Shadow Force hunts switches, and the normal forms' abilities.
+const CreationTrio = require('./creation-trio.js');
+// Collab: crossover Pokemon, refused by every RP tier but RP Collab (Funerfly, Punibird, Laetitia,
+// Freischutz, Hatrequeen; one file each, collab-*.js).
+const Collab = require('./collab.js');
+// Touhou: the Touhoumons solomod's characters (DH2, MIT), a guest tier above Collab.
+const Touhou = require('./touhou.js');
+
+// The buffed Pokemon are Showdown's own, so they are changed in place rather
+// than added - and the learnsets they need are added when that file is loaded,
+// which is a separate hook. Both sides pass the same table, so whichever loads
+// second finds the other's work already done.
+let buffedPokedex = null;
+let buffedLearnsets = null;
+let tierTable = null;
+function buffWhatWeHave() {
+	if (buffedPokedex && buffedLearnsets) applyBuffs(buffedPokedex, buffedLearnsets);
+	// The Z-A Megas need the stats from one file and the tiers from another, so
+	// like the buffs they wait until both have been through here.
+	if (buffedPokedex && tierTable) {
+		applyZaMegas(buffedPokedex, tierTable);
+		// Last, so a deliberate decision beats a derived one.
+		applyTiers(tierTable, buffedPokedex, msg => console.log('[velvet] ' + msg));
+	}
+}
+
+exports.pokedex = data => {
+	Object.assign(data, Pokedex);
+	unnerfSpecies(data);
+	Halloween.pokedex(data);
+	Missingno.pokedex(data);
+	AbyssShrine.pokedex(data);
+	Collab.pokedex(data);
+	Touhou.pokedex(data);
+	buffedPokedex = data;
+	buffWhatWeHave();
+};
+exports.abilities = data => Touhou.abilities(Collab.abilities(CreationTrio.abilities(Stall.abilities(AbyssShrine.abilities(Missingno.abilities(Halloween.abilities(require('./balance-patch-1.js').patchAbsorbers(patchAbilities(unnerfAbilities(Object.assign(data, Abilities)))))))))));
+let moveTable = null;
+exports.moves = data => {
+	moveTable = Touhou.moves(Collab.moves(CreationTrio.moves(Classic.moves(Frostbite.moves(AbyssShrine.moves(Missingno.moves(Halloween.moves(patchMoves(unnerfMoves(Object.assign(data, Moves)))))))))));
+	teachHerEverything();
+	return moveTable;
+};
+exports.formatsData = data => {
+	Object.assign(data, FormatsData);
+	Halloween.formatsData(data);
+	Missingno.formatsData(data);
+	AbyssShrine.formatsData(data);
+	Collab.formatsData(data);
+	Touhou.formatsData(data);
+	tierTable = data;
+	buffWhatWeHave();
+};
+exports.learnsets = data => {
+	Object.assign(data, Learnsets);
+	Halloween.learnsets(data);
+	Missingno.learnsets(data);
+	AbyssShrine.learnsets(data);
+	Collab.learnsets(data);
+	Touhou.learnsets(data);
+	buffedLearnsets = data;
+	teachHerEverything();
+	buffWhatWeHave();
+};
+
+/**
+ * Samantha learns everything - worked out here rather than written down.
+ *
+ * Her learnset used to be a generated list of 843 moves, and the trouble with a
+ * generated list is that it is only true on the day it is generated. Five moves
+ * added to this server since - Wave Charge, the three Rush moves and Queen's
+ * Blitz - were all missing from it, so "she learns everything" had quietly
+ * stopped being true and nobody would have noticed until somebody tried to put
+ * one on her.
+ *
+ * Built from the move table the server is actually running instead, with the
+ * same filter the generator used: no Z-moves, no Max moves, nothing
+ * nonstandard except the past-generation moves National Dex brings back.
+ *
+ * Runs whenever either table lands, since the two data files load in whichever
+ * order the package feels like.
+ */
+function teachHerEverything() {
+	if (!moveTable || !buffedLearnsets) return;
+	const entry = buffedLearnsets.samantha || (buffedLearnsets.samantha = { learnset: {} });
+	entry.learnset = entry.learnset || {};
+	for (const [id, move] of Object.entries(moveTable)) {
+		if (move.isZ || move.isMax) continue;
+		if (move.isNonstandard && move.isNonstandard !== 'Past') continue;
+		if (!entry.learnset[id]) entry.learnset[id] = ['9M'];
+	}
+}
+
+// Items is the odd one out: Light Ball already exists and only two of its
+// handlers change, so replacing the whole entry would mean copying its number,
+// its Fling and its sprite across and keeping them in step forever.
+exports.items = data => {
+	patchItems(data);
+	// The Z-A Mega stones, which are their own data file and their own refusal:
+	// National Dex reads an item's nonstandard flag directly, so a stone left
+	// marked 'Future' is refused however legal the Mega holding it is.
+	applyZaStones(data, msg => console.log('[velvet] ' + msg));
+	Halloween.items(data);
+	AbyssShrine.items(data);
+	Frostbite.items(data);
+	Gems.items(data);
+	NewItems.items(data);
+	Touhou.items(data);
+	return data;
+};
+
+// Field conditions: the Abyss's and the Shrine's terrains (a table no other file here touches).
+exports.conditions = data => Touhou.conditions(Gems.conditions(Frostbite.conditions(AbyssShrine.conditions(data))));

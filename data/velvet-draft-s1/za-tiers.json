@@ -1,0 +1,888 @@
+{
+ "builtAt": "2026-09-14T13:38:01.077Z",
+ "how": "the higher of: one tier above the base form, and src/paper-strength.js on the Mega itself",
+ "tiers": {
+  "venusaurmega": {
+   "tier": "RU",
+   "score": 59.1,
+   "bst": 625,
+   "byRules": "RU",
+   "byPaper": "NU",
+   "base": "Venusaur",
+   "baseTier": "RU"
+  },
+  "charizardmegax": {
+   "tier": "RU",
+   "score": 74.1,
+   "bst": 634,
+   "byRules": "RU",
+   "byPaper": "OU",
+   "base": "Charizard",
+   "baseTier": "RU"
+  },
+  "charizardmegay": {
+   "tier": "Uber",
+   "score": 93.4,
+   "bst": 634,
+   "byRules": "RU",
+   "byPaper": "Uber",
+   "base": "Charizard",
+   "baseTier": "RU"
+  },
+  "blastoisemega": {
+   "tier": "RU",
+   "score": 70.3,
+   "bst": 630,
+   "byRules": "RU",
+   "byPaper": "UU",
+   "base": "Blastoise",
+   "baseTier": "RU"
+  },
+  "beedrillmega": {
+   "tier": "RU",
+   "score": 62.7,
+   "bst": 495,
+   "byRules": "RU",
+   "byPaper": "NU",
+   "base": "Beedrill",
+   "baseTier": "RU"
+  },
+  "pidgeotmega": {
+   "tier": "RU",
+   "score": 56.9,
+   "bst": 579,
+   "byRules": "RU",
+   "byPaper": "PU",
+   "base": "Pidgeot",
+   "baseTier": "RU"
+  },
+  "raichumegax": {
+   "tier": "RU",
+   "score": 85.5,
+   "bst": 585,
+   "byRules": "RU",
+   "byPaper": "Uber",
+   "base": "Raichu",
+   "baseTier": "RU"
+  },
+  "raichumegay": {
+   "tier": "RU",
+   "score": 82.9,
+   "bst": 585,
+   "byRules": "RU",
+   "byPaper": "Uber",
+   "base": "Raichu",
+   "baseTier": "RU"
+  },
+  "clefablemega": {
+   "tier": "UU",
+   "score": 81,
+   "bst": 583,
+   "byRules": "UU",
+   "byPaper": "Uber",
+   "base": "Clefable",
+   "baseTier": "UU"
+  },
+  "alakazammega": {
+   "tier": "UU",
+   "score": 58.1,
+   "bst": 600,
+   "byRules": "UU",
+   "byPaper": "NU",
+   "base": "Alakazam",
+   "baseTier": "RUBL"
+  },
+  "victreebelmega": {
+   "tier": "RU",
+   "score": 63.2,
+   "bst": 590,
+   "byRules": "RU",
+   "byPaper": "NU",
+   "base": "Victreebel",
+   "baseTier": "RU"
+  },
+  "slowbromega": {
+   "tier": "UU",
+   "score": 58.5,
+   "bst": 590,
+   "byRules": "UU",
+   "byPaper": "NU",
+   "base": "Slowbro",
+   "baseTier": "UU"
+  },
+  "gengarmega": {
+   "tier": "Uber",
+   "score": 109.1,
+   "bst": 600,
+   "byRules": "UU",
+   "byPaper": "Uber",
+   "base": "Gengar",
+   "baseTier": "RUBL"
+  },
+  "kangaskhanmega": {
+   "tier": "RU",
+   "score": 51.3,
+   "bst": 590,
+   "byRules": "RU",
+   "byPaper": "PU",
+   "base": "Kangaskhan",
+   "baseTier": "RU"
+  },
+  "starmiemega": {
+   "tier": "RU",
+   "score": 76.5,
+   "bst": 620,
+   "byRules": "RU",
+   "byPaper": "OU",
+   "base": "Starmie",
+   "baseTier": "RU"
+  },
+  "pinsirmega": {
+   "tier": "RU",
+   "score": 53.5,
+   "bst": 600,
+   "byRules": "RU",
+   "byPaper": "PU",
+   "base": "Pinsir",
+   "baseTier": "RU"
+  },
+  "gyaradosmega": {
+   "tier": "OU",
+   "score": 74.5,
+   "bst": 640,
+   "byRules": "OU",
+   "byPaper": "OU",
+   "base": "Gyarados",
+   "baseTier": "UUBL"
+  },
+  "aerodactylmega": {
+   "tier": "RU",
+   "score": 59.9,
+   "bst": 615,
+   "byRules": "RU",
+   "byPaper": "NU",
+   "base": "Aerodactyl",
+   "baseTier": "RU"
+  },
+  "dragonitemega": {
+   "tier": "Uber",
+   "score": 93.5,
+   "bst": 700,
+   "byRules": "Uber",
+   "byPaper": "Uber",
+   "base": "Dragonite",
+   "baseTier": "OU"
+  },
+  "mewtwomegax": {
+   "tier": "Uber",
+   "score": 91.1,
+   "bst": 780,
+   "byRules": "Uber",
+   "byPaper": "Uber",
+   "base": "Mewtwo",
+   "baseTier": "Uber"
+  },
+  "mewtwomegay": {
+   "tier": "Uber",
+   "score": 88,
+   "bst": 780,
+   "byRules": "Uber",
+   "byPaper": "Uber",
+   "base": "Mewtwo",
+   "baseTier": "Uber"
+  },
+  "meganiummega": {
+   "tier": "RU",
+   "score": 66.9,
+   "bst": 625,
+   "byRules": "RU",
+   "byPaper": "RU",
+   "base": "Meganium",
+   "baseTier": "RU"
+  },
+  "feraligatrmega": {
+   "tier": "RU",
+   "score": 74.3,
+   "bst": 630,
+   "byRules": "RU",
+   "byPaper": "OU",
+   "base": "Feraligatr",
+   "baseTier": "RU"
+  },
+  "ampharosmega": {
+   "tier": "RU",
+   "score": 69.8,
+   "bst": 610,
+   "byRules": "RU",
+   "byPaper": "UU",
+   "base": "Ampharos",
+   "baseTier": "RU"
+  },
+  "steelixmega": {
+   "tier": "RU",
+   "score": 49.9,
+   "bst": 610,
+   "byRules": "RU",
+   "byPaper": "PU",
+   "base": "Steelix",
+   "baseTier": "RU"
+  },
+  "scizormega": {
+   "tier": "UU",
+   "score": 86.3,
+   "bst": 600,
+   "byRules": "UU",
+   "byPaper": "Uber",
+   "base": "Scizor",
+   "baseTier": "UU"
+  },
+  "heracrossmega": {
+   "tier": "RU",
+   "score": 75.1,
+   "bst": 600,
+   "byRules": "RU",
+   "byPaper": "OU",
+   "base": "Heracross",
+   "baseTier": "RU"
+  },
+  "skarmorymega": {
+   "tier": "UU",
+   "score": 87.5,
+   "bst": 565,
+   "byRules": "UU",
+   "byPaper": "Uber",
+   "base": "Skarmory",
+   "baseTier": "UU"
+  },
+  "houndoommega": {
+   "tier": "RU",
+   "score": 79.9,
+   "bst": 600,
+   "byRules": "RU",
+   "byPaper": "Uber",
+   "base": "Houndoom",
+   "baseTier": "RU"
+  },
+  "tyranitarmega": {
+   "tier": "Uber",
+   "score": 81.9,
+   "bst": 700,
+   "byRules": "Uber",
+   "byPaper": "Uber",
+   "base": "Tyranitar",
+   "baseTier": "UU"
+  },
+  "sceptilemega": {
+   "tier": "RU",
+   "score": 77.3,
+   "bst": 630,
+   "byRules": "RU",
+   "byPaper": "OU",
+   "base": "Sceptile",
+   "baseTier": "RU"
+  },
+  "blazikenmega": {
+   "tier": "Uber",
+   "score": 99.5,
+   "bst": 630,
+   "byRules": "OU",
+   "byPaper": "Uber",
+   "base": "Blaziken",
+   "baseTier": "UUBL"
+  },
+  "swampertmega": {
+   "tier": "UU",
+   "score": 77.8,
+   "bst": 635,
+   "byRules": "UU",
+   "byPaper": "OU",
+   "base": "Swampert",
+   "baseTier": "UU"
+  },
+  "gardevoirmega": {
+   "tier": "RU",
+   "score": 78.9,
+   "bst": 618,
+   "byRules": "RU",
+   "byPaper": "Uber",
+   "base": "Gardevoir",
+   "baseTier": "RU"
+  },
+  "sableyemega": {
+   "tier": "RU",
+   "score": 68.5,
+   "bst": 480,
+   "byRules": "RU",
+   "byPaper": "RU",
+   "base": "Sableye",
+   "baseTier": "RU"
+  },
+  "mawilemega": {
+   "tier": "RU",
+   "score": 68.1,
+   "bst": 480,
+   "byRules": "RU",
+   "byPaper": "RU",
+   "base": "Mawile",
+   "baseTier": "RU"
+  },
+  "aggronmega": {
+   "tier": "RU",
+   "score": 51.5,
+   "bst": 630,
+   "byRules": "RU",
+   "byPaper": "PU",
+   "base": "Aggron",
+   "baseTier": "RU"
+  },
+  "medichammega": {
+   "tier": "RU",
+   "score": 89.7,
+   "bst": 510,
+   "byRules": "RU",
+   "byPaper": "Uber",
+   "base": "Medicham",
+   "baseTier": "RU"
+  },
+  "manectricmega": {
+   "tier": "RU",
+   "score": 64.6,
+   "bst": 575,
+   "byRules": "RU",
+   "byPaper": "NU",
+   "base": "Manectric",
+   "baseTier": "RU"
+  },
+  "sharpedomega": {
+   "tier": "RU",
+   "score": 55,
+   "bst": 560,
+   "byRules": "RU",
+   "byPaper": "PU",
+   "base": "Sharpedo",
+   "baseTier": "RU"
+  },
+  "cameruptmega": {
+   "tier": "RU",
+   "score": 76.6,
+   "bst": 560,
+   "byRules": "RU",
+   "byPaper": "OU",
+   "base": "Camerupt",
+   "baseTier": "RU"
+  },
+  "altariamega": {
+   "tier": "RU",
+   "score": 62.8,
+   "bst": 590,
+   "byRules": "RU",
+   "byPaper": "NU",
+   "base": "Altaria",
+   "baseTier": "RU"
+  },
+  "banettemega": {
+   "tier": "RU",
+   "score": 80.6,
+   "bst": 555,
+   "byRules": "RU",
+   "byPaper": "Uber",
+   "base": "Banette",
+   "baseTier": "RU"
+  },
+  "chimechomega": {
+   "tier": "RU",
+   "score": 73.2,
+   "bst": 555,
+   "byRules": "RU",
+   "byPaper": "OU",
+   "base": "Chimecho",
+   "baseTier": "RU"
+  },
+  "absolmega": {
+   "tier": "RU",
+   "score": 65.7,
+   "bst": 565,
+   "byRules": "RU",
+   "byPaper": "RU",
+   "base": "Absol",
+   "baseTier": "RU"
+  },
+  "absolmegaz": {
+   "tier": "RU",
+   "score": 74.7,
+   "bst": 565,
+   "byRules": "RU",
+   "byPaper": "OU",
+   "base": "Absol",
+   "baseTier": "RU"
+  },
+  "glaliemega": {
+   "tier": "RU",
+   "score": 61.7,
+   "bst": 580,
+   "byRules": "RU",
+   "byPaper": "NU",
+   "base": "Glalie",
+   "baseTier": "RU"
+  },
+  "salamencemega": {
+   "tier": "Uber",
+   "score": 82,
+   "bst": 700,
+   "byRules": "Uber",
+   "byPaper": "Uber",
+   "base": "Salamence",
+   "baseTier": "RUBL"
+  },
+  "metagrossmega": {
+   "tier": "Uber",
+   "score": 91.2,
+   "bst": 700,
+   "byRules": "Uber",
+   "byPaper": "Uber",
+   "base": "Metagross",
+   "baseTier": "RU"
+  },
+  "latiasmega": {
+   "tier": "Uber",
+   "score": 85.4,
+   "bst": 700,
+   "byRules": "Uber",
+   "byPaper": "Uber",
+   "base": "Latias",
+   "baseTier": "RU"
+  },
+  "latiosmega": {
+   "tier": "Uber",
+   "score": 88.1,
+   "bst": 700,
+   "byRules": "Uber",
+   "byPaper": "Uber",
+   "base": "Latios",
+   "baseTier": "UUBL"
+  },
+  "rayquazamega": {
+   "tier": "Uber",
+   "score": 96.5,
+   "bst": 780,
+   "byRules": "Uber",
+   "byPaper": "Uber",
+   "base": "Rayquaza",
+   "baseTier": "Uber"
+  },
+  "staraptormega": {
+   "tier": "RU",
+   "score": 76.8,
+   "bst": 585,
+   "byRules": "RU",
+   "byPaper": "OU",
+   "base": "Staraptor",
+   "baseTier": "RU"
+  },
+  "lopunnymega": {
+   "tier": "RU",
+   "score": 57.1,
+   "bst": 580,
+   "byRules": "RU",
+   "byPaper": "PU",
+   "base": "Lopunny",
+   "baseTier": "RU"
+  },
+  "garchompmega": {
+   "tier": "Uber",
+   "score": 80.7,
+   "bst": 700,
+   "byRules": "Uber",
+   "byPaper": "Uber",
+   "base": "Garchomp",
+   "baseTier": "OU"
+  },
+  "garchompmegaz": {
+   "tier": "Uber",
+   "score": 81.7,
+   "bst": 700,
+   "byRules": "Uber",
+   "byPaper": "Uber",
+   "base": "Garchomp",
+   "baseTier": "OU"
+  },
+  "lucariomega": {
+   "tier": "Uber",
+   "score": 96,
+   "bst": 625,
+   "byRules": "RU",
+   "byPaper": "Uber",
+   "base": "Lucario",
+   "baseTier": "RU"
+  },
+  "lucariomegaz": {
+   "tier": "Uber",
+   "score": 99.9,
+   "bst": 625,
+   "byRules": "RU",
+   "byPaper": "Uber",
+   "base": "Lucario",
+   "baseTier": "RU"
+  },
+  "abomasnowmega": {
+   "tier": "RU",
+   "score": 64.6,
+   "bst": 594,
+   "byRules": "RU",
+   "byPaper": "NU",
+   "base": "Abomasnow",
+   "baseTier": "RU"
+  },
+  "gallademega": {
+   "tier": "RU",
+   "score": 82,
+   "bst": 618,
+   "byRules": "RU",
+   "byPaper": "Uber",
+   "base": "Gallade",
+   "baseTier": "RU"
+  },
+  "froslassmega": {
+   "tier": "RU",
+   "score": 85.1,
+   "bst": 580,
+   "byRules": "RU",
+   "byPaper": "Uber",
+   "base": "Froslass",
+   "baseTier": "RU"
+  },
+  "heatranmega": {
+   "tier": "Uber",
+   "score": 87.3,
+   "bst": 700,
+   "byRules": "Uber",
+   "byPaper": "Uber",
+   "base": "Heatran",
+   "baseTier": "OU"
+  },
+  "darkraimega": {
+   "tier": "Uber",
+   "score": 74.3,
+   "bst": 700,
+   "byRules": "Uber",
+   "byPaper": "OU",
+   "base": "Darkrai",
+   "baseTier": "Uber"
+  },
+  "emboarmega": {
+   "tier": "RU",
+   "score": 77.8,
+   "bst": 628,
+   "byRules": "RU",
+   "byPaper": "OU",
+   "base": "Emboar",
+   "baseTier": "RU"
+  },
+  "excadrillmega": {
+   "tier": "UU",
+   "score": 87.2,
+   "bst": 608,
+   "byRules": "UU",
+   "byPaper": "Uber",
+   "base": "Excadrill",
+   "baseTier": "UU"
+  },
+  "audinomega": {
+   "tier": "RU",
+   "score": 37.9,
+   "bst": 545,
+   "byRules": "RU",
+   "byPaper": "PU",
+   "base": "Audino",
+   "baseTier": "RU"
+  },
+  "scolipedemega": {
+   "tier": "UU",
+   "score": 42,
+   "bst": 585,
+   "byRules": "UU",
+   "byPaper": "PU",
+   "base": "Scolipede",
+   "baseTier": "RUBL"
+  },
+  "scraftymega": {
+   "tier": "RU",
+   "score": 71.2,
+   "bst": 588,
+   "byRules": "RU",
+   "byPaper": "UU",
+   "base": "Scrafty",
+   "baseTier": "RU"
+  },
+  "eelektrossmega": {
+   "tier": "RU",
+   "score": 70,
+   "bst": 615,
+   "byRules": "RU",
+   "byPaper": "UU",
+   "base": "Eelektross",
+   "baseTier": "RU"
+  },
+  "chandeluremega": {
+   "tier": "Uber",
+   "score": 94.3,
+   "bst": 620,
+   "byRules": "RU",
+   "byPaper": "Uber",
+   "base": "Chandelure",
+   "baseTier": "RU"
+  },
+  "golurkmega": {
+   "tier": "RU",
+   "score": 72.2,
+   "bst": 583,
+   "byRules": "RU",
+   "byPaper": "UU",
+   "base": "Golurk",
+   "baseTier": "RU"
+  },
+  "chesnaughtmega": {
+   "tier": "RU",
+   "score": 65.9,
+   "bst": 630,
+   "byRules": "RU",
+   "byPaper": "RU",
+   "base": "Chesnaught",
+   "baseTier": "RU"
+  },
+  "delphoxmega": {
+   "tier": "RU",
+   "score": 88.6,
+   "bst": 634,
+   "byRules": "RU",
+   "byPaper": "Uber",
+   "base": "Delphox",
+   "baseTier": "RU"
+  },
+  "greninjamega": {
+   "tier": "Uber",
+   "score": 99.7,
+   "bst": 630,
+   "byRules": "OU",
+   "byPaper": "Uber",
+   "base": "Greninja",
+   "baseTier": "UUBL"
+  },
+  "pyroarmega": {
+   "tier": "RU",
+   "score": 73.9,
+   "bst": 607,
+   "byRules": "RU",
+   "byPaper": "OU",
+   "base": "Pyroar",
+   "baseTier": "RU"
+  },
+  "floettemega": {
+   "tier": "OU",
+   "score": 72.4,
+   "bst": 651,
+   "byRules": "OU",
+   "byPaper": "UU",
+   "base": "Floette",
+   "baseTier": "NFE"
+  },
+  "meowsticmmega": {
+   "tier": "RU",
+   "score": 72.5,
+   "bst": 566,
+   "byRules": "RU",
+   "byPaper": "UU",
+   "base": "Meowstic",
+   "baseTier": "RU"
+  },
+  "meowsticfmega": {
+   "tier": "RU",
+   "score": 72.5,
+   "bst": 566,
+   "byRules": "RU",
+   "byPaper": "UU",
+   "base": "Meowstic",
+   "baseTier": "RU"
+  },
+  "malamarmega": {
+   "tier": "RU",
+   "score": 62.5,
+   "bst": 582,
+   "byRules": "RU",
+   "byPaper": "NU",
+   "base": "Malamar",
+   "baseTier": "RU"
+  },
+  "barbaraclemega": {
+   "tier": "RU",
+   "score": 47,
+   "bst": 600,
+   "byRules": "RU",
+   "byPaper": "PU",
+   "base": "Barbaracle",
+   "baseTier": "RU"
+  },
+  "dragalgemega": {
+   "tier": "RU",
+   "score": 70.3,
+   "bst": 594,
+   "byRules": "RU",
+   "byPaper": "UU",
+   "base": "Dragalge",
+   "baseTier": "RU"
+  },
+  "hawluchamega": {
+   "tier": "OU",
+   "score": 80.6,
+   "bst": 600,
+   "byRules": "OU",
+   "byPaper": "Uber",
+   "base": "Hawlucha",
+   "baseTier": "UUBL"
+  },
+  "zygardemega": {
+   "tier": "Uber",
+   "score": 75.2,
+   "bst": 778,
+   "byRules": "Uber",
+   "byPaper": "OU",
+   "base": "Zygarde",
+   "baseTier": "Uber"
+  },
+  "dianciemega": {
+   "tier": "Uber",
+   "score": 93.5,
+   "bst": 700,
+   "byRules": "Uber",
+   "byPaper": "Uber",
+   "base": "Diancie",
+   "baseTier": "RU"
+  },
+  "crabominablemega": {
+   "tier": "RU",
+   "score": 62.3,
+   "bst": 578,
+   "byRules": "RU",
+   "byPaper": "NU",
+   "base": "Crabominable",
+   "baseTier": "RU"
+  },
+  "golisopodmega": {
+   "tier": "RU",
+   "score": 55.8,
+   "bst": 630,
+   "byRules": "RU",
+   "byPaper": "PU",
+   "base": "Golisopod",
+   "baseTier": "RU"
+  },
+  "drampamega": {
+   "tier": "RU",
+   "score": 44.4,
+   "bst": 585,
+   "byRules": "RU",
+   "byPaper": "PU",
+   "base": "Drampa",
+   "baseTier": "RU"
+  },
+  "magearnamega": {
+   "tier": "Uber",
+   "score": 94.1,
+   "bst": 700,
+   "byRules": "Uber",
+   "byPaper": "Uber",
+   "base": "Magearna",
+   "baseTier": "Uber"
+  },
+  "magearnaoriginalmega": {
+   "tier": "Uber",
+   "score": 94.1,
+   "bst": 700,
+   "byRules": "Uber",
+   "byPaper": "Uber",
+   "base": "Magearna",
+   "baseTier": "Uber"
+  },
+  "zeraoramega": {
+   "tier": "Uber",
+   "score": 71.5,
+   "bst": 700,
+   "byRules": "Uber",
+   "byPaper": "UU",
+   "base": "Zeraora",
+   "baseTier": "UU"
+  },
+  "falinksmega": {
+   "tier": "RU",
+   "score": 70,
+   "bst": 570,
+   "byRules": "RU",
+   "byPaper": "UU",
+   "base": "Falinks",
+   "baseTier": "RU"
+  },
+  "scovillainmega": {
+   "tier": "RU",
+   "score": 61.3,
+   "bst": 586,
+   "byRules": "RU",
+   "byPaper": "NU",
+   "base": "Scovillain",
+   "baseTier": "RU"
+  },
+  "glimmoramega": {
+   "tier": "UU",
+   "score": 83.3,
+   "bst": 625,
+   "byRules": "UU",
+   "byPaper": "Uber",
+   "base": "Glimmora",
+   "baseTier": "UU"
+  },
+  "tatsugiricurlymega": {
+   "tier": "RU",
+   "score": 62.4,
+   "bst": 575,
+   "byRules": "RU",
+   "byPaper": "NU",
+   "base": "Tatsugiri",
+   "baseTier": "RU"
+  },
+  "tatsugiridroopymega": {
+   "tier": "RU",
+   "score": 47.6,
+   "bst": 575,
+   "byRules": "RU",
+   "byPaper": "PU",
+   "base": "Tatsugiri",
+   "baseTier": "RU"
+  },
+  "tatsugiristretchymega": {
+   "tier": "RU",
+   "score": 62.4,
+   "bst": 575,
+   "byRules": "RU",
+   "byPaper": "NU",
+   "base": "Tatsugiri",
+   "baseTier": "RU"
+  },
+  "baxcaliburmega": {
+   "tier": "Uber",
+   "score": 75,
+   "bst": 700,
+   "byRules": "Uber",
+   "byPaper": "OU",
+   "base": "Baxcalibur",
+   "baseTier": "Uber"
+  },
+  "crucibellemega": {
+   "tier": "OU",
+   "score": 89.8,
+   "bst": 640,
+   "byRules": "OU",
+   "byPaper": "Uber",
+   "base": "Crucibelle",
+   "baseTier": "CAP"
+  }
+ }
+}

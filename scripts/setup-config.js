@@ -153,6 +153,23 @@ if (fs.existsSync(dataSrc)) {
 			'',
 		].join('\n'));
 	}
+	// The draft's data, frozen when its auction opened (data/velvet-draft-s1/FROZEN.md):
+	// the same RP layer, worked out from the frozen copy, as a mod of its own.
+	const frozenSrc = path.join(__dirname, '..', 'data', 'velvet-draft-s1');
+	const frozenDir = path.join(dataDest, 'velvet-draft-s1');
+	fs.mkdirSync(frozenDir, { recursive: true });
+	for (const file of fs.readdirSync(frozenSrc)) fs.copyFileSync(path.join(frozenSrc, file), path.join(frozenDir, file));
+	fs.mkdirSync(path.join(dataDest, 'mods', 'gen9draftrp'), { recursive: true });
+	fs.writeFileSync(path.join(dataDest, 'mods', 'gen9draftrp', 'scripts.js'), [
+		"'use strict';",
+		'// Written by scripts/setup-config.js: the Season 1 draft, on RP data frozen over Gen 9. See data/velvet-draft-s1/FROZEN.md.',
+		'exports.Scripts = {',
+		'	gen: 9,',
+		"	inherit: 'gen9',",
+		"	init() { require('../../velvet-draft-s1/rp-mod.js').apply(this); },",
+		'};',
+		'',
+	].join('\n'));
 	// RP Random Battle is the one generated format: Showdown finds a format's team
 	// generator by its mod's name, so gen9rp points at the ninth generation's.
 	const rbDir = path.join(dataDest, 'random-battles', 'gen9rp');

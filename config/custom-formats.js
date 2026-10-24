@@ -1495,7 +1495,9 @@ exports.Formats = [
 	{
 		name: "[Gen 9] RP Draft",
 		desc: "Kagura Draft League: the Season 1 draft pool only. No Z-Moves or Tera; Baton Pass only dry passes (nothing carried over).",
-		mod: 'gen9',
+		// Becomes gen9draftrp below: RP's data as it was when the auction opened, frozen for the
+		// season (the owner, 24 Oct 2026: "rules stay until the end"). See data/velvet-draft-s1/FROZEN.md.
+		mod: 'gen9draft',
 		ruleset: ['Standard NatDex', 'Terastal Clause', 'Z-Move Clause', ...RP_RULES, ...RP_GEMS],
 		banlist: ['Arena Trap', 'Moody', 'Power Construct', 'Shadow Tag', "King's Rock", 'Quick Claw', 'Razor Fang', 'Assist', 'Last Respects', 'Shed Tail'],
 		checkCanLearn: levelFreeMoves,

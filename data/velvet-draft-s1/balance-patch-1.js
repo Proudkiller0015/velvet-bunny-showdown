@@ -1,0 +1,2531 @@
+'use strict';
+/**
+ * Balance Patch 1.
+ *
+ * The first big pass over the Pokemon nobody picks. Four parts, each read by the
+ * file that already owns that kind of change, so nothing here needs a hook of
+ * its own:
+ *
+ *   EVOLUTIONS  evolution levels that made no sense for what the Pokemon
+ *               becomes (applied by buffs.js, read by the Discord bot too)
+ *   MOVES       ten new moves for the underdogs, plus Regigigas's signature
+ *               (merged into moves.js)
+ *   ABILITIES   Regigigas's signature ability (merged into abilities.js)
+ *   BUFFS       who gets what: moves, abilities, and the handful of existing
+ *               moves each group should always have had (merged into buffs.js)
+ *
+ * The rule for the underdogs was PU, not OU: a Pokemon that had no reason to
+ * be picked gets one reason, not three. The deliberately silly ones - Unown,
+ * Luvdisc, Delibird, Spinda and friends - get a touch of flavour and stay silly.
+ */
+
+/*
+ * Evolution levels.
+ *
+ * Game Freak put some Pokemon behind levels that belong to pseudo-legendaries:
+ * a 510 base stat Braviary at 54, a 430 Magcargo at 38, a 410 Medicham at 37.
+ * In a roleplay where a trainer's level is capped by badges, that is a Pokemon
+ * nobody ever sees evolved. The strong keep a late level, but never past the
+ * caps at the bottom of this table: 50 for a final stage, 40 for a middle one.
+ *
+ * Keyed by the Pokemon it evolves INTO, which is where Showdown keeps evoLevel.
+ */
+exports.EVOLUTIONS = {
+	braviary: { from: 54, to: 40, why: '510 BST: a mid-game bird, not a pseudo-legendary' },
+	braviaryhisui: { from: 54, to: 40, why: 'Same line as Braviary' },
+	mandibuzz: { from: 54, to: 40, why: "Braviary's counterpart, same wait for no reason" },
+	bisharp: { from: 52, to: 40, why: '490 BST middle stage (cap 40); Kingambit still needs the Crest' },
+	mienshao: { from: 50, to: 40, why: '510 BST fighter stuck behind a pseudo level' },
+	klang: { from: 38, to: 30, why: 'A 440 BST middle stage at 38; ten levels as Klang before Klinklang at 40' },
+	klinklang: { from: 49, to: 40, why: '520 BST, and no stronger for the wait' },
+	dragalge: { from: 48, to: 38, why: '494 BST: a pseudo level for a RU Pokemon' },
+	noivern: { from: 48, to: 38, why: '535 BST speedster, evolving late made it unusable in-story' },
+	vanillish: { from: 35, to: 30, why: 'Brings the line forward' },
+	vanilluxe: { from: 47, to: 40, why: 'An ice cream cone should not take longer than Garchomp' },
+	vibrava: { from: 35, to: 28, why: 'Brings the line forward: ten levels as Vibrava before Flygon at 38' },
+	flygon: { from: 45, to: 38, why: '520 BST, not a pseudo-legendary despite the wait' },
+	sealeo: { from: 32, to: 28, why: 'Brings the line forward: ten levels as Sealeo before Walrein at 38' },
+	walrein: { from: 44, to: 38, why: '530 BST with a slow, bulky role that needs levels early' },
+	golurk: { from: 43, to: 35, why: '483 BST' },
+	glalie: { from: 42, to: 35, why: '480 BST, weaker than Froslass, which evolves by stone' },
+	beheeyem: { from: 42, to: 36, why: '485 BST' },
+	palossand: { from: 42, to: 34, why: '480 BST' },
+	exploud: { from: 40, to: 35, why: '490 BST' },
+	wailord: { from: 40, to: 35, why: '500 BST, and most of it is HP' },
+	drapion: { from: 40, to: 34, why: '500 BST' },
+	jellicent: { from: 40, to: 34, why: '480 BST' },
+	revavroom: { from: 40, to: 34, why: '500 BST' },
+	scrafty: { from: 39, to: 32, why: '488 BST' },
+	eelektrik: { from: 39, to: 30, why: 'A 405 BST middle stage, and Eelektross is only a stone away' },
+	barbaracle: { from: 39, to: 34, why: '500 BST' },
+	magcargo: { from: 38, to: 30, why: '430 BST at 38 was the worst ratio in the game' },
+	purugly: { from: 38, to: 30, why: '452 BST' },
+	medicham: { from: 37, to: 30, why: '410 BST' },
+	banette: { from: 37, to: 30, why: '455 BST' },
+	garbodor: { from: 36, to: 32, why: '474 BST' },
+	pidgeot: { from: 36, to: 32, why: '479 BST' },
+	swanna: { from: 35, to: 30, why: '473 BST' },
+	dewgong: { from: 34, to: 30, why: '475 BST' },
+	sawsbuck: { from: 34, to: 30, why: '475 BST' },
+	seaking: { from: 33, to: 28, why: '450 BST' },
+	cacturne: { from: 32, to: 28, why: '475 BST' },
+	lumineon: { from: 31, to: 26, why: '460 BST' },
+
+	/*
+	 * Two-stage lines that evolved late. One evolution, so the whole wait was
+	 * spent as the unevolved form: brought to 32-36 by how strong the final is.
+	 * Palafin (Zero to Hero) keeps its 38. Regional forms move with their line.
+	 */
+	rapidash: { from: 40, to: 34, why: '500 BST two-stage line' },
+	rapidashgalar: { from: 40, to: 34, why: 'Same line as Rapidash' },
+	muk: { from: 38, to: 34, why: '500 BST two-stage line' },
+	mukalola: { from: 38, to: 34, why: 'Same line as Muk' },
+	omastar: { from: 40, to: 34, why: '495 BST fossil' },
+	kabutops: { from: 40, to: 34, why: '495 BST fossil' },
+	cradily: { from: 40, to: 34, why: '495 BST fossil' },
+	armaldo: { from: 40, to: 34, why: '495 BST fossil' },
+	carracosta: { from: 37, to: 33, why: '495 BST fossil' },
+	archeops: { from: 37, to: 36, why: '567 BST: the strongest here keeps a late level' },
+	tyrantrum: { from: 39, to: 36, why: '521 BST fossil' },
+	aurorus: { from: 39, to: 36, why: '521 BST fossil' },
+	cursola: { from: 38, to: 34, why: '510 BST, but frail' },
+	claydol: { from: 36, to: 32, why: '500 BST two-stage line' },
+	toxicroak: { from: 37, to: 32, why: '490 BST two-stage line' },
+	abomasnow: { from: 40, to: 34, why: '494 BST two-stage line' },
+	amoonguss: { from: 39, to: 34, why: 'Strong in battle through its utility, not its 464 BST' },
+	galvantula: { from: 36, to: 32, why: '472 BST two-stage line' },
+	ferrothorn: { from: 40, to: 36, why: 'A defensive staple: the later end of the range' },
+	beartic: { from: 37, to: 32, why: '505 BST two-stage line' },
+	clawitzer: { from: 37, to: 32, why: '500 BST two-stage line' },
+	toxapex: { from: 38, to: 36, why: 'A defensive staple: the later end of the range' },
+	sandaconda: { from: 36, to: 32, why: '510 BST two-stage line' },
+
+	/*
+	 * Baby Pokemon. A baby is the one you find at the start, and Elekid at 30
+	 * spent most of an RP as Elekid. Every baby grows up at 16, the level the
+	 * friendship babies (Pichu, Cleffa, Togepi...) already used. The ones the games
+	 * tie to a move, a party member or friendship at a time of day have no
+	 * evoLevel, so the battle server never checked theirs; `from` names the old
+	 * rule and the RP bot reads the new level. Happiny keeps its Oval Stone too.
+	 */
+	electabuzz: { from: 30, to: 16, why: 'Baby: grows up at 16' },
+	magmar: { from: 30, to: 16, why: 'Baby: grows up at 16' },
+	jynx: { from: 30, to: 16, why: 'Baby: grows up at 16' },
+	toxtricity: { from: 30, to: 16, why: 'Baby: grows up at 16' },
+	toxtricitylowkey: { from: 30, to: 16, why: 'Baby: grows up at 16' },
+	hitmonlee: { from: 20, to: 16, why: 'Baby: grows up at 16' },
+	hitmonchan: { from: 20, to: 16, why: 'Baby: grows up at 16' },
+	hitmontop: { from: 20, to: 16, why: 'Baby: grows up at 16' },
+	wobbuffet: { from: 15, to: 16, why: 'Baby: grows up at 16, with the rest' },
+	sudowoodo: { from: 'levelMove', to: 16, why: 'Baby: grows up at 16 (was knowing Mimic)' },
+	mrmime: { from: 'levelMove', to: 16, why: 'Baby: grows up at 16 (was knowing Mimic)' },
+	mantine: { from: 'levelExtra', to: 16, why: 'Baby: grows up at 16 (was a Remoraid in the party)' },
+	chansey: { from: 'Oval Stone', to: 16, why: 'Baby: also grows up at 16; the Oval Stone still works' },
+	// 24 Sep 2026: these three named items that have nothing to do with it (the
+	// Sun Stone is Roselia's own evolution, not Budew's). Budew and Riolu evolve
+	// by friendship in the day, Chingling by friendship at night.
+	roselia: { from: 'levelFriendship', to: 16, why: 'Baby: also grows up at 16; high friendship in the day still works' },
+	lucario: { from: 'levelFriendship', to: 16, why: 'Baby: also grows up at 16; high friendship in the day still works' },
+	chimecho: { from: 'levelFriendship', to: 16, why: 'Baby: also grows up at 16; high friendship at night still works' },
+
+	/*
+	 * The caps. No evolution into a final stage after level 50 - pseudo-
+	 * legendaries included - and no middle stage after 40, so nobody spends the
+	 * back half of the game waiting on a Pokemon that has not become itself.
+	 */
+	dragonite: { from: 55, to: 50, why: 'Cap: no final evolution after 50' },
+	tyranitar: { from: 55, to: 50, why: 'Cap: no final evolution after 50' },
+	zweilous: { from: 50, to: 40, why: 'Cap: no middle stage after 40' },
+	hydreigon: { from: 64, to: 50, why: 'Cap: the latest evolution in the game, now 50' },
+	volcarona: { from: 59, to: 50, why: 'Cap: no final evolution after 50' },
+	drakloak: { from: 50, to: 40, why: 'Cap: no middle stage after 40' },
+	dragapult: { from: 60, to: 50, why: 'Cap: no final evolution after 50' },
+	baxcalibur: { from: 54, to: 50, why: 'Cap: no final evolution after 50' },
+	solgaleo: { from: 53, to: 50, why: 'Cap: no final evolution after 50' },
+	lunala: { from: 53, to: 50, why: 'Cap: no final evolution after 50' },
+	cosmoem: { from: 43, to: 40, why: 'Cap: no middle stage after 40' },
+	rhydon: { from: 42, to: 40, why: 'Cap: no middle stage after 40' },
+	lampent: { from: 41, to: 24, why: 'Early-game friendly: Litwick is met early' },
+
+	// September 2026 review: ordinary three-stage lines finish with the starters' tier (36-38),
+	// and nothing that isn't a pseudo-legendary evolves later than the pseudo-legendaries do.
+	gothitelle: { from: 41, to: 38, why: '490 BST: finishes with the other ordinary three-stage lines' },
+	reuniclus: { from: 41, to: 38, why: "490 BST: Gothitelle's counterpart, same level" },
+	hatterene: { from: 42, to: 38, why: '510 BST: finishes with the other ordinary three-stage lines' },
+	grimmsnarl: { from: 42, to: 38, why: "510 BST: Hatterene's counterpart, same level" },
+	aggron: { from: 42, to: 38, why: '530 BST, the same as a starter, which finishes at 36' },
+	mrrime: { from: 42, to: 38, why: '520 BST: finishes with the other ordinary three-stage lines' },
+	haxorus: { from: 48, to: 45, why: 'Not a pseudo-legendary (540 BST), so no later than Metagross and Kommo-o' },
+
+	// Stone or level: the Dusk Stone still works any time, and Lampent now also evolves by itself at 36.
+	chandelure: { from: 'Dusk Stone', to: 36, why: 'Now also evolves at level 36; the Dusk Stone still works' },
+
+	/*
+	 * The same case as Chandelure: a Pokemon met early whose only way forward
+	 * was a stone nobody has mid-RP. Not Aegislash (strong enough that the Dusk
+	 * Stone is a fair gate), not Eevee (the stones are the point) and no trade
+	 * evolutions (the bot already handles trades and the Link Cable).
+	 */
+	mismagius: { from: 'Dusk Stone', to: 33, why: 'Now also evolves at level 33; the Dusk Stone still works' },
+	honchkrow: { from: 'Dusk Stone', to: 33, why: 'Now also evolves at level 33; the Dusk Stone still works' },
+	cinccino: { from: 'Shiny Stone', to: 32, why: 'Now also evolves at level 32; the Shiny Stone still works' },
+	ludicolo: { from: 'Water Stone', to: 36, why: 'Now also evolves at level 36; the Water Stone still works' },
+	heliolisk: { from: 'Sun Stone', to: 32, why: 'Now also evolves at level 32; the Sun Stone still works' },
+	scovillain: { from: 'Fire Stone', to: 30, why: 'Now also evolves at level 30; the Fire Stone still works' },
+};
+
+/*
+ * The new moves.
+ *
+ * Numbers from -10 down; -1 to -9 are taken. `gen: 9` on every one, because a
+ * negative number leaves the generation at 0 and the validator reads gen 0 as
+ * "does not exist yet". `velvetShared` tells the signature-move table these
+ * are handed out, not anybody's signature. `flavor` is the line the patch notes
+ * and the builder lead with; `desc` is what it does.
+ */
+function drainIn(sunDrain, normalDrain) {
+	return function (move, pokemon) {
+		const sun = ['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather());
+		move.drain = sun ? sunDrain : normalDrain;
+	};
+}
+
+exports.MOVES = {
+	// Chilly Reception with Trick Room instead of snow: a pivot that sets the room
+	// (or ends it, as Trick Room does) and brings in the slow Pokemon behind it.
+	// Priority 0 by the owner's call - it is not -7 like Trick Room itself.
+	twilightexit: {
+		num: -41, gen: 9, name: "Twilight Exit", type: "Dark", category: "Status",
+		basePower: 0, accuracy: true, pp: 5, priority: 0,
+		flags: { mirror: 1, metronome: 1 },
+		pseudoWeather: 'trickroom',
+		selfSwitch: true,
+		secondary: null, target: "all", contestType: "Clever", velvetShared: true,
+		flavor: "The user twists the dusk inside out and slips away through the gap it leaves.",
+		shortDesc: "Sets Trick Room (or ends it), then the user switches out.",
+		desc: "For 5 turns, the Pokemon on the field move in reverse speed order within their priority bracket, as Trick Room does; if Trick Room is already active, it ends instead. Then the user switches out.",
+	},
+	hivefrenzy: {
+		num: -10, gen: 9, name: "Hive Frenzy", type: "Bug", category: "Physical",
+		basePower: 80, accuracy: 100, pp: 15, priority: 0,
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		secondary: { chance: 50, self: { boosts: { atk: 1 } } },
+		target: "normal", contestType: "Tough", velvetShared: true,
+		flavor: "The user whips itself into the fury of a whole hive and stings without mercy.",
+		shortDesc: "50% chance to raise the user's Attack by 1.",
+		desc: "The user whips itself into the fury of a whole hive. Has a 50% chance to raise the user's Attack by 1 stage.",
+	},
+	chrysalisveil: {
+		num: -11, gen: 9, name: "Chrysalis Veil", type: "Bug", category: "Status",
+		basePower: 0, accuracy: true, pp: 10, priority: 0,
+		onHit(target, source, move) {
+			const healed = this.heal(Math.ceil(target.baseMaxhp / 2), target, target);
+			const boosted = this.boost({ spd: 1 }, target, target, move);
+			if (!healed && !boosted) return this.NOT_FAIL;
+		},
+		flags: { snatch: 1, heal: 1, metronome: 1 },
+		secondary: null, target: "self", contestType: "Beautiful", velvetShared: true,
+		flavor: "The user wraps itself in shimmering silk, mending inside a cocoon that shrugs off attacks.",
+		shortDesc: "Heals 1/2 of max HP and raises Sp. Def by 1.",
+		desc: "The user wraps itself in shimmering silk. Restores 1/2 of its maximum HP, rounded up, and raises its Special Defense by 1 stage.",
+	},
+	hustleup: {
+		num: -12, gen: 9, name: "Hustle Up", type: "Normal", category: "Status",
+		basePower: 0, accuracy: true, pp: 20, priority: 0,
+		boosts: { atk: 1, spe: 1 },
+		flags: { snatch: 1, metronome: 1 },
+		secondary: null, target: "self", contestType: "Cool", velvetShared: true,
+		flavor: "Scrappy, stubborn and underestimated, the user rolls its shoulders and gets serious.",
+		shortDesc: "Raises the user's Attack and Speed by 1.",
+		desc: "Scrappy, stubborn and underestimated, the user gets serious. Raises its Attack and Speed by 1 stage each.",
+	},
+	carrionfeast: {
+		num: -13, gen: 9, name: "Carrion Feast", type: "Dark", category: "Physical",
+		basePower: 80, accuracy: 100, pp: 15, priority: 0,
+		drain: [1, 2],
+		flags: { contact: 1, protect: 1, mirror: 1, bite: 1, metronome: 1 },
+		secondary: null, target: "normal", contestType: "Tough", velvetShared: true,
+		flavor: "The user tears into its prey like a scavenger that has not eaten in days.",
+		shortDesc: "User recovers 50% of the damage dealt.",
+		desc: "The user tears into the target like a starving scavenger. It recovers 1/2 of the HP lost by the target, rounded half up.",
+	},
+	sparkscamper: {
+		num: -14, gen: 9, name: "Spark Scamper", type: "Electric", category: "Physical",
+		basePower: 40, accuracy: 100, pp: 30, priority: 1,
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		secondary: null, target: "normal", contestType: "Cute", velvetShared: true,
+		flavor: "Faster than the eye can follow, the user darts in trailing sparks and is gone again.",
+		shortDesc: "Usually goes first.",
+		desc: "The user darts in trailing sparks before the target can react. Priority +1.",
+	},
+	undertow: {
+		num: -15, gen: 9, name: "Undertow", type: "Water", category: "Special",
+		basePower: 90, accuracy: 100, pp: 20, priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		secondary: { chance: 50, boosts: { spe: -1 } },
+		target: "normal", contestType: "Beautiful", velvetShared: true,
+		flavor: "A current that looks calm from the surface drags the target down and holds it there.",
+		shortDesc: "50% chance to lower the target's Speed by 1.",
+		desc: "A deceptively calm current drags at the target. Has a 50% chance to lower the target's Speed by 1 stage.",
+	},
+	solarnectar: {
+		num: -16, gen: 9, name: "Solar Nectar", type: "Grass", category: "Special",
+		basePower: 80, accuracy: 100, pp: 10, priority: 0,
+		drain: [1, 4],
+		onModifyMove: drainIn([1, 2], [1, 4]),
+		// 135 in harsh sunlight. The user's effective weather, so Air Lock and Utility Umbrella turn it off.
+		basePowerCallback(pokemon, target, move) {
+			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather())) return 135;
+			return move.basePower;
+		},
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		secondary: null, target: "normal", contestType: "Beautiful", velvetShared: true,
+		flavor: "The user drinks in the sun's warmth and returns it as a burst of sweet, scalding nectar.",
+		shortDesc: "135 power and heals 50% of damage in sun; else 80 power, heals 25%.",
+		desc: "The user bursts with sun-warmed nectar. It recovers 1/4 of the HP lost by the target. In harsh sunlight its power rises to 135 and it recovers 1/2 of the HP lost instead.",
+	},
+	craghammer: {
+		num: -17, gen: 9, name: "Crag Hammer", type: "Rock", category: "Physical",
+		// The first strong Rock attack that never misses: Liquidation's shape, for Rock.
+		basePower: 90, accuracy: 100, pp: 10, priority: 0,
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		secondary: { chance: 20, boosts: { def: -1 } },
+		target: "normal", contestType: "Tough", velvetShared: true,
+		flavor: "The user brings its whole stony weight down like a mountain falling on a single spot.",
+		shortDesc: "100% accurate. 20% chance to lower the target's Defense by 1.",
+		desc: "Never misses unless evasion or accuracy drops say otherwise. The user brings its full stony weight down on the target. Has a 20% chance to lower the target's Defense by 1 stage.",
+	},
+	hypnowhirl: {
+		num: -18, gen: 9, name: "Hypno Whirl", type: "Psychic", category: "Special",
+		basePower: 90, accuracy: 100, pp: 15, priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		secondary: { chance: 20, volatileStatus: 'confusion' },
+		target: "normal", contestType: "Clever", velvetShared: true,
+		flavor: "Rings of psychic light spin until the target no longer knows which way is up.",
+		shortDesc: "20% chance to confuse the target.",
+		desc: "Spinning rings of psychic light disorient the target. Has a 20% chance to confuse it.",
+	},
+	shufflejab: {
+		num: -19, gen: 9, name: "Shuffle Jab", type: "Fighting", category: "Physical",
+		basePower: 70, accuracy: 100, pp: 15, priority: 0,
+		flags: { contact: 1, protect: 1, mirror: 1, punch: 1, metronome: 1 },
+		secondary: { chance: 100, self: { boosts: { spe: 1 } } },
+		target: "normal", contestType: "Cool", velvetShared: true,
+		flavor: "Light on its feet, the user slips a jab in and is already dancing into the next one.",
+		shortDesc: "100% chance to raise the user's Speed by 1.",
+		desc: "The user slips in a quick jab and keeps moving. Has a 100% chance to raise the user's Speed by 1 stage.",
+	},
+
+	/*
+	 * Regigigas's signature.
+	 *
+	 * The Pokemon that towed the continents into place, finally allowed to act
+	 * like it. Not an OHKO and not unconditional: 110 power, 95% accurate, five
+	 * PP. What makes it frightening is what it refuses to respect - Protect and
+	 * Detect do nothing, and Reflect, Light Screen and Aurora Veil shatter before
+	 * the hit lands. Colossus Unbound already stops abilities softening it, so
+	 * there is no wall that stands up to it on principle; only one that survives
+	 * it on numbers.
+	 *
+	 * `nosketch`, and Mew does not get it: this one is Regigigas's.
+	 */
+	/*
+	 * Articuno's signature: the storm it has always been said to bring.
+	 *
+	 * A spread Ice move that slows everything it touches, and never misses in snow
+	 * (like Blizzard). 85 power is Ice Beam's neighbourhood, not Blizzard's.
+	 */
+	aurorasquall: {
+		num: -21, gen: 9, name: "Aurora Squall", type: "Ice", category: "Special",
+		basePower: 85, accuracy: 95, pp: 10, priority: 0,
+		onModifyMove(move, pokemon) {
+			if (['snowscape', 'hail'].includes(pokemon.effectiveWeather())) move.accuracy = true;
+		},
+		flags: { protect: 1, mirror: 1, wind: 1, metronome: 1, nosketch: 1 },
+		secondary: { chance: 30, boosts: { spe: -1 } },
+		target: "allAdjacentFoes", contestType: "Beautiful",
+		flavor: "Curtains of polar light come down as a gale that freezes the air in its path.",
+		shortDesc: "Hits all foes. 30% chance to lower Speed. Can't miss in snow. Articuno's signature.",
+		desc: "Curtains of polar light come down as a freezing gale. Hits all adjacent foes, with a 30% chance to lower each target's Speed by 1 stage. This move does not check accuracy in snow.",
+	},
+	/*
+	 * The lake trio: knowledge, emotion and willpower. Each signature is a
+	 * 110 power Psychic attack with an effect that always happens, paid for with
+	 * 90-95% accuracy and 5-8 PP. 8 PP is flat (noPPBoosts): with PP Ups it was
+	 * 8 * 8/5 = 12.8, shown in battle as "12.8/12.8".
+	 */
+	// Uxie's: knowledge taken back. Always resets the target's stat changes, and
+	// clears the user's own drops too.
+	memorywipe: {
+		num: -22, gen: 9, name: "Memory Wipe", type: "Psychic", category: "Special",
+		basePower: 110, accuracy: 95, pp: 8, noPPBoosts: true, priority: 0,
+		onHit(target, source) {
+			target.clearBoosts();
+			this.add('-clearboost', target);
+			let dropped = false;
+			for (const stat in source.boosts) {
+				if (source.boosts[stat] < 0) { source.boosts[stat] = 0; dropped = true; }
+			}
+			if (dropped) this.add('-clearnegativeboost', source, '[silent]');
+		},
+		flags: { protect: 1, mirror: 1, metronome: 1, nosketch: 1 },
+		secondary: null, target: "normal", contestType: "Clever",
+		flavor: "Uxie opens its eyes, and whatever the target had learned this battle is gone.",
+		shortDesc: "Always resets the target's stat changes and the user's stat drops. Uxie's signature.",
+		desc: "Uxie opens its eyes and the target forgets. After dealing damage, all of the target's stat stages are reset to 0, and any of the user's lowered stat stages are reset to 0.",
+	},
+	// Mesprit's: shared feeling. Heals the user for all of the damage it deals. Same accuracy and PP as her sisters (the owner, 12 Oct 2026).
+	soulresonance: {
+		num: -23, gen: 9, name: "Soul Resonance", type: "Psychic", category: "Special",
+		basePower: 110, accuracy: 95, pp: 8, noPPBoosts: true, priority: 0,
+		drain: [1, 1],
+		flags: { protect: 1, mirror: 1, heal: 1, metronome: 1, nosketch: 1 },
+		secondary: null, target: "normal", contestType: "Beautiful",
+		flavor: "Mesprit feels the target's pain as its own, and takes the target's strength to bear it.",
+		shortDesc: "User recovers 100% of the damage dealt. Mesprit's signature.",
+		desc: "Mesprit feels the target's pain as its own. The user recovers HP equal to all of the HP lost by the target.",
+	},
+	// Azelf's: willpower made into a blow. Physical or special, whichever is
+	// stronger, and it always ignores the target's defensive boosts and evasion.
+	resolutestrike: {
+		num: -24, gen: 9, name: "Resolute Strike", type: "Psychic", category: "Special",
+		basePower: 110, accuracy: 95, pp: 8, noPPBoosts: true, priority: 0,
+		ignoreDefensive: true,
+		ignoreEvasion: true,
+		onModifyMove(move, pokemon) {
+			// Before boosts, as the description says (24 Sep 2026: it read them with
+			// boosts, the unboosted flag being the second argument, not the third).
+			// A physical Azelf stays physical through a Nasty Plot, and the other
+			// way round.
+			if (pokemon.getStat('atk', true, true) > pokemon.getStat('spa', true, true)) move.category = 'Physical';
+		},
+		flags: { protect: 1, mirror: 1, metronome: 1, nosketch: 1 },
+		secondary: null,
+		target: "normal", contestType: "Cool",
+		flavor: "Azelf's will alone is enough to hit, and no wall it can see will stop it.",
+		shortDesc: "Uses the higher attacking stat. Always ignores the target's stat boosts. Azelf's signature.",
+		desc: "Azelf's willpower becomes a blow. Uses whichever of the user's Attack or Special Attack is higher, before boosts, and always ignores the target's Defense, Special Defense and evasion boosts.",
+	},
+	/*
+	 * Voltaic Lance: the reliable physical Electric attack the type never had.
+	 * Wild Charge hurts its user and Thunder Punch is 75; this is 100 power, never
+	 * misses, and doesn't touch the target, so Rough Skin and Static can't punish it.
+	 */
+	voltaiclance: {
+		num: -25, gen: 9, name: "Voltaic Lance", type: "Electric", category: "Physical",
+		basePower: 100, accuracy: 100, pp: 10, priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		secondary: null, target: "normal", contestType: "Cool", velvetShared: true,
+		flavor: "The user gathers every spark it has into a spear of lightning and hurls it.",
+		shortDesc: "100% accurate, no contact. No drawback.",
+		desc: "The user hurls a spear of lightning. Does not make contact.",
+	},
+	/*
+	 * Rime Cleaver: Ice's third strong physical attack, and the reliable one.
+	 * Icicle Crash is 85 at 90% and Triple Axel rolls its accuracy three times;
+	 * this is 100 power that never misses, with no drawback.
+	 */
+	rimecleaver: {
+		num: -26, gen: 9, name: "Rime Cleaver", type: "Ice", category: "Physical",
+		basePower: 100, accuracy: 100, pp: 10, priority: 0,
+		flags: { contact: 1, protect: 1, mirror: 1, slicing: 1, metronome: 1 },
+		secondary: null, target: "normal", contestType: "Cool", velvetShared: true,
+		flavor: "A blade of frost as old as the glacier it was broken from comes down in one clean stroke.",
+		shortDesc: "100% accurate. No drawback.",
+		desc: "The user brings down a blade of ancient frost in one clean, slicing stroke.",
+	},
+	/*
+	 * Oxidize: Poison's Freeze-Dry. Steel is normally immune to Poison; this
+	 * rusts it instead, for super-effective damage. 70 power, 100%, and a 10%
+	 * chance to confuse. It never poisons.
+	 */
+	oxidize: {
+		num: -27, gen: 9, name: "Oxidize", type: "Poison", category: "Special",
+		basePower: 70, accuracy: 100, pp: 20, priority: 0,
+		ignoreImmunity: { Poison: true },
+		onEffectiveness(typeMod, target, type) {
+			if (type === 'Steel') return 1;
+		},
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		secondary: { chance: 10, volatileStatus: 'confusion' },
+		target: "normal", contestType: "Clever", velvetShared: true,
+		flavor: "A bitter, eating mist that turns even steel to flaking rust.",
+		shortDesc: "Super effective on Steel. 10% chance to confuse. Never poisons.",
+		desc: "A corrosive mist. This move's type effectiveness against Steel is changed to be super effective no matter what this move's type is, and Steel-types are not immune to it. Has a 10% chance to confuse the target. It cannot poison.",
+	},
+	/*
+	 * Tremor Shot - the special Ground priority the game never had (the owner,
+	 * 29 Sep 2026, with Chimai). Vacuum Wave's shape for Ground: 40 power, +1,
+	 * special. Flying types and Levitate are still immune.
+	 */
+	/*
+	 * Velvet Guard - Cotton Guard for the other side (the owner, 29 Sep 2026): +3
+	 * Special Defense. Handed to everything that learns Cotton Guard, and the trio.
+	 */
+	/*
+	 * Velvet Press - Body Press for the special side (the owner, 29 Sep 2026): Fairy,
+	 * 80 power, uses the user's Special Defense in place of its Special Attack.
+	 * Velvet Guard's partner, and handed out generously to special walls.
+	 */
+	/*
+	 * Chilling Mist - Will-O-Wisp for the cold (the owner, 29 Sep 2026): Ice, status,
+	 * 85% accurate, frostbites the target - the new special-side burn
+	 * (data/velvet/frostbite.js). Fire types are immune to the move itself, not to
+	 * frostbite from elsewhere; Ice types can't be frostbitten at all.
+	 */
+	/*
+	 * Guzzlord's kit (the owner, 29 Sep 2026: "a massive Guzzlord buff" - Beast Boost
+	 * and its stats stay). Grand Feast is a one-turn Geomancy for the physical and
+	 * special sides alike that also sets Trick Room, which a 43-Speed Pokemon wants;
+	 * Devour and Endless Hunger are its two attacks. Guzzlord only.
+	 */
+	grandfeast: {
+		num: -53, gen: 9, name: "Grand Feast", type: "Dark", category: "Status",
+		basePower: 0, accuracy: true, pp: 5, priority: 0,
+		flags: { metronome: 1 },
+		boosts: { atk: 2, def: 2, spa: 2, spd: 2 },
+		// Sets Trick Room if it is not already up (it never ends one).
+		onHit(target, source) {
+			if (!this.field.pseudoWeather['trickroom']) this.field.addPseudoWeather('trickroom', source);
+		},
+		secondary: null,
+		target: "self", type: "Dark", contestType: "Tough",
+		shortDesc: "Raises Atk, Def, SpA, SpD by 2 and sets Trick Room. Guzzlord.",
+		desc: "Raises the user's Attack, Defense, Special Attack and Special Defense by 2 stages each, in one turn, and sets Trick Room for 5 turns if it is not already active. Guzzlord's signature move.",
+	},
+	devour: {
+		num: -54, gen: 9, name: "Devour", type: "Dark", category: "Physical",
+		basePower: 100, accuracy: 100, pp: 10, priority: 0,
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, bite: 1 },
+		drain: [1, 2],
+		// Hits from whichever of Attack and Special Attack is higher (Photon Geyser's rule).
+		onModifyMove(move, pokemon) {
+			move.category = pokemon.getStat('atk', false, true) > pokemon.getStat('spa', false, true) ? 'Physical' : 'Special';
+		},
+		secondary: null,
+		target: "normal", contestType: "Tough",
+		shortDesc: "Uses the higher of Atk/SpA. Heals 50% of the damage dealt. Guzzlord.",
+		desc: "Physical or special, whichever of the user's Attack and Special Attack is higher (counting stat stages). The user recovers 1/2 the HP lost by the target, rounded half up. Makes contact; boosted by Strong Jaw. Guzzlord's signature move.",
+	},
+	endlesshunger: {
+		num: -55, gen: 9, name: "Endless Hunger", type: "Dragon", category: "Special",
+		basePower: 100, accuracy: 100, pp: 10, priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		// Hits from whichever of Attack and Special Attack is higher (Photon Geyser's rule).
+		onModifyMove(move, pokemon) {
+			move.category = pokemon.getStat('atk', false, true) > pokemon.getStat('spa', false, true) ? 'Physical' : 'Special';
+		},
+		// Everything goes in: a Berry is eaten (Bug Bite's rule), anything else is swallowed whole.
+		onAfterHit(target, source, move) {
+			if (!source.hp) return;
+			const item = target.getItem();
+			if (!item.id) return;
+			if (item.isBerry) {
+				if (target.takeItem(source)) {
+					this.add("-enditem", target, item.name, "[from] stealeat", "[move] Endless Hunger", `[of] ${source}`);
+					if (this.singleEvent("Eat", item, target.itemState, source, source, move)) this.runEvent("EatItem", source, source, move, item);
+					if (item.onEat) source.ateBerry = true;
+				}
+				return;
+			}
+			const taken = target.takeItem(source);
+			if (taken) this.add("-enditem", target, taken.name, "[from] move: Endless Hunger", `[of] ${source}`);
+		},
+		secondary: null,
+		target: "normal", contestType: "Tough",
+		shortDesc: "Uses the higher of Atk/SpA. Swallows the target's item; eats a Berry. Guzzlord.",
+		desc: "Physical or special, whichever of the user's Attack and Special Attack is higher (counting stat stages). After hitting, the target loses its held item if it can be removed. If it was a Berry, the user eats it and gains its effect, as Bug Bite does. Guzzlord's signature move.",
+	},
+	chillingmist: {
+		num: -52, gen: 9, name: "Chilling Mist", type: "Ice", category: "Status",
+		basePower: 0, accuracy: 85, pp: 15, priority: 0,
+		flags: { protect: 1, reflectable: 1, mirror: 1, metronome: 1 },
+		status: 'frb',
+		// Toxic's rule: an Ice-type user can't miss.
+		onModifyMove(move, pokemon) {
+			if (pokemon.hasType('Ice')) move.accuracy = true;
+		},
+		onTryImmunity(target) {
+			return !target.hasType('Fire');
+		},
+		secondary: null,
+		target: "normal", contestType: "Beautiful", velvetShared: true,
+		flavor: "A biting, ghostly mist that numbs whatever it settles on.",
+		shortDesc: "Frostbites the target. Fire immune. Ice-type user: never misses.",
+		desc: "Frostbites the target: its Special Attack is halved and it loses 1/16 of its maximum HP at the end of each turn. Ice types cannot be frostbitten, and Fire-type Pokemon are immune to this move. If the user is an Ice type, this move can't miss.",
+	},
+	velvetpress: {
+		num: -51, gen: 9, name: "Velvet Press", type: "Fairy", category: "Special",
+		basePower: 80, accuracy: 100, pp: 10, priority: 0,
+		overrideOffensiveStat: 'spd',
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		secondary: null,
+		target: "normal", contestType: "Tough", velvetShared: true,
+		flavor: "The user presses its soft, unyielding bulk against the target.",
+		shortDesc: "Uses user's Sp. Def stat as Sp. Atk in damage calculation.",
+		desc: "Damage is calculated using the user's Special Defense stat as its Special Attack, including stat stage changes. Other effects that modify the Special Attack stat are used as normal. The special counterpart of Body Press.",
+	},
+	/*
+	 * Penance - Punishment for the Fairy side (the owner, 29 Sep 2026): special, 75
+	 * power +20 for each of the target's stat boosts, no cap. Another answer to
+	 * the setup this patch added; the Fairy types and Chimai learn it.
+	 */
+	penance: {
+		num: -56, gen: 9, name: "Penance", type: "Fairy", category: "Special",
+		basePower: 0, accuracy: 100, pp: 5, priority: 0,
+		basePowerCallback(pokemon, target) {
+			return 75 + 20 * target.positiveBoosts();
+		},
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		secondary: null,
+		target: "normal", contestType: "Cool", velvetShared: true,
+		flavor: "A radiant judgment that grows harsher the prouder the target has made itself.",
+		shortDesc: "75 power +20 for each of the target's stat boosts. No cap.",
+		desc: "Power is 75, plus 20 for each of the target's positive stat stage changes, with no cap. The Fairy, special counterpart of Punishment.",
+	},
+	velvetguard: {
+		num: -49, gen: 9, name: "Velvet Guard", type: "Fairy", category: "Status",
+		basePower: 0, accuracy: true, pp: 10, priority: 0,
+		flags: { snatch: 1, metronome: 1 },
+		boosts: { spd: 3 },
+		secondary: null,
+		target: "self", contestType: "Cute", velvetShared: true,
+		flavor: "The user wraps itself in soft, thick velvet that turns aside energy attacks.",
+		shortDesc: "Raises the user's Sp. Def by 3.",
+		desc: "Raises the user's Special Defense by 3 stages.",
+	},
+	tremorshot: {
+		num: -48, gen: 9, name: "Tremor Shot", type: "Ground", category: "Special",
+		basePower: 40, accuracy: 100, pp: 30, priority: 1,
+		flags: { protect: 1, mirror: 1, metronome: 1, nonsky: 1 },
+		secondary: null,
+		target: "normal", contestType: "Tough", velvetShared: true,
+		flavor: "A sharp jolt through the earth that reaches the target before it can move.",
+		shortDesc: "Usually goes first.",
+		desc: "No additional effect. A special Ground-type move with +1 priority.",
+	},
+	/*
+	 * Gleamstalk - Luxray's. It locks eyes with its prey through any wall, and
+	 * the prey freezes: the target is paralyzed (through a Substitute), Luxray's
+	 * Speed rises by 2 whether or not the paralysis takes, and its next Electric
+	 * move is charged to double power, as Charge does. It never misses. Dark-type,
+	 * so it paralyzes Ground types and, with Prankster, fails on Dark ones - but it
+	 * is still lightning: Volt Absorb, Lightning Rod, Motor Drive and the like take
+	 * it as they would an Electric move, and then Luxray gets nothing.
+	 */
+	gleamstalk: {
+		num: -28, gen: 9, name: "Gleamstalk", type: "Dark", category: "Status",
+		basePower: 0, accuracy: true, pp: 10, priority: 0,
+		flags: { protect: 1, reflectable: 1, mirror: 1, bypasssub: 1, metronome: 1, nosketch: 1 },
+		onHit(target, source, move) {
+			target.trySetStatus('par', source, move);
+			this.boost({ spe: 2 }, source, source, move);
+			source.addVolatile('charge');
+		},
+		secondary: null,
+		target: "normal", contestType: "Cool",
+		flavor: "Luxray's eyes find its prey through the wall, and the prey forgets how to run.",
+		shortDesc: "Paralyzes the target. User: +2 Speed, next Electric move 2x power.",
+		desc: "Never misses and hits through Substitute. Paralyzes the target, Ground types included; abilities that absorb Electric moves (Volt Absorb, Lightning Rod, Motor Drive and the like) absorb it instead, and then the user gains nothing. Whether or not the paralysis takes, the user's Speed rises by 2 stages and its next Electric-type attack has doubled power, as with Charge.",
+	},
+	/*
+	 * Infernape's two (Patch 1.5), by the owner's request. Great Sage Strike -
+	 * after the Great Sage Equal to Heaven, the monkey king Infernape is drawn
+	 * from - is the Focus Blast that lands: Close Combat on the special side, with the same
+	 * price. Pyre Strike is Flare Blitz without the recoil, so the knife does not
+	 * cut the hand holding it - it keeps the thaw and the burn chance.
+	 */
+	greatsagestrike: {
+		num: -29, gen: 9, name: "Great Sage Strike", type: "Fighting", category: "Special",
+		basePower: 120, accuracy: 100, pp: 5, priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1, nosketch: 1 },
+		self: { boosts: { def: -1, spd: -1 } },
+		secondary: null,
+		target: "normal", contestType: "Tough",
+		flavor: "The strike of the monkey king who called himself Heaven's equal: every limb, all the fire, at once.",
+		shortDesc: "Lowers the user's Defense and Sp. Def by 1.",
+		desc: "Lowers the user's Defense and Special Defense by 1 stage.",
+	},
+	pyrestrike: {
+		num: -30, gen: 9, name: "Pyre Strike", type: "Fire", category: "Physical",
+		basePower: 120, accuracy: 100, pp: 15, priority: 0,
+		flags: { contact: 1, protect: 1, mirror: 1, defrost: 1, metronome: 1, nosketch: 1 },
+		secondary: { chance: 10, status: 'brn' },
+		target: "normal", contestType: "Cool",
+		flavor: "Infernape wraps itself in flame and crashes into the foe - and walks out of the fire unburnt.",
+		shortDesc: "10% chance to burn. Thaws user. No recoil.",
+		desc: "Has a 10% chance to burn the target. If the user is frozen, it thaws out before using this move. Unlike Flare Blitz, the user takes no recoil damage.",
+	},
+	/*
+	 * Torterra's two (Patch 1.5). Elder Timber is Wood Hammer without the recoil:
+	 * the tree on its back is old enough not to splinter. Tectonic Shell is the
+	 * turtle that carries the world settling into it - half its health back, and
+	 * the ground on the other side turns to jagged rock (Stealth Rock).
+	 */
+	eldertimber: {
+		num: -31, gen: 9, name: "Elder Timber", type: "Grass", category: "Physical",
+		basePower: 120, accuracy: 100, pp: 15, priority: 0,
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, nosketch: 1 },
+		secondary: null,
+		target: "normal", contestType: "Tough",
+		flavor: "Torterra swings the ancient tree on its back down on the foe. The wood is too old to splinter.",
+		shortDesc: "No recoil.",
+		desc: "A Wood Hammer that deals no recoil damage to the user.",
+	},
+	tectonicshell: {
+		num: -32, gen: 9, name: "Tectonic Shell", type: "Ground", category: "Status",
+		basePower: 0, accuracy: true, pp: 10, priority: 0,
+		flags: { snatch: 1, heal: 1, metronome: 1, nosketch: 1 },
+		onHit(pokemon) {
+			// 24 Sep 2026, three fixes to match the description (and Recover):
+			// - half of the *base* max HP, as Recover's `heal` takes it, so a
+			//   Dynamaxed Torterra does not heal half of its doubled HP;
+			// - rounded half up (Math.round), where modify() rounded half down;
+			// - no "-fail" line at full HP when the rocks still go up: the move
+			//   did something, and the log said it failed. It fails, properly and
+			//   once, only when neither half did anything.
+			const healed = pokemon.hp < pokemon.maxhp && !!this.heal(Math.round(pokemon.baseMaxhp / 2));
+			const rocks = pokemon.side.foe.addSideCondition('stealthrock', pokemon);
+			if (!healed && !rocks) return false;
+		},
+		secondary: null,
+		target: "self", contestType: "Tough",
+		flavor: "The continent on Torterra's back settles, and the land on the far side splits into jagged stone.",
+		shortDesc: "Heals the user by 50%. Sets Stealth Rock on the foe's side.",
+		desc: "The user restores 1/2 of its maximum HP, rounded half up, and sets Stealth Rock on the opposing side. It still sets the rocks at full HP, and still heals if rocks are already up.",
+	},
+	/*
+	 * Empoleon's two (Patch 1.5). Imperial Torrent is the Hydro Pump that an
+	 * emperor does not miss with. Royal Decree dismisses the foe from its presence
+	 * (Roar) and leaves Spikes where it stood, so every dismissal costs more.
+	 */
+	imperialtorrent: {
+		num: -33, gen: 9, name: "Imperial Torrent", type: "Water", category: "Special",
+		basePower: 110, accuracy: 100, pp: 5, priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1, nosketch: 1 },
+		secondary: null,
+		target: "normal", contestType: "Beautiful",
+		flavor: "The emperor commands the tide, and the tide does not miss.",
+		// 24 Sep 2026: it said "never misses", which is `accuracy: true`. This is
+		// 100% - accuracy drops and evasion still count - so the text says that.
+		shortDesc: "A 110-power Hydro Pump with 100% accuracy.",
+		desc: "A 110-power Water attack with 100% accuracy.",
+	},
+	royaldecree: {
+		num: -34, gen: 9, name: "Royal Decree", type: "Steel", category: "Status",
+		basePower: 0, accuracy: true, pp: 10, priority: -6,
+		flags: { reflectable: 1, mirror: 1, bypasssub: 1, allyanim: 1, metronome: 1, noassist: 1, failcopycat: 1, nosketch: 1 },
+		onHit(target, source) {
+			target.side.addSideCondition('spikes', source);
+		},
+		forceSwitch: true,
+		secondary: null,
+		target: "normal", contestType: "Cool",
+		flavor: "Empoleon points its beak, and the foe is dismissed from the emperor's presence - over a floor of spikes.",
+		shortDesc: "Usually goes last (-6). Forces the target out; sets a layer of Spikes.",
+		desc: "Always goes last (-6 priority). Lays a layer of Spikes on the target's side, then forces the target to switch to a random ally, as Roar does. Bounced back by Magic Bounce.",
+	},
+	/*
+	 * Soul Toll - Spiritomb's (Patch 1.5). Touch the keystone and the toll comes due:
+	 * against a cursed target - and Keystone Legion curses whoever tries to finish
+	 * Spiritomb - it strikes first (+1 priority), the power doubles, and Spiritomb
+	 * takes half the damage back as HP.
+	 * Spiritomb's Attack and Sp. Atk are equal, so it strikes with whichever is higher
+	 * (boosts included), physical or special.
+	 */
+	/*
+	 * Thorned Bouquet - Roserade's (Patch 1.5). The bouquet in each hand: one of
+	 * flowers, one hiding thorns. A draining Grass attack that always poisons, and once the
+	 * target is poisoned the thorns count too - it also hits as Poison, the way
+	 * Flying Press is Fighting and Flying at once.
+	 */
+	thornedbouquet: {
+		num: -36, gen: 9, name: "Thorned Bouquet", type: "Grass", category: "Special",
+		// Drains like Giga Drain, by the owner's call, at its own 90 power; the thorns
+		// always poison.
+		basePower: 90, accuracy: 100, pp: 10, priority: 0,
+		flags: { protect: 1, mirror: 1, heal: 1, metronome: 1, nosketch: 1 },
+		drain: [1, 2],
+		onEffectiveness(typeMod, target, type, move) {
+			if (target && ['psn', 'tox'].includes(target.status)) return typeMod + this.dex.getEffectiveness('Poison', type);
+		},
+		secondary: { chance: 100, status: 'psn' },
+		target: "normal", contestType: "Beautiful",
+		flavor: "One bouquet is flowers. The other is thorns, and they are poisoned.",
+		shortDesc: "Heals 50% of damage dealt. Poisons the target. Already poisoned? Hits as Grass and Poison.",
+		// 24 Sep 2026: the type notes were wrong. Fairy never resisted Grass (it
+		// takes the Poison half super effectively), and Steel's immunity to Poison
+		// is not carried over by the second chart - it counts as neutral there - so
+		// Steel still just resists it. Badly poisoned counts as poisoned.
+		desc: "The user heals by half the damage it deals, and the target is poisoned. If the target was already poisoned or badly poisoned before the hit, the attack counts as both Grass and Poison type for how effective it is: Grass types take it neutrally, Fairy types super effectively, Poison types resist it doubly, and Steel types still only resist it.",
+	},
+	soultoll: {
+		num: -35, gen: 9, name: "Soul Toll", type: "Ghost", category: "Physical",
+		basePower: 90, accuracy: 100, pp: 10, priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1, nosketch: 1 },
+		basePowerCallback(pokemon, target, move) {
+			// Hex's rule too: any status condition doubles it (the two do not stack).
+			return target && (target.volatiles['curse'] || target.status) ? move.basePower * 2 : move.basePower;
+		},
+		// Priority is decided before a target is, so it asks whether the foe in front
+		// of it is cursed (in doubles: either foe).
+		onModifyPriority(priority, source) {
+			if (source && source.foes().some(foe => foe.volatiles['curse'])) return priority + 1;
+		},
+		onModifyMove(move, pokemon, target) {
+			if (pokemon.getStat('atk', false, true) < pokemon.getStat('spa', false, true)) move.category = 'Special';
+			if (target && target.volatiles['curse']) move.drain = [1, 2];
+		},
+		secondary: null,
+		target: "normal", contestType: "Tough",
+		flavor: "The 108 spirits collect what they are owed.",
+		shortDesc: "Higher atk stat. 2x power vs cursed or statused. Vs cursed: +1 priority, 50% drain.",
+		desc: "This move is special if the user's Special Attack is higher than its Attack (boosts included), physical otherwise. If the target is cursed (as by Curse or Keystone Legion) or has a non-volatile status condition, as with Hex, this move's power doubles to 180; the two do not stack. If the target is cursed, the user also recovers 1/2 of the HP lost by the target, rounded half up. While an opposing Pokemon is cursed, this move has +1 priority.",
+	},
+	continentalheave: {
+		num: -20, gen: 9, name: "Continental Heave", type: "Normal", category: "Physical",
+		basePower: 110, accuracy: 100, pp: 5, priority: 0,
+		breaksProtect: true,
+		onTryHit(target) {
+			if (!target.runImmunity('Normal')) return;
+			let shattered = false;
+			for (const screen of ['reflect', 'lightscreen', 'auroraveil']) {
+				if (target.side.removeSideCondition(screen)) shattered = true;
+			}
+			if (shattered) this.add('-message', `The ground itself heaves, and ${target.side.name}'s screens shatter!`);
+		},
+		flags: { contact: 1, mirror: 1, metronome: 1, nosketch: 1 },
+		secondary: null, target: "normal", contestType: "Tough",
+		flavor: "The strength that once dragged continents across the sea, brought down on a single foe.",
+		shortDesc: "Ignores Protect. Breaks screens. Regigigas's signature move.",
+		desc: "The strength that dragged continents across the sea. Hits through Protect, Detect and similar moves, and destroys Reflect, Light Screen and Aurora Veil on the target's side before dealing damage.",
+	},
+	/*
+	 * Bulldog Maul - Granbull's (29 Sep 2026, the owner: "BUFF this man"). The
+	 * bulldog bites down and does not let go: a Fairy bite that traps, and with
+	 * Bulldog Grip (Strong Jaw) behind it, 80 power plays like 120.
+	 */
+	bulldogmaul: {
+		num: -57, gen: 9, name: "Bulldog Maul", type: "Fairy", category: "Physical",
+		basePower: 80, accuracy: 100, pp: 10, priority: 0,
+		flags: { contact: 1, protect: 1, mirror: 1, bite: 1, metronome: 1 },
+		secondary: {
+			chance: 100,
+			onHit(target, source, move) {
+				if (source.isActive) target.addVolatile('trapped', source, move, 'trapper');
+			},
+		},
+		target: "normal", contestType: "Tough",
+		flavor: "The bulldog clamps its jaws shut and simply refuses to let go.",
+		shortDesc: "Prevents the target from switching out. Biting move.",
+		desc: "The user bites down and will not let go. The target cannot switch out while the user stays on the field (Ghost types still can). Boosted by Strong Jaw and Bulldog Grip.",
+	},
+	/*
+	 * The Tapus' signatures (the owner, 30 Sep 2026): one each, built on the terrain
+	 * each one sets on entry.
+	 */
+	// Koko: a Rising Voltage with a higher base (85 vs 70) and a smaller terrain boost
+	// (1.5x, 127 vs 140), hitting with Koko's better attacking stat.
+	uilasurge: {
+		num: -58, gen: 9, name: "Uila Surge", type: "Electric", category: "Special",
+		basePower: 85, accuracy: 100, pp: 15, priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		onModifyMove(move, pokemon) {
+			if (pokemon.getStat('atk', false, true) > pokemon.getStat('spa', false, true)) move.category = 'Physical';
+		},
+		onBasePower(basePower, source, target) {
+			if (this.field.isTerrain('electricterrain') && target && target.isGrounded()) return this.chainModify(1.5);
+		},
+		secondary: null, target: "normal", contestType: "Cool",
+		flavor: "The guardian of Melemele calls down its own storm.",
+		shortDesc: "Uses the user's better attacking stat. 1.5x power on Electric Terrain.",
+		desc: "Uses whichever of the user's Attack or Special Attack is higher, before any boosts. Power is multiplied by 1.5 if the target is grounded while Electric Terrain is active.",
+	},
+	// Lele: hits whichever of the target's defences is lower, boosts included.
+	manapierce: {
+		num: -59, gen: 9, name: "Mana Pierce", type: "Psychic", category: "Special",
+		basePower: 100, accuracy: 100, pp: 10, priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		onModifyMove(move, pokemon, target) {
+			if (!target) return;
+			// Stat stages included: a Sp. Def boost sends it at Defense instead.
+			move.overrideDefensiveStat = target.getStat('def', false, true) < target.getStat('spd', false, true) ? 'def' : 'spd';
+		},
+		secondary: null, target: "normal", contestType: "Clever",
+		flavor: "The guardian of Akala reads where the target is weakest, and strikes there.",
+		shortDesc: "Hits the target's lower defence (Def or Sp. Def), boosts included.",
+		desc: "Deals damage against whichever of the target's Defense or Special Defense is lower, counting stat stages. Uses the user's Special Attack.",
+	},
+	// Bulu: a Grassy Glide a touch harder than the Simi monkeys' Jungle Rush with the
+	// Elemental Banana (80 x 1.3 = 104).
+	nahelerush: {
+		num: -60, gen: 9, name: "Nahele Rush", type: "Grass", category: "Physical",
+		basePower: 105, accuracy: 100, pp: 10, priority: 0,
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		onModifyPriority(priority, source) {
+			if (this.field.isTerrain('grassyterrain') && source.isGrounded()) return priority + 1;
+		},
+		secondary: null, target: "normal", contestType: "Tough",
+		flavor: "The guardian of Ula'ula charges through its own forest.",
+		shortDesc: "User on Grassy Terrain: +1 priority.",
+		desc: "Gains +1 priority while Grassy Terrain is active and the user is grounded.",
+	},
+	// Fini: a Fairy Rising Voltage for Misty Terrain.
+	ohuwave: {
+		num: -61, gen: 9, name: "Ohu Wave", type: "Fairy", category: "Special",
+		basePower: 80, accuracy: 100, pp: 15, priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		onBasePower(basePower) {
+			if (this.field.isTerrain('mistyterrain')) return this.chainModify(2);
+		},
+		secondary: null, target: "normal", contestType: "Beautiful",
+		flavor: "The guardian of Poni rides its own mist in.",
+		shortDesc: "2x power on Misty Terrain.",
+		desc: "Power doubles while Misty Terrain is active.",
+	},
+};
+
+/*
+ * Colossus Unbound.
+ *
+ * Slow Start was a joke told at a legend's expense for eighteen years: 670 base
+ * stats that spend their first five turns at half strength. This is the ability
+ * the Pokemon deserved. Mold Breaker, so nothing's ability softens its blows;
+ * Clear Body, so nothing talks it down; and 1.2x Attack while above half HP -
+ * enormous, but finite, and gone the moment it is worn down.
+ *
+ * Ubers, and moved there in tiering.js.
+ */
+/** The lake trio's shared gift: their Psychic moves hit Dark types. */
+function psychicHitsDark(move) {
+	if (move.type !== 'Psychic' || move.ignoreImmunity === true) return;
+	if (!move.ignoreImmunity) move.ignoreImmunity = {};
+	move.ignoreImmunity['Psychic'] = true;
+}
+
+exports.ABILITIES = {
+	/*
+	 * Mudflat Ambush - Stunfisk's, both formes.
+	 *
+	 * A flat fish buried in the mud, waiting to be stepped on. Three abilities'
+	 * worth of trap: anything that touches it takes 1/8 of its HP (Rough Skin)
+	 * and may be paralysed (Static, 30%), and Electric moves are soaked up to heal
+	 * a quarter (Volt Absorb). Strong for a slow, bulky PU Pokemon; none of it
+	 * helps it hit harder.
+	 */
+	mudflatambush: {
+		name: "Mudflat Ambush",
+		onTryHitPriority: 1,
+		onTryHit(target, source, move) {
+			if (target !== source && move.type === 'Electric') {
+				if (!this.heal(target.baseMaxhp / 4)) this.add('-immune', target, '[from] ability: Mudflat Ambush');
+				return null;
+			}
+		},
+		onDamagingHitOrder: 1,
+		onDamagingHit(damage, target, source, move) {
+			if (!this.checkMoveMakesContact(move, source, target, true)) return;
+			this.damage(source.baseMaxhp / 8, source, target);
+			if (this.randomChance(3, 10)) source.trySetStatus('par', target);
+		},
+		flags: { breakable: 1 },
+		rating: 3.5,
+		num: -8,
+		gen: 9,
+		flavor: "Step on a Stunfisk and you'll find out why it's smiling.",
+		shortDesc: "Contact attackers lose 1/8 HP, 30% paralysis. Electric moves heal it 1/4.",
+		desc: "Pokemon making contact with this Pokemon lose 1/8 of their maximum HP, rounded down, and have a 30% chance to be paralyzed. This Pokemon is immune to Electric-type moves and restores 1/4 of its maximum HP, rounded down, when hit by one.",
+	},
+	/*
+	 * Polar Mantle - Articuno's.
+	 *
+	 * Ice/Flying's whole problem is Rock: a quarter of its HP to Stealth Rock on
+	 * every entry, and double damage from every Rock move. The mantle halves both,
+	 * and it brings the snow with it (Snow Warning), which raises an Ice-type's
+	 * Defense and makes Blizzard and Aurora Squall sure hits.
+	 */
+	polarmantle: {
+		name: "Polar Mantle",
+		onStart(source) {
+			this.field.setWeather('snowscape');
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.type === 'Rock') {
+				this.debug('Polar Mantle halves Rock');
+				return this.chainModify(0.5);
+			}
+		},
+		onDamage(damage, target, source, effect) {
+			if (effect && effect.id === 'stealthrock') return Math.max(1, Math.floor(damage / 2));
+		},
+		flags: { breakable: 1 },
+		rating: 4,
+		num: -9,
+		gen: 9,
+		flavor: "The legendary bird of ice arrives wrapped in the blizzard it was named for.",
+		shortDesc: "Sets snow on entry. Takes half damage from Rock moves and Stealth Rock.",
+		desc: "On switch-in, this Pokemon summons snow. It takes half damage from Rock-type moves and from Stealth Rock.",
+	},
+	/*
+	 * Permafrost Core - Regice's.
+	 *
+	 * Regice's 200 Special Defense was always undone by being weak to Fire,
+	 * Fighting, Rock and Steel. The core is cold enough that Fire and Fighting
+	 * do half, and nothing can burn or freeze it. Two of four weaknesses,
+	 * softened, on a special wall: bulk, not power.
+	 */
+	permafrostcore: {
+		name: "Permafrost Core",
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.type === 'Fire' || move.type === 'Fighting') {
+				this.debug('Permafrost Core halves');
+				return this.chainModify(0.5);
+			}
+		},
+		onSetStatus(status, target, source, effect) {
+			if (status.id !== 'brn' && status.id !== 'frz') return;
+			if (effect && effect.status) this.add('-immune', target, '[from] ability: Permafrost Core');
+			return false;
+		},
+		flags: { breakable: 1 },
+		rating: 3.5,
+		num: -10,
+		gen: 9,
+		flavor: "Ice that has not melted in ten thousand years does not start now.",
+		shortDesc: "Takes half damage from Fire and Fighting moves. Can't be burned or frozen.",
+		desc: "This Pokemon takes half damage from Fire-type and Fighting-type moves, and cannot be burned or frozen.",
+	},
+	/*
+	 * Bedrock Core - Regirock's (the owner, 29 Sep 2026: "wasn't given as much love as
+	 * Regice"). Permafrost Core's mirror: half damage from Water and Grass, its two
+	 * commonest weaknesses, and it can't be poisoned.
+	 */
+	bedrockcore: {
+		name: "Bedrock Core",
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.type === 'Water' || move.type === 'Grass') {
+				this.debug('Bedrock Core halves');
+				return this.chainModify(0.5);
+			}
+		},
+		onSetStatus(status, target, source, effect) {
+			if (status.id !== 'psn' && status.id !== 'tox') return;
+			if (effect && effect.status) this.add('-immune', target, '[from] ability: Bedrock Core');
+			return false;
+		},
+		flags: { breakable: 1 },
+		rating: 3.5,
+		num: -35,
+		gen: 9,
+		flavor: "Stone older than the sea itself shrugs off water and roots alike.",
+		shortDesc: "Takes half damage from Water and Grass moves. Can't be poisoned.",
+		desc: "This Pokemon takes half damage from Water-type and Grass-type moves, and cannot be poisoned or badly poisoned.",
+	},
+	/*
+	 * Mind Keeper - Uxie's. Knowledge as armour: it ignores every foe's stat
+	 * changes (Unaware) and takes 3/4 damage from super-effective hits (Filter).
+	 */
+	mindkeeper: {
+		name: "Mind Keeper",
+		onModifyMovePriority: -5,
+		onModifyMove: psychicHitsDark,
+		onAnyModifyBoost(boosts, pokemon) {
+			const user = this.effectState.target;
+			if (user === pokemon) return;
+			if (user === this.activePokemon && pokemon === this.activeTarget) {
+				boosts['def'] = 0; boosts['spd'] = 0; boosts['evasion'] = 0;
+			}
+			if (pokemon === this.activePokemon && user === this.activeTarget) {
+				boosts['atk'] = 0; boosts['def'] = 0; boosts['spa'] = 0; boosts['accuracy'] = 0;
+			}
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (target.getMoveHitData(move).typeMod > 0) return this.chainModify(0.75);
+		},
+		flags: { breakable: 1 },
+		rating: 4,
+		num: -11,
+		gen: 9,
+		flavor: "It already knows every trick you were about to try.",
+		shortDesc: "Ignores foes' stat changes. 0.75x super-effective damage. Psychic moves hit Dark types.",
+		desc: "This Pokemon ignores other Pokemon's stat stages when taking or doing damage, receives 3/4 damage from supereffective attacks, and its Psychic-type moves can hit Dark-type Pokemon.",
+	},
+	/*
+	 * Heartfelt Resolve - Mesprit's. Every time a super-effective hit lands on
+	 * it, the hurt becomes power: +1 Special Attack. Repeatable, but only on the
+	 * hits that were meant to finish it.
+	 */
+	heartfeltresolve: {
+		name: "Heartfelt Resolve",
+		onModifyMovePriority: -5,
+		onModifyMove: psychicHitsDark,
+		onDamagingHit(damage, target, source, move) {
+			if (target.hp && target.getMoveHitData(move).typeMod > 0) this.boost({ spa: 1 }, target, target);
+		},
+		flags: {},
+		rating: 3.5,
+		num: -12,
+		gen: 9,
+		flavor: "Hurt it where it's weakest and it only feels more.",
+		shortDesc: "Super-effective hit taken: +1 Sp. Atk. Psychic moves hit Dark types.",
+		desc: "When this Pokemon is damaged by a super-effective attack and is not knocked out, its Special Attack is raised by 1 stage. Its Psychic-type moves can hit Dark-type Pokemon.",
+	},
+	/*
+	 * Unbending Will - Azelf's. Willpower that does not accept "not very
+	 * effective": resisted hits deal double (Tinted Lens), and its Psychic
+	 * moves hit Dark types.
+	 */
+	unbendingwill: {
+		name: "Unbending Will",
+		onModifyMovePriority: -5,
+		onModifyMove: psychicHitsDark,
+		onModifyDamage(damage, source, target, move) {
+			if (target.getMoveHitData(move).typeMod < 0) return this.chainModify(2);
+		},
+		flags: {},
+		rating: 4,
+		num: -13,
+		gen: 9,
+		flavor: "Azelf does not accept that anything is out of reach.",
+		shortDesc: "Not-very-effective hits deal double. Psychic moves hit Dark types.",
+		desc: "This Pokemon's attacks that are not very effective on a target deal double damage, and its Psychic-type moves can hit Dark-type Pokemon.",
+	},
+	/*
+	 * The eeveelutions' signatures. Glaceon and Leafeon bring their own weather
+	 * and double their Speed in it, a five-turn sweep that needs no teammate;
+	 * Flareon sets itself alight and runs on the burn.
+	 */
+	diamonddust: {
+		name: "Diamond Dust",
+		onStart(source) {
+			this.field.setWeather('snowscape');
+		},
+		onModifySpe(spe, pokemon) {
+			if (this.field.isWeather(['hail', 'snowscape'])) return this.chainModify(2);
+		},
+		flags: {},
+		rating: 4,
+		num: -14,
+		gen: 9,
+		flavor: "The air around Glaceon freezes into glittering motes, and it moves through them like light.",
+		shortDesc: "Sets snow on entry. Doubles Speed in snow.",
+		desc: "On switch-in, this Pokemon summons snow. Its Speed is doubled while it is snowing.",
+	},
+	solstice: {
+		name: "Solstice",
+		onStart(source) {
+			this.field.setWeather('sunnyday');
+		},
+		onModifySpe(spe, pokemon) {
+			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather())) return this.chainModify(2);
+		},
+		flags: {},
+		rating: 4,
+		num: -15,
+		gen: 9,
+		flavor: "Leafeon unfurls, and it is midsummer wherever it stands.",
+		shortDesc: "Sets harsh sunlight on entry. Doubles Speed in sun.",
+		desc: "On switch-in, this Pokemon summons harsh sunlight. Its Speed is doubled while the sunlight is harsh, unless it holds a Utility Umbrella.",
+	},
+	kindledfury: {
+		name: "Kindled Fury",
+		onStart(pokemon) {
+			// Fire types cannot be burned; this one does it to itself anyway.
+			if (!pokemon.status) pokemon.setStatus('brn', pokemon, this.effect, true);
+		},
+		onResidualOrder: 28,
+		onResidualSubOrder: 2,
+		onResidual(pokemon) {
+			if (pokemon.activeTurns) this.boost({ spe: 1 });
+		},
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, pokemon) {
+			if (pokemon.status) return this.chainModify(1.5);
+		},
+		// Guts: the burn does not halve its physical damage. The engine only skips
+		// the halving for Guts by name, so it is undone here (Facade is never halved).
+		onModifyDamage(damage, source, target, move) {
+			if (source.status === 'brn' && move.category === 'Physical' && move.id !== 'facade') return this.chainModify(2);
+		},
+		flags: {},
+		rating: 4.5,
+		num: -16,
+		gen: 9,
+		flavor: "Flareon sets its own mane alight, and the longer it burns the faster it runs.",
+		shortDesc: "Burns itself on entry. Speed Boost + Guts; its burn does not halve its Attack.",
+		desc: "On switch-in, this Pokemon burns itself if it has no status, even though it is a Fire type. Its Speed rises by 1 stage at the end of each full turn on the field, its Attack is multiplied by 1.5 while it has a status condition, and a burn does not halve its physical damage.",
+	},
+	/*
+	 * Moonlit Venom - Umbreon's. Its sweat turns poisonous under the moon: no
+	 * status condition takes hold (Purifying Salt's immunity, so Rest fails too),
+	 * and its poison reaches Steel and Poison types (Corrosion).
+	 */
+	moonlitvenom: {
+		name: "Moonlit Venom",
+		onSetStatus(status, target, source, effect) {
+			if (effect && effect.status) this.add('-immune', target, '[from] ability: Moonlit Venom');
+			return false;
+		},
+		onTryAddVolatile(status, target) {
+			if (status.id === 'yawn') {
+				this.add('-immune', target, '[from] ability: Moonlit Venom');
+				return null;
+			}
+		},
+		// Corrosion is checked by name inside the engine, so the poison is applied
+		// here instead, past the type immunity and through every other check.
+		onModifyMove(move) {
+			const corrode = effect => {
+				if (!effect || (effect.status !== 'psn' && effect.status !== 'tox')) return;
+				const status = effect.status;
+				delete effect.status;
+				effect.onHit = function (target, source, active) {
+					return target.setStatus(target.status || status, source, active, true);
+				};
+			};
+			corrode(move);
+			for (const secondary of move.secondaries || []) corrode(secondary);
+		},
+		flags: { breakable: 1 },
+		rating: 4,
+		num: -17,
+		gen: 9,
+		flavor: "Under the moon, Umbreon's sweat turns to venom that nothing can wash away, and nothing can touch.",
+		shortDesc: "Immune to status conditions. Can poison Steel and Poison types.",
+		desc: "This Pokemon cannot be poisoned, burned, paralyzed, put to sleep or frozen, and cannot become drowsy; Rest fails. Its moves can poison Steel-type and Poison-type Pokemon.",
+	},
+	/*
+	 * Prescience - Espeon's. It sees the harm coming: only attacks damage it
+	 * (Magic Guard), and status moves and hazards aimed at it bounce back
+	 * (Magic Bounce).
+	 */
+	prescience: {
+		name: "Prescience",
+		onSwitchOut(pokemon) {
+			pokemon.heal(pokemon.baseMaxhp / 3);
+		},
+		onDamage(damage, target, source, effect) {
+			if (effect.effectType !== 'Move') {
+				if (effect.effectType === 'Ability') this.add('-activate', source, 'ability: ' + effect.name);
+				return false;
+			}
+		},
+		onTryHitPriority: 1,
+		onTryHit(target, source, move) {
+			if (target === source || move.hasBounced || !move.flags['reflectable'] || target.isSemiInvulnerable()) return;
+			const newMove = this.dex.getActiveMove(move.id);
+			newMove.hasBounced = true;
+			newMove.pranksterBoosted = false;
+			this.actions.useMove(newMove, target, { target: source });
+			return null;
+		},
+		onAllyTryHitSide(target, source, move) {
+			if (target.isAlly(source) || move.hasBounced || !move.flags['reflectable'] || target.isSemiInvulnerable()) return;
+			const newMove = this.dex.getActiveMove(move.id);
+			newMove.hasBounced = true;
+			newMove.pranksterBoosted = false;
+			this.actions.useMove(newMove, this.effectState.target, { target: source });
+			move.hasBounced = true;
+			return null;
+		},
+		flags: { breakable: 1 },
+		rating: 5,
+		num: -18,
+		gen: 9,
+		flavor: "The jewel on Espeon's brow glows before any harm arrives, and the harm turns around.",
+		shortDesc: "Magic Guard + Magic Bounce + Regenerator.",
+		desc: "This Pokemon can only be damaged by direct attacks, and it reflects back status moves and hazards aimed at it or its side, as Magic Bounce does. It restores 1/3 of its maximum HP when it switches out.",
+	},
+	/*
+	 * Liquid Body - Vaporeon's. It melts into water: Water moves heal it instead
+	 * (Water Absorb), and it recovers a third of its HP on switching out
+	 * (Regenerator).
+	 */
+	liquidbody: {
+		name: "Liquid Body",
+		onTryHit(target, source, move) {
+			if (target !== source && move.type === 'Water') {
+				if (!this.heal(target.baseMaxhp / 4)) this.add('-immune', target, '[from] ability: Liquid Body');
+				return null;
+			}
+		},
+		onSwitchOut(pokemon) {
+			pokemon.heal(pokemon.baseMaxhp / 3);
+		},
+		flags: { breakable: 1 },
+		rating: 4.5,
+		num: -19,
+		gen: 9,
+		flavor: "Vaporeon dissolves into the water around it and comes back whole.",
+		shortDesc: "Water Absorb + Regenerator.",
+		desc: "This Pokemon is immune to Water-type moves and heals 1/4 of its maximum HP when hit by one. It restores 1/3 of its maximum HP when it switches out.",
+	},
+	/*
+	 * Static Needles - Jolteon's. Its fur bristles into charged needles:
+	 * Electric moves heal it and raise its Speed (Volt Absorb and Motor Drive),
+	 * and touching it can paralyze (Static).
+	 */
+	staticneedles: {
+		name: "Static Needles",
+		onTryHit(target, source, move) {
+			if (target !== source && move.type === 'Electric') {
+				const healed = this.heal(target.baseMaxhp / 4);
+				const boosted = this.boost({ spe: 1 });
+				if (!healed && !boosted) this.add('-immune', target, '[from] ability: Static Needles');
+				return null;
+			}
+		},
+		onDamagingHit(damage, target, source, move) {
+			if (this.checkMoveMakesContact(move, source, target) && this.randomChance(3, 10)) {
+				source.trySetStatus('par', target);
+			}
+		},
+		flags: { breakable: 1 },
+		rating: 3.5,
+		num: -20,
+		gen: 9,
+		flavor: "Every hair on Jolteon stands up as a needle full of lightning.",
+		shortDesc: "Electric immunity: heals 1/4 and +1 Speed. 30% to paralyze on contact.",
+		desc: "This Pokemon is immune to Electric-type moves; when hit by one it heals 1/4 of its maximum HP and its Speed rises by 1 stage. Pokemon making contact with it have a 30% chance to be paralyzed.",
+	},
+	/*
+	 * Ribbon Hymn - Sylveon's. Its Normal moves become Fairy with a 1.3x boost
+	 * (Pixilate), and its ribbons hush sound moves aimed at it (Soundproof).
+	 */
+	ribbonhymn: {
+		name: "Ribbon Hymn",
+		onModifyTypePriority: -1,
+		onModifyType(move, pokemon) {
+			const noModifyType = ['judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'terrainpulse', 'weatherball'];
+			if (move.type === 'Normal' && (!noModifyType.includes(move.id) || (this.activeMove && this.activeMove.isMax)) &&
+				!(move.isZ && move.category !== 'Status') && !(move.name === 'Tera Blast' && pokemon.terastallized)) {
+				move.type = 'Fairy';
+				move.typeChangerBoosted = this.effect;
+			}
+		},
+		onBasePowerPriority: 23,
+		onBasePower(basePower, pokemon, target, move) {
+			if (move.typeChangerBoosted === this.effect) return this.chainModify([5325, 4096]);
+		},
+		onTryHit(target, source, move) {
+			if (target !== source && move.flags['sound']) {
+				this.add('-immune', target, '[from] ability: Ribbon Hymn');
+				return null;
+			}
+		},
+		onAllyTryHitSide(target, source, move) {
+			if (move.flags['sound']) this.add('-immune', this.effectState.target, '[from] ability: Ribbon Hymn');
+		},
+		flags: { breakable: 1 },
+		rating: 4,
+		num: -21,
+		gen: 9,
+		flavor: "Sylveon's ribbons sing a quiet hymn that turns every sound it makes to a Fairy's, and hushes any aimed at it.",
+		shortDesc: "Pixilate + Soundproof.",
+		desc: "This Pokemon's Normal-type moves become Fairy type and have 1.3x power. It is immune to sound-based moves.",
+	},
+	colossusunbound: {
+		name: "Colossus Unbound",
+		onStart(pokemon) {
+			this.add('-ability', pokemon, 'Colossus Unbound');
+			this.add('-message', `${pokemon.name} has awoken, and it is unbound!`);
+		},
+		onModifyMove(move) {
+			move.ignoreAbility = true;
+		},
+		onTryBoost(boost, target, source, effect) {
+			if (source && target === source) return;
+			let refused = false;
+			for (const stat in boost) {
+				if (boost[stat] < 0) {
+					delete boost[stat];
+					refused = true;
+				}
+			}
+			if (refused && !effect.secondaries && effect.id !== 'octolock') {
+				this.add('-fail', target, 'unboost', '[from] ability: Colossus Unbound', `[of] ${target}`);
+			}
+		},
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, pokemon) {
+			if (pokemon.hp > pokemon.maxhp / 2) {
+				this.debug('Colossus Unbound boost');
+				return this.chainModify([4915, 4096]);
+			}
+		},
+		flags: { breakable: 1 },
+		rating: 4.5,
+		num: -7,
+		gen: 9,
+		flavor: "The titan that moved the continents, no longer waking slowly.",
+		shortDesc: "Mold Breaker + Clear Body. 1.2x Attack while above 50% HP.",
+		desc: "This Pokemon's moves and their effects ignore the Abilities of other Pokemon, other Pokemon cannot lower its stat stages, and its Attack is multiplied by 1.2 while its HP is above half.",
+	},
+	/*
+	 * Crown of Flame - Infernape's (Patch 1.5). Simisear, with the Elemental Banana,
+	 * Solar Surge and Cinder Rush, had become a better Infernape than Infernape.
+	 * This is what the Simisear can't be: a Fire/Fighting mixed attacker whose
+	 * crown burns hotter the harder it hits. Its two abilities fused and made
+	 * constant - Blaze without the wait, Iron Fist - so Mach Punch, Drain Punch
+	 * and Fire Punch are where it is strongest, with no weather or item needed.
+	 * And a built-in Expert Belt, by the owner's call: Infernape is the pocket
+	 * knife, with an answer for everything - Ice, Thunder and Fire Punch, Grass
+	 * Knot, U-turn, Knock Off, Stealth Rock, Taunt, Encore, Will-O-Wisp - and
+	 * whichever blade it picks for the target cuts deeper, with the item slot
+	 * still free.
+	 */
+	crownofflame: {
+		name: "Crown of Flame",
+		onBasePowerPriority: 23,
+		onBasePower(basePower, attacker, defender, move) {
+			let mod = 4096;
+			if (move.type === 'Fire' || move.type === 'Fighting') mod = Math.round(mod * 5325 / 4096);
+			if (move.flags['punch']) mod = Math.round(mod * 4915 / 4096);
+			if (mod !== 4096) return this.chainModify([mod, 4096]);
+		},
+		// A built-in Expert Belt, so the item slot stays free for the rest of the knife.
+		onModifyDamage(damage, source, target, move) {
+			if (move && target.getMoveHitData(move).typeMod > 0) return this.chainModify([4915, 4096]);
+		},
+		flags: {},
+		rating: 4,
+		num: -22,
+		gen: 9,
+		flavor: "The flame on Infernape's head is a crown, and every blow it lands makes it burn brighter.",
+		shortDesc: "Fire/Fighting moves 1.3x, punches 1.2x, super effective hits 1.2x (all stack).",
+		desc: "This Pokemon's Fire- and Fighting-type moves have 1.3x power, and its punch-based moves have 1.2x power; a Fire or Fighting punch gets both. Its super effective attacks also deal 1.2x damage, as if it held an Expert Belt, and this stacks with a held item.",
+	},
+	/*
+	 * The Sinnoh starters' abilities (Patch 1.5), and lesser ones for the first two
+	 * stages, each with a name of its own. Every one boosts the line's two types;
+	 * the final stage adds the rest.
+	 */
+	kindlingcrown: {
+		name: "Kindling Crown",
+		onBasePowerPriority: 23,
+		onBasePower(basePower, attacker, defender, move) {
+			let mod = 4096;
+			if (move.type === 'Fire' || move.type === 'Fighting') mod = Math.round(mod * 4915 / 4096);
+			if (move.flags['punch']) mod = Math.round(mod * 4505 / 4096);
+			if (mod !== 4096) return this.chainModify([mod, 4096]);
+		},
+		flags: {},
+		rating: 3,
+		num: -23,
+		gen: 9,
+		flavor: "The first sparks of a crown that has not caught yet.",
+		shortDesc: "Fire and Fighting moves 1.2x power; punching moves 1.1x (both stack).",
+		desc: "This Pokemon's Fire- and Fighting-type moves have 1.2x power, and its punch-based moves have 1.1x power; a Fire or Fighting punch gets both.",
+	},
+	worldturtle: {
+		name: "World Turtle",
+		onBasePowerPriority: 23,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.type === 'Grass' || move.type === 'Ground') return this.chainModify([5325, 4096]);
+		},
+		onCriticalHit: false,
+		onSourceModifyDamage(damage, source, target, move) {
+			if (target.getMoveHitData(move).typeMod > 0) return this.chainModify(0.75);
+		},
+		flags: { breakable: 1 },
+		rating: 4,
+		num: -24,
+		gen: 9,
+		flavor: "People once believed a giant Torterra carried the world on its back. Nothing is getting through that shell.",
+		shortDesc: "Grass/Ground moves 1.3x. Can't be crit. Super effective hits on it 0.75x.",
+		desc: "This Pokemon's Grass- and Ground-type moves have 1.3x power. It cannot be struck by a critical hit (Shell Armor), and super effective attacks against it deal 3/4 damage (Solid Rock).",
+	},
+	saplingshell: {
+		name: "Sapling Shell",
+		onBasePowerPriority: 23,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.type === 'Grass' || move.type === 'Ground') return this.chainModify([4915, 4096]);
+		},
+		onCriticalHit: false,
+		flags: { breakable: 1 },
+		rating: 3,
+		num: -25,
+		gen: 9,
+		flavor: "A shell hardening around a sapling that will one day be a forest.",
+		shortDesc: "Grass and Ground moves 1.2x power. Can't be struck by a critical hit.",
+		desc: "This Pokemon's Grass- and Ground-type moves have 1.2x power, and it cannot be struck by a critical hit.",
+	},
+	emperorspride: {
+		name: "Emperor's Pride",
+		onBasePowerPriority: 23,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.type === 'Water' || move.type === 'Steel') return this.chainModify([5325, 4096]);
+		},
+		// Competitive's own code, since an ability can only have one name.
+		onAfterEachBoost(boost, target, source, effect) {
+			if (!source || target.isAlly(source)) return;
+			for (const stat in boost) {
+				if (boost[stat] < 0) {
+					this.boost({ spa: 2 }, target, target, null, false, true);
+					return;
+				}
+			}
+		},
+		// Queenly Majesty: priority aimed at the emperor or its allies does not reach it.
+		onFoeTryMove(target, source, move) {
+			const targetAllExceptions = ['perishsong', 'flowershield', 'rototiller'];
+			if (move.target === 'foeSide' || (move.target === 'all' && !targetAllExceptions.includes(move.id))) return;
+			const holder = this.effectState.target;
+			if ((source.isAlly(holder) || move.target === 'all') && move.priority > 0.1) {
+				this.attrLastMove('[still]');
+				this.add('cant', holder, "ability: Emperor's Pride", move, '[of] ' + target);
+				return false;
+			}
+		},
+		flags: { breakable: 1 },
+		rating: 4,
+		num: -26,
+		gen: 9,
+		flavor: "Hurt Empoleon's pride and it only grows fiercer - and no one strikes before the emperor.",
+		shortDesc: "Water/Steel moves 1.3x. Competitive. Immune to priority moves.",
+		desc: "This Pokemon's Water- and Steel-type moves have 1.3x power. When an opponent lowers any of its stats, its Special Attack rises by 2 stages (Competitive). Opposing moves with priority above 0 cannot target it or its allies (Queenly Majesty).",
+	},
+	proudchick: {
+		name: "Proud Chick",
+		onBasePowerPriority: 23,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.type === 'Water' || move.type === 'Steel') return this.chainModify([4915, 4096]);
+		},
+		onAfterEachBoost(boost, target, source, effect) {
+			if (!source || target.isAlly(source)) return;
+			for (const stat in boost) {
+				if (boost[stat] < 0) {
+					this.boost({ spa: 2 }, target, target, null, false, true);
+					return;
+				}
+			}
+		},
+		flags: {},
+		rating: 3,
+		num: -27,
+		gen: 9,
+		flavor: "Too proud to accept food from anyone, and too proud to back down.",
+		shortDesc: "Water and Steel moves 1.2x power. Competitive.",
+		desc: "This Pokemon's Water- and Steel-type moves have 1.2x power, and when an opponent lowers any of its stats, its Special Attack rises by 2 stages.",
+	},
+	/*
+	 * Masquerade - Roserade's (Patch 1.5), by the owner's design. Roserade arrives like
+	 * the masked dancer it is: every foe is taunted, and whatever screens the other side
+	 * put up are torn down before the dance starts. Walls that would sit on it with
+	 * Recover and set-up, and the screens they hide behind, both go.
+	 */
+	/*
+	 * Aura Guard - Mega Lucario Z's, from current Showdown. This package predates it,
+	 * so the teambuilder offered it and the battle used Adaptability instead. Copied
+	 * as Showdown has it, without the Future flag so it is legal here.
+	 */
+	auraguard: {
+		name: "Aura Guard",
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.flags['contact']) return this.chainModify(0.5);
+		},
+		flags: { breakable: 1 },
+		rating: 3.5,
+		num: 319,
+		gen: 9,
+		shortDesc: "This Pokemon receives 1/2 damage from contact moves.",
+		desc: "This Pokemon receives 1/2 damage from contact moves.",
+	},
+	masquerade: {
+		name: "Masquerade",
+		onStart(pokemon) {
+			this.add('-ability', pokemon, 'Masquerade');
+			const side = pokemon.side.foe;
+			let removed = false;
+			for (const screen of ['reflect', 'lightscreen', 'auroraveil']) {
+				if (side.removeSideCondition(screen)) {
+					this.add('-sideend', side, this.dex.conditions.get(screen).name, '[from] ability: Masquerade', `[of] ${pokemon}`);
+					removed = true;
+				}
+			}
+			for (const foe of pokemon.foes()) {
+				if (!foe.volatiles['taunt']) foe.addVolatile('taunt', pokemon);
+			}
+		},
+		flags: {},
+		rating: 4,
+		num: -29,
+		gen: 9,
+		flavor: "The masked dancer arrives, and no one gets to hide or stall.",
+		shortDesc: "On switch-in: taunts every foe and removes screens on their side.",
+		desc: "When this Pokemon enters the battle, Reflect, Light Screen and Aurora Veil are removed from the opposing side, and every opposing Pokemon is taunted (as by Taunt: it can only use attacking moves for 3 turns). Oblivious and Aroma Veil block the taunt as usual.",
+	},
+	/*
+	 * Keystone Legion - Spiritomb's (Patch 1.5), by the owner's request: something
+	 * new rather than two abilities glued together. Spiritomb is 108 spirits bound
+	 * to the Odd Keystone. The first blow that would break it, the legion takes
+	 * instead: Spiritomb holds on at 1 HP, and the spirits knocked loose cling to
+	 * whoever struck, cursed as by Curse, until it leaves the field. The cracked
+	 * keystone mends when any Pokemon faints, on either side: a new soul joins the
+	 * legion, and it can hold on again.
+	 */
+	keystonelegion: {
+		name: "Keystone Legion",
+		// A new soul for the legion: any faint, either side, mends the keystone.
+		onAnyFaint(target) {
+			const holder = this.effectState.target;
+			if (holder && target !== holder && holder.m.keystoneCracked) {
+				holder.m.keystoneCracked = false;
+				this.add('-message', `A soul joins the legion. ${holder.name}'s keystone mends!`);
+			}
+		},
+		onDamagePriority: -30,
+		onDamage(damage, target, source, effect) {
+			if (!effect || effect.effectType !== 'Move' || damage < target.hp) return;
+			// 24 Sep 2026: an ability only hears events while its holder is on the
+			// field, so a faint while Spiritomb sat on the bench never mended the
+			// keystone - though the description says any faint does. The faint
+			// count at the crack is kept, and a higher one now means it mended.
+			if (target.m.keystoneCracked && this.sides.reduce((n, side) => n + side.totalFainted, 0) > (target.m.keystoneFaints || 0)) {
+				target.m.keystoneCracked = false;
+				this.add('-message', `A soul joins the legion. ${target.name}'s keystone mends!`);
+			}
+			if (target.m.keystoneCracked) return;
+			target.m.keystoneCracked = true;
+			target.m.keystoneFaints = this.sides.reduce((n, side) => n + side.totalFainted, 0);
+			this.add('-ability', target, 'Keystone Legion');
+			this.add('-message', `The spirits of the keystone shield ${target.name}!`);
+			if (source && source !== target && source.hp && !source.volatiles['curse']) {
+				source.addVolatile('curse', target);
+			}
+			return target.hp - 1;
+		},
+		flags: { breakable: 1 },
+		rating: 3.5,
+		num: -28,
+		gen: 9,
+		flavor: "108 spirits bound to one stone. Break it, and they break free - onto you.",
+		shortDesc: "Survives a KO hit at 1 HP and curses the attacker. Recharges when another Pokemon faints.",
+		desc: "When an attack would knock this Pokemon out, it survives with 1 HP instead, and the attacker is cursed (it loses 1/4 of its maximum HP at the end of each turn until it switches out), as if by Curse. Works at any HP. After it triggers it cannot trigger again, even across switches, until any other Pokemon on either side faints. Mold Breaker and similar abilities ignore it.",
+	},
+	/*
+	 * Bulldog Grip - Granbull's (29 Sep 2026): Intimidate and Strong Jaw together.
+	 * The Attack drop is passed as Intimidate, so whatever blocks or answers
+	 * Intimidate (Inner Focus, Guard Dog, Defiant, Adrenaline Orb) still does.
+	 */
+	bulldoggrip: {
+		name: "Bulldog Grip",
+		onStart(pokemon) {
+			let activated = false;
+			const intimidate = this.dex.abilities.get('intimidate');
+			for (const target of pokemon.adjacentFoes()) {
+				if (!activated) {
+					this.add('-ability', pokemon, 'Bulldog Grip', 'boost');
+					activated = true;
+				}
+				if (target.volatiles['substitute']) {
+					this.add('-immune', target);
+				} else {
+					this.boost({ atk: -1 }, target, pokemon, intimidate, true);
+				}
+			}
+		},
+		onBasePowerPriority: 19,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.flags['bite']) return this.chainModify(1.5);
+		},
+		flags: {},
+		rating: 4,
+		num: -36,
+		gen: 9,
+		flavor: "All bark and, it turns out, a great deal of bite.",
+		shortDesc: "Intimidate + Strong Jaw: lowers foes' Attack on entry; biting moves 1.5x.",
+		desc: "On switch-in, lowers the Attack of adjacent foes by 1 stage exactly as Intimidate does, and counts as Intimidate for anything that blocks or reacts to it. This Pokemon's biting moves have 1.5x power.",
+	},
+};
+
+/*
+ * Who gets what.
+ *
+ * Each group gets its new move and a short list of standard moves its kind
+ * received everywhere else. Moves a Pokemon (or its baby) already learns are
+ * skipped by buffs.js, so these lists only say what should be true, not what
+ * was missing. `small` marks the joke Pokemon: the new move, nothing more.
+ */
+const GROUPS = {
+	bugPhysical: {
+		moves: ['hivefrenzy', 'leechlife', 'uturn', 'knockoff', 'swordsdance'],
+		species: ['ariados', 'beedrill', 'ledian', 'mothim', 'volbeat', 'spidops', 'vespiquen', 'parasect'],
+	},
+	bugSpecial: {
+		moves: ['chrysalisveil', 'bugbuzz', 'uturn', 'energyball'],
+		species: ['butterfree', 'beautifly', 'dustox', 'masquerain', 'vivillon', 'wormadam', 'wormadamsandy', 'wormadamtrash', 'illumise', 'rabsca'],
+	},
+	normal: {
+		moves: ['hustleup', 'uturn', 'knockoff', 'suckerpunch', 'bodyslam', 'facade'],
+		species: ['furret', 'raticate', 'raticatealola', 'linoone', 'watchog', 'fearow', 'dodrio', 'swellow', 'persian', 'purugly', 'zangoose', 'delcatty', 'bibarel', 'gumshoos', 'squawkabilly', 'granbull'],
+	},
+	dark: {
+		moves: ['carrionfeast', 'knockoff', 'suckerpunch', 'crunch'],
+		species: ['mightyena', 'liepard', 'thievul', 'persianalola', 'raticatealola', 'cacturne', 'sharpedo', 'mawile', 'banette', 'seviper', 'arbok', 'sableye', 'absol'],
+	},
+	electric: {
+		moves: ['sparkscamper', 'voltswitch', 'nuzzle'],
+		species: ['pachirisu', 'plusle', 'minun', 'emolga', 'dedenne', 'togedemaru', 'manectric', 'stunfisk', 'pincurchin'],
+	},
+	water: {
+		moves: ['undertow', 'scald', 'flipturn'],
+		species: ['lumineon', 'seaking', 'whiscash', 'corsola', 'lanturn', 'dewgong', 'swanna', 'wugtrio', 'basculin'],
+	},
+	grass: {
+		moves: ['solarnectar', 'gigadrain', 'synthesis', 'leechseed'],
+		species: ['cherrim', 'maractus', 'jumpluff', 'tropius', 'carnivine', 'shiinotic', 'eldegoss', 'sawsbuck', 'parasect', 'wormadam', 'cacturne'],
+	},
+	rock: {
+		moves: ['craghammer', 'stealthrock', 'stoneedge', 'rockslide'],
+		species: ['sudowoodo', 'magcargo', 'solrock', 'klawf', 'stonjourner', 'sandslash', 'marowak', 'dugtrio'],
+	},
+	psychic: {
+		moves: ['hypnowhirl', 'psyshock', 'calmmind', 'futuresight'],
+		species: ['chimecho', 'grumpig', 'meowstic', 'meowsticf', 'swoobat', 'lunatone', 'mrmime', 'jynx', 'indeedee', 'indeedeef', 'rabsca'],
+	},
+	fighting: {
+		moves: ['shufflejab', 'drainpunch', 'machpunch', 'bulkup', 'knockoff'],
+		species: ['hitmonlee', 'hitmonchan', 'hitmontop', 'throh', 'sawk', 'hariyama', 'falinks', 'granbull'],
+	},
+};
+
+/*
+ * The ones that are meant to be bad, and should stay a bit bad.
+ *
+ * Unown, Luvdisc, Delibird and the rest are jokes Game Freak told on purpose,
+ * and a joke explained to PU is not funny any more. Each gets one new move that
+ * suits it - a touch of flavour, not a promotion.
+ */
+const SMALL = {
+	// Cottonee gets Spore, and keeps it as Whimsicott (the owner, 30 Sep 2026).
+	cottonee: ['spore'],
+	whimsicott: ['spore'],
+	// The legendary beasts get Recover (the owner, 30 Sep 2026).
+	raikou: ['recover'],
+	entei: ['recover'],
+	suicune: ['recover'],
+	unown: ['hypnowhirl'],
+	luvdisc: ['undertow'],
+	wishiwashi: ['undertow'],
+	pyukumuku: ['undertow'],
+	delibird: ['hustleup'],
+	// Mystical Fire for the Florges line, walled by Steel without it (the owner, 12 Oct 2026).
+	flabebe: ['mysticalfire'],
+	floette: ['mysticalfire'],
+	florges: ['mysticalfire'],
+	// Swords Dance to power up Soul Toll (the owner, 12 Oct 2026).
+	spiritomb: ['swordsdance'],
+	farfetchd: ['hustleup'],
+	spinda: ['shufflejab'],
+	kricketune: ['hivefrenzy'],
+	sunflora: ['solarnectar'],
+};
+
+/*
+ * Abilities, only where the ability was the problem.
+ *
+ * Existing abilities of the kind a PU Pokemon can build around, never the
+ * game-defining ones. Each sits beside what the Pokemon already had.
+ */
+/*
+ * Unaware as an Awakened ability (the owner, 29 Sep 2026: "to stop the setup").
+ * The +3 moves, Quiver Dance on a legendary and Grand Feast all want an answer that
+ * isn't a Pokemon born with Unaware. The walls that check sweepers, mostly RU-UU.
+ * Not Blissey or Chansey: Unaware on those is a tier review, not a buff.
+ */
+const UNAWARE = ['snorlax', 'florges', 'goodra', 'goodrahisui', 'registeel', 'bronzong', 'hippowdon', 'mandibuzz', 'alomomola', 'slowking', 'slowkinggalar', 'mudsdale', 'avalugg', 'avalugghisui', 'cetitan', 'lapras', 'milotic', 'steelix', 'carbink', 'tangrowth', 'amoonguss', 'gastrodon', 'hariyama', 'cresselia', 'suicune'];
+
+const ABILITY_GRANTS = {
+	plusle: 'Motor Drive',
+	minun: 'Motor Drive',
+	cherrim: 'Chlorophyll',
+	wormadam: 'Filter',
+	wormadamsandy: 'Filter',
+	wormadamtrash: 'Filter',
+	beautifly: 'Tinted Lens',
+	furret: 'Scrappy',
+	dodrio: 'Reckless',
+	swanna: 'Swift Swim',
+	whiscash: 'Water Absorb',
+	stunfisk: 'Mudflat Ambush',
+	stunfiskgalar: 'Mudflat Ambush',
+	magcargo: 'Solid Rock',
+	banette: 'Prankster',
+	seviper: 'Intimidate',
+	stonjourner: 'Sturdy',
+	// For the funny (the owner): the illusion fox that really becomes you. Not the Hisuian ones.
+	zoroark: 'Imposter',
+	zorua: 'Imposter',
+};
+
+/*
+ * Three eeveelutions with a stat worth building around and no way to use it:
+ * each gets a signature ability and a little coverage. Eevee is left alone -
+ * it is every eeveelution's pre-evolution, so whatever it gets, all eight get.
+ */
+/*
+ * Luxray: Knock Off and Sucker Punch for the Dark STAB it now has (Crunch and
+ * Throat Chop it already knew), and for Prankster the moves of a hunter that
+ * pins its prey - Taunt, Parting Shot, Encore, Yawn, Swagger, Swords Dance. Volt Switch,
+ * Thunder Wave, Snarl, Fake Tears, Protect and Substitute it already had.
+ */
+/*
+ * Golisopod, by the owner's request: its movepool, not its ability. First Impression
+ * only works on the first turn out, which left it without a strong Bug move after;
+ * it had no real recovery for a Pokemon built to sit in; and a beach scavenger that
+ * curls up and rolls should be able to clear hazards. One of each.
+ */
+const GOLISOPOD = ['megahorn', 'shoreup', 'rapidspin'];
+
+/*
+ * Eevee (Patch 1.5), by the owner's request: reliable recovery and a few moves its
+ * evolutions put to use. Eevee only had Wish and Protect to stay alive, and of the
+ * eight only Espeon (Morning Sun) and Umbreon (Moonlight) could heal themselves,
+ * both at the weather's mercy.
+ *   Recover       the recovery, for all nine
+ *   Teleport      a slow pivot: Umbreon, Vaporeon and Sylveon bring a sweeper in safely
+ *   Healing Wish  Jolteon and Espeon, fast and frail, can hand their health on
+ *   Knock Off     Umbreon's utility, and item removal for the physical ones
+ *   Focus Blast   coverage for the special ones against Dark, Steel, Normal, Ice and Rock
+ * Given to Eevee and to each eeveelution by name, so the team builder and the
+ * client see it on every one of them, not only through the pre-evolution.
+ */
+const EEVEE = ['recover', 'teleport', 'healingwish', 'knockoff', 'focusblast'];
+
+/*
+ * Infernape (Patch 1.5): Crown of Flame (above), and the one elemental punch it
+ * was missing - Ice Punch, for the Flying, Ground and Dragon types that stop a
+ * Fire/Fighting cold. Thunder Punch and Fire Punch it had, and Blaze Kick comes
+ * from Chimchar already.
+ * Plus its two signatures, Great Sage Strike and Pyre Strike; three of the
+ * shared moves that suit a fast martial artist (Hustle Up, Crag Hammer, Spark
+ * Scamper); Explosion; and the monkey moves it never had - Copycat (monkey see,
+ * monkey do), Screech, Double Hit, Tickle, and High Jump Kick and Bounce for the
+ * monkey king's leaps.
+ * Infernape only, not Chimchar or Monferno.
+ */
+/*
+ * Torterra and Empoleon (Patch 1.5), the rest of the trio, treated as Infernape
+ * was: an ability, two signatures, Explosion, and their animal's moves -
+ * a turtle's for Torterra (Rapid Spin, Head Smash, Yawn, Flail, Rollout, Ancient
+ * Power, Shell Smash), and for Empoleon a bird's that doesn't need to fly (Roost,
+ * Defog, Tailwind, Wing Attack) and a penguin's (Freeze-Dry, Ice Shard, Icicle
+ * Crash, Frost Breath, Aurora Veil). The first two stages get the lesser abilities.
+ */
+const TORTERRA = {
+	ability: 'World Turtle',
+	moves: ['eldertimber', 'tectonicshell', 'explosion', 'rapidspin', 'headsmash', 'yawn', 'flail', 'rollout', 'ancientpower', 'shellsmash'],
+};
+const EMPOLEON = {
+	ability: "Emperor's Pride",
+	moves: ['imperialtorrent', 'royaldecree', 'explosion', 'roost', 'defog', 'tailwind', 'wingattack',
+		'freezedry', 'iceshard', 'iciclecrash', 'frostbreath', 'auroraveil'],
+};
+const TRIO_BABIES = {
+	chimchar: 'Kindling Crown', monferno: 'Kindling Crown',
+	turtwig: 'Sapling Shell', grotle: 'Sapling Shell',
+	piplup: 'Proud Chick', prinplup: 'Proud Chick',
+};
+
+/*
+ * Spiritomb (Patch 1.5): Keystone Legion (above), and what a slow Ghost with 50 HP
+ * needs to use it - Strength Sap for recovery that also blunts physical attackers,
+ * Parting Shot to leave on its own terms, and Knock Off. Its HP goes from 50 to 85
+ * in unnerfs.js. Aimed at UU. The recent generations' new Ghost moves are all
+ * signatures (Rage Fist, Bitter Malice, Infernal Parade, Last Respects), which stay
+ * with their owners; Poltergeist and Hex it already had. Its own is Soul Toll.
+ */
+/*
+ * Roserade (Patch 1.5): Masquerade and Thorned Bouquet (above), not a sun kit.
+ * Strength Sap is recovery that needs no weather, Mortal Spin clears hazards and
+ * spreads poison. HP 60 to 75 in unnerfs.js. Aimed at UU.
+ */
+// Granbull (29 Sep 2026, "BUFF this man"): Bulldog Grip (Intimidate + Strong Jaw) behind its
+// fangs, a trapping Fairy bite, a draining bite for recovery, and Swords Dance.
+// The Tapus (30 Sep 2026): a signature each; Bulu also gets Play Rough and U-turn.
+const TAPUS = { tapukoko: ['uilasurge'], tapulele: ['manapierce'], tapubulu: ['nahelerush', 'playrough', 'uturn'], tapufini: ['ohuwave'] };
+const GRANBULL = { ability: 'Bulldog Grip', moves: ['bulldogmaul', 'carrionfeast', 'jawlock', 'swordsdance'] };
+const ROSERADE = { ability: 'Masquerade', moves: ['thornedbouquet', 'strengthsap', 'mortalspin', 'nastyplot'] };
+
+// Togekiss (Patch 1.5, the owner's call): a pivot.
+const TOGEKISS = ['uturn'];
+
+// Dewgong (7 Oct 2026, the owner's call: "buff it, keep Thick Fat, no signature"): the
+// tools of a defensive Pokemon. Slack Off is the recovery it never had; Wish and Roar
+// support the team and shuffle it; Chilly Reception and Aurora Veil make it the snow
+// team's wall; Freeze-Dry lets its Ice STAB touch the Water types that wall it. Its
+// bulk goes up 50 in unnerfs.js. Dewgong only, not Seel.
+const DEWGONG = ['slackoff', 'wish', 'roar', 'chillyreception', 'auroraveil', 'freezedry'];
+
+/*
+ * ZU move buffs (9 Oct 2026, the owner: "buff some ZU pokemon with moves (no ability or
+ * signature since i wanna monitor buffs) ... make sure it makes sense in their lore").
+ * Moves only, final stages only, each from its own Pokédex lore. Kept as one list so the
+ * owner can watch these eleven and take any back.
+ */
+const ZU_MOVES = {
+  ampharos: ['tailglow'],                        // its tail's light is a beacon seen from far away
+  ariados: ['silktrap', 'firstimpression'],      // spins webs, strikes from ambush
+  bibarel: ['woodhammer', 'shoreup'],            // gnaws trees, builds dams
+  beartic: ['mountaingale'],                     // the frozen north; swings slabs of ice
+  lumineon: ['tailglow'],                        // its glowing fins lure prey in the deep sea
+  seaking: ['wavecrash', 'hornleech'],           // swims up waterfalls, drills with its horn
+  whiscash: ['shoreup'],                         // buries itself in the riverbed mud
+  wigglytuff: ['boomburst', 'moonblast'],        // balloons up and sings; a Fairy without a Fairy attack
+  ledian: ['cosmicpower', 'meteormash'],         // draws power from starlight, fights with its fists
+  mightyena: ['jawlock'],                        // a pack hunter that never lets go once it bites
+  relicanth: ['shoreup', 'wavecrash'],           // unchanged for a hundred million years in the deep
+};
+
+const SPIRITOMB = { ability: 'Keystone Legion', moves: ['soultoll', 'strengthsap', 'partingshot', 'knockoff'] };
+
+const INFERNAPE = {
+	ability: 'Crown of Flame',
+	moves: ['icepunch', 'greatsagestrike', 'pyrestrike', 'hustleup', 'craghammer', 'sparkscamper',
+		'explosion', 'copycat', 'screech', 'doublehit', 'tickle', 'highjumpkick', 'bounce'],
+};
+
+// Guzzlord: its three signatures and the Dragon and Dark moves it was missing.
+const GUZZLORD = { moves: ['grandfeast', 'devour', 'endlesshunger', 'suckerpunch', 'throatchop', 'foulplay', 'nightslash', 'jawlock', 'powertrip', 'nastyplot', 'partingshot', 'taunt', 'dragondance', 'scaleshot', 'breakingswipe'] };
+const LUXRAY = { ability: 'Prankster', moves: ['gleamstalk', 'knockoff', 'suckerpunch', 'taunt', 'partingshot', 'encore', 'yawn', 'swagger', 'swordsdance'] };
+
+const EEVEELUTIONS = {
+	// Solar Blade (native) fires in one turn in its own sun. Rock for the Fire,
+	// Flying and Bug types that wall Grass; Ground for Steel and Poison; Temper Flare,
+	// boosted by its own sun, for Steel and Bug.
+	leafeon: { ability: 'Solstice', moves: ['stoneedge', 'earthquake', 'temperflare'] },
+	// Facade (native) is the burn's other half. Ground for the Fire and Rock
+	// types, Fighting and Dark for the rest.
+	// Swords Dance, which it never learned in any game: 130 Attack with nothing to
+	// set up with but Curse, which takes its Speed away to get there (owner's call).
+	flareon: { ability: 'Kindled Fury', moves: ['highhorsepower', 'closecombat', 'knockoff', 'swordsdance'] },
+	// Ground for the Steel and Fire types that wall Ice; Psyshock for Fighting.
+	glaceon: { ability: 'Diamond Dust', moves: ['earthpower', 'psyshock'] },
+	// The other five: a signature each, two existing abilities fused on theme.
+	umbreon: { ability: 'Moonlit Venom', moves: [] },
+	espeon: { ability: 'Prescience', moves: [] },
+	vaporeon: { ability: 'Liquid Body', moves: [] },
+	jolteon: { ability: 'Static Needles', moves: [] },
+	sylveon: { ability: 'Ribbon Hymn', moves: [] },
+};
+
+/*
+ * The ten shared moves, like TMs: every Pokemon across the dex that each one
+ * suits, not only the underdogs. Final stages are listed; pre-evolutions follow.
+ * Mew gets all ten; Smeargle can Sketch them.
+ */
+const TM_DISTRIBUTION = {
+	// The Trick Room pivot: Banette first, the Ghosts with a dark streak, and the
+	// Dark types that had no niche - many of them slow enough to love the room.
+	twilightexit: ['banette', 'gengar', 'sableye', 'spiritomb', 'dusknoir', 'mismagius', 'houndstone', 'mightyena', 'liepard', 'thievul', 'cacturne', 'skuntank', 'mandibuzz', 'crawdaunt', 'scrafty', 'pangoro', 'malamar', 'mabosstiff', 'honchkrow', 'grimmsnarl', 'persianalola', 'raticatealola', 'hoopa', 'luxray'],
+	// Stinging, swarming and pincered bugs. Not Scolipede: Speed Boost plus a 50% Attack raise is a sweeper it doesn't need to be.
+	hivefrenzy: ['beedrill', 'ariados', 'ledian', 'volbeat', 'vespiquen', 'parasect', 'scyther', 'scizor', 'kleavor', 'pinsir', 'heracross', 'drapion', 'gligar', 'gliscor', 'escavalier', 'durant', 'leavanny', 'lokix', 'spidops', 'kricketune', 'mothim', 'ribombee', 'golisopod', 'yanmega', 'ninjask', 'crustle'],
+	// Cocoons, moths and silk-spinners. Not Volcarona: reliable recovery beside Quiver Dance pushes an OU sweeper too far.
+	chrysalisveil: ['butterfree', 'beautifly', 'dustox', 'venomoth', 'masquerain', 'mothim', 'vivillon', 'frosmoth', 'ribombee', 'leavanny', 'illumise', 'volbeat', 'wormadam', 'wormadamsandy', 'wormadamtrash', 'shuckle', 'rabsca', 'forretress'],
+	// Scrappy, stubborn Normal-types. Not Diggersby (Huge Power), Maushold (Technician multi-hits), Ursaluna or Kangaskhan.
+	hustleup: ['regigigas', 'furret', 'raticate', 'raticatealola', 'linoone', 'linoonegalar', 'watchog', 'fearow', 'dodrio', 'swellow', 'persian', 'purugly', 'zangoose', 'delcatty', 'bibarel', 'gumshoos', 'squawkabilly', 'granbull', 'delibird', 'farfetchd', 'sirfetchd', 'stoutland', 'lopunny', 'cinccino', 'tauros', 'miltank', 'obstagoon', 'greedent', 'oinkologne', 'bouffalant', 'unfezant', 'ambipom', 'ursaring', 'smeargle', 'spinda'],
+	// Scavengers and predators. Not Kingambit, Weavile or Crawdaunt: a draining Dark move is too much of a gift to all three.
+	carrionfeast: ['mightyena', 'liepard', 'thievul', 'persianalola', 'raticatealola', 'cacturne', 'sharpedo', 'mawile', 'banette', 'seviper', 'arbok', 'sableye', 'absol', 'mandibuzz', 'honchkrow', 'krookodile', 'houndoom', 'bisharp', 'zoroark', 'skuntank', 'drapion', 'scrafty', 'grimmsnarl', 'mabosstiff', 'shiftry', 'spiritomb', 'malamar', 'houndstone'],
+	// Small, quick electric critters.
+	sparkscamper: ['pikachu', 'raichu', 'raichualola', 'pachirisu', 'plusle', 'minun', 'emolga', 'dedenne', 'togedemaru', 'manectric', 'stunfisk', 'pincurchin', 'jolteon', 'morpeko', 'pawmot', 'luxray', 'zebstrika', 'electrode', 'electrodehisui'],
+	// Currents, reefs and the deep. Not Starmie or Palafin: strong special Water with a 50% Speed drop is too much on either.
+	undertow: ['lumineon', 'seaking', 'whiscash', 'corsola', 'lanturn', 'dewgong', 'swanna', 'wugtrio', 'basculin', 'luvdisc', 'wishiwashi', 'pyukumuku', 'tentacruel', 'octillery', 'mantine', 'huntail', 'gorebyss', 'relicanth', 'wailord', 'milotic', 'kingdra', 'dhelmise', 'dragalge', 'clawitzer', 'jellicent', 'alomomola', 'lapras', 'cursola', 'barraskewda', 'golduck', 'politoed', 'quagsire', 'qwilfish', 'overqwil', 'toxapex', 'dondozo'],
+	// Sun, flowers, nectar and pollen. Venusaur is the borderline one (135 in sun on Chlorophyll), kept because the move is its theme and the sun must be set first.
+	solarnectar: ['sunflora', 'cherrim', 'maractus', 'jumpluff', 'tropius', 'carnivine', 'shiinotic', 'eldegoss', 'sawsbuck', 'parasect', 'wormadam', 'cacturne', 'venusaur', 'bellossom', 'vileplume', 'roserade', 'florges', 'comfey', 'lilligant', 'whimsicott', 'meganium', 'ribombee', 'victreebel', 'exeggutor', 'exeggutoralola', 'lurantis', 'arboliva', 'scovillain', 'ludicolo', 'breloom', 'appletun', 'sceptile'],
+	// Heavy stone bodies, boulders and hammers. Not Tyranitar, Garganacl or Landorus: reliable Rock STAB or coverage on those tips OU; they keep Stone Edge.
+	craghammer: ['sudowoodo', 'magcargo', 'solrock', 'klawf', 'stonjourner', 'sandslash', 'marowak', 'dugtrio', 'golem', 'golemalola', 'rhyperior', 'aggron', 'rampardos', 'bastiodon', 'probopass', 'gigalith', 'coalossal', 'lycanroc', 'lycanrocmidnight', 'lycanrocdusk', 'tyrantrum', 'barbaracle', 'crustle', 'archeops', 'aerodactyl', 'kabutops', 'armaldo', 'cradily', 'avalugg', 'avalugghisui', 'relicanth', 'steelix', 'tinkaton', 'conkeldurr', 'carbink'],
+	// Chilling Mist: the Ice and Ghost types (the owner). Not the Uber/AG ones (Giratina,
+	// Lunala, Flutter Mane, Iron Bundle, Chien-Pao, Baxcalibur, Annihilape, Spectrier,
+	// Marshadow, Shedinja, Galarian Darmanitan) - a status-spreading STAB there is a tier review.
+	chillingmist: ['sandslashalola', 'ninetalesalola', 'dewgong', 'cloyster', 'gengar', 'marowakalola', 'jynx', 'lapras', 'articuno', 'typhlosionhisui', 'delibird', 'sableye', 'banette', 'glalie', 'walrein', 'regice', 'drifblim', 'mismagius', 'spiritomb', 'abomasnow', 'weavile', 'glaceon', 'mamoswine', 'dusknoir', 'froslass', 'rotom', 'cofagrigus', 'zoroarkhisui', 'vanilluxe', 'jellicent', 'chandelure', 'beartic', 'cryogonal', 'golurk', 'kyurem', 'aegislash', 'aurorus', 'trevenant', 'gourgeist', 'avalugg', 'avalugghisui', 'hoopa', 'decidueye', 'crabominable', 'palossand', 'mimikyu', 'dhelmise', 'blacephalon', 'polteageist', 'cursola', 'mrrime', 'runerigus', 'frosmoth', 'eiscue', 'arctozolt', 'arctovish', 'dragapult', 'glastrier', 'basculegion', 'skeledirge', 'ceruledge', 'brambleghast', 'houndstone', 'cetitan', 'gholdengo', 'sinistcha', 'pecharunt',
+		// Cold-water Water types and chilling Dark types (the owner: "like Suicune", "or chilling Dark types").
+		'suicune', 'milotic', 'kingdra', 'lumineon', 'tentacruel', 'lanturn', 'primarina', 'empoleon', 'toxapex', 'absol', 'umbreon', 'honchkrow', 'mandibuzz', 'mightyena', 'liepard', 'zoroark', 'hydreigon', 'crawdaunt', 'thievul', 'grimmsnarl', 'obstagoon'],
+	// The lazy ones (the owner: "give lazy Pokemon Slack Off"), for stall.
+	slackoff: ['snorlax', 'bibarel', 'komala', 'lickilicky', 'hippowdon', 'torkoal', 'pyukumuku', 'dondozo', 'musharna', 'swalot', 'wobbuffet', 'spinda', 'cetitan', 'camerupt', 'stunfisk', 'stunfiskgalar', 'hypno', 'wailord', 'mudsdale', 'mudbray',
+		// Pre-evolutions by name: only our own moves are inherited downward automatically.
+		'munchlax', 'bidoof', 'hippopotas', 'munna', 'gulpin', 'wynaut', 'numel', 'drowzee', 'wailmer',
+		// And every Regi (the owner).
+		'regigigas', 'regirock', 'regice', 'registeel', 'regieleki', 'regidrago'],
+	// Penance, widely (the owner): the Fairy types, the special Psychic types, the special
+	// stall walls, and Chimai. Not the Uber/AG tiers.
+	penance: ['clefable', 'ninetalesalola', 'wigglytuff', 'rapidashgalar', 'weezinggalar', 'mrmime', 'azumarill', 'granbull', 'gardevoir', 'mawile', 'togekiss', 'florges', 'aromatisse', 'sylveon', 'dedenne', 'carbink', 'klefki', 'diancie', 'primarina', 'ribombee', 'shiinotic', 'comfey', 'mimikyu', 'tapukoko', 'tapulele', 'tapubulu', 'tapufini', 'hatterene', 'grimmsnarl', 'alcremie', 'enamorus', 'dachsbun', 'tinkaton', 'screamtail', 'ironvaliant', 'fezandipiti', 'whimsicott', 'slurpuff', 'chimai', 'raichualola', 'alakazam', 'slowbro', 'exeggutor', 'starmie', 'jynx', 'articunogalar', 'xatu', 'espeon', 'slowking', 'slowkinggalar', 'grumpig', 'lunatone', 'chimecho', 'latias', 'latios', 'cresselia', 'musharna', 'swoobat', 'sigilyph', 'gothitelle', 'reuniclus', 'beheeyem', 'braviaryhisui', 'meloetta', 'delphox', 'meowstic', 'hoopa', 'oranguru', 'necrozma', 'magearna', 'orbeetle', 'mrrime', 'indeedee', 'enamorustherian', 'armarouge', 'rabsca', 'farigiraf', 'munkidori', 'ironcrown', 'blissey', 'chansey', 'goodra', 'goodrahisui', 'suicune', 'milotic', 'lapras', 'regice', 'mew', 'celebi', 'jirachi', 'amoonguss', 'tangrowth'],
+	// Punishment, widely (the owner): the physical Dark types and the physical stall walls. Not the Uber/AG tiers.
+	punishment: ['yveltal', 'raticatealola', 'mukalola', 'umbreon', 'tyranitar', 'mightyena', 'shiftry', 'sableye', 'sharpedo', 'cacturne', 'crawdaunt', 'absol', 'luxray', 'honchkrow', 'skuntank', 'spiritomb', 'drapion', 'weavile', 'samurotthisui', 'liepard', 'krookodile', 'scrafty', 'mandibuzz', 'pangoro', 'malamar', 'incineroar', 'guzzlord', 'grimmsnarl', 'obstagoon', 'morpeko', 'zarude', 'overqwil', 'meowscarada', 'lokix', 'mabosstiff', 'bombirdier', 'kingambit', 'brutebonnet', 'tinglu', 'roaringmoon', 'hippowdon', 'corviknight', 'skarmory', 'gliscor', 'dondozo', 'garganacl', 'snorlax', 'mudsdale', 'avalugg', 'clodsire', 'quagsire'],
+	// Everything that learns Cotton Guard (pre-evolutions follow on their own).
+	// Velvet Guard's partner: everything that learns the Guard, and the special walls
+	// (the owner: "generous with press logic"). Same exclusions as the Guard.
+	velvetpress: [...new Set([
+		'ampharos', 'jumpluff', 'altaria', 'banette', 'whimsicott', 'maractus', 'bouffalant', 'furfrou', 'slurpuff', 'eldegoss', 'dubwool',
+		'clefable', 'ninetalesalola', 'wigglytuff', 'rapidashgalar', 'weezinggalar', 'mrmime', 'azumarill', 'granbull', 'gardevoir', 'mawile', 'togekiss', 'florges', 'aromatisse', 'sylveon', 'dedenne', 'carbink', 'klefki', 'diancie', 'primarina', 'ribombee', 'shiinotic', 'comfey', 'mimikyu', 'tapukoko', 'tapulele', 'tapubulu', 'tapufini', 'hatterene', 'grimmsnarl', 'alcremie', 'enamorus', 'dachsbun', 'tinkaton', 'screamtail', 'ironvaliant', 'fezandipiti',
+		'blissey', 'chansey', 'regice', 'cresselia', 'deoxysdefense', 'suicune', 'latias', 'latios', 'slowking', 'slowkinggalar', 'goodra', 'goodrahisui', 'milotic', 'lapras', 'alomomola', 'snorlax', 'umbreon', 'mandibuzz', 'registeel', 'toxapex', 'amoonguss', 'porygon2', 'hippowdon', 'tangrowth', 'dragonite', 'gastrodon', 'quagsire', 'clodsire', 'dondozo', 'garganacl', 'tinglu', 'regidrago', 'mew', 'celebi', 'jirachi', 'manaphy', 'uxie', 'azelf', 'mesprit', 'articuno', 'articunogalar', 'zapdosgalar', 'moltresgalar', 'glimmora', 'corviknight', 'bronzong', 'ferrothorn', 'mudsdale',
+	])],
+	velvetguard: ['ampharos', 'jumpluff', 'altaria', 'banette', 'whimsicott', 'maractus', 'bouffalant', 'furfrou', 'slurpuff', 'eldegoss', 'dubwool',
+		// And the Fairy types (the owner). Not Xerneas, Zacian, Flutter Mane or Magearna:
+		// +3 Sp. Def on an Uber or AG Fairy is a tier review, not a TM.
+		'clefable', 'ninetalesalola', 'wigglytuff', 'rapidashgalar', 'weezinggalar', 'mrmime', 'azumarill', 'granbull', 'gardevoir', 'mawile', 'togekiss', 'florges', 'aromatisse', 'sylveon', 'dedenne', 'carbink', 'klefki', 'diancie', 'primarina', 'ribombee', 'shiinotic', 'comfey', 'mimikyu', 'tapukoko', 'tapulele', 'tapubulu', 'tapufini', 'hatterene', 'grimmsnarl', 'alcremie', 'enamorus', 'dachsbun', 'tinkaton', 'screamtail', 'ironvaliant', 'fezandipiti'],
+	// The special Ground attackers (29 Sep 2026, with Chimai). Not Landorus: like
+	// Crag Hammer, Ground priority on it tips a tier; it keeps Earth Power.
+	tremorshot: ['nidoking', 'nidoqueen', 'gastrodon', 'palossand', 'seismitoad', 'stunfisk', 'stunfiskgalar', 'camerupt', 'claydol', 'whiscash', 'flygon', 'sandyshocks'],
+	// Hypnotists and spinning psychic lights. Not Espathra, Hatterene or Starmie.
+	hypnowhirl: ['chimecho', 'grumpig', 'meowstic', 'meowsticf', 'swoobat', 'lunatone', 'mrmime', 'mrrime', 'jynx', 'indeedee', 'indeedeef', 'rabsca', 'unown', 'hypno', 'xatu', 'girafarig', 'farigiraf', 'bronzong', 'claydol', 'gothitelle', 'reuniclus', 'beheeyem', 'malamar', 'musharna', 'gardevoir', 'sigilyph', 'delphox', 'orbeetle', 'oranguru', 'bruxish', 'alakazam'],
+	// Boxers and fighters light on their feet. Not Annihilape (Uber) or Quaquaval, which already has a Speed-raising signature.
+	// Electric physical attackers. Not Iron Hands (OU, and it would replace a
+	// drawback move with none), Regieleki (Uber) or the special legendaries.
+	voltaiclance: ['electivire', 'luxray', 'zeraora', 'eelektross', 'pawmot', 'morpeko', 'dracozolt', 'arctozolt',
+		'ironthorns', 'zebstrika', 'manectric', 'raichu', 'raichualola', 'pikachu', 'emolga', 'pachirisu', 'dedenne',
+		'togedemaru', 'stunfisk', 'boltund', 'pincurchin', 'minun', 'plusle'],
+	// Ice physical attackers. Not Weavile or Sneasel (it would outclass Icicle
+	// Crash on a UU sweeper), Baxcalibur (Uber), Galarian Darmanitan (Gorilla
+	// Tactics) or the Ice legends; Mamoswine is the borderline one kept.
+	rimecleaver: ['mamoswine', 'cetitan', 'beartic', 'avalugg', 'avalugghisui', 'glalie', 'abomasnow', 'walrein',
+		'crabominable', 'eiscue', 'arctozolt', 'arctovish', 'lapras'],
+	// Poison special and mixed attackers. Not Gengar or Glimmora (a Steel answer
+	// on top of what they already threaten), Amoonguss, Venusaur, or the Poison
+	// legends and Ultra Beasts.
+	oxidize: ['nidoking', 'nidoqueen', 'muk', 'mukalola', 'weezing', 'weezinggalar', 'tentacruel', 'dragalge', 'salazzle', 'toxapex',
+		'vileplume', 'victreebel', 'roserade', 'venomoth', 'swalot', 'toxtricity', 'toxtricitylowkey', 'garbodor', 'skuntank', 'dustox',
+		'seviper', 'toedscruel'],
+	shufflejab: ['hitmonlee', 'hitmonchan', 'hitmontop', 'throh', 'sawk', 'hariyama', 'falinks', 'granbull', 'spinda', 'machamp', 'conkeldurr', 'pangoro', 'primeape', 'poliwrath', 'toxicroak', 'lucario', 'infernape', 'medicham', 'mienshao', 'crabominable', 'passimian', 'hawlucha', 'grapploct', 'lopunny', 'scrafty', 'pawmot', 'kommoo'],
+};
+
+/*
+ * Newer moves for older Pokemon: shared moves from Generations 8 and 9 that
+ * skipped Pokemon who obviously fit them. Moves they already know are skipped
+ * when the buffs are applied.
+ */
+const NEWER_MOVES = {
+	'tripleaxel': [
+		'froslass',
+		'eiscue',
+		'jynx',
+		'smoochum',
+		'mrrime',
+		'mrmimegalar',
+		'delibird',
+		'hitmonlee',
+		'hitmontop',
+		'tyrogue',
+		'lopunny',
+		'buneary'
+	],
+	'icespinner': [
+		'froslass',
+		'snorunt',
+		'glalie',
+		'jynx',
+		'smoochum',
+		'cryogonal',
+		'hitmontop',
+		'delibird',
+		'eiscue'
+	],
+	'chillingwater': [
+		'seel',
+		'dewgong',
+		'spheal',
+		'sealeo',
+		'walrein',
+		'lapras',
+		'shellder',
+		'cloyster',
+		'bergmite',
+		'avalugg',
+		'cetoddle',
+		'cetitan'
+	],
+	'snowscape': [
+		'articuno',
+		'regice',
+		'jynx',
+		'smoochum',
+		'glalie',
+		'froslass',
+		'snorunt',
+		'beartic',
+		'cubchoo',
+		'vanillite',
+		'vanillish',
+		'vanilluxe',
+		'cryogonal',
+		'snover',
+		'abomasnow',
+		'walrein',
+		'avalugg',
+		'eiscue',
+		'delibird',
+		'lapras',
+		'dewgong',
+		'swinub',
+		'piloswine',
+		'mamoswine',
+		'glaceon',
+		'snom',
+		'frosmoth'
+	],
+	'axekick': [
+		'hitmonlee',
+		'hitmontop',
+		'tyrogue',
+		'lopunny',
+		'buneary',
+		'sawk',
+		'mienfoo',
+		'mienshao',
+		'medicham',
+		'meditite'
+	],
+	'temperflare': [
+		'growlithe',
+		'arcanine',
+		'houndour',
+		'houndoom',
+		'magby',
+		'magmar',
+		'magmortar',
+		'darumaka',
+		'darmanitan',
+		'tepig',
+		'pignite',
+		'emboar',
+		'litten',
+		'torracat',
+		'incineroar',
+		'numel',
+		'camerupt',
+		'flareon',
+		'ponyta',
+		'rapidash'
+	],
+	'trailblaze': [
+		'treecko',
+		'grovyle',
+		'sceptile',
+		'tropius',
+		'deerling',
+		'sawsbuck',
+		'skiddo',
+		'gogoat',
+		'leavanny',
+		'shroomish',
+		'breloom',
+		'cacnea',
+		'cacturne',
+		'ludicolo',
+		'shiftry',
+		'turtwig',
+		'grotle',
+		'torterra',
+		'snover',
+		'abomasnow',
+		'carnivine',
+		'maractus'
+	],
+	'pounce': [
+		'spinarak',
+		'ariados',
+		'joltik',
+		'galvantula',
+		'scyther',
+		'leavanny',
+		'ninjask',
+		'yanmega',
+		'heracross',
+		'pinsir',
+		'durant',
+		'escavalier',
+		'accelgor',
+		'dwebble',
+		'crustle'
+	],
+	'hardpress': [
+		'aron',
+		'lairon',
+		'aggron',
+		'onix',
+		'steelix',
+		'shieldon',
+		'bastiodon',
+		'nosepass',
+		'probopass',
+		'bronzor',
+		'bronzong',
+		'klink',
+		'klang',
+		'klinklang',
+		'cufant',
+		'copperajah'
+	],
+	'psychicnoise': [
+		'jynx',
+		'mrmime',
+		'grumpig',
+		'chimecho',
+		'xatu',
+		'girafarig',
+		'bronzong',
+		'claydol',
+		'gothitelle',
+		'reuniclus',
+		'beheeyem',
+		'musharna',
+		'sigilyph',
+		'delphox',
+		'meowstic',
+		'meowsticf'
+	],
+	'alluringvoice': [
+		'clefairy',
+		'clefable',
+		'jigglypuff',
+		'wigglytuff',
+		'togekiss',
+		'gardevoir',
+		'florges',
+		'aromatisse',
+		'slurpuff',
+		'sylveon',
+		'whimsicott',
+		'primarina',
+		'comfey'
+	],
+	'upperhand': [
+		'hitmonlee',
+		'hitmonchan',
+		'hitmontop',
+		'medicham',
+		'mienshao',
+		'sawk',
+		'hawlucha',
+		'infernape',
+		'lucario'
+	],
+	'dragoncheer': [
+		'altaria',
+		'flygon',
+		'kingdra',
+		'dragalge',
+		'noivern',
+		'haxorus',
+		'druddigon',
+		'goodra',
+		'turtonator'
+	]
+};
+
+/*
+ * Grass gets coverage: existing moves that answer the seven types resisting
+ * Grass, matched to each Pokemon's stats and theme. Not Rillaboom, Ogerpon,
+ * Venusaur, Amoonguss, Meowscarada, Breloom or Ferrothorn.
+ */
+const GRASS_COVERAGE = {
+	'sunflora': [
+		'earthpower',
+		'sludgebomb',
+		'fireblast'
+	],
+	'cherrim': [
+		'earthpower',
+		'fireblast'
+	],
+	'maractus': [
+		'earthpower',
+		'sludgebomb',
+		'knockoff'
+	],
+	'jumpluff': [
+		'knockoff',
+		'earthquake'
+	],
+	'tropius': [
+		'earthquake',
+		'stoneedge',
+		'knockoff'
+	],
+	'carnivine': [
+		'knockoff',
+		'earthquake',
+		'gunkshot'
+	],
+	'shiinotic': [
+		'earthpower',
+		'sludgebomb'
+	],
+	'eldegoss': [
+		'earthpower',
+		'knockoff'
+	],
+	'sawsbuck': [
+		'highhorsepower',
+		'stoneedge',
+		'knockoff'
+	],
+	'parasect': [
+		'rockslide',
+		'knockoff'
+	],
+	'wormadam': [
+		'earthpower',
+		'sludgebomb'
+	],
+	'cacturne': [
+		'earthquake',
+		'gunkshot'
+	],
+	'bellossom': [
+		'earthpower',
+		'sludgebomb'
+	],
+	'victreebel': [
+		'earthquake',
+		'knockoff'
+	],
+	'exeggutor': [
+		'earthpower',
+		'fireblast'
+	],
+	'exeggutoralola': [
+		'dragonpulse',
+		'earthquake',
+		'flamethrower'
+	],
+	'ludicolo': [
+		'earthpower'
+	],
+	'shiftry': [
+		'rockslide',
+		'earthquake'
+	],
+	'lurantis': [
+		'knockoff',
+		'earthquake',
+		'stoneedge'
+	],
+	'gogoat': [
+		'stoneedge',
+		'highhorsepower'
+	],
+	'leavanny': [
+		'knockoff',
+		'rockslide'
+	],
+	'appletun': [
+		'dragonpulse',
+		'earthpower'
+	],
+	'flapple': [
+		'stoneedge',
+		'earthquake'
+	],
+	'dhelmise': [
+		'stoneedge',
+		'earthquake'
+	],
+	'abomasnow': [
+		'earthpower',
+		'earthquake'
+	],
+	'sceptile': [
+		'earthpower',
+		'sludgebomb'
+	],
+	'meganium': [
+		'earthquake',
+		'knockoff',
+		'earthpower' // the owner, 30 Sep 2026
+	],
+	'arboliva': [
+		'earthpower',
+		'sludgebomb'
+	],
+	'scovillain': [
+		'earthpower',
+		'sludgebomb'
+	],
+	'cradily': [
+		'earthpower',
+		'sludgebomb'
+	],
+	'lilligant': [
+		'earthpower',
+		'sludgebomb'
+	],
+	'roserade': [
+		'earthpower'
+	],
+	'trevenant': [
+		'rockslide',
+		'highhorsepower'
+	],
+	'gourgeist': [
+		'earthquake',
+		'rockslide'
+	],
+	'vileplume': [
+		'earthpower'
+	],
+	'decidueye': [
+		'stoneedge',
+		'knockoff'
+	],
+	'chesnaught': [
+		'stoneedge'
+	],
+	'toedscruel': [
+		'sludgebomb',
+		'knockoff'
+	],
+	'torterra': [
+		'stoneedge'
+	],
+	'whimsicott': [
+		'sludgebomb'
+	]
+};
+
+/**
+ * Build the buff table: finals first (so each records its own additions before
+ * a pre-evolution claims them), then their pre-evolutions with the same new
+ * move and ability so a line is one idea, then Mew, then Regigigas.
+ */
+exports.buildBuffs = (Pokedex) => {
+	const out = {};
+	const add = (id, moves, abilities) => {
+		const entry = out[id] || (out[id] = { moves: [], abilities: [] });
+		for (const m of moves) if (!entry.moves.includes(m)) entry.moves.push(m);
+		for (const a of abilities) if (!entry.abilities.includes(a)) entry.abilities.push(a);
+	};
+	for (const group of Object.values(GROUPS)) {
+		for (const id of group.species) add(id, group.moves, ABILITY_GRANTS[id] ? [ABILITY_GRANTS[id]] : []);
+	}
+	for (const [id, moves] of Object.entries(SMALL)) add(id, moves, []);
+	for (const [id, ability] of Object.entries(ABILITY_GRANTS)) add(id, [], [ability]);
+	for (const id of UNAWARE) if (Pokedex[id]) add(id, [], ['Unaware']);
+	// Caretaker for the Blissey line (data/velvet/stall.js).
+	for (const id of ['happiny', 'chansey', 'blissey']) if (Pokedex[id]) add(id, [], ['Caretaker']);
+
+	// Coverage for Grass types.
+	for (const [id, moves] of Object.entries(GRASS_COVERAGE)) if (Pokedex[id]) add(id, moves, []);
+
+	// Newer (Gen 8-9) shared moves for older Pokemon that fit them.
+	for (const [move, ids] of Object.entries(NEWER_MOVES)) {
+		for (const id of ids) if (Pokedex[id]) add(id, [move], []);
+	}
+
+	// The ten shared moves, handed out like TMs to everything they suit.
+	for (const [move, ids] of Object.entries(TM_DISTRIBUTION)) {
+		for (const id of ids) if (Pokedex[id]) add(id, [move], []);
+	}
+
+	// Pre-evolutions: the new move (not the coverage) and the ability.
+	const SIGNATURES = ['continentalheave', 'aurorasquall', 'memorywipe', 'soulresonance', 'resolutestrike', 'gleamstalk', 'greatsagestrike', 'pyrestrike', 'eldertimber', 'tectonicshell', 'imperialtorrent', 'royaldecree', 'soultoll', 'thornedbouquet', 'bulldogmaul', 'uilasurge', 'manapierce', 'nahelerush', 'ohuwave', 'grandfeast', 'devour', 'endlesshunger'];
+	const newMove = m => exports.MOVES[m] && !SIGNATURES.includes(m);
+	for (const id of Object.keys(out)) {
+		let species = Pokedex[id];
+		const seen = new Set([id]);
+		while (species && species.prevo) {
+			const pre = String(species.prevo).toLowerCase().replace(/[^a-z0-9]+/g, '');
+			if (seen.has(pre) || !Pokedex[pre]) break;
+			seen.add(pre);
+			add(pre, out[id].moves.filter(newMove), out[id].abilities.slice());
+			species = Pokedex[pre];
+		}
+	}
+
+	// Luxray, now Electric/Dark (see unnerfs.js): Dark attacks for the new STAB and
+	// Prankster with the stalker's support moves. Luxray only, not Shinx or Luxio.
+	if (Pokedex.luxray) add('luxray', LUXRAY.moves, [LUXRAY.ability]);
+	if (Pokedex.guzzlord) add('guzzlord', GUZZLORD.moves, []);
+
+	// Golisopod only, not Wimpod: after the pre-evolution pass.
+	if (Pokedex.golisopod) add('golisopod', GOLISOPOD, []);
+
+	// The eeveelutions, after the pre-evolution pass so Eevee does not inherit them.
+	for (const [id, e] of Object.entries(EEVEELUTIONS)) if (Pokedex[id]) add(id, e.moves, [e.ability]);
+
+	// Eevee's kit (Patch 1.5), for Eevee and all eight.
+	for (const id of ['eevee', ...Object.keys(EEVEELUTIONS)]) if (Pokedex[id]) add(id, EEVEE, []);
+
+	// Infernape only: after the pre-evolution pass.
+	if (Pokedex.infernape) add('infernape', INFERNAPE.moves, [INFERNAPE.ability]);
+	if (Pokedex.spiritomb) add('spiritomb', SPIRITOMB.moves, [SPIRITOMB.ability]);
+	if (Pokedex.roserade) add('roserade', ROSERADE.moves, [ROSERADE.ability]);
+	if (Pokedex.granbull) add('granbull', GRANBULL.moves, [GRANBULL.ability]);
+	for (const [id, moves] of Object.entries(TAPUS)) if (Pokedex[id]) add(id, moves, []);
+	if (Pokedex.togekiss) add('togekiss', TOGEKISS, []);
+	if (Pokedex.dewgong) add('dewgong', DEWGONG, []);
+	for (const [id, moves] of Object.entries(ZU_MOVES)) if (Pokedex[id]) add(id, moves, []);
+	if (Pokedex.torterra) add('torterra', TORTERRA.moves, [TORTERRA.ability]);
+	if (Pokedex.empoleon) add('empoleon', EMPOLEON.moves, [EMPOLEON.ability]);
+	for (const [id, ability] of Object.entries(TRIO_BABIES)) if (Pokedex[id]) add(id, [], [ability]);
+	// The creation trio's normal forms (data/velvet/creation-trio.js).
+	for (const [id, g] of Object.entries(require('./creation-trio.js').GRANTS)) if (Pokedex[id]) add(id, g.moves, [g.ability]);
+	// What the box-art and Uber legendaries were owed (data/velvet/legend-kits.js).
+	for (const [id, moves] of Object.entries(require('./legend-kits.js').GRANTS)) if (Pokedex[id]) add(id, moves, []);
+
+	// Mew learns every machine move there is, and these are handed out like machines.
+	add('mew', Object.keys(exports.MOVES).filter(newMove), []);
+
+	// Colossus Unbound first, so it is what a new set starts with; Slow Start stays pickable.
+	out.regigigas = { moves: ['continentalheave'], abilities: ['Colossus Unbound'], first: true };
+	// A Second Legend: Articuno keeps Pressure and Snow Cloak and gains its own.
+	out.articuno = { moves: ['aurorasquall', 'freezedry', 'hurricane', 'calmmind', 'roost', 'uturn'], abilities: ['Polar Mantle'] };
+	// The Legends Rise: each keeps what it had and gains its own. Uxie and Mesprit get
+	// signature abilities, each letting Psychic moves hit Dark types.
+	// Regirock, brought level with Regice: its own ability and a real kit.
+	out.regirock = { moves: ['headsmash', 'rockwrecker', 'craghammer', 'shoreup', 'spikes', 'knockoff', 'rapidspin'], abilities: ['Bedrock Core'] };
+	out.regice = { moves: ['freezedry', 'recover', 'aurorabeam', 'chillingwater', 'auroraveil'], abilities: ['Permafrost Core'] };
+	out.uxie = { moves: ['memorywipe', 'slackoff', 'teleport', 'healbell'], abilities: ['Mind Keeper'] };
+	out.mesprit = { moves: ['soulresonance', 'moonblast', 'calmmind', 'wish'], abilities: ['Heartfelt Resolve'] };
+	out.azelf = { moves: ['resolutestrike', 'closecombat', 'swordsdance', 'knockoff'], abilities: ['Unbending Will'] };
+	// Those five are written whole, which wiped whatever the shared moves had given
+	// them earlier (Velvet Press never reached Regice or the lake trio). Hand the
+	// shared moves out again on top; add() merges, so nothing is lost either way.
+	for (const [move, ids] of Object.entries(TM_DISTRIBUTION)) {
+		for (const id of ids) if (Pokedex[id] && ['regigigas', 'articuno', 'regice', 'regirock', 'uxie', 'mesprit', 'azelf'].includes(id)) add(id, [move], []);
+	}
+	return out;
+};
+
+exports.GROUPS = GROUPS;
+exports.TM_DISTRIBUTION = TM_DISTRIBUTION;
+exports.NEWER_MOVES = NEWER_MOVES;
+exports.GRASS_COVERAGE = GRASS_COVERAGE;
+exports.SMALL = SMALL;
+exports.ABILITY_GRANTS = ABILITY_GRANTS;
+exports.UNAWARE = UNAWARE;
+exports.EEVEELUTIONS = EEVEELUTIONS;
+
+/**
+ * Gleamstalk is Dark-type lightning: every ability that absorbs Electric moves
+ * absorbs it too. Found by what the ability checks rather than by a list, so
+ * Mudflat Ambush, Static Needles and anything added later come along; each is
+ * shown the move as Electric and does exactly what it does to one.
+ */
+exports.patchAbsorbers = Abilities => {
+	for (const ability of Object.values(Abilities)) {
+		const original = ability && ability.onTryHit;
+		if (typeof original !== 'function' || original.velvetGleamstalk || !/Electric/.test(String(original))) continue;
+		ability.onTryHit = function (target, source, move) {
+			if (move && move.id === 'gleamstalk') move = Object.create(move, { type: { value: 'Electric' } });
+			return original.call(this, target, source, move);
+		};
+		ability.onTryHit.velvetGleamstalk = true;
+	}
+	return Abilities;
+};
+exports.LUXRAY = LUXRAY;
+exports.GUZZLORD = GUZZLORD;
+exports.GOLISOPOD = GOLISOPOD;
+exports.EEVEE = EEVEE;
+exports.INFERNAPE = INFERNAPE;
+exports.SPIRITOMB = SPIRITOMB;
+exports.ROSERADE = ROSERADE;
+exports.GRANBULL = GRANBULL;
+exports.DEWGONG = DEWGONG;
+exports.ZU_MOVES = ZU_MOVES;
+exports.TAPUS = TAPUS;
+exports.TOGEKISS = TOGEKISS;
+exports.TORTERRA = TORTERRA;
+exports.EMPOLEON = EMPOLEON;
+exports.TRIO_BABIES = TRIO_BABIES;
