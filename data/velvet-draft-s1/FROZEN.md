@@ -8,3 +8,7 @@ same until the season ends.
 
 Never edit these files. `test/draft-frozen.test.js` fails if anything here
 changes. For Season 2, copy `data/velvet` again into a new folder.
+
+One correction since, by the owner's call (24 Oct 2026): Dragonize (Mega Feraligatr)
+was left at 1.2x when the other -ate abilities went back to 1.3x, which was our
+mistake, not a balance change, so it was fixed here too (unnerfs.js).

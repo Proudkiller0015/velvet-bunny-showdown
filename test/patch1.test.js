@@ -932,7 +932,8 @@ check(['dragapult', 'dragonitemega', 'lucariomegaz', 'greninjabond', 'magearna',
 		return `${move.type} ${b.runEvent('BasePower', b.p1.active[0], b.p2.active[0], move, move.basePower, true)}`;
 	};
 	for (const [species, ability, type] of [['Sylveon', 'Pixilate', 'Fairy'], ['Salamence-Mega', 'Aerilate', 'Flying'],
-		['Glalie-Mega', 'Refrigerate', 'Ice'], ['Golem-Alola', 'Galvanize', 'Electric'], ['Sylveon', 'Ribbon Hymn', 'Fairy']]) {
+		['Glalie-Mega', 'Refrigerate', 'Ice'], ['Golem-Alola', 'Galvanize', 'Electric'], ['Sylveon', 'Ribbon Hymn', 'Fairy'],
+		['Feraligatr-Mega', 'Dragonize', 'Dragon']]) {
 		const got = power(species, ability);
 		check(got === `${type} 117`, `${ability} Hyper Voice is ${type} at 117 power (${got})`);
 	}

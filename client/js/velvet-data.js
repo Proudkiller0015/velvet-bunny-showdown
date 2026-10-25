@@ -3833,7 +3833,7 @@
 					// Normalize is 1.3x here, not 1.2x: the tooltip already applied its 1.2.
 					if (ability === 'normalize' && moveType === 'Normal' && String(out.comment || '').indexOf('Normalize') >= 0) out.modify(5325 / 4915, 'Normalize (1.3x here)');
 					// The -ate abilities too: 1.3x here, on top of the tooltip's own 1.2.
-					var ATE = { aerilate: 'Aerilate', galvanize: 'Galvanize', pixilate: 'Pixilate', refrigerate: 'Refrigerate' };
+					var ATE = { aerilate: 'Aerilate', galvanize: 'Galvanize', pixilate: 'Pixilate', refrigerate: 'Refrigerate', dragonize: 'Dragonize' };
 					if (ATE[ability] && String(out.comment || '').indexOf(ATE[ability]) >= 0) out.modify(5325 / 4915, ATE[ability] + ' (1.3x here)');
 				}
 			} catch (e) {

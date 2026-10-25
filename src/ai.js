@@ -1247,6 +1247,13 @@ class BattleAI {
 				const best = TYPE_CHOOSERS[move.name].reduce((a, b) => (score(b) > score(a) ? b : a));
 				if (best !== move.type) { move = move.clone(); move.type = best; }
 			}
+			// Dragonize (Mega Feraligatr) is newer than the calculator: the retype and its 1.3x are done here.
+			let dragonize = 1;
+			if (String(attacker.ability || '') === 'Dragonize' && move.type === 'Normal' && !move.isZ && !move.isMax && !NO_TYPE_CHANGE.has(move.name)) {
+				move = move.clone();
+				move.type = 'Dragon';
+				dragonize = 1.3;
+			}
 			if (birdMove) {
 				defender = retype(defender, ['Water']);
 				defender.teraType = undefined;
@@ -1256,7 +1263,7 @@ class BattleAI {
 			const dmg = result.damage;
 			const rolls = Array.isArray(dmg) ? dmg.flat().filter(n => typeof n === 'number') : [dmg];
 			if (!rolls.length) return 0;
-			let avg = birdStab * charged * scale * typeChangerBoost(attacker, move, result) * rolls.reduce((a, b) => a + b, 0) / rolls.length;
+			let avg = birdStab * charged * scale * dragonize * typeChangerBoost(attacker, move, result) * rolls.reduce((a, b) => a + b, 0) / rolls.length;
 			// Glitched Data: a hit takes at most a quarter of its maximum HP, unless the attacker ignores abilities.
 			if (String(defender.ability || '') === 'Glitched Data' && !/^(Mold Breaker|Teravolt|Turboblaze)$/.test(String(attacker.ability || ''))) {
 				avg = Math.min(avg, Math.floor(defender.maxHP() / 4));

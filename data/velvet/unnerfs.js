@@ -215,6 +215,8 @@ function unnerfAbilities(Abilities) {
 	unnerfAte(Abilities.galvanize, 'Electric');
 	unnerfAte(Abilities.pixilate, 'Fairy');
 	unnerfAte(Abilities.refrigerate, 'Ice');
+	// Mega Feraligatr's: the same family, missed when the others went back to 1.3x (24 Oct 2026).
+	unnerfAte(Abilities.dragonize, 'Dragon');
 	buffNormalize(Abilities.normalize);
 	unnerfProtean(Abilities.protean, 'Protean');
 	unnerfProtean(Abilities.libero, 'Libero');
@@ -309,7 +311,7 @@ function unnerfSpecies(Pokedex) {
 
 exports.CHANGED = {
 	moves: ['darkvoid', ...Object.keys(RECOVERY_PP)],
-	abilities: ['protean', 'libero', 'battlebond', 'normalize', 'transistor', 'galewings', 'aerilate', 'galvanize', 'pixilate', 'refrigerate'],
+	abilities: ['protean', 'libero', 'battlebond', 'normalize', 'transistor', 'galewings', 'aerilate', 'galvanize', 'pixilate', 'refrigerate', 'dragonize'],
 	species: [...new Set([...Object.keys(SPECIES_STATS), ...Object.keys(SPECIES_TYPES), ...Object.keys(SPECIES_ABILITIES)])],
 };
 exports.unnerfSpecies = unnerfSpecies;
