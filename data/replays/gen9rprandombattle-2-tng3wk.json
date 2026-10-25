@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-2-tng3wk",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Normal",
+		"Jazmin Itzel"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Normal\n|j|☆Jazmin Itzel\n|t:|1792966691\n|gametype|singles\n|player|p1|Bunny Normal|bunny.png|1211\n|player|p2|Jazmin Itzel|266|1069\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1792966692\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Ariados|Ariados, L95, M|100/100\n|switch|p2a: Houndoom|Houndoom, L87, M|100/100\n|turn|1\n|c|☆Bunny Normal|Good luck! Playing on **normal**.\n|\n|t:|1792966703\n|move|p2a: Houndoom|Fire Blast|p1a: Ariados\n|-supereffective|p1a: Ariados\n|-enditem|p1a: Ariados|Focus Sash\n|-damage|p1a: Ariados|1/100\n|move|p1a: Ariados|Megahorn|p2a: Houndoom\n|-damage|p2a: Houndoom|0 fnt\n|faint|p2a: Houndoom\n|\n|upkeep\n|\n|t:|1792966719\n|switch|p2a: Calyrex|Calyrex-Shadow, L64|100/100\n|-ability|p2a: Calyrex|As One\n|-ability|p2a: Calyrex|Unnerve\n|turn|2\n|\n|t:|1792966737\n|move|p2a: Calyrex|Astral Barrage|p1a: Ariados\n|-damage|p1a: Ariados|0 fnt\n|faint|p1a: Ariados\n|-ability|p2a: Calyrex|Grim Neigh|boost\n|-boost|p2a: Calyrex|spa|1\n|-damage|p2a: Calyrex|91/100|[from] item: Life Orb\n|\n|upkeep\n|\n|t:|1792966738\n|switch|p1a: Crawdaunt|Crawdaunt, L84, F|100/100\n|turn|3\n|\n|t:|1792966751\n|move|p2a: Calyrex|Astral Barrage|p1a: Crawdaunt\n|-resisted|p1a: Crawdaunt\n|-damage|p1a: Crawdaunt|41/100\n|-damage|p2a: Calyrex|81/100|[from] item: Life Orb\n|move|p1a: Crawdaunt|Knock Off|p2a: Calyrex\n|-supereffective|p2a: Calyrex\n|-crit|p2a: Calyrex\n|-damage|p2a: Calyrex|0 fnt\n|-enditem|p2a: Calyrex|Life Orb|[from] move: Knock Off|[of] p1a: Crawdaunt\n|faint|p2a: Calyrex\n|-damage|p1a: Crawdaunt|31/100|[from] item: Life Orb\n|\n|upkeep\n|\n|t:|1792966766\n|switch|p2a: Venusaur|Venusaur, L84, M|100/100\n|turn|4\n|\n|t:|1792966774\n|move|p2a: Venusaur|Sludge Bomb|p1a: Crawdaunt\n|-damage|p1a: Crawdaunt|0 fnt\n|faint|p1a: Crawdaunt\n|\n|upkeep\n|\n|t:|1792966774\n|switch|p1a: Swanna|Swanna, L89, F|100/100\n|turn|5\n|\n|t:|1792966785\n|switch|p2a: Lucario|Lucario, L84, M|100/100\n|move|p1a: Swanna|Brave Bird|p2a: Lucario\n|-damage|p2a: Lucario|42/100\n|-damage|p1a: Swanna|83/100|[from] Recoil\n|\n|upkeep\n|turn|6\n",
+	"inputlog": null,
+	"uploadtime": 1792966787
+}
