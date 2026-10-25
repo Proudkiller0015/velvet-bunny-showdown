@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-1-tng3wk",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Easy",
+		"Jazmin Itzel"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆Jazmin Itzel\n|t:|1792966179\n|gametype|singles\n|player|p1|Bunny Easy|bunny.png|1212\n|player|p2|Jazmin Itzel|266|1000\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1792966179\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Vivillon|Vivillon-Icy Snow, L83, F|100/100\n|switch|p2a: Uxie|Uxie, L83|100/100\n|turn|1\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1792966197\n|move|p2a: Uxie|Thunder Wave|p1a: Vivillon\n|-status|p1a: Vivillon|par\n|move|p1a: Vivillon|Hurricane|p2a: Uxie|[miss]\n|-miss|p1a: Vivillon|p2a: Uxie\n|\n|upkeep\n|turn|2\n|\n|t:|1792966205\n|move|p2a: Uxie|Knock Off|p1a: Vivillon\n|-damage|p1a: Vivillon|70/100 par\n|-enditem|p1a: Vivillon|Heavy-Duty Boots|[from] move: Knock Off|[of] p2a: Uxie\n|move|p1a: Vivillon|Hurricane|p2a: Uxie\n|-damage|p2a: Uxie|70/100\n|\n|-heal|p2a: Uxie|76/100|[from] item: Leftovers\n|upkeep\n|turn|3\n|\n|t:|1792966275\n|switch|p2a: Drifblim|Drifblim, L86, F|100/100\n|cant|p1a: Vivillon|par\n|\n|upkeep\n|turn|4\n|\n|t:|1792966285\n|move|p2a: Drifblim|Calm Mind|p2a: Drifblim\n|-boost|p2a: Drifblim|spa|1\n|-boost|p2a: Drifblim|spd|1\n|cant|p1a: Vivillon|par\n|\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1792966286
+}
