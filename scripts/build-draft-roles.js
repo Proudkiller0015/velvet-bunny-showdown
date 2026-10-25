@@ -26,6 +26,8 @@ const MOVES = {
 	setup: ['swordsdance', 'dragondance', 'nastyplot', 'calmmind', 'quiverdance', 'bulkup', 'shellsmash', 'shiftgear', 'coil', 'victorydance', 'tidyup', 'agility', 'bellydrum'],
 	trickroom: ['trickroom'],
 	pursuit: ['pursuit'],
+	// Ours halve the target's Defense (Gen 1-4 rule): a trade with almost anything not a Ghost.
+	boom: ['explosion', 'selfdestruct'],
 };
 
 /** Every move a species can learn, through its pre-evolutions and base form. */
@@ -59,6 +61,7 @@ for (const p of pool) {
 	if ((has('priority') && atk >= 90) || (has('weakPriority') && atk >= 120)) tags.push('priority');
 	if (has('recovery')) tags.push('recovery');
 	if (has('pursuit')) tags.push('pursuit');
+	if (has('boom') && atk >= 90) tags.push('boom');
 	if (has('trickroom') && b.spe <= 70) tags.push('trsetter');
 	if (b.spe <= 60 && attack >= 105) tags.push('trabuser');
 	if (b.spe >= 100 && attack >= 105) tags.push('fast');
