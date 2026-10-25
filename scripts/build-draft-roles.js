@@ -54,8 +54,8 @@ for (const p of pool) {
 	if (has('hazards')) tags.push('hazards');
 	if (has('removal')) tags.push('removal');
 	if (has('pivot') || ability.includes('regenerator')) tags.push('pivot');
-	// Huge Power and Pure Power double it: Azumarill's Aqua Jet is a real one.
-	const atk = ability.includes('hugepower') || ability.includes('purepower') ? b.atk * 2 : b.atk;
+	// Huge Power and Pure Power double the stat: about the same as base Attack 2x + 60 (Azumarill's 50 reads as 160).
+	const atk = ability.includes('hugepower') || ability.includes('purepower') ? b.atk * 2 + 60 : b.atk;
 	if ((has('priority') && atk >= 90) || (has('weakPriority') && atk >= 120)) tags.push('priority');
 	if (has('recovery')) tags.push('recovery');
 	if (has('pursuit')) tags.push('pursuit');
