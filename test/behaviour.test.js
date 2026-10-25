@@ -74,6 +74,22 @@ function benchMon(species, moves, opts = {}) {
 	};
 }
 
+console.log('\n--- locked into nothing (the Stockfish stall game, 24 Oct 2026) ---');
+for (const difficulty of ['stockfish', 'champion', 'hard']) {
+	const ai = new BattleAI({ difficulty });
+	const lockedInto = (name, opts = {}) => {
+		const s = scenario({ me: 'Blissey', myMoves: ['Calm Mind', 'Soft-Boiled', 'Seismic Toss', 'Toxic'], myItem: 'choicescarf', foe: 'Gholdengo', foeMoves: ['Make It Rain', 'Focus Blast'], myHp: opts.hp || 100,
+			bench: [benchMon('Clodsire', ['Earthquake', 'Recover', 'Spikes', 'Poison Jab'])] });
+		for (const m of s.request.active[0].moves) m.disabled = m.move !== name;
+		if (opts.struggle) s.request.active[0].moves = [{ move: 'Struggle', id: 'struggle', target: 'randomNormal', disabled: false }];
+		return ai.decide(s.request, s.state);
+	};
+	check(`${difficulty}: Scarf-locked into Calm Mind, it switches`, lockedInto('Calm Mind'), c => /^switch/.test(c));
+	check(`${difficulty}: Scarf-locked into Soft-Boiled at full HP, it switches`, lockedInto('Soft-Boiled'), c => /^switch/.test(c));
+	check(`${difficulty}: out of PP (Struggle only), it switches`, lockedInto('Calm Mind', { struggle: true }), c => /^switch/.test(c));
+	check(`${difficulty}: locked into Soft-Boiled at 40%, it heals`, lockedInto('Soft-Boiled', { hp: 40 }), c => /^move 2/.test(c));
+}
+
 console.log('\n--- setup gating ---');
 {
 	const ai = new BattleAI({ difficulty: 'champion' });

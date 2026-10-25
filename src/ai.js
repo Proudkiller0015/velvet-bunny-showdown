@@ -3916,6 +3916,32 @@ class BattleAI {
 			}
 		}
 
+		/*
+		 * Locked into one move that does nothing (24 Oct 2026, the owner's game against Stockfish):
+		 * a Blissey holding a Tricked Choice Scarf stayed in clicking Calm Mind, then Soft-Boiled at
+		 * full HP, then Struggled itself to death - stall's own rules kept it in, so this comes first.
+		 * Locked by a Choice item, Encore or empty PP into a status move, a heal it does not need, or
+		 * Struggle, it leaves for the best Pokemon on its bench.
+		 */
+		if (!this.cfg.naive && this.cfg.lockExit !== false && this.cfg.switching && legal.length === 1 && !active.trapped && !active.maybeTrapped) {
+			const only = PkmnDex.forGen(gen.num).moves.get(legal[0].move || legal[0].id);
+			const hpNow = (me.originalCurHP / me.maxHP()) * 100;
+			const struggling = only.id === 'struggle';
+			const useless = struggling || (only.category === 'Status' && !(only.flags && only.flags.heal && hpNow < 60));
+			if (useless && ((active.moves || []).length > 1 || struggling)) {
+				let alt = null;
+				for (const [i, p] of request.side.pokemon.entries()) {
+					if (p.active || /fnt/.test(p.condition)) continue;
+					const score = this.benchScore(gen, p, state, field, request, true);
+					if (!alt || score > alt.score) alt = { score, i: i + 1 };
+				}
+				if (alt) {
+					this.log(`locked into ${only.name}, nothing to gain -> switch ${alt.i}`);
+					return `switch ${alt.i}`;
+				}
+			}
+		}
+
 		// Stall's own switching and healing first (stallSwitch); a move it insists on skips the general rule.
 		let stallKeeps = false;
 		if (stall && (rules.pivot || rules.preserve || rules.boosted || rules.wish) && this.cfg.switching && request.side.pokemon.length > 1 && !active.trapped && !active.maybeTrapped) {
