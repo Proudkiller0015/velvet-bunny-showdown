@@ -41,7 +41,9 @@
 	var patchIndex = typeof WeakMap === 'function' ? new WeakMap() : null;
 	/*
 	 * `late`: a change made after the Season 1 draft froze its data (data/velvet-draft-s1). It is
-	 * RP's, but not the draft's, so the builder leaves it out while a draft format is picked.
+	 * RP's, but not the draft's, so the builder leaves it out while a draft format is picked. A late
+	 * change over an earlier one keeps the earlier for the draft (a Hard Press RP gave Steelix
+	 * before the freeze, taken out after it).
 	 */
 	function rpSet(obj, key, value, del, late) {
 		if (!obj) return;
@@ -53,11 +55,21 @@
 			if (byKey) byKey[key] = p;
 			RP.patches.push(p);
 		}
+		if (late && !p.late && 'val' in p) p.draft = { val: p.val, del: p.del };
 		p.val = value;
 		p.del = !!del;
 		p.late = !!late;
-		if (RP.on && !(p.late && RP.draft)) {
-			if (p.del) delete obj[key]; else obj[key] = value;
+		apply(p, RP.on, RP.draft);
+	}
+	/** Puts one change in for RP (or its pre-freeze value for the draft), or Showdown's value back. */
+	function apply(p, on, draft) {
+		var now = !on ? null : p.late && draft ? p.draft || null : p;
+		if (now) {
+			if (now.del) delete p.o[p.k]; else p.o[p.k] = now.val;
+		} else if (p.had) {
+			p.o[p.k] = p.old;
+		} else {
+			delete p.o[p.k];
 		}
 	}
 	/** The row a table held when we changed it, so a cached copy can be thrown away on a switch. */
@@ -73,16 +85,7 @@
 		if (RP.on === on && !!RP.draft === draft) return;
 		RP.on = on;
 		RP.draft = draft;
-		for (var i = 0; i < RP.patches.length; i++) {
-			var p = RP.patches[i];
-			if (on && !(p.late && draft)) {
-				if (p.del) delete p.o[p.k]; else p.o[p.k] = p.val;
-			} else if (p.had) {
-				p.o[p.k] = p.old;
-			} else {
-				delete p.o[p.k];
-			}
-		}
+		for (var i = 0; i < RP.patches.length; i++) apply(RP.patches[i], on, draft);
 		// The client caches a built Species, Move or Ability in place of the row it
 		// came from; put the rows back so the next lookup builds from the switched data.
 		for (var r = 0; r < RP.rows.length; r++) {
@@ -2550,14 +2553,17 @@
 					if (!learnset[added[k]] || learnset[added[k]] === '9a') rpSet(learnset, added[k], '9a');
 				}
 			}
-			// Moves RP took out, swapped for their replacement in every learnset (Hard Press is Anvil Drop).
-			var replaced = buffs.replacedMoves || {};
-			for (var id3 in table.learnsets) {
-				var row = table.learnsets[id3];
-				for (var old in replaced) {
+			// Paired moves: every Hard Press learner also gets Anvil Drop, and only the
+			// official learners keep Hard Press. Both are post-freeze, so RP Draft is untouched.
+			var paired = buffs.pairedMoves || {};
+			for (var old in paired) {
+				var keep = {};
+				for (var q = 0; q < paired[old].keep.length; q++) keep[paired[old].keep[q]] = true;
+				for (var id3 in table.learnsets) {
+					var row = table.learnsets[id3];
 					if (!row || !row[old]) continue;
-					rpSet(row, replaced[old], row[old], false, true);
-					rpSet(row, old, undefined, true, true);
+					rpSet(row, paired[old].to, row[old], false, true);
+					if (!keep[id3]) rpSet(row, old, undefined, true, true);
 				}
 			}
 		} else ready = false;

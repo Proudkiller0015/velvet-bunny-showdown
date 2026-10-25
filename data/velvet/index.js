@@ -62,7 +62,12 @@ let buffedPokedex = null;
 let buffedLearnsets = null;
 let tierTable = null;
 function buffWhatWeHave() {
-	if (buffedPokedex && buffedLearnsets) applyBuffs(buffedPokedex, buffedLearnsets);
+	if (buffedPokedex && buffedLearnsets) {
+		applyBuffs(buffedPokedex, buffedLearnsets);
+		// After every grant: Hard Press learners also get Anvil Drop, and only the
+		// official ones keep Hard Press (balance-patch-1.js PAIRED_MOVES).
+		require('./balance-patch-1.js').pairMoves(buffedLearnsets);
+	}
 	// The Z-A Megas need the stats from one file and the tiers from another, so
 	// like the buffs they wait until both have been through here.
 	if (buffedPokedex && tierTable) {
@@ -107,8 +112,6 @@ exports.learnsets = data => {
 	AbyssShrine.learnsets(data);
 	Collab.learnsets(data);
 	Touhou.learnsets(data);
-	// Hard Press is Anvil Drop in RP (balance-patch-1.js REPLACED_MOVES).
-	require('./balance-patch-1.js').replaceMoves(data);
 	buffedLearnsets = data;
 	teachHerEverything();
 	buffWhatWeHave();

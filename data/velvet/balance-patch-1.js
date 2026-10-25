@@ -2504,18 +2504,34 @@ exports.buildBuffs = (Pokedex) => {
 	return out;
 };
 
-/** Moves taken out of RP and the one each learnset gets in their place. */
-const REPLACED_MOVES = { hardpress: 'anvildrop' };
-exports.REPLACED_MOVES = REPLACED_MOVES;
-/** Every learnset that has a replaced move gets its replacement, from the same sources. */
-exports.replaceMoves = Learnsets => {
-	for (const entry of Object.values(Learnsets)) {
-		const ls = entry && entry.learnset;
-		if (!ls) continue;
-		for (const [old, now] of Object.entries(REPLACED_MOVES)) {
-			if (!ls[old]) continue;
+/*
+ * A move and the RP one paired with it: every learnset that has the first also
+ * gets the second, from the same sources. The official learners keep the first;
+ * anything RP gave it to (NEWER_MOVES, our own Pokémon) gets only the second, so
+ * Hard Press stays where Game Freak put it and Anvil Drop is the one we hand out
+ * (the owner, 25 Oct 2026).
+ */
+const PAIRED_MOVES = { hardpress: 'anvildrop' };
+exports.PAIRED_MOVES = PAIRED_MOVES;
+/** The species that learn this move in the official dex, and Samantha, who learns every move (index.js teachHerEverything). */
+const officialLearners = move => {
+	const { Learnsets } = require('pokemon-showdown/dist/data/learnsets.js');
+	return [...Object.keys(Learnsets).filter(id => Learnsets[id].learnset && Learnsets[id].learnset[move]), 'samantha'];
+};
+/** For the client builder: each paired move, its partner and who keeps it. */
+exports.pairedMoves = () => {
+	const out = {};
+	for (const [old, now] of Object.entries(PAIRED_MOVES)) out[old] = { to: now, keep: officialLearners(old) };
+	return out;
+};
+exports.pairMoves = Learnsets => {
+	for (const [old, now] of Object.entries(PAIRED_MOVES)) {
+		const keep = new Set(officialLearners(old));
+		for (const [id, entry] of Object.entries(Learnsets)) {
+			const ls = entry && entry.learnset;
+			if (!ls || !ls[old]) continue;
 			ls[now] = ls[old];
-			delete ls[old];
+			if (!keep.has(id)) delete ls[old];
 		}
 	}
 	return Learnsets;

@@ -939,13 +939,15 @@ check(['dragapult', 'dragonitemega', 'lucariomegaz', 'greninjabond', 'magearna',
 	}
 }
 
-console.log('\n--- Anvil Drop replaces Hard Press (24 Oct 2026) ---');
+console.log('\n--- Anvil Drop next to Hard Press (24-25 Oct 2026) ---');
 {
 	const dex = require('pokemon-showdown').Dex.mod('gen9rp');
 	const m = dex.moves.get('anvildrop');
 	check(m.basePower === 105 && m.accuracy === 80 && m.type === 'Steel' && m.ignoreDefensive, `Anvil Drop: Steel, 105 power, 80%, ignores Defense boosts (${m.basePower}/${m.accuracy})`);
 	const ls = id => dex.species.getLearnsetData(id).learnset || {};
-	check(ls('registeel').anvildrop && !ls('registeel').hardpress, 'Registeel learns Anvil Drop, not Hard Press');
+	check(ls('registeel').anvildrop && ls('registeel').hardpress, 'Registeel, an official learner, keeps Hard Press and gets Anvil Drop');
+	check(ls('steelix').anvildrop && !ls('steelix').hardpress, 'Steelix, given it by RP, gets only Anvil Drop');
+	check(ls('samantha').anvildrop && ls('samantha').hardpress, 'Samantha still learns every move');
 	const vanilla = require('pokemon-showdown').Dex.species.getLearnsetData('registeel').learnset;
 	check(!!vanilla.hardpress && !vanilla.anvildrop, 'the official dex keeps Hard Press');
 	// Into Curse: the same hit at +6 Defense as at +0.

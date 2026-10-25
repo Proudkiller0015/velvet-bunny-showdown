@@ -479,7 +479,7 @@ window.VelvetBuffs = {
 \tmegaTiers: ${JSON.stringify(megaTiers)},
 \tnatdexTiers: ${JSON.stringify(natdexTiers)},
 \tlowTiers: ${JSON.stringify(lowTiers)},
-\treplacedMoves: ${JSON.stringify(require(path.join(__dirname, '..', 'data', 'velvet', 'balance-patch-1.js')).REPLACED_MOVES)},
+\tpairedMoves: ${JSON.stringify(require(path.join(__dirname, '..', 'data', 'velvet', 'balance-patch-1.js')).pairedMoves())},
 \tcutMoves: ${JSON.stringify(cutMoves)},
 \tcutMoveSources: ${JSON.stringify(cutMoveSources)},
 \tunlocked: ${JSON.stringify(unlocked)},
