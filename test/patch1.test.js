@@ -938,5 +938,25 @@ check(['dragapult', 'dragonitemega', 'lucariomegaz', 'greninjabond', 'magearna',
 	}
 }
 
+console.log('\n--- Anvil Drop replaces Hard Press (24 Oct 2026) ---');
+{
+	const dex = require('pokemon-showdown').Dex.mod('gen9rp');
+	const m = dex.moves.get('anvildrop');
+	check(m.basePower === 105 && m.accuracy === 80 && m.type === 'Steel' && m.ignoreDefensive, `Anvil Drop: Steel, 105 power, 80%, ignores Defense boosts (${m.basePower}/${m.accuracy})`);
+	const ls = id => dex.species.getLearnsetData(id).learnset || {};
+	check(ls('registeel').anvildrop && !ls('registeel').hardpress, 'Registeel learns Anvil Drop, not Hard Press');
+	const vanilla = require('pokemon-showdown').Dex.species.getLearnsetData('registeel').learnset;
+	check(!!vanilla.hardpress && !vanilla.anvildrop, 'the official dex keeps Hard Press');
+	// Into Curse: the same hit at +6 Defense as at +0.
+	const hit = (def) => {
+		const b = battle([{ species: 'Registeel', ability: 'Clear Body', moves: ['anvildrop'] }], [{ species: 'Snorlax', ability: 'Thick Fat', moves: ['splash'] }]);
+		const target = b.p2.active[0];
+		target.boosts.def = def;
+		const move = b.dex.getActiveMove('anvildrop');
+		return b.actions.getDamage(b.p1.active[0], target, move, true);
+	};
+	check(hit(6) === hit(0) && hit(0) > 0, `it ignores +6 Defense (${hit(6)} vs ${hit(0)})`);
+}
+
 console.log(failed ? `\n${failed} failed` : '\nall passed');
 process.exit(failed ? 1 : 0);

@@ -435,6 +435,23 @@ exports.MOVES = {
 		desc: "The user brings down a blade of ancient frost in one clean, slicing stroke.",
 	},
 	/*
+	 * Anvil Drop replaces Hard Press (the owner, 24 Oct 2026: "nobody will ever use
+	 * it, its a waste"). Hard Press was 100 power only against a full-HP target and
+	 * weaker after every hit. This is a flat 105 that, like Chip Away, ignores the
+	 * target's Defense and evasion boosts: Steel's answer to Curse and Iron Defense
+	 * walls. 80% accurate, the drawback the owner asked for.
+	 */
+	anvildrop: {
+		num: -305, gen: 9, name: "Anvil Drop", type: "Steel", category: "Physical",
+		basePower: 105, accuracy: 80, pp: 10, priority: 0,
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		ignoreDefensive: true, ignoreEvasion: true,
+		secondary: null, target: "normal", contestType: "Tough", velvetShared: true,
+		flavor: "The user drops on the target like a hammer on an anvil. No armor softens the blow.",
+		shortDesc: "Ignores the target's stat stage changes.",
+		desc: "Ignores the target's stat stage changes, including evasiveness. Replaces Hard Press: every Pokemon that learned Hard Press learns this instead.",
+	},
+	/*
 	 * Oxidize: Poison's Freeze-Dry. Steel is normally immune to Poison; this
 	 * rusts it instead, for super-effective damage. 70 power, 100%, and a 10%
 	 * chance to confuse. It never poisons.
@@ -2487,6 +2504,22 @@ exports.buildBuffs = (Pokedex) => {
 	return out;
 };
 
+/** Moves taken out of RP and the one each learnset gets in their place. */
+const REPLACED_MOVES = { hardpress: 'anvildrop' };
+exports.REPLACED_MOVES = REPLACED_MOVES;
+/** Every learnset that has a replaced move gets its replacement, from the same sources. */
+exports.replaceMoves = Learnsets => {
+	for (const entry of Object.values(Learnsets)) {
+		const ls = entry && entry.learnset;
+		if (!ls) continue;
+		for (const [old, now] of Object.entries(REPLACED_MOVES)) {
+			if (!ls[old]) continue;
+			ls[now] = ls[old];
+			delete ls[old];
+		}
+	}
+	return Learnsets;
+};
 exports.GROUPS = GROUPS;
 exports.TM_DISTRIBUTION = TM_DISTRIBUTION;
 exports.NEWER_MOVES = NEWER_MOVES;

@@ -2543,6 +2543,16 @@
 					if (!learnset[added[k]] || learnset[added[k]] === '9a') rpSet(learnset, added[k], '9a');
 				}
 			}
+			// Moves RP took out, swapped for their replacement in every learnset (Hard Press is Anvil Drop).
+			var replaced = buffs.replacedMoves || {};
+			for (var id3 in table.learnsets) {
+				var row = table.learnsets[id3];
+				for (var old in replaced) {
+					if (!row || !row[old]) continue;
+					rpSet(row, replaced[old], row[old]);
+					rpSet(row, old, undefined, true);
+				}
+			}
 		} else ready = false;
 
 		return ready;
@@ -4030,6 +4040,7 @@
 		aurorasquall: ['blizzard', 'icywind'],
 		voltaiclance: ['boltstrike', 'wildcharge', 'thunderbolt'],
 		rimecleaver: ['iciclecrash', 'mountaingale', 'icepunch'],
+		anvildrop: ['heavyslam', 'gigatonhammer', 'ironhead'],
 		oxidize: ['sludgewave', 'acid', 'sludgebomb'],
 		memorywipe: ['psychic', 'confusion'],
 		soulresonance: ['heartstamp', 'drainingkiss', 'psyshock'],

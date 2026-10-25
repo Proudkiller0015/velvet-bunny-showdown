@@ -1510,9 +1510,11 @@ exports.Formats = [
 				const mega = this.dex.species.get(typeof item.megaStone === 'string' ? item.megaStone : Object.values(item.megaStone)[0]);
 				if (mega.exists && mega.baseSpecies === species.baseSpecies) entry = mega;
 			}
-			// Cosmetic forms (Gastrodon-East) are drafted as their base.
+			// Cosmetic forms (Gastrodon-East) are drafted as their base, and so is every Silvally:
+			// its Memory forms are one Pokemon, the type it holds (the owner, 24 Oct 2026).
 			const base = this.dex.species.get(entry.baseSpecies);
-			const id = pool.ids.has(entry.id) ? entry.id : (base.cosmeticFormes || []).includes(entry.name) ? base.id : entry.id;
+			const asBase = (base.cosmeticFormes || []).includes(entry.name) || base.id === 'silvally';
+			const id = pool.ids.has(entry.id) ? entry.id : asBase ? base.id : entry.id;
 			if (pool.banned.has(id)) return [`${entry.name} is banned in the draft (${pool.banned.get(id)}).`];
 			if (!pool.ids.has(id)) return [`${entry.name} is not in the Season 1 draft pool.`];
 		},

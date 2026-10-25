@@ -107,6 +107,8 @@ exports.learnsets = data => {
 	AbyssShrine.learnsets(data);
 	Collab.learnsets(data);
 	Touhou.learnsets(data);
+	// Hard Press is Anvil Drop in RP (balance-patch-1.js REPLACED_MOVES).
+	require('./balance-patch-1.js').replaceMoves(data);
 	buffedLearnsets = data;
 	teachHerEverything();
 	buffWhatWeHave();
