@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-4-tng3wk",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Easy",
+		"Jazmin Itzel"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆Jazmin Itzel\n|t:|1792967257\n|gametype|singles\n|player|p1|Bunny Easy|bunny.png|1155\n|player|p2|Jazmin Itzel|266|1114\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1792967257\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Bronzong|Bronzong, L88|100/100\n|switch|p2a: Volbeat|Volbeat, L90, M|100/100\n|turn|1\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1792967274\n|move|p2a: Volbeat|Knock Off|p1a: Bronzong\n|-supereffective|p1a: Bronzong\n|-damage|p1a: Bronzong|64/100\n|-enditem|p1a: Bronzong|Leftovers|[from] move: Knock Off|[of] p2a: Volbeat\n|move|p1a: Bronzong|Stealth Rock|p2a: Volbeat\n|-sidestart|p2: Jazmin Itzel|move: Stealth Rock\n|\n|upkeep\n|turn|2\n|\n|t:|1792967283\n|-terastallize|p1a: Bronzong|Water\n|move|p2a: Volbeat|Leech Life|p1a: Bronzong\n|-damage|p1a: Bronzong|38/100\n|move|p1a: Bronzong|Hypno Whirl|p2a: Volbeat\n|-damage|p2a: Volbeat|68/100\n|\n|upkeep\n|turn|3\n|\n|t:|1792967293\n|move|p2a: Volbeat|Leech Life|p1a: Bronzong\n|-damage|p1a: Bronzong|14/100\n|-heal|p2a: Volbeat|80/100|[from] drain|[of] p1a: Bronzong\n|move|p1a: Bronzong|Hypno Whirl|p2a: Volbeat\n|-damage|p2a: Volbeat|47/100\n|\n|upkeep\n|turn|4\n|\n|t:|1792967302\n|move|p2a: Volbeat|Leech Life|p1a: Bronzong\n|-damage|p1a: Bronzong|0 fnt\n|-heal|p2a: Volbeat|54/100|[from] drain|[of] p1a: Bronzong\n|faint|p1a: Bronzong\n|\n|upkeep\n|\n|t:|1792967302\n|switch|p1a: Emboar|Emboar, L84, F|100/100\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1792967307
+}
