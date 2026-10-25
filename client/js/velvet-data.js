@@ -39,7 +39,11 @@
 	 */
 	var RP = { on: true, patches: [], rows: [] };
 	var patchIndex = typeof WeakMap === 'function' ? new WeakMap() : null;
-	function rpSet(obj, key, value, del) {
+	/*
+	 * `late`: a change made after the Season 1 draft froze its data (data/velvet-draft-s1). It is
+	 * RP's, but not the draft's, so the builder leaves it out while a draft format is picked.
+	 */
+	function rpSet(obj, key, value, del, late) {
 		if (!obj) return;
 		var byKey = patchIndex && patchIndex.get(obj);
 		if (!byKey && patchIndex) { byKey = {}; patchIndex.set(obj, byKey); }
@@ -51,7 +55,8 @@
 		}
 		p.val = value;
 		p.del = !!del;
-		if (RP.on) {
+		p.late = !!late;
+		if (RP.on && !(p.late && RP.draft)) {
 			if (p.del) delete obj[key]; else obj[key] = value;
 		}
 	}
@@ -62,13 +67,15 @@
 	function isRpFormat(format) {
 		return /gen\d+rp/.test(String(format || '').toLowerCase());
 	}
-	function setRpMode(on) {
+	function setRpMode(on, format) {
 		on = !!on;
-		if (RP.on === on) return;
+		var draft = on && /gen\d+rpdraft/.test(String(format || '').toLowerCase());
+		if (RP.on === on && !!RP.draft === draft) return;
 		RP.on = on;
+		RP.draft = draft;
 		for (var i = 0; i < RP.patches.length; i++) {
 			var p = RP.patches[i];
-			if (on) {
+			if (on && !(p.late && draft)) {
 				if (p.del) delete p.o[p.k]; else p.o[p.k] = p.val;
 			} else if (p.had) {
 				p.o[p.k] = p.old;
@@ -426,7 +433,7 @@
 			if (typeof original !== 'function') return;
 			tb.prototype[name] = function () {
 				var out = original.apply(this, arguments);
-				setRpMode(!this.curTeam || isRpFormat(this.curTeam.format));
+				setRpMode(!this.curTeam || isRpFormat(this.curTeam.format), this.curTeam && this.curTeam.format);
 				return out;
 			};
 		};
@@ -439,7 +446,7 @@
 			if (typeof original !== 'function') return;
 			proto[name] = function () {
 				var battle = battleOf(this);
-				if (battle) setRpMode(isRpFormat(battle.id || battle.roomid || battle.tier));
+				if (battle) setRpMode(isRpFormat(battle.id || battle.roomid || battle.tier), battle.id || battle.roomid || battle.tier);
 				return original.apply(this, arguments);
 			};
 		};
@@ -1471,7 +1478,7 @@
 		search.prototype.getTypedSearch = function (searchType, format, speciesOrSet) {
 			var asked = window.toID(format || '');
 			// Search is where the builder asks for a format's data, so this is where RP switches on or off.
-			if (asked) setRpMode(isRpFormat(asked));
+			if (asked) setRpMode(isRpFormat(asked), asked);
 			var mapped = RP_TIERS[asked];
 			var typed = original.call(this, searchType, mapped || format, speciesOrSet);
 			/*
@@ -2549,8 +2556,8 @@
 				var row = table.learnsets[id3];
 				for (var old in replaced) {
 					if (!row || !row[old]) continue;
-					rpSet(row, replaced[old], row[old]);
-					rpSet(row, old, undefined, true);
+					rpSet(row, replaced[old], row[old], false, true);
+					rpSet(row, old, undefined, true, true);
 				}
 			}
 		} else ready = false;
