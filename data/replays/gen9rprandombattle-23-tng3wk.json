@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-23-tng3wk",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Easy",
+		"arsneal42"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆arsneal42\n|t:|1793054095\n|gametype|singles\n|player|p1|Bunny Easy|bunny.png|1132\n|player|p2|arsneal42|266|1000\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1793054095\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Hydrapple|Hydrapple, L83, M|312/312\n|switch|p2a: Gyarados|Gyarados, L79, M|280/280\n|turn|1\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1793054144\n|-terastallize|p1a: Hydrapple|Steel\n|move|p2a: Gyarados|Earthquake|p1a: Hydrapple\n|-supereffective|p1a: Hydrapple\n|-damage|p1a: Hydrapple|174/312\n|move|p1a: Hydrapple|Leaf Storm|p2a: Gyarados\n|-damage|p2a: Gyarados|118/280\n|-unboost|p1a: Hydrapple|spa|2\n|\n|upkeep\n|turn|2\n|\n|t:|1793054172\n|move|p2a: Gyarados|Earthquake|p1a: Hydrapple\n|-supereffective|p1a: Hydrapple\n|-damage|p1a: Hydrapple|42/312\n|move|p1a: Hydrapple|Leaf Storm|p2a: Gyarados\n|-damage|p2a: Gyarados|37/280\n|-unboost|p1a: Hydrapple|spa|2\n|\n|upkeep\n|turn|3\n|l|☆arsneal42\n|player|p2|\n|inactive|arsneal42 has 2 minutes to come back and make a move, or they forfeit.\n|-message|arsneal42 lost due to inactivity.\n|\n|win|Bunny Easy\n",
+	"inputlog": ">start {\"formatid\":\"gen9rprandombattle\",\"seed\":\"sodium,9ad725ec66dcc4426c10247554e88417\",\"rated\":\"Rated battle\"}\n>player p1 {\"name\":\"Bunny Easy\",\"avatar\":\"bunny.png\",\"rating\":1132,\"seed\":\"sodium,054a99002122313b6f22864770fac0d7\"}\n>player p2 {\"name\":\"arsneal42\",\"avatar\":\"266\",\"rating\":1000,\"seed\":\"sodium,0ccb65ee615770db6207ec7425093933\"}\n>chat ☆Bunny Easy|Good luck! Playing on **easy**.\n>p1 move leafstorm terastallize\n>p2 move earthquake\n>p1 move leafstorm\n>p2 move earthquake\n>forcelose p2",
+	"uploadtime": 1793054325
+}
