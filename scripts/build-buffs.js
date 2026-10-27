@@ -447,6 +447,14 @@ for (const [id, record] of Object.entries(applied)) {
 	if (record.abilities.length) entry.slots = Object.assign({}, species.abilities);
 	bySpecies[id] = entry;
 }
+// Moves given after the Season 1 draft froze its data: RP's, not the draft's, so the
+// builder leaves them out while RP Draft is picked (cats' Hustle Up, 27 Oct 2026).
+const draftLearnsets = require(path.join(PACKAGE, 'dist', 'sim', 'dex.js')).Dex.mod('gen9draftrp').data.Learnsets;
+for (const [id, entry] of Object.entries(bySpecies)) {
+	const own = (draftLearnsets[id] && draftLearnsets[id].learnset) || {};
+	const late = entry.moves.filter(m => !own[m]);
+	if (late.length) entry.late = late;
+}
 // Halloween 2026: Witch's Snatch is not learned (Poltergeist becomes it on the Mega),
 // but the Mega's own page lists it, like Behemoth Blade on Zacian-Crowned.
 bySpecies.banettemegahalloween = { moves: ['witchssnatch'], abilities: [] };

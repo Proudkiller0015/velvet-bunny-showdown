@@ -2531,6 +2531,7 @@
 			}
 			for (var id2 in buffs.bySpecies) {
 				var added = buffs.bySpecies[id2].moves;
+				var lateMoves = buffs.bySpecies[id2].late || [];
 				/*
 				 * A form with no row of its own (Dialga-Origin, Giratina-Origin...) reads its
 				 * base form's. An empty row here would replace that with nothing: the creation
@@ -2550,7 +2551,7 @@
 					// format. These Pokemon were never in Scarlet and Violet, so
 					// their real entries stop at '...9pq' and a buff written without
 					// the 'a' is listed in National Dex and invisible everywhere else.
-					if (!learnset[added[k]] || learnset[added[k]] === '9a') rpSet(learnset, added[k], '9a');
+					if (!learnset[added[k]] || learnset[added[k]] === '9a') rpSet(learnset, added[k], '9a', false, lateMoves.indexOf(added[k]) >= 0);
 				}
 			}
 			// Paired moves: every Hard Press learner also gets Anvil Drop, and only the
