@@ -12,3 +12,5 @@ changes. For Season 2, copy `data/velvet` again into a new folder.
 One correction since, by the owner's call (24 Oct 2026): Dragonize (Mega Feraligatr)
 was left at 1.2x when the other -ate abilities went back to 1.3x, which was our
 mistake, not a balance change, so it was fixed here too (unnerfs.js).
+
+Liepard learns Hustle Up here too, as in RP (owner, 27 Oct 2026; balance-patch-1.js).

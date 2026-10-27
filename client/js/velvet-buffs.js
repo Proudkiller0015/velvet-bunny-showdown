@@ -2381,6 +2381,7 @@ window.VelvetBuffs = {
 				"carrionfeast",
 				"crunch",
 				"twilightexit",
+				"hustleup",
 				"chillingmist",
 				"punishment"
 			],
@@ -5966,6 +5967,7 @@ window.VelvetBuffs = {
 			"moves": [
 				"carrionfeast",
 				"twilightexit",
+				"hustleup",
 				"chillingmist"
 			],
 			"abilities": []

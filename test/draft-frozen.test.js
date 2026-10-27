@@ -12,7 +12,7 @@ const path = require('path');
 const crypto = require('crypto');
 const { Dex } = require('pokemon-showdown');
 
-const FROZEN = 'b70236c00bbd76533e8e52801473f7361ff23d6af56b791d96cc06252baf8a74';
+const FROZEN = '6dac87cf7e22dfbc79fcfae65861c9fd09a363a59b3b2f5856be8c2aacbf1902';
 
 let pass = 0, fail = 0;
 const check = (what, got, want) => {
