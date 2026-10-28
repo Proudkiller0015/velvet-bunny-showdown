@@ -1430,6 +1430,12 @@
 		 * nothing taken out, which is what this format's rules actually say.
 		 */
 		gen9rpbattle: 'gen9nationaldexag',
+		// The other formats with RP Battle's rules (nothing banned) had no entry either, so the
+		// builder marked every past-generation Pokemon in them Illegal (RP Raid, the owner, 28 Oct 2026).
+		gen9rpraid: 'gen9nationaldexag',
+		gen9rpbattledoubles: 'gen9nationaldexag',
+		gen9rpcustomgame: 'gen9nationaldexag',
+		gen9rptutorial: 'gen9nationaldexag',
 		gen9rpag: 'gen9nationaldexag',
 		// RP AG plus the collab Pokemon, which are listed on top under their own heading (collabRows).
 		gen9rpcollab: 'gen9nationaldexag',

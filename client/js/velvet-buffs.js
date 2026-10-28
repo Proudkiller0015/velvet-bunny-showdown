@@ -3495,7 +3495,8 @@ window.VelvetBuffs = {
 				"knockoff",
 				"suckerpunch",
 				"carrionfeast",
-				"taunt"
+				"taunt",
+				"bulkup"
 			],
 			"abilities": [
 				"Harvest Lantern"
@@ -6487,7 +6488,8 @@ window.VelvetBuffs = {
 				"knockoff",
 				"suckerpunch",
 				"carrionfeast",
-				"taunt"
+				"taunt",
+				"bulkup"
 			],
 			"abilities": [
 				"Harvest Lantern"
@@ -7774,7 +7776,8 @@ window.VelvetBuffs = {
 				"knockoff",
 				"suckerpunch",
 				"carrionfeast",
-				"taunt"
+				"taunt",
+				"bulkup"
 			],
 			"abilities": [
 				"Harvest Lantern"
@@ -7803,7 +7806,8 @@ window.VelvetBuffs = {
 				"knockoff",
 				"suckerpunch",
 				"carrionfeast",
-				"taunt"
+				"taunt",
+				"bulkup"
 			],
 			"abilities": [
 				"Harvest Lantern"
@@ -7832,7 +7836,8 @@ window.VelvetBuffs = {
 				"knockoff",
 				"suckerpunch",
 				"carrionfeast",
-				"taunt"
+				"taunt",
+				"bulkup"
 			],
 			"abilities": [
 				"Harvest Lantern"

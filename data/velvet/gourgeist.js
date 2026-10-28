@@ -17,7 +17,7 @@
  *                     behind a thorned shell (Spiky Shield). Chilling Mist, a Ghost's ice move, for every size.
  *   Dark moves        a trick-or-treater's: Twilight Exit and Parting Shot to slip away,
  *                     Knock Off for the candy, Sucker Punch from the dark, Carrion Feast
- *                     on what its arms caught, and Taunt.
+ *                     on what its arms caught, and Taunt. Bulk Up (the owner, 28 Oct 2026).
  *   Tier              NU, all four sizes (tiering.js).
  *
  * Both for the Pumpkaboo line, all four sizes; RP only (the draft is frozen).
@@ -164,7 +164,7 @@ exports.learnsets = (data) => {
 
 const LINE_IDS = ['pumpkaboo', 'pumpkaboosmall', 'pumpkaboolarge', 'pumpkaboosuper', 'gourgeist', 'gourgeistsmall', 'gourgeistlarge', 'gourgeistsuper'];
 const MOVES = ['phantompursuit', 'lanternlunge', 'sing', 'perishsong', 'meanlook', 'shadowclaw', 'strengthsap', 'hornleech', 'spikyshield', 'chillingmist',
-	'twilightexit', 'partingshot', 'knockoff', 'suckerpunch', 'carrionfeast', 'taunt'];
+	'twilightexit', 'partingshot', 'knockoff', 'suckerpunch', 'carrionfeast', 'taunt', 'bulkup'];
 exports.GRANTS = Object.fromEntries(LINE_IDS.map(id => [id, { ability: 'Harvest Lantern', moves: MOVES }]));
 exports.MOVE_IDS = ['phantompursuit', 'lanternlunge'];
 exports.ABILITY_IDS = ['harvestlantern'];
