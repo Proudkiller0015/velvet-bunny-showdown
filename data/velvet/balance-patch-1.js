@@ -2477,6 +2477,12 @@ exports.buildBuffs = (Pokedex) => {
 	for (const [id, ability] of Object.entries(TRIO_BABIES)) if (Pokedex[id]) add(id, [], [ability]);
 	// The creation trio's normal forms (data/velvet/creation-trio.js).
 	for (const [id, g] of Object.entries(require('./creation-trio.js').GRANTS)) if (Pokedex[id]) add(id, g.moves, [g.ability]);
+	// The Pumpkaboo line (data/velvet/gourgeist.js), every size.
+	// Each size also gets what its line's Average size was given, which only ever reached the Average.
+	for (const [id, g] of Object.entries(require('./gourgeist.js').GRANTS)) {
+		const base = Pokedex[id] && Pokedex[id].baseSpecies ? String(Pokedex[id].baseSpecies).toLowerCase() : id;
+		if (Pokedex[id]) add(id, [...g.moves, ...((base !== id && out[base] && out[base].moves) || [])], [g.ability]);
+	}
 	// What the box-art and Uber legendaries were owed (data/velvet/legend-kits.js).
 	for (const [id, moves] of Object.entries(require('./legend-kits.js').GRANTS)) if (Pokedex[id]) add(id, moves, []);
 

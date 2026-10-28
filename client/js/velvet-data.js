@@ -2514,7 +2514,7 @@
 				// Only the Pokemon whose abilities actually changed carry a slot
 				// table; everyone else keeps the one the client already has.
 				var slots = buffs.bySpecies[id].slots;
-				if (entry && slots) { rpRow('BattlePokedex', id, entry); rpSet(entry, 'abilities', slots); }
+				if (entry && slots) { rpRow('BattlePokedex', id, entry); rpSet(entry, 'abilities', slots, false, !!buffs.bySpecies[id].lateAbilities); }
 			}
 		} else ready = false;
 
@@ -2713,6 +2713,8 @@
 			for (var k = 0; k < record.abilities.length; k++) {
 				var abilityid = window.toID(record.abilities[k]);
 				if (window.BattleAbilities && !window.BattleAbilities[abilityid]) continue;
+				// Given after the draft froze: not offered while RP Draft is picked.
+				if (RP.draft && record.lateAbilities && record.lateAbilities.indexOf(abilityid) >= 0) continue;
 				hoist.push(abilityid);
 			}
 			if (!hoist.length) return results;

@@ -371,6 +371,11 @@ const TIERS = {
 	latias: 'UU', // the owner, 30 Sep 2026
 	donphan: 'RU',
 	swampert: 'NU', // the owner, 30 Sep 2026
+	// The owner, 28 Oct 2026, with Harvest Lantern: every size.
+	gourgeist: 'NU',
+	gourgeistsmall: 'NU',
+	gourgeistlarge: 'NU',
+	gourgeistsuper: 'NU',
 	alakazam: 'UU',
 	gengar: 'UU',
 	regidrago: 'RUBL',

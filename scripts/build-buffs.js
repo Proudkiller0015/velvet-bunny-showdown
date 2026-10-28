@@ -449,11 +449,19 @@ for (const [id, record] of Object.entries(applied)) {
 }
 // Moves given after the Season 1 draft froze its data: RP's, not the draft's, so the
 // builder leaves them out while RP Draft is picked (cats' Hustle Up, 27 Oct 2026).
-const draftLearnsets = require(path.join(PACKAGE, 'dist', 'sim', 'dex.js')).Dex.mod('gen9draftrp').data.Learnsets;
+const draftDex = require(path.join(PACKAGE, 'dist', 'sim', 'dex.js')).Dex.mod('gen9draftrp');
+const draftLearnsets = draftDex.data.Learnsets;
 for (const [id, entry] of Object.entries(bySpecies)) {
-	const own = (draftLearnsets[id] && draftLearnsets[id].learnset) || {};
+	// A form also learns what its base form does (Gourgeist's sizes), as the validator counts it.
+	const baseId = draftDex.species.get(id).exists ? draftDex.toID(draftDex.species.get(id).baseSpecies) : id;
+	const own = Object.assign({}, (draftLearnsets[baseId] && draftLearnsets[baseId].learnset) || {}, (draftLearnsets[id] && draftLearnsets[id].learnset) || {});
 	const late = entry.moves.filter(m => !own[m]);
 	if (late.length) entry.late = late;
+	// And abilities (Gourgeist's Harvest Lantern, 28 Oct 2026): the draft keeps its own slots.
+	const draftSpecies = draftDex.species.get(id);
+	const had = draftSpecies.exists ? Object.values(draftSpecies.abilities).map(a => draftDex.toID(a)) : [];
+	const lateAbilities = (entry.abilities || []).map(a => draftDex.toID(a)).filter(a => !had.includes(a));
+	if (draftSpecies.exists && lateAbilities.length) entry.lateAbilities = lateAbilities;
 }
 // Halloween 2026: Witch's Snatch is not learned (Poltergeist becomes it on the Mega),
 // but the Mega's own page lists it, like Behemoth Blade on Zacian-Crowned.

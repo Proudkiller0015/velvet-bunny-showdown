@@ -74,11 +74,11 @@ const tag = label => `\`${label}\``;
 const V_ = f => f.map(x => `data/velvet/${x}`);
 // Where each kind of change is written, so a tag is the change's own patch and not the first
 // time the name turned up anywhere (Dragon Pulse was handed out in 1.1, buffed in 2.6c).
-const MOVE_FILES = V_(['unnerfs.js', 'classic-mechanics.js', 'creation-trio.js', 'moves.js', 'abyss-shrine.js', 'frostbite.js']);
-const ABILITY_FILES = V_(['unnerfs.js', 'abilities.js', 'balance-patch-1.js']);
+const MOVE_FILES = V_(['unnerfs.js', 'classic-mechanics.js', 'creation-trio.js', 'gourgeist.js', 'moves.js', 'abyss-shrine.js', 'frostbite.js']);
+const ABILITY_FILES = V_(['unnerfs.js', 'abilities.js', 'balance-patch-1.js', 'gourgeist.js']);
 const ITEM_FILES = V_(['items.js', 'gems.js', 'new-items.js', 'za-megas.js', 'unnerfs.js']);
 const STAT_FILES = V_(['unnerfs.js', 'za-megas.js', 'missingno.js']);
-const GRANT_FILES = V_(['balance-patch-1.js', 'unnerfs.js', 'creation-trio.js', 'stall.js', 'buffs.js', 'missingno.js']);
+const GRANT_FILES = V_(['balance-patch-1.js', 'unnerfs.js', 'creation-trio.js', 'gourgeist.js', 'stall.js', 'buffs.js', 'missingno.js']);
 const EVO_FILES = V_(['balance-patch-1.js']);
 // The file that changes each vanilla move, from the lists those files export themselves.
 const MOVE_SOURCE = {};
@@ -136,7 +136,8 @@ for (const id of allSpecies) {
 		const how = s => [s.evoLevel ? `Lv ${s.evoLevel}` : '', s.evoItem || '', s.evoType && !s.evoLevel && !s.evoItem ? s.evoType : ''].filter(Boolean).join(' or ') || '—';
 		parts.push(`evolves from ${ours.prevo} at **${how(ours)}** (was ${how(theirs)})${t(EVO_FILES)}`);
 	}
-	const vLearn = ((V.learnsets[id] || {}).learnset) || {};
+	// A form with no learnset of its own (Gourgeist-Small) learns through its base form.
+	const vLearn = ((V.learnsets[id] || V.learnsets[String(ours.baseSpecies || '').toLowerCase().replace(/[^a-z0-9]+/g, '')] || {}).learnset) || {};
 	const oLearn = ((D.Learnsets[id] || {}).learnset) || {};
 	const newMoves = Object.keys(oLearn).filter(m => !vLearn[m] && !HIDDEN_MOVES.includes(m));
 	for (const m of newMoves) (learners[m] = learners[m] || []).push(id);

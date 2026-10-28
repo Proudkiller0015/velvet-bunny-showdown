@@ -46,6 +46,8 @@ const NewItems = require('./new-items.js');
 const Classic = require('./classic-mechanics.js');
 // Help for stall: Caretaker.
 const Stall = require('./stall.js');
+// Gourgeist's Harvest Lantern and Phantom Pursuit.
+const Gourgeist = require('./gourgeist.js');
 // The creation trio's buff: Shadow Force hunts switches, and the normal forms' abilities.
 const CreationTrio = require('./creation-trio.js');
 // Collab: crossover Pokemon, refused by every RP tier but RP Collab (Funerfly, Punibird, Laetitia,
@@ -88,10 +90,10 @@ exports.pokedex = data => {
 	buffedPokedex = data;
 	buffWhatWeHave();
 };
-exports.abilities = data => Touhou.abilities(Collab.abilities(CreationTrio.abilities(Stall.abilities(AbyssShrine.abilities(Missingno.abilities(Halloween.abilities(require('./balance-patch-1.js').patchAbsorbers(patchAbilities(unnerfAbilities(Object.assign(data, Abilities)))))))))));
+exports.abilities = data => Touhou.abilities(Collab.abilities(Gourgeist.abilities(CreationTrio.abilities(Stall.abilities(AbyssShrine.abilities(Missingno.abilities(Halloween.abilities(require('./balance-patch-1.js').patchAbsorbers(patchAbilities(unnerfAbilities(Object.assign(data, Abilities))))))))))));
 let moveTable = null;
 exports.moves = data => {
-	moveTable = Touhou.moves(Collab.moves(CreationTrio.moves(Classic.moves(Frostbite.moves(AbyssShrine.moves(Missingno.moves(Halloween.moves(patchMoves(unnerfMoves(Object.assign(data, Moves)))))))))));
+	moveTable = Touhou.moves(Collab.moves(Gourgeist.moves(CreationTrio.moves(Classic.moves(Frostbite.moves(AbyssShrine.moves(Missingno.moves(Halloween.moves(patchMoves(unnerfMoves(Object.assign(data, Moves))))))))))));
 	teachHerEverything();
 	return moveTable;
 };
@@ -112,6 +114,7 @@ exports.learnsets = data => {
 	AbyssShrine.learnsets(data);
 	Collab.learnsets(data);
 	Touhou.learnsets(data);
+	Gourgeist.learnsets(data);
 	buffedLearnsets = data;
 	teachHerEverything();
 	buffWhatWeHave();
