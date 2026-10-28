@@ -1690,6 +1690,27 @@
 		return !!(draft && draft.formats && draft.formats.indexOf(format) >= 0);
 	}
 
+	/*
+	 * A pick's forms that come with it (config/custom-formats.js, RP Draft onValidateSet): its
+	 * cosmetic forms (Gastrodon-East), and every form of Silvally, Gourgeist and Pumpkaboo. They
+	 * are listed under the pick's tier, so the builder never calls a legal form Illegal
+	 * (the owner, 28 Oct 2026).
+	 */
+	var DRAFT_ONE_PICK = ['silvally', 'gourgeist', 'pumpkaboo'];
+	function draftCovered(id) {
+		var dex = window.BattlePokedex || {};
+		var row = dex[id];
+		var out = [id];
+		if (!row) return out;
+		var more = (row.cosmeticFormes || []).slice();
+		if (DRAFT_ONE_PICK.indexOf(id) >= 0) more = more.concat(row.otherFormes || []);
+		for (var i = 0; i < more.length; i++) {
+			var fid = window.toID(more[i]);
+			if (dex[fid] && !dex[fid].battleOnly && out.indexOf(fid) < 0) out.push(fid);
+		}
+		return out;
+	}
+
 	var draftTierIndex = null;
 	function draftTierOf(id) {
 		var draft = window.VelvetDraft;
@@ -1697,7 +1718,10 @@
 		if (!draftTierIndex) {
 			draftTierIndex = {};
 			for (var i = 0; i < draft.tiers.length; i++) {
-				for (var j = 0; j < draft.tiers[i].ids.length; j++) draftTierIndex[draft.tiers[i].ids[j]] = draft.tiers[i].tier;
+				for (var j = 0; j < draft.tiers[i].ids.length; j++) {
+					var covered = draftCovered(draft.tiers[i].ids[j]);
+					for (var k = 0; k < covered.length; k++) if (!draftTierIndex[covered[k]]) draftTierIndex[covered[k]] = draft.tiers[i].tier;
+				}
 			}
 		}
 		return draftTierIndex[id] || '';
@@ -1709,7 +1733,10 @@
 		var rows = [];
 		for (var i = 0; i < draft.tiers.length; i++) {
 			var t = draft.tiers[i];
-			var ids = t.ids.filter(function (id) { return !!dex[id]; });
+			var ids = [];
+			t.ids.forEach(function (id) {
+				draftCovered(id).forEach(function (c) { if (dex[c] && ids.indexOf(c) < 0) ids.push(c); });
+			});
 			if (!ids.length) continue;
 			rows.push(['header', t.tier + (t.tier.length > 2 ? '' : ' Tier') + ' · ₽' + t.price]);
 			for (var j = 0; j < ids.length; j++) rows.push(['pokemon', ids[j]]);
