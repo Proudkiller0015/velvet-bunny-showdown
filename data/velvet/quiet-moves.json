@@ -1,0 +1,4 @@
+{
+  "_why": "Moves a Pokemon learns as an ordinary machine move, not an Awakened one: no buff record, no #rp-buffs line, no patch note. Every RP format and the draft (config/custom-formats.js grantedToCut; scripts/build-buffs.js lists them like cut moves). The owner, 28 Oct 2026: Luxray was always meant to have both screens.",
+  "luxray": ["reflect"]
+}

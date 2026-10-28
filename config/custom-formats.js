@@ -277,10 +277,13 @@ try {
 	console.log('[velvet] no rp-moves.json; run scripts/build-rp-moves.js - ' + e.message);
 }
 
+// Quiet grants (data/velvet/quiet-moves.json): ordinary moves, not Awakened ones.
+let QUIET_MOVES = {};
+try { QUIET_MOVES = require('../data/velvet/quiet-moves.json'); } catch (e) { /* none */ }
 function grantedToCut(dex, species, move) {
 	const base = species.baseSpecies && species.baseSpecies !== species.name ?
 		dex.species.get(species.baseSpecies) : species;
-	const list = [...(CUT_MOVES[base.id] || []), ...(CUT_MOVES[species.id] || []), ...(RP_MOVES[base.id] || RP_MOVES[species.id] || [])];
+	const list = [...(CUT_MOVES[base.id] || []), ...(CUT_MOVES[species.id] || []), ...(RP_MOVES[base.id] || RP_MOVES[species.id] || []), ...(QUIET_MOVES[base.id] || []), ...(QUIET_MOVES[species.id] || [])];
 	return list.includes(move.id);
 }
 

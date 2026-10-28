@@ -235,6 +235,11 @@ try {
  *
  * The server's dex is right about this, and this script runs on the server.
  */
+// Quiet grants are listed the same way: ordinary moves in the builder, not Awakened.
+try {
+	const quiet = require(path.join(__dirname, '..', 'data', 'velvet', 'quiet-moves.json'));
+	for (const [id, list] of Object.entries(quiet)) if (Array.isArray(list)) cutMoves[id] = [...new Set([...(cutMoves[id] || []), ...list])];
+} catch (e) { /* none */ }
 const cutMoveSources = {};
 for (const list of Object.values(cutMoves)) {
 	for (const id of list) {
