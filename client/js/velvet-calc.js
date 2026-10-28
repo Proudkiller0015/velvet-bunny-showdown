@@ -601,8 +601,11 @@
 	 */
 	var tries = 0;
 	function attempt() {
-		var done = inject() && wrap();
-		if (window.calc && window.calc.__velvet && window.calc.__velvetCalc) done = true;
+		// Each half retried on its own: inject() says false once it has run, which used to stop
+		// wrap() from ever being tried again if it missed the first time.
+		var injected = inject() || !!(window.calc && window.calc.__velvet);
+		var wrapped = wrap() || !!(window.calc && window.calc.__velvetCalc);
+		var done = injected && wrapped;
 		if (done || ++tries > 100) clearInterval(timer);
 	}
 	var timer = setInterval(attempt, 50);

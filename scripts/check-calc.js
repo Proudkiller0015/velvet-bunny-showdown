@@ -305,7 +305,7 @@ setTimeout(go, 300);
 	], { encoding: 'utf8', maxBuffer: 1 << 28, stdio: ['ignore', 'pipe', 'ignore'] });
 
 	const match = /RESULT:(\[[\s\S]*?\])</.exec(dom);
-	try { fs.rmSync(work, { recursive: true, force: true }); } catch (e) { /* temp */ }
+	if (process.env.KEEP_CALC_PAGE) console.log('page kept in ' + work); else try { fs.rmSync(work, { recursive: true, force: true }); } catch (e) { /* temp */ }
 	if (!match) throw new Error('the browser reported nothing:\n' + dom.slice(0, 600));
 	return JSON.parse(match[1]);
 }
@@ -314,7 +314,8 @@ setTimeout(go, 300);
 function unpackForCalc(packed) {
 	const [name, species, item, ability, moves, nature, evs] = packed.split('|');
 	const [hp, atk, def, spa, spd, spe] = (evs || '').split(',').map(n => Number(n) || 0);
-	const { Dex } = require(path.join(ROOT, 'node_modules', 'pokemon-showdown', 'dist', 'sim', 'dex.js'));
+	// RP's dex: the plain one has never heard of Queen Wrath or the Elemental Banana.
+	const Dex = require(path.join(ROOT, 'node_modules', 'pokemon-showdown', 'dist', 'sim', 'dex.js')).Dex.mod('gen9rp');
 	return {
 		name: Dex.species.get(species || name).name,
 		item: item ? Dex.items.get(item).name : '',
