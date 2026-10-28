@@ -3372,6 +3372,18 @@ window.VelvetBuffs = {
 				"auraresonance"
 			]
 		},
+		"ironvaliant": {
+			"moves": [
+				"auraresonance",
+				"penance",
+				"velvetpress",
+				"velvetguard"
+			],
+			"abilities": [],
+			"late": [
+				"auraresonance"
+			]
+		},
 		"darmanitan": {
 			"moves": [
 				"auraresonance",
@@ -6627,14 +6639,6 @@ window.VelvetBuffs = {
 			]
 		},
 		"screamtail": {
-			"moves": [
-				"penance",
-				"velvetpress",
-				"velvetguard"
-			],
-			"abilities": []
-		},
-		"ironvaliant": {
 			"moves": [
 				"penance",
 				"velvetpress",

@@ -1762,6 +1762,8 @@ const SMALL = {
 	marshadow: ['auraresonance'],
 	magearna: ['auraresonance'],
 	magearnaoriginal: ['auraresonance'],
+	// Iron Valiant too (the owner, 28 Oct 2026).
+	ironvaliant: ['auraresonance'],
 	// Unova Darmanitan's Zen Mode meditates: Aura Resonance and Trick Room. Not Galar's (the owner, 28 Oct 2026).
 	darmanitan: ['auraresonance', 'trickroom'],
 	luvdisc: ['undertow'],
