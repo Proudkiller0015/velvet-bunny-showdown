@@ -683,7 +683,8 @@
 		var switchIn = installRpSwitch();
 		var caughtIn = installCaughtMark();
 		var ppIn = installTouhouPP();
-		var moemonIn = installMoemonDetails() && installMoemonPicker() && installMoemonSetting() && installAwakenedColumn();
+		var trIn = installTrickRoomTurns();
+		var moemonIn = trIn && installMoemonDetails() && installMoemonPicker() && installMoemonSetting() && installAwakenedColumn();
 		return moemonIn && ppIn && caughtIn && switchIn && tableIn && orderIn && spritesIn && iconIn && builderIn && tipsIn && rpIn &&
 			cutIn && listIn && buffsIn && abilitiesIn && itemIn && sigItemIn && powerIn && dmaxIn && awakenedIn && textIn && zMaxIn && eternaIn && defaultIn && bagIn && usefulIn && frbIn && sureIn && gemIn;
 	}
@@ -3003,6 +3004,25 @@
 				}
 			} catch (e) { /* the row draws as it was */ }
 			return original.apply(this, arguments);
+		};
+		return true;
+	}
+
+	/*
+	 * Trick Room's turns, shown as "5 or 8" in RP battles the way terrains are (Terrain
+	 * Extender): our Warped Hourglass makes its holder's Trick Room last 8 (the owner, 28 Oct
+	 * 2026: the field said 5 and gave no hint).
+	 */
+	function installTrickRoomTurns() {
+		var B = window.Battle;
+		if (!B || !B.prototype || !B.prototype.addPseudoWeather) return false;
+		if (B.prototype.__velvetTrickRoom) return true;
+		B.prototype.__velvetTrickRoom = true;
+		var original = B.prototype.addPseudoWeather;
+		B.prototype.addPseudoWeather = function (weather, minTimeLeft, timeLeft) {
+			var format = window.toID(String(this.tier || this.id || ''));
+			if (weather === 'Trick Room' && !timeLeft && format.indexOf('rp') >= 0) timeLeft = 8;
+			return original.call(this, weather, minTimeLeft, timeLeft);
 		};
 		return true;
 	}
