@@ -479,6 +479,7 @@ function distributionFor(Pokedex, rule, Learnsets) {
 exports.applied = {};
 
 /** Put the buffs into the dex the server is about to use. */
+const NOT_LIKE_MEW = ['auraresonance'];
 exports.applyBuffs = (Pokedex, Learnsets) => {
 	/*
 	 * Balance Patch 1 first joins the table (once), then its evolution levels go
@@ -507,7 +508,8 @@ exports.applyBuffs = (Pokedex, Learnsets) => {
 		for (const id of require('./legend-kits.js').LIKE_MEW) {
 			if (!Pokedex[id]) continue;
 			const buff = exports.Buffs[id] || (exports.Buffs[id] = { moves: [], abilities: [] });
-			buff.moves = [...new Set([...(buff.moves || []), ...machineMoves, ...(exports.Buffs.mew?.moves || [])])];
+			// Not a signature Mew was given as well (Lucario's Aura Resonance).
+			buff.moves = [...new Set([...(buff.moves || []), ...machineMoves, ...(exports.Buffs.mew?.moves || [])])].filter(m => !NOT_LIKE_MEW.includes(m));
 		}
 	}
 	for (const [id, change] of Object.entries(PATCH1.EVOLUTIONS)) {

@@ -243,6 +243,31 @@ exports.MOVES = {
 		shortDesc: "Raises Atk, Spe by 1. With Hustle, accuracy by 2 too.",
 		desc: "Scrappy, stubborn and underestimated, the user gets serious. Raises its Attack and Speed by 1 stage each. If the user has the Hustle Ability, it also raises its accuracy by 2 stages.",
 	},
+	/*
+	 * Lucario's signature (the owner, 28 Oct 2026): a special Belly Drum, with Gen 2's
+	 * rule. Above half HP it costs half and maximizes Sp. Atk; at half HP or less it
+	 * still raises Sp. Atk by 2, for nothing. Mew and Mewtwo learn it too.
+	 */
+	auraresonance: {
+		num: -308, gen: 9, name: "Aura Resonance", type: "Fighting", category: "Status",
+		basePower: 0, accuracy: true, pp: 10, priority: 0,
+		onHit(target) {
+			if (target.boosts.spa >= 6) return false;
+			if (target.hp <= target.maxhp / 2) {
+				this.boost({ spa: 2 }, target);
+				return;
+			}
+			this.directDamage(target.maxhp / 2);
+			this.boost({ spa: 12 }, target);
+		},
+		flags: { snatch: 1, metronome: 1 },
+		secondary: null, target: "self", contestType: "Beautiful",
+		// Shared only so Mew and Mewtwo do not file it as theirs; build-signature-moves.js CHOSEN makes it Lucario's.
+		velvetShared: true,
+		flavor: "The user focuses its spiritual energy until its aura roars to life.",
+		shortDesc: "User loses 50% HP, maxes SpA. At or below 50%: SpA +2, no cost.",
+		desc: "The user focuses its spiritual energy. If its HP is above half, it loses 1/2 of its maximum HP, rounded down, and raises its Special Attack to +6. If its HP is half or less, it raises its Special Attack by 2 stages instead, at no HP cost (as Belly Drum worked in Generation 2). Fails if Special Attack is already +6. Lucario's signature move.",
+	},
 	carrionfeast: {
 		num: -13, gen: 9, name: "Carrion Feast", type: "Dark", category: "Physical",
 		basePower: 80, accuracy: 100, pp: 15, priority: 0,
@@ -1727,6 +1752,18 @@ const SMALL = {
 	entei: ['recover'],
 	suicune: ['recover'],
 	unown: ['hypnowhirl'],
+	// Aura Resonance: Lucario's signature, and Mew's and Mewtwo's (the owner, 28 Oct 2026).
+	lucario: ['auraresonance'],
+	mew: ['auraresonance'],
+	mewtwo: ['auraresonance'],
+	// And the Aura Sphere learners whose theme is spiritual energy: meditation (Medicham),
+	// a spirit fighter (Marshadow) and an artificial soul (Magearna).
+	medicham: ['auraresonance'],
+	marshadow: ['auraresonance'],
+	magearna: ['auraresonance'],
+	magearnaoriginal: ['auraresonance'],
+	// Unova Darmanitan's Zen Mode meditates: Aura Resonance and Trick Room. Not Galar's (the owner, 28 Oct 2026).
+	darmanitan: ['auraresonance', 'trickroom'],
 	luvdisc: ['undertow'],
 	wishiwashi: ['undertow'],
 	pyukumuku: ['undertow'],
@@ -2553,6 +2590,36 @@ exports.pairMoves = Learnsets => {
 };
 exports.GROUPS = GROUPS;
 exports.TM_DISTRIBUTION = TM_DISTRIBUTION;
+
+/*
+ * Egg moves passed down from a Pokemon that knows them: everything that can breed with
+ * it learns the move as an egg move, on the stage that hatches (the owner, 28 Oct 2026:
+ * Aura Resonance for every Pokemon that can get egg moves from Lucario).
+ */
+const EGG_MOVES = { auraresonance: 'lucario' };
+// Who never gets it all the same: Galarian Darmanitan's Zen Mode is not the meditating one.
+const EGG_EXCEPT = { auraresonance: ['darumakagalar', 'darmanitangalar'] };
+exports.EGG_MOVES = EGG_MOVES;
+const toId = s => String(s || '').toLowerCase().replace(/[^a-z0-9]+/g, '');
+exports.eggMoves = (Pokedex, Learnsets, record) => {
+	for (const [move, parent] of Object.entries(EGG_MOVES)) {
+		const groups = new Set((Pokedex[parent] && Pokedex[parent].eggGroups) || []);
+		if (!groups.size) continue;
+		for (const [id, species] of Object.entries(Pokedex)) {
+			if (!species.num || species.num <= 0 || species.battleOnly || /-(Mega|Gmax|Totem|Primal)/.test(species.name || '')) continue;
+			if (species.forme && !Learnsets[id]) continue;   // a forme that learns through its base
+			if (!(species.eggGroups || []).some(g => groups.has(g))) continue;
+			if ((EGG_EXCEPT[move] || []).includes(id)) continue;
+			// The stage that hatches: walk back to the first one.
+			let hatch = id;
+			for (let pre = Pokedex[hatch] && Pokedex[hatch].prevo; pre && Pokedex[toId(pre)]; pre = Pokedex[hatch].prevo) hatch = toId(pre);
+			const entry = Learnsets[hatch] || (Learnsets[hatch] = { learnset: {} });
+			entry.learnset = entry.learnset || {};
+			if (!entry.learnset[move]) entry.learnset[move] = ['9E'];
+			if (record) for (const who of new Set([hatch, id])) record(who, move);
+		}
+	}
+};
 exports.NEWER_MOVES = NEWER_MOVES;
 exports.GRASS_COVERAGE = GRASS_COVERAGE;
 exports.SMALL = SMALL;

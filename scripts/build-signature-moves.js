@@ -222,7 +222,7 @@ function build() {
 	// here: on the Halloween 2026 Mega it becomes Witch's Snatch
 	// (data/velvet/halloween.js), so the builder files it under Banette's own.
 	// Makuro, Raishin and Chimai (abyss-shrine.js): their own moves, which nothing else learns.
-	const CHOSEN = { shuppet: ['poltergeist'], makuro: ['abyssalmaw', 'leviathancrash', 'sovereignrite'], raishin: ['shrinebellstrike', 'spiritthunder', 'sovereignrite'], chimai: ['sanctuarypulse', 'hallowedquake', 'sovereignrite'] };
+	const CHOSEN = { shuppet: ['poltergeist'], riolu: ['auraresonance'], makuro: ['abyssalmaw', 'leviathancrash', 'sovereignrite'], raishin: ['shrinebellstrike', 'spiritthunder', 'sovereignrite'], chimai: ['sanctuarypulse', 'hallowedquake', 'sovereignrite'] };
 	for (const [id, { signature }] of Object.entries(collab.LEARNSETS)) CHOSEN[id] = signature;
 	// Each Touhou Pokemon: the mod's moves it learns, formes included (Hecatia-Earth's are Hecatia's).
 	// Not the ones handed out as machines (touhou.js TMS, `velvetShared`), which half the dex

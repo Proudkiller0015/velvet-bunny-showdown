@@ -66,6 +66,12 @@ let tierTable = null;
 function buffWhatWeHave() {
 	if (buffedPokedex && buffedLearnsets) {
 		applyBuffs(buffedPokedex, buffedLearnsets);
+		// Egg moves from a parent that knows them (balance-patch-1.js EGG_MOVES), listed as Awakened.
+		require('./balance-patch-1.js').eggMoves(buffedPokedex, buffedLearnsets, (id, move) => {
+			const applied = require('./buffs.js').applied;
+			const rec = applied[id] || (applied[id] = { moves: [], abilities: [] });
+			if (!rec.moves.includes(move)) rec.moves.push(move);
+		});
 		// After every grant: Hard Press learners also get Anvil Drop, and only the
 		// official ones keep Hard Press (balance-patch-1.js PAIRED_MOVES).
 		require('./balance-patch-1.js').pairMoves(buffedLearnsets);

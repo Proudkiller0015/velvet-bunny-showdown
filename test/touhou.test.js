@@ -308,7 +308,8 @@ const turn = (b, p1, p2) => { b.choose('p1', p1); b.choose('p2', p2); };
 	for (const id of new Set(tables.filter(m => !touhou.MOVE_IDS.includes(m)))) {
 		const m = dex.moves.get(id);
 		ok(m.exists && m.id === id && !m.isZ && !m.isMax && (!m.isNonstandard || m.isNonstandard === 'Past'), `${id}: a real, legal move`);
-		ok(!signatures.has(id) && !ours.has(id), `${id}: nobody's signature`);
+		// Except Lucario's Aura Resonance, which the owner gave every Touhou Pokemon (28 Oct 2026).
+		if (id !== 'auraresonance') ok(!signatures.has(id) && !ours.has(id), `${id}: nobody's signature`);
 	}
 	ok(touhou.SPECIES.every(id => touhou.THEMATIC[id] && touhou.THEMATIC[id].length >= 4), 'every character has its own thematic moves');
 }

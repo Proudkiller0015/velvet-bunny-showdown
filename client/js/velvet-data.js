@@ -294,6 +294,8 @@
 		standard: true,
 		still: { front: ['gourgeist-touhou.png', 96, 96], back: ['gourgeist-touhou-back.png', 96, 96] },
 		shiny: { still: { front: ['gourgeist-touhou-shiny.png', 96, 96], back: ['gourgeist-touhou-back-shiny.png', 96, 96] } },
+		builder: 'background-image:url(#SPRITES#gourgeist-touhou.png);background-position:10px 5px;background-repeat:no-repeat;image-rendering:pixelated;',
+		shinyBuilder: 'background-image:url(#SPRITES#gourgeist-touhou-shiny.png);background-position:10px 5px;background-repeat:no-repeat;image-rendering:pixelated;',
 	};
 	function touhouSkinFor(pokemon) {
 		var name = pokemon;
@@ -305,6 +307,8 @@
 		var battle = pokemon && pokemon.side && pokemon.side.battle;
 		try { if (!battle && window.app && app.curRoom) battle = app.curRoom.battle; } catch (e) { /* no room */ }
 		var format = window.toID(String((battle && (battle.tier || battle.id)) || ''));
+		// Or, in the teambuilder, the format of the team being edited.
+		try { if (!format && window.app && app.curRoom && app.curRoom.curTeam) format = window.toID(app.curRoom.curTeam.format || ''); } catch (e) { /* no team */ }
 		return format.indexOf('rptouhou') >= 0 ? TOUHOU_SKIN : null;
 	}
 
@@ -2415,7 +2419,7 @@
 
 		var original = window.Dex.getTeambuilderSprite;
 		window.Dex.getTeambuilderSprite = function (set, gen) {
-			var ours = oursFor(set);
+			var ours = oursFor(set) || touhouSkinFor(set);
 			if (ours && ours.shinyBuilder && set && set.shiny) return ours.shinyBuilder.split('#SPRITES#').join(SPRITES);
 			if (ours && ours.builder) return ours.builder.split('#SPRITES#').join(SPRITES);
 			return original.call(this, set, gen);
@@ -4076,6 +4080,7 @@
 		hivefrenzy: ['lunge', 'attackorder', 'xscissor'],
 		chrysalisveil: ['defendorder', 'quiverdance', 'recover'],
 		hustleup: ['howl', 'bulkup', 'dragondance'],
+		auraresonance: ['calmmind', 'aurasphere'],
 		carrionfeast: ['crunch', 'bite'],
 		sparkscamper: ['zippyzap', 'spark', 'quickattack'],
 		undertow: ['whirlpool', 'surf', 'waterpulse'],

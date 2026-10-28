@@ -236,7 +236,9 @@ exports.learnsets = (data) => {
  */
 const UNIVERSAL = ['toxic', 'weatherball', 'hiddenpower', 'terablast', 'protect', 'substitute', 'rest', 'sleeptalk',
 	'endure', 'facade', 'return', 'frustration', 'round', 'snore', 'attract', 'doubleteam', 'swagger', 'confide',
-	'secretpower', 'naturalgift', 'mimic', 'hyperbeam', 'gigaimpact', 'takedown', 'helpinghand', 'bodyslam', 'curse'];
+	'secretpower', 'naturalgift', 'mimic', 'hyperbeam', 'gigaimpact', 'takedown', 'helpinghand', 'bodyslam', 'curse',
+	// Lucario's Aura Resonance, for every Touhou Pokemon (the owner, 28 Oct 2026).
+	'auraresonance'];
 
 /*
  * By type. `status` goes to every Boneka of the type; `physical` to the ones that hit
