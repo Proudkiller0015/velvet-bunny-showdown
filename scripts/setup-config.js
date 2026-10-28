@@ -149,6 +149,7 @@ if (fs.existsSync(dataSrc)) {
 			`	gen: ${mod.gen},`,
 			`	inherit: '${mod.inherit}',`,
 			"	init() { require('../../velvet/rp-mod.js').apply(this); },",
+			"	pokemon: require('../../velvet/rp-mod.js').POKEMON,",
 			'};',
 			'',
 		].join('\n'));
@@ -167,6 +168,7 @@ if (fs.existsSync(dataSrc)) {
 		'	gen: 9,',
 		"	inherit: 'gen9',",
 		"	init() { require('../../velvet-draft-s1/rp-mod.js').apply(this); },",
+		"	pokemon: require('../../velvet/rp-mod.js').POKEMON,",
 		'};',
 		'',
 	].join('\n'));

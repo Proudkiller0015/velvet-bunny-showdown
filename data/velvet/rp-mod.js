@@ -156,6 +156,24 @@ function apply(dex) {
 /** The mods, one per generation RP is played in. */
 const MODS = [9, 8, 7, 6, 5, 4, 3, 2, 1].map(gen => ({ id: `gen${gen}rp`, gen, inherit: `gen${gen}` }));
 
+/*
+ * Moemon sprites (the owner, 28 Oct 2026): a look picked in the builder, carried on the set
+ * as `pokeball: 'Moemon'`. The details every client gets say so (", moemon"), so the
+ * opponent draws it too, at team preview, on switch-in and after a forme change. The
+ * client takes the tag out before it parses the rest (client/js/velvet-data.js).
+ */
+const MOEMON = ['gourgeist'];
+const POKEMON = {
+	getUpdatedDetails(level) {
+		const details = Object.getPrototypeOf(this).getUpdatedDetails.call(this, level);
+		const base = String(this.species.baseSpecies || '').toLowerCase().replace(/[^a-z0-9]+/g, '');
+		const picked = String((this.set && this.set.pokeball) || '').toLowerCase() === 'moemon';
+		return picked && MOEMON.includes(base) ? details + ', moemon' : details;
+	},
+};
+
 exports.apply = apply;
+exports.POKEMON = POKEMON;
+exports.MOEMON = MOEMON;
 exports.diff = diff;
 exports.MODS = MODS;

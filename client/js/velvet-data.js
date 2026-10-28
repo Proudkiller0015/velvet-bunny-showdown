@@ -285,31 +285,68 @@
 	});
 
 	/*
-	 * Gourgeist as the pumpkin girl, in RP Touhou battles only (the owner, 28 Oct 2026): every
-	 * size, with a shiny recoloured to match the official shiny (orchid hair, black pumpkin,
-	 * lime glow). Everywhere else it keeps the normal sprite.
+	 * Moemon sprites: an alternative look a player picks for one Pokemon in the builder's
+	 * Details (the owner, 28 Oct 2026), the way Gastrodon picks East or West. The normal
+	 * sprite is the default. The choice rides on the set (`pokeball: 'Moemon'`, a field
+	 * nothing else here uses), and the server adds ", moemon" to that Pokemon's details
+	 * (data/velvet/rp-mod.js), so both players see it, at team preview, on every switch-in
+	 * and through Harvest Lantern's size changes. Every RP format.
+	 *
+	 * Gourgeist: the pumpkin girl, every size, with a shiny recoloured to the official
+	 * shiny's palette (orchid hair, black pumpkin, lime glow).
 	 */
-	var TOUHOU_SKIN_IDS = ['gourgeist', 'gourgeistsmall', 'gourgeistlarge', 'gourgeistsuper'];
-	var TOUHOU_SKIN = {
-		standard: true,
-		still: { front: ['gourgeist-touhou.png', 96, 96], back: ['gourgeist-touhou-back.png', 96, 96] },
-		shiny: { still: { front: ['gourgeist-touhou-shiny.png', 96, 96], back: ['gourgeist-touhou-back-shiny.png', 96, 96] } },
-		builder: 'background-image:url(#SPRITES#gourgeist-touhou.png);background-position:10px 5px;background-repeat:no-repeat;image-rendering:pixelated;',
-		shinyBuilder: 'background-image:url(#SPRITES#gourgeist-touhou-shiny.png);background-position:10px 5px;background-repeat:no-repeat;image-rendering:pixelated;',
+	var MOEMON_FLAG = 'moemon';
+	var MOEMON = {
+		gourgeist: {
+			standard: true,
+			still: { front: ['gourgeist-touhou.png', 96, 96], back: ['gourgeist-touhou-back.png', 96, 96] },
+			shiny: { still: { front: ['gourgeist-touhou-shiny.png', 96, 96], back: ['gourgeist-touhou-back-shiny.png', 96, 96] } },
+			builder: 'background-image:url(#SPRITES#gourgeist-touhou.png);background-position:10px 5px;background-repeat:no-repeat;image-rendering:pixelated;',
+			shinyBuilder: 'background-image:url(#SPRITES#gourgeist-touhou-shiny.png);background-position:10px 5px;background-repeat:no-repeat;image-rendering:pixelated;',
+		},
 	};
-	function touhouSkinFor(pokemon) {
-		var name = pokemon;
-		if (name && typeof name === 'object') {
-			name = (name.getSpeciesForme && name.getSpeciesForme()) || name.speciesForme || name.species || name.name || '';
-		}
-		if (typeof name !== 'string' || TOUHOU_SKIN_IDS.indexOf(window.toID(name)) < 0) return null;
-		// The battle it is drawn in: its own side's, or the room on screen (team preview passes names).
-		var battle = pokemon && pokemon.side && pokemon.side.battle;
-		try { if (!battle && window.app && app.curRoom) battle = app.curRoom.battle; } catch (e) { /* no room */ }
-		var format = window.toID(String((battle && (battle.tier || battle.id)) || ''));
-		// Or, in the teambuilder, the format of the team being edited.
-		try { if (!format && window.app && app.curRoom && app.curRoom.curTeam) format = window.toID(app.curRoom.curTeam.format || ''); } catch (e) { /* no team */ }
-		return format.indexOf('rptouhou') >= 0 ? TOUHOU_SKIN : null;
+	function moemonBase(name) {
+		var species = window.Dex && window.Dex.species ? window.Dex.species.get(name) : null;
+		var base = window.toID((species && species.exists && species.baseSpecies) || name);
+		return MOEMON[base] ? base : '';
+	}
+	// Whether this Pokemon or set wears its Moemon sprite.
+	function hasMoemonFlag(pokemon) {
+		if (!pokemon || typeof pokemon !== 'object') return false;
+		if (window.toID(pokemon.pokeball || '') === MOEMON_FLAG) return true;
+		return String(pokemon.details || '').split(', ').indexOf(MOEMON_FLAG) >= 0 || !!pokemon.moemon;
+	}
+	function moemonFor(pokemon) {
+		if (!hasMoemonFlag(pokemon)) return null;
+		// Options > Graphics > "Hide Moemon sprites": this viewer sees the normal ones.
+		try { if (window.Dex.prefs('nomoemon')) return null; } catch (e) { /* no prefs yet */ }
+		var name = (pokemon.getSpeciesForme && pokemon.getSpeciesForme()) || pokemon.speciesForme || pokemon.species || pokemon.name || '';
+		var base = moemonBase(name);
+		return base ? MOEMON[base] : null;
+	}
+	/*
+	 * The client reads a details string from the end (tera, shiny, gender, then level), so
+	 * a tag it does not know would throw all of those off. It is taken out before parsing
+	 * and kept as a flag; `details` itself is left whole, since later lines match on it.
+	 */
+	function installMoemonDetails() {
+		var B = window.Battle;
+		if (!B || !B.prototype || !B.prototype.parseDetails) return false;
+		if (B.prototype.__velvetMoemon) return true;
+		B.prototype.__velvetMoemon = true;
+		var original = B.prototype.parseDetails;
+		B.prototype.parseDetails = function (name, pokemonid, details, output) {
+			var parts = String(details || '').split(', ');
+			var at = parts.indexOf(MOEMON_FLAG);
+			if (at < 0) return original.apply(this, arguments);
+			parts.splice(at, 1);
+			var out = original.call(this, name, pokemonid, parts.join(', '), output);
+			out.details = details;
+			out.searchid = out.ident ? out.ident + '|' + details : '';
+			out.moemon = true;
+			return out;
+		};
+		return true;
 	}
 
 	// Which of ours this is, if it is one of ours at all. The client passes a
@@ -581,7 +618,8 @@
 		var switchIn = installRpSwitch();
 		var caughtIn = installCaughtMark();
 		var ppIn = installTouhouPP();
-		return ppIn && caughtIn && switchIn && tableIn && orderIn && spritesIn && iconIn && builderIn && tipsIn && rpIn &&
+		var moemonIn = installMoemonDetails() && installMoemonPicker() && installMoemonSetting();
+		return moemonIn && ppIn && caughtIn && switchIn && tableIn && orderIn && spritesIn && iconIn && builderIn && tipsIn && rpIn &&
 			cutIn && listIn && buffsIn && abilitiesIn && itemIn && sigItemIn && powerIn && dmaxIn && awakenedIn && textIn && zMaxIn && eternaIn && defaultIn && bagIn && usefulIn && frbIn && sureIn && gemIn;
 	}
 
@@ -2244,7 +2282,7 @@
 			// property, while a set from the builder answers `getSpeciesForme()`.
 			// Reading only one of them is why she rendered everywhere except the
 			// team preview.
-			var ours = oursFor(pokemon) || touhouSkinFor(pokemon);
+			var ours = moemonFor(pokemon) || oursFor(pokemon);
 			if (ours) {
 				// Animated unless this viewer has turned animation off, which is the
 				// same pair of preferences the client checks for everyone else - so
@@ -2419,7 +2457,7 @@
 
 		var original = window.Dex.getTeambuilderSprite;
 		window.Dex.getTeambuilderSprite = function (set, gen) {
-			var ours = oursFor(set) || touhouSkinFor(set);
+			var ours = moemonFor(set) || oursFor(set);
 			if (ours && ours.shinyBuilder && set && set.shiny) return ours.shinyBuilder.split('#SPRITES#').join(SPRITES);
 			if (ours && ours.builder) return ours.builder.split('#SPRITES#').join(SPRITES);
 			return original.call(this, set, gen);
@@ -2794,6 +2832,107 @@
 			return out;
 		};
 		return true;
+	}
+
+	/*
+	 * The sprite picker in Details, for a Pokemon that has a Moemon sprite. The form's own
+	 * save (detailsChange) only keeps a real Poke Ball in `pokeball`, so the choice is
+	 * written back after it, every time it runs.
+	 */
+	function installMoemonPicker() {
+		var room = window.TeambuilderRoom;
+		if (!room || !room.prototype || !room.prototype.updateDetailsForm || !room.prototype.detailsChange) return false;
+		if (room.__velvetMoemon) return true;
+		room.__velvetMoemon = true;
+		var draw = room.prototype.updateDetailsForm;
+		room.prototype.updateDetailsForm = function () {
+			var out = draw.apply(this, arguments);
+			try { addMoemonRow(this); } catch (e) { /* the form still works without it */ }
+			return out;
+		};
+		var save = room.prototype.detailsChange;
+		room.prototype.detailsChange = function () {
+			var set = this.curSet;
+			var moe = !!(set && window.toID(set.pokeball || '') === MOEMON_FLAG);
+			var out = save.apply(this, arguments);
+			if (moe && set && moemonBase(set.species) && window.toID(set.pokeball || '') !== MOEMON_FLAG) {
+				set.pokeball = 'Moemon';
+				this.save();
+			}
+			return out;
+		};
+		// A builder opened before this ran is bound to the old save: bind it again.
+		try { if (window.app && app.rooms && app.rooms.teambuilder && app.rooms.teambuilder.delegateEvents) app.rooms.teambuilder.delegateEvents(); } catch (e) { /* none open */ }
+		return true;
+	}
+
+	// The setting, in Options under Graphics beside the other sprite choices.
+	function installMoemonSetting() {
+		var P = window.OptionsPopup;
+		if (!P || !P.prototype || !P.prototype.initialize) return false;
+		if (P.prototype.__velvetMoemon) return true;
+		P.prototype.__velvetMoemon = true;
+		var init = P.prototype.initialize;
+		P.prototype.initialize = function () {
+			var out = init.apply(this, arguments);
+			try {
+				var $row = $('<p><label class="checkbox"><input type="checkbox" name="nomoemon"' +
+					(window.Dex.prefs('nomoemon') ? ' checked' : '') + ' /> Hide Moemon sprites</label></p>');
+				var $after = this.$el.find('input[name=nopastgens]').closest('p');
+				if ($after.length) $row.insertAfter($after); else this.$el.append($row);
+				$row.find('input').on('change', function () { window.Storage.prefs('nomoemon', !!this.checked); });
+			} catch (e) { /* Options still opens without it */ }
+			return out;
+		};
+		return true;
+	}
+
+	// "Change sprite", as Gastrodon has for East and West, opening the same kind of picker.
+	function addMoemonRow(room) {
+		var set = room.curSet;
+		if (!set || !room.$chart || !moemonBase(set.species)) return;
+		var $form = room.$chart.find('form.detailsform');
+		if (!$form.length || $form.find('button.velvetsprite').length) return;
+		// Gastrodon's own button already opens a picker; a Pokemon with both gets ours only.
+		var $row = $('<div class="formrow"><button type="button" class="button velvetsprite">Change sprite</button></div>');
+		$form.append($row);
+		$row.find('button').on('click', function (e) {
+			e.preventDefault();
+			e.stopPropagation();
+			window.app.addPopup(moemonPopup(), { room: room, curSet: set });
+		});
+	}
+
+	var MoemonPopup = null;
+	function moemonPopup() {
+		if (MoemonPopup) return MoemonPopup;
+		MoemonPopup = window.Popup.extend({
+			type: 'semimodal',
+			initialize: function (data) {
+				this.room = data.room;
+				this.curSet = data.curSet;
+				var set = this.curSet;
+				var moe = window.toID(set.pokeball || '') === MOEMON_FLAG;
+				var look = function (pokeball) {
+					var copy = { species: set.species, shiny: set.shiny, pokeball: pokeball };
+					return String(window.Dex.getTeambuilderSprite(copy, 9) || '').replace(/"/g, '&quot;');
+				};
+				var buf = '<p>Pick a variant or <button name="close" class="button">Cancel</button></p><div class="formlist">';
+				buf += '<button name="setSprite" value="" title="Normal" class="option' + (moe ? '' : ' cur') + '" style="width:96px;height:96px;' + look('') + '"></button>';
+				buf += '<button name="setSprite" value="Moemon" title="Moemon" class="option pixelated' + (moe ? ' cur' : '') + '" style="width:96px;height:96px;' + look('Moemon') + '"></button>';
+				buf += '<div style="clear:both"></div></div>';
+				this.$el.html(buf).css({ 'max-width': 100 * 7 });
+			},
+			setSprite: function (value) {
+				if (value === 'Moemon') this.curSet.pokeball = 'Moemon';
+				else if (window.toID(this.curSet.pokeball || '') === MOEMON_FLAG) delete this.curSet.pokeball;
+				this.close();
+				this.room.updatePokemonSprite();
+				this.room.curTeam.team = window.Storage.packTeam(this.room.curSetList);
+				window.Storage.saveTeam(this.room.curTeam);
+			},
+		});
+		return MoemonPopup;
 	}
 
 	function addDynamaxRows(room) {
