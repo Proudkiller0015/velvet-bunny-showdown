@@ -316,11 +316,17 @@
 		if (window.toID(pokemon.pokeball || '') === MOEMON_FLAG) return true;
 		return String(pokemon.details || '').split(', ').indexOf(MOEMON_FLAG) >= 0 || !!pokemon.moemon;
 	}
+	// Options > Graphics > "Moemon sprites": as each player picked (default), always, or never.
+	function moemonPref() {
+		try { return window.Dex.prefs('moemon') || (window.Dex.prefs('nomoemon') ? 'never' : ''); } catch (e) { return ''; }
+	}
 	function moemonFor(pokemon) {
-		if (!hasMoemonFlag(pokemon)) return null;
-		// Options > Graphics > "Hide Moemon sprites": this viewer sees the normal ones.
-		try { if (window.Dex.prefs('nomoemon')) return null; } catch (e) { /* no prefs yet */ }
-		var name = (pokemon.getSpeciesForme && pokemon.getSpeciesForme()) || pokemon.speciesForme || pokemon.species || pokemon.name || '';
+		var pref = moemonPref();
+		if (pref === 'never') return null;
+		if (pref !== 'always' && !hasMoemonFlag(pokemon)) return null;
+		if (!pokemon) return null;
+		var name = typeof pokemon === 'string' ? pokemon :
+			(pokemon.getSpeciesForme && pokemon.getSpeciesForme()) || pokemon.speciesForme || pokemon.species || pokemon.name || '';
 		var base = moemonBase(name);
 		return base ? MOEMON[base] : null;
 	}
@@ -2456,6 +2462,7 @@
 		window.Dex.__velvetBuilderSprite = true;
 
 		var original = window.Dex.getTeambuilderSprite;
+		builderOriginal = function (set) { return original.call(window.Dex, set, 9); };
 		window.Dex.getTeambuilderSprite = function (set, gen) {
 			var ours = moemonFor(set) || oursFor(set);
 			if (ours && ours.shinyBuilder && set && set.shiny) return ours.shinyBuilder.split('#SPRITES#').join(SPRITES);
@@ -2876,11 +2883,16 @@
 		P.prototype.initialize = function () {
 			var out = init.apply(this, arguments);
 			try {
-				var $row = $('<p><label class="checkbox"><input type="checkbox" name="nomoemon"' +
-					(window.Dex.prefs('nomoemon') ? ' checked' : '') + ' /> Hide Moemon sprites</label></p>');
+				var cur = moemonPref();
+				var opt = function (v, label) { return '<option value="' + v + '"' + (cur === v ? ' selected="selected"' : '') + '>' + label + '</option>'; };
+				var $row = $('<p><label class="optlabel">Moemon sprites: <select name="moemon" class="button">' +
+					opt('', 'As each player picked') + opt('always', 'Always') + opt('never', 'Never') + '</select></label></p>');
 				var $after = this.$el.find('input[name=nopastgens]').closest('p');
 				if ($after.length) $row.insertAfter($after); else this.$el.append($row);
-				$row.find('input').on('change', function () { window.Storage.prefs('nomoemon', !!this.checked); });
+				$row.find('select').on('change', function () {
+					window.Storage.prefs('moemon', this.value || null);
+					window.Storage.prefs('nomoemon', null);
+				});
 			} catch (e) { /* Options still opens without it */ }
 			return out;
 		};
@@ -2904,6 +2916,7 @@
 	}
 
 	var MoemonPopup = null;
+	var builderOriginal = function () { return ''; };
 	function moemonPopup() {
 		if (MoemonPopup) return MoemonPopup;
 		MoemonPopup = window.Popup.extend({
@@ -2915,7 +2928,10 @@
 				var moe = window.toID(set.pokeball || '') === MOEMON_FLAG;
 				var look = function (pokeball) {
 					var copy = { species: set.species, shiny: set.shiny, pokeball: pokeball };
-					return String(window.Dex.getTeambuilderSprite(copy, 9) || '').replace(/"/g, '&quot;');
+					var ours = pokeball ? MOEMON[moemonBase(set.species)] : null;
+					var css = ours ? (set.shiny && ours.shinyBuilder ? ours.shinyBuilder : ours.builder).split('#SPRITES#').join(SPRITES) :
+						(oursFor(copy) || {}).builder || builderOriginal(copy);
+					return String(css || '').replace(/"/g, '&quot;');
 				};
 				var buf = '<p>Pick a variant or <button name="close" class="button">Cancel</button></p><div class="formlist">';
 				buf += '<button name="setSprite" value="" title="Normal" class="option' + (moe ? '' : ' cur') + '" style="width:96px;height:96px;' + look('') + '"></button>';
