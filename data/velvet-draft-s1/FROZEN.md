@@ -18,3 +18,5 @@ Liepard learns Hustle Up here too, as in RP (owner, 27 Oct 2026; balance-patch-1
 Gourgeist released into the draft (owner, 28 Oct 2026, mid-auction): Harvest Lantern, Lantern Lunge,
 Phantom Pursuit and its new moves, every size (gourgeist.js, wired in index.js and balance-patch-1.js).
 All four sizes are one pick, as Silvally (config/custom-formats.js); its pool price went from E/F to C+.
+
+Iron Hands learns Voltaic Lance (owner, 28 Oct 2026), as in RP (balance-patch-1.js TM_DISTRIBUTION).

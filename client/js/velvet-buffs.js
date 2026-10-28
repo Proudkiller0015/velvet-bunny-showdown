@@ -7070,6 +7070,12 @@ window.VelvetBuffs = {
 			],
 			"abilities": []
 		},
+		"ironhands": {
+			"moves": [
+				"voltaiclance"
+			],
+			"abilities": []
+		},
 		"electivire": {
 			"moves": [
 				"voltaiclance",

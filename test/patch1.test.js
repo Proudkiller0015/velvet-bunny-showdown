@@ -274,7 +274,7 @@ check(!['memorywipe', 'soulresonance', 'resolutestrike', 'aurorasquall'].some(mv
 	const b = battle([{ species: 'Electivire', ability: 'Motor Drive', moves: ['voltaiclance'] }], [{ species: 'Garchomp', ability: 'Rough Skin', moves: ['splash'] }, { species: 'Gyarados', ability: 'Intimidate', moves: ['splash'] }]);
 	b.p2.active[0].switchFlag = false;
 	const hp = b.p1.active[0].hp;
-	check(learns('electivire', 'voltaiclance') && learns('elekid', 'voltaiclance') && learns('mew', 'voltaiclance') && !learns('ironhands', 'voltaiclance'), 'Voltaic Lance: Electivire line and Mew yes, Iron Hands no');
+	check(learns('electivire', 'voltaiclance') && learns('elekid', 'voltaiclance') && learns('mew', 'voltaiclance') && learns('ironhands', 'voltaiclance') && !learns('regieleki', 'voltaiclance'), 'Voltaic Lance: Electivire line, Mew and Iron Hands yes (28 Oct 2026), Regieleki no');
 	check(hp === b.p1.active[0].hp, 'turn setup ran');
 }
 

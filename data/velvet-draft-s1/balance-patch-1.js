@@ -1972,7 +1972,7 @@ const TM_DISTRIBUTION = {
 	// Boxers and fighters light on their feet. Not Annihilape (Uber) or Quaquaval, which already has a Speed-raising signature.
 	// Electric physical attackers. Not Iron Hands (OU, and it would replace a
 	// drawback move with none), Regieleki (Uber) or the special legendaries.
-	voltaiclance: ['electivire', 'luxray', 'zeraora', 'eelektross', 'pawmot', 'morpeko', 'dracozolt', 'arctozolt',
+	voltaiclance: ['ironhands', 'electivire', 'luxray', 'zeraora', 'eelektross', 'pawmot', 'morpeko', 'dracozolt', 'arctozolt',
 		'ironthorns', 'zebstrika', 'manectric', 'raichu', 'raichualola', 'pikachu', 'emolga', 'pachirisu', 'dedenne',
 		'togedemaru', 'stunfisk', 'boltund', 'pincurchin', 'minun', 'plusle'],
 	// Ice physical attackers. Not Weavile or Sneasel (it would outclass Icicle
