@@ -56,6 +56,9 @@ const PATCHES = [
 const LATEST = PATCHES[PATCHES.length - 1].label;
 const patchAt = ms => (PATCHES.find(p => p.at >= ms) || { label: LATEST }).label;
 
+// A word on what a grant is for, where the list alone would not say.
+const NOTES = { darmanitan: 'Zen Sanctum: turning Zen sets **Trick Room**, turning back ends it' };
+
 // The first commit that added `token` to the server's own data files.
 const EXCLUDE = ['learnsets.js', 'cut-moves.json', 'rp-moves.json', 'rp-usage.json', 'random-sets.js', 'za-tiers.json']
 	.map(f => `:(exclude)data/velvet/${f}`);
@@ -154,6 +157,7 @@ for (const id of allSpecies) {
 		const rest = newMoves.filter(m => !mew[m]);
 		parts.push(`learns **every TM Mew does**${rest.length ? `, and ${rest.map(moveName).sort().join(', ')}` : ''} ${tag(tagFor('LIKE_MEW', V_(['legend-kits.js'])))}`);
 	} else if (newMoves.length) parts.push(`learns ${newMoves.map(moveName).sort().join(', ')}`);
+	if (NOTES[id]) parts.push(NOTES[id]);
 	if (!parts.length) continue;
 	speciesLines.push({ num: ours.num, name: speciesName(id), text: `• **${speciesName(id)}**: ${parts.join(' · ')}` });
 }
@@ -297,6 +301,8 @@ console.log(`${out.length} parts, ${speciesLines.length} Pokemon, ${newMoveLines
  */
 const toID = s => String(s).toLowerCase().replace(/[^a-z0-9]+/g, '');
 const faqs = {};
+// A forme with no line of its own answers with its base form's (/rfaq darmanitanzen).
+const FAQ_ALIASES = { darmanitanzen: 'darmanitan' };
 const lists = [];
 function addList(title, lines, listed = true) {
 	const names = [];
@@ -323,6 +329,7 @@ for (const [id, who] of Object.entries(learners)) {
 		faqs[key] = faqs[key].replace(/Learned by: \d+ Pokémon \(each listed under Pokémon\)\./, `Learned by (${who.length}): ${who.map(speciesName).sort().join(', ')}.`);
 	}
 }
+for (const [alias, of] of Object.entries(FAQ_ALIASES)) if (!faqs[alias] && faqs[of]) faqs[alias] = faqs[of];
 addList('New abilities', newAbilityLines);
 addList('New items', newItemLines);
 addList('Changed moves', mergedChangedMoves);

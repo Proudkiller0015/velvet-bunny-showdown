@@ -951,6 +951,67 @@ function psychicHitsDark(move) {
 
 exports.ABILITIES = {
 	/*
+	 * Twisted Dimensions - Orbeetle's Awakened ability (the owner, 28 Oct 2026): on switching in it
+	 * sets Trick Room. It never turns an active Trick Room off.
+	 */
+	twisteddimensions: {
+		name: "Twisted Dimensions",
+		num: -255,
+		gen: 9,
+		rating: 3.5,
+		onStart(pokemon) {
+			if (this.field.getPseudoWeather('trickroom')) return;
+			this.add('-activate', pokemon, 'ability: Twisted Dimensions');
+			this.field.addPseudoWeather('trickroom', pokemon, this.dex.abilities.get('twisteddimensions'));
+		},
+		flags: {},
+		shortDesc: "On switch-in, sets Trick Room (5 turns) if it is not already up.",
+		desc: "On switch-in, this Pokemon sets Trick Room for 5 turns, as the move does, unless Trick Room is already in effect; it never ends an active Trick Room.",
+	},
+	/*
+	 * Zen Sanctum - Unova Darmanitan's Awakened ability (the owner, 28 Oct 2026). Zen Mode,
+	 * and the meditation bends time: turning Zen sets Trick Room, turning back (healed past
+	 * half) ends it; switching out leaves it up. A separate ability so Galarian Darmanitan's Zen Mode
+	 * stays as it was; Galarian Darmanitan never gets this one.
+	 */
+	zensanctum: {
+		name: "Zen Sanctum",
+		num: -254,
+		gen: 9,
+		rating: 3,
+		onResidualOrder: 29,
+		onResidual(pokemon) {
+			if (pokemon.baseSpecies.baseSpecies !== 'Darmanitan' || pokemon.transformed || pokemon.species.name.includes('Galar')) return;
+			if (pokemon.hp <= pokemon.maxhp / 2 && pokemon.species.forme !== 'Zen') {
+				pokemon.addVolatile('zensanctum');
+			} else if (pokemon.hp > pokemon.maxhp / 2 && pokemon.species.forme === 'Zen') {
+				pokemon.addVolatile('zensanctum');
+				pokemon.removeVolatile('zensanctum');
+			}
+		},
+		// Switching out (or losing the ability) turns it back quietly and leaves Trick Room up:
+		// only turning back in battle ends it (the owner).
+		onEnd(pokemon) {
+			if (!pokemon.volatiles['zensanctum'] || !pokemon.hp) return;
+			pokemon.transformed = false;
+			delete pokemon.volatiles['zensanctum'];
+			if (pokemon.species.forme === 'Zen') pokemon.formeChange(pokemon.species.battleOnly, this.effect, false, '0', '[silent]');
+		},
+		condition: {
+			onStart(pokemon) {
+				if (pokemon.species.id !== 'darmanitanzen') pokemon.formeChange('Darmanitan-Zen');
+				if (!this.field.getPseudoWeather('trickroom')) this.field.addPseudoWeather('trickroom', pokemon, this.dex.abilities.get('zensanctum'));
+			},
+			onEnd(pokemon) {
+				if (pokemon.species.forme === 'Zen') pokemon.formeChange(pokemon.species.battleOnly);
+				if (this.field.getPseudoWeather('trickroom')) this.field.removePseudoWeather('trickroom');
+			},
+		},
+		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1 },
+		shortDesc: "Zen Mode; becoming Zen sets Trick Room, turning back ends it.",
+		desc: "Unova Darmanitan only. As Zen Mode: at the end of a turn at 1/2 HP or less it becomes Darmanitan-Zen, and above 1/2 it turns back. Becoming Zen sets Trick Room if it is not already up; turning back (healed above 1/2) ends Trick Room. Switching out leaves it up. Cannot be copied, swapped or suppressed.",
+	},
+	/*
 	 * Mudflat Ambush - Stunfisk's, both formes.
 	 *
 	 * A flat fish buried in the mud, waiting to be stepped on. Three abilities'
@@ -1797,6 +1858,8 @@ const SMALL = {
 const UNAWARE = ['snorlax', 'florges', 'goodra', 'goodrahisui', 'registeel', 'bronzong', 'hippowdon', 'mandibuzz', 'alomomola', 'slowking', 'slowkinggalar', 'mudsdale', 'avalugg', 'avalugghisui', 'cetitan', 'lapras', 'milotic', 'steelix', 'carbink', 'tangrowth', 'amoonguss', 'gastrodon', 'hariyama', 'cresselia', 'suicune'];
 
 const ABILITY_GRANTS = {
+	orbeetle: 'Twisted Dimensions',
+	darmanitan: 'Zen Sanctum',
 	plusle: 'Motor Drive',
 	minun: 'Motor Drive',
 	cherrim: 'Chlorophyll',
