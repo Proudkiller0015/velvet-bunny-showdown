@@ -315,7 +315,7 @@
 		};
 	}
 	// Every Moemon look a Pokemon has: [{art, label}], ours first.
-	function moemonList(name) {
+	function moemonList(name, exact) {
 		var dex = window.Dex && window.Dex.species;
 		var species = dex ? dex.get(name) : null;
 		if (!species || !species.exists) return [];
@@ -325,13 +325,24 @@
 		// A forme with none of its own uses its base form's, unless it is one that looks
 		// different in battle (a Mega, Primal or Gigantamax keeps its normal sprite).
 		var battleForm = species.battleOnly || species.isMega || species.isPrimal || species.forme === 'Gmax' || /^Mega/.test(species.forme || '');
-		if (!theirs && !battleForm) theirs = table[base];
+		if (!theirs && !battleForm && !exact) theirs = table[base];
 		var out = [];
 		(OUR_MOEMON[base] || []).forEach(function (v) { out.push({ art: moemonVariant(v.front, v.size), label: v.label }); });
 		(theirs || []).forEach(function (v) { out.push({ art: moemonVariant('moemon/' + v[0], 64), label: 'Moemon Project' + (v[1] ? ', ' + v[1] : '') }); });
 		return out;
 	}
 	function moemonBase(name) { return moemonList(name).length ? window.toID(name) : ''; }
+	function moemonFamily(name) {
+		var dex = window.Dex && window.Dex.species;
+		var species = dex ? dex.get(name) : null;
+		if (!species || !species.exists) return [name];
+		var base = dex.get(species.baseSpecies);
+		if (!base.cosmeticFormes || !base.cosmeticFormes.length) return [species.name];
+		return [base.name].concat(base.cosmeticFormes);
+	}
+	function familyHasMoemon(name) {
+		return moemonFamily(name).some(function (form, i) { return moemonList(form, i > 0).length > 0; });
+	}
 	// Which look this Pokemon or set wears: 0 for the normal sprite, else 1, 2...
 	function moemonNumber(pokemon) {
 		if (!pokemon || typeof pokemon !== 'object') return 0;
@@ -2901,6 +2912,16 @@
 			}
 			return out;
 		};
+		var alt = room.prototype.altForm;
+		room.prototype.altForm = function (e) {
+			var set = this.curSet, index = 0;
+			if (!set) {
+				index = +$(e.currentTarget).closest('li').attr('value');
+				set = this.curSetList[index];
+			}
+			if (!set || !familyHasMoemon(set.species)) return alt.apply(this, arguments);
+			window.app.addPopup(moemonPopup(), { room: this, curSet: set, index: index });
+		};
 		// A builder opened before this ran is bound to the old save: bind it again.
 		try { if (window.app && app.rooms && app.rooms.teambuilder && app.rooms.teambuilder.delegateEvents) app.rooms.teambuilder.delegateEvents(); } catch (e) { /* none open */ }
 		return true;
@@ -2935,10 +2956,11 @@
 	// "Change sprite", as Gastrodon has for East and West, opening the same kind of picker.
 	function addMoemonRow(room) {
 		var set = room.curSet;
-		if (!set || !room.$chart || !moemonBase(set.species)) return;
+		if (!set || !room.$chart || !familyHasMoemon(set.species)) return;
 		var $form = room.$chart.find('form.detailsform');
 		if (!$form.length || $form.find('button.velvetsprite').length) return;
-		// Gastrodon's own button already opens a picker; a Pokemon with both gets ours only.
+		// Gastrodon's own button is there already, and now opens this same picker.
+		if (room.$chart.find('button.altform').length) return;
 		var $row = $('<div class="formrow"><button type="button" class="button velvetsprite">Change sprite</button></div>');
 		$form.append($row);
 		$row.find('button').on('click', function (e) {
@@ -2958,28 +2980,44 @@
 				this.room = data.room;
 				this.curSet = data.curSet;
 				var set = this.curSet;
+				this.index = data.index || 0;
 				var cur = moemonNumber(set);
+				var curForm = window.toID(set.species);
 				var esc = function (t) { return String(t || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;'); };
-				var normal = { species: set.species, shiny: set.shiny };
-				var css = function (art) {
-					if (!art) return (oursFor(normal) || {}).builder || builderOriginal(normal);
+				var css = function (form, art) {
+					if (!art) {
+						var normal = { species: form, shiny: set.shiny };
+						return (oursFor(normal) || {}).builder || builderOriginal(normal);
+					}
 					return (set.shiny && art.shinyBuilder ? art.shinyBuilder : art.builder).split('#SPRITES#').join(SPRITES);
 				};
 				var buf = '<p>Pick a variant or <button name="close" class="button">Cancel</button></p><div class="formlist">';
-				buf += '<button name="setSprite" value="" title="Normal" class="option' + (cur ? '' : ' cur') + '" style="width:96px;height:96px;' + esc(css(null)) + '"></button>';
-				moemonList(set.species).forEach(function (v, i) {
-					var value = i ? 'Moemon ' + (i + 1) : 'Moemon';
-					buf += '<button name="setSprite" value="' + value + '" title="' + esc(v.label) + '" class="option pixelated' + (cur === i + 1 ? ' cur' : '') +
-						'" style="width:96px;height:96px;' + esc(css(v.art)) + '"></button>';
+				moemonFamily(set.species).forEach(function (form, f) {
+					var here = window.toID(form) === curForm;
+					var forme = window.Dex.species.get(form).forme || '';
+					buf += '<button name="setSprite" value="' + esc(form) + '|" title="' + esc(forme ? forme : 'Normal') + '" class="option' + (here && !cur ? ' cur' : '') +
+						'" style="width:96px;height:96px;' + esc(css(form, null)) + '"></button>';
+					moemonList(form, f > 0).forEach(function (v, i) {
+						var value = i ? 'Moemon ' + (i + 1) : 'Moemon';
+						buf += '<button name="setSprite" value="' + esc(form) + '|' + value + '" title="' + esc((forme ? forme + ', ' : '') + v.label) + '" class="option pixelated' +
+							(here && cur === i + 1 ? ' cur' : '') + '" style="width:96px;height:96px;' + esc(css(form, v.art)) + '"></button>';
+					});
 				});
 				buf += '<div style="clear:both"></div></div>';
 				this.$el.html(buf).css({ 'max-width': 100 * 7 });
 			},
 			setSprite: function (value) {
-				if (value) this.curSet.pokeball = value;
+				var at = String(value || '').indexOf('|');
+				var form = at >= 0 ? value.slice(0, at) : this.curSet.species;
+				var look = at >= 0 ? value.slice(at + 1) : value;
+				var formChanged = form && window.toID(form) !== window.toID(this.curSet.species);
+				if (form) this.curSet.species = form;
+				if (look) this.curSet.pokeball = look;
 				else if (MOEMON_TAG.test(window.toID(this.curSet.pokeball || ''))) delete this.curSet.pokeball;
 				this.close();
-				this.room.updatePokemonSprite();
+				if (this.room.curSet) this.room.updatePokemonSprite();
+				else this.room.update();
+				if (formChanged) this.room.$('input[name=pokemon]').eq(this.index).val(this.curSet.species);
 				this.room.curTeam.team = window.Storage.packTeam(this.room.curSetList);
 				window.Storage.saveTeam(this.room.curTeam);
 			},
