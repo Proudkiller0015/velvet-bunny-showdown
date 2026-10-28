@@ -683,7 +683,7 @@
 		var switchIn = installRpSwitch();
 		var caughtIn = installCaughtMark();
 		var ppIn = installTouhouPP();
-		var moemonIn = installMoemonDetails() && installMoemonPicker() && installMoemonSetting();
+		var moemonIn = installMoemonDetails() && installMoemonPicker() && installMoemonSetting() && installAwakenedColumn();
 		return moemonIn && ppIn && caughtIn && switchIn && tableIn && orderIn && spritesIn && iconIn && builderIn && tipsIn && rpIn &&
 			cutIn && listIn && buffsIn && abilitiesIn && itemIn && sigItemIn && powerIn && dmaxIn && awakenedIn && textIn && zMaxIn && eternaIn && defaultIn && bagIn && usefulIn && frbIn && sureIn && gemIn;
 	}
@@ -2939,6 +2939,44 @@
 		};
 		// A builder opened before this ran is bound to the old save: bind it again.
 		try { if (window.app && app.rooms && app.rooms.teambuilder && app.rooms.teambuilder.delegateEvents) app.rooms.teambuilder.delegateEvents(); } catch (e) { /* none open */ }
+		return true;
+	}
+
+	/*
+	 * The Pokemon list's ability columns: 1 and 2 stacked, Hidden beside them, and a slot under
+	 * Hidden that only a special ability ever filled. In RP that slot shows the Awakened
+	 * ability (the owner, 28 Oct 2026: it sat empty while the ability was ours).
+	 */
+	function installAwakenedColumn() {
+		var S = window.BattleSearch;
+		if (!S || !S.prototype || !S.prototype.renderPokemonRow) return false;
+		if (S.prototype.__velvetAwakenedCol) return true;
+		S.prototype.__velvetAwakenedCol = true;
+		var original = S.prototype.renderPokemonRow;
+		S.prototype.renderPokemonRow = function (pokemon) {
+			try {
+				var table = RP.on && window.VelvetBuffs && window.VelvetBuffs.bySpecies;
+				if (table && pokemon && pokemon.abilities && !pokemon.abilities.S) {
+					var record = table[pokemon.id] || null;
+					if ((!record || !(record.abilities || []).length) && (pokemon.battleOnly || pokemon.isMega || pokemon.isPrimal)) record = table[window.toID(pokemon.baseSpecies)];
+					var awakened = (record && record.abilities) || [];
+					if (awakened.length) {
+						var shown = Object.create(pokemon);
+						var abilities = {};
+						for (var k in pokemon.abilities) abilities[k] = pokemon.abilities[k];
+						// An Awakened ability the data put in the free second slot moves down here too.
+						if (abilities['1'] && awakened.indexOf(abilities['1']) >= 0) delete abilities['1'];
+						if (abilities.H && awakened.indexOf(abilities.H) >= 0) delete abilities.H;
+						var listed = [abilities['0'], abilities['1'], abilities.H];
+						abilities.S = awakened.filter(function (x) { return listed.indexOf(x) < 0; }).join(' / ');
+						if (!abilities.S) delete abilities.S;
+						shown.abilities = abilities;
+						arguments[0] = shown;
+					}
+				}
+			} catch (e) { /* the row draws as it was */ }
+			return original.apply(this, arguments);
+		};
 		return true;
 	}
 
