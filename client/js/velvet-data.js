@@ -253,6 +253,21 @@
 		};
 	});
 	/*
+	 * The other collab Pokemon, also Lobotomy Corporation's: their in-game cut-outs from the
+	 * game's wiki (art/collab/make-sprites.py). Punibird-Angry and Hatred Queen-Hatred are the
+	 * same figure in a rage glow, as Funerfly-Breach is. The backs are the fronts turned round.
+	 */
+	[['punibird', 'punibird'], ['punibirdangry', 'punibird-angry'], ['laetitia', 'laetitia'], ['freischutz', 'freischutz'],
+		['hatrequeen', 'hatrequeen'], ['hatrequeenhatred', 'hatrequeen-hatred']].forEach(function (f) {
+		var file = 'collab/' + f[1];
+		ART[f[0]] = {
+			standard: true,
+			still: { front: [file + '.png' + SPRITE_V, 96, 96], back: [file + '-back.png' + SPRITE_V, 96, 96] },
+			icon: file + '-icon.png' + SPRITE_V,
+			builder: 'background-image:url(#SPRITES#' + file + '.png' + SPRITE_V + ');background-position:10px 5px;background-repeat:no-repeat;',
+		};
+	});
+	/*
 	 * The Touhou Pokemon (data/velvet/touhou.js): the Touhoumons solomod's own sprites (DH2, MIT),
 	 * standard 96x96 fronts, backs and shinies with 40x30 icons, in sprites/touhou/<id>*.png.
 	 * One row per species and forme, written by scripts/import-touhou.js.
