@@ -162,13 +162,13 @@ const MODS = [9, 8, 7, 6, 5, 4, 3, 2, 1].map(gen => ({ id: `gen${gen}rp`, gen, i
  * opponent draws it too, at team preview, on switch-in and after a forme change. The
  * client takes the tag out before it parses the rest (client/js/velvet-data.js).
  */
-const MOEMON = ['gourgeist'];
+// 'Moemon' is the first look, 'Moemon 2' the second, and so on (client/js/velvet-moemon.js).
+const MOEMON = /^moemon[0-9]*$/;
 const POKEMON = {
 	getUpdatedDetails(level) {
 		const details = Object.getPrototypeOf(this).getUpdatedDetails.call(this, level);
-		const base = String(this.species.baseSpecies || '').toLowerCase().replace(/[^a-z0-9]+/g, '');
-		const picked = String((this.set && this.set.pokeball) || '').toLowerCase() === 'moemon';
-		return picked && MOEMON.includes(base) ? details + ', moemon' : details;
+		const tag = String((this.set && this.set.pokeball) || '').toLowerCase().replace(/[^a-z0-9]+/g, '');
+		return MOEMON.test(tag) ? details + ', ' + tag : details;
 	},
 };
 

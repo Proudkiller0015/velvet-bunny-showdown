@@ -285,50 +285,82 @@
 	});
 
 	/*
-	 * Moemon sprites: an alternative look a player picks for one Pokemon in the builder's
-	 * Details (the owner, 28 Oct 2026), the way Gastrodon picks East or West. The normal
-	 * sprite is the default. The choice rides on the set (`pokeball: 'Moemon'`, a field
-	 * nothing else here uses), and the server adds ", moemon" to that Pokemon's details
-	 * (data/velvet/rp-mod.js), so both players see it, at team preview, on every switch-in
-	 * and through Harvest Lantern's size changes. Every RP format.
+	 * Moemon sprites: alternative looks a player picks for one Pokemon in the builder's
+	 * Details ("Change sprite", the way Gastrodon picks East or West; the owner, 28 Oct 2026).
+	 * The normal sprite is the default. Most are the Moemon Project's (window.VelvetMoemon,
+	 * client/js/velvet-moemon.js, used with the Project's permission and credited in the
+	 * Moemon room); Gourgeist also has our own pumpkin girl, listed first.
 	 *
-	 * Gourgeist: the pumpkin girl, every size, with a shiny recoloured to the official
-	 * shiny's palette (orchid hair, black pumpkin, lime glow).
+	 * The choice rides on the set as `pokeball: 'Moemon'` (the first variant) or 'Moemon N',
+	 * a field nothing else here uses, and the server adds it to the details (", moemon2";
+	 * data/velvet/rp-mod.js), so both players see it at team preview, on every switch-in and
+	 * through forme changes. Every RP format.
 	 */
-	var MOEMON_FLAG = 'moemon';
-	var MOEMON = {
-		gourgeist: {
-			standard: true,
-			still: { front: ['gourgeist-touhou.png', 96, 96], back: ['gourgeist-touhou-back.png', 96, 96] },
-			shiny: { still: { front: ['gourgeist-touhou-shiny.png', 96, 96], back: ['gourgeist-touhou-back-shiny.png', 96, 96] } },
-			builder: 'background-image:url(#SPRITES#gourgeist-touhou.png);background-position:10px 5px;background-repeat:no-repeat;image-rendering:pixelated;',
-			shinyBuilder: 'background-image:url(#SPRITES#gourgeist-touhou-shiny.png);background-position:10px 5px;background-repeat:no-repeat;image-rendering:pixelated;',
-		},
+	var MOEMON_TAG = /^moemon(\d*)$/;
+	var OUR_MOEMON = {
+		gourgeist: [{ front: 'gourgeist-touhou', label: 'Pumpkin girl, ours', size: 96 }],
 	};
-	function moemonBase(name) {
-		var species = window.Dex && window.Dex.species ? window.Dex.species.get(name) : null;
-		var base = window.toID((species && species.exists && species.baseSpecies) || name);
-		return MOEMON[base] ? base : '';
+	function moemonVariant(file, size) {
+		var scale = size === 96 ? '' : 'background-size:96px 96px;';
+		var builder = function (f) {
+			return 'background-image:url(#SPRITES#' + f + '.png);' + scale + 'background-position:10px 5px;background-repeat:no-repeat;image-rendering:pixelated;';
+		};
+		var backOf = function (f) { return f.indexOf('-touhou') > 0 ? f + '-back' : f + '-back'; };
+		return {
+			standard: true,
+			still: { front: [file + '.png', 96, 96], back: [backOf(file) + '.png', 96, 96] },
+			shiny: { still: { front: [file + '-shiny.png', 96, 96], back: [backOf(file) + '-shiny.png', 96, 96] } },
+			builder: builder(file),
+			shinyBuilder: builder(file + '-shiny'),
+		};
 	}
-	// Whether this Pokemon or set wears its Moemon sprite.
-	function hasMoemonFlag(pokemon) {
-		if (!pokemon || typeof pokemon !== 'object') return false;
-		if (window.toID(pokemon.pokeball || '') === MOEMON_FLAG) return true;
-		return String(pokemon.details || '').split(', ').indexOf(MOEMON_FLAG) >= 0 || !!pokemon.moemon;
+	// Every Moemon look a Pokemon has: [{art, label}], ours first.
+	function moemonList(name) {
+		var dex = window.Dex && window.Dex.species;
+		var species = dex ? dex.get(name) : null;
+		if (!species || !species.exists) return [];
+		var table = window.VelvetMoemon || {};
+		var id = window.toID(species.name), base = window.toID(species.baseSpecies);
+		var theirs = table[id];
+		// A forme with none of its own uses its base form's, unless it is one that looks
+		// different in battle (a Mega, Primal or Gigantamax keeps its normal sprite).
+		var battleForm = species.battleOnly || species.isMega || species.isPrimal || species.forme === 'Gmax' || /^Mega/.test(species.forme || '');
+		if (!theirs && !battleForm) theirs = table[base];
+		var out = [];
+		(OUR_MOEMON[base] || []).forEach(function (v) { out.push({ art: moemonVariant(v.front, v.size), label: v.label }); });
+		(theirs || []).forEach(function (v) { out.push({ art: moemonVariant('moemon/' + v[0], 64), label: 'Moemon Project' + (v[1] ? ', ' + v[1] : '') }); });
+		return out;
 	}
+	function moemonBase(name) { return moemonList(name).length ? window.toID(name) : ''; }
+	// Which look this Pokemon or set wears: 0 for the normal sprite, else 1, 2...
+	function moemonNumber(pokemon) {
+		if (!pokemon || typeof pokemon !== 'object') return 0;
+		var m = MOEMON_TAG.exec(window.toID(pokemon.pokeball || ''));
+		if (m) return +m[1] || 1;
+		var parts = String(pokemon.details || '').split(', ');
+		for (var i = 0; i < parts.length; i++) {
+			m = MOEMON_TAG.exec(parts[i]);
+			if (m) return +m[1] || 1;
+		}
+		return pokemon.moemon || 0;
+	}
+	function hasMoemonFlag(pokemon) { return moemonNumber(pokemon) > 0; }
 	// Options > Graphics > "Moemon sprites": as each player picked (default), always, or never.
 	function moemonPref() {
 		try { return window.Dex.prefs('moemon') || (window.Dex.prefs('nomoemon') ? 'never' : ''); } catch (e) { return ''; }
 	}
 	function moemonFor(pokemon) {
 		var pref = moemonPref();
-		if (pref === 'never') return null;
-		if (pref !== 'always' && !hasMoemonFlag(pokemon)) return null;
-		if (!pokemon) return null;
+		if (pref === 'never' || !pokemon) return null;
+		var n = moemonNumber(pokemon);
+		if (!n && pref === 'always') n = 1;
+		if (!n) return null;
 		var name = typeof pokemon === 'string' ? pokemon :
 			(pokemon.getSpeciesForme && pokemon.getSpeciesForme()) || pokemon.speciesForme || pokemon.species || pokemon.name || '';
-		var base = moemonBase(name);
-		return base ? MOEMON[base] : null;
+		var list = moemonList(name);
+		if (!list.length) return null;
+		// After a forme change the number may be past this forme's list: its first, then.
+		return (list[n - 1] || list[0]).art;
 	}
 	/*
 	 * The client reads a details string from the end (tera, shiny, gender, then level), so
@@ -343,13 +375,14 @@
 		var original = B.prototype.parseDetails;
 		B.prototype.parseDetails = function (name, pokemonid, details, output) {
 			var parts = String(details || '').split(', ');
-			var at = parts.indexOf(MOEMON_FLAG);
+			var at = -1, m = null;
+			for (var i = 1; i < parts.length && at < 0; i++) if ((m = MOEMON_TAG.exec(parts[i]))) at = i;
 			if (at < 0) return original.apply(this, arguments);
 			parts.splice(at, 1);
 			var out = original.call(this, name, pokemonid, parts.join(', '), output);
 			out.details = details;
 			out.searchid = out.ident ? out.ident + '|' + details : '';
-			out.moemon = true;
+			out.moemon = +m[1] || 1;
 			return out;
 		};
 		return true;
@@ -2860,10 +2893,10 @@
 		var save = room.prototype.detailsChange;
 		room.prototype.detailsChange = function () {
 			var set = this.curSet;
-			var moe = !!(set && window.toID(set.pokeball || '') === MOEMON_FLAG);
+			var kept = set && MOEMON_TAG.test(window.toID(set.pokeball || '')) ? set.pokeball : '';
 			var out = save.apply(this, arguments);
-			if (moe && set && moemonBase(set.species) && window.toID(set.pokeball || '') !== MOEMON_FLAG) {
-				set.pokeball = 'Moemon';
+			if (kept && set.pokeball !== kept) {
+				set.pokeball = kept;
 				this.save();
 			}
 			return out;
@@ -2925,23 +2958,26 @@
 				this.room = data.room;
 				this.curSet = data.curSet;
 				var set = this.curSet;
-				var moe = window.toID(set.pokeball || '') === MOEMON_FLAG;
-				var look = function (pokeball) {
-					var copy = { species: set.species, shiny: set.shiny, pokeball: pokeball };
-					var ours = pokeball ? MOEMON[moemonBase(set.species)] : null;
-					var css = ours ? (set.shiny && ours.shinyBuilder ? ours.shinyBuilder : ours.builder).split('#SPRITES#').join(SPRITES) :
-						(oursFor(copy) || {}).builder || builderOriginal(copy);
-					return String(css || '').replace(/"/g, '&quot;');
+				var cur = moemonNumber(set);
+				var esc = function (t) { return String(t || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;'); };
+				var normal = { species: set.species, shiny: set.shiny };
+				var css = function (art) {
+					if (!art) return (oursFor(normal) || {}).builder || builderOriginal(normal);
+					return (set.shiny && art.shinyBuilder ? art.shinyBuilder : art.builder).split('#SPRITES#').join(SPRITES);
 				};
 				var buf = '<p>Pick a variant or <button name="close" class="button">Cancel</button></p><div class="formlist">';
-				buf += '<button name="setSprite" value="" title="Normal" class="option' + (moe ? '' : ' cur') + '" style="width:96px;height:96px;' + look('') + '"></button>';
-				buf += '<button name="setSprite" value="Moemon" title="Moemon" class="option pixelated' + (moe ? ' cur' : '') + '" style="width:96px;height:96px;' + look('Moemon') + '"></button>';
+				buf += '<button name="setSprite" value="" title="Normal" class="option' + (cur ? '' : ' cur') + '" style="width:96px;height:96px;' + esc(css(null)) + '"></button>';
+				moemonList(set.species).forEach(function (v, i) {
+					var value = i ? 'Moemon ' + (i + 1) : 'Moemon';
+					buf += '<button name="setSprite" value="' + value + '" title="' + esc(v.label) + '" class="option pixelated' + (cur === i + 1 ? ' cur' : '') +
+						'" style="width:96px;height:96px;' + esc(css(v.art)) + '"></button>';
+				});
 				buf += '<div style="clear:both"></div></div>';
 				this.$el.html(buf).css({ 'max-width': 100 * 7 });
 			},
 			setSprite: function (value) {
-				if (value === 'Moemon') this.curSet.pokeball = 'Moemon';
-				else if (window.toID(this.curSet.pokeball || '') === MOEMON_FLAG) delete this.curSet.pokeball;
+				if (value) this.curSet.pokeball = value;
+				else if (MOEMON_TAG.test(window.toID(this.curSet.pokeball || ''))) delete this.curSet.pokeball;
 				this.close();
 				this.room.updatePokemonSprite();
 				this.room.curTeam.team = window.Storage.packTeam(this.room.curSetList);

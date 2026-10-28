@@ -1092,6 +1092,11 @@ function rollTrainer(opts) {
 	if (gensokyo && rolled && Array.isArray(rolled.team)) {
 		ensureBoneka(rolled.team, { place: opts.place, cls: findClass(rolled.classId), badges: clampBadges(opts.badges), rng: opts.rng || Math.random });
 	}
+	// Gensokyo's trainers, and the Gap Wanderer who comes from there, show their whole team
+	// with Moemon sprites where one exists (the owner, 28 Oct 2026; client/js/velvet-moemon.js).
+	if ((gensokyo || rolled && rolled.classId === 'gapwanderer') && rolled && Array.isArray(rolled.team)) {
+		for (const set of rolled.team) if (set && !set.pokeball) set.pokeball = 'Moemon';
+	}
 	return rolled;
 }
 

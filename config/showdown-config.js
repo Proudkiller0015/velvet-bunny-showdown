@@ -1824,6 +1824,33 @@ function rpBuffsRoom() {
 }
 
 /**
+ * Moemon sprites, and their credit (the owner, 28 Oct 2026). The Moemon Project lets
+ * the sprites be used with credit and a link to one of its socials, which is this room.
+ * Credits from data/moemon-credits.json (scripts/build-moemon.js).
+ */
+function moemonRoom() {
+	let data;
+	try { data = require('../../../data/moemon-credits.json'); } catch (e) { console.log('[moemon] no data/moemon-credits.json'); return; }
+	const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+	const artists = data.artists.filter(a => a && a !== '?').map(esc).join(', ');
+	const room = makeRoom('Moemon', {
+		isPrivate: false,
+		modjoin: false,
+		modchat: false,
+		autojoin: false,
+		introMessage: '<div style="padding:4px"><h2 style="margin:0 0 4px">Moemon</h2>' +
+			'<p style="margin:0 0 6px">Alternative sprites for ' + data.pokemon + ' Pok&eacute;mon (' + data.sprites + ' in all), ' +
+			'from the <b>Moemon Project</b>, used with their permission. ' +
+			'Join them: <a href="https://discord.gg/p7eUWPamde">Moemon Project Discord</a>.</p>' +
+			'<p style="margin:0 0 6px"><b>How:</b> in the teambuilder, open a Pok&eacute;mon&#39;s <b>Details</b> and press <b>Change sprite</b>. ' +
+			'Both players see your pick, in every RP format. <b>Options &gt; Moemon sprites</b> shows them as each player picked, always, or never.</p>' +
+			'<details><summary><b>Sprite artists</b></summary><p style="margin:4px 0 0;font-size:9pt">' + artists + '</p></details>' +
+			'<p style="margin:6px 0 0;font-size:9pt">Gourgeist&#39;s pumpkin girl is our own. Updated ' + esc(data.built) + '.</p></div>',
+	});
+	if (room) console.log('[moemon] the Moemon room is open');
+}
+
+/**
  * A room that keeps every battle, and a file that outlives the room.
  *
  * The lobby announces battles as they start, but a chat room is a scrollback:
@@ -2693,6 +2720,7 @@ exports.startuphook = function () {
 	battleLog();
 	helpRoom();
 	rpBuffsRoom();
+	moemonRoom();
 	// Chat's commands may not all be loaded yet at startup; try again shortly if not.
 	if (!serverHelp()) setTimeout(serverHelp, 3000).unref();
 	if (!whoisClient()) setTimeout(whoisClient, 3000).unref();
