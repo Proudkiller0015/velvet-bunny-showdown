@@ -1,0 +1,426 @@
+{
+ "reimuhakurei": [
+  [
+   "th-reimu",
+   "Reimu"
+  ]
+ ],
+ "marisakirisame": [
+  [
+   "th-marisa",
+   "Marisa"
+  ]
+ ],
+ "rumia": [
+  [
+   "th-rumia",
+   "Rumia"
+  ]
+ ],
+ "daiyousei": [
+  [
+   "th-daiyousei",
+   "Daiyousei"
+  ]
+ ],
+ "cirno": [
+  [
+   "th-cirno",
+   "Cirno"
+  ]
+ ],
+ "hongmeiling": [
+  [
+   "th-meiling",
+   "Meiling"
+  ]
+ ],
+ "koakuma": [
+  [
+   "th-koakuma",
+   "Koakuma"
+  ]
+ ],
+ "patchouliknowledge": [
+  [
+   "th-patchouli",
+   "Patchouli"
+  ]
+ ],
+ "sakuyaizayoi": [
+  [
+   "th-sakuya",
+   "Sakuya"
+  ]
+ ],
+ "remiliascarlet": [
+  [
+   "th-remilia",
+   "Remilia"
+  ]
+ ],
+ "flandrescarlet": [
+  [
+   "th-flandre",
+   "Flandre"
+  ]
+ ],
+ "lettywhiterock": [
+  [
+   "th-letty",
+   "Letty"
+  ]
+ ],
+ "chen": [
+  [
+   "th-chen",
+   "Chen"
+  ]
+ ],
+ "alicemargatroid": [
+  [
+   "th-alice",
+   "Alice"
+  ]
+ ],
+ "lilywhite": [
+  [
+   "th-lilywhite",
+   "LilyWhite"
+  ]
+ ],
+ "lunasaprismriver": [
+  [
+   "th-lunasa",
+   "Lunasa"
+  ]
+ ],
+ "merlinprismriver": [
+  [
+   "th-merlin",
+   "Merlin"
+  ]
+ ],
+ "lyricaprismriver": [
+  [
+   "th-lyrica",
+   "Lyrica"
+  ]
+ ],
+ "youmukonpaku": [
+  [
+   "th-youmu",
+   "Youmu"
+  ]
+ ],
+ "yuyukosaigyouji": [
+  [
+   "th-yuyuko",
+   "Yuyuko"
+  ]
+ ],
+ "ranyakumo": [
+  [
+   "th-ran",
+   "Ran"
+  ]
+ ],
+ "yukariyakumo": [
+  [
+   "th-yukari",
+   "Yukari"
+  ]
+ ],
+ "suikaibuki": [
+  [
+   "th-suika",
+   "Suika"
+  ]
+ ],
+ "wrigglenightbug": [
+  [
+   "th-wriggle",
+   "Wriggle"
+  ]
+ ],
+ "mystialorelei": [
+  [
+   "th-mystia",
+   "Mystia"
+  ]
+ ],
+ "keine": [
+  [
+   "th-keine",
+   "Keine"
+  ]
+ ],
+ "tewiinaba": [
+  [
+   "th-tewih",
+   "Tewi (H)"
+  ],
+  [
+   "th-tewil",
+   "Tewi (L)"
+  ]
+ ],
+ "reiseninaba": [
+  [
+   "th-reisen",
+   "Reisen"
+  ]
+ ],
+ "eirinyagokoro": [
+  [
+   "th-eirin",
+   "Eirin"
+  ]
+ ],
+ "kaguyahouraisan": [
+  [
+   "th-kaguya",
+   "Kaguya"
+  ]
+ ],
+ "fujiwaranomokou": [
+  [
+   "th-mokou",
+   "Mokou"
+  ]
+ ],
+ "ayashameimaru": [
+  [
+   "th-aya",
+   "Aya"
+  ]
+ ],
+ "medicinemelancholy": [
+  [
+   "th-medicine",
+   "Medicine"
+  ]
+ ],
+ "yuukakazami": [
+  [
+   "th-yuka",
+   "Yuka"
+  ]
+ ],
+ "komachionozuka": [
+  [
+   "th-komachi",
+   "Komachi"
+  ]
+ ],
+ "eikishiki": [
+  [
+   "th-eiki",
+   "Eiki"
+  ]
+ ],
+ "shizuhaaki": [
+  [
+   "th-shizuha",
+   "Shizuha"
+  ]
+ ],
+ "minorikoaki": [
+  [
+   "th-minoriko",
+   "Minoriko"
+  ]
+ ],
+ "hinakagiyama": [
+  [
+   "th-hina",
+   "Hina"
+  ]
+ ],
+ "nitorikawashiro": [
+  [
+   "th-nitori",
+   "Nitori"
+  ]
+ ],
+ "momijiinubashiri": [
+  [
+   "th-momiji",
+   "Momiji"
+  ]
+ ],
+ "sanaekochiya": [
+  [
+   "th-sanae",
+   "Sanae"
+  ]
+ ],
+ "kanakoyasaka": [
+  [
+   "th-kanako",
+   "Kanako"
+  ]
+ ],
+ "suwakomoriya": [
+  [
+   "th-suwako",
+   "Suwako"
+  ]
+ ],
+ "ikunagae": [
+  [
+   "th-iku",
+   "Iku"
+  ]
+ ],
+ "tenshihinanawi": [
+  [
+   "th-tenshi",
+   "Tenshi"
+  ]
+ ],
+ "kisume": [
+  [
+   "th-kisume",
+   "Kisume"
+  ]
+ ],
+ "yamamekurodani": [
+  [
+   "th-yamame",
+   "Yamame"
+  ]
+ ],
+ "parseemizuhashi": [
+  [
+   "th-parsee",
+   "Parsee"
+  ]
+ ],
+ "yuugihoshiguma": [
+  [
+   "th-yuugi",
+   "Yuugi"
+  ]
+ ],
+ "satorikomeiji": [
+  [
+   "th-satori",
+   "Satori"
+  ]
+ ],
+ "rinkaenbyou": [
+  [
+   "th-rin",
+   "Rin"
+  ]
+ ],
+ "utsuhoreiuji": [
+  [
+   "th-utsuho",
+   "Utsuho"
+  ]
+ ],
+ "koishikomeiji": [
+  [
+   "th-koishi",
+   "Koishi"
+  ]
+ ],
+ "nazrin": [
+  [
+   "th-nazrin",
+   "Nazrin"
+  ]
+ ],
+ "kogasatatara": [
+  [
+   "th-kogasa",
+   "Kogasa"
+  ]
+ ],
+ "ichirinkumoi": [
+  [
+   "th-ichirin",
+   "Ichirin"
+  ]
+ ],
+ "minamitsumurasa": [
+  [
+   "th-murasa",
+   "Murasa"
+  ]
+ ],
+ "shoutoramaru": [
+  [
+   "th-shou",
+   "Shou"
+  ]
+ ],
+ "byakurenhijiri": [
+  [
+   "th-byakuren",
+   "Byakuren"
+  ]
+ ],
+ "nuehoujuu": [
+  [
+   "th-nue",
+   "Nue"
+  ]
+ ],
+ "hatatehimekaidou": [
+  [
+   "th-hatate",
+   "Hatate"
+  ]
+ ],
+ "sunnymilk": [
+  [
+   "th-sunnymilk",
+   "Sunnymilk"
+  ]
+ ],
+ "lunachild": [
+  [
+   "th-lunachild",
+   "Lunachild"
+  ]
+ ],
+ "starsapphire": [
+  [
+   "th-stars",
+   "Star S"
+  ]
+ ],
+ "kasenibaraki": [
+  [
+   "th-kasen",
+   "Kasen"
+  ]
+ ],
+ "maiteireida": [
+  [
+   "th-mai",
+   "Mai"
+  ]
+ ],
+ "vivit": [
+  [
+   "th-vivit",
+   "VIVIT"
+  ]
+ ],
+ "watatsukinotoyohime": [
+  [
+   "th-toyohime",
+   "Toyohime"
+  ]
+ ],
+ "watatsukinoyorihime": [
+  [
+   "th-yorihime",
+   "Yorihime"
+  ]
+ ]
+}

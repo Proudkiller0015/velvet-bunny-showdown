@@ -54,6 +54,12 @@ for (let i = 0; i < rows.length; i++) {
 		if (n && n.length < 40) artists.set(n.toLowerCase(), n);
 	}
 }
+// And the Touhou Pokemon's World Link (Touhoudex) sprites, one per character, evolutions left
+// out (the owner, 28 Oct 2026): tools/moemon/touhoudex.json. Fronts only there: the back is the
+// front mirrored and the shiny the same colours.
+for (const [id, list] of Object.entries(require('../tools/moemon/touhoudex.json'))) {
+	for (const [file, name] of list) (variants[id] = variants[id] || []).push([file, name, 'Touhoudex (World Link)']);
+}
 function toID(s) { return String(s || '').toLowerCase().replace(/[^a-z0-9]+/g, ''); }
 
 const count = Object.values(variants).reduce((t, l) => t + l.length, 0);

@@ -328,7 +328,7 @@
 		if (!theirs && !battleForm && !exact) theirs = table[base];
 		var out = [];
 		(OUR_MOEMON[base] || []).forEach(function (v) { out.push({ art: moemonVariant(v.front, v.size), label: v.label }); });
-		(theirs || []).forEach(function (v) { out.push({ art: moemonVariant('moemon/' + v[0], 64), label: 'Moemon Project' + (v[1] ? ', ' + v[1] : '') }); });
+		(theirs || []).forEach(function (v) { out.push({ art: moemonVariant('moemon/' + v[0], 64), label: (v[2] || 'Moemon Project') + (v[1] ? ', ' + v[1] : '') }); });
 		return out;
 	}
 	function moemonBase(name) { return moemonList(name).length ? window.toID(name) : ''; }

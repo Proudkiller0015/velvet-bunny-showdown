@@ -1845,7 +1845,7 @@ function moemonRoom() {
 			'<p style="margin:0 0 6px"><b>How:</b> in the teambuilder, open a Pok&eacute;mon&#39;s <b>Details</b> and press <b>Change sprite</b>. ' +
 			'Both players see your pick, in every RP format. <b>Options &gt; Moemon sprites</b> shows them as each player picked, always, or never.</p>' +
 			'<details><summary><b>Sprite artists</b></summary><p style="margin:4px 0 0;font-size:9pt">' + artists + '</p></details>' +
-			'<p style="margin:6px 0 0;font-size:9pt">Gourgeist&#39;s pumpkin girl is our own. Updated ' + esc(data.built) + '.</p></div>',
+			'<p style="margin:6px 0 0;font-size:9pt">The Touhou Pok&eacute;mon&#39;s looks are the <b>Touhoumon World Link</b> sprites (its <a href="https://worldlink.fandom.com/wiki/Touhoudex">Touhoudex</a>). Gourgeist&#39;s pumpkin girl is our own. Updated ' + esc(data.built) + '.</p></div>',
 	});
 	if (room) console.log('[moemon] the Moemon room is open');
 }
