@@ -158,7 +158,7 @@ const CASES = [
  * asked for, which is exactly what it does with a random number anyway.
  */
 function engineRolls(testCase) {
-	const battle = new Battle({ formatid: 'gen9customgame', strictChoices: false });
+	const battle = new Battle({ formatid: 'gen9rpbattle', strictChoices: false });
 	battle.setPlayer('p1', { name: 'A', team: Teams.unpack(testCase.attacker) });
 	battle.setPlayer('p2', { name: 'B', team: Teams.unpack(testCase.defender) });
 	battle.makeChoices('default', 'default');

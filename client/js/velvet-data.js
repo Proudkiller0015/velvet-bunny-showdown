@@ -4313,6 +4313,17 @@
 	var ITEM_ICONS = {
 		elementalbanana: 'elemental-banana.png',
 		brokenpact: 'broken-pact.png',
+		// Our own items' bag icons (28 Oct 2026, the owner's ChatGPT, cut to 24x24): sprites/items/.
+		banettitehalloween: 'items/banettitehalloween.png',
+		abyssalpearl: 'items/abyssalpearl.png',
+		shrinebell: 'items/shrinebell.png',
+		sanctuarylotus: 'items/sanctuarylotus.png',
+		warpedhourglass: 'items/warpedhourglass.png',
+		ultrashard: 'items/ultrashard.png',
+		chillingorb: 'items/chillingorb.png',
+		bloodlust: 'items/bloodlust.png',
+		summerbackdoor: 'items/summerbackdoor.png',
+		jeweledpagoda: 'items/jeweledpagoda.png',
 	};
 
 	function installItemIcon() {
