@@ -590,7 +590,16 @@ exports.applyBuffs = (Pokedex, Learnsets) => {
 				// straight past and the move comes back unlearnable. '9a' belongs to
 				// the client's teambuilder table, which is a different file in a
 				// different format - see installBuffs() in client/js/velvet-data.js.
-				if (alreadyKnows(Pokedex, Learnsets, id, move)) continue;
+				if (alreadyKnows(Pokedex, Learnsets, id, move)) {
+					/*
+					 * Inherited from a pre-evolution. For one of our own moves that is
+					 * still a buff this Pokemon was given, so it is listed on its page:
+					 * Hustle Up on Litten alone left Incineroar's Awakened list without
+					 * it (the owner, 28 Oct 2026: "otherwise it will be weird").
+					 */
+					if (PATCH1.MOVES[move] && (buff.moves || []).includes(move) && !record.moves.includes(move)) record.moves.push(move);
+					continue;
+				}
 				entry.learnset[move] = ['9M'];
 				if (!record.moves.includes(move)) record.moves.push(move);
 			}

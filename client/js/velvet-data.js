@@ -284,6 +284,30 @@
 		};
 	});
 
+	/*
+	 * Gourgeist as the pumpkin girl, in RP Touhou battles only (the owner, 28 Oct 2026): every
+	 * size, with a shiny recoloured to match the official shiny (orchid hair, black pumpkin,
+	 * lime glow). Everywhere else it keeps the normal sprite.
+	 */
+	var TOUHOU_SKIN_IDS = ['gourgeist', 'gourgeistsmall', 'gourgeistlarge', 'gourgeistsuper'];
+	var TOUHOU_SKIN = {
+		standard: true,
+		still: { front: ['gourgeist-touhou.png', 96, 96], back: ['gourgeist-touhou-back.png', 96, 96] },
+		shiny: { still: { front: ['gourgeist-touhou-shiny.png', 96, 96], back: ['gourgeist-touhou-back-shiny.png', 96, 96] } },
+	};
+	function touhouSkinFor(pokemon) {
+		var name = pokemon;
+		if (name && typeof name === 'object') {
+			name = (name.getSpeciesForme && name.getSpeciesForme()) || name.speciesForme || name.species || name.name || '';
+		}
+		if (typeof name !== 'string' || TOUHOU_SKIN_IDS.indexOf(window.toID(name)) < 0) return null;
+		// The battle it is drawn in: its own side's, or the room on screen (team preview passes names).
+		var battle = pokemon && pokemon.side && pokemon.side.battle;
+		try { if (!battle && window.app && app.curRoom) battle = app.curRoom.battle; } catch (e) { /* no room */ }
+		var format = window.toID(String((battle && (battle.tier || battle.id)) || ''));
+		return format.indexOf('rptouhou') >= 0 ? TOUHOU_SKIN : null;
+	}
+
 	// Which of ours this is, if it is one of ours at all. The client passes a
 	// name in some places and a Pokemon in others, and its two kinds of Pokemon
 	// do not agree on how to ask: a battle's own objects carry `speciesForme` as
@@ -2216,7 +2240,7 @@
 			// property, while a set from the builder answers `getSpeciesForme()`.
 			// Reading only one of them is why she rendered everywhere except the
 			// team preview.
-			var ours = oursFor(pokemon);
+			var ours = oursFor(pokemon) || touhouSkinFor(pokemon);
 			if (ours) {
 				// Animated unless this viewer has turned animation off, which is the
 				// same pair of preferences the client checks for everyone else - so

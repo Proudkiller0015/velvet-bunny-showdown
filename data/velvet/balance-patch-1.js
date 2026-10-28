@@ -233,11 +233,15 @@ exports.MOVES = {
 		num: -12, gen: 9, name: "Hustle Up", type: "Normal", category: "Status",
 		basePower: 0, accuracy: true, pp: 20, priority: 0,
 		boosts: { atk: 1, spe: 1 },
+		// With Hustle it also steadies its aim: accuracy +2 (the owner, 28 Oct 2026).
+		onModifyMove(move, pokemon) {
+			if (pokemon.hasAbility('hustle')) move.boosts = { atk: 1, spe: 1, accuracy: 2 };
+		},
 		flags: { snatch: 1, metronome: 1 },
 		secondary: null, target: "self", contestType: "Cool", velvetShared: true,
 		flavor: "Scrappy, stubborn and underestimated, the user rolls its shoulders and gets serious.",
-		shortDesc: "Raises the user's Attack and Speed by 1.",
-		desc: "Scrappy, stubborn and underestimated, the user gets serious. Raises its Attack and Speed by 1 stage each.",
+		shortDesc: "Raises Atk, Spe by 1. With Hustle, accuracy by 2 too.",
+		desc: "Scrappy, stubborn and underestimated, the user gets serious. Raises its Attack and Speed by 1 stage each. If the user has the Hustle Ability, it also raises its accuracy by 2 stages.",
 	},
 	carrionfeast: {
 		num: -13, gen: 9, name: "Carrion Feast", type: "Dark", category: "Physical",
@@ -1941,7 +1945,12 @@ const TM_DISTRIBUTION = {
 	// Cocoons, moths and silk-spinners. Not Volcarona: reliable recovery beside Quiver Dance pushes an OU sweeper too far.
 	chrysalisveil: ['butterfree', 'beautifly', 'dustox', 'venomoth', 'masquerain', 'mothim', 'vivillon', 'frosmoth', 'ribombee', 'leavanny', 'illumise', 'volbeat', 'wormadam', 'wormadamsandy', 'wormadamtrash', 'shuckle', 'rabsca', 'forretress'],
 	// Scrappy, stubborn Normal-types. Not Diggersby (Huge Power), Maushold (Technician multi-hits), Ursaluna or Kangaskhan.
-	hustleup: ['regigigas', 'furret', 'raticate', 'raticatealola', 'linoone', 'linoonegalar', 'watchog', 'fearow', 'dodrio', 'swellow', 'persian', 'purugly', 'zangoose', 'delcatty', 'bibarel', 'gumshoos', 'squawkabilly', 'granbull', 'delibird', 'farfetchd', 'sirfetchd', 'stoutland', 'lopunny', 'cinccino', 'tauros', 'miltank', 'obstagoon', 'greedent', 'oinkologne', 'bouffalant', 'unfezant', 'ambipom', 'ursaring', 'smeargle', 'spinda', 'liepard', 'persianalola', 'perrserker', 'pyroar', 'luxray', 'meowstic', 'meowsticf', 'incineroar', 'meowscarada', 'zeraora', 'mew'],
+	hustleup: ['regigigas', 'furret', 'raticate', 'raticatealola', 'linoone', 'linoonegalar', 'watchog', 'fearow', 'dodrio', 'swellow', 'persian', 'purugly', 'zangoose', 'delcatty', 'bibarel', 'gumshoos', 'squawkabilly', 'granbull', 'delibird', 'farfetchd', 'sirfetchd', 'stoutland', 'lopunny', 'cinccino', 'tauros', 'miltank', 'obstagoon', 'greedent', 'oinkologne', 'bouffalant', 'unfezant', 'ambipom', 'ursaring', 'smeargle', 'spinda', 'liepard', 'persianalola', 'perrserker', 'pyroar', 'luxray', 'meowstic', 'meowsticf', 'incineroar', 'meowscarada', 'zeraora', 'mew',
+		// Every Pokemon that can have Hustle (the owner, 28 Oct 2026).
+		'nidoranf', 'nidorina', 'nidoranm', 'nidorino', 'togepi', 'togetic', 'togekiss', 'corsola', 'remoraid', 'combee',
+		'lilliganthisui', 'darumaka', 'darumakagalar', 'rufflet', 'durant', 'deino', 'zweilous', 'flapple', 'dracozolt', 'cirno',
+		// And what they evolve into, so the move is listed on the whole line (the owner).
+		'nidoqueen', 'nidoking', 'octillery', 'vespiquen', 'darmanitan', 'darmanitangalar', 'braviary', 'braviaryhisui', 'hydreigon'],
 	// Scavengers and predators. Not Kingambit, Weavile or Crawdaunt: a draining Dark move is too much of a gift to all three.
 	carrionfeast: ['mightyena', 'liepard', 'thievul', 'persianalola', 'raticatealola', 'cacturne', 'sharpedo', 'mawile', 'banette', 'seviper', 'arbok', 'sableye', 'absol', 'mandibuzz', 'honchkrow', 'krookodile', 'houndoom', 'bisharp', 'zoroark', 'skuntank', 'drapion', 'scrafty', 'grimmsnarl', 'mabosstiff', 'shiftry', 'spiritomb', 'malamar', 'houndstone'],
 	// Small, quick electric critters.

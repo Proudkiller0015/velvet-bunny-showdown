@@ -32,6 +32,8 @@ const V = {
 };
 const Dex = require(path.join(ROOT, 'src', 'rp-dex'))();
 const D = Dex.data;
+// What each Pokemon was given (data/velvet/buffs.js), filled in by loading the dex above.
+const APPLIED = require(path.join(ROOT, 'node_modules', 'pokemon-showdown', 'dist', 'data', 'velvet', 'buffs.js')).applied || {};
 
 const HIDDEN_SPECIES = ['samantha'];
 const HIDDEN_MOVES = ['queenbeam', 'queensdance', 'queensblitz', 'queensheal'];
@@ -140,6 +142,11 @@ for (const id of allSpecies) {
 	const vLearn = ((V.learnsets[id] || V.learnsets[String(ours.baseSpecies || '').toLowerCase().replace(/[^a-z0-9]+/g, '')] || {}).learnset) || {};
 	const oLearn = ((D.Learnsets[id] || {}).learnset) || {};
 	const newMoves = Object.keys(oLearn).filter(m => !vLearn[m] && !HIDDEN_MOVES.includes(m));
+	// One of our moves it was given but learns through its pre-evolution (Hustle Up on Nidoqueen
+	// through Nidoran) has no learnset entry of its own: still listed, as it is in the builder.
+	for (const m of ((APPLIED[id] || {}).moves || [])) {
+		if (!newMoves.includes(m) && !vLearn[m] && !HIDDEN_MOVES.includes(m) && D.Moves[m] && !V.moves[m]) newMoves.push(m);
+	}
 	for (const m of newMoves) (learners[m] = learners[m] || []).push(id);
 	// Arceus learns every TM Mew does (legend-kits.js LIKE_MEW): said once, not as 150 names.
 	if (LIKE_MEW.includes(id)) {
