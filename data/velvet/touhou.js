@@ -1167,9 +1167,13 @@ const MOVES = {
 		flags: { protect: 1, mirror: 1, metronome: 1, bypasssub: 1 },
 		onPrepareHit: anim('Explosion'),
 		// A doll flung into the enemy lines and detonated: no wall of a substitute stops it.
+		// Puppet Summon: another doll steps in front of her, a substitute that costs no HP.
+		onAfterMoveSecondarySelf(source) {
+			if (!source.volatiles['substitute']) source.addVolatile('substitute');
+		},
 		secondary: null, target: 'allAdjacentFoes', type: 'Steel',
-		shortDesc: "Hits adjacent foes. Ignores substitutes. Alice's signature.",
-		desc: "Hits all adjacent foes. Ignores a target's substitute: one of the user's dolls explodes among them, and the user does not faint. Alice Margatroid's signature move.",
+		shortDesc: "Hits adjacent foes, ignores subs. User gets a free substitute. Alice's signature.",
+		desc: "Hits all adjacent foes. Ignores a target's substitute: one of the user's dolls explodes among them, and the user does not faint. Puppet Summon: after the attack, if the user has no substitute, another doll gives it one with 1/4 of its maximum HP, at no HP cost. Alice Margatroid's signature move.",
 	},
 	resurrectionbutterfly: {
 		num: -272, accuracy: 100, basePower: 90, category: 'Special', name: 'Resurrection Butterfly', pp: 8, noPPBoosts: true, priority: 0,

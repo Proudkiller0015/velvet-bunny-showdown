@@ -505,6 +505,14 @@ function play(formatid, seed) {
 	turn(b, 'move 1', 'move 1');
 	turn(b, 'move 1', 'move 1');
 	ok(b.p2.active[0].volatiles.disable, 'Terrible Souvenir: disables what the target used');
+	// Artful Sacrifice (Puppet Summon): a free substitute after the hit, never a second one.
+	b = battle([mon('Alice Margatroid', ['Artful Sacrifice'])], [mon('Blissey', ['Splash'])]);
+	turn(b, 'move 1', 'move 1');
+	const alice = b.p1.active[0];
+	ok(alice.volatiles.substitute && alice.hp === alice.maxhp && alice.volatiles.substitute.hp === Math.floor(alice.maxhp / 4), 'Artful Sacrifice: a full substitute at no HP cost');
+	alice.volatiles.substitute.hp = 1;
+	turn(b, 'move 1', 'move 1');
+	ok(alice.volatiles.substitute.hp === 1, 'Artful Sacrifice: keeps the doll she has, no refill');
 	ok(/TYPE_CHOOSERS/.test(fs.readFileSync(path.join(ROOT, 'src', 'ai.js'), 'utf8')), "the bot's estimate knows the type-choosing signatures");
 }
 console.log(`touhou: ${n} checks passed`);
