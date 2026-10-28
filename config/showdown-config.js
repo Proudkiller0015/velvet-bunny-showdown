@@ -1840,7 +1840,7 @@ function moemonRoom() {
 		autojoin: false,
 		introMessage: '<div style="padding:4px"><h2 style="margin:0 0 4px">Moemon</h2>' +
 			'<p style="margin:0 0 6px">Alternative sprites for ' + data.pokemon + ' Pok&eacute;mon (' + data.sprites + ' in all), ' +
-			'from the <b>Moemon Project</b>, used with their permission. ' +
+			'from the <b>Moemon Project</b>. ' +
 			'Join them: <a href="https://discord.gg/p7eUWPamde">Moemon Project Discord</a>.</p>' +
 			'<p style="margin:0 0 6px"><b>How:</b> in the teambuilder, open a Pok&eacute;mon&#39;s <b>Details</b> and press <b>Change sprite</b>. ' +
 			'Both players see your pick, in every RP format. <b>Options &gt; Moemon sprites</b> shows them as each player picked, always, or never.</p>' +
