@@ -14,3 +14,7 @@ was left at 1.2x when the other -ate abilities went back to 1.3x, which was our
 mistake, not a balance change, so it was fixed here too (unnerfs.js).
 
 Liepard learns Hustle Up here too, as in RP (owner, 27 Oct 2026; balance-patch-1.js).
+
+Gourgeist released into the draft (owner, 28 Oct 2026, mid-auction): Harvest Lantern, Lantern Lunge,
+Phantom Pursuit and its new moves, every size (gourgeist.js, wired in index.js and balance-patch-1.js).
+All four sizes are one pick, as Silvally (config/custom-formats.js); its pool price went from E/F to C+.

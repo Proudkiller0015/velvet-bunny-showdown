@@ -3,7 +3,7 @@
  * Gourgeist (data/velvet/gourgeist.js): Harvest Lantern makes the foe part Ghost and
  * resizes it each turn toward the biggest pumpkin that still outspeeds the foe, growing
  * when none can or under Trick Room; Lantern Lunge goes first; Phantom Pursuit hits a
- * switcher. NU in RP, and nothing of it in the frozen draft.
+ * switcher. NU in RP, and in the draft too since the owner released it there (28 Oct 2026), every size as one pick.
  */
 const assert = require('assert');
 const { Battle, Teams, TeamValidator } = require('pokemon-showdown');
@@ -57,7 +57,8 @@ const set = (species, extra = {}) => ({ species, ability: 'Harvest Lantern', mov
 for (const species of ['Gourgeist', 'Gourgeist-Small', 'Gourgeist-Large', 'Gourgeist-Super']) {
 	ok(!new TeamValidator('gen9rpnu').validateTeam([set(species)]), `${species} legal in RP NU`);
 	ok((new TeamValidator('gen9rppu').validateTeam([set(species, { ability: 'Frisk', moves: ['shadowsneak'] })]) || []).length, `${species} is above RP PU`);
-	ok((new TeamValidator('gen9rpdraft').validateTeam([set(species)]) || []).length, `${species}: Harvest Lantern is not in the frozen draft`);
+	ok(!new TeamValidator('gen9rpdraft').validateTeam([set(species)]), `${species}: legal in the draft, as the one Gourgeist pick`);
 }
+ok(!new TeamValidator('gen9rpdraft').validateTeam([set('Pumpkaboo-Large')]), 'every Pumpkaboo size is the one Pumpkaboo pick in the draft');
 ok(!new TeamValidator('gen9rplc').validateTeam([set('Pumpkaboo-Super', { level: 5 })]), 'Pumpkaboo has it all too');
 console.log(`gourgeist: ${n} checks passed`);

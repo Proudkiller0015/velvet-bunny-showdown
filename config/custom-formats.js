@@ -1513,7 +1513,8 @@ exports.Formats = [
 			// Cosmetic forms (Gastrodon-East) are drafted as their base, and so is every Silvally:
 			// its Memory forms are one Pokemon, the type it holds (the owner, 24 Oct 2026).
 			const base = this.dex.species.get(entry.baseSpecies);
-			const asBase = (base.cosmeticFormes || []).includes(entry.name) || base.id === 'silvally';
+			// So is every size of Gourgeist and Pumpkaboo: Harvest Lantern resizes it mid-battle (the owner, 28 Oct 2026).
+			const asBase = (base.cosmeticFormes || []).includes(entry.name) || ['silvally', 'gourgeist', 'pumpkaboo'].includes(base.id);
 			const id = pool.ids.has(entry.id) ? entry.id : asBase ? base.id : entry.id;
 			if (pool.banned.has(id)) return [`${entry.name} is banned in the draft (${pool.banned.get(id)}).`];
 			if (!pool.ids.has(id)) return [`${entry.name} is not in the Season 1 draft pool.`];

@@ -97,6 +97,28 @@
    ]
   },
   {
+   "name": "Urshifu-Rapid-Strike",
+   "id": "urshifurapidstrike",
+   "price": 100,
+   "tier": "S",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/urshifu-rapidstrike.png",
+   "types": [
+    "Fighting",
+    "Water"
+   ]
+  },
+  {
+   "name": "Urshifu",
+   "id": "urshifu",
+   "price": 100,
+   "tier": "S",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/urshifu.png",
+   "types": [
+    "Fighting",
+    "Dark"
+   ]
+  },
+  {
    "name": "Gouging Fire",
    "id": "gougingfire",
    "price": 100,
@@ -515,28 +537,6 @@
    "types": [
     "Bug",
     "Fire"
-   ]
-  },
-  {
-   "name": "Urshifu-Rapid-Strike",
-   "id": "urshifurapidstrike",
-   "price": 65,
-   "tier": "A",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/urshifu-rapidstrike.png",
-   "types": [
-    "Fighting",
-    "Water"
-   ]
-  },
-  {
-   "name": "Urshifu",
-   "id": "urshifu",
-   "price": 65,
-   "tier": "A",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/urshifu.png",
-   "types": [
-    "Fighting",
-    "Dark"
    ]
   },
   {
@@ -2009,6 +2009,17 @@
    "types": [
     "Electric",
     "Water"
+   ]
+  },
+  {
+   "name": "Gourgeist",
+   "id": "gourgeist",
+   "price": 30,
+   "tier": "C+",
+   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/gourgeist.png",
+   "types": [
+    "Ghost",
+    "Grass"
    ]
   },
   {
@@ -5227,17 +5238,6 @@
    ]
   },
   {
-   "name": "Gourgeist-Super",
-   "id": "gourgeistsuper",
-   "price": 10,
-   "tier": "E",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/gourgeist-super.png",
-   "types": [
-    "Ghost",
-    "Grass"
-   ]
-  },
-  {
    "name": "Huntail",
    "id": "huntail",
    "price": 10,
@@ -5739,17 +5739,6 @@
    ]
   },
   {
-   "name": "Gourgeist-Small",
-   "id": "gourgeistsmall",
-   "price": 5,
-   "tier": "F",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/gourgeist-small.png",
-   "types": [
-    "Ghost",
-    "Grass"
-   ]
-  },
-  {
    "name": "Morpeko",
    "id": "morpeko",
    "price": 5,
@@ -6118,17 +6107,6 @@
    ]
   },
   {
-   "name": "Gourgeist",
-   "id": "gourgeist",
-   "price": 5,
-   "tier": "F",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/gourgeist.png",
-   "types": [
-    "Ghost",
-    "Grass"
-   ]
-  },
-  {
    "name": "Magmortar",
    "id": "magmortar",
    "price": 5,
@@ -6462,17 +6440,6 @@
    "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/castform.png",
    "types": [
     "Normal"
-   ]
-  },
-  {
-   "name": "Gourgeist-Large",
-   "id": "gourgeistlarge",
-   "price": 5,
-   "tier": "F",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/gourgeist-large.png",
-   "types": [
-    "Ghost",
-    "Grass"
    ]
   },
   {
@@ -9910,17 +9877,6 @@
    ]
   },
   {
-   "name": "Pumpkaboo-Small",
-   "id": "pumpkaboosmall",
-   "price": 1,
-   "tier": "LC",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/pumpkaboo-small.png",
-   "types": [
-    "Ghost",
-    "Grass"
-   ]
-  },
-  {
    "name": "Pidgey",
    "id": "pidgey",
    "price": 1,
@@ -10428,17 +10384,6 @@
    ]
   },
   {
-   "name": "Pumpkaboo-Large",
-   "id": "pumpkaboolarge",
-   "price": 1,
-   "tier": "LC",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/pumpkaboo-large.png",
-   "types": [
-    "Ghost",
-    "Grass"
-   ]
-  },
-  {
    "name": "Grubbin",
    "id": "grubbin",
    "price": 1,
@@ -10847,17 +10792,6 @@
    "types": [
     "Dragon",
     "Ground"
-   ]
-  },
-  {
-   "name": "Pumpkaboo-Super",
-   "id": "pumpkaboosuper",
-   "price": 1,
-   "tier": "LC",
-   "sprite": "https://play.pokemonshowdown.com/sprites/home-centered/pumpkaboo-super.png",
-   "types": [
-    "Ghost",
-    "Grass"
    ]
   },
   {

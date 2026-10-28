@@ -3505,27 +3505,7 @@ window.VelvetBuffs = {
 				"1": "Frisk",
 				"H": "Insomnia",
 				"V0": "Harvest Lantern"
-			},
-			"late": [
-				"phantompursuit",
-				"lanternlunge",
-				"sing",
-				"perishsong",
-				"meanlook",
-				"shadowclaw",
-				"strengthsap",
-				"hornleech",
-				"spikyshield",
-				"twilightexit",
-				"partingshot",
-				"knockoff",
-				"suckerpunch",
-				"carrionfeast",
-				"taunt"
-			],
-			"lateAbilities": [
-				"harvestlantern"
-			]
+			}
 		},
 		"vileplume": {
 			"moves": [
@@ -6517,27 +6497,7 @@ window.VelvetBuffs = {
 				"1": "Frisk",
 				"H": "Insomnia",
 				"V0": "Harvest Lantern"
-			},
-			"late": [
-				"phantompursuit",
-				"lanternlunge",
-				"sing",
-				"perishsong",
-				"meanlook",
-				"shadowclaw",
-				"strengthsap",
-				"hornleech",
-				"spikyshield",
-				"twilightexit",
-				"partingshot",
-				"knockoff",
-				"suckerpunch",
-				"carrionfeast",
-				"taunt"
-			],
-			"lateAbilities": [
-				"harvestlantern"
-			]
+			}
 		},
 		"dartrix": {
 			"moves": [
@@ -7824,27 +7784,7 @@ window.VelvetBuffs = {
 				"1": "Frisk",
 				"H": "Insomnia",
 				"V0": "Harvest Lantern"
-			},
-			"late": [
-				"phantompursuit",
-				"lanternlunge",
-				"sing",
-				"perishsong",
-				"meanlook",
-				"shadowclaw",
-				"strengthsap",
-				"hornleech",
-				"spikyshield",
-				"twilightexit",
-				"partingshot",
-				"knockoff",
-				"suckerpunch",
-				"carrionfeast",
-				"taunt"
-			],
-			"lateAbilities": [
-				"harvestlantern"
-			]
+			}
 		},
 		"pumpkaboolarge": {
 			"moves": [
@@ -7873,27 +7813,7 @@ window.VelvetBuffs = {
 				"1": "Frisk",
 				"H": "Insomnia",
 				"V0": "Harvest Lantern"
-			},
-			"late": [
-				"phantompursuit",
-				"lanternlunge",
-				"sing",
-				"perishsong",
-				"meanlook",
-				"shadowclaw",
-				"strengthsap",
-				"hornleech",
-				"spikyshield",
-				"twilightexit",
-				"partingshot",
-				"knockoff",
-				"suckerpunch",
-				"carrionfeast",
-				"taunt"
-			],
-			"lateAbilities": [
-				"harvestlantern"
-			]
+			}
 		},
 		"pumpkaboosuper": {
 			"moves": [
@@ -7922,27 +7842,7 @@ window.VelvetBuffs = {
 				"1": "Frisk",
 				"H": "Insomnia",
 				"V0": "Harvest Lantern"
-			},
-			"late": [
-				"phantompursuit",
-				"lanternlunge",
-				"sing",
-				"perishsong",
-				"meanlook",
-				"shadowclaw",
-				"strengthsap",
-				"hornleech",
-				"spikyshield",
-				"twilightexit",
-				"partingshot",
-				"knockoff",
-				"suckerpunch",
-				"carrionfeast",
-				"taunt"
-			],
-			"lateAbilities": [
-				"harvestlantern"
-			]
+			}
 		},
 		"gourgeistsmall": {
 			"moves": [
@@ -7956,10 +7856,7 @@ window.VelvetBuffs = {
 				"1": "Frisk",
 				"H": "Insomnia",
 				"V0": "Harvest Lantern"
-			},
-			"lateAbilities": [
-				"harvestlantern"
-			]
+			}
 		},
 		"gourgeistlarge": {
 			"moves": [
@@ -7973,10 +7870,7 @@ window.VelvetBuffs = {
 				"1": "Frisk",
 				"H": "Insomnia",
 				"V0": "Harvest Lantern"
-			},
-			"lateAbilities": [
-				"harvestlantern"
-			]
+			}
 		},
 		"gourgeistsuper": {
 			"moves": [
@@ -7990,10 +7884,7 @@ window.VelvetBuffs = {
 				"1": "Frisk",
 				"H": "Insomnia",
 				"V0": "Harvest Lantern"
-			},
-			"lateAbilities": [
-				"harvestlantern"
-			]
+			}
 		},
 		"mewtwo": {
 			"moves": [
