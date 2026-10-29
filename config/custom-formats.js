@@ -1712,14 +1712,14 @@ function witchStoneRule(set) {
  * know these Pokemon at all; the official formats never see them. The files sit beside
  * this one's data/ both in the project and in the package's dist.
  */
-const velvetData = file => require(require('path').join(__dirname, '..', 'data', 'velvet', file));
+const velvetData = (file, dir = 'velvet') => require(require('path').join(__dirname, '..', 'data', dir, file));
 const GUEST_TIERS = [
 	{
-		guests: velvetData('collab.js'), allows: 'allowsCollab',
+		guests: velvetData('collab.js'), frozen: velvetData('collab.js', 'velvet-draft-s1'), allows: 'allowsCollab',
 		why: name => `${name} is a Collab Pokémon: crossover Pokémon are legal only in [Gen 9] RP Collab and the RP Battle formats.`,
 	},
 	{
-		guests: velvetData('touhou.js'), allows: 'allowsTouhou',
+		guests: velvetData('touhou.js'), frozen: velvetData('touhou.js', 'velvet-draft-s1'), allows: 'allowsTouhou',
 		why: name => `${name} is a Touhou Pokémon: legal only in [Gen 9] RP Touhou and the RP Battle formats.`,
 	},
 ];
@@ -1728,8 +1728,9 @@ for (const format of exports.Formats) {
 	// Not where the teams are generated (RP Random Battle, the tutorial): the generator
 	// refuses any custom ban, and it never hands out a guest anyway.
 	if (!format.name || !isRpFormat(format) || format.team) continue;
-	for (const { guests, allows } of GUEST_TIERS) {
-		if (!format[allows]) format.banlist = [...(format.banlist || []), ...guests.NAMES];
+	for (const { guests, frozen, allows } of GUEST_TIERS) {
+		// The Season 1 draft plays on its frozen copy, which never heard of later guests.
+		if (!format[allows]) format.banlist = [...(format.banlist || []), ...(format.mod === 'gen9draftrp' ? frozen : guests).NAMES];
 	}
 }
 function guestRule(set) {

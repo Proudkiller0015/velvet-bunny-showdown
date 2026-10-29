@@ -12,6 +12,8 @@
  *    across switches.
  *  - Hatrequeen: Arcana Slave's charge and its Photon Geyser category; Love and Justice
  *    turning her for good after two quiet turns, a hit or a switch starting them over.
+ *  - King Boo: Bashful King's 2/3 from faster attackers and 1.3x on slower targets;
+ *    Painting Prison's 4-5 turn trap, let go when he switches, never on Ghosts.
  *  - The bot's reading of them, and full random battles.
  *
  * Reads the data installed in node_modules by scripts/setup-config.js.
@@ -328,6 +330,46 @@ const ok = (cond, what) => { assert.ok(cond, what); n++; };
 	ok(category() === 'Physical', 'physical at +6 Attack');
 }
 
+// ---- King Boo: Bashful King and Painting Prison.
+{
+	// The same seed with and without the ability: the same rolls, so the ratio is the ability's.
+	const lost = (ability, mine, theirs, p1, p2) => {
+		const b = battle([{ ...mine, ability }], [theirs], 'gen9rpcollab', [5, 6, 7, 8]);
+		turn(b, p1, p2);
+		return [b.p1.active[0].maxhp - b.p1.active[0].hp, b.p2.active[0].maxhp - b.p2.active[0].hp];
+	};
+	const boo = mon('King Boo', ['Moonblast', 'Painting Prison', 'Splash'], { evs: { hp: 252, spa: 252 }, nature: 'Modest' });
+	const quick = mon('Regieleki', ['Dark Pulse', 'Splash'], { evs: { spa: 252, spe: 252 }, nature: 'Timid' });
+	const hid = lost('Bashful King', boo, quick, 'move 3', 'move 1')[0] / lost('Pressure', boo, quick, 'move 3', 'move 1')[0];
+	ok(hid > 0.62 && hid < 0.71, `a faster attacker does 2/3 (${hid.toFixed(3)})`);
+	const chased = lost('Bashful King', boo, wall(), 'move 1', 'move 1')[1] / lost('Pressure', boo, wall(), 'move 1', 'move 1')[1];
+	ok(chased > 1.25 && chased < 1.35, `his hits on a slower target do 1.3x (${chased.toFixed(3)})`);
+	const slow = mon('Snorlax', ['Crunch'], { evs: { atk: 252 } });
+	ok(lost('Bashful King', boo, slow, 'move 3', 'move 1')[0] === lost('Pressure', boo, slow, 'move 3', 'move 1')[0], 'a slower attacker hits him in full');
+}
+{
+	const boo = mon('King Boo', ['Painting Prison', 'Splash'], { ability: 'Bashful King' });
+	// Slowking, which a Ghost move can hit; the Normal-type wall is immune.
+	const sitter = () => mon('Slowking', ['Splash'], { evs: { hp: 252, spd: 252 }, nature: 'Calm', item: 'Leftovers' });
+	const b = battle([boo, mon('Chansey', ['Splash'])], [sitter(), mon('Clefable', ['Splash'])]);
+	const from = b.log.length;
+	turn(b, 'move 1', 'move 1');
+	ok(b.p2.active[0].volatiles['paintingprison'] && logSince(b, from).includes('sealed inside a painting'), 'Painting Prison seals the target');
+	ok(b.p2.activeRequest.active[0].trapped, 'it cannot switch');
+	const length = b.p2.active[0].volatiles['paintingprison'].duration;
+	ok(length === 4 || length === 5, `for 4 or 5 turns (${length})`);
+	turn(b, 'switch 2', 'move 1');
+	ok(!b.p2.active[0].volatiles['paintingprison'] && !b.p2.activeRequest.active[0].trapped, 'King Boo switching out lets it go');
+	const ghost = battle([boo], [mon('Gengar', ['Splash'])]);
+	turn(ghost, 'move 1', 'move 1');
+	ok(!ghost.p2.activeRequest.active[0].trapped, 'a Ghost type still switches out');
+	const held = battle([boo], [sitter(), mon('Clefable', ['Splash'])]);
+	turn(held, 'move 1', 'move 1');
+	let turns = 0;
+	while (held.p2.active[0].volatiles['paintingprison'] && turns < 8) { turn(held, 'move 2', 'move 1'); turns++; }
+	ok(turns >= 3 && turns <= 4 && !held.p2.activeRequest.active[0].trapped, `and the painting gives way on its own (${turns} more turns)`);
+}
+
 // ---- The bot's reading of them (src/ai.js).
 {
 	const { BattleAI } = require('../src/ai');
@@ -354,7 +396,7 @@ const ok = (cond, what) => { assert.ok(cond, what); n++; };
 	ok(score(new Set(['weewitchsgift'])) < 0, 'and not into a foe that already carries one');
 }
 
-// ---- Full battles with random choices, all five guests on both sides: nothing throws.
+// ---- Full battles with random choices, all six guests on both sides: nothing throws.
 {
 	const pick = (rng, list) => list[Math.floor(rng() * list.length)];
 	let seed = 11;
@@ -386,7 +428,7 @@ const ok = (cond, what) => { assert.ok(cond, what); n++; };
 		freischutz({ moves: ['Magic Bullet', 'Iron Head', 'Sucker Punch', 'Protect'], item: 'Life Orb' }),
 		hatrequeen({ moves: ['Arcana Slave', 'Psyshock', 'Dark Pulse', 'Calm Mind'], item: 'Power Herb' }),
 		mon('Funerfly', ['Solemn Lament', 'Butterfly Procession', 'Last Rites', 'Quiver Dance'], { ability: 'Qliphoth Counter' }),
-		mon('Garchomp', ['Earthquake', 'Dragon Claw', 'Swords Dance', 'Protect'], { evs: { atk: 252 } }),
+		mon('King Boo', ['Painting Prison', 'Moonblast', 'Will-O-Wisp', 'Trick Room'], { ability: 'Bashful King' }),
 	];
 	for (const [games, formatid] of [[6, 'gen9rpcollab'], [3, 'gen9rpbattledoubles']]) {
 		for (let game = 0; game < games; game++) {

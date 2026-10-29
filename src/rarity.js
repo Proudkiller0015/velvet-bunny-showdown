@@ -160,6 +160,12 @@ function classOf(name) {
 	let s = species(name);
 	const guest = touhouClass(s, name);
 	if (guest) return guest;
+	/*
+	 * The Collab Pokemon (crossover guests: King Boo, the Lobotomy Corporation ones) are
+	 * unknown to this dex too. Each is one of a kind with a strong stat total, so rare,
+	 * the class a 540+ line would get.
+	 */
+	if ((!s || !s.exists) && RP_TIERS[toID(typeof name === 'string' ? name : name && name.name)] === 'Collab') return 'rare';
 	if (!s || !s.exists) return 'common';
 	if (classCache.has(s.id)) return classCache.get(s.id);
 	const base = Dex.species.get(s.baseSpecies);

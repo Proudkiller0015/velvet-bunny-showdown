@@ -268,6 +268,24 @@
 		};
 	});
 	/*
+	 * King Boo, the Halloween board's collab Pokemon: official renders from the Super Mario
+	 * Wiki (art/collab/kingboo-sprites.py). The shiny is his Dark Moon look, glowing purple.
+	 */
+	(function () {
+		var file = 'collab/kingboo';
+		var builder = function (f) {
+			return 'background-image:url(#SPRITES#' + f + SPRITE_V + ');background-position:10px 5px;background-repeat:no-repeat;';
+		};
+		ART.kingboo = {
+			standard: true,
+			still: { front: [file + '.png' + SPRITE_V, 96, 96], back: [file + '-back.png' + SPRITE_V, 96, 96] },
+			shiny: { still: { front: [file + '-shiny.png' + SPRITE_V, 96, 96], back: [file + '-shiny-back.png' + SPRITE_V, 96, 96] } },
+			icon: file + '-icon.png' + SPRITE_V,
+			builder: builder(file + '.png'),
+			shinyBuilder: builder(file + '-shiny.png'),
+		};
+	})();
+	/*
 	 * The Touhou Pokemon (data/velvet/touhou.js): the Touhoumons solomod's own sprites (DH2, MIT),
 	 * standard 96x96 fronts, backs and shinies with 40x30 icons, in sprites/touhou/<id>*.png.
 	 * One row per species and forme, written by scripts/import-touhou.js.

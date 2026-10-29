@@ -1,7 +1,7 @@
 'use strict';
 /**
  * Collab (data/velvet/collab.js): crossover Pokemon, refused by every RP format but
- * RP Collab - all five of them, and the bot that drafts them. Then Funerfly's
+ * RP Collab - all six of them, and the bot that drafts them. Then Funerfly's
  * Qliphoth Counter (two super-effective hits, or a teammate fainting beside it, and
  * it breaches for good), Solemn Lament's two Ghost hits, Butterfly Procession's
  * four-turn bind, Last Rites (a special Last Respects) and the ability's Technician.
@@ -40,8 +40,9 @@ const GUESTS = [
 	mon('Laetitia', ["Wee Witch's Gift", 'Play Rough'], { ability: 'Dear Friends' }),
 	mon('Freischutz', ['Magic Bullet', 'Iron Head'], { ability: "The Devil's Seventh" }),
 	mon('Hatrequeen', ['Arcana Slave', 'Moonblast'], { ability: 'Love and Justice' }),
+	mon('King Boo', ['Painting Prison', 'Moonblast'], { ability: 'Bashful King' }),
 ];
-ok(GUESTS.map(set => rpDex.species.get(set.species).id).join() === COLLAB.SPECIES.join(), `five collab Pokemon (${COLLAB.SPECIES.join(', ')})`);
+ok(GUESTS.map(set => rpDex.species.get(set.species).id).join() === COLLAB.SPECIES.join(), `six collab Pokemon (${COLLAB.SPECIES.join(', ')})`);
 const problems = (f, set = funerfly()) => new TeamValidator(f).validateTeam([set]);
 for (const set of GUESTS) {
 	ok(!problems('gen9rpcollab', set), `${set.species} legal in RP Collab (${problems('gen9rpcollab', set)})`);
@@ -67,7 +68,7 @@ ok(true, 'every format builds its rule table');
 const rpTiers = require('../src/rp-tiers.json');
 ok(COLLAB.SPECIES.every(id => rpTiers[id] === 'Collab'), 'src/rp-tiers.json files every one under Collab');
 // Numbers of their own: 2004 on, clear of the Touhou Pokemon's 2101 and up.
-ok(COLLAB.SPECIES.map(id => rpDex.species.get(id).num).join() === '2004,2005,2006,2007,2008', 'dex numbers 2004-2008');
+ok(COLLAB.SPECIES.map(id => rpDex.species.get(id).num).join() === '2004,2005,2006,2007,2008,2009', 'dex numbers 2004-2009');
 
 // ---- The bot drafts one in RP Collab and nowhere else.
 {

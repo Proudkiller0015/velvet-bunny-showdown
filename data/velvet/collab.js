@@ -18,6 +18,10 @@
  *   collab-freischutz.js   Freischutz   Der Freischutz                        2007
  *   collab-hatrequeen.js   Hatrequeen   The Queen of Hatred                   2008
  *
+ * And from Nintendo's Mario series, the yearly Halloween board's prize:
+ *
+ *   collab-kingboo.js      King Boo     King Boo (Luigi's Mansion)            2009
+ *
  * Each file holds its Pokemon, formes, abilities and moves; this one puts them in
  * the tier, writes their learnsets and gathers the lists everything else reads.
  */
@@ -28,6 +32,7 @@ const MONS = [
 	require('./collab-laetitia.js'),
 	require('./collab-freischutz.js'),
 	require('./collab-hatrequeen.js'),
+	require('./collab-kingboo.js'),
 ];
 const TIER = 'Collab';
 // What every new Pokemon of ours gets.
