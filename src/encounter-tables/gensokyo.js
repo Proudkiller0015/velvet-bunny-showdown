@@ -370,6 +370,22 @@ module.exports = {
       rare: ['Honedge', 'Absol', 'Yamask-Galar'],
       boneka: ['Komachi Onozuka', 'Nazrin', 'Sumireko Usami', 'Eika Ebisu', 'Urumi Ushizaki', 'Kutaka Niwatari', 'Ubame Chirizuka'],
     },
+    'mayohiga': {
+      name: 'Mayohiga',
+      channels: ['mayohiga', 'yakumo-residence'],
+      types: ['Normal', 'Dark', 'Psychic', 'Ghost'],
+      wild: ['mayohiga', 'yakumo-residence'],
+      trainers: ['hexmaniac', 'ruinmaniac', 'backpacker', 'ninjaboy', 'kimonogirl'],
+      noTrainers: ['yakumo-residence'],
+      // The village of the lost: empty houses, a well, and a great many cats.
+      common: ['Meowth', 'Glameow', 'Purrloin', 'Skitty', 'Espurr', 'Shinx', 'Sneasel', 'Murkrow', 'Misdreavus', 'Pidove'],
+      rare: ['Litten', 'Zorua', 'Vulpix-Alola'],
+      spots: {
+        // Yukari's house, only there when she wants it to be; her fox shikigami keeps it
+        'yakumo-residence': { types: ['Psychic', 'Ghost', 'Dark'], common: ['Vulpix', 'Espurr', 'Natu', 'Elgyem', 'Hatenna', 'Unown'], rare: ['Abra', 'Zorua-Hisui'], boneka: ['Ran Yakumo'] },
+      },
+      boneka: ['Chen'],
+    },
 
     // ---------------------------------------------------------------- Routes
     'route-301': {

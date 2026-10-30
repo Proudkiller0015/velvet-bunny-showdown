@@ -59,7 +59,7 @@ function wildViews() {
 	const mapFile = path.join(__dirname, '..', '..', 'rp-bot', 'data', 'map-places.json');
 	const expected = ['village', 'myouren', 'hakurei', 'forestofmagic', 'kourindou', 'mistylake', 'scarletmansion', 'bamboo', 'eientei',
 		'genbu', 'tenguvillage', 'moriya', 'netherworld', 'hakugyokurou', 'windcave', 'formercapital', 'chireiden', 'gardenofsun',
-		'namelesshill', 'muenzuka', 'r301', 'r302', 'r303', 'r304', 'r305', 'r306'];
+		'namelesshill', 'muenzuka', 'mayohiga', 'r301', 'r302', 'r303', 'r304', 'r305', 'r306'];
 	const key = id => id.replace(/^r(\d+)$/, 'route-$1');   // the map calls routes r301, the tables route-301
 	for (const id of expected) check(!!G.locations[key(id)], `a table for ${id}`);
 	check(places.length === expected.length, `no table for a place the map does not have (${places.length})`);
