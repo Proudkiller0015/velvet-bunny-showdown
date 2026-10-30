@@ -3,7 +3,7 @@
  * King Boo, from Nintendo's Mario series and Luigi's Mansion. The crowned king of the
  * Boos: shy while you look at him, bold the moment your back is turned, and fond of
  * sealing his guests inside paintings. A Collab Pokemon: see collab.js for the tier.
- * The owner's Halloween board, 24 hours every 31 October (rp-bot gacha.js).
+ * The owner's Halloween board, 2 days every 30 and 31 October (rp-bot gacha.js).
  *
  *   King Boo   Ghost/Fairy   95 / 60 / 90 / 125 / 110 / 80   560
  *
