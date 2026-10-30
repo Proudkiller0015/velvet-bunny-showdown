@@ -1,0 +1,12 @@
+{
+	"id": "gen9rpdraft-8-tnpwbk",
+	"format": "[Gen 9] RP Draft",
+	"players": [
+		"Prev0w1",
+		"Velvet Bunny"
+	],
+	"rating": null,
+	"log": "|j|☆Prev0w1\n|j|☆Velvet Bunny\n|t:|1793401416\n|gametype|singles\n|player|p1|Prev0w1|102|\n|player|p2|Velvet Bunny|bunny.png|\n|gen|9\n|tier|[Gen 9] RP Draft\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Endless Battle Clause: Forcing endless battles is banned\n|rule|Species Clause: Limit one of each Pokémon\n|rule|OHKO Clause: OHKO moves are banned\n|rule|Evasion Clause: Evasion abilities, items, and moves are banned\n|rule|Evasion Abilities Clause: Evasion abilities are banned\n|rule|Evasion Items Clause: Evasion items are banned\n|rule|Evasion Moves Clause: Evasion moves are banned\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Terastal Clause: You cannot Terastallize\n|rule|Z-Move Clause: Z-Moves are banned\n|clearpoke\n|poke|p1|Toxapex|\n|poke|p1|Leafeon|\n|poke|p1|Ursaluna|\n|poke|p1|Regieleki|\n|poke|p1|Delphox|\n|poke|p1|Sylveon|\n|poke|p2|Comfey|\n|poke|p2|Ribombee|\n|poke|p2|Toxapex|\n|poke|p2|Cinderace|\n|poke|p2|Iron Moth|\n|poke|p2|Gliscor|\n|teampreview\n|c|☆Velvet Bunny|Good luck! Playing on **hard**. (PM me to change it.)\n|\n|t:|1793401439\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Delphox|Delphox|100/100\n|switch|p2a: Gliscor|Gliscor|100/100\n|turn|1\n|\n|t:|1793401442\n|detailschange|p1a: Delphox|Delphox-Mega\n|-mega|p1a: Delphox|Delphox|Delphoxite\n|move|p1a: Delphox|Nasty Plot|p1a: Delphox\n|-boost|p1a: Delphox|spa|2\n|move|p2a: Gliscor|Earthquake|p1a: Delphox\n|-immune|p1a: Delphox|[from] ability: Levitate\n|\n|-status|p2a: Gliscor|tox|[from] item: Toxic Orb\n|upkeep\n|turn|2\n|\n|t:|1793401447\n|switch|p2a: Toxapex|Toxapex|100/100\n|move|p1a: Delphox|Flamethrower|p2a: Toxapex\n|-resisted|p2a: Toxapex\n|-damage|p2a: Toxapex|55/100\n|\n|upkeep\n|turn|3\n|\n|t:|1793401450\n|move|p1a: Delphox|Hypno Whirl|p2a: Toxapex\n|-supereffective|p2a: Toxapex\n|-crit|p2a: Toxapex\n|-damage|p2a: Toxapex|0 fnt\n|faint|p2a: Toxapex\n|\n|upkeep\n|\n|t:|1793401450\n|switch|p2a: Cinderace|Cinderace|100/100\n|turn|4\n|\n|t:|1793401454\n|move|p1a: Delphox|Hypno Whirl|p2a: Cinderace\n|-damage|p2a: Cinderace|0 fnt\n|faint|p2a: Cinderace\n|\n|upkeep\n|\n|t:|1793401454\n|switch|p2a: Comfey|Comfey|100/100\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1793401460
+}
