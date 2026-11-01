@@ -135,6 +135,8 @@ exports.pokedex = (data) => {
 		// The Summer Backdoor's forme (see the items below): the validator's message for
 		// a Cirno-Tanned without one names the Pokemon it changes from.
 		if (id === 'cirnotanned') data[id].changesFrom = 'Cirno';
+		// Youmu, the half-phantom swordswoman (the owner, 1 Nov 2026): Sharpness instead of Hyper Cutter.
+		if (id === 'youmukonpaku' && data[id].abilities[1] === 'Hyper Cutter') data[id].abilities = { ...data[id].abilities, 1: 'Sharpness' };
 	}
 	return data;
 };

@@ -95,6 +95,49 @@ exports.abilities = (data) => {
 };
 
 exports.moves = (data) => {
+	// Delibird's signature (the owner, 1 Nov 2026): Present as a Water move, five hits of 25 (125 in
+	// all) that never miss. Two rolls before it goes off, each one time in twenty, decide the whole
+	// move: a heal (every hit heals the target a quarter instead, Present's heal) or a double (every
+	// hit at 50). Only physical or special is rolled again on every hit. An Ice-type user gets STAB
+	// on it (forceSTAB, as the engine's own).
+	data.presentsurge = {
+		num: -321,
+		gen: 9,
+		accuracy: true,
+		basePower: 25,
+		category: 'Special',
+		name: 'Present Surge',
+		pp: 8,
+		priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		multihit: 5,
+		onModifyMove(move, pokemon) {
+			if (pokemon.hasType('Ice')) move.forceSTAB = true;
+			move.surgeHeal = this.random(20) === 0;
+			move.surgeDoubled = !move.surgeHeal && this.random(20) === 0;
+		},
+		// Run on every hit, before the damage picks Attack or Special Attack from the category.
+		basePowerCallback(pokemon, target, move) {
+			move.category = this.random(2) ? 'Physical' : 'Special';
+			if (move.surgeHeal) {
+				// A heal on a target already at full HP does nothing, rather than failing (which
+				// would end the move there, as Present's does): the five hits always land.
+				if (target.hp < target.maxhp) {
+					move.heal = [1, 4];
+					move.infiltrates = true;
+				} else {
+					delete move.heal;
+				}
+				return 0;
+			}
+			return move.surgeDoubled ? 50 : 25;
+		},
+		secondary: null,
+		target: 'normal',
+		type: 'Water',
+		shortDesc: "5 hits, never misses, random phys/spec per hit. 5%: all hits heal. 5%: all hits 2x.",
+		desc: "Hits five times and does not check accuracy. Each hit is physical or special at random, one chance in two, using Attack or Special Attack to match. Before it goes off, two rolls decide the whole move: one time in twenty every hit deals no damage and heals the target by 1/4 of its maximum HP instead, as Present can; otherwise, one time in twenty every hit has double power (50). An Ice-type user gets STAB on it as if it were Water-type. Delibird's signature move.",
+	};
 	// Each hazard skips a Pokemon with Present Power on switch-in, as it skips Heavy-Duty Boots.
 	for (const id of HAZARDS) {
 		const condition = data[id] && data[id].condition;
@@ -118,13 +161,18 @@ exports.learnsets = (data) => {
 	const bundle = data.ironbundle && data.ironbundle.learnset;
 	const own = data.delibird && data.delibird.learnset;
 	if (!bundle || !own) return data;
-	for (const id of Object.keys(bundle)) {
+	// And a modern movepool (the owner, 1 Nov 2026: 'delibird movepool is SO ass'): the physical Water
+	// moves Iron Bundle lacks, for Present Power's doubled Attack, and the staples it never had.
+	const MODERN = ['presentsurge', 'liquidation', 'aquajet', 'hurricane', 'roost', 'knockoff', 'iciclecrash', 'chillyreception', 'trick', 'switcheroo', 'surf', 'focusblast', 'calmmind', 'bellydrum'];
+	for (const id of [...Object.keys(bundle), ...MODERN]) {
 		if (own[id]) continue;
 		own[id] = ['9M'];
 		if (!ADDED_MOVES.includes(id)) ADDED_MOVES.push(id);
 	}
 	return data;
 };
+
+exports.MOVE_IDS = ['presentsurge'];
 
 exports.EVENT_SPECIES = ['delibird', 'delibirdmega'];
 

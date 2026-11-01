@@ -63,6 +63,7 @@ const OUR_ABILITIES = ['witchinghour'];
 // Christmas 2026 (data/velvet/christmas.js): the Delibirdite and Present Power.
 OUR_ITEMS.push('delibirdite');
 OUR_ABILITIES.push('presentpower');
+OUR_MOVES.push('presentsurge');
 // Makuro and Raishin (data/velvet/abyss-shrine.js): their signature moves and abilities.
 const abyssShrine = require(path.join(PACKAGE, 'dist', 'data', 'velvet', 'abyss-shrine.js'));
 OUR_MOVES.push(...abyssShrine.MOVE_IDS);
