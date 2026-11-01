@@ -107,7 +107,7 @@ exports.moves = (data) => {
 		basePower: 25,
 		category: 'Special',
 		name: 'Present Surge',
-		pp: 8,
+		pp: 5,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
 		multihit: 5,
