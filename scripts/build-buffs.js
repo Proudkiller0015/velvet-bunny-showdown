@@ -60,6 +60,9 @@ const LABEL = 'Awakened';
 const OUR_ITEMS = ['elementalbanana', 'brokenpact', 'banettitehalloween'];
 const OUR_MOVES = ['witchssnatch'];
 const OUR_ABILITIES = ['witchinghour'];
+// Christmas 2026 (data/velvet/christmas.js): the Delibirdite and Present Power.
+OUR_ITEMS.push('delibirdite');
+OUR_ABILITIES.push('presentpower');
 // Makuro and Raishin (data/velvet/abyss-shrine.js): their signature moves and abilities.
 const abyssShrine = require(path.join(PACKAGE, 'dist', 'data', 'velvet', 'abyss-shrine.js'));
 OUR_MOVES.push(...abyssShrine.MOVE_IDS);
@@ -262,7 +265,11 @@ const megaTiers = {};
 const natdexTiers = {};
 // Halloween 2026: the witch Mega Banette is ours, not a Z-A Mega, so it is added by hand.
 const halloween = require(path.join(PACKAGE, 'dist', 'data', 'velvet', 'halloween.js'));
-const OUR_MEGAS = { [Dex.species.get(halloween.FORME).id]: Dex.species.get(halloween.FORME).tier };
+const christmas = require(path.join(PACKAGE, 'dist', 'data', 'velvet', 'christmas.js'));
+const OUR_MEGAS = {
+	[Dex.species.get(halloween.FORME).id]: Dex.species.get(halloween.FORME).tier,
+	[Dex.species.get(christmas.FORME).id]: Dex.species.get(christmas.FORME).tier,
+};
 // Species this server made legal and tiered in its own formats-data (Eternamax: AG).
 const OUR_FORMATS = require(path.join(PACKAGE, 'dist', 'data', 'velvet', 'formats-data.js')).FormatsData;
 const OUR_TIERS = {};
@@ -372,13 +379,14 @@ for (const id of Object.keys(OUR_MEGAS)) search.push([id, 'pokemon', offsetsFor(
 // Alias rows for our Megas ("halloween", "mega banette halloween"...): [alias, type, target, at].
 const searchAliases = [];
 for (const [alias, at] of halloween.SEARCH_ALIASES || []) searchAliases.push([alias, 'pokemon', Dex.species.get(halloween.FORME).id, at]);
+for (const [alias, at] of christmas.SEARCH_ALIASES || []) searchAliases.push([alias, 'pokemon', Dex.species.get(christmas.FORME).id, at]);
 for (const [alias, at] of missingno.SEARCH_ALIASES || []) searchAliases.push([alias, 'pokemon', missingno.ID, at]);
 for (const [alias, target, at] of collab.SEARCH_ALIASES || []) searchAliases.push([alias, 'pokemon', target, at]);
 // The Touhou Pokemon's nicknames from their mod ("reimu", "patchy") and the later words of their names.
 for (const [alias, target, at] of touhou.SEARCH_ALIASES || []) searchAliases.push([alias, 'pokemon', target, at]);
 
 // Event Pokemon, for "event" in the search: every event file lists its own.
-const EVENT_FILES = ['halloween.js', 'missingno.js'];
+const EVENT_FILES = ['halloween.js', 'missingno.js', 'christmas.js'];
 const events = [];
 for (const file of EVENT_FILES) {
 	const mod = require(path.join(PACKAGE, 'dist', 'data', 'velvet', file));
@@ -451,6 +459,12 @@ for (const [id, record] of Object.entries(applied)) {
 	 */
 	if (record.abilities.length) entry.slots = Object.assign({}, species.abilities);
 	bySpecies[id] = entry;
+}
+// And Iron Bundle's moves, given to Delibird for Christmas (christmas.js ADDED_MOVES).
+Dex.species.getLearnsetData(Dex.species.get('delibird'));
+{
+	const entry = bySpecies.delibird || (bySpecies.delibird = { moves: [], abilities: [] });
+	for (const id of christmas.ADDED_MOVES) if (!entry.moves.includes(id)) entry.moves.push(id);
 }
 // Moves given after the Season 1 draft froze its data: RP's, not the draft's, so the
 // builder leaves them out while RP Draft is picked (cats' Hustle Up, 27 Oct 2026).

@@ -32,6 +32,8 @@ const { applyTiers } = require('./tiering.js');
 const { unnerfMoves, unnerfAbilities, unnerfSpecies } = require('./unnerfs.js');
 // Halloween 2026: the Witching Hour Mega Banette skin, its stone, ability and signature.
 const Halloween = require('./halloween.js');
+// Christmas 2026: Mega Delibird, the Delibirdite and Present Power.
+const Christmas = require('./christmas.js');
 // Halloween 2026, second board: MissingNo., made standard, with an ability and a move of its own.
 const Missingno = require('./missingno.js');
 // Makuro and Raishin, the Abyss and the Shrine: two legendaries and their terrains.
@@ -89,6 +91,7 @@ exports.pokedex = data => {
 	Object.assign(data, Pokedex);
 	unnerfSpecies(data);
 	Halloween.pokedex(data);
+	Christmas.pokedex(data);
 	Missingno.pokedex(data);
 	AbyssShrine.pokedex(data);
 	Collab.pokedex(data);
@@ -96,16 +99,17 @@ exports.pokedex = data => {
 	buffedPokedex = data;
 	buffWhatWeHave();
 };
-exports.abilities = data => Touhou.abilities(Collab.abilities(Gourgeist.abilities(CreationTrio.abilities(Stall.abilities(AbyssShrine.abilities(Missingno.abilities(Halloween.abilities(require('./balance-patch-1.js').patchAbsorbers(patchAbilities(unnerfAbilities(Object.assign(data, Abilities))))))))))));
+exports.abilities = data => Touhou.abilities(Collab.abilities(Gourgeist.abilities(CreationTrio.abilities(Stall.abilities(AbyssShrine.abilities(Missingno.abilities(Christmas.abilities(Halloween.abilities(require('./balance-patch-1.js').patchAbsorbers(patchAbilities(unnerfAbilities(Object.assign(data, Abilities)))))))))))));
 let moveTable = null;
 exports.moves = data => {
-	moveTable = Touhou.moves(Collab.moves(Gourgeist.moves(CreationTrio.moves(Classic.moves(Frostbite.moves(AbyssShrine.moves(Missingno.moves(Halloween.moves(patchMoves(unnerfMoves(Object.assign(data, Moves))))))))))));
+	moveTable = Touhou.moves(Collab.moves(Gourgeist.moves(CreationTrio.moves(Classic.moves(Frostbite.moves(AbyssShrine.moves(Missingno.moves(Christmas.moves(Halloween.moves(patchMoves(unnerfMoves(Object.assign(data, Moves)))))))))))));
 	teachHerEverything();
 	return moveTable;
 };
 exports.formatsData = data => {
 	Object.assign(data, FormatsData);
 	Halloween.formatsData(data);
+	Christmas.formatsData(data);
 	Missingno.formatsData(data);
 	AbyssShrine.formatsData(data);
 	Collab.formatsData(data);
@@ -116,6 +120,7 @@ exports.formatsData = data => {
 exports.learnsets = data => {
 	Object.assign(data, Learnsets);
 	Halloween.learnsets(data);
+	Christmas.learnsets(data);
 	Missingno.learnsets(data);
 	AbyssShrine.learnsets(data);
 	Collab.learnsets(data);
@@ -164,6 +169,7 @@ exports.items = data => {
 	// marked 'Future' is refused however legal the Mega holding it is.
 	applyZaStones(data, msg => console.log('[velvet] ' + msg));
 	Halloween.items(data);
+	Christmas.items(data);
 	AbyssShrine.items(data);
 	Frostbite.items(data);
 	Gems.items(data);

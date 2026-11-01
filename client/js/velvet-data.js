@@ -191,6 +191,29 @@
 		// and kept pixel-sharp; squeezing it to half size made it unreadable.
 		builder: 'background-image:url(#SPRITES#banette-megahalloween.png);background-size:96px 91px;background-position:10px 8px;background-repeat:no-repeat;image-rendering:pixelated;',
 	};
+	// Christmas 2026: Mega Delibird, from the owner's approved design, on a 100px grid
+	// (its sprites carry their own size, like the witch Mega Banette).
+	ART.delibirdmega = {
+		still: { front: ['delibird-mega.png', 96, 99], back: ['delibird-mega-back.png', 96, 95] },
+		// Animated like the trio's (scripts/animate-sprite.py): the front from the design art,
+		// drawn at half the file's size; the back is the pixel sprite with an idle loop.
+		animated: {
+			front: ['delibird-mega-ani.webp', 124, 128, true],
+			back: ['delibird-mega-back-ani.webp', 96, 95],
+		},
+		// Shiny: the Moemon Project's shiny Delibird green (owner, 1 Nov 2026).
+		shiny: {
+			still: { front: ['delibird-mega-shiny.png', 96, 99], back: ['delibird-mega-back-shiny.png', 96, 95] },
+			animated: {
+				front: ['delibird-mega-shiny-ani.webp', 124, 128, true],
+				back: ['delibird-mega-back-shiny-ani.webp', 96, 95],
+			},
+		},
+		// Mega Evolution plays the base's cry, as the official Megas do.
+		cry: 'audio/cries/delibird-mega.mp3',
+		builder: 'background-image:url(#SPRITES#delibird-mega.png);background-size:96px 99px;background-position:10px 2px;background-repeat:no-repeat;image-rendering:pixelated;',
+		shinyBuilder: 'background-image:url(#SPRITES#delibird-mega-shiny.png);background-size:96px 99px;background-position:10px 2px;background-repeat:no-repeat;image-rendering:pixelated;',
+	};
 	// Makuro and Raishin (data/velvet/abyss-shrine.js): pixelized from the owner's art
 	// onto standard 96x96 canvases, standing where a gen 5 sprite stands. The back is
 	// the front turned round until a real back view is drawn.
@@ -332,6 +355,9 @@
 	var MOEMON_TAG = /^moemon(\d*)$/;
 	var OUR_MOEMON = {
 		gourgeist: [{ front: 'gourgeist-touhou', label: 'Pumpkin girl, ours', size: 96 }],
+		// Mega Delibird (Christmas 2026) has no Moemon of the Project's: ours, drawn after
+		// Nerak55's Delibird, so a Moemon Delibird stays one when it Mega Evolves.
+		delibirdmega: [{ front: 'delibird-mega-moemon', label: 'Santa girl, ours', size: 96 }],
 	};
 	function moemonVariant(file, size) {
 		var scale = size === 96 ? '' : 'background-size:96px 96px;';
@@ -360,7 +386,8 @@
 		var battleForm = species.battleOnly || species.isMega || species.isPrimal || species.forme === 'Gmax' || /^Mega/.test(species.forme || '');
 		if (!theirs && !battleForm && !exact) theirs = table[base];
 		var out = [];
-		(OUR_MOEMON[base] || []).forEach(function (v) { out.push({ art: moemonVariant(v.front, v.size), label: v.label }); });
+		// A battle form's own (Mega Delibird) first; a base form's own looks are the base's and its plain formes'.
+		(OUR_MOEMON[id] || (battleForm && id !== base ? [] : OUR_MOEMON[base]) || []).forEach(function (v) { out.push({ art: moemonVariant(v.front, v.size), label: v.label }); });
 		(theirs || []).forEach(function (v) { out.push({ art: moemonVariant('moemon/' + v[0], 64), label: (v[2] || 'Moemon Project') + (v[1] ? ', ' + v[1] : '') }); });
 		return out;
 	}
@@ -467,6 +494,25 @@
 			isMega: true,
 			battleOnly: "Banette",
 			tier: "UU",
+		},
+
+		// Christmas 2026 (data/velvet/christmas.js): Delibird's own Mega, from the Delibirdite.
+		delibirdmega: {
+			num: 225,
+			name: "Delibird-Mega",
+			baseSpecies: "Delibird",
+			forme: "Mega",
+			types: ["Ice", "Flying"],
+			baseStats: { hp: 45, atk: 69, def: 51, spa: 124, spd: 5, spe: 136 },
+			abilities: { 0: "Present Power" },
+			heightm: 1.1,
+			weightkg: 22,
+			color: "Red",
+			eggGroups: ["Undiscovered"],
+			requiredItem: "Delibirdite",
+			isMega: true,
+			battleOnly: "Delibird",
+			tier: "Uber",
 		},
 
 		// Reachable only by a Nuzleaf fainting with a Broken Pact, so the
@@ -646,7 +692,7 @@
 		for (var ns in fresh) if (window.BattlePokedex[ns] !== fresh[ns]) window.BattlePokedex[ns] = fresh[ns];
 		// Mini icons: a forme with no icon of its own borrows the one it is a skin of
 		// (the witch Mega Banette shows Mega Banette's, not plain Banette's).
-		var ICON_OF = { banettemegahalloween: 'banettemega' };
+		var ICON_OF = { banettemegahalloween: 'banettemega', delibirdmega: 'delibird' };
 		var icons = window.BattlePokemonIconIndexes;
 		if (icons) for (var ic in ICON_OF) if (icons[ic] === undefined && icons[ICON_OF[ic]] !== undefined) icons[ic] = icons[ICON_OF[ic]];
 		if (window.BattleMovedex) {
@@ -2520,6 +2566,12 @@
 				stats[other] = keep;
 			}
 
+			// Present Power (Mega Delibird, Christmas 2026): Huge Power's Attack and Fur Coat's Defense.
+			if (ability === 'presentpower') {
+				stats.atk *= 2;
+				stats.def *= 2;
+			}
+
 			if (ability === 'colossusunbound') {
 				var hp = clientPokemon ? clientPokemon.hp : serverPokemon && serverPokemon.hp;
 				var maxhp = clientPokemon ? clientPokemon.maxhp : serverPokemon && serverPokemon.maxhp;
@@ -4380,6 +4432,7 @@
 		brokenpact: 'broken-pact.png',
 		// Our own items' bag icons (28 Oct 2026, the owner's ChatGPT, cut to 24x24): sprites/items/.
 		banettitehalloween: 'items/banettitehalloween.png',
+		delibirdite: 'items/delibirdite.png',
 		abyssalpearl: 'items/abyssalpearl.png',
 		shrinebell: 'items/shrinebell.png',
 		sanctuarylotus: 'items/sanctuarylotus.png',
