@@ -245,6 +245,12 @@
 			out.push(['atk', 2, 1], ['spa', 2, 1]);
 		}
 
+		// Present Power (Mega Delibird, Christmas 2026): Huge Power's Attack and Fur Coat's
+		// Defense, both doubled; the Defense half only counts when it is the one being hit.
+		if (ability === 'Present Power') {
+			out.push(['atk', 2, 1], ['def', 2, 1]);
+		}
+
 		// Colossus Unbound (Regigigas, Balance Patch 1): 1.2x Attack while above
 		// half HP. Its Mold Breaker half the calculator cannot be told about by
 		// name, so a defender's ability is still applied here.
@@ -320,6 +326,15 @@
 			"Emperor's Pride": [['Water', 'Steel'], 5325],
 			'Proud Chick': [['Water', 'Steel'], 4915],
 		};
+		/*
+		 * Present Surge (Delibird's signature): an Ice-type user gets STAB on this Water move.
+		 * The calculator only gives STAB for the move's own type, so it is added as power -
+		 * the same 1.5x. (Its random physical/special per hit can't be shown: the calc shows
+		 * the special side.)
+		 */
+		if (move.name === 'Present Surge' && attacker.types && attacker.types.indexOf('Ice') >= 0 && attacker.types.indexOf('Water') < 0) {
+			out.push([6144, 4096]);
+		}
 		var trio = TRIO[String(attacker.ability || '')];
 		if (trio) {
 			var m = 4096;

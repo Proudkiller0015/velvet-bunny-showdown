@@ -146,6 +146,18 @@ const CASES = [
 		move: 'Tackle',
 		boosts: { atk: 2 },
 	},
+	{
+		name: 'Present Power doubles Attack (Mega Delibird)',
+		attacker: 'A|delibirdmega|delibirdite|presentpower|iceshard,bravebird,protect,roost|Adamant|,252,4,,,252|||||',
+		defender: 'B|blissey||naturalcure|tackle,protect,rest,softboiled|Bold|252,,252,,,|||||',
+		move: 'Brave Bird',
+	},
+	{
+		name: 'Present Power doubles Defense (Mega Delibird hit)',
+		attacker: 'A|garchomp||roughskin|dragonclaw,protect,rest,earthquake|Adamant|,252,4,,,252|||||',
+		defender: 'B|delibirdmega|delibirdite|presentpower|iceshard,bravebird,protect,roost|Impish|252,,252,,,|||||',
+		move: 'Dragon Claw',
+	},
 ];
 
 /* ------------------------------------------------------------------- engine */

@@ -48,7 +48,7 @@ const PATCHES = [
 	['updates-22', '2.2.1'], ['updates-23', '2.2.2'], ['updates-24', '2.3'], ['updates-24-complete', '2.3'],
 	['updates-25', '2.4'], ['updates-26', '2.4.1'], ['updates-27', '2.4.2'], ['updates-28', '2.5'], ['updates-28b', '2.5b'],
 	['updates-29', '2.6'], ['updates-29b', '2.6b'], ['updates-29c', '2.6c'], ['updates-29d', '2.6d'], ['updates-29e', '2.6e'],
-	['updates-29f', '2.6f'], ['updates-29g', '2.6g'], ['updates-29h', '2.6h'], ['updates-29i', '2.6i'], ['updates-31', '3.0'], ['updates-31a', '3.0a'], ['updates-31b', '3.0b'], ['updates-31c', '3.0c'], ['updates-31d', '3.1'],
+	['updates-29f', '2.6f'], ['updates-29g', '2.6g'], ['updates-29h', '2.6h'], ['updates-29i', '2.6i'], ['updates-31', '3.0'], ['updates-31a', '3.0a'], ['updates-31b', '3.0b'], ['updates-31c', '3.0c'], ['updates-31d', '3.1'], ['updates-31e', '3.1a'],
 ].map(([file, label]) => {
 	const id = BigInt(JSON.parse(fs.readFileSync(path.join(GUIDES, `${file}.ids.json`), 'utf8'))[0]);
 	return { label, at: Number((id >> 22n) + 1420070400000n) };
@@ -79,11 +79,11 @@ const tag = label => `\`${label}\``;
 const V_ = f => f.map(x => `data/velvet/${x}`);
 // Where each kind of change is written, so a tag is the change's own patch and not the first
 // time the name turned up anywhere (Dragon Pulse was handed out in 1.1, buffed in 2.6c).
-const MOVE_FILES = V_(['unnerfs.js', 'classic-mechanics.js', 'creation-trio.js', 'gourgeist.js', 'moves.js', 'abyss-shrine.js', 'frostbite.js']);
-const ABILITY_FILES = V_(['unnerfs.js', 'abilities.js', 'balance-patch-1.js', 'gourgeist.js']);
-const ITEM_FILES = V_(['items.js', 'gems.js', 'new-items.js', 'za-megas.js', 'unnerfs.js']);
-const STAT_FILES = V_(['unnerfs.js', 'za-megas.js', 'missingno.js']);
-const GRANT_FILES = V_(['balance-patch-1.js', 'unnerfs.js', 'creation-trio.js', 'gourgeist.js', 'stall.js', 'buffs.js', 'missingno.js']);
+const MOVE_FILES = V_(['unnerfs.js', 'classic-mechanics.js', 'creation-trio.js', 'gourgeist.js', 'moves.js', 'abyss-shrine.js', 'frostbite.js', 'christmas.js']);
+const ABILITY_FILES = V_(['unnerfs.js', 'abilities.js', 'balance-patch-1.js', 'gourgeist.js', 'christmas.js', 'touhou.js']);
+const ITEM_FILES = V_(['items.js', 'gems.js', 'new-items.js', 'za-megas.js', 'unnerfs.js', 'christmas.js']);
+const STAT_FILES = V_(['unnerfs.js', 'za-megas.js', 'missingno.js', 'christmas.js']);
+const GRANT_FILES = V_(['balance-patch-1.js', 'unnerfs.js', 'creation-trio.js', 'gourgeist.js', 'stall.js', 'buffs.js', 'missingno.js', 'christmas.js']);
 const EVO_FILES = V_(['balance-patch-1.js']);
 // The file that changes each vanilla move, from the lists those files export themselves.
 const MOVE_SOURCE = {};
