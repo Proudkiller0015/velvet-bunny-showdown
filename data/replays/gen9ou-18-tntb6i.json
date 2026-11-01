@@ -1,0 +1,12 @@
+{
+	"id": "gen9ou-18-tntb6i",
+	"format": "[Gen 9] OU",
+	"players": [
+		"Bunny Normal",
+		"Awther"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Normal\n|j|☆Awther\n|t:|1793565945\n|gametype|singles\n|player|p1|Bunny Normal|bunny.png|1278\n|player|p2|Awther|blue|1271\n|gen|9\n|tier|[Gen 9] OU\n|rated|\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Endless Battle Clause: Forcing endless battles is banned\n|rule|Species Clause: Limit one of each Pokémon\n|rule|OHKO Clause: OHKO moves are banned\n|rule|Evasion Items Clause: Evasion items are banned\n|rule|Evasion Moves Clause: Evasion moves are banned\n|rule|Evasion Abilities Clause: Evasion abilities are banned\n|rule|Sleep Moves Clause: Sleep-inducing moves are banned\n|clearpoke\n|poke|p1|Toxapex, M|\n|poke|p1|Sinistcha-Masterpiece|\n|poke|p1|Landorus-Therian, M|\n|poke|p1|Kingambit, M|\n|poke|p1|Hatterene, F|\n|poke|p1|Raging Bolt|\n|poke|p2|Pelipper, F|\n|poke|p2|Kingdra, M|\n|poke|p2|Raging Bolt|\n|poke|p2|Great Tusk|\n|poke|p2|Iron Crown|\n|poke|p2|Ogerpon-Wellspring, F|\n|teampreview\n|c|☆Bunny Normal|Good luck! Playing on **normal**.\n|\n|t:|1793565949\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Raging Bolt|Raging Bolt|100/100\n|switch|p2a: Pelipper|Pelipper, F|100/100\n|-weather|RainDance|[from] ability: Drizzle|[of] p2a: Pelipper\n|turn|1\n|\n|t:|1793565953\n|switch|p2a: Great Tusk|Great Tusk|100/100\n|move|p1a: Raging Bolt|Thunderbolt|p2a: Great Tusk\n|-immune|p2a: Great Tusk\n|\n|-weather|RainDance|[upkeep]\n|upkeep\n|turn|2\n|\n|t:|1793565961\n|-end|p1a: Raging Bolt|Protosynthesis|[silent]\n|switch|p1a: Sinistcha|Sinistcha-Masterpiece|100/100\n|move|p2a: Great Tusk|Stealth Rock|p1a: Sinistcha\n|-sidestart|p1: Bunny Normal|move: Stealth Rock\n|\n|-weather|RainDance|[upkeep]\n|upkeep\n|turn|3\n|\n|t:|1793565968\n|move|p2a: Great Tusk|Knock Off|p1a: Sinistcha\n|-supereffective|p1a: Sinistcha\n|-damage|p1a: Sinistcha|58/100\n|-enditem|p1a: Sinistcha|Heavy-Duty Boots|[from] move: Knock Off|[of] p2a: Great Tusk\n|move|p1a: Sinistcha|Matcha Gotcha|p2a: Great Tusk\n|-supereffective|p2a: Great Tusk\n|-damage|p2a: Great Tusk|21/100\n|-heal|p1a: Sinistcha|100/100|[from] drain|[of] p2a: Great Tusk\n|\n|-weather|RainDance|[upkeep]\n|upkeep\n|turn|4\n|\n|t:|1793565979\n|-end|p2a: Great Tusk|Protosynthesis|[silent]\n|switch|p2a: Iron Crown|Iron Crown|100/100\n|move|p1a: Sinistcha|Strength Sap|p2a: Iron Crown\n|-unboost|p2a: Iron Crown|atk|1\n|\n|-weather|RainDance|[upkeep]\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1793565986
+}
