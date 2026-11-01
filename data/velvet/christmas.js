@@ -135,8 +135,8 @@ exports.moves = (data) => {
 		secondary: null,
 		target: 'normal',
 		type: 'Water',
-		shortDesc: "5 hits, never misses, random phys/spec per hit. 5%: all hits heal. 5%: all hits 2x.",
-		desc: "Hits five times and does not check accuracy. Each hit is physical or special at random, one chance in two, using Attack or Special Attack to match. Before it goes off, two rolls decide the whole move: one time in twenty every hit deals no damage and heals the target by 1/4 of its maximum HP instead, as Present can; otherwise, one time in twenty every hit has double power (50). An Ice-type user gets STAB on it as if it were Water-type. Delibird's signature move.",
+		shortDesc: "5 hits, never misses, random phys/spec per hit. STAB for Ice types (Delibird). 5%: heal, 5%: 2x.",
+		desc: "Hits five times and does not check accuracy. Each hit is physical or special at random, one chance in two, using Attack or Special Attack to match. Before it goes off, two rolls decide the whole move: one time in twenty every hit deals no damage and heals the target by 1/4 of its maximum HP instead, as Present can; otherwise, one time in twenty every hit has double power (50). An Ice-type user, Delibird included, gets STAB on it as if it were Water-type. Delibird's signature move.",
 	};
 	// Each hazard skips a Pokemon with Present Power on switch-in, as it skips Heavy-Duty Boots.
 	for (const id of HAZARDS) {
