@@ -1,0 +1,12 @@
+{
+	"id": "gen9customgame-20-tntb6i",
+	"format": "[Gen 9] Custom Game",
+	"players": [
+		"Bunny Easy",
+		"Jazmin Itzel"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆Jazmin Itzel\n|t:|1793587627\n|gametype|singles\n|badge|p2|bronze|gen9customgame|3-3\n|player|p1|Bunny Easy|bunny.png|1034\n|player|p2|Jazmin Itzel|2|1051\n|gen|9\n|tier|[Gen 9] Custom Game\n|rated|\n|clearpoke\n|poke|p1|Hatterene|\n|poke|p1|Kyurem-Black|\n|poke|p1|Dragonite|\n|poke|p1|Dragapult|\n|poke|p1|Gliscor|\n|poke|p1|Skarmory|\n|poke|p2|Regieleki|\n|poke|p2|Arceus|\n|poke|p2|Lugia|\n|poke|p2|Zacian-Crowned|\n|poke|p2|Mewtwo|\n|poke|p2|Zamazenta-Crowned|\n|teampreview\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1793587636\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Dragapult|Dragapult|317/317\n|switch|p2a: Regieleki|Regieleki|302/302\n|-item|p2a: Regieleki|Air Balloon\n|turn|1\n|\n|t:|1793587646\n|move|p2a: Regieleki|Volt Switch|p1a: Dragapult\n|debug|Transistor boost\n|-resisted|p1a: Dragapult\n|-damage|p1a: Dragapult|233/317\n|\n|t:|1793587650\n|switch|p2a: Arceus|Arceus|382/382|[from] Volt Switch\n|move|p1a: Dragapult|Draco Meteor|p2a: Arceus\n|-damage|p2a: Arceus|144/382\n|-unboost|p1a: Dragapult|spa|2\n|\n|upkeep\n|turn|2\n|\n|t:|1793587670\n|move|p1a: Dragapult|Draco Meteor|p2a: Arceus\n|-damage|p2a: Arceus|24/382\n|-unboost|p1a: Dragapult|spa|2\n|move|p2a: Arceus|Stealth Rock|p1a: Dragapult\n|-sidestart|p1: Bunny Easy|move: Stealth Rock\n|\n|upkeep\n|turn|3\n|\n|t:|1793587683\n|switch|p2a: Zacian|Zacian-Crowned|326/326\n|-ability|p2a: Zacian|Intrepid Sword|boost\n|-boost|p2a: Zacian|atk|1\n|move|p1a: Dragapult|Draco Meteor|p2a: Zacian\n|-immune|p2a: Zacian\n|\n|upkeep\n|turn|4\n|\n|t:|1793587692\n|move|p2a: Zacian|Swords Dance|p2a: Zacian\n|-boost|p2a: Zacian|atk|2\n|move|p1a: Dragapult|Draco Meteor|p2a: Zacian\n|-immune|p2a: Zacian\n|\n|upkeep\n|turn|5\n|\n|t:|1793587699\n|move|p2a: Zacian|Swords Dance|p2a: Zacian\n|-boost|p2a: Zacian|atk|2\n|move|p1a: Dragapult|Draco Meteor|p2a: Zacian\n|-immune|p2a: Zacian\n|\n|upkeep\n|turn|6\n",
+	"inputlog": null,
+	"uploadtime": 1793587706
+}
