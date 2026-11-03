@@ -607,14 +607,20 @@ const RAID_CATCH_HP = 0.25;     // no ball until it is this worn down
 const RAID_CATCH_DMAX = 0.35;   // Dynamax makes it hard to catch
 const RAID_CATCH_GMAX = 0.2;    // Gigantamax harder still - it is the prize
 
-/** The raid boss's side: one Pokemon, under a "Raid ..." name only the RP bot uses. */
+/**
+ * The raid boss's side, under a "Raid ..." name only the RP bot uses: one Pokemon,
+ * or up to three in a shared raid (a trio of legendaries).
+ */
 function isRaidSide(side) {
-	return !!side && /^Raid /.test(side.name) && side.pokemon.length === 1;
+	return !!side && /^Raid /.test(side.name) && side.pokemon.length >= 1 && side.pokemon.length <= 3;
 }
 const raidBossSide = battle => battle.sides.find(isRaidSide) || null;
+/** The boss a ball goes at: in a shared raid, one that is worn out (the first, if none is yet). */
 const raidBoss = (battle) => {
 	const side = raidBossSide(battle);
-	return side ? side.active.find(p => p && !p.fainted) || null : null;
+	if (!side) return null;
+	const up = side.active.filter(p => p && !p.fainted);
+	return (battle.rpShared && up.find(p => p.m.raidDown && !p.m.raidCaught)) || up[0] || null;
 };
 const isGmax = pokemon => !!pokemon && /-Gmax$/i.test(pokemon.species.name);
 
@@ -646,6 +652,268 @@ function keepDynamaxed(battle) {
 		boss.volatiles['dynamax'].duration = 999;
 	}
 }
+
+/*
+ * Shared raids (owner, 3 Nov 2026; src/raid.js says how they work).
+ *
+ * Every raider fights the bosses in a battle of their own, one Pokemon against
+ * one to three Lv. 200 legendaries, and the bosses' HP is shared between all of
+ * those battles: at the end of each turn this battle reports what it took off
+ * each boss and takes on what everybody else did. The bosses Dynamax as they
+ * come out, for three turns, once. A boss is never knocked out: at no HP left
+ * in the raid it is worn out, stops fighting, and can be caught. With every
+ * boss worn out the raiders get CATCH_TURNS to throw before the bosses retreat
+ * (a win); a raid still going at TURN_LIMIT blows everyone away (a loss).
+ */
+function raidModule() {
+	const path = require('path');
+	for (const up of ['../../../../src/raid', '../src/raid']) {
+		try { return require(path.join(__dirname, up)); } catch (e) { if (e.code !== 'MODULE_NOT_FOUND') throw e; }
+	}
+	return null;
+}
+
+function installSharedRaid(battle) {
+	const R = raidModule();
+	const bossSide = raidBossSide(battle);
+	const raiderSide = bossSide && bossSide.foe;
+	const raid = R && raiderSide ? R.forRaider(raiderSide.name) : null;
+	if (!bossSide) return;
+	bossSide.rpRaidBoss = true;
+	// The bosses Dynamax once, as they come out (onSwitchIn): never again by choice.
+	bossSide.dynamaxUsed = true;
+	battle.rpShared = { R, raid, who: raiderSide ? raiderSide.name : '', last: bossSide.pokemon.map(() => 1), catchUntil: 0, over: false };
+	bossSide.pokemon.forEach((pokemon, i) => {
+		pokemon.m.rpRaidBoss = true;
+		pokemon.m.raidIndex = i;
+		// Dynamax is the boss's one gimmick.
+		pokemon.canTerastallize = null;
+		pokemon.canMegaEvo = null;
+		// Joining late: the bosses are already as worn as the raid has made them.
+		const hp = raid && raid.bosses[i] ? raid.bosses[i].hp : 1;
+		pokemon.hp = Math.max(1, Math.round(pokemon.maxhp * hp));
+		battle.rpShared.last[i] = pokemon.hp / pokemon.maxhp;
+		if (raid && raid.bosses[i] && raid.bosses[i].down) pokemon.m.raidDown = true;
+	});
+	/*
+	 * One Pokemon against three: in a triple battle its far side can't reach the
+	 * far boss, and nobody chose to stand there. Everyone in a raid is in reach.
+	 */
+	if (bossSide.pokemon.length > 1) {
+		/*
+		 * A side with fewer Pokemon than places on the field leaves a hole the engine
+		 * trips over (battle.js runAction reads `forceSwitchFlag` off every active
+		 * slot). The raider's spare places get a placeholder that is fainted from
+		 * the start: never chosen for, never switched to, and not counted as left.
+		 */
+		const P = raiderSide.pokemon[0].constructor;
+		while (raiderSide.pokemon.length < bossSide.pokemon.length) {
+			const filler = new P({ species: 'Unown', name: 'Empty Spot', moves: ['Hidden Power'], level: 1, ability: 'Levitate' }, raiderSide);
+			filler.position = raiderSide.pokemon.length;
+			filler.m.raidFiller = true;
+			raiderSide.pokemon.push(filler);
+		}
+		const switchIn = battle.actions.switchIn.bind(battle.actions);
+		battle.actions.switchIn = function (pokemon, pos, ...rest) {
+			if (!pokemon || !pokemon.m.raidFiller) return switchIn(pokemon, pos, ...rest);
+			const side = pokemon.side;
+			side.active[pos] = pokemon;
+			pokemon.position = pos;
+			pokemon.isActive = true;
+			pokemon.hp = 0;
+			pokemon.fainted = true;
+			pokemon.status = 'fnt';
+			side.pokemonLeft--;
+			return true;
+		};
+		for (const side of battle.sides) {
+			const chooseMove = side.chooseMove.bind(side);
+			side.chooseMove = function (moveText, targetLoc = 0, event = '') {
+				const pokemon = this.active[this.getChoiceIndex()];
+				if (!targetLoc && pokemon && !pokemon.fainted && !pokemon.getLockedMove()) {
+					const slot = pokemon.getMoves().find((m, n) => String(n + 1) === String(moveText).trim() || m.id === battle.toID(moveText));
+					let move = slot && battle.dex.moves.get(slot.id);
+					if (move && (pokemon.volatiles['dynamax'] || event === 'dynamax')) move = battle.actions.getMaxMove(move, pokemon) || move;
+					if (move && battle.actions.targetTypeChoices(move.target)) {
+						// A foe still standing: the raider's own Pokemon, or the first boss up.
+						const foe = this.foe.active.find(p => p && !p.fainted);
+						if (foe) targetLoc = foe.position + 1;
+					}
+				}
+				return chooseMove(moveText, targetLoc, event);
+			};
+		}
+		const valid = battle.validTargetLoc.bind(battle);
+		battle.validTargetLoc = (targetLoc, source, targetType) => {
+			if (targetLoc > 0 && ['normal', 'any', 'adjacentFoe'].includes(targetType)) return true;
+			return valid(targetLoc, source, targetType);
+		};
+		for (const side of battle.sides) {
+			for (const pokemon of side.pokemon) {
+				pokemon.isAdjacent = function (other) {
+					if (this.fainted || other.fainted || this === other) return false;
+					return true;
+				};
+			}
+		}
+	}
+	const names = bossSide.pokemon.map(p => p.species.name);
+	battle.add('raw', `<div class="broadcast-red"><b>⚔️ RAID: ${names.join(', ')}!</b> ` +
+		`Lv. ${bossSide.pokemon[0].level}, Dynamaxed for their first three turns. Every raider is fighting ${names.length > 1 ? 'them' : 'it'} at once, ` +
+		`and the HP is shared: what anyone takes off comes off for everybody.<br/>` +
+		`Wear ${names.length > 1 ? 'a boss' : 'it'} out and it stops fighting: <b>then throw a ball</b>. You have ${R ? R.TURN_LIMIT : 15} turns.</div>`);
+}
+
+const sharedRaidOf = battle => (battle.rpShared && battle.rpShared.raid ? battle.rpShared : null);
+
+/** This battle's end of turn: report the damage, take everybody else's, and post the board. */
+/**
+ * Report what this battle took off each boss since it last did, and take on the
+ * raid's HP. Also run when a raider faints (that turn's damage counts) and before
+ * a ball is thrown (a boss worn out in another battle can be caught at once).
+ */
+function shareRaidHp(battle) {
+	const s = sharedRaidOf(battle);
+	const bossSide = raidBossSide(battle);
+	if (!s || !bossSide || s.over) return;
+	const { R, raid } = s;
+	bossSide.pokemon.forEach((pokemon, i) => {
+		const now = pokemon.fainted ? 0 : pokemon.hp / pokemon.maxhp;
+		const hp = R.hit(raid, i, s.last[i] - now, s.who);
+		if (!pokemon.fainted) {
+			const want = hp <= 0 ? 1 : Math.max(1, Math.min(pokemon.maxhp, Math.round(hp * pokemon.maxhp)));
+			if (want !== pokemon.hp) {
+				pokemon.hp = want;
+				battle.add('-sethp', pokemon, pokemon.getHealth, '[silent]');
+			}
+			if (hp <= 0 && !pokemon.m.raidDown) {
+				pokemon.m.raidDown = true;
+				if (pokemon.volatiles['dynamax']) pokemon.removeVolatile('dynamax');
+				battle.add('raw', `<div class="broadcast-green"><b>${pokemon.species.name} is worn out!</b> It has stopped fighting. Throw a ball at it now.</div>`);
+			}
+		}
+		s.last[i] = pokemon.fainted ? 0 : pokemon.hp / pokemon.maxhp;
+	});
+}
+
+/** This battle's end of turn: share the HP, then the board, the catch window and the turn limit. */
+function syncSharedRaid(battle) {
+	const s = sharedRaidOf(battle);
+	const bossSide = raidBossSide(battle);
+	if (!s || !bossSide || s.over) return;
+	const { R, raid } = s;
+	shareRaidHp(battle);
+	R.turnPlayed(raid, s.who, battle.turn);
+	if (R.allDown(raid) && !s.catchUntil) {
+		s.catchUntil = battle.turn + R.CATCH_TURNS;
+		battle.add('raw', `<div class="broadcast-green"><b>Every raid boss is worn out - the raid is won!</b> ` +
+			`You have ${R.CATCH_TURNS} turns to throw before they retreat.</div>`);
+	}
+	battle.add('uhtml', `rpraid${battle.turn}`, R.board(raid));
+	if (s.catchUntil && battle.turn >= s.catchUntil) {
+		s.over = true;
+		battle.add('raw', `<div class="broadcast-blue"><b>The worn-out legendaries retreat.</b> The raid was won: everybody who fought gets the spoils.</div>`);
+		R.finished(raid, s.who, 'won');
+		battle.win(bossSide.foe);
+		return;
+	}
+	if (!s.catchUntil && battle.turn >= R.TURN_LIMIT) {
+		s.over = true;
+		battle.add('raw', `<div class="broadcast-red"><b>The raid bosses unleash a storm</b> and blow every raider away. The raid ran out of turns.</div>`);
+		R.finished(raid, s.who, 'out');
+		battle.win(bossSide);
+	}
+}
+
+/**
+ * A boss's turn: a worn-out boss does nothing, and the bosses facing several
+ * raiders only go for this one some of the time - their attention is split, as
+ * in the games, where a boss picks one raider a turn. A duo or trio counts as one
+ * boss for this: at most one of them attacks you a turn (which one is random),
+ * or three Lv. 200 legendaries one-shot every raider on turn one (3 Nov 2026).
+ */
+function sharedRaidBossMove(battle, pokemon) {
+	const s = sharedRaidOf(battle);
+	if (!s || !pokemon.m.rpRaidBoss) return;
+	if (pokemon.m.raidDown) {
+		battle.add('-message', `${pokemon.species.name} is too worn out to fight!`);
+		return false;
+	}
+	// Who attacks this turn, decided once a turn for the whole boss side.
+	if (s.actorTurn !== battle.turn) {
+		s.actorTurn = battle.turn;
+		const raiders = s.R.standing(s.raid);
+		const able = pokemon.side.active.filter(p => p && !p.fainted && !p.m.raidDown);
+		s.actor = able.length && (raiders <= 1 || battle.randomChance(1, raiders)) ? able[battle.random(able.length)] : null;
+	}
+	if (s.actor !== pokemon) {
+		// Said once a turn, and only when none of them comes for you: the one that does speaks for itself.
+		if (!s.actor && s.saidTurn !== battle.turn) {
+			s.saidTurn = battle.turn;
+			const others = s.raid.raiders.filter(r => r.state === 'fighting' && r.id !== s.R.toID(s.who));
+			const other = others.length ? others[battle.random(others.length)].name : 'another raider';
+			const bosses = pokemon.side.active.filter(p => p && !p.fainted && !p.m.raidDown);
+			battle.add('-message', bosses.length > 1 ? `The legendaries turned their attention to ${other}!` : `${pokemon.species.name} turned its attention to ${other}!`);
+		}
+		return false;
+	}
+}
+
+const SHARED_RAID = {
+	allowsCollab: true,
+	allowsTouhou: true,
+	ruleset: ['Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
+	battle: { trunc: Math.trunc },
+	onBegin() {
+		allGimmicks.call(this);
+		installCatching(this);
+		installItems(this);
+		installSharedRaid(this);
+	},
+	onBattleStart() {
+		if (raidBossSide(this)) this.add('uhtml', 'rpball0', ballPanel(encounters(), 'Balls bounce off a raid boss until it is worn out.'));
+		const s = sharedRaidOf(this);
+		if (s) this.add('uhtml', 'rpraid0', s.R.board(s.raid));
+	},
+	// Dynamax as it comes out, once: the engine ends it after three turns.
+	onSwitchIn(pokemon) {
+		if (!pokemon.m.rpRaidBoss || pokemon.m.raidDynamaxed || pokemon.m.raidDown) return;
+		pokemon.m.raidDynamaxed = true;
+		pokemon.addVolatile('dynamax');
+	},
+	onModifyPriority(priority, pokemon) { return RP_TURN_ACTIONS.onModifyPriority.call(this, priority, pokemon); },
+	onBeforeMovePriority: 100,
+	onBeforeMove(pokemon, target, move) {
+		const turn = RP_TURN_ACTIONS.onBeforeMove.call(this, pokemon, target, move);
+		if (turn === false) return false;
+		return sharedRaidBossMove(this, pokemon);
+	},
+	/*
+	 * A boss never faints: its last point of HP is where it is worn out, which the
+	 * end of the turn decides from everybody's damage. Bosses don't hurt each other
+	 * either (a Groudon's Earthquake next to its trio).
+	 */
+	onDamagePriority: -100,
+	onDamage(damage, target, source, effect) {
+		if (!target.m.rpRaidBoss) return damage;
+		if (effect && effect.effectType === 'Move' && source && source.side === target.side) return false;
+		if (damage >= target.hp) return Math.max(0, target.hp - 1);
+		return damage;
+	},
+	onResidualOrder: 100,
+	onResidual() { syncSharedRaid(this); },
+	onFaint(pokemon) {
+		const s = sharedRaidOf(this);
+		// One Pokemon each: a raider whose Pokemon faints is out of the raid.
+		if (s && !pokemon.m.rpRaidBoss && !pokemon.m.raidFiller) {
+			shareRaidHp(this);
+			s.R.finished(s.raid, s.who, 'out');
+		}
+	},
+	searchShow: false,
+	challengeShow: false,
+	rated: false,
+};
 
 /** A side is wild when it is one or two Pokemon under a "Wild ..." name - which only the RP bot plays as. */
 function isWildSide(side) {
@@ -975,7 +1243,13 @@ function installCatching(battle) {
 			 * same thing by only offering the ball at the end; here it would be a
 			 * wasted turn, so it is refused with the number.
 			 */
-			if (raid) {
+			if (raid && battle.rpShared) {
+				shareRaidHp(battle);
+				const boss = raidBoss(battle);
+				if (!boss || !boss.m.raidDown) {
+					return this.emitChoiceError(`A ball bounces off a raid boss that can still fight. Wear one out first`);
+				}
+			} else if (raid) {
 				const boss = raidBoss(battle);
 				if (!boss) return this.emitChoiceError(`There's nothing to throw at`);
 				const left = boss.hp / boss.maxhp;
@@ -985,7 +1259,7 @@ function installCatching(battle) {
 			}
 			// Two wild Pokemon at once can't be caught: the ball wouldn't know which.
 			// Same as the games - knock one out, then throw at the other.
-			const standing = foe.active.filter(p => p && !p.fainted);
+			const standing = raid && battle.rpShared ? [raidBoss(battle)].filter(Boolean) : foe.active.filter(p => p && !p.fainted);
 			if (standing.length > 1) {
 				return this.emitChoiceError(`There are two wild Pokémon out. Knock one out first, then throw at the other`);
 			}
@@ -1089,7 +1363,7 @@ function throwBall(battle, pokemon, ballId, sure = false, fail = false) {
 	 * raid because everyone has spent ten turns wearing it down, not because it
 	 * was ever likely - and a Gigantamax one, the thing people came for, less so.
 	 */
-	const raidChance = raid ? chance * (isGmax(wild) ? RAID_CATCH_GMAX : RAID_CATCH_DMAX) : chance;
+	const raidChance = raid && !battle.rpShared ? chance * (isGmax(wild) ? RAID_CATCH_GMAX : RAID_CATCH_DMAX) : chance;
 
 	const rng = () => battle.random();
 	const caught = !fail && (roamer ? rng() < raidChance : sure || rng() < raidChance);
@@ -1105,6 +1379,19 @@ function throwBall(battle, pokemon, ballId, sure = false, fail = false) {
 		battle.add('-message', `Gotcha! ${wild.name} was caught!`);
 		battle.add('-message', "In a real encounter, what you catch goes into your character's box (on the bot and in the doc), and the ball comes out of your bag. Here nothing is kept.");
 		tutorialNextSteps(battle);
+		battle.win(side);
+		return;
+	}
+	if (caught && raid && battle.rpShared) {
+		const s = battle.rpShared;
+		wild.m.raidCaught = true;
+		const boss = s.raid && s.raid.bosses[wild.m.raidIndex];
+		if (boss) boss.caughtBy = boss.caughtBy ? `${boss.caughtBy}, ${side.name}` : side.name;
+		battle.add('-message', `Gotcha! ${wild.name} was caught!`);
+		battle.add('raw', `<div class="broadcast-green"><b>Caught ${species.name}!</b> It goes to your box with the raid's spoils.<br/>` +
+			`<code>((Caught ${species.name}, Lv. ${wild.level}, with ${aOrAn(ball.name)}, in a raid))</code></div>`);
+		if (s.R && s.raid) s.R.finished(s.raid, s.who, 'caught');
+		s.over = true;
 		battle.win(side);
 		return;
 	}
@@ -1388,6 +1675,9 @@ exports.Formats = [
 		challengeShow: true,
 		rated: false,
 	},
+	{ ...SHARED_RAID, name: "[Gen 9] RP Raid Battle", desc: "A raid: your one Pokémon against a Lv. 200 legendary, its HP shared with every raider." },
+	{ ...SHARED_RAID, name: "[Gen 9] RP Raid Battle (Duo)", gameType: 'doubles', desc: "A raid against two Lv. 200 legendaries at once." },
+	{ ...SHARED_RAID, name: "[Gen 9] RP Raid Battle (Trio)", gameType: 'triples', desc: "A raid against three Lv. 200 legendaries at once." },
 	{
 		name: "[Gen 9] RP Raid",
 		allowsCollab: true,

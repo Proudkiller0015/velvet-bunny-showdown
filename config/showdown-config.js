@@ -2001,7 +2001,7 @@ const RP_BOT = process.env.PS_RP_BOT_NAME || 'RP Guide';
  * other bot, but are never remembered - the next "Hiker Bob" could be a person.
  */
 let isRpBot = () => false;
-const RP_FORMATS = new Set(['gen9rpbattlewildencounter', 'gen9rpbattlewilddoubles', 'gen9rptutorial']);
+const RP_FORMATS = new Set(['gen9rpbattlewildencounter', 'gen9rpbattlewilddoubles', 'gen9rptutorial', 'gen9rpraidbattle', 'gen9rpraidbattleduo', 'gen9rpraidbattletrio']);
 // Set once the roleplay hooks are up: what /tutorial needs to start a battle.
 let tutorialDeps = null;
 // Set by roleplay(): the RP bot turning an encounter down (the /rpbusy command).
@@ -2582,6 +2582,11 @@ function roleplay() {
 				// party: the whole team the player brought, benched Pokémon included (party EXP goes to all of it).
 				enc.result = { ...rp.resultFromLog(enc, this.room.log.log, toID(winnerName)), replay, party: partyOf(this, enc.userid) };
 				enc.status = 'done';
+				// A raider who forfeited or left is out of the raid, so the NPCs stop waiting for them.
+				if (enc.raid) {
+					const R = require('../../../src/raid');
+					R.finished(R.get(enc.raid), enc.showdown, 'left');
+				}
 			}
 		} catch (e) { console.log(`[roleplay] ${e.message}`); }
 		const out = end.call(this, winnerName, ...rest);

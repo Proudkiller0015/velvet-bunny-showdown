@@ -315,6 +315,100 @@ function requestEncounter(payload, deps) {
 }
 
 /*
+ * A raid (owner, 3 Nov 2026; src/raid.js): up to four characters, one Pokémon
+ * each, against one to three Lv. 200 legendaries, from the Discord bot's raid
+ * lobby. Every person gets an encounter of their own - a wild one, so the bag,
+ * the balls, the result and the settling on Discord are an encounter's - all
+ * pointing at one raid, whose HP they share. Seats nobody took go to NPC raiders,
+ * whose battles run here. The raid's legendaries can be caught (that is the prize).
+ */
+const RAID_FORMATS = ['gen9rpraidbattle', 'gen9rpraidbattleduo', 'gen9rpraidbattletrio'];
+const RAID_LEVEL = 200;
+const RAID_SUFFIX = ['', ' II', ' III', ' IV'];
+function requestRaid(payload, deps) {
+	const R = require('./raid');
+	const Dex = require('./rp-dex')();
+	const wanted = (Array.isArray(payload.bosses) ? payload.bosses : []).slice(0, 3).map(b => (typeof b === 'string' ? { species: b } : b || {}));
+	if (!wanted.length) return { ok: false, code: 'bosses', message: 'Name one to three legendaries for the raid.' };
+	const team = [];
+	for (const want of wanted) {
+		const species = Dex.species.get(want.species);
+		if (!species.exists) return { ok: false, code: 'bosses', message: `No Pokémon called "${want.species}".` };
+		const set = E.wildSet(species, RAID_LEVEL);
+		set.level = RAID_LEVEL;
+		if (want.shiny) set.shiny = true;
+		team.push(set);
+	}
+	const people = (Array.isArray(payload.raiders) ? payload.raiders : []).slice(0, R.MAX_RAIDERS);
+	const problems = [];
+	for (const p of people) {
+		const userid = toID(p.showdown);
+		if (!userid) problems.push(`${p.character || 'Somebody'} has no Showdown name linked`);
+		else if (!deps.isOnline(userid)) problems.push(`**${p.showdown}** isn't online on Showdown`);
+		else if (openFor(userid)) problems.push(`**${p.showdown}** already has an encounter open (\`!complete\` it first)`);
+		if (!Array.isArray(p.playerTeam) || p.playerTeam.length !== 1) problems.push(`**${p.showdown || p.character}** must bring exactly one Pokémon`);
+	}
+	if (problems.length) return { ok: false, code: 'raiders', message: problems.join('; ') + '.' };
+
+	const raidId = crypto.randomBytes(6).toString('hex');
+	const format = RAID_FORMATS[team.length - 1];
+	const base = `Raid ${Dex.species.get(team[0].species).baseSpecies}`;
+	const raid = R.create({
+		id: raidId,
+		bosses: team.map(s => ({ species: s.species, name: s.species })),
+		raiders: people.map(p => ({ name: p.showdown, pokemon: p.playerTeam[0].species })),
+		npcs: payload.npcs !== false,
+	});
+	const opened = [];
+	people.forEach((p, i) => {
+		const suffix = RAID_SUFFIX[i] ?? ` ${i + 1}`;
+		const enc = {
+			id: crypto.randomBytes(8).toString('hex'),
+			createdAt: Date.now(),
+			userid: toID(p.showdown),
+			showdown: p.showdown,
+			character: p.character || '',
+			discord: p.discord || '',
+			place: 'raid',
+			placeName: 'a raid',
+			channel: String(payload.channel || 'raid'),
+			balls: p.balls && typeof p.balls === 'object' ? normaliseBalls(p.balls) : null,
+			failBalls: 0,
+			items: p.items && typeof p.items === 'object' ? normaliseItems(p.items) : null,
+			badges: E.clampBadges(p.badges),
+			warning: '',
+			box: normaliseBox(p.box),
+			playerTeam: p.playerTeam.slice(0, 1),
+			caught: Math.max(0, Math.floor(Number(p.caught) || 0)),
+			dexCaught: Array.isArray(p.dexCaught) ? normaliseDex(p.dexCaught) : null,
+			gimmicks: p.gimmicks && typeof p.gimmicks === 'object'
+				? { mega: !!p.gimmicks.mega, zmove: !!p.gimmicks.zmove, dynamax: !!p.gimmicks.dynamax, tera: !!p.gimmicks.tera }
+				: null,
+			kind: 'wild',
+			double: team.length > 1,
+			// Each person's boss is its own account: four called "Raid Rayquaza" would be one account in four battles.
+			name: base.slice(0, 18 - suffix.length).trim() + suffix,
+			avatar: '',
+			team,
+			ai: 'hard',
+			format,
+			raid: raidId,
+			catchable: true,
+			status: 'waiting',
+			result: null,
+		};
+		encounters.set(enc.id, enc);
+		if (deps.spawn(enc) === false) R.finished(raid, p.showdown, 'left');
+		opened.push(enc);
+	});
+	const { Teams } = require('pokemon-showdown');
+	for (const r of raid.raiders.filter(x => x.npc)) {
+		void R.runNpc(raid, r, { format, bossName: base, bossTeam: Teams.pack(team), log: msg => console.log('[raid]', msg) });
+	}
+	return { ok: true, raid: { id: raidId, bosses: team.map(s => s.species), raiders: raid.raiders.map(r => ({ name: r.name, npc: r.npc, pokemon: r.pokemon })) }, encounters: opened.map(publicView) };
+}
+
+/*
  * The RP bot could not be handed the encounter (it is offline): deps.spawn has
  * put the encounter in 'error' with the reason. Discord hears that now, as a
  * failure, instead of "you've been challenged" for a challenge nobody sends
@@ -869,6 +963,8 @@ function publicView(enc) {
 		result: enc.result,
 		invalid: enc.invalid || null,
 		tutorial: !!enc.tutorial,
+		// A raid encounter: which raid (src/raid.js), so Discord can group its results.
+		raid: enc.raid || null,
 		// A rare encounter (the rare wild or a legendary's theme): the bot and the battle say so.
 		rare: isRare(enc),
 	};
@@ -912,6 +1008,10 @@ function normaliseBox(box) {
 }
 
 function checkTeam(enc, sets) {
+	// A raider brings one Pokémon: the one picked in the raid lobby.
+	if (enc && enc.raid && Array.isArray(sets) && sets.length !== 1) {
+		return { ok: false, problems: [`a raid is fought with **one** Pokémon, and this team has ${sets.length}`] };
+	}
 	if (!enc || !enc.box || !Array.isArray(sets)) return { ok: true, problems: [] };
 	/*
 	 * The base dex, and the RP dex for what only it has: the Touhou Pokemon (a caught
@@ -1072,7 +1172,8 @@ function resultFromLog(enc, lines, winnerid) {
 	}
 	let caught = null;
 	for (const line of lines) {
-		const m = /\(\(Caught (.+?), Lv\. (\d+), with an? (.+?)\)\)/.exec(line);
+		// A raid's line ends ", in a raid", which is not part of the ball's name.
+		const m = /\(\(Caught (.+?), Lv\. (\d+), with an? (.+?)(?:, in a raid)?\)\)/.exec(line);
 		if (m) caught = { species: m[1], level: Number(m[2]), ball: E.findBall(m[3]) ? E.findBall(m[3]).id : null };
 	}
 	if (caught) {
@@ -1088,6 +1189,11 @@ function resultFromLog(enc, lines, winnerid) {
 		const item = E.findBattleItem(m[2]);
 		if (item) itemsUsed[item.id] = (itemsUsed[item.id] || 0) + 1;
 	}
+	/*
+	 * A raid boss is Lv. 200 to fight, not to keep: it joins the box at the level of
+	 * the Pokémon that brought it down, so nobody's box gets a Lv. 200 (3 Nov 2026).
+	 */
+	if (caught && enc.raid) caught.level = Math.max(1, Math.min(100, Number(enc.playerTeam && enc.playerTeam[0] && enc.playerTeam[0].level) || 50));
 	// The tutorial's catch goes nowhere, so it has no line for the doc: the "Gotcha" says it.
 	if (!caught && enc.tutorial && lines.some(l => /^\|-message\|Gotcha! .+ was caught!$/.test(l))) {
 		caught = { species: enc.team[0].species, level: enc.team[0].level, ball: 'poke', shiny: false };
@@ -1396,6 +1502,26 @@ function httpRoute(deps, log) {
 			}).catch(() => send(res, 400, { ok: false, code: 'bad', message: 'Bad request.' }));
 			return true;
 		}
+		if (url === '/rp/raid' && req.method === 'POST') {
+			readJson(req).then(body => {
+				const checked = verify(body);
+				if (checked.error) return send(res, 403, { ok: false, code: 'forbidden', message: checked.error });
+				let answer;
+				try {
+					answer = requestRaid(checked.payload, deps);
+				} catch (e) {
+					log(`raid failed: ${e.stack || e.message}`);
+					answer = { ok: false, code: 'error', message: 'Something went wrong starting that raid.' };
+				}
+				if (!answer.ok || !deps.opening) return send(res, 200, answer);
+				// Each raider's battle opens by itself (their one Pokémon came from Discord): wait for the rooms.
+				Promise.all(answer.encounters.map(e => Promise.resolve(deps.opening(e.id)).catch(() => null))).then(rooms => {
+					answer.encounters = answer.encounters.map((e, i) => ({ ...publicView(encounters.get(e.id) || e), roomid: rooms[i] || null }));
+					send(res, 200, answer);
+				});
+			}).catch(() => send(res, 400, { ok: false, code: 'bad', message: 'Bad request.' }));
+			return true;
+		}
 		if (url === '/rp/allow' && req.method === 'POST') {
 			readJson(req).then(body => {
 				const checked = verify(body);
@@ -1481,6 +1607,6 @@ module.exports = {
 	packSets,
 	freeCatch, FREE_CATCHES, allowCatch, summoned, chosenSet, musicFor, caughtBefore, roamerReport, partyOf,
 	pvpCheck, pvpNotice, friendlyNotice, isAgreed, verify, placeFor, requestEncounter, requestTutorial, completeEncounter, canUseItem, usedInLog, setBags, bagFor, pvpItemsFor, canUsePvpItem, NPC_ITEMS_EACH, publicView, canThrow, thrownInLog, resultFromLog, openFor, encounterAccount, isEncounterName, isLocalOnly, LOOPBACK,
-	isRare, checkTeam, gimmickIn, GIMMICK_ITEM, GIMMICK_NAME, sidesInLog, startMatch,
+	isRare, checkTeam, gimmickIn, GIMMICK_ITEM, GIMMICK_NAME, sidesInLog, startMatch, requestRaid, RAID_FORMATS, RAID_LEVEL,
 	httpRoute, encounters, RP_ROOM, CHALLENGE_MS, recordFinished, finishedSince,
 };
