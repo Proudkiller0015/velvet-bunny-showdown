@@ -12,7 +12,7 @@
     { "file": "weather-trio-rse", "start": "17:19", "species": [] },
     { "file": "deoxys-frlg", "start": "18:44", "species": [] },
     { "file": "regis-rse", "start": "21:43", "species": [] },
-    { "file": "weather-trio", "start": "23:12", "species": ["groudon", "kyogre", "rayquaza", "rayquazamega"] },
+    { "file": "weather-trio", "start": "23:12", "species": ["groudon", "kyogre", "rayquaza"] },
     { "file": "deoxys", "start": "24:50", "species": ["deoxys", "deoxysattack", "deoxysdefense", "deoxysspeed"] },
     { "file": "regis", "start": "27:34", "species": ["regirock", "regice", "registeel"] },
     { "file": "weather-trio-hgss", "start": "29:14", "species": [] },
@@ -59,6 +59,17 @@
       ],
       "species": [
         "raishin"
+      ]
+    },
+    {
+      "file": "rayquaza-mega",
+      "source": "Pokemon Legends Z-A, Rogue Mega Rayquaza battle (the owner's download, 3 Nov 2026); loop measured on the full upload",
+      "loop": [
+        9500,
+        115750
+      ],
+      "species": [
+        "rayquazamega"
       ]
     }
   ]
