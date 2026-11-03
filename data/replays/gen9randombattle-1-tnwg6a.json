@@ -1,0 +1,12 @@
+{
+	"id": "gen9randombattle-1-tnwg6a",
+	"format": "[Gen 9] Random Battle",
+	"players": [
+		"mil014",
+		"Velvet Bunny"
+	],
+	"rating": null,
+	"log": "|j|☆mil014\n|j|☆Velvet Bunny\n|t:|1793714356\n|gametype|singles\n|player|p1|mil014|169|\n|player|p2|Velvet Bunny|bunny.png|\n|gen|9\n|tier|[Gen 9] Random Battle\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1793714356\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Azelf|Azelf, L82|100/100\n|switch|p2a: Electivire|Electivire, L84, M|100/100\n|turn|1\n|c|☆Velvet Bunny|Good luck! Playing on **hard**. (PM me to change it.)\n|\n|t:|1793714368\n|move|p1a: Azelf|Psychic|p2a: Electivire\n|-damage|p2a: Electivire|43/100\n|-damage|p1a: Azelf|91/100|[from] item: Life Orb\n|move|p2a: Electivire|Supercell Slam|p1a: Azelf\n|-damage|p1a: Azelf|15/100\n|-damage|p2a: Electivire|33/100|[from] item: Life Orb\n|\n|upkeep\n|turn|2\n|\n|t:|1793714370\n|move|p1a: Azelf|Psychic|p2a: Electivire\n|-damage|p2a: Electivire|0 fnt\n|faint|p2a: Electivire\n|-damage|p1a: Azelf|5/100|[from] item: Life Orb\n|\n|upkeep\n|\n|t:|1793714371\n|switch|p2a: Basculegion|Basculegion-F, L83, F|100/100\n|turn|3\n|\n|t:|1793714374\n|move|p1a: Azelf|Knock Off|p2a: Basculegion\n|-supereffective|p2a: Basculegion\n|-damage|p2a: Basculegion|20/100\n|-enditem|p2a: Basculegion|Choice Specs|[from] move: Knock Off|[of] p1a: Azelf\n|-damage|p1a: Azelf|0 fnt|[from] item: Life Orb\n|faint|p1a: Azelf\n|move|p2a: Basculegion|Ice Beam|p1: Azelf|[notarget]\n|-fail|p2a: Basculegion\n|\n|upkeep\n|\n|t:|1793714379\n|switch|p1a: Raikou|Raikou, L81|100/100\n|-ability|p1a: Raikou|Pressure\n|turn|4\n|\n|t:|1793714381\n|switch|p2a: Dialga|Dialga-Origin, L73|100/100\n|-ability|p2a: Dialga|Pressure\n|move|p1a: Raikou|Thunderbolt|p2a: Dialga\n|-resisted|p2a: Dialga\n|-damage|p2a: Dialga|82/100\n|-status|p2a: Dialga|par\n|\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1793714386
+}
