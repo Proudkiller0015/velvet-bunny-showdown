@@ -1,0 +1,12 @@
+{
+	"id": "gen9randombattle-2-tnwg6a",
+	"format": "[Gen 9] Random Battle",
+	"players": [
+		"mil014",
+		"Velvet Bunny"
+	],
+	"rating": null,
+	"log": "|j|☆mil014\n|j|☆Velvet Bunny\n|t:|1793714595\n|gametype|singles\n|player|p1|mil014|169|\n|player|p2|Velvet Bunny|bunny.png|\n|gen|9\n|tier|[Gen 9] Random Battle\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1793714595\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Quaquaval|Quaquaval, L79, M|100/100\n|switch|p2a: Trevenant|Trevenant, L89, F|100/100\n|turn|1\n|c|☆Velvet Bunny|Good luck! Playing on **stockfish**. (PM me to change it.)\n|\n|t:|1793714604\n|switch|p1a: Pecharunt|Pecharunt, L77|100/100\n|switch|p2a: Ampharos|Ampharos, L88, M|100/100\n|\n|upkeep\n|turn|2\n|\n|t:|1793714612\n|switch|p1a: Magnezone|Magnezone, L85|100/100\n|move|p2a: Ampharos|Discharge|p1a: Magnezone\n|-resisted|p1a: Magnezone\n|-damage|p1a: Magnezone|81/100\n|\n|-heal|p1a: Magnezone|87/100|[from] item: Leftovers\n|upkeep\n|turn|3\n|\n|t:|1793714615\n|move|p1a: Magnezone|Iron Defense|p1a: Magnezone\n|-boost|p1a: Magnezone|def|2\n|move|p2a: Ampharos|Focus Blast|p1a: Magnezone\n|-supereffective|p1a: Magnezone\n|-damage|p1a: Magnezone|6/100\n|\n|-heal|p1a: Magnezone|12/100|[from] item: Leftovers\n|upkeep\n|turn|4\n|\n|t:|1793714618\n|move|p1a: Magnezone|Body Press|p2a: Ampharos\n|-damage|p2a: Ampharos|61/100\n|move|p2a: Ampharos|Discharge|p1a: Magnezone\n|-resisted|p1a: Magnezone\n|-damage|p1a: Magnezone|0 fnt\n|faint|p1a: Magnezone\n|\n|upkeep\n|\n|t:|1793714622\n|switch|p1a: Trevenant|Trevenant, L89, F|100/100\n|turn|5\n|\n|t:|1793714625\n|switch|p2a: Cetitan|Cetitan, L82, M|100/100\n|move|p1a: Trevenant|Poltergeist|p2a: Cetitan|[miss]\n|-miss|p1a: Trevenant|p2a: Cetitan\n|\n|upkeep\n|turn|6\n",
+	"inputlog": null,
+	"uploadtime": 1793714626
+}
