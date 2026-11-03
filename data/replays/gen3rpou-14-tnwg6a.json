@@ -1,0 +1,12 @@
+{
+	"id": "gen3rpou-14-tnwg6a",
+	"format": "[Gen 3] RP OU",
+	"players": [
+		"Bunny Hard",
+		"UHOH Double Switch"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Hard\n|j|☆UHOH Double Switch\n|t:|1793748624\n|gametype|singles\n|badge|p2|gold|gen3rpou|1-1\n|player|p1|Bunny Hard|bunny.png|1292\n|player|p2|UHOH Double Switch|102|1536\n|gen|3\n|tier|[Gen 3] RP OU\n|rated|\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Beat Up Nicknames Mod: Beat Up will not reveal any party members\n|rule|Endless Battle Clause: Forcing endless battles is banned\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Switch Priority Clause Mod: Faster Pokémon switch first\n|rule|Species Clause: Limit one of each Pokémon\n|rule|OHKO Clause: OHKO moves are banned\n|rule|Evasion Items Clause: Evasion items are banned\n|rule|Evasion Moves Clause: Evasion moves are banned\n|rule|One Boost Passer Clause: Limit one Baton Passer that has a way to boost its stats\n|rule|Freeze Clause Mod: Limit one foe frozen\n|rule|Baton Pass Stat Clause: No Baton Passer may have a way to boost its Speed\n|\n|t:|1793748624\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Salamence|Salamence, F|100/100\n|switch|p2a: Skarmory|Skarmory, F|100/100\n|-ability|p1a: Salamence|Intimidate|boost\n|-unboost|p2a: Skarmory|atk|1\n|turn|1\n|c|☆Bunny Hard|Good luck! Playing on **hard**.\n|\n|t:|1793748630\n|move|p1a: Salamence|Flamethrower|p2a: Skarmory\n|-supereffective|p2a: Skarmory\n|-damage|p2a: Skarmory|41/100\n|move|p2a: Skarmory|Spikes|p1a: Salamence\n|-sidestart|p1: Bunny Hard|Spikes\n|\n|-heal|p2a: Skarmory|47/100|[from] item: Leftovers\n|upkeep\n|turn|2\n|\n|t:|1793748637\n|move|p2a: Skarmory|Protect|p2a: Skarmory\n|-singleturn|p2a: Skarmory|Protect\n|move|p1a: Salamence|Flamethrower|p2a: Skarmory\n|-activate|p2a: Skarmory|Protect\n|\n|-heal|p2a: Skarmory|53/100|[from] item: Leftovers\n|upkeep\n|turn|3\n|\n|t:|1793748648\n|switch|p2a: Swampert|Swampert, F|100/100\n|move|p1a: Salamence|Flamethrower|p2a: Swampert\n|-resisted|p2a: Swampert\n|-damage|p2a: Swampert|86/100\n|\n|-heal|p2a: Swampert|92/100|[from] item: Leftovers\n|upkeep\n|turn|4\n|\n|t:|1793748656\n|move|p1a: Salamence|Iron Defense|p1a: Salamence\n|-boost|p1a: Salamence|def|2\n|move|p2a: Swampert|Ice Beam|p1a: Salamence\n|-supereffective|p1a: Salamence\n|-damage|p1a: Salamence|10/100\n|-status|p1a: Salamence|frz\n|\n|-heal|p1a: Salamence|16/100 frz|[from] item: Leftovers\n|-heal|p2a: Swampert|99/100|[from] item: Leftovers\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1793748668
+}
