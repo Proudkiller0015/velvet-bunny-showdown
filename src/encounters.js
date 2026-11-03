@@ -478,6 +478,14 @@ const TRAINER_CLASSES = [
 	{ id: 'gapwanderer', title: 'Gap Wanderer', avatar: 'kimonogirl-gen2', types: [], sex: 'f', gap: true, short: 'Wanderer',
 		aliases: ['gap', 'wanderer', 'gapyoukai', 'sukima'],
 		intro: 'The air tears open like a ribbon pulled loose, and someone steps out of a gap full of eyes.' },
+	/*
+	 * The Scammer (owner, 2 Nov 2026): a con artist who brings the tricksters - Illusion,
+	 * Disguise, Pickpocket, Pay Day. Its names come from everywhere on purpose, so the
+	 * joke is the con and never one country.
+	 */
+	{ id: 'scammer', title: 'Scammer', avatar: 'gambler', types: ['Dark', 'Normal', 'Ghost'], sex: 'm', aliases: ['conartist', 'con', 'grifter'],
+		names: ['Rajesh', 'Amit', 'Deepak', 'Chad', 'Brad', 'Kyle', 'Nigel', 'Trevor', 'Gary', 'Dmitri', 'Sergei', 'Emeka', 'Tunde',
+			'Vinnie', 'Tony', 'Klaus', 'Pierre', 'Pajeet', 'Amyr', 'Wei', 'Kenji', 'Javier', 'Thiago', 'Mehmet', 'Bjorn', 'Seamus', 'Bruce', 'Hans'] },
 	{ id: 'twins', title: 'Twins', avatar: 'twins-gen4', types: ['Normal', 'Fairy', 'Electric', 'Bug'], sex: 'pair', pair: true },
 	{ id: 'youngcouple', title: 'Young Couple', avatar: 'youngcouple-gen4dp', types: ['Normal', 'Fairy', 'Psychic', 'Water'], sex: 'pair', pair: true, short: 'Couple' },
 ];
@@ -534,7 +542,7 @@ function findClass(input) {
 
 /** "Hiker Bob", always within Showdown's 18 characters. */
 function trainerName(cls, rng = Math.random) {
-	const name = pick(NAMES[cls.sex] || NAMES.m, rng);
+	const name = pick(cls.names || NAMES[cls.sex] || NAMES.m, rng);
 	for (const title of [cls.title, cls.short].filter(Boolean)) {
 		const full = `${title} ${name}`;
 		if (full.length <= 18) return full;
