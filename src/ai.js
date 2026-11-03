@@ -410,6 +410,21 @@ const BOUNCES = new Set(['magicbounce', 'prescience']);
 // Good as Gold blocks every status move aimed at it (Blissey clicked Thunder Wave into Gholdengo three times).
 const STATUS_PROOF = new Set(['moonlitvenom', 'purifyingsalt', 'comatose', 'goodasgold']);
 const CORRODES = new Set(['corrosion', 'moonlitvenom']);
+/*
+ * The battle reports weather and terrain by the simulator's names (RainDance, Grassy Terrain);
+ * the damage calculator only knows its own (Rain, Grassy) and silently ignores anything else,
+ * so until 3 Nov 2026 every estimate was made as if the field were empty: Rillaboom clicked a
+ * full-power Earthquake in its own Grassy Terrain, and rain Surf was counted at 1x.
+ */
+const CALC_WEATHER = {
+	raindance: 'Rain', sunnyday: 'Sun', sandstorm: 'Sand', snowscape: 'Snow', snow: 'Snow', hail: 'Hail',
+	primordialsea: 'Heavy Rain', desolateland: 'Harsh Sunshine', deltastream: 'Strong Winds',
+};
+function calcField(weather, terrain) {
+	const w = CALC_WEATHER[String(weather || '').toLowerCase().replace(/[^a-z]/g, '')];
+	const t = String(terrain || '').replace(/^move: /, '').replace(/ Terrain$/, '');
+	return new calc.Field({ weather: w || undefined, terrain: /^(Electric|Grassy|Psychic|Misty)$/.test(t) ? t : undefined });
+}
 // Weather Speed doublers, ours and the originals: [ability id, weathers].
 const WEATHER_SPEED = {
 	diamonddust: ['snowscape', 'hail'], slushrush: ['snowscape', 'hail'],
@@ -873,7 +888,7 @@ class BattleAI {
 					me.boosts = { ...(me.boosts || {}), ...h.myBoosts };
 					me.originalCurHP = me.maxHP();
 					const them = this.foePokemon(gen, { ...foe, boosts: h.foeBoosts || {}, tera: h.foeTera, hp: 100, maxhp: 100 }, { bare: true });
-					const field = new calc.Field({ weather: h.weather || undefined, terrain: h.terrain || undefined });
+					const field = calcField(h.weather, h.terrain);
 					const expect = this.damagePct(gen, them, me, d.name, field);
 					if (expect < 4) continue;
 					h.ratio = (h.dealt / h.maxhp * 100) / expect;
@@ -1390,7 +1405,7 @@ class BattleAI {
 	 */
 	teamPlan(gen, state, request) {
 		return this.memo('teamPlan', () => {
-			const field = new calc.Field({ weather: state.weather || undefined, terrain: state.terrain || undefined });
+			const field = calcField(state.weather, state.terrain);
 			const ours = (request.side.pokemon || []).filter(p => !/fnt/.test(p.condition || ''));
 			const { list: theirs } = this.foeRemaining(state);
 			const rows = new Map();
@@ -1462,7 +1477,7 @@ class BattleAI {
 
 		// Offensive presence: can it still threaten what is in front of it?
 		if (foes.length) {
-			const field = new calc.Field({ weather: state.weather || undefined, terrain: state.terrain || undefined });
+			const field = calcField(state.weather, state.terrain);
 			let best = 0;
 			for (const foe of foes) {
 				for (const m of entry.moves || []) best = Math.max(best, this.damageToFoe(gen, me, foe, toName(m, 'moves'), field));
@@ -3115,7 +3130,7 @@ class BattleAI {
 
 	forceSwitch(request, state) {
 		const gen = this.gen(state.gen);
-		const field = new calc.Field({ weather: state.weather || undefined, terrain: state.terrain || undefined });
+		const field = calcField(state.weather, state.terrain);
 		const options = request.side.pokemon
 			.map((p, i) => ({ p, i: i + 1 }))
 			.filter(({ p }) => !p.active && !/fnt/.test(p.condition));
@@ -3141,7 +3156,7 @@ class BattleAI {
 
 	turnChoice(request, state) {
 		const gen = this.gen(state.gen);
-		const field = new calc.Field({ weather: state.weather || undefined, terrain: state.terrain || undefined });
+		const field = calcField(state.weather, state.terrain);
 		const choices = [];
 
 		request.active.forEach((active, index) => {

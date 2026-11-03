@@ -174,7 +174,9 @@ function synthesize(dex, species, moves) {
 const ALTERNATIVES = [['seismictoss', 'velvetpress']];
 
 /** Moves an ability makes pointless: pickMoves drops them from that set's pool. */
-const ABILITY_COVERS = { caretaker: ['healbell', 'aromatherapy'] };
+// Grassy Terrain halves Earthquake, Bulldoze and Magnitude (the owner, 3 Nov 2026: Rillaboom ran EQ in its own terrain); High Horsepower is the Ground move for them.
+const GRASSY_HALVES = ['earthquake', 'bulldoze', 'magnitude'];
+const ABILITY_COVERS = { caretaker: ['healbell', 'aromatherapy'], grassysurge: GRASSY_HALVES, seedsower: GRASSY_HALVES };
 /** ...and what takes the freed slot: stall Blissey's Toxic (Thunder Wave read as speed control and a setup answer, and teams built round it stopped adding a breaker). */
 const ABILITY_ADDS = { caretaker: { swap: ['thunderwave'], add: ['toxic', 'velvetpress'] } };
 
