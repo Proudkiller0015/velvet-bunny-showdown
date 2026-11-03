@@ -76,6 +76,16 @@
 
 		var moves = window.calc.MOVES[GEN];
 		for (var move in DATA.moves) if (!moves[move]) moves[move] = DATA.moves[move];
+		// Real moves this server changed (Hyper Beam, Twister, Misty Explosion...): our power, type and category.
+		for (var moved in (DATA.changedMoves || {})) {
+			if (!moves[moved]) continue;
+			var row = DATA.changedMoves[moved];
+			// 0 is a power worked out in the move (Punishment): the calculator has its own sum for those.
+			if (row.bp) moves[moved].bp = row.bp;
+			moves[moved].type = row.type;
+			if (row.category !== 'Special') moves[moved].category = row.category;
+			else delete moves[moved].category;
+		}
 
 		// These two are lists of names rather than tables of data: the calculator
 		// only ever asks whether it has heard of them.
@@ -334,6 +344,14 @@
 		 */
 		if (move.name === 'Present Surge' && attacker.types && attacker.types.indexOf('Ice') >= 0 && attacker.types.indexOf('Water') < 0) {
 			out.push([6144, 4096]);
+		}
+		/*
+		 * Explosion, Self-Destruct and Misty Explosion halve the target's defence, as in
+		 * Generations 1-4 (classic-mechanics.js). The server does it as double power, which is
+		 * the same sum, so the calculator is told the same.
+		 */
+		if (move.name === 'Explosion' || move.name === 'Self-Destruct' || move.name === 'Misty Explosion') {
+			out.push([8192, 4096]);
 		}
 		var trio = TRIO[String(attacker.ability || '')];
 		if (trio) {

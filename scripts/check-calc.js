@@ -153,6 +153,18 @@ const CASES = [
 		move: 'Brave Bird',
 	},
 	{
+		name: "Self-Destruct halves the target's Defense (classic mechanics)",
+		attacker: 'A|snorlax||thickfat|selfdestruct,bodyslam,rest,curse|Serious|,,,,,|||||',
+		defender: 'B|gliscor||poisonheal|earthquake,protect,toxic,uturn|Serious|244,,36,,,|||||',
+		move: 'Self-Destruct',
+	},
+	{
+		name: "Hyper Beam at our power",
+		attacker: 'A|snorlax||thickfat|hyperbeam,bodyslam,rest,curse|Adamant|,252,,,,|||||',
+		defender: 'B|blissey||naturalcure|tackle,protect,rest,softboiled|Bold|252,,252,,,|||||',
+		move: 'Hyper Beam',
+	},
+	{
 		name: 'Present Power doubles Defense (Mega Delibird hit)',
 		attacker: 'A|garchomp||roughskin|dragonclaw,protect,rest,earthquake|Adamant|,252,4,,,252|||||',
 		defender: 'B|delibirdmega|delibirdite|presentpower|iceshard,bravebird,protect,roost|Impish|252,,252,,,|||||',

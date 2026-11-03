@@ -112,6 +112,15 @@ for (const id of MOVES) {
 	moves[found.name] = moveRow(found);
 }
 
+// Real moves this server changed (classic mechanics, the creation trio): written over the calculator's own rows.
+const changedMoves = {};
+for (const file of ['classic-mechanics.js', 'creation-trio.js']) {
+	for (const id of require(path.join(PACKAGE, 'dist', 'data', 'velvet', file)).CHANGED_MOVES || []) {
+		const found = Dex.moves.get(id);
+		if (found.exists) changedMoves[found.name] = moveRow(found);
+	}
+}
+
 const abilities = ABILITIES.map(id => {
 	const found = Dex.abilities.get(id);
 	if (!found.exists) throw new Error(`${id} is not an ability`);
@@ -138,6 +147,7 @@ window.__VELVET_CALC_DATA = {
 \tspecies: ${JSON.stringify(species)},
 \tchangedSpecies: ${JSON.stringify(changedSpecies)},
 \tmoves: ${JSON.stringify(moves)},
+\tchangedMoves: ${JSON.stringify(changedMoves)},
 \tabilities: ${JSON.stringify(abilities)},
 \titems: ${JSON.stringify(items)},
 };
