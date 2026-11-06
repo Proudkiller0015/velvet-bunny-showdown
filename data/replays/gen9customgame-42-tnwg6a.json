@@ -1,0 +1,12 @@
+{
+	"id": "gen9customgame-42-tnwg6a",
+	"format": "[Gen 9] Custom Game",
+	"players": [
+		"Bunny Normal",
+		"Jazmin Itzel"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Normal\n|j|☆Jazmin Itzel\n|t:|1794005409\n|gametype|singles\n|badge|p1|silver|gen9customgame|2-2\n|badge|p2|gold|gen9customgame|1-1\n|player|p1|Bunny Normal|bunny.png|1211\n|player|p2|Jazmin Itzel|266|1397\n|gen|9\n|tier|[Gen 9] Custom Game\n|rated|\n|bigerror|Warning: One player isn't adhering to a 510 EV limit, and the other player is.\n|clearpoke\n|poke|p1|Corviknight|\n|poke|p1|Arceus|\n|poke|p1|Skeledirge|\n|poke|p1|Chesnaught|\n|poke|p1|Blissey|\n|poke|p1|Slowking-Galar|\n|poke|p2|Meowscarada, F|\n|poke|p2|Gardevoir-Mega, F|\n|poke|p2|Greninja-*|\n|poke|p2|Dondozo, F|\n|poke|p2|Dusclops, F|\n|poke|p2|Haxorus, M|\n|teampreview\n|c|☆Bunny Normal|Good luck! Playing on **normal**.\n|\n|t:|1794005415\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Chesnaught|Chesnaught|380/380\n|switch|p2a: Meowscarada|Meowscarada, F, shiny|294/294\n|turn|1\n|\n|t:|1794005422\n|move|p2a: Meowscarada|U-turn|p1a: Chesnaught\n|-damage|p1a: Chesnaught|293/380\n|\n|t:|1794005429\n|switch|p2a: Haxorus|Haxorus, M, shiny|293/293|[from] U-turn\n|move|p1a: Chesnaught|Body Press|p2a: Haxorus\n|-damage|p2a: Haxorus|122/293\n|\n|-heal|p1a: Chesnaught|316/380|[from] item: Leftovers\n|upkeep\n|turn|2\n|\n|t:|1794005440\n|move|p2a: Haxorus|Sacred Fire|p1a: Chesnaught\n|-supereffective|p1a: Chesnaught\n|-damage|p1a: Chesnaught|0 fnt\n|debug|move failed because it did nothing\n|faint|p1a: Chesnaught\n|-damage|p2a: Haxorus|93/293|[from] item: Life Orb\n|\n|upkeep\n|\n|t:|1794005440\n|switch|p1a: Arceus|Arceus|444/444\n|turn|3\n|\n|t:|1794005455\n|switch|p2a: Dusclops|Dusclops, F|284/284\n|-terastallize|p1a: Arceus|Normal\n|move|p1a: Arceus|Body Slam|p2a: Dusclops\n|-immune|p2a: Dusclops\n|\n|upkeep\n|turn|4\n|\n|t:|1794005465\n|move|p1a: Arceus|Will-O-Wisp|p2a: Dusclops\n|-status|p2a: Dusclops|brn\n|move|p2a: Dusclops|Toxic|p1a: Arceus\n|-status|p1a: Arceus|tox\n|\n|-damage|p1a: Arceus|417/444 tox|[from] psn\n|-damage|p2a: Dusclops|267/284 brn|[from] brn\n|upkeep\n|turn|5\n|\n|t:|1794005473\n|switch|p1a: Skeledirge|Skeledirge|412/412\n|move|p2a: Dusclops|Night Shade|p1a: Skeledirge\n|-damage|p1a: Skeledirge|312/412\n|\n|-damage|p2a: Dusclops|250/284 brn|[from] brn\n|upkeep\n|turn|6\n",
+	"inputlog": null,
+	"uploadtime": 1794005475
+}
