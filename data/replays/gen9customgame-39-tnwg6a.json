@@ -1,0 +1,12 @@
+{
+	"id": "gen9customgame-39-tnwg6a",
+	"format": "[Gen 9] Custom Game",
+	"players": [
+		"Bunny Normal",
+		"Jazmin Itzel"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Normal\n|j|☆Jazmin Itzel\n|t:|1794004771\n|gametype|singles\n|badge|p1|silver|gen9customgame|2-2\n|badge|p2|gold|gen9customgame|1-1\n|player|p1|Bunny Normal|bunny.png|1211\n|player|p2|Jazmin Itzel|266|1363\n|gen|9\n|tier|[Gen 9] Custom Game\n|rated|\n|bigerror|Warning: One player isn't adhering to a 510 EV limit, and the other player is.\n|clearpoke\n|poke|p1|Pecharunt|\n|poke|p1|Clefable|\n|poke|p1|Skarmory|\n|poke|p1|Kyurem-Black|\n|poke|p1|Chansey|\n|poke|p1|Iron Moth|\n|poke|p2|Meowscarada, F|\n|poke|p2|Gardevoir-Mega, F|\n|poke|p2|Greninja-*|\n|poke|p2|Dondozo, F|\n|poke|p2|Dusclops, F|\n|poke|p2|Haxorus, M|\n|teampreview\n|c|☆Bunny Normal|Good luck! Playing on **normal**.\n|\n|t:|1794004777\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Skarmory|Skarmory|334/334\n|switch|p2a: Meowscarada|Meowscarada, F, shiny|294/294\n|turn|1\n|\n|t:|1794004785\n|move|p2a: Meowscarada|U-turn|p1a: Skarmory\n|-resisted|p1a: Skarmory\n|-damage|p1a: Skarmory|314/334\n|\n|t:|1794004793\n|switch|p2a: Haxorus|Haxorus, M, shiny|293/293|[from] U-turn\n|move|p1a: Skarmory|Roost|p1a: Skarmory\n|-heal|p1a: Skarmory|334/334\n|-singleturn|p1a: Skarmory|move: Roost\n|\n|upkeep\n|turn|2\n|\n|t:|1794004804\n|move|p2a: Haxorus|Shift Gear|p2a: Haxorus\n|-boost|p2a: Haxorus|spe|2\n|-boost|p2a: Haxorus|atk|1\n|move|p1a: Skarmory|Body Press|p2a: Haxorus\n|-damage|p2a: Haxorus|183/293\n|\n|upkeep\n|turn|3\n|\n|t:|1794004814\n|move|p2a: Haxorus|Sacred Fire|p1a: Skarmory\n|-supereffective|p1a: Skarmory\n|-ability|p1a: Skarmory|Sturdy\n|-damage|p1a: Skarmory|1/334\n|-damage|p2a: Haxorus|154/293|[from] item: Life Orb\n|move|p1a: Skarmory|Body Press|p2a: Haxorus\n|-damage|p2a: Haxorus|30/293\n|\n|-heal|p1a: Skarmory|21/334|[from] item: Leftovers\n|upkeep\n|turn|4\n|\n|t:|1794004832\n|switch|p2a: Dusclops|Dusclops, F|284/284\n|switch|p1a: Pecharunt|Pecharunt|380/380\n|\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1794004835
+}
