@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-48-tnwg6a",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"pedrndrin",
+		"Velvet Bunny"
+	],
+	"rating": null,
+	"log": "|j|☆pedrndrin\n|j|☆Velvet Bunny\n|t:|1794057209\n|gametype|singles\n|player|p1|pedrndrin|2|\n|player|p2|Velvet Bunny|bunny.png|\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1794057209\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Ursaluna|Ursaluna-Bloodmoon, L79, M|308/308\n|switch|p2a: Zoroark|Zoroark, L83, M|235/235\n|-transform|p2a: Zoroark|p1a: Ursaluna|[from] ability: Imposter\n|turn|1\n|c|☆Velvet Bunny|Good luck! Playing on **normal**. (PM me to change it.)\n|-message|pedrndrin forfeited.\n|\n|win|Velvet Bunny\n",
+	"inputlog": ">start {\"formatid\":\"gen9rprandombattle\",\"seed\":\"sodium,28eaaf01dca1aa2e678121693b95abb8\"}\n>player p1 {\"name\":\"pedrndrin\",\"avatar\":\"2\",\"rating\":0,\"seed\":\"sodium,ac41e9403d2720e2327a2f4eeb1a5c77\"}\n>player p2 {\"name\":\"Velvet Bunny\",\"avatar\":\"bunny.png\",\"rating\":0,\"seed\":\"sodium,4d43ff69c37044aad55edde9a6ce9795\"}\n>chat ☆Velvet Bunny|Good luck! Playing on **normal**. (PM me to change it.)\n>forcelose p1",
+	"uploadtime": 1794057231
+}
