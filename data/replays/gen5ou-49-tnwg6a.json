@@ -1,0 +1,12 @@
+{
+	"id": "gen5ou-49-tnwg6a",
+	"format": "[Gen 5] OU",
+	"players": [
+		"Bunny Normal",
+		"pedrndrin"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Normal\n|j|☆pedrndrin\n|t:|1794057248\n|gametype|singles\n|player|p1|Bunny Normal|bunny.png|1000\n|player|p2|pedrndrin|2|1000\n|gen|5\n|tier|[Gen 5] OU\n|rated|\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Endless Battle Clause: Forcing endless battles is banned\n|rule|Species Clause: Limit one of each Pokémon\n|rule|OHKO Clause: OHKO moves are banned\n|rule|Evasion Items Clause: Evasion items are banned\n|rule|Evasion Moves Clause: Evasion moves are banned\n|rule|Evasion Abilities Clause: Evasion abilities are banned\n|rule|Sleep Moves Clause: Sleep-inducing moves are banned\n|rule|Baton Pass Stat Clause: No Baton Passer may have a way to boost its stats\n|clearpoke\n|poke|p1|Chansey, F|item\n|poke|p1|Forretress, M|item\n|poke|p1|Starmie|item\n|poke|p1|Latios, M|item\n|poke|p1|Landorus-Therian, M|item\n|poke|p1|Skarmory, M|item\n|poke|p2|Typhlosion, M|item\n|poke|p2|Gastrodon, M|item\n|poke|p2|Gliscor, M|item\n|poke|p2|Weavile, M|item\n|poke|p2|Skarmory, F|item\n|poke|p2|Rotom-Wash|item\n|teampreview\n|c|☆Bunny Normal|Good luck! Playing on **normal**.\n|\n|t:|1794057259\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Chansey|Chansey, F|100/100\n|switch|p2a: Gliscor|Gliscor, M|100/100\n|turn|1\n|\n|t:|1794057265\n|move|p2a: Gliscor|Stealth Rock|p1a: Chansey\n|-sidestart|p1: Bunny Normal|move: Stealth Rock\n|move|p1a: Chansey|Seismic Toss|p2a: Gliscor\n|-damage|p2a: Gliscor|72/100\n|\n|-status|p2a: Gliscor|tox|[from] item: Toxic Orb\n|upkeep\n|turn|2\n|\n|t:|1794057278\n|move|p2a: Gliscor|Substitute|p2a: Gliscor\n|-start|p2a: Gliscor|Substitute\n|-damage|p2a: Gliscor|47/100 tox\n|move|p1a: Chansey|Seismic Toss|p2a: Gliscor\n|-end|p2a: Gliscor|Substitute\n|\n|-heal|p2a: Gliscor|60/100 tox|[from] ability: Poison Heal\n|upkeep\n|turn|3\n|\n|t:|1794057287\n|move|p2a: Gliscor|U-turn|p1a: Chansey\n|-damage|p1a: Chansey|91/100\n|\n|t:|1794057294\n|switch|p2a: Typhlosion|Typhlosion, M|100/100|[from] U-turn\n|move|p1a: Chansey|Seismic Toss|p2a: Typhlosion\n|-damage|p2a: Typhlosion|67/100\n|\n|upkeep\n|turn|4\n|\n|t:|1794057304\n|move|p2a: Typhlosion|Focus Blast|p1a: Chansey\n|-supereffective|p1a: Chansey\n|-damage|p1a: Chansey|68/100\n|move|p1a: Chansey|Seismic Toss|p2a: Typhlosion\n|-damage|p2a: Typhlosion|33/100\n|\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1794057319
+}
