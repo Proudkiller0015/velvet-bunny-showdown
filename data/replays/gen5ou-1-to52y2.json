@@ -1,0 +1,12 @@
+{
+	"id": "gen5ou-1-to52y2",
+	"format": "[Gen 5] OU",
+	"players": [
+		"Bunny Easy",
+		"pedrindrin"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆pedrindrin\n|t:|1794067054\n|gametype|singles\n|badge|p2|silver|gen5ou|2-2\n|player|p1|Bunny Easy|bunny.png|1000\n|player|p2|pedrindrin|1|1000\n|gen|5\n|tier|[Gen 5] OU\n|rated|\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Endless Battle Clause: Forcing endless battles is banned\n|rule|Species Clause: Limit one of each Pokémon\n|rule|OHKO Clause: OHKO moves are banned\n|rule|Evasion Items Clause: Evasion items are banned\n|rule|Evasion Moves Clause: Evasion moves are banned\n|rule|Evasion Abilities Clause: Evasion abilities are banned\n|rule|Sleep Moves Clause: Sleep-inducing moves are banned\n|rule|Baton Pass Stat Clause: No Baton Passer may have a way to boost its stats\n|clearpoke\n|poke|p1|Jirachi|item\n|poke|p1|Garchomp, M|item\n|poke|p1|Dragonite, M|item\n|poke|p1|Scizor, M|item\n|poke|p1|Starmie|item\n|poke|p1|Alakazam, F|item\n|poke|p2|Typhlosion, M|item\n|poke|p2|Gastrodon, M|item\n|poke|p2|Gliscor, M|item\n|poke|p2|Weavile, M|item\n|poke|p2|Skarmory, M|item\n|poke|p2|Rotom-Wash|item\n|teampreview\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1794067065\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Alakazam|Alakazam, F|100/100\n|switch|p2a: Gliscor|Gliscor, M|100/100\n|turn|1\n|\n|t:|1794067084\n|move|p1a: Alakazam|Grass Knot|p2a: Gliscor\n|-damage|p2a: Gliscor|75/100\n|move|p2a: Gliscor|U-turn|p1a: Alakazam\n|-supereffective|p1a: Alakazam\n|-damage|p1a: Alakazam|18/100\n|\n|t:|1794067099\n|switch|p2a: Weavile|Weavile, M|100/100|[from] U-turn\n|-ability|p2a: Weavile|Pressure\n|\n|upkeep\n|turn|2\n|\n|t:|1794067106\n|move|p2a: Weavile|Fake Out|p1a: Alakazam\n|-damage|p1a: Alakazam|0 fnt\n|faint|p1a: Alakazam\n|\n|upkeep\n|\n|t:|1794067106\n|switch|p1a: Scizor|Scizor, M|100/100\n|turn|3\n|\n|t:|1794067135\n|switch|p2a: Skarmory|Skarmory, M|100/100\n|move|p1a: Scizor|Quick Attack|p2a: Skarmory\n|-resisted|p2a: Skarmory\n|-crit|p2a: Skarmory\n|-damage|p2a: Skarmory|81/100\n|-damage|p1a: Scizor|84/100|[from] item: Rocky Helmet|[of] p2a: Skarmory\n|\n|upkeep\n|turn|4\n|\n|t:|1794067145\n|move|p1a: Scizor|Quick Attack|p2a: Skarmory\n|-resisted|p2a: Skarmory\n|-damage|p2a: Skarmory|71/100\n|-damage|p1a: Scizor|68/100|[from] item: Rocky Helmet|[of] p2a: Skarmory\n|move|p2a: Skarmory|Whirlwind|p1a: Scizor\n|drag|p1a: Garchomp|Garchomp, M|100/100\n|\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1794067160
+}
