@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-52-tnwg6a",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Easy",
+		"okakoakoaka"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆okakoakoaka\n|t:|1794061597\n|gametype|singles\n|player|p1|Bunny Easy|bunny.png|1152\n|player|p2|okakoakoaka|266|1000\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1794061597\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Roaring Moon|Roaring Moon, L72|270/270\n|switch|p2a: Infernape|Infernape, L82, F|235/235\n|turn|1\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|l|☆okakoakoaka\n|player|p2|\n|inactive|okakoakoaka has 2 minutes to come back and make a move, or they forfeit.\n|-message|okakoakoaka lost due to inactivity.\n|\n|win|Bunny Easy\n",
+	"inputlog": ">start {\"formatid\":\"gen9rprandombattle\",\"seed\":\"sodium,b41814a60552cbcc1c72c5935f8e3b39\",\"rated\":\"Rated battle\"}\n>player p1 {\"name\":\"Bunny Easy\",\"avatar\":\"bunny.png\",\"rating\":1152,\"seed\":\"sodium,dea509002893ab31b74a4c7f86028555\"}\n>player p2 {\"name\":\"okakoakoaka\",\"avatar\":\"266\",\"rating\":1000,\"seed\":\"sodium,e397887682664dd278ce95eb667a099b\"}\n>chat ☆Bunny Easy|Good luck! Playing on **easy**.\n>forcelose p2",
+	"uploadtime": 1794061746
+}
