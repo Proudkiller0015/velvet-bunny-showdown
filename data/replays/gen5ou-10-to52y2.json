@@ -1,0 +1,12 @@
+{
+	"id": "gen5ou-10-to52y2",
+	"format": "[Gen 5] OU",
+	"players": [
+		"Bunny Easy",
+		"pedrindrin"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆pedrindrin\n|t:|1794069447\n|gametype|singles\n|badge|p1|silver|gen5ou|2-2\n|badge|p2|bronze|gen5ou|3-3\n|player|p1|Bunny Easy|bunny.png|1131\n|player|p2|pedrindrin|1|1089\n|gen|5\n|tier|[Gen 5] OU\n|rated|\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Endless Battle Clause: Forcing endless battles is banned\n|rule|Species Clause: Limit one of each Pokémon\n|rule|OHKO Clause: OHKO moves are banned\n|rule|Evasion Items Clause: Evasion items are banned\n|rule|Evasion Moves Clause: Evasion moves are banned\n|rule|Evasion Abilities Clause: Evasion abilities are banned\n|rule|Sleep Moves Clause: Sleep-inducing moves are banned\n|rule|Baton Pass Stat Clause: No Baton Passer may have a way to boost its stats\n|clearpoke\n|poke|p1|Forretress, M|item\n|poke|p1|Jirachi|item\n|poke|p1|Starmie|item\n|poke|p1|Latios, M|item\n|poke|p1|Landorus-Therian, M|item\n|poke|p1|Skarmory, F|item\n|poke|p2|Heatran, F|item\n|poke|p2|Gastrodon, M|item\n|poke|p2|Gliscor, M|item\n|poke|p2|Weavile, M|item\n|poke|p2|Skarmory, M|item\n|poke|p2|Rotom-Wash|item\n|teampreview\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1794069452\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Starmie|Starmie|100/100\n|switch|p2a: Skarmory|Skarmory, M|100/100\n|-item|p1a: Starmie|Air Balloon\n|turn|1\n|\n|t:|1794069458\n|move|p1a: Starmie|Hydro Pump|p2a: Skarmory|[miss]\n|-miss|p1a: Starmie|p2a: Skarmory\n|move|p2a: Skarmory|Spikes|p1a: Starmie\n|-sidestart|p1: Bunny Easy|Spikes\n|\n|upkeep\n|turn|2\n|\n|t:|1794069467\n|move|p1a: Starmie|Hydro Pump|p2a: Skarmory\n|-damage|p2a: Skarmory|32/100\n|move|p2a: Skarmory|Whirlwind|p1a: Starmie\n|drag|p1a: Landorus|Landorus-Therian, M|100/100\n|-ability|p1a: Landorus|Intimidate|boost\n|-unboost|p2a: Skarmory|atk|1\n|\n|upkeep\n|turn|3\n|\n|t:|1794069475\n|move|p1a: Landorus|Psychic|p2a: Skarmory\n|-resisted|p2a: Skarmory\n|-damage|p2a: Skarmory|9/100\n|-damage|p1a: Landorus|90/100|[from] item: Life Orb\n|move|p2a: Skarmory|Roost|p2a: Skarmory\n|-heal|p2a: Skarmory|59/100\n|-singleturn|p2a: Skarmory|move: Roost\n|\n|upkeep\n|turn|4\n|\n|t:|1794069490\n|move|p1a: Landorus|Focus Blast|p2a: Skarmory\n|-damage|p2a: Skarmory|0 fnt\n|faint|p2a: Skarmory\n|-damage|p1a: Landorus|80/100|[from] item: Life Orb\n|\n|upkeep\n|\n|t:|1794069498\n|switch|p2a: Gastrodon|Gastrodon, M|100/100\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1794069500
+}
