@@ -1,0 +1,12 @@
+{
+	"id": "gen9nationaldexag-7-to52y2",
+	"format": "[Gen 9] National Dex AG",
+	"players": [
+		"Bunny Easy",
+		"okokokokokokokoau"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆okokokokokokokoau\n|t:|1794069204\n|gametype|singles\n|badge|p1|gold|gen9nationaldexag|1-1\n|badge|p2|silver|gen9nationaldexag|2-2\n|player|p1|Bunny Easy|bunny.png|1080\n|player|p2|okokokokokokokoau|n|1000\n|gen|9\n|tier|[Gen 9] National Dex AG\n|rated|\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Endless Battle Clause: Forcing endless battles is banned\n|clearpoke\n|poke|p1|Skarmory, F|\n|poke|p1|Toxapex, F|\n|poke|p1|Ting-Lu|\n|poke|p1|Grimmsnarl, M|\n|poke|p1|Cresselia, F|\n|poke|p1|Hatterene, F|\n|poke|p2|Shedinja|\n|poke|p2|Cyclizar, F|\n|poke|p2|Ho-Oh|\n|poke|p2|Gengar, F|\n|poke|p2|Gothitelle, F|\n|poke|p2|Tyranitar, M|\n|teampreview\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1794069391\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Grimmsnarl|Grimmsnarl, M|100/100\n|switch|p2a: Ho-Oh|Ho-Oh|100/100\n|turn|1\n|\n|t:|1794069472\n|move|p2a: Ho-Oh|Sacred Fire|p1a: Grimmsnarl\n|-damage|p1a: Grimmsnarl|33/100\n|-status|p1a: Grimmsnarl|brn\n|move|p1a: Grimmsnarl|Spirit Break|p2a: Ho-Oh\n|-resisted|p2a: Ho-Oh\n|-damage|p2a: Ho-Oh|95/100\n|-unboost|p2a: Ho-Oh|spa|1\n|\n|-damage|p1a: Grimmsnarl|26/100 brn|[from] brn\n|upkeep\n|turn|2\n|\n|t:|1794069569\n|move|p2a: Ho-Oh|Sacred Fire|p1a: Grimmsnarl\n|-damage|p1a: Grimmsnarl|0 fnt\n|faint|p1a: Grimmsnarl\n|\n|upkeep\n|\n|t:|1794069569\n|switch|p1a: Toxapex|Toxapex, F|100/100\n|turn|3\n|\n|t:|1794069670\n|switch|p2a: Gengar|Gengar, F|100/100\n|move|p1a: Toxapex|Liquidation|p2a: Gengar\n|-damage|p2a: Gengar|63/100\n|\n|upkeep\n|turn|4\n|\n|t:|1794069758\n|detailschange|p2a: Gengar|Gengar-Mega, F\n|-mega|p2a: Gengar|Gengar|Gengarite\n|move|p2a: Gengar|Encore|p1a: Toxapex\n|-start|p1a: Toxapex|Encore\n|move|p1a: Toxapex|Liquidation|p2a: Gengar\n|-damage|p2a: Gengar|33/100\n|\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1794069760
+}
