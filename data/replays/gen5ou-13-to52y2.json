@@ -1,0 +1,12 @@
+{
+	"id": "gen5ou-13-to52y2",
+	"format": "[Gen 5] OU",
+	"players": [
+		"Bunny Easy",
+		"pedrindrin"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆pedrindrin\n|t:|1794070091\n|gametype|singles\n|badge|p1|silver|gen5ou|2-2\n|badge|p2|bronze|gen5ou|3-3\n|player|p1|Bunny Easy|bunny.png|1164\n|player|p2|pedrindrin|1|1106\n|gen|5\n|tier|[Gen 5] OU\n|rated|\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Endless Battle Clause: Forcing endless battles is banned\n|rule|Species Clause: Limit one of each Pokémon\n|rule|OHKO Clause: OHKO moves are banned\n|rule|Evasion Items Clause: Evasion items are banned\n|rule|Evasion Moves Clause: Evasion moves are banned\n|rule|Evasion Abilities Clause: Evasion abilities are banned\n|rule|Sleep Moves Clause: Sleep-inducing moves are banned\n|rule|Baton Pass Stat Clause: No Baton Passer may have a way to boost its stats\n|clearpoke\n|poke|p1|Excadrill, F|item\n|poke|p1|Rotom-Wash|item\n|poke|p1|Reuniclus, F|item\n|poke|p1|Chansey, F|item\n|poke|p1|Thundurus-Therian, M|item\n|poke|p1|Breloom, F|item\n|poke|p2|Heatran, F|item\n|poke|p2|Gastrodon, M|item\n|poke|p2|Gliscor, M|item\n|poke|p2|Weavile, M|item\n|poke|p2|Skarmory, M|item\n|poke|p2|Rotom-Wash|item\n|teampreview\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1794070096\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Excadrill|Excadrill, F|100/100\n|switch|p2a: Gliscor|Gliscor, M|100/100\n|-ability|p1a: Excadrill|Mold Breaker\n|turn|1\n|\n|t:|1794070102\n|move|p1a: Excadrill|Iron Head|p2a: Gliscor\n|-damage|p2a: Gliscor|69/100\n|cant|p2a: Gliscor|flinch\n|\n|-status|p2a: Gliscor|tox|[from] item: Toxic Orb\n|upkeep\n|turn|2\n|\n|t:|1794070110\n|move|p1a: Excadrill|Iron Head|p2a: Gliscor\n|-damage|p2a: Gliscor|37/100 tox\n|move|p2a: Gliscor|Stealth Rock|p1a: Excadrill\n|-sidestart|p1: Bunny Easy|move: Stealth Rock\n|\n|-heal|p2a: Gliscor|50/100 tox|[from] ability: Poison Heal\n|upkeep\n|turn|3\n|\n|t:|1794070121\n|move|p1a: Excadrill|Iron Head|p2a: Gliscor\n|-damage|p2a: Gliscor|20/100 tox\n|move|p2a: Gliscor|Earthquake|p1a: Excadrill\n|-supereffective|p1a: Excadrill\n|-damage|p1a: Excadrill|5/100\n|\n|-heal|p2a: Gliscor|33/100 tox|[from] ability: Poison Heal\n|upkeep\n|turn|4\n|\n|t:|1794070130\n|switch|p2a: Rotom|Rotom-Wash|100/100\n|move|p1a: Excadrill|Iron Head|p2a: Rotom\n|-resisted|p2a: Rotom\n|-damage|p2a: Rotom|92/100\n|\n|-heal|p2a: Rotom|98/100|[from] item: Leftovers\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1794070140
+}
