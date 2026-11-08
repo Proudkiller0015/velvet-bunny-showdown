@@ -1368,7 +1368,7 @@ function replaySnapshots() {
 		for (const room of Rooms.rooms.values()) {
 			try {
 				const battle = room.battle;
-				if (!battle || battle.ended || !room.uploadReplay) continue;
+				if (!battle || battle.ended || !room.uploadReplay || isHidden(room)) continue;
 				const turn = currentTurn(room);
 				if (turn < 1 || turn - (battle.velvetSnapshotTurn || 0) < SNAPSHOT_TURNS) continue;
 				battle.velvetSnapshotTurn = turn;
@@ -1403,6 +1403,11 @@ function goodbye() {
 			try {
 				if (room.battle && !room.battle.ended) {
 					battles++;
+					if (isHidden(room)) {
+						room.add(`|html|<div class="broadcast-red"><b>The server is restarting.</b> ` +
+							`This battle cannot survive it, and as a hidden battle it keeps no replay.</div>`).update();
+						continue;
+					}
 					room.add(`|html|<div class="broadcast-red"><b>The server is restarting.</b> ` +
 						`This battle cannot survive it - a replay is being saved, and you can ` +
 						`reconnect in about a minute.</div>`).update();
@@ -1482,6 +1487,21 @@ function rpSectionFirst() {
  * random battles, ladder games - is still reported in the lobby, and every
  * battle still goes to the logs room.
  */
+/**
+ * A battle a player hid (/hidenext, /ionext): written down in the logs room only, never announced in the lobby
+ * or the Roleplay room, no automatic replay and nothing on the Discord RP feed (the owner, 8 Nov 2026: private
+ * sparring may be in our logs, never in the lobby). A player can still upload its replay by hand.
+ */
+function isHidden(room) {
+	if (!room) return false;
+	if (room.settings && room.settings.isPrivate) return true;
+	// The lobby is told while the battle is still being built, before Showdown marks the room private:
+	// the players' /hidenext is only on the options it was started with then.
+	const game = room.battle || room.game;
+	const players = (game && game.options && game.options.players) || [];
+	return players.some(p => p && (p.hidden || p.inviteOnly));
+}
+
 function rpBattlesToRoleplay() {
 	const G = Rooms.global;
 	if (!G || G.__velvetRpReport || typeof G.onCreateBattleRoom !== 'function') return;
@@ -1489,9 +1509,10 @@ function rpBattlesToRoleplay() {
 	const original = G.onCreateBattleRoom;
 	G.onCreateBattleRoom = function (players, room, options) {
 		const format = String((room && room.battle && room.battle.format) || (options && options.format) || '');
-		if (!/^gen\d+rp/.test(format)) return original.call(this, players, room, options);
+		const hidden = isHidden(room);
+		if (!hidden && !/^gen\d+rp/.test(format)) return original.call(this, players, room, options);
 		const saved = Config.reportbattles;
-		Config.reportbattles = ['roleplay', 'logs'];
+		Config.reportbattles = hidden ? ['logs'] : ['roleplay', 'logs'];
 		try {
 			return original.call(this, players, room, options);
 		} finally {
@@ -2572,7 +2593,7 @@ function roleplay() {
 		try {
 			// Every RP battle keeps a replay, so it can be posted on Discord - PvP
 			// ones included. The name is known before the upload finishes.
-			if (!wasEnded && /^gen\d+rp/.test(this.format) && !this.rpInvalid) {
+			if (!wasEnded && /^gen\d+rp/.test(this.format) && !this.rpInvalid && !isHidden(this.room)) {
 				const boot = typeof LoginServer !== 'undefined' && LoginServer.velvetReplayBoot;
 				const { id } = this.room.getReplayData();
 				if (boot && id) replay = `/replay/${id}-${boot}`;
