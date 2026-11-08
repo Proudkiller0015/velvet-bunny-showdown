@@ -1494,6 +1494,9 @@ class TeamBuilder {
 			if (/doesn't evolve|does not evolve/.test(p)) { constraints.mustEvolve = true; constraints.tag = 'evo'; learned = true; continue; }
 			if (/share a type/.test(p)) { constraints.shareType = true; learned = true; continue; }
 			if (/share a color|share a colour/.test(p)) { constraints.shareColor = true; learned = true; continue; }
+			// Same Letter Clause (National Dex Monoletter) and Statmons (one base stat over 100 on everybody).
+			if (/starting with the same letter/.test(p)) { constraints.shareLetter = true; learned = true; continue; }
+			if (/same base stat over 100/.test(p)) { constraints.shareStat = true; learned = true; continue; }
 			if (/total level limit of (\d+)/.test(p)) {
 				const cap = parseInt(p.match(/total level limit of (\d+)/)[1], 10);
 				const counted = ctx.ruleTable.pickedTeamSize || team.length;
@@ -1535,6 +1538,21 @@ class TeamBuilder {
 			for (const s of pool) (colors[s.color] = colors[s.color] || []).push(s);
 			const viable = Object.keys(colors).filter(c => colors[c].length >= ctx.size);
 			if (viable.length) pool = colors[pick(rng, viable)];
+		}
+		if (constraints.shareLetter) {
+			const letters = {};
+			for (const s of pool) {
+				const letter = (/^[A-Za-z]/.exec(s.name) || [''])[0].toUpperCase();
+				if (letter) (letters[letter] = letters[letter] || []).push(s);
+			}
+			const viable = Object.keys(letters).filter(l => letters[l].length >= ctx.size);
+			if (viable.length) pool = letters[pick(rng, viable)];
+		}
+		if (constraints.shareStat) {
+			const stats = {};
+			for (const s of pool) for (const [stat, value] of Object.entries(s.baseStats)) if (value > 100) (stats[stat] = stats[stat] || []).push(s);
+			const viable = Object.keys(stats).filter(stat => stats[stat].length >= ctx.size);
+			if (viable.length) pool = stats[pick(rng, viable)];
 		}
 		return this.rank(ctx, pool, rng);
 	}
@@ -1687,6 +1705,7 @@ class TeamBuilder {
 	 */
 	drafts(ctx, constraints) {
 		return ctx.size === 6 && ctx.gameType === 'singles' && !constraints.shareType && !constraints.shareColor &&
+			!constraints.shareLetter && !constraints.shareStat &&
 			!constraints.crossEvo && !constraints.level;
 	}
 

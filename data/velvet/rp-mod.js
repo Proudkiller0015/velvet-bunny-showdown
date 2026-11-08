@@ -57,13 +57,29 @@ function same(a, b) {
 
 let DIFF = null;
 
+/*
+ * The tiers RP was built on (7 Nov 2026, the owner: update Showdown's own metas "without touching rp").
+ * Showdown's own formats now take their tiers from current Showdown (upstream/, scripts/sync-showdown.js),
+ * which replaces the base formats-data. RP keeps the one it had: data/frozen-base is that file as the
+ * package shipped it, and the RP layer is worked out from it and laid over it, so no tier shift, ban or
+ * legality change upstream reaches an RP format. Without the frozen copy (it is copied in by
+ * setup-config), RP simply follows the base as before.
+ */
+function frozenFormatsData() {
+	try {
+		return require('../frozen-base/formats-data.js').FormatsData;
+	} catch (e) {
+		return null;
+	}
+}
+
 /** What data/velvet changes, table by table: whole new entries, and changed fields of existing ones. */
 function diff() {
 	if (DIFF) return DIFF;
 	const pristine = {};
 	const patched = {};
 	for (const [table, file] of TABLES) {
-		pristine[table] = require(`../${file}.js`)[table];
+		pristine[table] = (table === 'FormatsData' && frozenFormatsData()) || require(`../${file}.js`)[table];
 		patched[table] = {};
 		for (const id of Object.keys(pristine[table])) patched[table][id] = clone(pristine[table][id]);
 	}
@@ -104,6 +120,58 @@ function diff() {
 }
 
 /**
+ * Back to the frozen tiers wherever a dex still has the base entry (see frozenFormatsData). Also used by
+ * the frozen Season 1 draft's mod (scripts/setup-config.js), whose own files may never change.
+ */
+function pinFrozenTiers(dex) {
+	const data = dex.dataCache;
+	const frozen = frozenFormatsData();
+	const base = require('../formats-data.js').FormatsData;
+	if (frozen && data.FormatsData && frozen !== base) {
+		// Only entries no generation on the way down has its own of (an own entry replaces the base
+		// one whole, unless it says `inherit`): those came from the base, and go back to the frozen ones.
+		const gen = Number((/^gen(\d)/.exec(dex.currentMod) || [])[1]) || 9;
+		const own = [];
+		for (let g = gen; g < 9; g++) {
+			try {
+				own.push(require(`../mods/gen${g}/formats-data.js`).FormatsData);
+			} catch (e) {
+				// That generation has no tiers of its own.
+			}
+		}
+		for (const id of new Set([...Object.keys(base), ...Object.keys(frozen)])) {
+			if (same(base[id], frozen[id])) continue;
+			const mine = own.find(t => t[id]);
+			if (mine && !mine[id].inherit) continue;
+			const entry = data.FormatsData[id];
+			const next = { ...(frozen[id] || {}) };
+			// An `inherit` entry keeps its own fields over the frozen base.
+			if (mine) for (const k of Object.keys(mine[id])) if (k !== 'inherit') next[k] = entry[k];
+			if (!(id in frozen) && !mine) delete data.FormatsData[id];
+			else data.FormatsData[id] = next;
+		}
+	}
+}
+
+/**
+ * Runs `fn` with the base formats-data swapped for the frozen one, so code that reads the base as
+ * "what Showdown ships" (the draft's own rp-mod.js) still reads what it was built on.
+ */
+function withFrozenBase(fn) {
+	const frozen = frozenFormatsData();
+	const id = require.resolve('../formats-data.js');
+	const cached = require.cache[id];
+	if (!frozen || !cached) return fn();
+	const real = cached.exports;
+	cached.exports = { FormatsData: frozen };
+	try {
+		return fn();
+	} finally {
+		cached.exports = real;
+	}
+}
+
+/**
  * Lay the RP layer over a mod's own tables. Called from each RP mod's
  * scripts.js init, with `this` the mod's dex; its tables are fresh objects
  * holding the parent's entries by reference, so an entry is replaced, never
@@ -123,6 +191,7 @@ function apply(dex) {
 		damageTaken.Bird = 0;
 		data.TypeChart.bird = { damageTaken, isNonstandard: 'Custom' };
 	}
+	pinFrozenTiers(dex);
 	for (const [table] of TABLES) {
 		const mine = data[table];
 		if (!mine) continue;
@@ -173,6 +242,8 @@ const POKEMON = {
 };
 
 exports.apply = apply;
+exports.pinFrozenTiers = pinFrozenTiers;
+exports.withFrozenBase = withFrozenBase;
 exports.POKEMON = POKEMON;
 exports.MOEMON = MOEMON;
 exports.diff = diff;

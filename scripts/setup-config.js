@@ -167,7 +167,13 @@ if (fs.existsSync(dataSrc)) {
 		'exports.Scripts = {',
 		'	gen: 9,',
 		"	inherit: 'gen9',",
-		"	init() { require('../../velvet-draft-s1/rp-mod.js').apply(this); },",
+		// Its own files never change (FROZEN.md); the tiers it was built on are kept from outside them, as RP's are.
+		"	init() {",
+		"		const rp = require('../../velvet/rp-mod.js');",
+		"		if (rp.pinFrozenTiers) rp.pinFrozenTiers(this);",
+		"		const frozen = () => require('../../velvet-draft-s1/rp-mod.js').apply(this);",
+		"		if (rp.withFrozenBase) rp.withFrozenBase(frozen); else frozen();",
+		"	},",
 		"	pokemon: require('../../velvet/rp-mod.js').POKEMON,",
 		'};',
 		'',
@@ -224,6 +230,77 @@ if (fs.existsSync(formatsSrc)) {
 	fs.mkdirSync(path.dirname(formatsDest), { recursive: true });
 	fs.copyFileSync(formatsSrc, formatsDest);
 	console.log('custom formats -> copied');
+}
+
+// ------------------------------------------------- current Showdown, RP frozen
+// Showdown's own formats, their tiers and the Champions data, from current Showdown
+// (upstream/, written by scripts/sync-showdown.js). RP keeps what it had: the base
+// formats-data and the official formats it builds on are copied in frozen
+// (data/frozen-base, config/frozen-official-formats.js; see data/velvet/rp-mod.js and the
+// end of config/custom-formats.js). The package's own files are kept as *.shipped.js the
+// first time, so taking upstream/ away puts them back.
+const upstreamSrc = path.join(__dirname, '..', 'upstream');
+// Current Showdown formats this package can't build (a rule or feature it predates), found by
+// loading every format's rule table after a sync. These keep the definition the package shipped.
+const UPSTREAM_SKIP = [
+	'[Gen 9] Metronome Battle', // bans "type:Steel", a rule syntax this package predates
+];
+{
+	const frozenBase = path.join(__dirname, '..', 'data', 'frozen-base');
+	const frozenDest = path.join(pkgRoot, 'dist', 'data', 'frozen-base');
+	fs.mkdirSync(frozenDest, { recursive: true });
+	for (const file of fs.readdirSync(frozenBase)) fs.copyFileSync(path.join(frozenBase, file), path.join(frozenDest, file));
+	fs.copyFileSync(path.join(__dirname, '..', 'config', 'frozen-official-formats.js'), path.join(pkgRoot, 'dist', 'config', 'frozen-official-formats.js'));
+
+	const placed = [];
+	const place = (from, to) => {
+		const shipped = to.replace(/\.js$/, '.shipped.js');
+		if (fs.existsSync(to) && !fs.existsSync(shipped) && to.endsWith('.js')) fs.copyFileSync(to, shipped);
+		fs.mkdirSync(path.dirname(to), { recursive: true });
+		fs.copyFileSync(from, to);
+		placed.push(to);
+	};
+	const walk = dir => fs.readdirSync(dir, { withFileTypes: true }).flatMap(e => (e.isDirectory() ? walk(path.join(dir, e.name)) : [path.join(dir, e.name)]));
+	const upstreamFormats = path.join(pkgRoot, 'dist', 'config', 'upstream-formats.js');
+	const formatsFile = path.join(pkgRoot, 'dist', 'config', 'formats.js');
+	if (fs.existsSync(upstreamSrc)) {
+		for (const file of walk(path.join(upstreamSrc, 'data'))) {
+			place(file, path.join(pkgRoot, 'dist', 'data', path.relative(path.join(upstreamSrc, 'data'), file)));
+		}
+		place(path.join(upstreamSrc, 'config', 'formats.js'), upstreamFormats);
+		if (!fs.existsSync(formatsFile.replace(/\.js$/, '.shipped.js'))) fs.copyFileSync(formatsFile, formatsFile.replace(/\.js$/, '.shipped.js'));
+		// The formats list: current Showdown's, less any format whose mod this package does not have
+		// (a new Other Meta's), which would otherwise stop the whole list from loading.
+		fs.writeFileSync(formatsFile, [
+			"'use strict';",
+			'// Written by scripts/setup-config.js: current Showdown\'s formats (upstream/), less those this package cannot run.',
+			"const fs = require('fs');",
+			"const path = require('path');",
+			"const mods = path.join(__dirname, '..', 'data', 'mods');",
+			`const SKIP = new Set(${JSON.stringify(UPSTREAM_SKIP)});`,
+			'const skipped = [];',
+			"const shipped = new Map(require('./formats.shipped.js').Formats.filter(f => f.name).map(f => [f.name, f]));",
+			"exports.Formats = require('./upstream-formats.js').Formats.flatMap(f => {",
+			'	if (!f.name) return [f];',
+			'	// One this package cannot build: as it shipped, if it shipped it.',
+			'	if (SKIP.has(f.name)) return shipped.has(f.name) ? [shipped.get(f.name)] : (skipped.push(f.name), []);',
+			"	const mod = f.mod || 'gen9';",
+			"	if (mod === 'gen9' || fs.existsSync(path.join(mods, mod))) return [f];",
+			'	skipped.push(f.name);',
+			'	return [];',
+			'});',
+			'exports.Skipped = skipped;',
+			'',
+		].join('\n'));
+		const commit = fs.readFileSync(path.join(upstreamSrc, 'COMMIT'), 'utf8').trim().slice(0, 8);
+		console.log(`current Showdown -> ${placed.length} file(s) from ${commit}; RP frozen on the shipped tiers and formats`);
+	} else {
+		// No upstream/: back to what the package shipped.
+		for (const file of walk(path.join(pkgRoot, 'dist'))) {
+			if (!file.endsWith('.shipped.js')) continue;
+			fs.copyFileSync(file, file.replace(/\.shipped\.js$/, '.js'));
+		}
+	}
 }
 
 // What level each format is played at, written down so the server can build its

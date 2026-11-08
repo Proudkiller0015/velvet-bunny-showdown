@@ -2065,3 +2065,49 @@ for (const format of exports.Formats) {
 		return ownChange ? ownChange.call(this, set, fmt, setHas, teamHas) : undefined;
 	};
 }
+
+/*
+ * The official formats RP builds on, as they were (7 Nov 2026, the owner: bring Showdown's own metas
+ * up to date "without touching rp").
+ *
+ * Showdown's own formats now come from current Showdown (upstream/, scripts/sync-showdown.js), with
+ * their new tier shifts and bans. RP's ladders are built on some of them - RP OU on [Gen 9] National
+ * Dex, the past-gen RP tiers on each generation's OU and Ubers - and would have taken every one of
+ * those changes. So every format of ours that names an official one gets a frozen copy of it instead:
+ * the definition as the package shipped it (config/frozen-official-formats.js), named "<official> (RP)"
+ * and hidden. Official formats those copies name in turn are frozen the same way.
+ *
+ * Last, after the loop above, so the copies don't take this file's own set rules twice.
+ */
+{
+	let frozen = null;
+	try {
+		frozen = new Map(require('./frozen-official-formats.js').Formats.filter(f => f.name).map(f => [f.name, f]));
+	} catch (e) {
+		// Not copied in (an older setup): RP follows the official formats, as it always did.
+	}
+	if (frozen) {
+		const needed = new Set();
+		const visit = name => {
+			if (!frozen.has(name) || needed.has(name)) return;
+			needed.add(name);
+			for (const rule of frozen.get(name).ruleset || []) visit(rule);
+		};
+		for (const format of exports.Formats) for (const rule of format.ruleset || []) visit(rule);
+		const rename = rule => (needed.has(rule) ? `${rule} (RP)` : rule);
+		for (const format of exports.Formats) if (format.ruleset) format.ruleset = format.ruleset.map(rename);
+		exports.Formats.push({ section: 'RP Bases (hidden)' });
+		for (const name of needed) {
+			const format = frozen.get(name);
+			exports.Formats.push({
+				...format,
+				name: rename(name),
+				ruleset: (format.ruleset || []).map(rename),
+				searchShow: false,
+				challengeShow: false,
+				tournamentShow: false,
+				rated: false,
+			});
+		}
+	}
+}
