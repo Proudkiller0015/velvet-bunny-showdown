@@ -1,0 +1,12 @@
+{
+	"id": "gen9nationaldexag-70-to7j86",
+	"format": "[Gen 9] National Dex AG",
+	"players": [
+		"Bunny Stockfish",
+		"baaaaaaailooon"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Stockfish\n|j|☆baaaaaaailooon\n|t:|1794227369\n|gametype|singles\n|badge|p1|gold|gen9nationaldexag|1-1\n|player|p1|Bunny Stockfish|bunny.png|1332\n|player|p2|baaaaaaailooon|n|1275\n|gen|9\n|tier|[Gen 9] National Dex AG\n|rated|\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Endless Battle Clause: Forcing endless battles is banned\n|clearpoke\n|poke|p1|Clefable, F|\n|poke|p1|Gholdengo|\n|poke|p1|Dragapult, F|\n|poke|p1|Toxapex, M|\n|poke|p1|Grimmsnarl, M|\n|poke|p1|Excadrill, F|\n|poke|p2|Blissey, F|\n|poke|p2|Alomomola, F|\n|poke|p2|Tyranitar, F|\n|poke|p2|Skeledirge, F|\n|poke|p2|Ho-Oh|\n|poke|p2|Skarmory, F|\n|teampreview\n|c|☆Bunny Stockfish|Good luck! Playing on **stockfish**.\n|\n|t:|1794227385\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Toxapex|Toxapex, M|100/100\n|switch|p2a: Skarmory|Skarmory, F|100/100\n|turn|1\n|\n|t:|1794227393\n|move|p2a: Skarmory|Spikes|p1a: Toxapex\n|-sidestart|p1: Bunny Stockfish|Spikes\n|move|p1a: Toxapex|Toxic Spikes|p2a: Skarmory\n|-sidestart|p2: baaaaaaailooon|move: Toxic Spikes\n|\n|upkeep\n|turn|2\n|\n|t:|1794227398\n|move|p2a: Skarmory|Spikes|p1a: Toxapex\n|-sidestart|p1: Bunny Stockfish|Spikes\n|move|p1a: Toxapex|Toxic Spikes|p2a: Skarmory\n|-sidestart|p2: baaaaaaailooon|move: Toxic Spikes\n|\n|upkeep\n|turn|3\n|\n|t:|1794227403\n|move|p2a: Skarmory|Spikes|p1a: Toxapex\n|-sidestart|p1: Bunny Stockfish|Spikes\n|move|p1a: Toxapex|Liquidation|p2a: Skarmory\n|-damage|p2a: Skarmory|90/100\n|\n|-heal|p2a: Skarmory|96/100|[from] item: Leftovers\n|upkeep\n|turn|4\n|\n|t:|1794227413\n|move|p1a: Toxapex|Liquidation|p2a: Skarmory\n|-damage|p2a: Skarmory|86/100\n|move|p2a: Skarmory|Whirlwind|p1a: Toxapex\n|drag|p1a: Gholdengo|Gholdengo|100/100\n|-damage|p1a: Gholdengo|76/100|[from] Spikes\n|\n|-heal|p2a: Skarmory|92/100|[from] item: Leftovers\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1794227416
+}
