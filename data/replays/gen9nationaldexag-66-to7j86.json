@@ -1,0 +1,12 @@
+{
+	"id": "gen9nationaldexag-66-to7j86",
+	"format": "[Gen 9] National Dex AG",
+	"players": [
+		"Bunny Hard",
+		"baaaaaaailooon"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Hard\n|j|☆baaaaaaailooon\n|t:|1794223227\n|gametype|singles\n|badge|p1|gold|gen9nationaldexag|1-1\n|badge|p2|silver|gen9nationaldexag|2-2\n|player|p1|Bunny Hard|bunny.png|1283\n|player|p2|baaaaaaailooon|n|1227\n|gen|9\n|tier|[Gen 9] National Dex AG\n|rated|\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Endless Battle Clause: Forcing endless battles is banned\n|clearpoke\n|poke|p1|Skeledirge, F|\n|poke|p1|Tyranitar, F|\n|poke|p1|Hatterene, F|\n|poke|p1|Iron Treads|\n|poke|p1|Pelipper, F|\n|poke|p1|Dragapult, F|\n|poke|p2|Blissey, F|\n|poke|p2|Alomomola, M|\n|poke|p2|Tyranitar, F|\n|poke|p2|Skeledirge, M|\n|poke|p2|Ho-Oh|\n|poke|p2|Skarmory, M|\n|teampreview\n|c|☆Bunny Hard|Good luck! Playing on **hard**.\n|\n|t:|1794223239\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Tyranitar|Tyranitar, F|100/100\n|switch|p2a: Skarmory|Skarmory, M|100/100\n|-ability|p1a: Tyranitar|Unnerve\n|turn|1\n|\n|t:|1794223257\n|detailschange|p1a: Tyranitar|Tyranitar-Mega, F\n|-mega|p1a: Tyranitar|Tyranitar|Tyranitarite\n|-weather|Sandstorm|[from] ability: Sand Stream|[of] p1a: Tyranitar\n|move|p1a: Tyranitar|Stone Edge|p2a: Skarmory\n|-damage|p2a: Skarmory|59/100\n|move|p2a: Skarmory|Spikes|p1a: Tyranitar\n|-sidestart|p1: Bunny Hard|Spikes\n|\n|-weather|Sandstorm|[upkeep]\n|-heal|p2a: Skarmory|65/100|[from] item: Leftovers\n|upkeep\n|turn|2\n|\n|t:|1794223269\n|move|p1a: Tyranitar|Knock Off|p2a: Skarmory\n|-damage|p2a: Skarmory|29/100\n|-enditem|p2a: Skarmory|Leftovers|[from] move: Knock Off|[of] p1a: Tyranitar\n|move|p2a: Skarmory|Roost|p2a: Skarmory\n|-heal|p2a: Skarmory|79/100\n|-singleturn|p2a: Skarmory|move: Roost\n|\n|-weather|Sandstorm|[upkeep]\n|upkeep\n|turn|3\n|\n|t:|1794223279\n|move|p1a: Tyranitar|Stone Edge|p2a: Skarmory\n|-damage|p2a: Skarmory|38/100\n|move|p2a: Skarmory|Toxic|p1a: Tyranitar\n|-status|p1a: Tyranitar|tox\n|\n|-weather|Sandstorm|[upkeep]\n|-damage|p1a: Tyranitar|94/100 tox|[from] psn\n|upkeep\n|turn|4\n|\n|t:|1794223293\n|switch|p2a: Alomomola|Alomomola, M|100/100\n|move|p1a: Tyranitar|Stone Edge|p2a: Alomomola\n|-damage|p2a: Alomomola|66/100\n|\n|-weather|Sandstorm|[upkeep]\n|-damage|p2a: Alomomola|59/100|[from] Sandstorm\n|-damage|p1a: Tyranitar|82/100 tox|[from] psn\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1794223296
+}
