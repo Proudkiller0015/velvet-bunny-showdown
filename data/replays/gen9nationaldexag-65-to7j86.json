@@ -1,0 +1,12 @@
+{
+	"id": "gen9nationaldexag-65-to7j86",
+	"format": "[Gen 9] National Dex AG",
+	"players": [
+		"Bunny Hard",
+		"baaaaaaailooon"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Hard\n|j|☆baaaaaaailooon\n|t:|1794222362\n|gametype|singles\n|badge|p2|gold|gen9nationaldexag|1-1\n|player|p1|Bunny Hard|bunny.png|1000\n|player|p2|baaaaaaailooon|n|1220\n|gen|9\n|tier|[Gen 9] National Dex AG\n|rated|\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Endless Battle Clause: Forcing endless battles is banned\n|clearpoke\n|poke|p1|Ho-Oh|\n|poke|p1|Florges, F|\n|poke|p1|Skarmory, M|\n|poke|p1|Eternatus|\n|poke|p1|Skeledirge, M|\n|poke|p1|Chansey, F|\n|poke|p2|Blissey, F|\n|poke|p2|Alomomola, M|\n|poke|p2|Tyranitar, F|\n|poke|p2|Skeledirge, F|\n|poke|p2|Ho-Oh|\n|poke|p2|Skarmory, M|\n|teampreview\n|c|☆Bunny Hard|Good luck! Playing on **hard**.\n|\n|t:|1794222375\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Skarmory|Skarmory, M|100/100\n|switch|p2a: Skarmory|Skarmory, M|100/100\n|turn|1\n|\n|t:|1794222384\n|move|p2a: Skarmory|Spikes|p1a: Skarmory\n|-sidestart|p1: Bunny Hard|Spikes\n|move|p1a: Skarmory|Spikes|p2a: Skarmory\n|-sidestart|p2: baaaaaaailooon|Spikes\n|\n|upkeep\n|turn|2\n|\n|t:|1794222388\n|move|p1a: Skarmory|Spikes|p2a: Skarmory\n|-sidestart|p2: baaaaaaailooon|Spikes\n|move|p2a: Skarmory|Spikes|p1a: Skarmory\n|-sidestart|p1: Bunny Hard|Spikes\n|\n|upkeep\n|turn|3\n|\n|t:|1794222397\n|move|p2a: Skarmory|Spikes|p1a: Skarmory\n|-sidestart|p1: Bunny Hard|Spikes\n|move|p1a: Skarmory|Body Press|p2a: Skarmory\n|-damage|p2a: Skarmory|83/100\n|\n|-heal|p2a: Skarmory|89/100|[from] item: Leftovers\n|upkeep\n|turn|4\n|\n|t:|1794222408\n|move|p1a: Skarmory|Body Press|p2a: Skarmory\n|-damage|p2a: Skarmory|70/100\n|move|p2a: Skarmory|Whirlwind|p1a: Skarmory\n|drag|p1a: Skeledirge|Skeledirge, M|100/100\n|\n|-heal|p2a: Skarmory|76/100|[from] item: Leftovers\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1794222416
+}
