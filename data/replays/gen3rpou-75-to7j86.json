@@ -1,0 +1,12 @@
+{
+	"id": "gen3rpou-75-to7j86",
+	"format": "[Gen 3] RP OU",
+	"players": [
+		"Bunny Hard",
+		"UHOH Double Switch"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Hard\n|j|☆UHOH Double Switch\n|t:|1794604360\n|gametype|singles\n|badge|p2|gold|gen3rpou|1-1\n|player|p1|Bunny Hard|bunny.png|1293\n|player|p2|UHOH Double Switch|170|1585\n|gen|3\n|tier|[Gen 3] RP OU\n|rated|\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Beat Up Nicknames Mod: Beat Up will not reveal any party members\n|rule|Endless Battle Clause: Forcing endless battles is banned\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Switch Priority Clause Mod: Faster Pokémon switch first\n|rule|Species Clause: Limit one of each Pokémon\n|rule|OHKO Clause: OHKO moves are banned\n|rule|Evasion Items Clause: Evasion items are banned\n|rule|Evasion Moves Clause: Evasion moves are banned\n|rule|One Boost Passer Clause: Limit one Baton Passer that has a way to boost its stats\n|rule|Freeze Clause Mod: Limit one foe frozen\n|rule|Baton Pass Stat Clause: No Baton Passer may have a way to boost its Speed\n|\n|t:|1794604360\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Celebi|Celebi|100/100\n|switch|p2a: Skarmory|Skarmory, F|100/100\n|turn|1\n|c|☆Bunny Hard|Good luck! Playing on **hard**.\n|\n|t:|1794604368\n|switch|p1a: Magneton|Magneton|100/100\n|move|p2a: Skarmory|Spikes|p1a: Magneton\n|-sidestart|p1: Bunny Hard|Spikes\n|\n|upkeep\n|turn|2\n|\n|t:|1794604373\n|move|p1a: Magneton|Thunderbolt|p2a: Skarmory\n|-supereffective|p2a: Skarmory\n|-damage|p2a: Skarmory|3/100\n|move|p2a: Skarmory|Spikes|p1a: Magneton\n|-sidestart|p1: Bunny Hard|Spikes\n|\n|-heal|p2a: Skarmory|9/100|[from] item: Leftovers\n|upkeep\n|turn|3\n|\n|t:|1794604379\n|move|p1a: Magneton|Thunderbolt|p2a: Skarmory\n|-supereffective|p2a: Skarmory\n|-damage|p2a: Skarmory|0 fnt\n|faint|p2a: Skarmory\n|\n|t:|1794604383\n|switch|p2a: Dugtrio|Dugtrio, M|100/100\n|\n|upkeep\n|turn|4\n|\n|t:|1794604387\n|move|p2a: Dugtrio|Earthquake|p1a: Magneton\n|-supereffective|p1a: Magneton\n|-damage|p1a: Magneton|0 fnt\n|faint|p1a: Magneton\n|\n|t:|1794604388\n|switch|p1a: Metagross|Metagross|100/100\n|-damage|p1a: Metagross|84/100|[from] Spikes\n|\n|-heal|p1a: Metagross|90/100|[from] item: Leftovers\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1794604400
+}
