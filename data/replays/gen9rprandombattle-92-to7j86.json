@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-92-to7j86",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Hard",
+		"UHOH Double Switch"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Hard\n|j|☆UHOH Double Switch\n|t:|1794613520\n|gametype|singles\n|player|p1|Bunny Hard|bunny.png|1283\n|player|p2|UHOH Double Switch|169|1000\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1794613520\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Floatzel|Floatzel, L86, M|100/100\n|switch|p2a: Oranguru|Oranguru, L92, M|100/100\n|turn|1\n|c|☆Bunny Hard|Good luck! Playing on **hard**.\n|\n|t:|1794613528\n|-terastallize|p1a: Floatzel|Water\n|move|p1a: Floatzel|Wave Crash|p2a: Oranguru\n|-damage|p2a: Oranguru|8/100\n|-damage|p1a: Floatzel|67/100|[from] Recoil\n|move|p2a: Oranguru|Thunderbolt|p1a: Floatzel\n|-supereffective|p1a: Floatzel\n|-damage|p1a: Floatzel|0 fnt\n|faint|p1a: Floatzel\n|\n|-heal|p2a: Oranguru|14/100|[from] item: Leftovers\n|upkeep\n|\n|t:|1794613529\n|switch|p1a: Porygon-Z|Porygon-Z, L83|100/100\n|turn|2\n|\n|t:|1794613551\n|move|p1a: Porygon-Z|Tera Blast|p2a: Oranguru\n|-damage|p2a: Oranguru|0 fnt\n|faint|p2a: Oranguru\n|-damage|p1a: Porygon-Z|91/100|[from] item: Life Orb\n|\n|upkeep\n|\n|t:|1794613586\n|switch|p2a: Arcanine|Arcanine-Hisui, L79, F|100/100\n|turn|3\n|\n|t:|1794613600\n|move|p1a: Porygon-Z|Agility|p1a: Porygon-Z\n|-boost|p1a: Porygon-Z|spe|2\n|move|p2a: Arcanine|Flare Blitz|p1a: Porygon-Z\n|-damage|p1a: Porygon-Z|32/100\n|\n|upkeep\n|turn|4\n|\n|t:|1794613606\n|move|p1a: Porygon-Z|Shadow Ball|p2a: Arcanine\n|-damage|p2a: Arcanine|61/100\n|-damage|p1a: Porygon-Z|22/100|[from] item: Life Orb\n|move|p2a: Arcanine|Flare Blitz|p1a: Porygon-Z\n|-crit|p1a: Porygon-Z\n|-damage|p1a: Porygon-Z|0 fnt\n|faint|p1a: Porygon-Z\n|\n|upkeep\n|\n|t:|1794613607\n|switch|p1a: Gogoat|Gogoat, L88, F|100/100\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1794613621
+}
