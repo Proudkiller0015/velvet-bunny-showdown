@@ -2123,6 +2123,37 @@ const TM_DISTRIBUTION = {
  * when the buffs are applied.
  */
 const NEWER_MOVES = {
+	// Corrosive Gas (the owner, 13 Nov 2026): poisons too, legal again in RP. Its Generation 8 tutor learners
+	// already have it.
+	'corrosivegas': [
+		// Pre-evolutions of its Generation 8 learners (data/velvet/corrosive-gas.js).
+		'oddish',
+		'gloom',
+		'tentacool',
+		'croagunk',
+		'salandit',
+		// Gas: sludge, stomach gas, gas balloons, exhaust and coal smoke.
+		'grimer',
+		'muk',
+		'grimeralola',
+		'mukalola',
+		'gulpin',
+		'swalot',
+		'drifloon',
+		'drifblim',
+		'varoom',
+		'revavroom',
+		'torkoal',
+		// Poison types it suits: spore clouds, toxic spray and the toxin-makers.
+		'foongus',
+		'amoonguss',
+		'toxel',
+		'toxtricity',
+		'toxtricitylowkey',
+		'glimmet',
+		'glimmora',
+		'pecharunt',
+	],
 	'tripleaxel': [
 		'froslass',
 		'eiscue',

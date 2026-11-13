@@ -338,6 +338,9 @@ const RP_RULES = ['!Obtainable Misc', '+Floette-Eternal'];
 // UNBAN_TERA), while Gems Clause itself steps aside for '+item:<gem>'. Not Gen 1,
 // which has no held items. data/velvet/rp-mod.js makes them exist in every generation.
 const RP_GEMS = ['normal', 'fire', 'water', 'electric', 'grass', 'ice', 'fighting', 'poison', 'ground', 'flying', 'psychic', 'bug', 'rock', 'ghost', 'dragon', 'dark', 'steel', 'fairy'].map(t => `+item:${t}gem`);
+// Corrosive Gas, which Scarlet and Violet made unobtainable, in every RP tier from the eighth generation on
+// (data/velvet/corrosive-gas.js). Not the draft: its rules are frozen for the season.
+const RP_UNBANNED_MOVES = ['+move:corrosivegas'];
 
 /**
  * The tiers below RU, National Dex style.
@@ -407,7 +410,7 @@ function rpTier(name, base, { gen = 9, rules = [], ...extra } = {}) {
 	return {
 		name: `[Gen ${gen}] RP ${name}`,
 		mod: `gen${gen}`,
-		ruleset: [base, ...RP_RULES, ...(gen >= 2 ? RP_GEMS : []), ...rules],
+		ruleset: [base, ...RP_RULES, ...(gen >= 2 ? RP_GEMS : []), ...(gen >= 8 ? RP_UNBANNED_MOVES : []), ...rules],
 		checkCanLearn: levelFreeMoves,
 		onBegin: allGimmicks,
 		searchShow: true,

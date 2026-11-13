@@ -42,6 +42,8 @@ const AbyssShrine = require('./abyss-shrine.js');
 const Frostbite = require('./frostbite.js');
 // Type Gems, legal again.
 const Gems = require('./gems.js');
+// Corrosive Gas: poisons too (Steel types included), legal again in RP.
+const CorrosiveGas = require('./corrosive-gas.js');
 // New items for every Pokemon (Ultra Shard).
 const NewItems = require('./new-items.js');
 // Old-generation Belly Drum and recharge rules.
@@ -102,7 +104,7 @@ exports.pokedex = data => {
 exports.abilities = data => Touhou.abilities(Collab.abilities(Gourgeist.abilities(CreationTrio.abilities(Stall.abilities(AbyssShrine.abilities(Missingno.abilities(Christmas.abilities(Halloween.abilities(require('./balance-patch-1.js').patchAbsorbers(patchAbilities(unnerfAbilities(Object.assign(data, Abilities)))))))))))));
 let moveTable = null;
 exports.moves = data => {
-	moveTable = Touhou.moves(Collab.moves(Gourgeist.moves(CreationTrio.moves(Classic.moves(Frostbite.moves(AbyssShrine.moves(Missingno.moves(Christmas.moves(Halloween.moves(patchMoves(unnerfMoves(Object.assign(data, Moves)))))))))))));
+	moveTable = CorrosiveGas.moves(Touhou.moves(Collab.moves(Gourgeist.moves(CreationTrio.moves(Classic.moves(Frostbite.moves(AbyssShrine.moves(Missingno.moves(Christmas.moves(Halloween.moves(patchMoves(unnerfMoves(Object.assign(data, Moves))))))))))))));
 	teachHerEverything();
 	return moveTable;
 };
