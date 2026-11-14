@@ -1,0 +1,12 @@
+{
+	"id": "gen9championsbssregmc-44-togwjr",
+	"format": "[Gen 9 Champions] BSS Reg M-C",
+	"players": [
+		"Bunny Normal",
+		"Piscean Pianist"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Normal\n|j|☆Piscean Pianist\n|t:|1794693616\n|gametype|singles\n|badge|p1|gold|gen9championsbssregmc|1-1\n|badge|p2|silver|gen9championsbssregmc|2-2\n|player|p1|Bunny Normal|bunny.png|1228\n|player|p2|Piscean Pianist|akari|1224\n|gen|9\n|tier|[Gen 9 Champions] BSS Reg M-C\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|Item Clause: Limit 1 of each item\n|clearpoke\n|poke|p1|Espathra, L50, F|\n|poke|p1|Dragonite, L50, M|\n|poke|p1|Hippowdon, L50, M|\n|poke|p1|Scizor, L50, F|\n|poke|p1|Glimmora, L50, F|\n|poke|p1|Basculegion, L50, M|\n|poke|p2|Lucario, L50, M|\n|poke|p2|Dragonite, L50, M|\n|poke|p2|Zoroark-Hisui, L50, M|\n|poke|p2|Charizard, L50, M|\n|poke|p2|Milotic, L50, M|\n|poke|p2|Aegislash, L50, M|\n|teampreview|3\n|c|☆Bunny Normal|Good luck! Playing on **normal**.\n|\n|t:|1794693631\n|teamsize|p1|3\n|teamsize|p2|3\n|start\n|switch|p1a: Dragonite|Dragonite, L50, M|100/100\n|switch|p2a: Dragonite|Dragonite, L50, M|100/100\n|turn|1\n|\n|t:|1794693639\n|move|p1a: Dragonite|Extreme Speed|p2a: Dragonite\n|-immune|p2a: Dragonite\n|move|p2a: Dragonite|Icy Wind|p1a: Dragonite\n|-supereffective|p1a: Dragonite|2\n|-damage|p1a: Dragonite|48/100\n|-unboost|p1a: Dragonite|spe|1\n|-damage|p2a: Dragonite|90/100|[from] item: Life Orb\n|\n|upkeep\n|turn|2\n|\n|t:|1794693649\n|switch|p1a: Glimmora|Glimmora, L50, F|100/100\n|move|p2a: Dragonite|Icy Wind|p1a: Glimmora\n|-damage|p1a: Glimmora|67/100\n|-unboost|p1a: Glimmora|spe|1\n|-damage|p2a: Dragonite|80/100|[from] item: Life Orb\n|\n|upkeep\n|turn|3\n|\n|t:|1794693662\n|move|p2a: Dragonite|Bitter Malice|p1a: Glimmora\n|-damage|p1a: Glimmora|0 fnt\n|faint|p1a: Glimmora\n|-damage|p2a: Dragonite|70/100|[from] item: Life Orb\n|\n|upkeep\n|\n|t:|1794693662\n|switch|p1a: Espathra|Espathra, L50, F|100/100\n|turn|4\n|\n|t:|1794693676\n|move|p2a: Dragonite|Bitter Malice|p1a: Espathra\n|-supereffective|p1a: Espathra|1\n|-damage|p1a: Espathra|0 fnt\n|faint|p1a: Espathra\n|-damage|p2a: Dragonite|60/100|[from] item: Life Orb\n|\n|upkeep\n|\n|t:|1794693676\n|switch|p1a: Dragonite|Dragonite, L50, M|48/100\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1794693685
+}
