@@ -1,0 +1,12 @@
+{
+	"id": "gen9championsbssregmc-29-togwjr",
+	"format": "[Gen 9 Champions] BSS Reg M-C",
+	"players": [
+		"Bunny Normal",
+		"Piscean Pianist"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Normal\n|j|☆Piscean Pianist\n|t:|1794670459\n|gametype|singles\n|badge|p1|gold|gen9championsbssregmc|1-1\n|badge|p2|silver|gen9championsbssregmc|2-2\n|player|p1|Bunny Normal|bunny.png|1222\n|player|p2|Piscean Pianist|akari|1098\n|gen|9\n|tier|[Gen 9 Champions] BSS Reg M-C\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|Item Clause: Limit 1 of each item\n|clearpoke\n|poke|p1|Gliscor, L50, M|\n|poke|p1|Glimmora, L50, M|\n|poke|p1|Indeedee-F, L50, F|\n|poke|p1|Tauros-Paldea-Aqua, L50, M|\n|poke|p1|Dragonite, L50, M|\n|poke|p1|Gholdengo, L50|\n|poke|p2|Lucario, L50, M|\n|poke|p2|Dragonite, L50, F|\n|poke|p2|Zoroark-Hisui, L50, F|\n|poke|p2|Kleavor, L50, F|\n|poke|p2|Scizor, L50, F|\n|poke|p2|Aegislash, L50, F|\n|teampreview|3\n|c|☆Bunny Normal|Good luck! Playing on **normal**.\n|\n|t:|1794670468\n|teamsize|p1|3\n|teamsize|p2|3\n|start\n|switch|p1a: Gholdengo|Gholdengo, L50|100/100\n|switch|p2a: Lucario|Lucario, L50, M|100/100\n|turn|1\n|\n|t:|1794670479\n|detailschange|p2a: Lucario|Lucario-Mega, L50, M\n|-mega|p2a: Lucario|Lucario|Lucarionite\n|move|p2a: Lucario|Meteor Mash|p1a: Gholdengo\n|-resisted|p1a: Gholdengo|1\n|-damage|p1a: Gholdengo|64/100\n|move|p1a: Gholdengo|Shadow Ball|p2a: Lucario\n|-damage|p2a: Lucario|14/100\n|\n|upkeep\n|turn|2\n|\n|t:|1794670491\n|move|p2a: Lucario|Protect|p2a: Lucario\n|-singleturn|p2a: Lucario|Protect\n|move|p1a: Gholdengo|Shadow Ball|p2a: Lucario\n|-activate|p2a: Lucario|move: Protect\n|\n|upkeep\n|turn|3\n|\n|t:|1794670499\n|switch|p2a: Dragonite|Dragonite, L50, F|100/100\n|move|p1a: Gholdengo|Shadow Ball|p2a: Dragonite\n|-damage|p2a: Dragonite|71/100\n|\n|upkeep\n|turn|4\n|\n|t:|1794670506\n|move|p1a: Gholdengo|Make It Rain|p2a: Dragonite\n|-damage|p2a: Dragonite|7/100\n|-unboost|p1a: Gholdengo|spa|2\n|move|p2a: Dragonite|Dragon Dance|p2a: Dragonite\n|-boost|p2a: Dragonite|atk|1\n|-boost|p2a: Dragonite|spe|1\n|\n|upkeep\n|turn|5\n|\n|t:|1794670516\n|move|p2a: Dragonite|Dragon Claw|p1a: Gholdengo\n|-resisted|p1a: Gholdengo|1\n|-damage|p1a: Gholdengo|19/100\n|move|p1a: Gholdengo|Make It Rain|p2a: Dragonite\n|-damage|p2a: Dragonite|0 fnt\n|-unboost|p1a: Gholdengo|spa|2\n|faint|p2a: Dragonite\n|\n|upkeep\n|\n|t:|1794670521\n|switch|p2a: Lucario|Lucario-Mega, L50, M|100/100\n|turn|6\n",
+	"inputlog": null,
+	"uploadtime": 1794670524
+}
