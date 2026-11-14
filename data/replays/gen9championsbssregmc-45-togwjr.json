@@ -1,0 +1,12 @@
+{
+	"id": "gen9championsbssregmc-45-togwjr",
+	"format": "[Gen 9 Champions] BSS Reg M-C",
+	"players": [
+		"Bunny Normal",
+		"Piscean Pianist"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Normal\n|j|☆Piscean Pianist\n|t:|1794693715\n|gametype|singles\n|badge|p1|silver|gen9championsbssregmc|2-2\n|badge|p2|gold|gen9championsbssregmc|1-1\n|player|p1|Bunny Normal|bunny.png|1212\n|player|p2|Piscean Pianist|akari|1241\n|gen|9\n|tier|[Gen 9 Champions] BSS Reg M-C\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|Item Clause: Limit 1 of each item\n|clearpoke\n|poke|p1|Indeedee-F, L50, F|\n|poke|p1|Rillaboom, L50, F|\n|poke|p1|Ninetales-Alola, L50, M|\n|poke|p1|Dragonite, L50, M|\n|poke|p1|Gyarados, L50, M|\n|poke|p1|Glimmora, L50, F|\n|poke|p2|Lucario, L50, M|\n|poke|p2|Dragonite, L50, F|\n|poke|p2|Zoroark-Hisui, L50, M|\n|poke|p2|Charizard, L50, M|\n|poke|p2|Milotic, L50, F|\n|poke|p2|Aegislash, L50, M|\n|teampreview|3\n|c|☆Bunny Normal|Good luck! Playing on **normal**.\n|\n|t:|1794693731\n|teamsize|p1|3\n|teamsize|p2|3\n|start\n|switch|p1a: Glimmora|Glimmora, L50, F|100/100\n|switch|p2a: Milotic|Milotic, L50, F|100/100\n|turn|1\n|\n|t:|1794693739\n|move|p2a: Milotic|Dark Pulse|p1a: Glimmora\n|-damage|p1a: Glimmora|48/100\n|-damage|p2a: Milotic|90/100|[from] item: Life Orb\n|cant|p1a: Glimmora|flinch\n|\n|upkeep\n|turn|2\n|\n|t:|1794693746\n|move|p2a: Milotic|Dark Pulse|p1a: Glimmora\n|-damage|p1a: Glimmora|4/100\n|-damage|p2a: Milotic|80/100|[from] item: Life Orb\n|move|p1a: Glimmora|Power Gem|p2a: Milotic\n|-damage|p2a: Milotic|0 fnt\n|replace|p2a: Zoroark|Zoroark-Hisui, L50, M\n|-end|p2a: Zoroark|Illusion\n|faint|p2a: Zoroark\n|\n|upkeep\n|\n|t:|1794693759\n|switch|p2a: Milotic|Milotic, L50, F|100/100\n|turn|3\n|\n|t:|1794693763\n|move|p1a: Glimmora|Energy Ball|p2a: Milotic\n|-supereffective|p2a: Milotic|1\n|-damage|p2a: Milotic|58/100\n|move|p2a: Milotic|Surf|p1a: Glimmora\n|-supereffective|p1a: Glimmora|1\n|-damage|p1a: Glimmora|0 fnt\n|faint|p1a: Glimmora\n|\n|upkeep\n|\n|t:|1794693763\n|switch|p1a: Ninetales|Ninetales-Alola, L50, M|100/100\n|-weather|Snowscape|[from] ability: Snow Warning|[of] p1a: Ninetales\n|turn|4\n|\n|t:|1794693779\n|move|p1a: Ninetales|Moonblast|p2a: Milotic\n|-damage|p2a: Milotic|36/100\n|move|p2a: Milotic|Recover|p2a: Milotic\n|-heal|p2a: Milotic|86/100\n|\n|-weather|Snowscape|[upkeep]\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1794693785
+}
