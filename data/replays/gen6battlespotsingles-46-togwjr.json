@@ -1,0 +1,12 @@
+{
+	"id": "gen6battlespotsingles-46-togwjr",
+	"format": "[Gen 6] Battle Spot Singles",
+	"players": [
+		"Bunny Normal",
+		"Piscean Pianist"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Normal\n|j|☆Piscean Pianist\n|t:|1794694355\n|gametype|singles\n|player|p1|Bunny Normal|bunny.png|1000\n|player|p2|Piscean Pianist|akari|1000\n|gen|6\n|tier|[Gen 6] Battle Spot Singles\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|Item Clause: Limit 1 of each item\n|clearpoke\n|poke|p1|Avalugg, L50, M|item\n|poke|p1|Clefable, L50, F|item\n|poke|p1|Roserade, L50, F|item\n|poke|p1|Jellicent, L50, F|\n|poke|p1|Porygon2, L50|item\n|poke|p1|Gliscor, L50, M|item\n|poke|p2|Lopunny, L50, M|item\n|poke|p2|Flygon, L50, M|item\n|poke|p2|Volcarona, L50, F|item\n|teampreview|3\n|c|☆Bunny Normal|Good luck! Playing on **normal**.\n|\n|t:|1794694363\n|teamsize|p1|3\n|teamsize|p2|3\n|start\n|switch|p1a: Gliscor|Gliscor, L50, M|48/48\n|switch|p2a: Lopunny|Lopunny, L50, M|48/48\n|turn|1\n|\n|t:|1794694370\n|detailschange|p2a: Lopunny|Lopunny-Mega, L50, M\n|-mega|p2a: Lopunny|Lopunny|Lopunnite\n|move|p2a: Lopunny|Fake Out|p1a: Gliscor\n|-damage|p1a: Gliscor|40/48\n|cant|p1a: Gliscor|flinch\n|\n|-status|p1a: Gliscor|tox|[from] item: Toxic Orb\n|upkeep\n|turn|2\n|\n|t:|1794694381\n|move|p2a: Lopunny|Ice Punch|p1a: Gliscor\n|-supereffective|p1a: Gliscor\n|-damage|p1a: Gliscor|4/48 tox\n|move|p1a: Gliscor|Earthquake|p2a: Lopunny\n|-damage|p2a: Lopunny|27/48\n|\n|-heal|p1a: Gliscor|10/48 tox|[from] ability: Poison Heal\n|upkeep\n|turn|3\n|\n|t:|1794694390\n|switch|p1a: Clefable|Clefable, L50, F|48/48\n|move|p2a: Lopunny|Ice Punch|p1a: Clefable\n|-damage|p1a: Clefable|32/48\n|\n|-heal|p1a: Clefable|34/48|[from] item: Leftovers\n|upkeep\n|turn|4\n|\n|t:|1794694399\n|switch|p2a: Volcarona|Volcarona, L50, F|48/48\n|move|p1a: Clefable|Moonblast|p2a: Volcarona\n|-resisted|p2a: Volcarona\n|-damage|p2a: Volcarona|39/48\n|\n|-heal|p1a: Clefable|37/48|[from] item: Leftovers\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1794694405
+}
