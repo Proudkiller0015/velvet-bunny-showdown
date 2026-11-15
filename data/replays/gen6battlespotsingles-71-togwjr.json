@@ -1,0 +1,12 @@
+{
+	"id": "gen6battlespotsingles-71-togwjr",
+	"format": "[Gen 6] Battle Spot Singles",
+	"players": [
+		"Bunny Easy",
+		"Piscean Pianist"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆Piscean Pianist\n|t:|1794728806\n|gametype|singles\n|badge|p2|silver|gen6battlespotsingles|2-2\n|player|p1|Bunny Easy|bunny.png|1000\n|player|p2|Piscean Pianist|akari|1184\n|gen|6\n|tier|[Gen 6] Battle Spot Singles\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|Item Clause: Limit 1 of each item\n|clearpoke\n|poke|p1|Azumarill, L50, M|item\n|poke|p1|Klefki, L50, F|item\n|poke|p1|Hydreigon, L50, M|item\n|poke|p1|Garchomp, L50, M|item\n|poke|p1|Talonflame, L50, M|item\n|poke|p1|Heatran, L50, F|item\n|poke|p2|Lopunny, L50, M|item\n|poke|p2|Flygon, L50, M|item\n|poke|p2|Volcarona, L50, M|item\n|poke|p2|Drifblim, L50, M|item\n|teampreview|3\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1794728831\n|teamsize|p1|3\n|teamsize|p2|3\n|start\n|switch|p1a: Talonflame|Talonflame, L50, M|48/48\n|switch|p2a: Drifblim|Drifblim, L50, M|48/48\n|turn|1\n|\n|t:|1794728838\n|move|p2a: Drifblim|Protect|p2a: Drifblim\n|-singleturn|p2a: Drifblim|Protect\n|move|p1a: Talonflame|Flare Blitz|p2a: Drifblim\n|-activate|p2a: Drifblim|move: Protect\n|\n|-status|p2a: Drifblim|brn|[from] item: Flame Orb\n|upkeep\n|turn|2\n|\n|t:|1794728850\n|move|p1a: Talonflame|Flare Blitz|p2a: Drifblim\n|-damage|p2a: Drifblim|1/48 brn\n|-damage|p1a: Talonflame|22/48|[from] Recoil\n|move|p2a: Drifblim|Thunderbolt|p1a: Talonflame\n|-supereffective|p1a: Talonflame\n|-damage|p1a: Talonflame|0 fnt\n|faint|p1a: Talonflame\n|\n|-damage|p2a: Drifblim|0 fnt|[from] brn\n|faint|p2a: Drifblim\n|upkeep\n|\n|t:|1794728861\n|switch|p1a: Garchomp|Garchomp, L50, M|48/48\n|switch|p2a: Lopunny|Lopunny, L50, M|48/48\n|turn|3\n|\n|t:|1794728867\n|detailschange|p1a: Garchomp|Garchomp-Mega, L50, M\n|-mega|p1a: Garchomp|Garchomp|Garchompite\n|detailschange|p2a: Lopunny|Lopunny-Mega, L50, M\n|-mega|p2a: Lopunny|Lopunny|Lopunnite\n|move|p2a: Lopunny|Fake Out|p1a: Garchomp\n|-damage|p1a: Garchomp|38/48\n|cant|p1a: Garchomp|flinch\n|\n|upkeep\n|turn|4\n|\n|t:|1794728875\n|move|p2a: Lopunny|Ice Punch|p1a: Garchomp\n|-supereffective|p1a: Garchomp\n|-damage|p1a: Garchomp|0 fnt\n|faint|p1a: Garchomp\n|detailschange|p1: Garchomp|Garchomp, L50, M|[silent]\n|\n|upkeep\n|\n|t:|1794728875\n|switch|p1a: Hydreigon|Hydreigon, L50, M|48/48\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1794728886
+}
