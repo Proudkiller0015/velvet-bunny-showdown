@@ -1,0 +1,12 @@
+{
+	"id": "gen3randombattle-1-tok7a3",
+	"format": "[Gen 3] Random Battle",
+	"players": [
+		"Bunny Normal",
+		"0p9o9i8"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Normal\n|j|☆0p9o9i8\n|t:|1794775288\n|gametype|singles\n|badge|p1|gold|gen3randombattle|1-1\n|badge|p2|silver|gen3randombattle|2-2\n|player|p1|Bunny Normal|bunny.png|1224\n|player|p2|0p9o9i8|170|1153\n|gen|3\n|tier|[Gen 3] Random Battle\n|rated|\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Beat Up Nicknames Mod: Beat Up will not reveal any party members\n|rule|Endless Battle Clause: Forcing endless battles is banned\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Switch Priority Clause Mod: Faster Pokémon switch first\n|rule|Species Clause: Limit one of each Pokémon\n|rule|OHKO Clause: OHKO moves are banned\n|rule|Evasion Items Clause: Evasion items are banned\n|rule|Evasion Moves Clause: Evasion moves are banned\n|\n|t:|1794775288\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Furret|Furret, L87, M|100/100\n|switch|p2a: Ninjask|Ninjask, L83, F|100/100\n|turn|1\n|c|☆Bunny Normal|Good luck! Playing on **normal**.\n|\n|t:|1794775308\n|move|p2a: Ninjask|Swords Dance|p2a: Ninjask\n|-boost|p2a: Ninjask|atk|2\n|move|p1a: Furret|Shadow Ball|p2a: Ninjask\n|-damage|p2a: Ninjask|66/100\n|-unboost|p2a: Ninjask|spd|1\n|\n|-ability|p2a: Ninjask|Speed Boost|boost\n|-boost|p2a: Ninjask|spe|1\n|upkeep\n|turn|2\n|\n|t:|1794775350\n|switch|p1a: Slaking|Slaking, L78, M|100/100\n|move|p2a: Ninjask|Aerial Ace|p1a: Slaking\n|-damage|p1a: Slaking|69/100\n|\n|-ability|p2a: Ninjask|Speed Boost|boost\n|-boost|p2a: Ninjask|spe|1\n|upkeep\n|turn|3\n|\n|t:|1794775361\n|move|p2a: Ninjask|Aerial Ace|p1a: Slaking\n|-damage|p1a: Slaking|38/100\n|move|p1a: Slaking|Hyper Beam|p2a: Ninjask\n|-damage|p2a: Ninjask|0 fnt\n|-mustrecharge|p1a: Slaking\n|faint|p2a: Ninjask\n|\n|t:|1794775373\n|switch|p2a: Alakazam|Alakazam, L76, M|100/100\n|\n|upkeep\n|turn|4\n|\n|t:|1794775377\n|move|p2a: Alakazam|Calm Mind|p2a: Alakazam\n|-boost|p2a: Alakazam|spa|1\n|-boost|p2a: Alakazam|spd|1\n|cant|p1a: Slaking|recharge\n|\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1794775379
+}
