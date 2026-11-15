@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-91-togwjr",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Piscean Pianist",
+		"Velvet Bunny"
+	],
+	"rating": null,
+	"log": "|j|☆Piscean Pianist\n|j|☆Velvet Bunny\n|t:|1794766597\n|gametype|singles\n|player|p1|Piscean Pianist|iris-gen5bw2|\n|player|p2|Velvet Bunny|bunny.png|\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1794766597\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Shiftry|Shiftry, L89, M|100/100\n|switch|p2a: Gallade|Gallade, L80, M|100/100\n|turn|1\n|c|☆Velvet Bunny|Good luck! Playing on **easy**. (PM me to change it.)\n|\n|t:|1794766614\n|-terastallize|p2a: Gallade|Fighting\n|move|p1a: Shiftry|Will-O-Wisp|p2a: Gallade\n|-status|p2a: Gallade|brn\n|move|p2a: Gallade|Sacred Sword|p1a: Shiftry\n|-supereffective|p1a: Shiftry\n|-damage|p1a: Shiftry|0 fnt\n|faint|p1a: Shiftry\n|-damage|p2a: Gallade|90/100 brn|[from] item: Life Orb\n|\n|-damage|p2a: Gallade|84/100 brn|[from] brn\n|upkeep\n|\n|t:|1794766629\n|switch|p1a: Indeedee|Indeedee-F, L90, F|100/100\n|-fieldstart|move: Psychic Terrain|[from] ability: Psychic Surge|[of] p1a: Indeedee\n|turn|2\n|\n|t:|1794766634\n|move|p1a: Indeedee|Calm Mind|p1a: Indeedee\n|-boost|p1a: Indeedee|spa|1\n|-boost|p1a: Indeedee|spd|1\n|move|p2a: Gallade|Sacred Sword|p1a: Indeedee\n|-damage|p1a: Indeedee|38/100\n|-damage|p2a: Gallade|74/100 brn|[from] item: Life Orb\n|\n|-damage|p2a: Gallade|68/100 brn|[from] brn\n|upkeep\n|turn|3\n|\n|t:|1794766644\n|move|p1a: Indeedee|Hypno Whirl|p2a: Gallade\n|-supereffective|p2a: Gallade\n|-damage|p2a: Gallade|0 fnt\n|faint|p2a: Gallade\n|-damage|p1a: Indeedee|28/100|[from] item: Life Orb\n|\n|upkeep\n|\n|t:|1794766644\n|switch|p2a: Rampardos|Rampardos, L90, F|100/100\n|turn|4\n|\n|t:|1794766654\n|move|p2a: Rampardos|Earthquake|p1a: Indeedee\n|-damage|p1a: Indeedee|0 fnt\n|faint|p1a: Indeedee\n|\n|upkeep\n|\n|t:|1794766661\n|switch|p1a: Hitmonlee|Hitmonlee, L85, M|100/100\n|turn|5\n|\n|t:|1794766666\n|move|p1a: Hitmonlee|Drain Punch|p2a: Rampardos\n|-supereffective|p2a: Rampardos\n|-damage|p2a: Rampardos|33/100\n|move|p2a: Rampardos|Earthquake|p1a: Hitmonlee\n|-damage|p1a: Hitmonlee|17/100\n|\n|upkeep\n|turn|6\n",
+	"inputlog": null,
+	"uploadtime": 1794766668
+}
