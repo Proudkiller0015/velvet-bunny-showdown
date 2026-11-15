@@ -1,0 +1,12 @@
+{
+	"id": "gen3randombattle-94-togwjr",
+	"format": "[Gen 3] Random Battle",
+	"players": [
+		"Bunny Normal",
+		"0p9o9i8"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Normal\n|j|☆0p9o9i8\n|t:|1794768235\n|gametype|singles\n|badge|p1|gold|gen3randombattle|1-1\n|badge|p2|silver|gen3randombattle|2-2\n|player|p1|Bunny Normal|bunny.png|1236\n|player|p2|0p9o9i8|169|1117\n|gen|3\n|tier|[Gen 3] Random Battle\n|rated|\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Beat Up Nicknames Mod: Beat Up will not reveal any party members\n|rule|Endless Battle Clause: Forcing endless battles is banned\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Switch Priority Clause Mod: Faster Pokémon switch first\n|rule|Species Clause: Limit one of each Pokémon\n|rule|OHKO Clause: OHKO moves are banned\n|rule|Evasion Items Clause: Evasion items are banned\n|rule|Evasion Moves Clause: Evasion moves are banned\n|\n|t:|1794768235\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Gorebyss|Gorebyss, L85, F|100/100\n|switch|p2a: Exploud|Exploud, L86, F|100/100\n|turn|1\n|c|☆Bunny Normal|Good luck! Playing on **normal**.\n|\n|t:|1794768260\n|move|p2a: Exploud|Return|p1a: Gorebyss\n|-damage|p1a: Gorebyss|44/100\n|move|p1a: Gorebyss|Surf|p2a: Exploud\n|-damage|p2a: Exploud|54/100\n|\n|upkeep\n|turn|2\n|\n|t:|1794768267\n|move|p2a: Exploud|Return|p1a: Gorebyss\n|-damage|p1a: Gorebyss|0 fnt\n|faint|p1a: Gorebyss\n|\n|t:|1794768267\n|switch|p1a: Mawile|Mawile, L96, M|100/100\n|-ability|p1a: Mawile|Intimidate|boost\n|-unboost|p2a: Exploud|atk|1\n|\n|upkeep\n|turn|3\n|\n|t:|1794768289\n|-singleturn|p1a: Mawile|move: Focus Punch\n|switch|p2a: Lanturn|Lanturn, L82, F|100/100\n|move|p1a: Mawile|Focus Punch|p2a: Lanturn\n|-damage|p2a: Lanturn|47/100\n|\n|-heal|p2a: Lanturn|53/100|[from] item: Leftovers\n|upkeep\n|turn|4\n|\n|t:|1794768302\n|move|p2a: Lanturn|Thunderbolt|p1a: Mawile\n|-damage|p1a: Mawile|61/100\n|move|p1a: Mawile|Substitute|p1a: Mawile\n|-start|p1a: Mawile|Substitute\n|-damage|p1a: Mawile|36/100\n|\n|-heal|p2a: Lanturn|59/100|[from] item: Leftovers\n|-heal|p1a: Mawile|42/100|[from] item: Leftovers\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1794768308
+}
