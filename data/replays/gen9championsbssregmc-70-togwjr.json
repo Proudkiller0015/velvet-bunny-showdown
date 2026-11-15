@@ -1,0 +1,12 @@
+{
+	"id": "gen9championsbssregmc-70-togwjr",
+	"format": "[Gen 9 Champions] BSS Reg M-C",
+	"players": [
+		"Bunny Hard",
+		"Piscean Pianist"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Hard\n|j|☆Piscean Pianist\n|t:|1794727709\n|gametype|singles\n|badge|p1|silver|gen9championsbssregmc|2-2\n|badge|p2|gold|gen9championsbssregmc|1-1\n|player|p1|Bunny Hard|bunny.png|1284\n|player|p2|Piscean Pianist|akari|1314\n|gen|9\n|tier|[Gen 9 Champions] BSS Reg M-C\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|Item Clause: Limit 1 of each item\n|clearpoke\n|poke|p1|Toxapex, L50, M|\n|poke|p1|Gholdengo, L50|\n|poke|p1|Basculegion, L50, M|\n|poke|p1|Volcarona, L50, M|\n|poke|p1|Scizor, L50, F|\n|poke|p1|Hippowdon, L50, M|\n|poke|p2|Lucario, L50, M|\n|poke|p2|Dragonite, L50, M|\n|poke|p2|Zoroark-Hisui, L50, F|\n|poke|p2|Charizard, L50, F|\n|poke|p2|Milotic, L50, F|\n|poke|p2|Aegislash, L50, F|\n|teampreview|3\n|c|☆Bunny Hard|Good luck! Playing on **hard**.\n|\n|t:|1794727737\n|teamsize|p1|3\n|teamsize|p2|3\n|start\n|switch|p1a: Basculegion|Basculegion, L50, M|100/100\n|switch|p2a: Milotic|Milotic, L50, F|100/100\n|turn|1\n|\n|t:|1794727746\n|move|p1a: Basculegion|Outrage|p2a: Milotic\n|-damage|p2a: Milotic|62/100\n|move|p2a: Milotic|Dragon Pulse|p1a: Basculegion\n|-damage|p1a: Basculegion|75/100\n|\n|upkeep\n|turn|2\n|\n|t:|1794727754\n|move|p1a: Basculegion|Outrage|p2a: Milotic|[from] lockedmove\n|-damage|p2a: Milotic|21/100\n|move|p2a: Milotic|Recover|p2a: Milotic\n|-heal|p2a: Milotic|71/100\n|\n|upkeep\n|turn|3\n|\n|t:|1794727761\n|move|p1a: Basculegion|Outrage|p2a: Milotic|[from] lockedmove\n|-damage|p2a: Milotic|31/100\n|-start|p1a: Basculegion|confusion|[fatigue]\n|move|p2a: Milotic|Recover|p2a: Milotic\n|-heal|p2a: Milotic|81/100\n|\n|upkeep\n|turn|4\n|\n|t:|1794727771\n|-activate|p1a: Basculegion|confusion\n|-damage|p1a: Basculegion|60/100|[from] confusion\n|move|p2a: Milotic|Dragon Pulse|p1a: Basculegion\n|-damage|p1a: Basculegion|32/100\n|\n|upkeep\n|turn|5\n|\n|t:|1794727777\n|-activate|p1a: Basculegion|confusion\n|move|p1a: Basculegion|Outrage|p2a: Milotic\n|-damage|p2a: Milotic|44/100\n|move|p2a: Milotic|Dragon Pulse|p1a: Basculegion\n|-damage|p1a: Basculegion|6/100\n|\n|upkeep\n|turn|6\n|\n|t:|1794727785\n|-activate|p1a: Basculegion|confusion\n|move|p1a: Basculegion|Outrage|p2a: Milotic|[from] lockedmove\n|-damage|p2a: Milotic|2/100\n|move|p2a: Milotic|Recover|p2a: Milotic\n|-heal|p2a: Milotic|52/100\n|\n|upkeep\n|turn|7\n",
+	"inputlog": null,
+	"uploadtime": 1794727786
+}
