@@ -1,0 +1,12 @@
+{
+	"id": "gen9championsbssregmc-82-togwjr",
+	"format": "[Gen 9 Champions] BSS Reg M-C",
+	"players": [
+		"Bunny Hard",
+		"Piscean Pianist"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Hard\n|j|☆Piscean Pianist\n|t:|1794763258\n|gametype|singles\n|badge|p1|silver|gen9championsbssregmc|2-2\n|badge|p2|gold|gen9championsbssregmc|1-1\n|player|p1|Bunny Hard|bunny.png|1289\n|player|p2|Piscean Pianist|iris-gen5bw2|1361\n|gen|9\n|tier|[Gen 9 Champions] BSS Reg M-C\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|Item Clause: Limit 1 of each item\n|clearpoke\n|poke|p1|Indeedee-F, L50, F|\n|poke|p1|Gyarados, L50, F|\n|poke|p1|Gholdengo, L50|\n|poke|p1|Ninetales-Alola, L50, F|\n|poke|p1|Dragonite, L50, M|\n|poke|p1|Dragapult, L50, M|\n|poke|p2|Lucario, L50, M|\n|poke|p2|Dragonite, L50, F|\n|poke|p2|Zoroark-Hisui, L50, M|\n|poke|p2|Charizard, L50, F|\n|poke|p2|Milotic, L50, M|\n|poke|p2|Torterra, L50, F|\n|teampreview|3\n|c|☆Bunny Hard|Good luck! Playing on **hard**.\n|\n|t:|1794763265\n|teamsize|p1|3\n|teamsize|p2|3\n|start\n|switch|p1a: Dragonite|Dragonite, L50, M|100/100\n|switch|p2a: Dragonite|Dragonite, L50, F|100/100\n|turn|1\n|\n|t:|1794763271\n|move|p2a: Dragonite|Icy Wind|p1a: Dragonite\n|-supereffective|p1a: Dragonite|2\n|-damage|p1a: Dragonite|43/100\n|-unboost|p1a: Dragonite|spe|1\n|-enditem|p1a: Dragonite|Sitrus Berry|[eat]\n|-heal|p1a: Dragonite|68/100|[from] item: Sitrus Berry\n|-damage|p2a: Dragonite|90/100|[from] item: Life Orb\n|move|p1a: Dragonite|Dragon Dance|p1a: Dragonite\n|-boost|p1a: Dragonite|atk|1\n|-boost|p1a: Dragonite|spe|1\n|\n|upkeep\n|turn|2\n|\n|t:|1794763285\n|switch|p1a: Ninetales|Ninetales-Alola, L50, F|100/100\n|move|p2a: Dragonite|Icy Wind|p1a: Ninetales\n|-resisted|p1a: Ninetales|1\n|-damage|p1a: Ninetales|85/100\n|-unboost|p1a: Ninetales|spe|1\n|-damage|p2a: Dragonite|80/100|[from] item: Life Orb\n|\n|upkeep\n|turn|3\n|\n|t:|1794763291\n|move|p2a: Dragonite|Flamethrower|p1a: Ninetales\n|-supereffective|p1a: Ninetales|1\n|-damage|p1a: Ninetales|0 fnt\n|faint|p1a: Ninetales\n|-damage|p2a: Dragonite|70/100|[from] item: Life Orb\n|\n|upkeep\n|\n|t:|1794763291\n|switch|p1a: Dragapult|Dragapult, L50, M|100/100\n|turn|4\n|\n|t:|1794763298\n|move|p1a: Dragapult|Outrage|p2a: Dragonite\n|-crit|p2a: Dragonite\n|-damage|p2a: Dragonite|0 fnt\n|replace|p2a: Zoroark|Zoroark-Hisui, L50, M\n|-end|p2a: Zoroark|Illusion\n|faint|p2a: Zoroark\n|\n|upkeep\n|\n|t:|1794763306\n|switch|p2a: Dragonite|Dragonite, L50, F|100/100\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1794763308
+}
