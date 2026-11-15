@@ -1,0 +1,12 @@
+{
+	"id": "gen3randombattle-95-togwjr",
+	"format": "[Gen 3] Random Battle",
+	"players": [
+		"Bunny Normal",
+		"0p9o9i8"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Normal\n|j|☆0p9o9i8\n|t:|1794769265\n|gametype|singles\n|badge|p1|gold|gen3randombattle|1-1\n|badge|p2|silver|gen3randombattle|2-2\n|player|p1|Bunny Normal|bunny.png|1247\n|player|p2|0p9o9i8|169|1106\n|gen|3\n|tier|[Gen 3] Random Battle\n|rated|\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Beat Up Nicknames Mod: Beat Up will not reveal any party members\n|rule|Endless Battle Clause: Forcing endless battles is banned\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Switch Priority Clause Mod: Faster Pokémon switch first\n|rule|Species Clause: Limit one of each Pokémon\n|rule|OHKO Clause: OHKO moves are banned\n|rule|Evasion Items Clause: Evasion items are banned\n|rule|Evasion Moves Clause: Evasion moves are banned\n|\n|t:|1794769265\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Walrein|Walrein, L80, M|100/100\n|switch|p2a: Pidgeot|Pidgeot, L87, F|100/100\n|turn|1\n|c|☆Bunny Normal|Good luck! Playing on **normal**.\n|\n|t:|1794769284\n|move|p2a: Pidgeot|Return|p1a: Walrein\n|-damage|p1a: Walrein|68/100\n|move|p1a: Walrein|Ice Beam|p2a: Pidgeot\n|-supereffective|p2a: Pidgeot\n|-damage|p2a: Pidgeot|23/100\n|\n|-enditem|p2a: Pidgeot|Liechi Berry|[eat]\n|-boost|p2a: Pidgeot|atk|1|[from] item: Liechi Berry\n|-heal|p1a: Walrein|74/100|[from] item: Leftovers\n|upkeep\n|turn|2\n|\n|t:|1794769297\n|move|p2a: Pidgeot|Return|p1a: Walrein\n|-damage|p1a: Walrein|25/100\n|move|p1a: Walrein|Ice Beam|p2a: Pidgeot\n|-supereffective|p2a: Pidgeot\n|-damage|p2a: Pidgeot|0 fnt\n|faint|p2a: Pidgeot\n|\n|t:|1794769319\n|switch|p2a: Exploud|Exploud, L86, F|100/100\n|\n|-heal|p1a: Walrein|31/100|[from] item: Leftovers\n|upkeep\n|turn|3\n|\n|t:|1794769327\n|switch|p1a: Bellossom|Bellossom, L94, F|100/100\n|move|p2a: Exploud|Return|p1a: Bellossom\n|-damage|p1a: Bellossom|66/100\n|\n|-heal|p1a: Bellossom|73/100|[from] item: Leftovers\n|upkeep\n|turn|4\n|\n|t:|1794769337\n|move|p2a: Exploud|Flamethrower|p1a: Bellossom\n|-supereffective|p1a: Bellossom\n|-crit|p1a: Bellossom\n|-damage|p1a: Bellossom|2/100\n|move|p1a: Bellossom|Hidden Power|p2a: Exploud\n|-damage|p2a: Exploud|77/100\n|\n|-heal|p2a: Exploud|83/100|[from] item: Leftovers\n|-heal|p1a: Bellossom|8/100|[from] item: Leftovers\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1794769348
+}
