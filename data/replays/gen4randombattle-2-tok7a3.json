@@ -1,0 +1,12 @@
+{
+	"id": "gen4randombattle-2-tok7a3",
+	"format": "[Gen 4] Random Battle",
+	"players": [
+		"Bunny Normal",
+		"0p9o9i8"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Normal\n|j|☆0p9o9i8\n|t:|1794775585\n|gametype|singles\n|player|p1|Bunny Normal|bunny.png|1000\n|player|p2|0p9o9i8|170|1000\n|gen|4\n|tier|[Gen 4] Random Battle\n|rated|\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|HP Percentage Mod: HP is shown in percentages\n|\n|t:|1794775585\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Vileplume|Vileplume, L90, F|100/100\n|switch|p2a: Nidoqueen|Nidoqueen, L84, F|100/100\n|turn|1\n|c|☆Bunny Normal|Good luck! Playing on **normal**.\n|\n|t:|1794775599\n|move|p2a: Nidoqueen|Toxic Spikes|p1a: Vileplume\n|-sidestart|p1: Bunny Normal|move: Toxic Spikes\n|move|p1a: Vileplume|Solar Beam||[still]\n|-prepare|p1a: Vileplume|Solar Beam\n|\n|upkeep\n|turn|2\n|\n|t:|1794775622\n|switch|p2a: Cherrim|Cherrim, L95, F|100/100\n|move|p1a: Vileplume|Solar Beam|p2a: Cherrim|[from] lockedmove\n|-resisted|p2a: Cherrim\n|-damage|p2a: Cherrim|65/100\n|-damage|p1a: Vileplume|91/100|[from] item: Life Orb\n|\n|-heal|p2a: Cherrim|71/100|[from] item: Leftovers\n|upkeep\n|turn|3\n|\n|t:|1794775633\n|move|p2a: Cherrim|Leech Seed|p1a: Vileplume|[miss]\n|-miss|p2a: Cherrim|p1a: Vileplume\n|move|p1a: Vileplume|Sludge Bomb|p2a: Cherrim\n|-supereffective|p2a: Cherrim\n|-damage|p2a: Cherrim|0 fnt\n|faint|p2a: Cherrim\n|-damage|p1a: Vileplume|81/100|[from] item: Life Orb\n|\n|upkeep\n|\n|t:|1794775668\n|switch|p2a: Metagross|Metagross, L77|100/100\n|turn|4\n|\n|t:|1794775679\n|move|p2a: Metagross|Meteor Mash|p1a: Vileplume\n|-damage|p1a: Vileplume|28/100\n|-damage|p2a: Metagross|90/100|[from] item: Life Orb\n|move|p1a: Vileplume|Hidden Power|p2a: Metagross\n|-supereffective|p2a: Metagross\n|-damage|p2a: Metagross|26/100\n|-damage|p1a: Vileplume|18/100|[from] item: Life Orb\n|\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1794775679
+}
