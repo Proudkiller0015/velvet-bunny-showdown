@@ -1,0 +1,12 @@
+{
+	"id": "gen3randombattle-92-togwjr",
+	"format": "[Gen 3] Random Battle",
+	"players": [
+		"Bunny Normal",
+		"0p9o9i8"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Normal\n|j|☆0p9o9i8\n|t:|1794767632\n|gametype|singles\n|badge|p1|gold|gen3randombattle|1-1\n|badge|p2|silver|gen3randombattle|2-2\n|player|p1|Bunny Normal|bunny.png|1211\n|player|p2|0p9o9i8|169|1146\n|gen|3\n|tier|[Gen 3] Random Battle\n|rated|\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Beat Up Nicknames Mod: Beat Up will not reveal any party members\n|rule|Endless Battle Clause: Forcing endless battles is banned\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Switch Priority Clause Mod: Faster Pokémon switch first\n|rule|Species Clause: Limit one of each Pokémon\n|rule|OHKO Clause: OHKO moves are banned\n|rule|Evasion Items Clause: Evasion items are banned\n|rule|Evasion Moves Clause: Evasion moves are banned\n|\n|t:|1794767633\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Crawdaunt|Crawdaunt, L89, F|100/100\n|switch|p2a: Crawdaunt|Crawdaunt, L89, M|100/100\n|turn|1\n|c|☆Bunny Normal|Good luck! Playing on **normal**.\n|\n|t:|1794767641\n|move|p1a: Crawdaunt|Double-Edge|p2a: Crawdaunt\n|-damage|p2a: Crawdaunt|41/100\n|-damage|p1a: Crawdaunt|81/100|[from] Recoil\n|move|p2a: Crawdaunt|Swords Dance|p2a: Crawdaunt\n|-boost|p2a: Crawdaunt|atk|2\n|\n|-heal|p2a: Crawdaunt|47/100|[from] item: Leftovers\n|upkeep\n|turn|2\n|\n|t:|1794767651\n|move|p1a: Crawdaunt|Double-Edge|p2a: Crawdaunt\n|-crit|p2a: Crawdaunt\n|-damage|p2a: Crawdaunt|0 fnt\n|-damage|p1a: Crawdaunt|65/100|[from] Recoil\n|faint|p2a: Crawdaunt\n|\n|t:|1794767665\n|switch|p2a: Victreebel|Victreebel, L85, M|100/100\n|\n|upkeep\n|turn|3\n|\n|t:|1794767672\n|move|p2a: Victreebel|Magical Leaf|p1a: Crawdaunt\n|-supereffective|p1a: Crawdaunt\n|-damage|p1a: Crawdaunt|0 fnt\n|faint|p1a: Crawdaunt\n|\n|t:|1794767672\n|switch|p1a: Swalot|Swalot, L87, M|100/100\n|\n|upkeep\n|turn|4\n|\n|t:|1794767680\n|move|p2a: Victreebel|Hidden Power|p1a: Swalot\n|-supereffective|p1a: Swalot\n|-damage|p1a: Swalot|63/100\n|move|p1a: Swalot|Explosion|p2a: Victreebel\n|-damage|p2a: Victreebel|0 fnt\n|faint|p1a: Swalot\n|faint|p2a: Victreebel\n|\n|t:|1794767699\n|switch|p2a: Noctowl|Noctowl, L93, M|100/100\n|switch|p1a: Forretress|Forretress, L81, F|100/100\n|\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1794767708
+}
