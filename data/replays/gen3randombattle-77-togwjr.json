@@ -1,0 +1,12 @@
+{
+	"id": "gen3randombattle-77-togwjr",
+	"format": "[Gen 3] Random Battle",
+	"players": [
+		"Bunny Normal",
+		"0p9o9i8"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Normal\n|j|☆0p9o9i8\n|t:|1794755987\n|gametype|singles\n|badge|p1|gold|gen3randombattle|1-1\n|badge|p2|silver|gen3randombattle|2-2\n|player|p1|Bunny Normal|bunny.png|1220\n|player|p2|0p9o9i8|170|1040\n|gen|3\n|tier|[Gen 3] Random Battle\n|rated|\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Beat Up Nicknames Mod: Beat Up will not reveal any party members\n|rule|Endless Battle Clause: Forcing endless battles is banned\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Switch Priority Clause Mod: Faster Pokémon switch first\n|rule|Species Clause: Limit one of each Pokémon\n|rule|OHKO Clause: OHKO moves are banned\n|rule|Evasion Items Clause: Evasion items are banned\n|rule|Evasion Moves Clause: Evasion moves are banned\n|\n|t:|1794755987\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Claydol|Claydol, L81|100/100\n|switch|p2a: Azumarill|Azumarill, L87, M|100/100\n|turn|1\n|c|☆Bunny Normal|Good luck! Playing on **normal**.\n|\n|t:|1794755995\n|move|p1a: Claydol|Explosion|p2a: Azumarill\n|-damage|p2a: Azumarill|22/100\n|faint|p1a: Claydol\n|\n|t:|1794755995\n|switch|p1a: Electrode|Electrode, L82|100/100\n|\n|-heal|p2a: Azumarill|28/100|[from] item: Leftovers\n|upkeep\n|turn|2\n|\n|t:|1794756020\n|switch|p2a: Miltank|Miltank, L77, F|100/100\n|move|p1a: Electrode|Thunderbolt|p2a: Miltank\n|-damage|p2a: Miltank|63/100\n|\n|-heal|p2a: Miltank|69/100|[from] item: Leftovers\n|upkeep\n|turn|3\n|\n|t:|1794756029\n|move|p1a: Electrode|Toxic|p2a: Miltank\n|-status|p2a: Miltank|tox\n|move|p2a: Miltank|Earthquake|p1a: Electrode\n|-supereffective|p1a: Electrode\n|-damage|p1a: Electrode|50/100\n|\n|-heal|p1a: Electrode|56/100|[from] item: Leftovers\n|-heal|p2a: Miltank|75/100 tox|[from] item: Leftovers\n|-damage|p2a: Miltank|69/100 tox|[from] psn\n|upkeep\n|turn|4\n|\n|t:|1794756039\n|move|p1a: Electrode|Thunderbolt|p2a: Miltank\n|-damage|p2a: Miltank|31/100 tox\n|move|p2a: Miltank|Earthquake|p1a: Electrode\n|-supereffective|p1a: Electrode\n|-damage|p1a: Electrode|0 fnt\n|faint|p1a: Electrode\n|\n|t:|1794756039\n|switch|p1a: Slowbro|Slowbro, L82, M|100/100\n|\n|-heal|p2a: Miltank|37/100 tox|[from] item: Leftovers\n|-damage|p2a: Miltank|25/100 tox|[from] psn\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1794756047
+}
