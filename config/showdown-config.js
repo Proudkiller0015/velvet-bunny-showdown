@@ -776,6 +776,47 @@ exports.commands = {
 		`Rank can be the symbol or the name, eg "@" or "moderator". /setrank [username], none removes it.`,
 		`Requires: & ~`,
 	],
+	/**
+	 * Every battle running, private ones included, with a button that puts you in.
+	 *
+	 * A private battle renames its room to battle-<format>-<n>-<31 random letters>pw, so the
+	 * link a player copies before going private leads nowhere, and Showdown's own way in
+	 * (rank at least '%') reads the global auth map, which holds nobody here (see /setrank):
+	 * the owner was turned away from a private battle on 14 Nov.
+	 */
+	battles(target, room, user) {
+		this.checkCan('bypassall');   // owner and administrator only
+		const esc = Chat.escapeHTML;
+		const rows = [];
+		for (const r of Rooms.rooms.values()) {
+			if (!r.battle || r.battle.ended) continue;
+			const players = r.battle.players.map(p => p.name).filter(Boolean).join(' vs ') || '(waiting)';
+			rows.push(
+				`<button class="button" name="send" value="/forcejoin ${esc(r.roomid)}">Join</button> ` +
+				`${esc(r.title)} - ${esc(players)}, turn ${Number(r.battle.turn) || 0}` +
+				`${r.settings.isPrivate ? ' <small>(private)</small>' : ''}`
+			);
+		}
+		this.sendReplyBox(rows.length ? rows.join('<br />') : 'No battles running.');
+	},
+	battleshelp: [`/battles - every battle running, private ones too, with a Join button. Requires: & ~`],
+	/**
+	 * Join a battle whatever its privacy. Takes the room's full name or the short link a
+	 * player sent before it went private (battle-gen9rpdraft-53), which no longer exists
+	 * under that name.
+	 */
+	forcejoin(target, room, user, connection) {
+		this.checkCan('bypassall');   // owner and administrator only
+		const wanted = String(target || '').trim().replace(/^.*\//, '').toLowerCase();
+		if (!wanted) return this.parse('/help forcejoin');
+		const found = Rooms.get(wanted) ||
+			[...Rooms.rooms.values()].find(r => r.battle && r.roomid.startsWith(`${wanted}-`) && r.roomid.endsWith('pw'));
+		if (!found) throw new Chat.ErrorMessage(`No room ${wanted} (it may have ended). /battles lists the ones running.`);
+		user.joinRoom(found.roomid, connection);
+	},
+	forcejoinhelp: [
+		`/forcejoin [link or room] - join a room or battle even if it is private or invite-only; the short link of a battle that went private works too. Requires: & ~`,
+	],
 	customavatars: 'avatarlist',
 	avatars2: 'avatarlist',
 	/**
