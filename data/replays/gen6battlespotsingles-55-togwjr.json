@@ -1,0 +1,12 @@
+{
+	"id": "gen6battlespotsingles-55-togwjr",
+	"format": "[Gen 6] Battle Spot Singles",
+	"players": [
+		"Bunny Normal",
+		"Piscean Pianist"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Normal\n|j|☆Piscean Pianist\n|t:|1794724429\n|gametype|singles\n|badge|p1|gold|gen6battlespotsingles|1-1\n|badge|p2|silver|gen6battlespotsingles|2-2\n|player|p1|Bunny Normal|bunny.png|1211\n|player|p2|Piscean Pianist|akari|1149\n|gen|6\n|tier|[Gen 6] Battle Spot Singles\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|Item Clause: Limit 1 of each item\n|clearpoke\n|poke|p1|Togekiss, L50, M|item\n|poke|p1|Quagsire, L50, M|\n|poke|p1|Avalugg, L50, M|item\n|poke|p1|Jellicent, L50, F|\n|poke|p1|Chansey, L50, F|item\n|poke|p1|Roselia, L50, F|item\n|poke|p2|Lopunny, L50, F|item\n|poke|p2|Flygon, L50, M|item\n|poke|p2|Volcarona, L50, M|item\n|teampreview|3\n|c|☆Bunny Normal|Good luck! Playing on **normal**.\n|\n|t:|1794724434\n|teamsize|p1|3\n|teamsize|p2|3\n|start\n|switch|p1a: Togekiss|Togekiss, L50, M|48/48\n|switch|p2a: Lopunny|Lopunny, L50, F|48/48\n|turn|1\n|\n|t:|1794724441\n|detailschange|p2a: Lopunny|Lopunny-Mega, L50, F\n|-mega|p2a: Lopunny|Lopunny|Lopunnite\n|move|p2a: Lopunny|Fake Out|p1a: Togekiss\n|-damage|p1a: Togekiss|35/48\n|cant|p1a: Togekiss|flinch\n|\n|-heal|p1a: Togekiss|38/48|[from] item: Leftovers\n|upkeep\n|turn|2\n|\n|t:|1794724455\n|move|p2a: Lopunny|Ice Punch|p1a: Togekiss\n|-supereffective|p1a: Togekiss\n|-damage|p1a: Togekiss|9/48y\n|move|p1a: Togekiss|Dazzling Gleam|p2a: Lopunny\n|-supereffective|p2a: Lopunny\n|-damage|p2a: Lopunny|8/48\n|\n|-heal|p1a: Togekiss|12/48|[from] item: Leftovers\n|upkeep\n|turn|3\n|\n|t:|1794724464\n|move|p2a: Lopunny|Return|p1a: Togekiss\n|-damage|p1a: Togekiss|0 fnt\n|faint|p1a: Togekiss\n|\n|upkeep\n|\n|t:|1794724464\n|switch|p1a: Jellicent|Jellicent, L50, F|48/48\n|turn|4\n|\n|t:|1794724473\n|move|p2a: Lopunny|Return|p1a: Jellicent\n|-damage|p1a: Jellicent|17/48\n|move|p1a: Jellicent|Scald|p2a: Lopunny\n|-damage|p2a: Lopunny|0 fnt\n|faint|p2a: Lopunny\n|detailschange|p2: Lopunny|Lopunny, L50, F|[silent]\n|\n|upkeep\n|\n|t:|1794724481\n|switch|p2a: Flygon|Flygon, L50, M|48/48\n|turn|5\n|\n|t:|1794724486\n|move|p2a: Flygon|Draco Meteor|p1a: Jellicent\n|-damage|p1a: Jellicent|4/48\n|-unboost|p2a: Flygon|spa|2\n|move|p1a: Jellicent|Scald|p2a: Flygon\n|-damage|p2a: Flygon|31/48\n|-status|p2a: Flygon|brn\n|\n|-damage|p2a: Flygon|26/48 brn|[from] brn\n|upkeep\n|turn|6\n",
+	"inputlog": null,
+	"uploadtime": 1794724486
+}
