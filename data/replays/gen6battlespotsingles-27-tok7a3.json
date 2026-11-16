@@ -1,0 +1,12 @@
+{
+	"id": "gen6battlespotsingles-27-tok7a3",
+	"format": "[Gen 6] Battle Spot Singles",
+	"players": [
+		"Bunny Hard",
+		"Piscean Pianist"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Hard\n|j|☆Piscean Pianist\n|t:|1794803277\n|gametype|singles\n|badge|p2|silver|gen6battlespotsingles|2-2\n|player|p1|Bunny Hard|bunny.png|1000\n|player|p2|Piscean Pianist|akari|1210\n|gen|6\n|tier|[Gen 6] Battle Spot Singles\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|Item Clause: Limit 1 of each item\n|clearpoke\n|poke|p1|Mamoswine, L50, M|item\n|poke|p1|Whimsicott, L50, M|item\n|poke|p1|Ferrothorn, L50, M|item\n|poke|p1|Thundurus, L50, M|item\n|poke|p1|Rotom-Wash, L50|item\n|poke|p1|Gengar, L50, F|item\n|poke|p2|Lopunny, L50, F|item\n|poke|p2|Flygon, L50, M|item\n|poke|p2|Volcarona, L50, F|item\n|teampreview|3\n|c|☆Bunny Hard|Good luck! Playing on **hard**.\n|\n|t:|1794803284\n|teamsize|p1|3\n|teamsize|p2|3\n|start\n|switch|p1a: Mamoswine|Mamoswine, L50, M|48/48\n|switch|p2a: Lopunny|Lopunny, L50, F|48/48\n|turn|1\n|\n|t:|1794803291\n|detailschange|p2a: Lopunny|Lopunny-Mega, L50, F\n|-mega|p2a: Lopunny|Lopunny|Lopunnite\n|move|p2a: Lopunny|Fake Out|p1a: Mamoswine\n|-crit|p1a: Mamoswine\n|-damage|p1a: Mamoswine|28/48\n|cant|p1a: Mamoswine|flinch\n|\n|upkeep\n|turn|2\n|\n|t:|1794803301\n|move|p2a: Lopunny|Jump Kick|p1a: Mamoswine\n|-supereffective|p1a: Mamoswine\n|-damage|p1a: Mamoswine|0 fnt\n|faint|p1a: Mamoswine\n|\n|upkeep\n|\n|t:|1794803301\n|switch|p1a: Thundurus|Thundurus, L50, M|48/48\n|turn|3\n|\n|t:|1794803310\n|move|p2a: Lopunny|Return|p1a: Thundurus\n|-damage|p1a: Thundurus|6/48\n|move|p1a: Thundurus|Psychic|p2a: Lopunny\n|-supereffective|p2a: Lopunny\n|-damage|p2a: Lopunny|2/48\n|-unboost|p2a: Lopunny|spd|1\n|-damage|p1a: Thundurus|2/48|[from] item: Life Orb\n|\n|upkeep\n|turn|4\n|\n|t:|1794803317\n|move|p2a: Lopunny|Return|p1a: Thundurus\n|-damage|p1a: Thundurus|0 fnt\n|faint|p1a: Thundurus\n|\n|upkeep\n|\n|t:|1794803317\n|switch|p1a: Whimsicott|Whimsicott, L50, M|48/48\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1794803320
+}
