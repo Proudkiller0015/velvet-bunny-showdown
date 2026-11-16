@@ -1,0 +1,12 @@
+{
+	"id": "gen3randombattle-52-tok7a3",
+	"format": "[Gen 3] Random Battle",
+	"players": [
+		"Bunny Normal",
+		"0p9o9i8"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Normal\n|j|☆0p9o9i8\n|t:|1794873429\n|gametype|singles\n|badge|p1|gold|gen3randombattle|1-1\n|badge|p2|silver|gen3randombattle|2-2\n|player|p1|Bunny Normal|bunny.png|1211\n|player|p2|0p9o9i8|2|1189\n|gen|3\n|tier|[Gen 3] Random Battle\n|rated|\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Beat Up Nicknames Mod: Beat Up will not reveal any party members\n|rule|Endless Battle Clause: Forcing endless battles is banned\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Switch Priority Clause Mod: Faster Pokémon switch first\n|rule|Species Clause: Limit one of each Pokémon\n|rule|OHKO Clause: OHKO moves are banned\n|rule|Evasion Items Clause: Evasion items are banned\n|rule|Evasion Moves Clause: Evasion moves are banned\n|\n|t:|1794873429\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Vaporeon|Vaporeon, L79, M|100/100\n|switch|p2a: Kingdra|Kingdra, L81, M|100/100\n|turn|1\n|c|☆Bunny Normal|Good luck! Playing on **normal**.\n|\n|t:|1794873437\n|move|p2a: Kingdra|Hidden Power|p1a: Vaporeon\n|-supereffective|p1a: Vaporeon\n|-damage|p1a: Vaporeon|72/100\n|move|p1a: Vaporeon|Ice Beam|p2a: Kingdra\n|-crit|p2a: Kingdra\n|-damage|p2a: Kingdra|53/100\n|\n|-heal|p1a: Vaporeon|78/100|[from] item: Leftovers\n|upkeep\n|turn|2\n|\n|t:|1794873446\n|move|p2a: Kingdra|Hidden Power|p1a: Vaporeon\n|-supereffective|p1a: Vaporeon\n|-damage|p1a: Vaporeon|49/100\n|move|p1a: Vaporeon|Ice Beam|p2a: Kingdra\n|-damage|p2a: Kingdra|27/100\n|\n|-heal|p1a: Vaporeon|55/100|[from] item: Leftovers\n|upkeep\n|turn|3\n|\n|t:|1794873453\n|move|p2a: Kingdra|Hidden Power|p1a: Vaporeon\n|-supereffective|p1a: Vaporeon\n|-damage|p1a: Vaporeon|28/100\n|move|p1a: Vaporeon|Ice Beam|p2a: Kingdra\n|-damage|p2a: Kingdra|2/100\n|\n|-enditem|p2a: Kingdra|Petaya Berry|[eat]\n|-boost|p2a: Kingdra|spa|1|[from] item: Petaya Berry\n|-heal|p1a: Vaporeon|34/100|[from] item: Leftovers\n|upkeep\n|turn|4\n|\n|t:|1794873462\n|move|p2a: Kingdra|Hidden Power|p1a: Vaporeon\n|-supereffective|p1a: Vaporeon\n|-crit|p1a: Vaporeon\n|-damage|p1a: Vaporeon|0 fnt\n|faint|p1a: Vaporeon\n|\n|t:|1794873462\n|switch|p1a: Tauros|Tauros, L76, M|100/100\n|-ability|p1a: Tauros|Intimidate|boost\n|-unboost|p2a: Kingdra|atk|1\n|\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1794873462
+}
