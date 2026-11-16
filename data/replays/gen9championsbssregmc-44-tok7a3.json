@@ -1,0 +1,12 @@
+{
+	"id": "gen9championsbssregmc-44-tok7a3",
+	"format": "[Gen 9 Champions] BSS Reg M-C",
+	"players": [
+		"Bunny Hard",
+		"Piscean Pianist"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Hard\n|j|☆Piscean Pianist\n|t:|1794809716\n|gametype|singles\n|badge|p1|silver|gen9championsbssregmc|2-2\n|badge|p2|gold|gen9championsbssregmc|1-1\n|player|p1|Bunny Hard|bunny.png|1304\n|player|p2|Piscean Pianist|akari|1365\n|gen|9\n|tier|[Gen 9 Champions] BSS Reg M-C\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|Item Clause: Limit 1 of each item\n|clearpoke\n|poke|p1|Hippowdon, L50, M|\n|poke|p1|Basculegion, L50, M|\n|poke|p1|Glimmora, L50, F|\n|poke|p1|Scizor, L50, F|\n|poke|p1|Dragonite, L50, F|\n|poke|p1|Toxapex, L50, M|\n|poke|p2|Lucario, L50, M|\n|poke|p2|Dragonite, L50, F|\n|poke|p2|Zoroark-Hisui, L50, F|\n|poke|p2|Charizard, L50, F|\n|poke|p2|Milotic, L50, F|\n|poke|p2|Aegislash, L50, M|\n|teampreview|3\n|c|☆Bunny Hard|Good luck! Playing on **hard**.\n|\n|t:|1794809721\n|teamsize|p1|3\n|teamsize|p2|3\n|start\n|switch|p1a: Dragonite|Dragonite, L50, F|100/100\n|switch|p2a: Dragonite|Dragonite, L50, F|100/100\n|turn|1\n|\n|t:|1794809725\n|move|p1a: Dragonite|Dragon Dance|p1a: Dragonite\n|-boost|p1a: Dragonite|atk|1\n|-boost|p1a: Dragonite|spe|1\n|move|p2a: Dragonite|Dragon Dance|p2a: Dragonite\n|-boost|p2a: Dragonite|atk|1\n|-boost|p2a: Dragonite|spe|1\n|\n|upkeep\n|turn|2\n|\n|t:|1794809727\n|move|p1a: Dragonite|Dragon Dance|p1a: Dragonite\n|-boost|p1a: Dragonite|atk|1\n|-boost|p1a: Dragonite|spe|1\n|move|p2a: Dragonite|Dragon Dance|p2a: Dragonite\n|-boost|p2a: Dragonite|atk|1\n|-boost|p2a: Dragonite|spe|1\n|\n|upkeep\n|turn|3\n|\n|t:|1794809730\n|move|p2a: Dragonite|Dragon Claw|p1a: Dragonite\n|-supereffective|p1a: Dragonite|1\n|-damage|p1a: Dragonite|0 fnt\n|faint|p1a: Dragonite\n|\n|upkeep\n|\n|t:|1794809730\n|switch|p1a: Basculegion|Basculegion, L50, M|100/100\n|turn|4\n|\n|t:|1794809739\n|move|p2a: Dragonite|Dragon Claw|p1a: Basculegion\n|-damage|p1a: Basculegion|0 fnt\n|faint|p1a: Basculegion\n|\n|upkeep\n|\n|t:|1794809739\n|switch|p1a: Glimmora|Glimmora, L50, F|100/100\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1794809741
+}
