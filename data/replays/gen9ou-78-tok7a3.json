@@ -1,0 +1,12 @@
+{
+	"id": "gen9ou-78-tok7a3",
+	"format": "[Gen 9] OU",
+	"players": [
+		"Bunny Champion",
+		"retrtutyurytu"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Champion\n|j|☆retrtutyurytu\n|t:|1794935364\n|gametype|singles\n|badge|p1|bronze|gen9ou|3-3\n|player|p1|Bunny Champion|bunny.png|1302\n|player|p2|retrtutyurytu|101|1213\n|gen|9\n|tier|[Gen 9] OU\n|rated|\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Endless Battle Clause: Forcing endless battles is banned\n|rule|Species Clause: Limit one of each Pokémon\n|rule|OHKO Clause: OHKO moves are banned\n|rule|Evasion Items Clause: Evasion items are banned\n|rule|Evasion Moves Clause: Evasion moves are banned\n|rule|Evasion Abilities Clause: Evasion abilities are banned\n|rule|Sleep Moves Clause: Sleep-inducing moves are banned\n|clearpoke\n|poke|p1|Brute Bonnet|\n|poke|p1|Drifblim, F|\n|poke|p1|Quagsire, F|\n|poke|p1|Iron Moth|\n|poke|p1|Blissey, F|\n|poke|p1|Clefable, M|\n|poke|p2|Garchomp, M|\n|poke|p2|Ceruledge, M|\n|poke|p2|Corviknight, M|\n|poke|p2|Sylveon, F|\n|poke|p2|Greninja-*, M|\n|poke|p2|Espeon, F|\n|teampreview\n|c|☆Bunny Champion|Good luck! Playing on **champion**.\n|c|☆retrtutyurytu|can you play with my team?\n|\n|t:|1794935401\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Clefable|Clefable, M|100/100\n|switch|p2a: Corviknight|Corviknight, M, shiny|100/100\n|turn|1\n|\n|t:|1794935420\n|switch|p2a: Garchomp|Garchomp, M|100/100\n|switch|p1a: Brute Bonnet|Brute Bonnet|100/100\n|\n|upkeep\n|turn|2\n|\n|t:|1794935429\n|move|p2a: Garchomp|Scale Shot|p1a: Brute Bonnet\n|-damage|p1a: Brute Bonnet|92/100\n|-damage|p1a: Brute Bonnet|84/100\n|-damage|p1a: Brute Bonnet|76/100\n|-damage|p1a: Brute Bonnet|67/100\n|-hitcount|p1a: Brute Bonnet|4\n|-unboost|p2a: Garchomp|def|1\n|-boost|p2a: Garchomp|spe|1\n|move|p1a: Brute Bonnet|Crunch|p2a: Garchomp\n|-damage|p2a: Garchomp|49/100\n|-damage|p1a: Brute Bonnet|55/100|[from] ability: Rough Skin|[of] p2a: Garchomp\n|\n|upkeep\n|turn|3\n|\n|t:|1794935440\n|switch|p2a: Corviknight|Corviknight, M, shiny|100/100\n|move|p1a: Brute Bonnet|Synthesis|p1a: Brute Bonnet\n|-heal|p1a: Brute Bonnet|100/100\n|\n|upkeep\n|turn|4\n|\n|t:|1794935444\n|-end|p1a: Brute Bonnet|Protosynthesis|[silent]\n|switch|p1a: Quagsire|Quagsire, F|100/100\n|move|p2a: Corviknight|U-turn|p1a: Quagsire\n|-damage|p1a: Quagsire|90/100\n|\n|t:|1794935466\n|switch|p2a: Greninja|Greninja, M|100/100|[from] U-turn\n|\n|-heal|p1a: Quagsire|96/100|[from] item: Leftovers\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1794935470
+}
