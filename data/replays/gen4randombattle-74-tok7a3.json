@@ -1,0 +1,12 @@
+{
+	"id": "gen4randombattle-74-tok7a3",
+	"format": "[Gen 4] Random Battle",
+	"players": [
+		"Bunny Normal",
+		"0p9o9i8"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Normal\n|j|☆0p9o9i8\n|t:|1794933963\n|gametype|singles\n|badge|p1|gold|gen4randombattle|1-1\n|badge|p2|silver|gen4randombattle|2-2\n|player|p1|Bunny Normal|bunny.png|1211\n|player|p2|0p9o9i8|265|1104\n|gen|4\n|tier|[Gen 4] Random Battle\n|rated|\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|HP Percentage Mod: HP is shown in percentages\n|\n|t:|1794933963\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Sandslash|Sandslash, L88, F|100/100\n|switch|p2a: Machamp|Machamp, L80, M|100/100\n|turn|1\n|c|☆Bunny Normal|Good luck! Playing on **normal**.\n|\n|t:|1794933998\n|move|p1a: Sandslash|Earthquake|p2a: Machamp\n|-damage|p2a: Machamp|54/100\n|move|p2a: Machamp|Dynamic Punch|p1a: Sandslash\n|-damage|p1a: Sandslash|44/100\n|-start|p1a: Sandslash|confusion\n|\n|-heal|p1a: Sandslash|50/100|[from] item: Leftovers\n|upkeep\n|turn|2\n|\n|t:|1794934007\n|-activate|p1a: Sandslash|confusion\n|-damage|p1a: Sandslash|40/100|[from] confusion\n|move|p2a: Machamp|Dynamic Punch|p1a: Sandslash\n|-damage|p1a: Sandslash|0 fnt\n|faint|p1a: Sandslash\n|\n|upkeep\n|\n|t:|1794934007\n|switch|p1a: Girafarig|Girafarig, L92, M|100/100\n|turn|3\n|\n|t:|1794934015\n|move|p1a: Girafarig|Psychic|p2a: Machamp\n|-supereffective|p2a: Machamp\n|-damage|p2a: Machamp|0 fnt\n|faint|p2a: Machamp\n|-damage|p1a: Girafarig|91/100|[from] item: Life Orb\n|\n|upkeep\n|\n|t:|1794934058\n|switch|p2a: Seaking|Seaking, L93, M|100/100\n|turn|4\n|\n|t:|1794934063\n|move|p1a: Girafarig|Thunderbolt|p2a: Seaking\n|-supereffective|p2a: Seaking\n|-damage|p2a: Seaking|32/100\n|-damage|p1a: Girafarig|81/100|[from] item: Life Orb\n|move|p2a: Seaking|Rain Dance|p2a: Seaking\n|-weather|RainDance\n|\n|-weather|RainDance|[upkeep]\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1794934070
+}
