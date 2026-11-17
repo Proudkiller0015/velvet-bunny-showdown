@@ -1,0 +1,12 @@
+{
+	"id": "gen9championsbssregmc-21-tonvvg",
+	"format": "[Gen 9 Champions] BSS Reg M-C",
+	"players": [
+		"Bunny Stockfish",
+		"Piscean Pianist"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Stockfish\n|j|☆Piscean Pianist\n|t:|1794956245\n|gametype|singles\n|badge|p1|gold|gen9championsbssregmc|1-1\n|badge|p2|silver|gen9championsbssregmc|2-2\n|player|p1|Bunny Stockfish|bunny.png|1350\n|player|p2|Piscean Pianist|akari|1334\n|gen|9\n|tier|[Gen 9 Champions] BSS Reg M-C\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|Item Clause: Limit 1 of each item\n|clearpoke\n|poke|p1|Dragonite, L50, M|\n|poke|p1|Meowscarada, L50, M|\n|poke|p1|Scizor, L50, M|\n|poke|p1|Gholdengo, L50|\n|poke|p1|Annihilape, L50, M|\n|poke|p1|Mimikyu, L50, M|\n|poke|p2|Lucario, L50, M|\n|poke|p2|Dragonite, L50, F|\n|poke|p2|Zoroark-Hisui, L50, M|\n|poke|p2|Charizard, L50, M|\n|poke|p2|Milotic, L50, F|\n|poke|p2|Torterra, L50, F|\n|teampreview|3\n|c|☆Bunny Stockfish|Good luck! Playing on **stockfish**.\n|\n|t:|1794956254\n|teamsize|p1|3\n|teamsize|p2|3\n|start\n|switch|p1a: Gholdengo|Gholdengo, L50|100/100\n|switch|p2a: Dragonite|Dragonite, L50, F|100/100\n|turn|1\n|\n|t:|1794956259\n|move|p2a: Dragonite|Dragon Dance|p2a: Dragonite\n|-boost|p2a: Dragonite|atk|1\n|-boost|p2a: Dragonite|spe|1\n|move|p1a: Gholdengo|Make It Rain|p2a: Dragonite\n|-crit|p2a: Dragonite\n|-damage|p2a: Dragonite|48/100\n|-unboost|p1a: Gholdengo|spa|2\n|\n|upkeep\n|turn|2\n|\n|t:|1794956267\n|switch|p1a: Mimikyu|Mimikyu, L50, M|100/100\n|move|p2a: Dragonite|Fire Punch|p1a: Mimikyu\n|-activate|p1a: Mimikyu|ability: Disguise\n|-damage|p1a: Mimikyu|100/100\n|detailschange|p1a: Mimikyu|Mimikyu-Busted, L50, M\n|-damage|p1a: Mimikyu|87/100|[from] pokemon: Mimikyu-Busted\n|\n|upkeep\n|turn|3\n|\n|t:|1794956282\n|move|p2a: Dragonite|Fire Punch|p1a: Mimikyu\n|-damage|p1a: Mimikyu|16/100\n|move|p1a: Mimikyu|Play Rough|p2a: Dragonite\n|-supereffective|p2a: Dragonite|1\n|-damage|p2a: Dragonite|0 fnt\n|faint|p2a: Dragonite\n|\n|upkeep\n|\n|t:|1794956290\n|switch|p2a: Lucario|Lucario, L50, M|100/100\n|turn|4\n|\n|t:|1794956299\n|switch|p1a: Gholdengo|Gholdengo, L50|100/100\n|move|p2a: Lucario|Flamethrower|p1a: Gholdengo\n|-supereffective|p1a: Gholdengo|1\n|-damage|p1a: Gholdengo|1/100\n|-damage|p2a: Lucario|90/100|[from] item: Life Orb\n|\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1794956303
+}
