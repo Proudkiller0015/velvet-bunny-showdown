@@ -1,0 +1,12 @@
+{
+	"id": "gen5randombattle-76-tok7a3",
+	"format": "[Gen 5] Random Battle",
+	"players": [
+		"Bunny Normal",
+		"0p9o9i8"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Normal\n|j|☆0p9o9i8\n|t:|1794934220\n|gametype|singles\n|player|p1|Bunny Normal|bunny.png|1000\n|player|p2|0p9o9i8|265|1000\n|gen|5\n|tier|[Gen 5] Random Battle\n|rated|\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1794934221\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Roserade|Roserade, L83, M|100/100\n|switch|p2a: Seviper|Seviper, L93, F|100/100\n|turn|1\n|c|☆Bunny Normal|Good luck! Playing on **normal**.\n|\n|t:|1794934229\n|switch|p1a: Aggron|Aggron, L87, M|100/100\n|move|p2a: Seviper|Flamethrower|p1a: Aggron\n|-damage|p1a: Aggron|48/100\n|-damage|p2a: Seviper|91/100|[from] item: Life Orb\n|\n|upkeep\n|turn|2\n|\n|t:|1794934239\n|move|p2a: Seviper|Earthquake|p1a: Aggron\n|-supereffective|p1a: Aggron\n|-damage|p1a: Aggron|0 fnt\n|faint|p1a: Aggron\n|-damage|p2a: Seviper|81/100|[from] item: Life Orb\n|\n|upkeep\n|\n|t:|1794934239\n|switch|p1a: Chimecho|Chimecho, L96, F|100/100\n|turn|3\n|\n|t:|1794934250\n|move|p1a: Chimecho|Psychic|p2a: Seviper\n|-supereffective|p2a: Seviper\n|-damage|p2a: Seviper|0 fnt\n|faint|p2a: Seviper\n|\n|upkeep\n|\n|t:|1794934278\n|switch|p2a: Venusaur|Venusaur, L83, F|100/100\n|turn|4\n|\n|t:|1794934282\n|move|p2a: Venusaur|Leech Seed|p1a: Chimecho\n|-start|p1a: Chimecho|move: Leech Seed\n|move|p1a: Chimecho|Psychic|p2a: Venusaur\n|-supereffective|p2a: Venusaur\n|-damage|p2a: Venusaur|24/100\n|\n|-heal|p2a: Venusaur|30/100|[from] item: Black Sludge\n|-damage|p1a: Chimecho|88/100|[from] Leech Seed|[of] p2a: Venusaur\n|-heal|p2a: Venusaur|43/100|[silent]\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1794934290
+}
