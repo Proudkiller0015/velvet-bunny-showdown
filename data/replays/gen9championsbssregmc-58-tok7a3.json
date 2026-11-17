@@ -1,0 +1,12 @@
+{
+	"id": "gen9championsbssregmc-58-tok7a3",
+	"format": "[Gen 9 Champions] BSS Reg M-C",
+	"players": [
+		"Piscean Pianist",
+		"Bunny Hard"
+	],
+	"rating": null,
+	"log": "|j|☆Piscean Pianist\n|j|☆Bunny Hard\n|t:|1794896574\n|gametype|singles\n|badge|p1|gold|gen9championsbssregmc|1-1\n|badge|p2|silver|gen9championsbssregmc|2-2\n|player|p1|Piscean Pianist|akari|1332\n|player|p2|Bunny Hard|bunny.png|1331\n|gen|9\n|tier|[Gen 9 Champions] BSS Reg M-C\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|Item Clause: Limit 1 of each item\n|clearpoke\n|poke|p1|Lucario, L50, M|\n|poke|p1|Dragonite, L50, F|\n|poke|p1|Zoroark-Hisui, L50, F|\n|poke|p1|Charizard, L50, F|\n|poke|p1|Milotic, L50, M|\n|poke|p1|Aegislash, L50, M|\n|poke|p2|Dragonite, L50, M|\n|poke|p2|Garchomp, L50, F|\n|poke|p2|Scizor, L50, F|\n|poke|p2|Mimikyu, L50, F|\n|poke|p2|Glimmora, L50, F|\n|poke|p2|Gholdengo, L50|\n|teampreview|3\n|c|☆Bunny Hard|Good luck! Playing on **hard**.\n|\n|t:|1794896583\n|teamsize|p1|3\n|teamsize|p2|3\n|start\n|switch|p1a: Dragonite|Dragonite, L50, F|100/100\n|switch|p2a: Dragonite|Dragonite, L50, M|100/100\n|turn|1\n|\n|t:|1794896591\n|move|p1a: Dragonite|Icy Wind|p2a: Dragonite\n|-supereffective|p2a: Dragonite|2\n|-damage|p2a: Dragonite|42/100\n|-unboost|p2a: Dragonite|spe|1\n|-damage|p1a: Dragonite|90/100|[from] item: Life Orb\n|move|p2a: Dragonite|Ice Spinner|p1a: Dragonite\n|-damage|p1a: Dragonite|11/100\n|replace|p1a: Zoroark|Zoroark-Hisui, L50, F\n|-end|p1a: Zoroark|Illusion\n|-damage|p2a: Dragonite|32/100|[from] item: Life Orb\n|\n|upkeep\n|turn|2\n|\n|t:|1794896602\n|move|p1a: Zoroark|Icy Wind|p2a: Dragonite\n|-supereffective|p2a: Dragonite|2\n|-damage|p2a: Dragonite|0 fnt\n|faint|p2a: Dragonite\n|-damage|p1a: Zoroark|1/100|[from] item: Life Orb\n|\n|upkeep\n|\n|t:|1794896602\n|switch|p2a: Garchomp|Garchomp, L50, F|100/100\n|turn|3\n|\n|t:|1794896612\n|move|p2a: Garchomp|Earthquake|p1a: Zoroark\n|-damage|p1a: Zoroark|0 fnt\n|faint|p1a: Zoroark\n|\n|upkeep\n|\n|t:|1794896615\n|switch|p1a: Dragonite|Dragonite, L50, F|100/100\n|turn|4\n|\n|t:|1794896619\n|switch|p2a: Mimikyu|Mimikyu, L50, F|100/100\n|move|p1a: Dragonite|Dragon Dance|p1a: Dragonite\n|-boost|p1a: Dragonite|atk|1\n|-boost|p1a: Dragonite|spe|1\n|\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1794896625
+}
