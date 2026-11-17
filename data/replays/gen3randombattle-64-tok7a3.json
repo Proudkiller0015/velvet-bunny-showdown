@@ -1,0 +1,12 @@
+{
+	"id": "gen3randombattle-64-tok7a3",
+	"format": "[Gen 3] Random Battle",
+	"players": [
+		"Bunny Normal",
+		"0p9o9i8"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Normal\n|j|☆0p9o9i8\n|t:|1794917213\n|gametype|singles\n|badge|p1|gold|gen3randombattle|1-1\n|badge|p2|silver|gen3randombattle|2-2\n|player|p1|Bunny Normal|bunny.png|1227\n|player|p2|0p9o9i8|2|1200\n|gen|3\n|tier|[Gen 3] Random Battle\n|rated|\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Beat Up Nicknames Mod: Beat Up will not reveal any party members\n|rule|Endless Battle Clause: Forcing endless battles is banned\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Switch Priority Clause Mod: Faster Pokémon switch first\n|rule|Species Clause: Limit one of each Pokémon\n|rule|OHKO Clause: OHKO moves are banned\n|rule|Evasion Items Clause: Evasion items are banned\n|rule|Evasion Moves Clause: Evasion moves are banned\n|\n|t:|1794917213\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Charizard|Charizard, L79, M|100/100\n|switch|p2a: Arbok|Arbok, L85, M|100/100\n|-ability|p2a: Arbok|Intimidate|boost\n|-unboost|p1a: Charizard|atk|1\n|turn|1\n|c|☆Bunny Normal|Good luck! Playing on **normal**.\n|\n|t:|1794917231\n|move|p1a: Charizard|Fire Blast|p2a: Arbok\n|-damage|p2a: Arbok|44/100\n|move|p2a: Arbok|Sludge Bomb|p1a: Charizard\n|-damage|p1a: Charizard|62/100\n|-status|p1a: Charizard|psn\n|\n|-damage|p1a: Charizard|50/100 psn|[from] psn\n|-heal|p2a: Arbok|50/100|[from] item: Leftovers\n|upkeep\n|turn|2\n|\n|t:|1794917248\n|move|p1a: Charizard|Fire Blast|p2a: Arbok\n|-damage|p2a: Arbok|0 fnt\n|faint|p2a: Arbok\n|\n|t:|1794917276\n|switch|p2a: Exploud|Exploud, L86, F|100/100\n|\n|-damage|p1a: Charizard|38/100 psn|[from] psn\n|upkeep\n|turn|3\n|\n|t:|1794917284\n|switch|p1a: Sudowoodo|Sudowoodo, L92, F|100/100\n|move|p2a: Exploud|Return|p1a: Sudowoodo\n|-resisted|p1a: Sudowoodo\n|-damage|p1a: Sudowoodo|85/100\n|\n|upkeep\n|turn|4\n|\n|t:|1794917290\n|move|p2a: Exploud|Earthquake|p1a: Sudowoodo\n|-supereffective|p1a: Sudowoodo\n|-damage|p1a: Sudowoodo|48/100\n|move|p1a: Sudowoodo|Explosion|p2a: Exploud\n|-damage|p2a: Exploud|0 fnt\n|faint|p1a: Sudowoodo\n|faint|p2a: Exploud\n|\n|t:|1794917299\n|switch|p2a: Weezing|Weezing, L81, F|100/100\n|switch|p1a: Charizard|Charizard, L79, M|38/100 psn\n|\n|-damage|p1a: Charizard|25/100 psn|[from] psn\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1794917308
+}
