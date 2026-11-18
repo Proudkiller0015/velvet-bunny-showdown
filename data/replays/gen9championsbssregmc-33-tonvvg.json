@@ -1,0 +1,12 @@
+{
+	"id": "gen9championsbssregmc-33-tonvvg",
+	"format": "[Gen 9 Champions] BSS Reg M-C",
+	"players": [
+		"Bunny Normal",
+		"Piscean Pianist"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Normal\n|j|☆Piscean Pianist\n|t:|1794995492\n|gametype|singles\n|badge|p2|gold|gen9championsbssregmc|1-1\n|player|p1|Bunny Normal|bunny.png|1211\n|player|p2|Piscean Pianist|akari|1417\n|gen|9\n|tier|[Gen 9 Champions] BSS Reg M-C\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|Item Clause: Limit 1 of each item\n|clearpoke\n|poke|p1|Dragonite, L50, M|\n|poke|p1|Palafin, L50, M|\n|poke|p1|Garchomp, L50, F|\n|poke|p1|Grimmsnarl, L50, M|\n|poke|p1|Scizor, L50, F|\n|poke|p1|Gholdengo, L50|\n|poke|p2|Lucario, L50, M|\n|poke|p2|Dragonite, L50, M|\n|poke|p2|Zoroark-Hisui, L50, F|\n|poke|p2|Charizard, L50, F|\n|poke|p2|Milotic, L50, M|\n|poke|p2|Aegislash, L50, M|\n|teampreview|3\n|c|☆Bunny Normal|Good luck! Playing on **normal**.\n|\n|t:|1794995500\n|teamsize|p1|3\n|teamsize|p2|3\n|start\n|switch|p1a: Dragonite|Dragonite, L50, M|100/100\n|switch|p2a: Lucario|Lucario, L50, M|100/100\n|turn|1\n|\n|t:|1794995507\n|move|p2a: Lucario|Bitter Malice|p1a: Dragonite\n|-damage|p1a: Dragonite|73/100\n|-unboost|p1a: Dragonite|atk|1\n|-damage|p2a: Lucario|90/100|[from] item: Life Orb\n|move|p1a: Dragonite|Earthquake|p2a: Lucario\n|-damage|p2a: Lucario|28/100\n|replace|p2a: Zoroark|Zoroark-Hisui, L50, F\n|-end|p2a: Zoroark|Illusion\n|-damage|p1a: Dragonite|63/100|[from] item: Life Orb\n|\n|upkeep\n|turn|2\n|\n|t:|1794995516\n|move|p2a: Zoroark|Icy Wind|p1a: Dragonite\n|-supereffective|p1a: Dragonite|2\n|-damage|p1a: Dragonite|0 fnt\n|faint|p1a: Dragonite\n|-damage|p2a: Zoroark|18/100|[from] item: Life Orb\n|\n|upkeep\n|\n|t:|1794995516\n|switch|p1a: Garchomp|Garchomp, L50, F|100/100\n|turn|3\n|\n|t:|1794995527\n|move|p2a: Zoroark|Icy Wind|p1a: Garchomp\n|-supereffective|p1a: Garchomp|2\n|-damage|p1a: Garchomp|0 fnt\n|faint|p1a: Garchomp\n|-damage|p2a: Zoroark|9/100|[from] item: Life Orb\n|\n|upkeep\n|\n|t:|1794995527\n|switch|p1a: Palafin|Palafin, L50, M|100/100\n|turn|4\n|\n|t:|1794995537\n|move|p2a: Zoroark|Bitter Malice|p1a: Palafin\n|-damage|p1a: Palafin|22/100\n|-unboost|p1a: Palafin|atk|1\n|-damage|p2a: Zoroark|0 fnt|[from] item: Life Orb\n|faint|p2a: Zoroark\n|move|p1a: Palafin|Drain Punch|p2: Zoroark|[notarget]\n|-fail|p1a: Palafin\n|\n|-heal|p1a: Palafin|28/100|[from] item: Leftovers\n|upkeep\n|\n|t:|1794995543\n|switch|p2a: Lucario|Lucario, L50, M|100/100\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1794995544
+}
