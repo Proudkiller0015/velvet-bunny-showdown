@@ -1,0 +1,12 @@
+{
+	"id": "gen9championsbssregmc-9-topmw2",
+	"format": "[Gen 9 Champions] BSS Reg M-C",
+	"players": [
+		"Bunny Champion",
+		"Piscean Pianist"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Champion\n|j|☆Piscean Pianist\n|t:|1795032050\n|gametype|singles\n|badge|p1|silver|gen9championsbssregmc|2-2\n|badge|p2|gold|gen9championsbssregmc|1-1\n|player|p1|Bunny Champion|bunny.png|1337\n|player|p2|Piscean Pianist|iris-gen5bw2|1446\n|gen|9\n|tier|[Gen 9 Champions] BSS Reg M-C\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|Item Clause: Limit 1 of each item\n|clearpoke\n|poke|p1|Glimmora, L50, F|\n|poke|p1|Scizor, L50, F|\n|poke|p1|Dragonite, L50, M|\n|poke|p1|Gholdengo, L50|\n|poke|p1|Garchomp, L50, M|\n|poke|p1|Mimikyu, L50, M|\n|poke|p2|Lucario, L50, M|\n|poke|p2|Dragonite, L50, M|\n|poke|p2|Zoroark-Hisui, L50, F|\n|poke|p2|Charizard, L50, F|\n|poke|p2|Milotic, L50, F|\n|poke|p2|Torterra, L50, F|\n|teampreview|3\n|c|☆Bunny Champion|Good luck! Playing on **champion**.\n|\n|t:|1795032056\n|teamsize|p1|3\n|teamsize|p2|3\n|start\n|switch|p1a: Dragonite|Dragonite, L50, M|100/100\n|switch|p2a: Lucario|Lucario, L50, M|100/100\n|turn|1\n|\n|t:|1795032063\n|detailschange|p2a: Lucario|Lucario-Mega, L50, M\n|-mega|p2a: Lucario|Lucario|Lucarionite\n|move|p2a: Lucario|Protect|p2a: Lucario\n|-singleturn|p2a: Lucario|Protect\n|move|p1a: Dragonite|Earthquake|p2a: Lucario\n|-activate|p2a: Lucario|move: Protect\n|\n|upkeep\n|turn|2\n|\n|t:|1795032072\n|switch|p2a: Dragonite|Dragonite, L50, M|100/100\n|move|p1a: Dragonite|Earthquake|p2a: Dragonite\n|-immune|p2a: Dragonite\n|\n|upkeep\n|turn|3\n|\n|t:|1795032081\n|move|p2a: Dragonite|Dragon Dance|p2a: Dragonite\n|-boost|p2a: Dragonite|atk|1\n|-boost|p2a: Dragonite|spe|1\n|move|p1a: Dragonite|Outrage|p2a: Dragonite\n|-supereffective|p2a: Dragonite|1\n|-damage|p2a: Dragonite|4/100\n|-damage|p1a: Dragonite|90/100|[from] item: Life Orb\n|\n|upkeep\n|turn|4\n|\n|t:|1795032089\n|move|p2a: Dragonite|Dragon Claw|p1a: Dragonite\n|-supereffective|p1a: Dragonite|1\n|-damage|p1a: Dragonite|0 fnt\n|faint|p1a: Dragonite\n|\n|upkeep\n|\n|t:|1795032089\n|switch|p1a: Mimikyu|Mimikyu, L50, M|100/100\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1795032090
+}
