@@ -1,0 +1,12 @@
+{
+	"id": "gen9championsbssregmc-35-tonvvg",
+	"format": "[Gen 9 Champions] BSS Reg M-C",
+	"players": [
+		"Bunny Stockfish",
+		"Piscean Pianist"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Stockfish\n|j|☆Piscean Pianist\n|t:|1794995659\n|gametype|singles\n|badge|p1|silver|gen9championsbssregmc|2-2\n|badge|p2|gold|gen9championsbssregmc|1-1\n|player|p1|Bunny Stockfish|bunny.png|1332\n|player|p2|Piscean Pianist|akari|1441\n|gen|9\n|tier|[Gen 9 Champions] BSS Reg M-C\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|Item Clause: Limit 1 of each item\n|clearpoke\n|poke|p1|Kleavor, L50, M|\n|poke|p1|Annihilape, L50, M|\n|poke|p1|Ninetales-Alola, L50, M|\n|poke|p1|Gengar, L50, F|\n|poke|p1|Glimmora, L50, F|\n|poke|p1|Arcanine, L50, F|\n|poke|p2|Lucario, L50, M|\n|poke|p2|Dragonite, L50, M|\n|poke|p2|Zoroark-Hisui, L50, M|\n|poke|p2|Charizard, L50, M|\n|poke|p2|Milotic, L50, M|\n|poke|p2|Aegislash, L50, M|\n|teampreview|3\n|c|☆Bunny Stockfish|Good luck! Playing on **stockfish**.\n|\n|t:|1794995667\n|teamsize|p1|3\n|teamsize|p2|3\n|start\n|switch|p1a: Glimmora|Glimmora, L50, F|100/100\n|switch|p2a: Dragonite|Dragonite, L50, M|100/100\n|-item|p1a: Glimmora|Air Balloon\n|turn|1\n|\n|t:|1794995671\n|move|p1a: Glimmora|Stealth Rock|p2a: Dragonite\n|-sidestart|p2: Piscean Pianist|move: Stealth Rock\n|move|p2a: Dragonite|Dragon Dance|p2a: Dragonite\n|-boost|p2a: Dragonite|atk|1\n|-boost|p2a: Dragonite|spe|1\n|\n|upkeep\n|turn|2\n|\n|t:|1794995676\n|move|p2a: Dragonite|Dragon Dance|p2a: Dragonite\n|-boost|p2a: Dragonite|atk|1\n|-boost|p2a: Dragonite|spe|1\n|move|p1a: Glimmora|Power Gem|p2a: Dragonite\n|-supereffective|p2a: Dragonite|1\n|-damage|p2a: Dragonite|56/100\n|\n|upkeep\n|turn|3\n|\n|t:|1794995682\n|move|p2a: Dragonite|Dragon Claw|p1a: Glimmora\n|-damage|p1a: Glimmora|0 fnt\n|-activate|p1a: Glimmora|ability: Toxic Debris\n|-sidestart|p2: Piscean Pianist|move: Toxic Spikes\n|-enditem|p1a: Glimmora|Air Balloon\n|faint|p1a: Glimmora\n|\n|upkeep\n|\n|t:|1794995682\n|switch|p1a: Ninetales|Ninetales-Alola, L50, M|100/100\n|-weather|Snowscape|[from] ability: Snow Warning|[of] p1a: Ninetales\n|turn|4\n|\n|t:|1794995694\n|move|p2a: Dragonite|Fire Punch|p1a: Ninetales\n|-supereffective|p1a: Ninetales|1\n|-damage|p1a: Ninetales|0 fnt\n|-damage|p2a: Dragonite|40/100|[from] item: Rocky Helmet|[of] p1a: Ninetales\n|faint|p1a: Ninetales\n|\n|-weather|Snowscape|[upkeep]\n|upkeep\n|\n|t:|1794995694\n|switch|p1a: Gengar|Gengar, L50, F|100/100\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1794995704
+}
