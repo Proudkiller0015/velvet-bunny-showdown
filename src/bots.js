@@ -37,6 +37,32 @@ const url = `ws://${HOST}:${PORT}/showdown/websocket`;
 // turning into a restart loop if that ever stops being true.
 const RECYCLE_MB = Number(process.env.PS_BOTS_RECYCLE_MB || 120);
 const CHECK_MS = Number(process.env.PS_BOTS_CHECK_MS || 30000);
+
+// 18 Nov 2026: the whole box was killed at 512MB, which ends every battle on the
+// server, while this process sat under its own threshold. Idle, the three
+// processes now hold ~410MB of memory that cannot be dropped ("anon" in the
+// control group), so the heap rule above alone leaves too little room. When the
+// container's anon memory passes PS_BOTS_PRESSURE_MB and nobody is playing a bot,
+// the bots restart too, whatever their own heap: a few seconds without bots
+// instead of the server going down with everyone in it.
+const PRESSURE_MB = Number(process.env.PS_BOTS_PRESSURE_MB || 450);
+// A fresh process is 100-112MB of heap on Render; below this a restart would give
+// back too little to be worth it, and with the server holding the rest it would
+// repeat on every check. Above it, the bots have loaded formats they can drop.
+const PRESSURE_MIN_HEAP_MB = Number(process.env.PS_BOTS_PRESSURE_MIN_HEAP_MB || 125);
+// The ladder queues take ~2 minutes to log in after a start; never sooner than this.
+const PRESSURE_MIN_UPTIME_S = Number(process.env.PS_BOTS_PRESSURE_MIN_UPTIME_S ?? 300);
+
+/** The container's anon memory in MB, or null where there is no Linux control group. */
+function containerAnonMB() {
+	try {
+		const file = process.env.PS_BOTS_CGROUP_STAT || '/sys/fs/cgroup/memory.stat';
+		const found = /^anon (\d+)$/m.exec(fs.readFileSync(file, 'utf8'));
+		return found ? Number(found[1]) / 1048576 : null;
+	} catch (e) {
+		return null;
+	}
+}
 // Never sooner than this after starting, so a threshold set below what a fresh
 // process needs cannot turn into a restart every minute.
 const MIN_UPTIME_S = Number(process.env.PS_BOTS_MIN_UPTIME_S ?? 600);
@@ -88,6 +114,7 @@ function busyWith() {
 
 const statusFile = path.join(process.env.PS_CACHE_DIR || os.tmpdir(), 'velvet-bots.json');
 let highChecks = 0;
+let pressureChecks = 0;
 let recycling = false;
 
 function check() {
@@ -121,9 +148,17 @@ function check() {
 
 	// Twice in a row, so one garbage-heavy moment is not mistaken for the leak.
 	highChecks = memory.heapUsed > RECYCLE_MB * 1048576 ? highChecks + 1 : 0;
-	if (highChecks >= 2 && !busy && !recycling && process.uptime() >= MIN_UPTIME_S) {
+	const anon = containerAnonMB();
+	pressureChecks = anon !== null && anon > PRESSURE_MB && memory.heapUsed > PRESSURE_MIN_HEAP_MB * 1048576 ?
+		pressureChecks + 1 : 0;
+	const heapDue = highChecks >= 2 && process.uptime() >= MIN_UPTIME_S;
+	const pressureDue = pressureChecks >= 2 && process.uptime() >= PRESSURE_MIN_UPTIME_S;
+	if ((heapDue || pressureDue) && !busy && !recycling) {
 		recycling = true;
-		console.log(`[bots] heap ${Math.round(memory.heapUsed / 1048576)}MB and nobody is playing: restarting fresh`);
+		const heapMB = Math.round(memory.heapUsed / 1048576);
+		console.log(pressureDue && !heapDue ?
+			`[bots] container at ${Math.round(anon)}MB (heap ${heapMB}MB) and nobody is playing: restarting fresh` :
+			`[bots] heap ${heapMB}MB and nobody is playing: restarting fresh`);
 		for (const p of players) {
 			try { if (p.ws) p.ws.close(); } catch (e) {}
 		}
