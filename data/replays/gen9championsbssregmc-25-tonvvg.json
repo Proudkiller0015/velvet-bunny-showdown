@@ -1,0 +1,12 @@
+{
+	"id": "gen9championsbssregmc-25-tonvvg",
+	"format": "[Gen 9 Champions] BSS Reg M-C",
+	"players": [
+		"Bunny Stockfish",
+		"Piscean Pianist"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Stockfish\n|j|☆Piscean Pianist\n|t:|1794989360\n|gametype|singles\n|badge|p1|silver|gen9championsbssregmc|2-2\n|badge|p2|gold|gen9championsbssregmc|1-1\n|player|p1|Bunny Stockfish|bunny.png|1332\n|player|p2|Piscean Pianist|akari|1402\n|gen|9\n|tier|[Gen 9 Champions] BSS Reg M-C\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|Item Clause: Limit 1 of each item\n|clearpoke\n|poke|p1|Garchomp, L50, M|\n|poke|p1|Gholdengo, L50|\n|poke|p1|Gyarados, L50, F|\n|poke|p1|Azumarill, L50, F|\n|poke|p1|Glimmora, L50, M|\n|poke|p1|Dragonite, L50, F|\n|poke|p2|Lucario, L50, M|\n|poke|p2|Dragonite, L50, M|\n|poke|p2|Zoroark-Hisui, L50, M|\n|poke|p2|Charizard, L50, F|\n|poke|p2|Milotic, L50, M|\n|poke|p2|Aegislash, L50, M|\n|teampreview|3\n|c|☆Bunny Stockfish|Good luck! Playing on **stockfish**.\n|\n|t:|1794989376\n|teamsize|p1|3\n|teamsize|p2|3\n|start\n|switch|p1a: Azumarill|Azumarill, L50, F|100/100\n|switch|p2a: Dragonite|Dragonite, L50, M|100/100\n|turn|1\n|\n|t:|1794989383\n|switch|p2a: Lucario|Lucario, L50, M|100/100\n|move|p1a: Azumarill|Play Rough|p2a: Lucario\n|-damage|p2a: Lucario|0 fnt\n|faint|p2a: Lucario\n|-damage|p1a: Azumarill|90/100|[from] item: Life Orb\n|\n|upkeep\n|\n|t:|1794989394\n|switch|p2a: Dragonite|Dragonite, L50, M|100/100\n|turn|2\n|\n|t:|1794989397\n|move|p2a: Dragonite|Bitter Malice|p1a: Azumarill\n|-damage|p1a: Azumarill|25/100\n|-unboost|p1a: Azumarill|atk|1\n|-damage|p2a: Dragonite|90/100|[from] item: Life Orb\n|move|p1a: Azumarill|Play Rough|p2a: Dragonite\n|-damage|p2a: Dragonite|0 fnt\n|replace|p2a: Zoroark|Zoroark-Hisui, L50, M\n|-end|p2a: Zoroark|Illusion\n|faint|p2a: Zoroark\n|-damage|p1a: Azumarill|16/100|[from] item: Life Orb\n|\n|upkeep\n|\n|t:|1794989409\n|switch|p2a: Dragonite|Dragonite, L50, M|100/100\n|turn|3\n|\n|t:|1794989412\n|move|p2a: Dragonite|Extreme Speed|p1a: Azumarill\n|-damage|p1a: Azumarill|0 fnt\n|faint|p1a: Azumarill\n|\n|upkeep\n|\n|t:|1794989412\n|switch|p1a: Garchomp|Garchomp, L50, M|100/100\n|turn|4\n|\n|t:|1794989420\n|move|p1a: Garchomp|Outrage|p2a: Dragonite\n|-supereffective|p2a: Dragonite|1\n|-damage|p2a: Dragonite|28/100\n|move|p2a: Dragonite|Dragon Dance|p2a: Dragonite\n|-boost|p2a: Dragonite|atk|1\n|-boost|p2a: Dragonite|spe|1\n|\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1794989424
+}
