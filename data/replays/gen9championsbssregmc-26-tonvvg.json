@@ -1,0 +1,12 @@
+{
+	"id": "gen9championsbssregmc-26-tonvvg",
+	"format": "[Gen 9 Champions] BSS Reg M-C",
+	"players": [
+		"Bunny Stockfish",
+		"Piscean Pianist"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Stockfish\n|j|☆Piscean Pianist\n|t:|1794990786\n|gametype|singles\n|badge|p1|silver|gen9championsbssregmc|2-2\n|badge|p2|gold|gen9championsbssregmc|1-1\n|player|p1|Bunny Stockfish|bunny.png|1351\n|player|p2|Piscean Pianist|akari|1378\n|gen|9\n|tier|[Gen 9 Champions] BSS Reg M-C\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|Item Clause: Limit 1 of each item\n|clearpoke\n|poke|p1|Glimmora, L50, F|\n|poke|p1|Tinkaton, L50, F|\n|poke|p1|Kingambit, L50, F|\n|poke|p1|Dragonite, L50, M|\n|poke|p1|Scizor, L50, F|\n|poke|p1|Hippowdon, L50, M|\n|poke|p2|Lucario, L50, M|\n|poke|p2|Dragonite, L50, M|\n|poke|p2|Zoroark-Hisui, L50, M|\n|poke|p2|Charizard, L50, F|\n|poke|p2|Milotic, L50, M|\n|poke|p2|Aegislash, L50, F|\n|teampreview|3\n|c|☆Bunny Stockfish|Good luck! Playing on **stockfish**.\n|\n|t:|1794990795\n|teamsize|p1|3\n|teamsize|p2|3\n|start\n|switch|p1a: Hippowdon|Hippowdon, L50, M|100/100\n|switch|p2a: Dragonite|Dragonite, L50, M|100/100\n|turn|1\n|\n|t:|1794990800\n|move|p2a: Dragonite|Dragon Dance|p2a: Dragonite\n|-boost|p2a: Dragonite|atk|1\n|-boost|p2a: Dragonite|spe|1\n|move|p1a: Hippowdon|Stealth Rock|p2a: Dragonite\n|-sidestart|p2: Piscean Pianist|move: Stealth Rock\n|\n|upkeep\n|turn|2\n|\n|t:|1794990805\n|move|p2a: Dragonite|Dragon Dance|p2a: Dragonite\n|-boost|p2a: Dragonite|atk|1\n|-boost|p2a: Dragonite|spe|1\n|move|p1a: Hippowdon|Yawn|p2a: Dragonite\n|-start|p2a: Dragonite|move: Yawn|[of] p1a: Hippowdon\n|\n|upkeep\n|turn|3\n|\n|t:|1794990811\n|move|p2a: Dragonite|Dragon Dance|p2a: Dragonite\n|-boost|p2a: Dragonite|atk|1\n|-boost|p2a: Dragonite|spe|1\n|move|p1a: Hippowdon|Stealth Rock||[still]\n|-fail|p1a: Hippowdon\n|\n|-end|p2a: Dragonite|move: Yawn|[silent]\n|-status|p2a: Dragonite|slp\n|upkeep\n|turn|4\n|\n|t:|1794990814\n|cant|p2a: Dragonite|slp\n|move|p1a: Hippowdon|Stealth Rock||[still]\n|-fail|p1a: Hippowdon\n|\n|upkeep\n|turn|5\n|\n|t:|1794990816\n|-curestatus|p2a: Dragonite|slp|[msg]\n|move|p2a: Dragonite|Dragon Claw|p1a: Hippowdon\n|-damage|p1a: Hippowdon|0 fnt\n|faint|p1a: Hippowdon\n|\n|upkeep\n|\n|t:|1794990816\n|switch|p1a: Tinkaton|Tinkaton, L50, F|100/100\n|turn|6\n",
+	"inputlog": null,
+	"uploadtime": 1794990824
+}
