@@ -159,6 +159,18 @@ const CASES = [
 		move: 'Self-Destruct',
 	},
 	{
+		name: 'Normal Gem: 1.5x, as in Generation 5 (data/velvet/gems.js)',
+		attacker: 'A|snorlax|normalgem|thickfat|bodyslam,selfdestruct,rest,curse|Adamant|,252,,,,|||||',
+		defender: 'B|blissey||naturalcure|tackle,protect,rest,softboiled|Bold|252,,252,,,|||||',
+		move: 'Body Slam',
+	},
+	{
+		name: 'Fire Gem on a special move',
+		attacker: 'A|charizard|firegem|blaze|flamethrower,airslash,roost,protect|Modest|,,,252,,|||||',
+		defender: 'B|blissey||naturalcure|tackle,protect,rest,softboiled|Bold|252,,252,,,|||||',
+		move: 'Flamethrower',
+	},
+	{
 		name: "Hyper Beam at our power",
 		attacker: 'A|snorlax||thickfat|hyperbeam,bodyslam,rest,curse|Adamant|,252,,,,|||||',
 		defender: 'B|blissey||naturalcure|tackle,protect,rest,softboiled|Bold|252,,252,,,|||||',
@@ -204,7 +216,11 @@ function engineRolls(testCase) {
 		// every set of sixteen and made the comparison meaningless. A move that
 		// always crits keeps its own answer.
 		if (move.willCrit === undefined) move.willCrit = !!testCase.crit;
+		// A Gem works when the move is used (it adds the 'gem' boost then), which getDamage alone skips.
+		const item = attacker.getItem();
+		if (item.isGem && item.name === `${move.type} Gem`) attacker.addVolatile('gem');
 		const damage = battle.actions.getDamage(attacker, defender, move);
+		attacker.removeVolatile('gem');
 		rolls.push(typeof damage === 'number' ? damage : null);
 	}
 	battle.destroy();

@@ -114,7 +114,7 @@ for (const id of MOVES) {
 
 // Real moves this server changed (classic mechanics, the creation trio): written over the calculator's own rows.
 const changedMoves = {};
-for (const file of ['classic-mechanics.js', 'creation-trio.js']) {
+for (const file of ['classic-mechanics.js', 'creation-trio.js', 'champions-update.js']) {
 	for (const id of require(path.join(PACKAGE, 'dist', 'data', 'velvet', file)).CHANGED_MOVES || []) {
 		const found = Dex.moves.get(id);
 		if (found.exists) changedMoves[found.name] = moveRow(found);

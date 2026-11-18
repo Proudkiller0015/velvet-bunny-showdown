@@ -341,6 +341,12 @@ for (const id of require(path.join(PACKAGE, 'dist', 'data', 'velvet', 'corrosive
 for (const id of require(path.join(PACKAGE, 'dist', 'data', 'velvet', 'creation-trio.js')).CHANGED_MOVES) overrides.moves[id] = moveRow(Dex.moves.get(id));
 // Will-O-Wisp and Thunder Wave never miss for their own type (data/velvet/frostbite.js).
 for (const id of Object.keys(require(path.join(PACKAGE, 'dist', 'data', 'velvet', 'frostbite.js')).SURE_HIT)) if (id !== 'chillingmist') overrides.moves[id] = moveRow(Dex.moves.get(id));
+// Pokemon Champions' balance update, its buffs (data/velvet/champions-update.js).
+{
+	const champions = require(path.join(PACKAGE, 'dist', 'data', 'velvet', 'champions-update.js'));
+	for (const id of champions.CHANGED_MOVES) overrides.moves[id] = moveRow(Dex.moves.get(id));
+	for (const id of champions.CHANGED_ABILITIES) overrides.abilities[id] = abilityRow(Dex.abilities.get(id));
+}
 for (const id of CHANGED.abilities) overrides.abilities[id] = abilityRow(Dex.abilities.get(id));
 const items = {};
 for (const id of OUR_ITEMS) items[id] = itemRow(Dex.items.get(id));

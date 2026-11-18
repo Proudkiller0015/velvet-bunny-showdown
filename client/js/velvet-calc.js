@@ -353,6 +353,13 @@
 		if (move.name === 'Explosion' || move.name === 'Self-Destruct' || move.name === 'Misty Explosion') {
 			out.push([8192, 4096]);
 		}
+		/*
+		 * Type Gems are Generation 5's 1.5x here (data/velvet/gems.js). The calculator already
+		 * gives its own Generation 6+ 1.3x for a matching Gem, so this adds the rest: 1.5 / 1.3.
+		 */
+		if (attacker.item && String(attacker.item) === move.type + ' Gem') {
+			out.push([Math.round(4096 * 6144 / 5325), 4096]);
+		}
 		var trio = TRIO[String(attacker.ability || '')];
 		if (trio) {
 			var m = 4096;

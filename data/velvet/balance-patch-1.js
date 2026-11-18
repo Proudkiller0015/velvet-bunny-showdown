@@ -2571,6 +2571,11 @@ exports.buildBuffs = (Pokedex) => {
 		for (const id of ids) if (Pokedex[id]) add(id, [move], []);
 	}
 
+	// Pokemon Champions' balance update (data/velvet/champions-update.js): exactly its list.
+	for (const [move, ids] of Object.entries(require('./champions-update.js').LEARNS)) {
+		for (const id of ids) if (Pokedex[id]) add(id, [move], []);
+	}
+
 	// The ten shared moves, handed out like TMs to everything they suit.
 	for (const [move, ids] of Object.entries(TM_DISTRIBUTION)) {
 		for (const id of ids) if (Pokedex[id]) add(id, [move], []);

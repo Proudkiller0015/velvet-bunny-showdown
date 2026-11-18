@@ -44,6 +44,8 @@ const Frostbite = require('./frostbite.js');
 const Gems = require('./gems.js');
 // Corrosive Gas: poisons too (Steel types included), legal again in RP.
 const CorrosiveGas = require('./corrosive-gas.js');
+// Pokemon Champions' first balance update, its buffs only (accuracy, Flash Fire, Stalwart, new learners).
+const ChampionsUpdate = require('./champions-update.js');
 // New items for every Pokemon (Ultra Shard).
 const NewItems = require('./new-items.js');
 // Old-generation Belly Drum and recharge rules.
@@ -101,10 +103,10 @@ exports.pokedex = data => {
 	buffedPokedex = data;
 	buffWhatWeHave();
 };
-exports.abilities = data => Touhou.abilities(Collab.abilities(Gourgeist.abilities(CreationTrio.abilities(Stall.abilities(AbyssShrine.abilities(Missingno.abilities(Christmas.abilities(Halloween.abilities(require('./balance-patch-1.js').patchAbsorbers(patchAbilities(unnerfAbilities(Object.assign(data, Abilities)))))))))))));
+exports.abilities = data => ChampionsUpdate.abilities(Touhou.abilities(Collab.abilities(Gourgeist.abilities(CreationTrio.abilities(Stall.abilities(AbyssShrine.abilities(Missingno.abilities(Christmas.abilities(Halloween.abilities(require('./balance-patch-1.js').patchAbsorbers(patchAbilities(unnerfAbilities(Object.assign(data, Abilities))))))))))))));
 let moveTable = null;
 exports.moves = data => {
-	moveTable = CorrosiveGas.moves(Touhou.moves(Collab.moves(Gourgeist.moves(CreationTrio.moves(Classic.moves(Frostbite.moves(AbyssShrine.moves(Missingno.moves(Christmas.moves(Halloween.moves(patchMoves(unnerfMoves(Object.assign(data, Moves))))))))))))));
+	moveTable = ChampionsUpdate.moves(CorrosiveGas.moves(Touhou.moves(Collab.moves(Gourgeist.moves(CreationTrio.moves(Classic.moves(Frostbite.moves(AbyssShrine.moves(Missingno.moves(Christmas.moves(Halloween.moves(patchMoves(unnerfMoves(Object.assign(data, Moves)))))))))))))));
 	teachHerEverything();
 	return moveTable;
 };

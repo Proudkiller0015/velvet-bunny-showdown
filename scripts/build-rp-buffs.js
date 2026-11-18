@@ -83,7 +83,7 @@ const MOVE_FILES = V_(['unnerfs.js', 'classic-mechanics.js', 'creation-trio.js',
 const ABILITY_FILES = V_(['unnerfs.js', 'abilities.js', 'balance-patch-1.js', 'gourgeist.js', 'christmas.js', 'touhou.js']);
 const ITEM_FILES = V_(['items.js', 'gems.js', 'new-items.js', 'za-megas.js', 'unnerfs.js', 'christmas.js']);
 const STAT_FILES = V_(['unnerfs.js', 'za-megas.js', 'missingno.js', 'christmas.js']);
-const GRANT_FILES = V_(['balance-patch-1.js', 'unnerfs.js', 'creation-trio.js', 'gourgeist.js', 'stall.js', 'buffs.js', 'missingno.js', 'christmas.js']);
+const GRANT_FILES = V_(['balance-patch-1.js', 'champions-update.js', 'unnerfs.js', 'creation-trio.js', 'gourgeist.js', 'stall.js', 'buffs.js', 'missingno.js', 'christmas.js']);
 const EVO_FILES = V_(['balance-patch-1.js']);
 // The file that changes each vanilla move, from the lists those files export themselves.
 const MOVE_SOURCE = {};
@@ -93,6 +93,7 @@ for (const [file, ids] of [
 	['unnerfs.js', velvet('unnerfs.js').CHANGED.moves],
 	['classic-mechanics.js', velvet('classic-mechanics.js').CHANGED_MOVES],
 	['creation-trio.js', velvet('creation-trio.js').CHANGED_MOVES],
+	['champions-update.js', velvet('champions-update.js').CHANGED_MOVES],
 ]) for (const id of ids) MOVE_SOURCE[id] = `data/velvet/${file}`;
 
 // ---- helpers ----------------------------------------------------------------
