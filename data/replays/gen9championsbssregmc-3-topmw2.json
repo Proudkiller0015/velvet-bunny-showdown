@@ -1,0 +1,12 @@
+{
+	"id": "gen9championsbssregmc-3-topmw2",
+	"format": "[Gen 9 Champions] BSS Reg M-C",
+	"players": [
+		"Bunny Champion",
+		"Piscean Pianist"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Champion\n|j|☆Piscean Pianist\n|t:|1795031300\n|gametype|singles\n|badge|p2|gold|gen9championsbssregmc|1-1\n|player|p1|Bunny Champion|bunny.png|1302\n|player|p2|Piscean Pianist|iris-gen5bw2|1490\n|gen|9\n|tier|[Gen 9 Champions] BSS Reg M-C\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|Item Clause: Limit 1 of each item\n|clearpoke\n|poke|p1|Dragonite, L50, M|\n|poke|p1|Gholdengo, L50|\n|poke|p1|Garchomp, L50, F|\n|poke|p1|Gallade, L50, M|\n|poke|p1|Glimmora, L50, F|\n|poke|p1|Mimikyu, L50, F|\n|poke|p2|Lucario, L50, M|\n|poke|p2|Dragonite, L50, M|\n|poke|p2|Zoroark-Hisui, L50, F|\n|poke|p2|Charizard, L50, F|\n|poke|p2|Milotic, L50, M|\n|poke|p2|Torterra, L50, M|\n|teampreview|3\n|c|☆Bunny Champion|Good luck! Playing on **champion**.\n|\n|t:|1795031320\n|teamsize|p1|3\n|teamsize|p2|3\n|start\n|switch|p1a: Garchomp|Garchomp, L50, F|100/100\n|switch|p2a: Dragonite|Dragonite, L50, M|100/100\n|turn|1\n|\n|t:|1795031325\n|move|p1a: Garchomp|Outrage|p2a: Dragonite\n|-supereffective|p2a: Dragonite|1\n|-damage|p2a: Dragonite|24/100\n|move|p2a: Dragonite|Dragon Dance|p2a: Dragonite\n|-boost|p2a: Dragonite|atk|1\n|-boost|p2a: Dragonite|spe|1\n|\n|upkeep\n|turn|2\n|\n|t:|1795031343\n|move|p1a: Garchomp|Outrage|p2a: Dragonite|[from] lockedmove\n|-supereffective|p2a: Dragonite|1\n|-damage|p2a: Dragonite|0 fnt\n|faint|p2a: Dragonite\n|-start|p1a: Garchomp|confusion|[fatigue]\n|\n|upkeep\n|\n|t:|1795031352\n|switch|p2a: Lucario|Lucario, L50, M|100/100\n|turn|3\n|\n|t:|1795031354\n|-activate|p1a: Garchomp|confusion\n|move|p1a: Garchomp|Outrage|p2a: Lucario\n|-damage|p2a: Lucario|0 fnt\n|replace|p2a: Zoroark|Zoroark-Hisui, L50, F\n|-end|p2a: Zoroark|Illusion\n|faint|p2a: Zoroark\n|\n|upkeep\n|\n|t:|1795031378\n|switch|p2a: Lucario|Lucario, L50, M|100/100\n|turn|4\n|\n|t:|1795031384\n|detailschange|p2a: Lucario|Lucario-Mega, L50, M\n|-mega|p2a: Lucario|Lucario|Lucarionite\n|-end|p1a: Garchomp|confusion\n|move|p1a: Garchomp|Outrage|p2a: Lucario|[from] lockedmove\n|-resisted|p2a: Lucario|1\n|-damage|p2a: Lucario|55/100\n|-start|p1a: Garchomp|confusion|[fatigue]\n|move|p2a: Lucario|Dragon Pulse|p1a: Garchomp\n|-supereffective|p1a: Garchomp|1\n|-damage|p1a: Garchomp|31/100\n|\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1795031390
+}
