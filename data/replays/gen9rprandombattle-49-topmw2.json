@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-49-topmw2",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Hard",
+		"SFDF329I32F"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Hard\n|j|☆SFDF329I32F\n|t:|1795193933\n|gametype|singles\n|player|p1|Bunny Hard|bunny.png|1288\n|player|p2|SFDF329I32F|169|1000\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795193934\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Dragapult|Dragapult, L77, F|262/262\n|switch|p2a: Vigoroth|Vigoroth, L85, M|275/275\n|turn|1\n|c|☆Bunny Hard|Good luck! Playing on **hard**.\n|-message|SFDF329I32F forfeited.\n|\n|win|Bunny Hard\n",
+	"inputlog": ">start {\"formatid\":\"gen9rprandombattle\",\"seed\":\"sodium,338982334ede3afd5086e068f700c140\",\"rated\":\"Rated battle\"}\n>player p1 {\"name\":\"Bunny Hard\",\"avatar\":\"bunny.png\",\"rating\":1288,\"seed\":\"sodium,fa16ee64a3115822e4c197b130f0368b\"}\n>player p2 {\"name\":\"SFDF329I32F\",\"avatar\":\"169\",\"rating\":1000,\"seed\":\"sodium,d3d6d4a71dc03e626d6445a613ecb32f\"}\n>chat ☆Bunny Hard|Good luck! Playing on **hard**.\n>forcelose p2",
+	"uploadtime": 1795193966
+}
