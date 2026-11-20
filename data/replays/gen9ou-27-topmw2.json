@@ -1,0 +1,12 @@
+{
+	"id": "gen9ou-27-topmw2",
+	"format": "[Gen 9] OU",
+	"players": [
+		"Bunny Easy",
+		"gjdtjhg64dv"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆gjdtjhg64dv\n|t:|1795149155\n|gametype|singles\n|player|p1|Bunny Easy|bunny.png|1079\n|player|p2|gjdtjhg64dv|169|1000\n|gen|9\n|tier|[Gen 9] OU\n|rated|\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Endless Battle Clause: Forcing endless battles is banned\n|rule|Species Clause: Limit one of each Pokémon\n|rule|OHKO Clause: OHKO moves are banned\n|rule|Evasion Items Clause: Evasion items are banned\n|rule|Evasion Moves Clause: Evasion moves are banned\n|rule|Evasion Abilities Clause: Evasion abilities are banned\n|rule|Sleep Moves Clause: Sleep-inducing moves are banned\n|clearpoke\n|poke|p1|Raging Bolt|\n|poke|p1|Iron Treads|\n|poke|p1|Alomomola, M|\n|poke|p1|Glimmora, F|\n|poke|p1|Kyurem|\n|poke|p1|Latios, M|\n|poke|p2|Ceruledge, F|\n|poke|p2|Espeon, M|\n|poke|p2|Garchomp, F|\n|poke|p2|Umbreon, F|\n|poke|p2|Blastoise, M|\n|poke|p2|Iron Valiant|\n|teampreview\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1795149171\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Latios|Latios, M|100/100\n|switch|p2a: Blastoise|Blastoise, M|100/100\n|turn|1\n|\n|t:|1795149179\n|move|p1a: Latios|Draco Meteor|p2a: Blastoise\n|-damage|p2a: Blastoise|28/100\n|-unboost|p1a: Latios|spa|2\n|move|p2a: Blastoise|Ice Beam|p1a: Latios\n|-supereffective|p1a: Latios\n|-damage|p1a: Latios|62/100\n|\n|-heal|p2a: Blastoise|34/100|[from] item: Leftovers\n|upkeep\n|turn|2\n|\n|t:|1795149194\n|switch|p2a: Iron Valiant|Iron Valiant|100/100\n|-enditem|p2a: Iron Valiant|Booster Energy\n|-activate|p2a: Iron Valiant|ability: Quark Drive|[fromitem]\n|-start|p2a: Iron Valiant|quarkdrivespe\n|move|p1a: Latios|Recover|p1a: Latios\n|-heal|p1a: Latios|100/100\n|\n|upkeep\n|turn|3\n|\n|t:|1795149203\n|move|p2a: Iron Valiant|Moonblast|p1a: Latios\n|-supereffective|p1a: Latios\n|-damage|p1a: Latios|3/100\n|move|p1a: Latios|Draco Meteor|p2a: Iron Valiant\n|-immune|p2a: Iron Valiant\n|\n|upkeep\n|turn|4\n|\n|t:|1795149209\n|move|p2a: Iron Valiant|Moonblast|p1a: Latios\n|-supereffective|p1a: Latios\n|-damage|p1a: Latios|0 fnt\n|faint|p1a: Latios\n|\n|upkeep\n|\n|t:|1795149209\n|switch|p1a: Raging Bolt|Raging Bolt|100/100\n|-enditem|p1a: Raging Bolt|Booster Energy\n|-activate|p1a: Raging Bolt|ability: Protosynthesis|[fromitem]\n|-start|p1a: Raging Bolt|protosynthesisspa\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1795149217
+}
