@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-54-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Normal",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Normal\n|j|☆Guvila\n|t:|1795537328\n|gametype|singles\n|player|p1|Bunny Normal|bunny.png|1223\n|player|p2|Guvila|2|1106\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795537328\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Palossand|Palossand, L89, M|100/100\n|switch|p2a: Swampert|Swampert, L83, M|100/100\n|turn|1\n|c|☆Bunny Normal|Good luck! Playing on **normal**.\n|\n|t:|1795537336\n|move|p2a: Swampert|Yawn|p1a: Palossand\n|-start|p1a: Palossand|move: Yawn|[of] p2a: Swampert\n|move|p1a: Palossand|Shadow Ball|p2a: Swampert\n|-crit|p2a: Swampert\n|-damage|p2a: Swampert|53/100\n|-unboost|p2a: Swampert|spd|1\n|\n|-heal|p2a: Swampert|59/100|[from] item: Leftovers\n|upkeep\n|turn|2\n|\n|t:|1795537347\n|switch|p2a: Dewgong|Dewgong, L94, F|100/100\n|move|p1a: Palossand|Shadow Ball|p2a: Dewgong\n|-damage|p2a: Dewgong|78/100\n|\n|-end|p1a: Palossand|move: Yawn|[silent]\n|-status|p1a: Palossand|slp\n|upkeep\n|turn|3\n|\n|t:|1795537356\n|move|p2a: Dewgong|Undertow|p1a: Palossand\n|-supereffective|p1a: Palossand\n|-damage|p1a: Palossand|38/100 slp\n|-unboost|p1a: Palossand|spe|1\n|-ability|p1a: Palossand|Water Compaction|boost\n|-boost|p1a: Palossand|def|2\n|cant|p1a: Palossand|slp\n|\n|-heal|p1a: Palossand|44/100 slp|[from] item: Leftovers\n|upkeep\n|turn|4\n|\n|t:|1795537365\n|switch|p1a: Gastrodon|Gastrodon, L86, M|100/100\n|move|p2a: Dewgong|Undertow|p1a: Gastrodon\n|-ability|p1a: Gastrodon|Storm Drain|boost\n|-boost|p1a: Gastrodon|spa|1\n|\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1795537385
+}
