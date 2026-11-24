@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-66-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Normal",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Normal\n|j|☆Guvila\n|t:|1795540317\n|gametype|singles\n|player|p1|Bunny Normal|bunny.png|1252\n|player|p2|Guvila|2|1209\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795540317\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Excadrill|Excadrill, L79, F|100/100\n|switch|p2a: Regice|Regice, L88|100/100\n|-ability|p1a: Excadrill|Mold Breaker\n|turn|1\n|c|☆Bunny Normal|Good luck! Playing on **normal**.\n|\n|t:|1795540337\n|switch|p2a: Quaquaval|Quaquaval, L79, F|100/100\n|move|p1a: Excadrill|Iron Head|p2a: Quaquaval\n|-resisted|p2a: Quaquaval\n|-damage|p2a: Quaquaval|79/100\n|\n|-heal|p2a: Quaquaval|85/100|[from] item: Leftovers\n|upkeep\n|turn|2\n|\n|t:|1795540346\n|-terastallize|p1a: Excadrill|Grass\n|move|p1a: Excadrill|Earthquake|p2a: Quaquaval\n|-damage|p2a: Quaquaval|36/100\n|move|p2a: Quaquaval|Aqua Step|p1a: Excadrill\n|-resisted|p1a: Excadrill\n|-damage|p1a: Excadrill|80/100\n|-boost|p2a: Quaquaval|spe|1\n|\n|-heal|p2a: Quaquaval|42/100|[from] item: Leftovers\n|upkeep\n|turn|3\n|\n|t:|1795540361\n|switch|p2a: Moltres|Moltres-Galar, L79|100/100\n|move|p1a: Excadrill|Earthquake|p2a: Moltres\n|-immune|p2a: Moltres\n|\n|upkeep\n|turn|4\n|\n|t:|1795540368\n|move|p2a: Moltres|Nasty Plot|p2a: Moltres\n|-boost|p2a: Moltres|spa|2\n|move|p1a: Excadrill|Rock Slide|p2a: Moltres\n|-supereffective|p2a: Moltres\n|-damage|p2a: Moltres|50/100\n|-ability|p2a: Moltres|Berserk|boost\n|-boost|p2a: Moltres|spa|1\n|\n|upkeep\n|turn|5\n|\n|t:|1795540382\n|move|p2a: Moltres|Hurricane|p1a: Excadrill\n|-supereffective|p1a: Excadrill\n|-damage|p1a: Excadrill|0 fnt\n|faint|p1a: Excadrill\n|\n|upkeep\n|\n|t:|1795540382\n|switch|p1a: Ampharos|Ampharos, L88, M|100/100\n|turn|6\n",
+	"inputlog": null,
+	"uploadtime": 1795540386
+}
