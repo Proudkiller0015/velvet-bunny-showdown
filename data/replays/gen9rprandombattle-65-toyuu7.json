@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-65-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Normal",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Normal\n|j|☆Guvila\n|t:|1795540099\n|gametype|singles\n|player|p1|Bunny Normal|bunny.png|1237\n|player|p2|Guvila|2|1225\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795540099\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Electivire|Electivire, L84, M|100/100\n|switch|p2a: Chi-Yu|Chi-Yu, L77|100/100\n|-ability|p2a: Chi-Yu|Beads of Ruin\n|turn|1\n|c|☆Bunny Normal|Good luck! Playing on **normal**.\n|\n|t:|1795540107\n|-terastallize|p1a: Electivire|Ground\n|move|p1a: Electivire|Earthquake|p2a: Chi-Yu\n|-supereffective|p2a: Chi-Yu\n|-damage|p2a: Chi-Yu|0 fnt\n|faint|p2a: Chi-Yu\n|-damage|p1a: Electivire|91/100|[from] item: Life Orb\n|\n|upkeep\n|\n|t:|1795540115\n|switch|p2a: Dewgong|Dewgong, L94, F|100/100\n|turn|2\n|\n|t:|1795540118\n|move|p1a: Electivire|Voltaic Lance|p2a: Dewgong\n|-supereffective|p2a: Dewgong\n|-damage|p2a: Dewgong|20/100\n|-damage|p1a: Electivire|81/100|[from] item: Life Orb\n|move|p2a: Dewgong|Triple Axel|p1a: Electivire\n|-supereffective|p1a: Electivire\n|-damage|p1a: Electivire|62/100\n|-supereffective|p1a: Electivire\n|-damage|p1a: Electivire|24/100\n|-supereffective|p1a: Electivire\n|-damage|p1a: Electivire|0 fnt\n|faint|p1a: Electivire\n|-hitcount|p1: Electivire|3\n|\n|upkeep\n|\n|t:|1795540118\n|switch|p1a: Mienshao|Mienshao, L83, M|100/100\n|turn|3\n|\n|t:|1795540134\n|switch|p2a: Comfey|Comfey, L85, F|100/100\n|move|p1a: Mienshao|Close Combat|p2a: Comfey\n|-resisted|p2a: Comfey\n|-damage|p2a: Comfey|68/100\n|-unboost|p1a: Mienshao|def|1\n|-unboost|p1a: Mienshao|spd|1\n|\n|-heal|p2a: Comfey|75/100|[from] item: Leftovers\n|upkeep\n|turn|4\n|\n|t:|1795540144\n|switch|p1a: Bronzong|Bronzong, L88|100/100\n|move|p2a: Comfey|Velvet Press|p1a: Bronzong\n|-resisted|p1a: Bronzong\n|-damage|p1a: Bronzong|86/100\n|\n|-heal|p2a: Comfey|81/100|[from] item: Leftovers\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1795540146
+}
