@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-60-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Normal",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Normal\n|j|☆Guvila\n|t:|1795539019\n|gametype|singles\n|player|p1|Bunny Normal|bunny.png|1228\n|player|p2|Guvila|2|1212\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795539019\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Kleavor|Kleavor, L78, F|100/100\n|switch|p2a: Iron Hands|Iron Hands, L79|100/100\n|turn|1\n|c|☆Bunny Normal|Good luck! Playing on **normal**.\n|\n|t:|1795539030\n|move|p1a: Kleavor|Stone Axe|p2a: Iron Hands|[miss]\n|-miss|p1a: Kleavor|p2a: Iron Hands\n|move|p2a: Iron Hands|Swords Dance|p2a: Iron Hands\n|-boost|p2a: Iron Hands|atk|2\n|\n|upkeep\n|turn|2\n|\n|t:|1795539039\n|move|p1a: Kleavor|Stone Axe|p2a: Iron Hands\n|-resisted|p2a: Iron Hands\n|-damage|p2a: Iron Hands|87/100\n|-sidestart|p2: Guvila|move: Stealth Rock\n|move|p2a: Iron Hands|Voltaic Lance|p1a: Kleavor\n|-crit|p1a: Kleavor\n|-damage|p1a: Kleavor|0 fnt\n|faint|p1a: Kleavor\n|\n|-heal|p2a: Iron Hands|93/100|[from] item: Leftovers\n|upkeep\n|\n|t:|1795539039\n|switch|p1a: Dragalge|Dragalge, L88, F|100/100\n|turn|3\n|\n|t:|1795539053\n|move|p1a: Dragalge|Draco Meteor|p2a: Iron Hands\n|-damage|p2a: Iron Hands|27/100\n|-unboost|p1a: Dragalge|spa|2\n|move|p2a: Iron Hands|Swords Dance|p2a: Iron Hands\n|-boost|p2a: Iron Hands|atk|2\n|\n|-heal|p2a: Iron Hands|33/100|[from] item: Leftovers\n|upkeep\n|turn|4\n|\n|t:|1795539061\n|move|p1a: Dragalge|Draco Meteor|p2a: Iron Hands\n|-damage|p2a: Iron Hands|0 fnt\n|-unboost|p1a: Dragalge|spa|2\n|faint|p2a: Iron Hands\n|-end|p2a: Iron Hands|Quark Drive|[silent]\n|\n|upkeep\n|\n|t:|1795539075\n|switch|p2a: Ninetales|Ninetales-Alola, L78, M|100/100\n|-damage|p2a: Ninetales|76/100|[from] Stealth Rock\n|-weather|Snowscape|[from] ability: Snow Warning|[of] p2a: Ninetales\n|turn|5\n|\n|t:|1795539082\n|switch|p1a: Glastrier|Glastrier, L86|100/100\n|move|p2a: Ninetales|Aurora Veil|p2a: Ninetales\n|-sidestart|p2: Guvila|move: Aurora Veil\n|\n|-weather|Snowscape|[upkeep]\n|upkeep\n|turn|6\n",
+	"inputlog": null,
+	"uploadtime": 1795539086
+}
