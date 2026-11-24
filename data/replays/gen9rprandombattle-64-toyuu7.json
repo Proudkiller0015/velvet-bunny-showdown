@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-64-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Normal",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Normal\n|j|☆Guvila\n|t:|1795539931\n|gametype|singles\n|player|p1|Bunny Normal|bunny.png|1256\n|player|p2|Guvila|2|1195\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795539931\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Salazzle|Salazzle, L83, F|100/100\n|switch|p2a: Tauros|Tauros-Paldea-Combat, L82, M|100/100\n|-ability|p2a: Tauros|Intimidate|boost\n|-unboost|p1a: Salazzle|atk|1\n|turn|1\n|c|☆Bunny Normal|Good luck! Playing on **normal**.\n|\n|t:|1795539940\n|move|p1a: Salazzle|Toxic|p2a: Tauros\n|-status|p2a: Tauros|tox\n|move|p2a: Tauros|Earthquake|p1a: Salazzle\n|-supereffective|p1a: Salazzle\n|-damage|p1a: Salazzle|0 fnt\n|faint|p1a: Salazzle\n|-damage|p2a: Tauros|91/100 tox|[from] item: Life Orb\n|\n|-damage|p2a: Tauros|85/100 tox|[from] psn\n|upkeep\n|\n|t:|1795539940\n|switch|p1a: Oranguru|Oranguru, L92, F|100/100\n|turn|2\n|\n|t:|1795539960\n|switch|p2a: Yanmega|Yanmega, L82, M|100/100\n|move|p1a: Oranguru|Hypno Whirl|p2a: Yanmega\n|-damage|p2a: Yanmega|26/100\n|\n|upkeep\n|turn|3\n|\n|t:|1795539969\n|move|p2a: Yanmega|Protect|p2a: Yanmega\n|-singleturn|p2a: Yanmega|Protect\n|move|p1a: Oranguru|Hypno Whirl|p2a: Yanmega\n|-activate|p2a: Yanmega|move: Protect\n|\n|-ability|p2a: Yanmega|Speed Boost|boost\n|-boost|p2a: Yanmega|spe|1\n|upkeep\n|turn|4\n|\n|t:|1795539976\n|move|p2a: Yanmega|Hive Frenzy|p1a: Oranguru\n|-supereffective|p1a: Oranguru\n|-damage|p1a: Oranguru|58/100\n|-boost|p2a: Yanmega|atk|1\n|move|p1a: Oranguru|Hypno Whirl|p2a: Yanmega\n|-damage|p2a: Yanmega|0 fnt\n|faint|p2a: Yanmega\n|\n|upkeep\n|\n|t:|1795539985\n|switch|p2a: Smeargle|Smeargle, L95, F|100/100\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1795539986
+}
