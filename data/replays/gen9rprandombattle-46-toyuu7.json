@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-46-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Kaede21355528",
+		"Velvet Bunny"
+	],
+	"rating": null,
+	"log": "|j|☆Kaede21355528\n|j|☆Velvet Bunny\n|t:|1795514642\n|gametype|singles\n|player|p1|Kaede21355528|roxanne|\n|player|p2|Velvet Bunny|bunny.png|\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795514642\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Clefable|Clefable, L83, F|293/293\n|switch|p2a: Bellossom|Bellossom, L84, F|263/263\n|turn|1\n|c|☆Velvet Bunny|Good luck! Playing on **hard**. (PM me to change it.)\n|-message|Kaede21355528 forfeited.\n|\n|win|Velvet Bunny\n",
+	"inputlog": ">start {\"formatid\":\"gen9rprandombattle\",\"seed\":\"sodium,30c8c35381640aaa2331b0b4e33fd116\"}\n>player p1 {\"name\":\"Kaede21355528\",\"avatar\":\"roxanne\",\"rating\":0,\"seed\":\"sodium,962293c238142a458308570ce1e109b5\"}\n>player p2 {\"name\":\"Velvet Bunny\",\"avatar\":\"bunny.png\",\"rating\":0,\"seed\":\"sodium,71f92753eb00ac9fb66158100e3fc52e\"}\n>chat ☆Velvet Bunny|Good luck! Playing on **hard**. (PM me to change it.)\n>forcelose p1",
+	"uploadtime": 1795514656
+}
