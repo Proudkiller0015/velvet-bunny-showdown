@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-67-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Normal",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Normal\n|j|☆Guvila\n|t:|1795540502\n|gametype|singles\n|player|p1|Bunny Normal|bunny.png|1234\n|player|p2|Guvila|2|1227\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795540502\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Arceus|Arceus-Psychic, L70|100/100\n|switch|p2a: Vikavolt|Vikavolt, L83, M|100/100\n|turn|1\n|c|☆Bunny Normal|Good luck! Playing on **normal**.\n|\n|t:|1795540509\n|-terastallize|p1a: Arceus|Steel\n|move|p1a: Arceus|Recover||[still]\n|-fail|p1a: Arceus|heal\n|move|p2a: Vikavolt|Sticky Web|p1a: Arceus\n|-sidestart|p1: Bunny Normal|move: Sticky Web\n|\n|upkeep\n|turn|2\n|\n|t:|1795540518\n|switch|p1a: Ludicolo|Ludicolo, L90, M|100/100\n|-activate|p1a: Ludicolo|move: Sticky Web\n|-unboost|p1a: Ludicolo|spe|1\n|switch|p2a: Cinderace|Cinderace, L77, F|100/100\n|\n|upkeep\n|turn|3\n|\n|t:|1795540526\n|move|p2a: Cinderace|U-turn|p1a: Ludicolo\n|-start|p2a: Cinderace|typechange|Bug|[from] ability: Libero\n|-supereffective|p1a: Ludicolo\n|-damage|p1a: Ludicolo|42/100\n|\n|t:|1795540533\n|switch|p2a: Noctowl|Noctowl, L95, M|100/100|[from] U-turn\n|move|p1a: Ludicolo|Hydro Pump|p2a: Noctowl\n|-damage|p2a: Noctowl|56/100\n|\n|upkeep\n|turn|4\n|\n|t:|1795540541\n|move|p2a: Noctowl|Hurricane|p1a: Ludicolo\n|-supereffective|p1a: Ludicolo\n|-damage|p1a: Ludicolo|0 fnt\n|faint|p1a: Ludicolo\n|\n|upkeep\n|\n|t:|1795540541\n|switch|p1a: Plusle|Plusle, L95, M|100/100\n|-activate|p1a: Plusle|move: Sticky Web\n|-unboost|p1a: Plusle|spe|1\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1795540546
+}
