@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-56-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Hard",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Hard\n|j|☆Guvila\n|t:|1795537819\n|gametype|singles\n|player|p1|Bunny Hard|bunny.png|1303\n|player|p2|Guvila|2|1140\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795537820\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Ludicolo|Ludicolo, L90, M|100/100\n|switch|p2a: Raikou|Raikou, L81|100/100\n|-ability|p2a: Raikou|Pressure\n|turn|1\n|c|☆Bunny Hard|Good luck! Playing on **hard**.\n|\n|t:|1795537841\n|move|p2a: Raikou|Calm Mind|p2a: Raikou\n|-boost|p2a: Raikou|spa|1\n|-boost|p2a: Raikou|spd|1\n|move|p1a: Ludicolo|Earth Power|p2a: Raikou\n|-supereffective|p2a: Raikou\n|-damage|p2a: Raikou|58/100\n|-damage|p1a: Ludicolo|90/100|[from] item: Life Orb\n|\n|-heal|p2a: Raikou|65/100|[from] item: Leftovers\n|upkeep\n|turn|2\n|\n|t:|1795537850\n|move|p2a: Raikou|Calm Mind|p2a: Raikou\n|-boost|p2a: Raikou|spa|1\n|-boost|p2a: Raikou|spd|1\n|move|p1a: Ludicolo|Earth Power|p2a: Raikou\n|-supereffective|p2a: Raikou\n|-damage|p2a: Raikou|31/100\n|-damage|p1a: Ludicolo|80/100|[from] item: Life Orb\n|\n|-heal|p2a: Raikou|37/100|[from] item: Leftovers\n|upkeep\n|turn|3\n|\n|t:|1795537862\n|move|p2a: Raikou|Calm Mind|p2a: Raikou\n|-boost|p2a: Raikou|spa|1\n|-boost|p2a: Raikou|spd|1\n|move|p1a: Ludicolo|Earth Power|p2a: Raikou\n|-supereffective|p2a: Raikou\n|-damage|p2a: Raikou|11/100\n|-damage|p1a: Ludicolo|70/100|[from] item: Life Orb\n|\n|-heal|p2a: Raikou|17/100|[from] item: Leftovers\n|upkeep\n|turn|4\n|\n|t:|1795537870\n|move|p2a: Raikou|Thunderbolt|p1a: Ludicolo\n|-damage|p1a: Ludicolo|0 fnt\n|faint|p1a: Ludicolo\n|\n|-heal|p2a: Raikou|23/100|[from] item: Leftovers\n|upkeep\n|\n|t:|1795537871\n|switch|p1a: Cacturne|Cacturne, L92, F|100/100\n|turn|5\n|\n|t:|1795537879\n|move|p2a: Raikou|Recover|p2a: Raikou\n|-heal|p2a: Raikou|73/100\n|move|p1a: Cacturne|Carrion Feast|p2a: Raikou\n|-damage|p2a: Raikou|14/100\n|-damage|p1a: Cacturne|91/100|[from] item: Life Orb\n|\n|-heal|p2a: Raikou|20/100|[from] item: Leftovers\n|upkeep\n|turn|6\n",
+	"inputlog": null,
+	"uploadtime": 1795537885
+}
