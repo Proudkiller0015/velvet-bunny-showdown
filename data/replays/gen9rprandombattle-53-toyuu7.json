@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-53-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Normal",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Normal\n|j|☆Guvila\n|t:|1795537156\n|gametype|singles\n|player|p1|Bunny Normal|bunny.png|1211\n|player|p2|Guvila|2|1119\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795537156\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Piloswine|Piloswine, L85, M|100/100\n|switch|p2a: Zekrom|Zekrom, L71|100/100\n|-ability|p2a: Zekrom|Teravolt\n|turn|1\n|c|☆Bunny Normal|Good luck! Playing on **normal**.\n|\n|t:|1795537176\n|switch|p2a: Swampert|Swampert, L83, F|100/100\n|move|p1a: Piloswine|Earthquake|p2a: Swampert\n|-damage|p2a: Swampert|60/100\n|\n|-heal|p2a: Swampert|66/100|[from] item: Leftovers\n|upkeep\n|turn|2\n|\n|t:|1795537189\n|move|p1a: Piloswine|Rime Cleaver|p2a: Swampert\n|-damage|p2a: Swampert|27/100\n|move|p2a: Swampert|Roar|p1a: Piloswine\n|drag|p1a: Roaring Moon|Roaring Moon, L72|100/100\n|-enditem|p1a: Roaring Moon|Booster Energy\n|-activate|p1a: Roaring Moon|ability: Protosynthesis|[fromitem]\n|-start|p1a: Roaring Moon|protosynthesisatk\n|\n|-heal|p2a: Swampert|33/100|[from] item: Leftovers\n|upkeep\n|turn|3\n|\n|t:|1795537204\n|move|p1a: Roaring Moon|Outrage|p2a: Swampert\n|-damage|p2a: Swampert|0 fnt\n|faint|p2a: Swampert\n|\n|upkeep\n|\n|t:|1795537209\n|switch|p2a: Chien-Pao|Chien-Pao, L72|100/100\n|-ability|p2a: Chien-Pao|Sword of Ruin\n|turn|4\n|\n|t:|1795537217\n|move|p2a: Chien-Pao|Rime Cleaver|p1a: Roaring Moon\n|-supereffective|p1a: Roaring Moon\n|-damage|p1a: Roaring Moon|0 fnt\n|faint|p1a: Roaring Moon\n|-end|p1a: Roaring Moon|Protosynthesis|[silent]\n|\n|upkeep\n|\n|t:|1795537217\n|switch|p1a: Blaziken|Blaziken, L76, F|100/100\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1795537225
+}
