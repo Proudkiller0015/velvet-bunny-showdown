@@ -1,0 +1,12 @@
+{
+	"id": "gen9championsbssregmc-47-toyuu7",
+	"format": "[Gen 9 Champions] BSS Reg M-C",
+	"players": [
+		"Kaede21355528",
+		"Velvet Bunny"
+	],
+	"rating": null,
+	"log": "|j|☆Kaede21355528\n|j|☆Velvet Bunny\n|t:|1795521731\n|gametype|singles\n|player|p1|Kaede21355528|roxanne|\n|player|p2|Velvet Bunny|bunny.png|\n|gen|9\n|tier|[Gen 9 Champions] BSS Reg M-C\n|rule|Species Clause: Limit one of each Pokémon\n|rule|Item Clause: Limit 1 of each item\n|clearpoke\n|poke|p1|Glaceon, L50, M|\n|poke|p1|Leafeon, L50, F|\n|poke|p1|Flareon, L50, F|\n|poke|p1|Vaporeon, L50, F|\n|poke|p1|Espeon, L50, M|\n|poke|p1|Sylveon, L50, F|\n|poke|p2|Indeedee, L50, M|\n|poke|p2|Dragonite, L50, M|\n|poke|p2|Scizor, L50, M|\n|poke|p2|Sneasler, L50, F|\n|poke|p2|Baxcalibur, L50, F|\n|poke|p2|Gholdengo, L50|\n|teampreview|3\n|c|☆Velvet Bunny|Good luck! Playing on **hard**. (PM me to change it.)\n|\n|t:|1795521777\n|teamsize|p1|3\n|teamsize|p2|3\n|start\n|switch|p1a: Sylveon|Sylveon, L50, F|100/100\n|switch|p2a: Dragonite|Dragonite, L50, M|100/100\n|turn|1\n|\n|t:|1795521791\n|move|p2a: Dragonite|Earthquake|p1a: Sylveon\n|-damage|p1a: Sylveon|37/100\n|-damage|p2a: Dragonite|90/100|[from] item: Life Orb\n|move|p1a: Sylveon|Hyper Voice|p2a: Dragonite\n|-supereffective|p2a: Dragonite|1\n|-damage|p2a: Dragonite|0 fnt\n|faint|p2a: Dragonite\n|\n|-heal|p1a: Sylveon|43/100|[from] item: Leftovers\n|upkeep\n|\n|t:|1795521791\n|switch|p2a: Sneasler|Sneasler, L50, F|100/100\n|turn|2\n|\n|t:|1795521809\n|move|p1a: Sylveon|Quick Attack|p2a: Sneasler\n|-damage|p2a: Sneasler|82/100\n|move|p2a: Sneasler|Dire Claw|p1a: Sylveon\n|-supereffective|p1a: Sylveon|1\n|-damage|p1a: Sylveon|0 fnt\n|faint|p1a: Sylveon\n|\n|upkeep\n|\n|t:|1795521818\n|switch|p1a: Espeon|Espeon, L50, M|100/100\n|turn|3\n|\n|t:|1795521829\n|move|p1a: Espeon|Psychic|p2a: Sneasler\n|-supereffective|p2a: Sneasler|2\n|-damage|p2a: Sneasler|0 fnt\n|faint|p2a: Sneasler\n|\n|upkeep\n|\n|t:|1795521829\n|switch|p2a: Indeedee|Indeedee, L50, M|100/100\n|-fieldstart|move: Psychic Terrain|[from] ability: Psychic Surge|[of] p2a: Indeedee\n|turn|4\n|\n|t:|1795521838\n|move|p1a: Espeon|Psychic|p2a: Indeedee\n|-resisted|p2a: Indeedee|1\n|-damage|p2a: Indeedee|52/100\n|move|p2a: Indeedee|Shadow Ball|p1a: Espeon\n|-supereffective|p1a: Espeon|1\n|-damage|p1a: Espeon|33/100\n|\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1795521843
+}
