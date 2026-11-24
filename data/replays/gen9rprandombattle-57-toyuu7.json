@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-57-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Normal",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Normal\n|j|☆Guvila\n|t:|1795538192\n|gametype|singles\n|player|p1|Bunny Normal|bunny.png|1211\n|player|p2|Guvila|2|1184\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795538192\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Avalugg|Avalugg, L88, M|100/100\n|switch|p2a: Dodrio|Dodrio, L85, M|100/100\n|turn|1\n|c|☆Bunny Normal|Good luck! Playing on **normal**.\n|\n|t:|1795538207\n|switch|p2a: Jolteon|Jolteon, L84, M|100/100\n|move|p1a: Avalugg|Rime Cleaver|p2a: Jolteon\n|-damage|p2a: Jolteon|27/100\n|\n|upkeep\n|turn|2\n|\n|t:|1795538216\n|move|p2a: Jolteon|Thunderbolt|p1a: Avalugg\n|-damage|p1a: Avalugg|35/100\n|-status|p1a: Avalugg|par\n|-damage|p2a: Jolteon|17/100|[from] item: Life Orb\n|move|p1a: Avalugg|Rime Cleaver|p2a: Jolteon\n|-damage|p2a: Jolteon|0 fnt\n|faint|p2a: Jolteon\n|\n|upkeep\n|\n|t:|1795538227\n|switch|p2a: Oinkologne|Oinkologne-F, L92, F|100/100\n|turn|3\n|\n|t:|1795538233\n|move|p2a: Oinkologne|Lash Out|p1a: Avalugg\n|-damage|p1a: Avalugg|24/100 par\n|cant|p1a: Avalugg|par\n|\n|upkeep\n|turn|4\n|\n|t:|1795538241\n|move|p2a: Oinkologne|Body Slam|p1a: Avalugg\n|-damage|p1a: Avalugg|7/100 par\n|move|p1a: Avalugg|Body Press|p2a: Oinkologne\n|-supereffective|p2a: Oinkologne\n|-damage|p2a: Oinkologne|42/100\n|\n|-heal|p2a: Oinkologne|48/100|[from] item: Leftovers\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1795538245
+}
