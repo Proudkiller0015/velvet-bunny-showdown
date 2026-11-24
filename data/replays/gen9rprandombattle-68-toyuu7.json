@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-68-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Normal",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Normal\n|j|☆Guvila\n|t:|1795540730\n|gametype|singles\n|player|p1|Bunny Normal|bunny.png|1218\n|player|p2|Guvila|2|1244\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795540731\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Palossand|Palossand, L89, M|100/100\n|switch|p2a: Lilligant|Lilligant-Hisui, L79, F|100/100\n|turn|1\n|c|☆Bunny Normal|Good luck! Playing on **normal**.\n|\n|t:|1795540738\n|move|p2a: Lilligant|Sleep Powder|p1a: Palossand|[miss]\n|-miss|p2a: Lilligant|p1a: Palossand\n|move|p1a: Palossand|Earth Power|p2a: Lilligant\n|-resisted|p2a: Lilligant\n|-crit|p2a: Lilligant\n|-damage|p2a: Lilligant|59/100\n|\n|upkeep\n|turn|2\n|\n|t:|1795540745\n|move|p2a: Lilligant|Sleep Powder|p1a: Palossand|[miss]\n|-miss|p2a: Lilligant|p1a: Palossand\n|move|p1a: Palossand|Earth Power|p2a: Lilligant\n|-resisted|p2a: Lilligant\n|-damage|p2a: Lilligant|32/100\n|\n|upkeep\n|turn|3\n|\n|t:|1795540751\n|move|p2a: Lilligant|Sleep Powder|p1a: Palossand\n|-status|p1a: Palossand|slp|[from] move: Sleep Powder\n|cant|p1a: Palossand|slp\n|\n|upkeep\n|turn|4\n|\n|t:|1795540756\n|move|p2a: Lilligant|Victory Dance|p2a: Lilligant\n|-boost|p2a: Lilligant|atk|1\n|-boost|p2a: Lilligant|def|1\n|-boost|p2a: Lilligant|spe|1\n|cant|p1a: Palossand|slp\n|\n|upkeep\n|turn|5\n|\n|t:|1795540761\n|move|p2a: Lilligant|Victory Dance|p2a: Lilligant\n|-boost|p2a: Lilligant|atk|1\n|-boost|p2a: Lilligant|def|1\n|-boost|p2a: Lilligant|spe|1\n|cant|p1a: Palossand|slp\n|\n|upkeep\n|turn|6\n",
+	"inputlog": null,
+	"uploadtime": 1795540766
+}
