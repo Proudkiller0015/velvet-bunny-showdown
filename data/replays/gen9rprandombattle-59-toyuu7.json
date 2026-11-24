@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-59-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Normal",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Normal\n|j|☆Guvila\n|t:|1795538729\n|gametype|singles\n|player|p1|Bunny Normal|bunny.png|1211\n|player|p2|Guvila|2|1229\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795538729\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Kleavor|Kleavor, L78, F|237/237\n|switch|p2a: Altaria|Altaria, L89, F|278/278\n|turn|1\n|c|☆Bunny Normal|Good luck! Playing on **normal**.\n|\n|t:|1795538761\n|move|p2a: Altaria|Dragon Dance|p2a: Altaria\n|-boost|p2a: Altaria|atk|1\n|-boost|p2a: Altaria|spe|1\n|move|p1a: Kleavor|Stone Axe|p2a: Altaria\n|-supereffective|p2a: Altaria\n|-damage|p2a: Altaria|50/278\n|-sidestart|p2: Guvila|move: Stealth Rock\n|\n|upkeep\n|turn|2\n|\n|t:|1795538771\n|move|p2a: Altaria|Brave Bird|p1a: Kleavor\n|-damage|p1a: Kleavor|66/237\n|-damage|p2a: Altaria|0 fnt|[from] Recoil\n|faint|p2a: Altaria\n|move|p1a: Kleavor|Stone Axe|p2: Altaria|[notarget]\n|-fail|p1a: Kleavor\n|\n|upkeep\n|\n|t:|1795538780\n|switch|p2a: Komala|Komala, L87, M|255/255\n|-damage|p2a: Komala|224/255|[from] Stealth Rock\n|-ability|p2a: Komala|Comatose\n|turn|3\n|\n|t:|1795538788\n|move|p1a: Kleavor|Close Combat|p2a: Komala\n|-supereffective|p2a: Komala\n|-damage|p2a: Komala|0 fnt\n|-unboost|p1a: Kleavor|def|1\n|-unboost|p1a: Kleavor|spd|1\n|faint|p2a: Komala\n|\n|upkeep\n|l|☆Guvila\n|player|p2|\n|inactive|Guvila has 2 minutes to come back and make a move, or they forfeit.\n|-message|Guvila lost due to inactivity.\n|\n|win|Bunny Normal\n",
+	"inputlog": ">start {\"formatid\":\"gen9rprandombattle\",\"seed\":\"sodium,4930786365d60478cbb5f7faccae7de8\",\"rated\":\"Rated battle\"}\n>player p1 {\"name\":\"Bunny Normal\",\"avatar\":\"bunny.png\",\"rating\":1211,\"seed\":\"sodium,f0b735e72db7812a892007a652a961d1\"}\n>player p2 {\"name\":\"Guvila\",\"avatar\":\"2\",\"rating\":1229,\"seed\":\"sodium,cbfccf0f660d1fe8058750afaed58b30\"}\n>chat ☆Bunny Normal|Good luck! Playing on **normal**.\n>p1 move stoneaxe\n>p2 move dragondance\n>p1 move stoneaxe\n>p2 move bravebird\n>p2 switch 5\n>p1 move closecombat\n>p2 move bodyslam\n>forcelose p2",
+	"uploadtime": 1795538976
+}
