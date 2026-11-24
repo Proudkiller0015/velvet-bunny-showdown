@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-52-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Normal",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Normal\n|j|☆Guvila\n|t:|1795536943\n|gametype|singles\n|player|p1|Bunny Normal|bunny.png|1221\n|player|p2|Guvila|2|1064\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795536944\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Haxorus|Haxorus, L77, F|100/100\n|switch|p2a: Lilligant|Lilligant, L86, F|100/100\n|-ability|p1a: Haxorus|Mold Breaker\n|turn|1\n|c|☆Bunny Normal|Good luck! Playing on **normal**.\n|\n|t:|1795536955\n|switch|p2a: Glastrier|Glastrier, L86|100/100\n|-terastallize|p1a: Haxorus|Steel\n|move|p1a: Haxorus|Iron Head|p2a: Glastrier\n|-supereffective|p2a: Glastrier\n|-damage|p2a: Glastrier|56/100\n|\n|upkeep\n|turn|2\n|\n|t:|1795536964\n|switch|p2a: Incineroar|Incineroar, L82, M|100/100\n|-ability|p2a: Incineroar|Intimidate|boost\n|-unboost|p1a: Haxorus|atk|1\n|move|p1a: Haxorus|Iron Head|p2a: Incineroar\n|-resisted|p2a: Incineroar\n|-damage|p2a: Incineroar|89/100\n|\n|upkeep\n|turn|3\n|\n|t:|1795536978\n|move|p1a: Haxorus|Earthquake|p2a: Incineroar\n|-supereffective|p2a: Incineroar\n|-damage|p2a: Incineroar|49/100\n|move|p2a: Incineroar|Swords Dance|p2a: Incineroar\n|-boost|p2a: Incineroar|atk|2\n|\n|upkeep\n|turn|4\n|\n|t:|1795536989\n|move|p1a: Haxorus|Earthquake|p2a: Incineroar\n|-supereffective|p2a: Incineroar\n|-damage|p2a: Incineroar|12/100\n|move|p2a: Incineroar|Flare Blitz|p1a: Haxorus\n|-supereffective|p1a: Haxorus\n|-damage|p1a: Haxorus|0 fnt\n|faint|p1a: Haxorus\n|-damage|p2a: Incineroar|0 fnt|[from] Recoil\n|faint|p2a: Incineroar\n|\n|upkeep\n|\n|t:|1795537002\n|switch|p1a: Conkeldurr|Conkeldurr, L80, M|100/100\n|switch|p2a: Dedenne|Dedenne, L88, F|100/100\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1795537005
+}
