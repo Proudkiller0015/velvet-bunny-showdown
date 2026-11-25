@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-98-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Normal",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Normal\n|j|☆Guvila\n|t:|1795604971\n|gametype|singles\n|player|p1|Bunny Normal|bunny.png|1286\n|player|p2|Guvila|170|1181\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795604971\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Kyogre|Kyogre, L71|100/100\n|switch|p2a: Camerupt|Camerupt, L91, F|100/100\n|-weather|RainDance|[from] ability: Drizzle|[of] p1a: Kyogre\n|turn|1\n|c|☆Bunny Normal|Good luck! Playing on **normal**.\n|\n|t:|1795604989\n|switch|p2a: Virizion|Virizion, L82|100/100\n|move|p1a: Kyogre|Undertow|p2a: Virizion\n|-resisted|p2a: Virizion\n|-damage|p2a: Virizion|80/100\n|\n|-weather|RainDance|[upkeep]\n|upkeep\n|turn|2\n|\n|t:|1795604997\n|move|p2a: Virizion|Swords Dance|p2a: Virizion\n|-boost|p2a: Virizion|atk|2\n|move|p1a: Kyogre|Thunder|p2a: Virizion\n|-resisted|p2a: Virizion\n|-damage|p2a: Virizion|68/100\n|\n|-weather|RainDance|[upkeep]\n|upkeep\n|turn|3\n|\n|t:|1795605004\n|switch|p1a: Solgaleo|Solgaleo, L74|100/100\n|move|p2a: Virizion|Leaf Blade|p1a: Solgaleo\n|-resisted|p1a: Solgaleo\n|-damage|p1a: Solgaleo|69/100\n|-damage|p2a: Virizion|58/100|[from] item: Life Orb\n|\n|-weather|RainDance|[upkeep]\n|-heal|p1a: Solgaleo|76/100|[from] item: Leftovers\n|upkeep\n|turn|4\n|\n|t:|1795605013\n|move|p2a: Virizion|Close Combat|p1a: Solgaleo\n|-damage|p1a: Solgaleo|0 fnt\n|-unboost|p2a: Virizion|def|1\n|-unboost|p2a: Virizion|spd|1\n|faint|p1a: Solgaleo\n|-damage|p2a: Virizion|48/100|[from] item: Life Orb\n|\n|-weather|RainDance|[upkeep]\n|upkeep\n|\n|t:|1795605013\n|switch|p1a: Iron Boulder|Iron Boulder, L77|100/100\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1795605014
+}
