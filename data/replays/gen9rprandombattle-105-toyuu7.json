@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-105-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Normal",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Normal\n|j|☆Guvila\n|t:|1795606574\n|gametype|singles\n|player|p1|Bunny Normal|bunny.png|1216\n|player|p2|Guvila|170|1274\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795606574\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Kricketune|Kricketune, L99, F|311/311\n|switch|p2a: Decidueye|Decidueye-Hisui, L87, F|295/295\n|turn|1\n|c|☆Bunny Normal|Good luck! Playing on **normal**.\n|\n|t:|1795606584\n|switch|p2a: Ogerpon|Ogerpon-Hearthflame, L74, F|239/239\n|-ability|p2a: Ogerpon|Mold Breaker\n|move|p1a: Kricketune|Hive Frenzy|p2a: Ogerpon\n|-damage|p2a: Ogerpon|116/239\n|-boost|p1a: Kricketune|atk|1\n|\n|upkeep\n|turn|2\n|\n|t:|1795606593\n|-terastallize|p1a: Kricketune|Ghost\n|move|p2a: Ogerpon|Ivy Cudgel|p1a: Kricketune|[anim] Ivy Cudgel Fire\n|-damage|p1a: Kricketune|166/311\n|move|p1a: Kricketune|Hive Frenzy|p2a: Ogerpon\n|-damage|p2a: Ogerpon|0 fnt\n|faint|p2a: Ogerpon\n|\n|upkeep\n|\n|t:|1795606603\n|switch|p2a: Tornadus|Tornadus, L82, M|263/263\n|turn|3\n|\n|t:|1795606606\n|switch|p1a: Empoleon|Empoleon, L84, F|278/278\n|move|p2a: Tornadus|Bleakwind Storm|p1a: Empoleon|[miss]\n|-miss|p2a: Tornadus|p1a: Empoleon\n|\n|upkeep\n|turn|4\n|-message|Guvila forfeited.\n|l|☆Guvila\n|player|p2|\n|\n|win|Bunny Normal\n",
+	"inputlog": ">start {\"formatid\":\"gen9rprandombattle\",\"seed\":\"sodium,27057e24f6cff415a8538af0d71903cd\",\"rated\":\"Rated battle\"}\n>player p1 {\"name\":\"Bunny Normal\",\"avatar\":\"bunny.png\",\"rating\":1216,\"seed\":\"sodium,ed69cec9d4fe755b61fda04f64556a8c\"}\n>player p2 {\"name\":\"Guvila\",\"avatar\":\"170\",\"rating\":1274,\"seed\":\"sodium,f903dfe0225915e01775c8e9723501cd\"}\n>chat ☆Bunny Normal|Good luck! Playing on **normal**.\n>p1 move hivefrenzy\n>p2 switch 5\n>p1 move hivefrenzy terastallize\n>p2 move ivycudgel\n>p2 switch 6\n>p1 switch 5\n>p2 move bleakwindstorm\n>forcelose p2",
+	"uploadtime": 1795606618
+}
