@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-123-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Easy",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆Guvila\n|t:|1795610525\n|gametype|singles\n|player|p1|Bunny Easy|bunny.png|1188\n|player|p2|Guvila|170|1257\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795610526\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Bisharp|Bisharp, L79, F|100/100\n|switch|p2a: Stonjourner|Stonjourner, L91, F|100/100\n|turn|1\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1795610538\n|move|p2a: Stonjourner|Rock Polish|p2a: Stonjourner\n|-boost|p2a: Stonjourner|spe|2\n|move|p1a: Bisharp|Carrion Feast|p2a: Stonjourner\n|-damage|p2a: Stonjourner|82/100\n|\n|upkeep\n|turn|2\n|\n|t:|1795610546\n|move|p2a: Stonjourner|Heat Crash|p1a: Bisharp\n|-supereffective|p1a: Bisharp\n|-damage|p1a: Bisharp|9/100\n|-damage|p2a: Stonjourner|72/100|[from] item: Life Orb\n|move|p1a: Bisharp|Iron Head|p2a: Stonjourner\n|-supereffective|p2a: Stonjourner\n|-damage|p2a: Stonjourner|32/100\n|\n|upkeep\n|turn|3\n|\n|t:|1795610553\n|move|p2a: Stonjourner|Heat Crash|p1a: Bisharp\n|-supereffective|p1a: Bisharp\n|-damage|p1a: Bisharp|0 fnt\n|faint|p1a: Bisharp\n|-damage|p2a: Stonjourner|22/100|[from] item: Life Orb\n|\n|upkeep\n|\n|t:|1795610553\n|switch|p1a: Victreebel|Victreebel, L90, F|100/100\n|turn|4\n|\n|t:|1795610561\n|-terastallize|p1a: Victreebel|Grass\n|move|p2a: Stonjourner|Heat Crash|p1a: Victreebel\n|-supereffective|p1a: Victreebel\n|-damage|p1a: Victreebel|0 fnt\n|faint|p1a: Victreebel\n|-damage|p2a: Stonjourner|12/100|[from] item: Life Orb\n|\n|upkeep\n|\n|t:|1795610561\n|switch|p1a: Brambleghast|Brambleghast, L88, M|100/100\n|turn|5\n|\n|t:|1795610570\n|move|p2a: Stonjourner|Heat Crash|p1a: Brambleghast\n|-supereffective|p1a: Brambleghast\n|-damage|p1a: Brambleghast|0 fnt\n|faint|p1a: Brambleghast\n|-damage|p2a: Stonjourner|2/100|[from] item: Life Orb\n|\n|upkeep\n|\n|t:|1795610570\n|switch|p1a: Dudunsparce|Dudunsparce-Three-Segment, L83, M|100/100\n|turn|6\n",
+	"inputlog": null,
+	"uploadtime": 1795610575
+}
