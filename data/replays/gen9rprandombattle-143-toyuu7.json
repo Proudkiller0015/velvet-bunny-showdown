@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-143-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Easy",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆Guvila\n|t:|1795615312\n|gametype|singles\n|player|p1|Bunny Easy|bunny.png|1235\n|player|p2|Guvila|170|1247\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795615313\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Keldeo|Keldeo-Resolute, L79|100/100\n|switch|p2a: Giratina|Giratina-Origin, L72|100/100\n|turn|1\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1795615351\n|move|p1a: Keldeo|Hydro Pump|p2a: Giratina\n|-resisted|p2a: Giratina\n|-damage|p2a: Giratina|78/100\n|move|p2a: Giratina|Will-O-Wisp|p1a: Keldeo\n|-status|p1a: Keldeo|brn\n|\n|-damage|p1a: Keldeo|94/100 brn|[from] brn\n|upkeep\n|turn|2\n|\n|t:|1795615364\n|switch|p2a: Bellibolt|Bellibolt, L84, M|100/100\n|move|p1a: Keldeo|Hydro Pump|p2a: Bellibolt|[miss]\n|-miss|p1a: Keldeo|p2a: Bellibolt\n|\n|-heal|p1a: Keldeo|100/100 brn|[from] item: Leftovers\n|-damage|p1a: Keldeo|94/100 brn|[from] brn\n|upkeep\n|turn|3\n|\n|t:|1795615375\n|-terastallize|p1a: Keldeo|Steel\n|move|p1a: Keldeo|Hydro Pump|p2a: Bellibolt\n|-damage|p2a: Bellibolt|61/100\n|-start|p2a: Bellibolt|Charge|Hydro Pump|[from] ability: Electromorphosis\n|move|p2a: Bellibolt|Thunderbolt|p1a: Keldeo\n|-damage|p1a: Keldeo|13/100 brn\n|-end|p2a: Bellibolt|Charge|[silent]\n|\n|-heal|p1a: Keldeo|19/100 brn|[from] item: Leftovers\n|-heal|p2a: Bellibolt|67/100|[from] item: Leftovers\n|-damage|p1a: Keldeo|13/100 brn|[from] brn\n|upkeep\n|turn|4\n|\n|t:|1795615385\n|move|p1a: Keldeo|Secret Sword|p2a: Bellibolt\n|-damage|p2a: Bellibolt|36/100\n|-start|p2a: Bellibolt|Charge|Secret Sword|[from] ability: Electromorphosis\n|move|p2a: Bellibolt|Thunderbolt|p1a: Keldeo\n|-damage|p1a: Keldeo|0 fnt\n|faint|p1a: Keldeo\n|-end|p2a: Bellibolt|Charge|[silent]\n|\n|-heal|p2a: Bellibolt|42/100|[from] item: Leftovers\n|upkeep\n|\n|t:|1795615385\n|switch|p1a: Scovillain|Scovillain, L91, F|100/100\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1795615395
+}
