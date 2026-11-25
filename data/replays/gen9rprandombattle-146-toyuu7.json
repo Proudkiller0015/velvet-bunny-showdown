@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-146-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Easy",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆Guvila\n|t:|1795615983\n|gametype|singles\n|player|p1|Bunny Easy|bunny.png|1254\n|player|p2|Guvila|170|1228\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795615983\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Rhyperior|Rhyperior, L82, F|100/100\n|switch|p2a: Volcanion|Volcanion, L79|100/100\n|turn|1\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1795615989\n|-terastallize|p1a: Rhyperior|Grass\n|move|p2a: Volcanion|Steam Eruption|p1a: Rhyperior\n|-resisted|p1a: Rhyperior\n|-damage|p1a: Rhyperior|69/100\n|move|p1a: Rhyperior|Earthquake|p2a: Volcanion\n|-supereffective|p2a: Volcanion\n|-damage|p2a: Volcanion|0 fnt\n|faint|p2a: Volcanion\n|\n|upkeep\n|\n|t:|1795616002\n|switch|p2a: Calyrex|Calyrex-Shadow, L64|100/100\n|-ability|p2a: Calyrex|As One\n|-ability|p2a: Calyrex|Unnerve\n|turn|2\n|\n|t:|1795616011\n|move|p2a: Calyrex|Astral Barrage|p1a: Rhyperior\n|-damage|p1a: Rhyperior|0 fnt\n|faint|p1a: Rhyperior\n|-ability|p2a: Calyrex|Grim Neigh|boost\n|-boost|p2a: Calyrex|spa|1\n|\n|upkeep\n|\n|t:|1795616011\n|switch|p1a: Cacturne|Cacturne, L92, F|100/100\n|turn|3\n|\n|t:|1795616027\n|switch|p2a: Scrafty|Scrafty, L83, M|100/100\n|move|p1a: Cacturne|Gunk Shot|p2a: Scrafty|[miss]\n|-miss|p1a: Cacturne|p2a: Scrafty\n|\n|upkeep\n|turn|4\n|\n|t:|1795616035\n|move|p1a: Cacturne|Seed Bomb|p2a: Scrafty\n|-damage|p2a: Scrafty|52/100\n|-damage|p1a: Cacturne|91/100|[from] item: Life Orb\n|move|p2a: Scrafty|Bulk Up|p2a: Scrafty\n|-boost|p2a: Scrafty|atk|1\n|-boost|p2a: Scrafty|def|1\n|\n|-heal|p2a: Scrafty|58/100|[from] item: Leftovers\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1795616035
+}
