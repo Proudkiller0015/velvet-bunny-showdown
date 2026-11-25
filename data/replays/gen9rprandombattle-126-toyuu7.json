@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-126-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Easy",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆Guvila\n|t:|1795611028\n|gametype|singles\n|player|p1|Bunny Easy|bunny.png|1193\n|player|p2|Guvila|170|1260\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795611028\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Skuntank|Skuntank, L84, M|310/310\n|switch|p2a: Frosmoth|Frosmoth, L82, M|249/249\n|turn|1\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1795611035\n|move|p1a: Skuntank|Gunk Shot|p2a: Frosmoth\n|-damage|p2a: Frosmoth|50/249\n|-damage|p1a: Skuntank|279/310|[from] item: Life Orb\n|move|p2a: Frosmoth|Quiver Dance|p2a: Frosmoth\n|-boost|p2a: Frosmoth|spa|1\n|-boost|p2a: Frosmoth|spd|1\n|-boost|p2a: Frosmoth|spe|1\n|\n|upkeep\n|turn|2\n|\n|t:|1795611049\n|switch|p2a: Snorlax|Snorlax, L82, F|397/397\n|move|p1a: Skuntank|Gunk Shot|p2a: Snorlax\n|-damage|p2a: Snorlax|201/397\n|-damage|p1a: Skuntank|248/310|[from] item: Life Orb\n|\n|-heal|p2a: Snorlax|225/397|[from] item: Leftovers\n|upkeep\n|turn|3\n|\n|t:|1795611058\n|move|p1a: Skuntank|Gunk Shot|p2a: Snorlax\n|-damage|p2a: Snorlax|26/397\n|-damage|p1a: Skuntank|217/310|[from] item: Life Orb\n|move|p2a: Snorlax|Earthquake|p1a: Skuntank\n|-supereffective|p1a: Skuntank\n|-damage|p1a: Skuntank|45/310\n|\n|-heal|p2a: Snorlax|50/397|[from] item: Leftovers\n|upkeep\n|turn|4\n|-message|Guvila forfeited.\n|\n|win|Bunny Easy\n",
+	"inputlog": ">start {\"formatid\":\"gen9rprandombattle\",\"seed\":\"sodium,0df926dddc4fcc4fd14c9888870e9ee0\",\"rated\":\"Rated battle\"}\n>player p1 {\"name\":\"Bunny Easy\",\"avatar\":\"bunny.png\",\"rating\":1193,\"seed\":\"sodium,c4554262335dfadf7020f51d98e29066\"}\n>player p2 {\"name\":\"Guvila\",\"avatar\":\"170\",\"rating\":1260,\"seed\":\"sodium,c4e864b484249f61b28282e6a3a3fa74\"}\n>chat ☆Bunny Easy|Good luck! Playing on **easy**.\n>p1 move gunkshot\n>p2 move quiverdance\n>p1 move gunkshot\n>p2 switch 5\n>p1 move gunkshot\n>p2 move earthquake\n>forcelose p2",
+	"uploadtime": 1795611066
+}
