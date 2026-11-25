@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-119-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Easy",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆Guvila\n|t:|1795609661\n|gametype|singles\n|player|p1|Bunny Easy|bunny.png|1136\n|player|p2|Guvila|170|1277\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795609661\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Rayquaza|Rayquaza, L72|100/100\n|switch|p2a: Hitmonlee|Hitmonlee, L85, M|100/100\n|-ability|p1a: Rayquaza|Air Lock\n|turn|1\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1795609677\n|move|p2a: Hitmonlee|Swords Dance|p2a: Hitmonlee\n|-boost|p2a: Hitmonlee|atk|2\n|move|p1a: Rayquaza|Dragon Ascent|p2a: Hitmonlee\n|-supereffective|p2a: Hitmonlee\n|-crit|p2a: Hitmonlee\n|-damage|p2a: Hitmonlee|0 fnt\n|-unboost|p1a: Rayquaza|def|1\n|-unboost|p1a: Rayquaza|spd|1\n|faint|p2a: Hitmonlee\n|\n|upkeep\n|\n|t:|1795609696\n|switch|p2a: Hoopa|Hoopa, L85|100/100\n|turn|2\n|\n|t:|1795609701\n|move|p2a: Hoopa|Psychic|p1a: Rayquaza\n|-damage|p1a: Rayquaza|6/100\n|move|p1a: Rayquaza|Dragon Dance|p1a: Rayquaza\n|-boost|p1a: Rayquaza|atk|1\n|-boost|p1a: Rayquaza|spe|1\n|\n|upkeep\n|turn|3\n|\n|t:|1795609706\n|move|p1a: Rayquaza|Dragon Ascent|p2a: Hoopa\n|-damage|p2a: Hoopa|3/100\n|-unboost|p1a: Rayquaza|def|1\n|-unboost|p1a: Rayquaza|spd|1\n|move|p2a: Hoopa|Psychic|p1a: Rayquaza\n|-damage|p1a: Rayquaza|0 fnt\n|faint|p1a: Rayquaza\n|\n|upkeep\n|\n|t:|1795609706\n|switch|p1a: Mamoswine|Mamoswine, L81, M|100/100\n|turn|4\n|\n|t:|1795609719\n|switch|p2a: Krookodile|Krookodile, L79, F|100/100\n|-ability|p2a: Krookodile|Intimidate|boost\n|-unboost|p1a: Mamoswine|atk|1\n|-terastallize|p1a: Mamoswine|Ground\n|move|p1a: Mamoswine|Earthquake|p2a: Krookodile\n|-damage|p2a: Krookodile|39/100\n|-damage|p1a: Mamoswine|91/100|[from] item: Life Orb\n|\n|-heal|p2a: Krookodile|45/100|[from] item: Leftovers\n|upkeep\n|turn|5\n|\n|t:|1795609731\n|switch|p2a: Araquanid|Araquanid, L82, M|100/100\n|move|p1a: Mamoswine|Rime Cleaver|p2a: Araquanid\n|-resisted|p2a: Araquanid\n|-damage|p2a: Araquanid|77/100\n|-damage|p1a: Mamoswine|81/100|[from] item: Life Orb\n|\n|upkeep\n|turn|6\n",
+	"inputlog": null,
+	"uploadtime": 1795609735
+}
