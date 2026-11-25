@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-144-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Easy",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆Guvila\n|t:|1795615662\n|gametype|singles\n|player|p1|Bunny Easy|bunny.png|1220\n|player|p2|Guvila|170|1262\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795615663\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Frosmoth|Frosmoth, L82, M|100/100\n|switch|p2a: Masquerain|Masquerain, L87, F|100/100\n|-ability|p2a: Masquerain|Intimidate|boost\n|-unboost|p1a: Frosmoth|atk|1\n|turn|1\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1795615677\n|move|p2a: Masquerain|Sticky Web|p1a: Frosmoth\n|-sidestart|p1: Bunny Easy|move: Sticky Web\n|move|p1a: Frosmoth|Ice Beam|p2a: Masquerain\n|-supereffective|p2a: Masquerain\n|-damage|p2a: Masquerain|13/100\n|\n|upkeep\n|turn|2\n|\n|t:|1795615684\n|move|p2a: Masquerain|Hurricane|p1a: Frosmoth|[miss]\n|-miss|p2a: Masquerain|p1a: Frosmoth\n|move|p1a: Frosmoth|Giga Drain|p2a: Masquerain\n|-resisted|p2a: Masquerain\n|-damage|p2a: Masquerain|8/100\n|\n|upkeep\n|turn|3\n|\n|t:|1795615689\n|move|p2a: Masquerain|Hurricane|p1a: Frosmoth\n|-supereffective|p1a: Frosmoth\n|-damage|p1a: Frosmoth|52/100\n|move|p1a: Frosmoth|Ice Beam|p2a: Masquerain\n|-supereffective|p2a: Masquerain\n|-damage|p2a: Masquerain|0 fnt\n|faint|p2a: Masquerain\n|\n|upkeep\n|\n|t:|1795615703\n|switch|p2a: Clawitzer|Clawitzer, L87, M|100/100\n|turn|4\n|\n|t:|1795615709\n|move|p1a: Frosmoth|Ice Beam|p2a: Clawitzer\n|-resisted|p2a: Clawitzer\n|-damage|p2a: Clawitzer|86/100\n|move|p2a: Clawitzer|Aura Sphere|p1a: Frosmoth\n|-damage|p1a: Frosmoth|30/100\n|\n|upkeep\n|turn|5\n|\n|t:|1795615715\n|move|p1a: Frosmoth|Ice Beam|p2a: Clawitzer\n|-resisted|p2a: Clawitzer\n|-damage|p2a: Clawitzer|73/100\n|move|p2a: Clawitzer|Undertow|p1a: Frosmoth\n|-damage|p1a: Frosmoth|7/100\n|-unboost|p1a: Frosmoth|spe|1\n|\n|upkeep\n|turn|6\n",
+	"inputlog": null,
+	"uploadtime": 1795615715
+}
