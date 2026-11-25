@@ -1,0 +1,12 @@
+{
+	"id": "gen9championsbssregmc-76-toyuu7",
+	"format": "[Gen 9 Champions] BSS Reg M-C",
+	"players": [
+		"Kaede21355528",
+		"Velvet Bunny"
+	],
+	"rating": null,
+	"log": "|j|☆Kaede21355528\n|j|☆Velvet Bunny\n|t:|1795571301\n|gametype|singles\n|player|p1|Kaede21355528|roxanne|\n|player|p2|Velvet Bunny|bunny.png|\n|gen|9\n|tier|[Gen 9 Champions] BSS Reg M-C\n|rule|Species Clause: Limit one of each Pokémon\n|rule|Item Clause: Limit 1 of each item\n|clearpoke\n|poke|p1|Glaceon, L50, F|\n|poke|p1|Leafeon, L50, F|\n|poke|p1|Flareon, L50, M|\n|poke|p1|Vaporeon, L50, F|\n|poke|p1|Espeon, L50, M|\n|poke|p1|Sylveon, L50, F|\n|poke|p2|Swampert, L50, M|\n|poke|p2|Corviknight, L50, F|\n|poke|p2|Dragonite, L50, M|\n|poke|p2|Scizor, L50, F|\n|poke|p2|Basculegion, L50, M|\n|poke|p2|Annihilape, L50, F|\n|teampreview|3\n|c|☆Velvet Bunny|Good luck! Playing on **champion**. (PM me to change it.)\n|\n|t:|1795571343\n|teamsize|p1|3\n|teamsize|p2|3\n|start\n|switch|p1a: Leafeon|Leafeon, L50, F|100/100\n|switch|p2a: Dragonite|Dragonite, L50, M|100/100\n|turn|1\n|\n|t:|1795571351\n|move|p2a: Dragonite|Extreme Speed|p1a: Leafeon\n|-damage|p1a: Leafeon|77/100\n|-damage|p2a: Dragonite|83/100|[from] item: Rocky Helmet|[of] p1a: Leafeon\n|-damage|p2a: Dragonite|74/100|[from] item: Life Orb\n|move|p1a: Leafeon|Knock Off|p2a: Dragonite\n|-damage|p2a: Dragonite|45/100\n|-enditem|p2a: Dragonite|Life Orb|[from] move: Knock Off|[of] p1a: Leafeon\n|\n|upkeep\n|turn|2\n|\n|t:|1795571367\n|move|p2a: Dragonite|Extreme Speed|p1a: Leafeon\n|-damage|p1a: Leafeon|60/100\n|-damage|p2a: Dragonite|29/100|[from] item: Rocky Helmet|[of] p1a: Leafeon\n|move|p1a: Leafeon|Yawn|p2a: Dragonite\n|-start|p2a: Dragonite|move: Yawn|[of] p1a: Leafeon\n|\n|upkeep\n|turn|3\n|\n|t:|1795571374\n|move|p2a: Dragonite|Extreme Speed|p1a: Leafeon\n|-damage|p1a: Leafeon|44/100\n|-damage|p2a: Dragonite|13/100|[from] item: Rocky Helmet|[of] p1a: Leafeon\n|move|p1a: Leafeon|Knock Off|p2a: Dragonite\n|-damage|p2a: Dragonite|0 fnt\n|faint|p2a: Dragonite\n|\n|upkeep\n|\n|t:|1795571375\n|switch|p2a: Annihilape|Annihilape, L50, F|100/100\n|turn|4\n|\n|t:|1795571386\n|move|p2a: Annihilape|Close Combat|p1a: Leafeon\n|-damage|p1a: Leafeon|6/100\n|-unboost|p2a: Annihilape|def|1\n|-unboost|p2a: Annihilape|spd|1\n|-damage|p2a: Annihilape|83/100|[from] item: Rocky Helmet|[of] p1a: Leafeon\n|move|p1a: Leafeon|Synthesis|p1a: Leafeon\n|-heal|p1a: Leafeon|56/100\n|\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1795571390
+}
