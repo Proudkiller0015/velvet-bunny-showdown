@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-153-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Easy",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆Guvila\n|t:|1795622882\n|gametype|singles\n|player|p1|Bunny Easy|bunny.png|1234\n|player|p2|Guvila|265|1248\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795622882\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Honchkrow|Honchkrow, L86, F|100/100\n|switch|p2a: Seviper|Seviper, L93, M|100/100\n|turn|1\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1795622900\n|move|p2a: Seviper|Swords Dance|p2a: Seviper\n|-boost|p2a: Seviper|atk|2\n|move|p1a: Honchkrow|Heat Wave|p2a: Seviper\n|-damage|p2a: Seviper|68/100\n|\n|-heal|p2a: Seviper|74/100|[from] item: Leftovers\n|upkeep\n|turn|2\n|\n|t:|1795622907\n|-terastallize|p1a: Honchkrow|Flying\n|move|p2a: Seviper|Gunk Shot|p1a: Honchkrow|[miss]\n|-miss|p2a: Seviper|p1a: Honchkrow\n|move|p1a: Honchkrow|Brave Bird|p2a: Seviper\n|-crit|p2a: Seviper\n|-damage|p2a: Seviper|0 fnt\n|faint|p2a: Seviper\n|-ability|p1a: Honchkrow|Moxie|boost\n|-boost|p1a: Honchkrow|atk|1\n|-damage|p1a: Honchkrow|78/100|[from] Recoil\n|\n|upkeep\n|\n|t:|1795622928\n|switch|p2a: Oinkologne|Oinkologne-F, L92, F|100/100\n|turn|3\n|\n|t:|1795622936\n|move|p2a: Oinkologne|Curse|p2a: Oinkologne\n|-unboost|p2a: Oinkologne|spe|1\n|-boost|p2a: Oinkologne|atk|1\n|-boost|p2a: Oinkologne|def|1\n|move|p1a: Honchkrow|Brave Bird|p2a: Oinkologne\n|-damage|p2a: Oinkologne|40/100\n|-damage|p1a: Honchkrow|55/100|[from] Recoil\n|\n|-heal|p2a: Oinkologne|46/100|[from] item: Leftovers\n|upkeep\n|turn|4\n|\n|t:|1795622946\n|move|p1a: Honchkrow|Brave Bird|p2a: Oinkologne\n|-damage|p2a: Oinkologne|0 fnt\n|faint|p2a: Oinkologne\n|-ability|p1a: Honchkrow|Moxie|boost\n|-boost|p1a: Honchkrow|atk|1\n|-damage|p1a: Honchkrow|38/100|[from] Recoil\n|\n|upkeep\n|\n|t:|1795622956\n|switch|p2a: Banette|Banette, L93, F|100/100\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1795622957
+}
