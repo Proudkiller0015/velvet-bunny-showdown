@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-125-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Easy",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆Guvila\n|t:|1795610874\n|gametype|singles\n|player|p1|Bunny Easy|bunny.png|1153\n|player|p2|Guvila|170|1281\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795610874\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Lucario|Lucario, L84, M|100/100\n|switch|p2a: Swanna|Swanna, L89, F|100/100\n|turn|1\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1795610886\n|switch|p2a: Hitmonchan|Hitmonchan, L87, M|100/100\n|move|p1a: Lucario|Close Combat|p2a: Hitmonchan\n|-damage|p2a: Hitmonchan|13/100\n|-unboost|p1a: Lucario|def|1\n|-unboost|p1a: Lucario|spd|1\n|\n|upkeep\n|turn|2\n|\n|t:|1795610893\n|move|p1a: Lucario|Close Combat|p2a: Hitmonchan\n|-damage|p2a: Hitmonchan|0 fnt\n|-unboost|p1a: Lucario|def|1\n|-unboost|p1a: Lucario|spd|1\n|faint|p2a: Hitmonchan\n|\n|upkeep\n|\n|t:|1795610900\n|switch|p2a: Gurdurr|Gurdurr, L85, M|100/100\n|turn|3\n|\n|t:|1795610903\n|move|p1a: Lucario|Close Combat|p2a: Gurdurr\n|-damage|p2a: Gurdurr|47/100\n|-unboost|p1a: Lucario|def|1\n|-unboost|p1a: Lucario|spd|1\n|move|p2a: Gurdurr|Drain Punch|p1a: Lucario\n|-supereffective|p1a: Lucario\n|-damage|p1a: Lucario|0 fnt\n|-heal|p2a: Gurdurr|92/100|[from] drain|[of] p1a: Lucario\n|faint|p1a: Lucario\n|\n|upkeep\n|\n|t:|1795610903\n|switch|p1a: Squawkabilly|Squawkabilly, L85, M|100/100\n|turn|4\n|\n|t:|1795610920\n|switch|p2a: Mamoswine|Mamoswine, L81, F|100/100\n|move|p1a: Squawkabilly|Knock Off|p2a: Mamoswine\n|-damage|p2a: Mamoswine|74/100\n|-enditem|p2a: Mamoswine|Life Orb|[from] move: Knock Off|[of] p1a: Squawkabilly\n|\n|-status|p1a: Squawkabilly|brn|[from] item: Flame Orb\n|upkeep\n|turn|5\n|\n|t:|1795610928\n|-terastallize|p1a: Squawkabilly|Normal\n|move|p1a: Squawkabilly|Brave Bird|p2a: Mamoswine\n|-damage|p2a: Mamoswine|0 fnt\n|faint|p2a: Mamoswine\n|-damage|p1a: Squawkabilly|73/100 brn|[from] Recoil\n|\n|-damage|p1a: Squawkabilly|67/100 brn|[from] brn\n|upkeep\n",
+	"inputlog": null,
+	"uploadtime": 1795610935
+}
