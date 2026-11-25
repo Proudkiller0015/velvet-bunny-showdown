@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-106-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Normal",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Normal\n|j|☆Guvila\n|t:|1795606622\n|gametype|singles\n|player|p1|Bunny Normal|bunny.png|1234\n|player|p2|Guvila|170|1256\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795606622\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Garchomp|Garchomp, L74, F|100/100\n|switch|p2a: Dragapult|Dragapult, L77, M|100/100\n|turn|1\n|c|☆Bunny Normal|Good luck! Playing on **normal**.\n|\n|t:|1795606634\n|move|p2a: Dragapult|Will-O-Wisp|p1a: Garchomp\n|-status|p1a: Garchomp|brn\n|move|p1a: Garchomp|Spikes|p2a: Dragapult\n|-sidestart|p2: Guvila|Spikes\n|\n|-damage|p1a: Garchomp|94/100 brn|[from] brn\n|upkeep\n|turn|2\n|\n|t:|1795606648\n|move|p2a: Dragapult|Hex|p1a: Garchomp\n|-damage|p1a: Garchomp|42/100 brn\n|move|p1a: Garchomp|Outrage|p2a: Dragapult\n|-supereffective|p2a: Dragapult\n|-damage|p2a: Dragapult|38/100\n|\n|-damage|p1a: Garchomp|36/100 brn|[from] brn\n|upkeep\n|turn|3\n|\n|t:|1795606656\n|move|p2a: Dragapult|Dragon Darts|p1a: Garchomp\n|-supereffective|p1a: Garchomp\n|-damage|p1a: Garchomp|0 fnt\n|faint|p1a: Garchomp\n|\n|upkeep\n|\n|t:|1795606656\n|switch|p1a: Avalugg|Avalugg-Hisui, L90, M|100/100\n|turn|4\n|\n|t:|1795606670\n|switch|p2a: Samurott|Samurott, L88, M|100/100\n|-damage|p2a: Samurott|88/100|[from] Spikes\n|move|p1a: Avalugg|Rime Cleaver|p2a: Samurott\n|-resisted|p2a: Samurott\n|-damage|p2a: Samurott|65/100\n|\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1795606674
+}
