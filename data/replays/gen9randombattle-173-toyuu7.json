@@ -1,0 +1,12 @@
+{
+	"id": "gen9randombattle-173-toyuu7",
+	"format": "[Gen 9] Random Battle",
+	"players": [
+		"Bunny Easy",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆Guvila\n|t:|1795627874\n|gametype|singles\n|player|p1|Bunny Easy|bunny.png|1066\n|player|p2|Guvila|265|1055\n|gen|9\n|tier|[Gen 9] Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795627874\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Brute Bonnet|Brute Bonnet, L80|100/100\n|switch|p2a: Greedent|Greedent, L86, M|100/100\n|turn|1\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1795627879\n|move|p1a: Brute Bonnet|Crunch|p2a: Greedent\n|-damage|p2a: Greedent|75/100\n|-unboost|p2a: Greedent|def|1\n|move|p2a: Greedent|Swords Dance|p2a: Greedent\n|-boost|p2a: Greedent|atk|2\n|\n|upkeep\n|turn|2\n|\n|t:|1795627889\n|move|p1a: Brute Bonnet|Close Combat|p2a: Greedent\n|-supereffective|p2a: Greedent\n|-damage|p2a: Greedent|0 fnt\n|-unboost|p1a: Brute Bonnet|def|1\n|-unboost|p1a: Brute Bonnet|spd|1\n|faint|p2a: Greedent\n|\n|upkeep\n|\n|t:|1795627901\n|switch|p2a: Klefki|Klefki, L84, F|100/100\n|turn|3\n|\n|t:|1795627905\n|-terastallize|p1a: Brute Bonnet|Poison\n|move|p2a: Klefki|Thunder Wave|p1a: Brute Bonnet|[miss]\n|-miss|p2a: Klefki|p1a: Brute Bonnet\n|move|p1a: Brute Bonnet|Crunch|p2a: Klefki\n|-resisted|p2a: Klefki\n|-damage|p2a: Klefki|79/100\n|\n|-heal|p2a: Klefki|85/100|[from] item: Leftovers\n|upkeep\n|turn|4\n|\n|t:|1795627914\n|move|p2a: Klefki|Thunder Wave|p1a: Brute Bonnet|[miss]\n|-miss|p2a: Klefki|p1a: Brute Bonnet\n|move|p1a: Brute Bonnet|Close Combat|p2a: Klefki\n|-damage|p2a: Klefki|41/100\n|-unboost|p1a: Brute Bonnet|def|1\n|-unboost|p1a: Brute Bonnet|spd|1\n|\n|-heal|p2a: Klefki|47/100|[from] item: Leftovers\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1795627918
+}
