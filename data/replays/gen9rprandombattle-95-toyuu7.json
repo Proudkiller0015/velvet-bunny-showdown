@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-95-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Normal",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Normal\n|j|☆Guvila\n|t:|1795604414\n|gametype|singles\n|player|p1|Bunny Normal|bunny.png|1289\n|player|p2|Guvila|170|1160\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795604415\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Sandy Shocks|Sandy Shocks, L80|100/100\n|switch|p2a: Meganium|Meganium, L90, F|100/100\n|turn|1\n|c|☆Bunny Normal|Good luck! Playing on **normal**.\n|\n|t:|1795604424\n|-terastallize|p1a: Sandy Shocks|Electric\n|move|p1a: Sandy Shocks|Earth Power|p2a: Meganium\n|-resisted|p2a: Meganium\n|-damage|p2a: Meganium|82/100\n|-damage|p1a: Sandy Shocks|91/100|[from] item: Life Orb\n|move|p2a: Meganium|Encore|p1a: Sandy Shocks\n|-start|p1a: Sandy Shocks|Encore\n|\n|-heal|p2a: Meganium|88/100|[from] item: Leftovers\n|upkeep\n|turn|2\n|\n|t:|1795604433\n|move|p1a: Sandy Shocks|Earth Power|p2a: Meganium\n|-resisted|p2a: Meganium\n|-damage|p2a: Meganium|67/100\n|-damage|p1a: Sandy Shocks|81/100|[from] item: Life Orb\n|move|p2a: Meganium|Solar Nectar|p1a: Sandy Shocks\n|-damage|p1a: Sandy Shocks|44/100\n|-heal|p2a: Meganium|75/100|[from] drain|[of] p1a: Sandy Shocks\n|\n|-heal|p2a: Meganium|82/100|[from] item: Leftovers\n|upkeep\n|turn|3\n|\n|t:|1795604443\n|-end|p1a: Sandy Shocks|Protosynthesis|[silent]\n|switch|p1a: Moltres|Moltres-Galar, L79|100/100\n|move|p2a: Meganium|Solar Nectar|p1a: Moltres\n|-resisted|p1a: Moltres\n|-damage|p1a: Moltres|88/100\n|-heal|p2a: Meganium|85/100|[from] drain|[of] p1a: Moltres\n|\n|-heal|p2a: Meganium|91/100|[from] item: Leftovers\n|upkeep\n|turn|4\n|\n|t:|1795604456\n|switch|p2a: Primarina|Primarina, L83, M|100/100\n|move|p1a: Moltres|Hurricane|p2a: Primarina\n|-damage|p2a: Primarina|67/100\n|\n|upkeep\n|turn|5\n|\n|t:|1795604464\n|switch|p1a: Gengar|Gengar, L81, F|100/100\n|move|p2a: Primarina|Velvet Press|p1a: Gengar\n|-resisted|p1a: Gengar\n|-damage|p1a: Gengar|61/100\n|\n|upkeep\n|turn|6\n",
+	"inputlog": null,
+	"uploadtime": 1795604474
+}
