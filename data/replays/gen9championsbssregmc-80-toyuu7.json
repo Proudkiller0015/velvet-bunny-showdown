@@ -1,0 +1,12 @@
+{
+	"id": "gen9championsbssregmc-80-toyuu7",
+	"format": "[Gen 9 Champions] BSS Reg M-C",
+	"players": [
+		"Bunny Stockfish",
+		"Piscean Pianist"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Stockfish\n|j|☆Piscean Pianist\n|t:|1795584631\n|gametype|singles\n|badge|p1|silver|gen9championsbssregmc|2-2\n|badge|p2|gold|gen9championsbssregmc|1-1\n|player|p1|Bunny Stockfish|bunny.png|1369\n|player|p2|Piscean Pianist|akari|1517\n|gen|9\n|tier|[Gen 9 Champions] BSS Reg M-C\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|Item Clause: Limit 1 of each item\n|clearpoke\n|poke|p1|Gholdengo, L50|\n|poke|p1|Indeedee, L50, M|\n|poke|p1|Hippowdon, L50, F|\n|poke|p1|Tyranitar, L50, M|\n|poke|p1|Dragonite, L50, M|\n|poke|p1|Corviknight, L50, F|\n|poke|p2|Lucario, L50, M|\n|poke|p2|Dragonite, L50, F|\n|poke|p2|Zoroark-Hisui, L50, F|\n|poke|p2|Charizard, L50, M|\n|poke|p2|Milotic, L50, M|\n|poke|p2|Aegislash, L50, M|\n|teampreview|3\n|c|☆Bunny Stockfish|Good luck! Playing on **stockfish**.\n|\n|t:|1795584637\n|teamsize|p1|3\n|teamsize|p2|3\n|start\n|switch|p1a: Dragonite|Dragonite, L50, M|100/100\n|switch|p2a: Dragonite|Dragonite, L50, F|100/100\n|turn|1\n|\n|t:|1795584641\n|move|p2a: Dragonite|Dragon Dance|p2a: Dragonite\n|-boost|p2a: Dragonite|atk|1\n|-boost|p2a: Dragonite|spe|1\n|move|p1a: Dragonite|Outrage|p2a: Dragonite\n|-supereffective|p2a: Dragonite|1\n|-damage|p2a: Dragonite|16/100\n|-damage|p1a: Dragonite|90/100|[from] item: Life Orb\n|\n|upkeep\n|turn|2\n|\n|t:|1795584650\n|move|p2a: Dragonite|Dragon Claw|p1a: Dragonite\n|-supereffective|p1a: Dragonite|1\n|-damage|p1a: Dragonite|0 fnt\n|faint|p1a: Dragonite\n|\n|upkeep\n|\n|t:|1795584650\n|switch|p1a: Gholdengo|Gholdengo, L50|100/100\n|turn|3\n|\n|t:|1795584659\n|move|p2a: Dragonite|Fire Punch|p1a: Gholdengo\n|-supereffective|p1a: Gholdengo|1\n|-damage|p1a: Gholdengo|17/100\n|move|p1a: Gholdengo|Shadow Ball|p2a: Dragonite\n|-damage|p2a: Dragonite|0 fnt\n|faint|p2a: Dragonite\n|\n|upkeep\n|\n|t:|1795584666\n|switch|p2a: Lucario|Lucario, L50, M|100/100\n|turn|4\n|\n|t:|1795584670\n|move|p1a: Gholdengo|Shadow Ball|p2a: Lucario\n|-immune|p2a: Lucario\n|move|p2a: Lucario|Bitter Malice|p1a: Gholdengo\n|-supereffective|p1a: Gholdengo|1\n|-damage|p1a: Gholdengo|0 fnt\n|faint|p1a: Gholdengo\n|-damage|p2a: Lucario|90/100|[from] item: Life Orb\n|\n|upkeep\n|\n|t:|1795584670\n|switch|p1a: Indeedee|Indeedee, L50, M|100/100\n|-fieldstart|move: Psychic Terrain|[from] ability: Psychic Surge|[of] p1a: Indeedee\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1795584672
+}
