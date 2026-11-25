@@ -1,0 +1,12 @@
+{
+	"id": "gen9randombattle-174-toyuu7",
+	"format": "[Gen 9] Random Battle",
+	"players": [
+		"Bunny Easy",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆Guvila\n|t:|1795628134\n|gametype|singles\n|player|p1|Bunny Easy|bunny.png|1054\n|player|p2|Guvila|265|1096\n|gen|9\n|tier|[Gen 9] Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795628134\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Wo-Chien|Wo-Chien, L83|100/100\n|switch|p2a: Goodra|Goodra, L85, M|100/100\n|-ability|p1a: Wo-Chien|Tablets of Ruin\n|turn|1\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1795628144\n|move|p2a: Goodra|Fire Blast|p1a: Wo-Chien\n|-supereffective|p1a: Wo-Chien\n|-damage|p1a: Wo-Chien|53/100\n|move|p1a: Wo-Chien|Knock Off|p2a: Goodra\n|-damage|p2a: Goodra|64/100\n|-enditem|p2a: Goodra|Assault Vest|[from] move: Knock Off|[of] p1a: Wo-Chien\n|\n|-heal|p1a: Wo-Chien|59/100|[from] item: Leftovers\n|upkeep\n|turn|2\n|\n|t:|1795628154\n|-terastallize|p1a: Wo-Chien|Poison\n|move|p2a: Goodra|Fire Blast|p1a: Wo-Chien\n|-damage|p1a: Wo-Chien|37/100\n|move|p1a: Wo-Chien|Knock Off|p2a: Goodra\n|-damage|p2a: Goodra|40/100\n|\n|-heal|p1a: Wo-Chien|43/100|[from] item: Leftovers\n|upkeep\n|turn|3\n|\n|t:|1795628163\n|move|p2a: Goodra|Draco Meteor|p1a: Wo-Chien\n|-damage|p1a: Wo-Chien|2/100\n|-unboost|p2a: Goodra|spa|2\n|move|p1a: Wo-Chien|Giga Drain|p2a: Goodra\n|-ability|p2a: Goodra|Sap Sipper|boost\n|-boost|p2a: Goodra|atk|1\n|\n|-heal|p1a: Wo-Chien|8/100|[from] item: Leftovers\n|upkeep\n|turn|4\n|\n|t:|1795628173\n|move|p2a: Goodra|Scald|p1a: Wo-Chien\n|-damage|p1a: Wo-Chien|0 fnt\n|faint|p1a: Wo-Chien\n|\n|upkeep\n|\n|t:|1795628173\n|switch|p1a: Glastrier|Glastrier, L86|100/100\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1795628178
+}
