@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-116-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Easy",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆Guvila\n|t:|1795608743\n|gametype|singles\n|player|p1|Bunny Easy|bunny.png|1118\n|player|p2|Guvila|170|1277\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795608743\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Meowscarada|Meowscarada, L78, F|100/100\n|switch|p2a: Galvantula|Galvantula, L82, M|100/100\n|turn|1\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1795608751\n|move|p1a: Meowscarada|Knock Off|p2a: Galvantula\n|-start|p1a: Meowscarada|typechange|Dark|[from] ability: Protean\n|-damage|p2a: Galvantula|44/100\n|-enditem|p2a: Galvantula|Focus Sash|[from] move: Knock Off|[of] p1a: Meowscarada\n|move|p2a: Galvantula|Sticky Web|p1a: Meowscarada\n|-sidestart|p1: Bunny Easy|move: Sticky Web\n|\n|upkeep\n|turn|2\n|\n|t:|1795608758\n|move|p1a: Meowscarada|Flower Trick|p2a: Galvantula\n|-start|p1a: Meowscarada|typechange|Grass|[from] ability: Protean\n|-resisted|p2a: Galvantula\n|-crit|p2a: Galvantula\n|-damage|p2a: Galvantula|13/100\n|move|p2a: Galvantula|Bug Buzz|p1a: Meowscarada\n|-supereffective|p1a: Meowscarada\n|-damage|p1a: Meowscarada|15/100\n|\n|upkeep\n|turn|3\n|\n|t:|1795608768\n|move|p1a: Meowscarada|Flower Trick|p2a: Galvantula\n|-resisted|p2a: Galvantula\n|-crit|p2a: Galvantula\n|-damage|p2a: Galvantula|0 fnt\n|faint|p2a: Galvantula\n|\n|upkeep\n|\n|t:|1795608945\n|switch|p2a: Braviary|Braviary-Hisui, L85, M|100/100\n|turn|4\n|\n|t:|1795608953\n|move|p1a: Meowscarada|Flower Trick|p2a: Braviary\n|-resisted|p2a: Braviary\n|-crit|p2a: Braviary\n|-damage|p2a: Braviary|81/100\n|move|p2a: Braviary|Hurricane|p1a: Meowscarada\n|-supereffective|p1a: Meowscarada\n|-damage|p1a: Meowscarada|0 fnt\n|faint|p1a: Meowscarada\n|\n|upkeep\n|\n|t:|1795608953\n|switch|p1a: Floatzel|Floatzel, L86, F|100/100\n|-activate|p1a: Floatzel|move: Sticky Web\n|-unboost|p1a: Floatzel|spe|1\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1795608955
+}
