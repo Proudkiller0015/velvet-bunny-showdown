@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-160-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Easy",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆Guvila\n|t:|1795624466\n|gametype|singles\n|badge|p2|bronze|gen9rprandombattle|3-3\n|player|p1|Bunny Easy|bunny.png|1160\n|player|p2|Guvila|265|1312\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795624467\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Sneasler|Sneasler, L74, F|100/100\n|switch|p2a: Jumpluff|Jumpluff, L87, F|100/100\n|turn|1\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1795624475\n|move|p2a: Jumpluff|Leech Seed|p1a: Sneasler\n|-start|p1a: Sneasler|move: Leech Seed\n|move|p1a: Sneasler|Close Combat|p2a: Jumpluff\n|-resisted|p2a: Jumpluff\n|-damage|p2a: Jumpluff|75/100\n|-unboost|p1a: Sneasler|def|1\n|-unboost|p1a: Sneasler|spd|1\n|-enditem|p1a: Sneasler|White Herb\n|-clearnegativeboost|p1a: Sneasler|[silent]\n|\n|-damage|p1a: Sneasler|88/100|[from] Leech Seed|[of] p2a: Jumpluff\n|-heal|p2a: Jumpluff|86/100|[silent]\n|upkeep\n|turn|2\n|\n|t:|1795624486\n|move|p1a: Sneasler|Gunk Shot|p2a: Jumpluff\n|-supereffective|p2a: Jumpluff\n|-damage|p2a: Jumpluff|0 fnt\n|faint|p2a: Jumpluff\n|\n|upkeep\n|\n|t:|1795624511\n|switch|p2a: Dachsbun|Dachsbun, L92, M|100/100\n|turn|3\n|\n|t:|1795624515\n|move|p1a: Sneasler|Close Combat|p2a: Dachsbun\n|-resisted|p2a: Dachsbun\n|-damage|p2a: Dachsbun|83/100\n|-unboost|p1a: Sneasler|def|1\n|-unboost|p1a: Sneasler|spd|1\n|move|p2a: Dachsbun|Yawn|p1a: Sneasler\n|-start|p1a: Sneasler|move: Yawn|[of] p2a: Dachsbun\n|\n|-heal|p2a: Dachsbun|89/100|[from] item: Leftovers\n|-damage|p1a: Sneasler|75/100|[from] Leech Seed|[of] p2a: Dachsbun\n|-heal|p2a: Dachsbun|100/100|[silent]\n|upkeep\n|turn|4\n|\n|t:|1795624529\n|move|p1a: Sneasler|Gunk Shot|p2a: Dachsbun\n|-supereffective|p2a: Dachsbun\n|-damage|p2a: Dachsbun|24/100\n|move|p2a: Dachsbun|Velvet Press|p1a: Sneasler\n|-damage|p1a: Sneasler|6/100\n|\n|-heal|p2a: Dachsbun|30/100|[from] item: Leftovers\n|-damage|p1a: Sneasler|0 fnt|[from] Leech Seed|[of] p2a: Dachsbun\n|-heal|p2a: Dachsbun|36/100|[silent]\n|faint|p1a: Sneasler\n|upkeep\n|\n|t:|1795624529\n|switch|p1a: Basculin|Basculin, L86, M|100/100\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1795624537
+}
