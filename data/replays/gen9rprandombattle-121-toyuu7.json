@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-121-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Easy",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆Guvila\n|t:|1795610122\n|gametype|singles\n|player|p1|Bunny Easy|bunny.png|1161\n|player|p2|Guvila|170|1267\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795610123\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Porygon2|Porygon2, L81|100/100\n|switch|p2a: Volcanion|Volcanion, L79|100/100\n|-ability|p1a: Porygon2|Download|boost\n|-boost|p1a: Porygon2|spa|1\n|turn|1\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1795610135\n|switch|p2a: Groudon|Groudon, L72|100/100\n|-weather|SunnyDay|[from] ability: Drought|[of] p2a: Groudon\n|move|p1a: Porygon2|Tera Blast|p2a: Groudon\n|-damage|p2a: Groudon|48/100\n|\n|-weather|SunnyDay|[upkeep]\n|-heal|p2a: Groudon|54/100|[from] item: Leftovers\n|upkeep\n|turn|2\n|\n|t:|1795610147\n|switch|p2a: Polteageist|Polteageist-Antique, L78|100/100\n|move|p1a: Porygon2|Shadow Ball|p2a: Polteageist\n|-supereffective|p2a: Polteageist\n|-damage|p2a: Polteageist|30/100\n|-start|p1a: Porygon2|Disable|Shadow Ball|[from] ability: Cursed Body|[of] p2a: Polteageist\n|\n|-weather|SunnyDay|[upkeep]\n|upkeep\n|turn|3\n|\n|t:|1795610156\n|move|p2a: Polteageist|Shell Smash|p2a: Polteageist\n|-unboost|p2a: Polteageist|def|1\n|-unboost|p2a: Polteageist|spd|1\n|-boost|p2a: Polteageist|atk|2\n|-boost|p2a: Polteageist|spa|2\n|-boost|p2a: Polteageist|spe|2\n|-enditem|p2a: Polteageist|White Herb\n|-clearnegativeboost|p2a: Polteageist|[silent]\n|move|p1a: Porygon2|Tera Blast|p2a: Polteageist\n|-immune|p2a: Polteageist\n|\n|-weather|SunnyDay|[upkeep]\n|upkeep\n|turn|4\n|\n|t:|1795610170\n|move|p2a: Polteageist|Tera Blast|p1a: Porygon2\n|-damage|p1a: Porygon2|71/100\n|move|p1a: Porygon2|Tera Blast|p2a: Polteageist\n|-immune|p2a: Polteageist\n|\n|-weather|SunnyDay|[upkeep]\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1795610175
+}
