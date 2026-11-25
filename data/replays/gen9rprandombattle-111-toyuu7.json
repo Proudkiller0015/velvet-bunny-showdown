@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-111-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Easy",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆Guvila\n|t:|1795607717\n|gametype|singles\n|player|p1|Bunny Easy|bunny.png|1105\n|player|p2|Guvila|170|1262\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795607717\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Dudunsparce|Dudunsparce, L83, F|100/100\n|switch|p2a: Glaceon|Glaceon, L80, M|100/100\n|-weather|Snowscape|[from] ability: Diamond Dust|[of] p2a: Glaceon\n|turn|1\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1795607724\n|move|p2a: Glaceon|Aurora Veil|p2a: Glaceon\n|-sidestart|p2: Guvila|move: Aurora Veil\n|move|p1a: Dudunsparce|Headbutt|p2a: Glaceon\n|-damage|p2a: Glaceon|91/100\n|\n|-weather|Snowscape|[upkeep]\n|upkeep\n|turn|2\n|\n|t:|1795607734\n|switch|p2a: Infernape|Infernape, L82, F|100/100\n|move|p1a: Dudunsparce|Headbutt|p2a: Infernape\n|-damage|p2a: Infernape|84/100\n|\n|-weather|Snowscape|[upkeep]\n|upkeep\n|turn|3\n|\n|t:|1795607747\n|-terastallize|p1a: Dudunsparce|Ground\n|move|p2a: Infernape|Great Sage Strike|p1a: Dudunsparce\n|-damage|p1a: Dudunsparce|31/100\n|-unboost|p2a: Infernape|def|1\n|-unboost|p2a: Infernape|spd|1\n|-damage|p2a: Infernape|75/100|[from] item: Life Orb\n|move|p1a: Dudunsparce|Headbutt|p2a: Infernape\n|-damage|p2a: Infernape|48/100\n|\n|-weather|Snowscape|[upkeep]\n|-heal|p1a: Dudunsparce|37/100|[from] item: Leftovers\n|upkeep\n|turn|4\n|\n|t:|1795607758\n|move|p2a: Infernape|Pyre Strike|p1a: Dudunsparce\n|-damage|p1a: Dudunsparce|0 fnt\n|faint|p1a: Dudunsparce\n|-damage|p2a: Infernape|38/100|[from] item: Life Orb\n|\n|-weather|Snowscape|[upkeep]\n|upkeep\n|\n|t:|1795607758\n|switch|p1a: Flareon|Flareon, L84, M|100/100\n|-status|p1a: Flareon|brn|[from] ability: Kindled Fury|[of] p1a: Flareon\n|turn|5\n|\n|t:|1795607767\n|move|p2a: Infernape|High Jump Kick|p1a: Flareon\n|-damage|p1a: Flareon|0 fnt\n|faint|p1a: Flareon\n|-damage|p2a: Infernape|29/100|[from] item: Life Orb\n|\n|-weather|none\n|upkeep\n|\n|t:|1795607768\n|switch|p1a: Zangoose|Zangoose, L85, M|100/100\n|turn|6\n",
+	"inputlog": null,
+	"uploadtime": 1795607775
+}
