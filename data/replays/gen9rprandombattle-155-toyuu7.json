@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-155-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Easy",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆Guvila\n|t:|1795623338\n|gametype|singles\n|player|p1|Bunny Easy|bunny.png|1234\n|player|p2|Guvila|265|1248\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795623338\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Komala|Komala, L87, M|100/100\n|switch|p2a: Eiscue|Eiscue, L88, F|100/100\n|-ability|p1a: Komala|Comatose\n|turn|1\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1795623345\n|move|p1a: Komala|Body Slam|p2a: Eiscue\n|-activate|p2a: Eiscue|ability: Ice Face\n|-damage|p2a: Eiscue|100/100\n|detailschange|p2a: Eiscue|Eiscue-Noice, L88, F\n|move|p2a: Eiscue|Belly Drum|p2a: Eiscue\n|-damage|p2a: Eiscue|50/100\n|-setboost|p2a: Eiscue|atk|6|[from] move: Belly Drum\n|-enditem|p2a: Eiscue|Sitrus Berry|[eat]\n|-heal|p2a: Eiscue|75/100|[from] item: Sitrus Berry\n|\n|upkeep\n|turn|2\n|\n|t:|1795623363\n|move|p2a: Eiscue|Rime Cleaver|p1a: Komala\n|-damage|p1a: Komala|0 fnt\n|faint|p1a: Komala\n|\n|upkeep\n|\n|t:|1795623363\n|switch|p1a: Lycanroc|Lycanroc-Dusk, L81, M|100/100\n|turn|3\n|\n|t:|1795623369\n|move|p2a: Eiscue|Liquidation|p1a: Lycanroc\n|-supereffective|p1a: Lycanroc\n|-damage|p1a: Lycanroc|0 fnt\n|faint|p1a: Lycanroc\n|\n|upkeep\n|\n|t:|1795623369\n|switch|p1a: Phione|Phione, L91|100/100\n|turn|4\n|\n|t:|1795623389\n|switch|p2a: Sinistcha|Sinistcha, L83|100/100\n|move|p1a: Phione|Scald|p2a: Sinistcha\n|-resisted|p2a: Sinistcha\n|-damage|p2a: Sinistcha|80/100\n|\n|-heal|p2a: Sinistcha|86/100|[from] item: Leftovers\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1795623397
+}
