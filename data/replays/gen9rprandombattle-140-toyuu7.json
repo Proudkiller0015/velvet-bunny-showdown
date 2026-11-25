@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-140-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Easy",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆Guvila\n|t:|1795614799\n|gametype|singles\n|player|p1|Bunny Easy|bunny.png|1293\n|player|p2|Guvila|170|1160\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795614799\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Delibird|Delibird, F|100/100\n|switch|p2a: Revavroom|Revavroom, L79, M|100/100\n|turn|1\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1795614807\n|-terastallize|p1a: Delibird|Ghost\n|move|p1a: Delibird|Brave Bird|p2a: Revavroom\n|-resisted|p2a: Revavroom\n|-damage|p2a: Revavroom|75/100\n|-damage|p1a: Delibird|92/100|[from] Recoil\n|move|p2a: Revavroom|Shift Gear|p2a: Revavroom\n|-boost|p2a: Revavroom|spe|2\n|-boost|p2a: Revavroom|atk|1\n|\n|upkeep\n|turn|2\n|\n|t:|1795614815\n|move|p2a: Revavroom|Shift Gear|p2a: Revavroom\n|-boost|p2a: Revavroom|spe|2\n|-boost|p2a: Revavroom|atk|1\n|move|p1a: Delibird|Spikes|p2a: Revavroom\n|-sidestart|p2: Guvila|Spikes\n|\n|upkeep\n|turn|3\n|\n|t:|1795614820\n|move|p2a: Revavroom|Shift Gear|p2a: Revavroom\n|-boost|p2a: Revavroom|spe|2\n|-boost|p2a: Revavroom|atk|1\n|move|p1a: Delibird|Brave Bird|p2a: Revavroom\n|-resisted|p2a: Revavroom\n|-damage|p2a: Revavroom|51/100\n|-damage|p1a: Delibird|84/100|[from] Recoil\n|\n|upkeep\n|turn|4\n|\n|t:|1795614827\n|move|p2a: Revavroom|Shift Gear|p2a: Revavroom\n|-boost|p2a: Revavroom|spe|0\n|-boost|p2a: Revavroom|atk|1\n|move|p1a: Delibird|Brave Bird|p2a: Revavroom\n|-resisted|p2a: Revavroom\n|-damage|p2a: Revavroom|25/100\n|-damage|p1a: Delibird|75/100|[from] Recoil\n|\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1795614835
+}
