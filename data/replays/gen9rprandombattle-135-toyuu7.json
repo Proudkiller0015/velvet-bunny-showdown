@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-135-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Easy",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆Guvila\n|t:|1795611999\n|gametype|singles\n|player|p1|Bunny Easy|bunny.png|1256\n|player|p2|Guvila|170|1209\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795612000\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Avalugg|Avalugg-Hisui, L90, F|317/317\n|switch|p2a: Emboar|Emboar, L84, F|322/322\n|turn|1\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1795612010\n|switch|p2a: Samurott|Samurott, L88, M|310/310\n|-terastallize|p1a: Avalugg|Flying\n|move|p1a: Avalugg|Rime Cleaver|p2a: Samurott\n|-resisted|p2a: Samurott\n|-damage|p2a: Samurott|238/310\n|\n|upkeep\n|turn|2\n|\n|t:|1795612019\n|move|p2a: Samurott|Swords Dance|p2a: Samurott\n|-boost|p2a: Samurott|atk|2\n|move|p1a: Avalugg|Crag Hammer|p2a: Samurott\n|-damage|p2a: Samurott|106/310\n|\n|upkeep\n|turn|3\n|l|☆Guvila\n|player|p2|\n|inactive|Guvila has 2 minutes to come back and make a move, or they forfeit.\n|-message|Guvila lost due to inactivity.\n|\n|win|Bunny Easy\n",
+	"inputlog": ">start {\"formatid\":\"gen9rprandombattle\",\"seed\":\"sodium,52785fb9c1db2851334ddb1744804e0e\",\"rated\":\"Rated battle\"}\n>player p1 {\"name\":\"Bunny Easy\",\"avatar\":\"bunny.png\",\"rating\":1256,\"seed\":\"sodium,9f5e392200c76abfd13ffa6e3f88103d\"}\n>player p2 {\"name\":\"Guvila\",\"avatar\":\"170\",\"rating\":1209,\"seed\":\"sodium,33e1aee87035b682d67a8ba6ea253485\"}\n>chat ☆Bunny Easy|Good luck! Playing on **easy**.\n>p1 move rimecleaver terastallize\n>p2 switch 3\n>p1 move craghammer\n>p2 move swordsdance\n>forcelose p2",
+	"uploadtime": 1795612165
+}
