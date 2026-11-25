@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-130-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Easy",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆Guvila\n|t:|1795611635\n|gametype|singles\n|player|p1|Bunny Easy|bunny.png|1241\n|player|p2|Guvila|170|1224\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795611635\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Arceus|Arceus-Bug, L73|100/100\n|switch|p2a: Klawf|Klawf, L90, M|100/100\n|turn|1\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1795611643\n|move|p1a: Arceus|Judgment|p2a: Klawf\n|-damage|p2a: Klawf|49/100\n|-ability|p2a: Klawf|Anger Shell|boost\n|-boost|p2a: Klawf|atk|1\n|-boost|p2a: Klawf|spa|1\n|-boost|p2a: Klawf|spe|1\n|-unboost|p2a: Klawf|def|1\n|-unboost|p2a: Klawf|spd|1\n|move|p2a: Klawf|Swords Dance|p2a: Klawf\n|-boost|p2a: Klawf|atk|2\n|\n|upkeep\n|turn|2\n|\n|t:|1795611652\n|-terastallize|p1a: Arceus|Fire\n|move|p2a: Klawf|Crag Hammer|p1a: Arceus\n|-supereffective|p1a: Arceus\n|-crit|p1a: Arceus\n|-damage|p1a: Arceus|0 fnt\n|faint|p1a: Arceus\n|\n|upkeep\n|\n|t:|1795611652\n|switch|p1a: Great Tusk|Great Tusk, L77|100/100\n|turn|3\n|\n|t:|1795611660\n|move|p2a: Klawf|Crabhammer|p1a: Great Tusk\n|-supereffective|p1a: Great Tusk\n|-damage|p1a: Great Tusk|0 fnt\n|faint|p1a: Great Tusk\n|-end|p1a: Great Tusk|Protosynthesis|[silent]\n|\n|upkeep\n|\n|t:|1795611660\n|switch|p1a: Sandaconda|Sandaconda, L84, F|100/100\n|turn|4\n|\n|t:|1795611666\n|move|p2a: Klawf|Crabhammer|p1a: Sandaconda\n|-supereffective|p1a: Sandaconda\n|-damage|p1a: Sandaconda|0 fnt\n|faint|p1a: Sandaconda\n|\n|upkeep\n|\n|t:|1795611666\n|switch|p1a: Pikachu|Pikachu-Sinnoh, L93, M|100/100\n|turn|5\n|\n|t:|1795611673\n|move|p1a: Pikachu|Spark Scamper|p2a: Klawf\n|-damage|p2a: Klawf|21/100\n|move|p2a: Klawf|High Horsepower|p1a: Pikachu\n|-supereffective|p1a: Pikachu\n|-damage|p1a: Pikachu|0 fnt\n|faint|p1a: Pikachu\n|\n|upkeep\n|\n|t:|1795611673\n|switch|p1a: Furret|Furret, L94, F|100/100\n|turn|6\n",
+	"inputlog": null,
+	"uploadtime": 1795611675
+}
