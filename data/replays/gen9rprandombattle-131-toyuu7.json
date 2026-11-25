@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-131-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Easy",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆Guvila\n|t:|1795611704\n|gametype|singles\n|player|p1|Bunny Easy|bunny.png|1224\n|player|p2|Guvila|170|1241\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795611704\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Lunala|Lunala, L70|100/100\n|switch|p2a: Spiritomb|Spiritomb, L88, M|100/100\n|turn|1\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1795611711\n|move|p1a: Lunala|Psyshock|p2a: Spiritomb\n|-immune|p2a: Spiritomb\n|move|p2a: Spiritomb|Swords Dance|p2a: Spiritomb\n|-boost|p2a: Spiritomb|atk|2\n|\n|upkeep\n|turn|2\n|\n|t:|1795611716\n|move|p1a: Lunala|Psyshock|p2a: Spiritomb\n|-immune|p2a: Spiritomb\n|move|p2a: Spiritomb|Knock Off|p1a: Lunala\n|-supereffective|p1a: Lunala\n|-damage|p1a: Lunala|0 fnt\n|-enditem|p1a: Lunala|Leftovers|[from] move: Knock Off|[of] p2a: Spiritomb\n|faint|p1a: Lunala\n|-damage|p2a: Spiritomb|91/100|[from] item: Life Orb\n|\n|upkeep\n|\n|t:|1795611717\n|switch|p1a: Alomomola|Alomomola, L87, M|100/100\n|turn|3\n|\n|t:|1795611737\n|move|p1a: Alomomola|Undertow|p2a: Spiritomb\n|-damage|p2a: Spiritomb|77/100\n|-unboost|p2a: Spiritomb|spe|1\n|move|p2a: Spiritomb|Knock Off|p1a: Alomomola\n|-damage|p1a: Alomomola|67/100\n|-enditem|p1a: Alomomola|Heavy-Duty Boots|[from] move: Knock Off|[of] p2a: Spiritomb\n|-damage|p2a: Spiritomb|67/100|[from] item: Life Orb\n|\n|upkeep\n|turn|4\n|\n|t:|1795611745\n|move|p1a: Alomomola|Undertow|p2a: Spiritomb\n|-damage|p2a: Spiritomb|53/100\n|-unboost|p2a: Spiritomb|spe|1\n|move|p2a: Spiritomb|Soul Toll|p1a: Alomomola\n|-damage|p1a: Alomomola|36/100\n|-damage|p2a: Spiritomb|43/100|[from] item: Life Orb\n|\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1795611755
+}
