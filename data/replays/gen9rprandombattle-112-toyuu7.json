@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-112-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Easy",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆Guvila\n|t:|1795607829\n|gametype|singles\n|player|p1|Bunny Easy|bunny.png|1096\n|player|p2|Guvila|170|1272\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795607829\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Emboar|Emboar, L84, F|100/100\n|switch|p2a: Regidrago|Regidrago, L77|100/100\n|turn|1\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1795607840\n|move|p2a: Regidrago|Earthquake|p1a: Emboar\n|-supereffective|p1a: Emboar\n|-damage|p1a: Emboar|55/100\n|move|p1a: Emboar|Close Combat|p2a: Regidrago\n|-damage|p2a: Regidrago|13/100\n|-unboost|p1a: Emboar|def|1\n|-unboost|p1a: Emboar|spd|1\n|\n|upkeep\n|turn|2\n|\n|t:|1795607848\n|move|p2a: Regidrago|Earthquake|p1a: Emboar\n|-supereffective|p1a: Emboar\n|-damage|p1a: Emboar|0 fnt\n|faint|p1a: Emboar\n|\n|upkeep\n|\n|t:|1795607848\n|switch|p1a: Noivern|Noivern, L82, F|100/100\n|turn|3\n|\n|t:|1795607862\n|switch|p2a: Granbull|Granbull, L88, M|100/100\n|-ability|p2a: Granbull|Intimidate|boost\n|-unboost|p1a: Noivern|atk|1\n|move|p1a: Noivern|Draco Meteor|p2a: Granbull\n|-immune|p2a: Granbull\n|\n|upkeep\n|turn|4\n|\n|t:|1795607870\n|move|p1a: Noivern|Hurricane|p2a: Granbull\n|-damage|p2a: Granbull|54/100\n|-start|p2a: Granbull|confusion\n|-activate|p2a: Granbull|confusion\n|-damage|p2a: Granbull|40/100|[from] confusion\n|\n|-heal|p2a: Granbull|46/100|[from] item: Leftovers\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1795607875
+}
