@@ -1,0 +1,12 @@
+{
+	"id": "gen9randombattle-172-toyuu7",
+	"format": "[Gen 9] Random Battle",
+	"players": [
+		"Bunny Easy",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆Guvila\n|t:|1795627732\n|gametype|singles\n|player|p1|Bunny Easy|bunny.png|1082\n|player|p2|Guvila|265|1000\n|gen|9\n|tier|[Gen 9] Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795627732\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Diancie|Diancie, L82|100/100\n|switch|p2a: Blissey|Blissey, L85, F|100/100\n|turn|1\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1795627739\n|move|p2a: Blissey|Thunder Wave|p1a: Diancie\n|-status|p1a: Diancie|par\n|move|p1a: Diancie|Diamond Storm|p2a: Blissey\n|-damage|p2a: Blissey|51/100\n|\n|-heal|p2a: Blissey|57/100|[from] item: Leftovers\n|upkeep\n|turn|2\n|\n|t:|1795627746\n|move|p2a: Blissey|Stealth Rock|p1a: Diancie\n|-sidestart|p1: Bunny Easy|move: Stealth Rock\n|move|p1a: Diancie|Diamond Storm|p2a: Blissey\n|-damage|p2a: Blissey|2/100\n|-boost|p1a: Diancie|def|2\n|\n|-heal|p2a: Blissey|8/100|[from] item: Leftovers\n|upkeep\n|turn|3\n|\n|t:|1795627754\n|move|p2a: Blissey|Soft-Boiled|p2a: Blissey\n|-heal|p2a: Blissey|58/100\n|move|p1a: Diancie|Diamond Storm|p2a: Blissey\n|-damage|p2a: Blissey|2/100\n|-boost|p1a: Diancie|def|2\n|\n|-heal|p2a: Blissey|8/100|[from] item: Leftovers\n|upkeep\n|turn|4\n|\n|t:|1795627761\n|move|p2a: Blissey|Soft-Boiled|p2a: Blissey\n|-heal|p2a: Blissey|58/100\n|cant|p1a: Diancie|par\n|\n|-heal|p2a: Blissey|64/100|[from] item: Leftovers\n|upkeep\n|turn|5\n|\n|t:|1795627766\n|move|p2a: Blissey|Soft-Boiled|p2a: Blissey\n|-heal|p2a: Blissey|100/100\n|move|p1a: Diancie|Diamond Storm|p2a: Blissey\n|-damage|p2a: Blissey|44/100\n|\n|-heal|p2a: Blissey|50/100|[from] item: Leftovers\n|upkeep\n|turn|6\n|\n|t:|1795627774\n|move|p2a: Blissey|Seismic Toss|p1a: Diancie\n|-damage|p1a: Diancie|61/100 par\n|move|p1a: Diancie|Diamond Storm|p2a: Blissey\n|-damage|p2a: Blissey|0 fnt\n|-boost|p1a: Diancie|def|2\n|faint|p2a: Blissey\n|\n|-heal|p1a: Diancie|67/100 par|[from] item: Leftovers\n|upkeep\n",
+	"inputlog": null,
+	"uploadtime": 1795627778
+}
