@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-113-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Easy",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆Guvila\n|t:|1795608127\n|gametype|singles\n|player|p1|Bunny Easy|bunny.png|1089\n|player|p2|Guvila|170|1280\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795608127\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Mudsdale|Mudsdale, L83, M|100/100\n|switch|p2a: Blastoise|Blastoise, L80, M|100/100\n|turn|1\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1795608135\n|move|p2a: Blastoise|Shell Smash|p2a: Blastoise\n|-unboost|p2a: Blastoise|def|1\n|-unboost|p2a: Blastoise|spd|1\n|-boost|p2a: Blastoise|atk|2\n|-boost|p2a: Blastoise|spa|2\n|-boost|p2a: Blastoise|spe|2\n|-enditem|p2a: Blastoise|White Herb\n|-clearnegativeboost|p2a: Blastoise|[silent]\n|move|p1a: Mudsdale|Earthquake|p2a: Blastoise\n|-damage|p2a: Blastoise|50/100\n|\n|upkeep\n|turn|2\n|\n|t:|1795608145\n|move|p2a: Blastoise|Hydro Pump|p1a: Mudsdale\n|-supereffective|p1a: Mudsdale\n|-damage|p1a: Mudsdale|39/100\n|move|p1a: Mudsdale|Earthquake|p2a: Blastoise\n|-damage|p2a: Blastoise|0 fnt\n|faint|p2a: Blastoise\n|\n|-heal|p1a: Mudsdale|45/100|[from] item: Leftovers\n|upkeep\n|\n|t:|1795608156\n|switch|p2a: Dondozo|Dondozo, L78, F|100/100\n|turn|3\n|\n|t:|1795608158\n|move|p1a: Mudsdale|Earthquake|p2a: Dondozo\n|-damage|p2a: Dondozo|67/100\n|move|p2a: Dondozo|Undertow|p1a: Mudsdale\n|-supereffective|p1a: Mudsdale\n|-damage|p1a: Mudsdale|5/100\n|-unboost|p1a: Mudsdale|spe|1\n|\n|-heal|p2a: Dondozo|73/100|[from] item: Leftovers\n|-heal|p1a: Mudsdale|11/100|[from] item: Leftovers\n|upkeep\n|turn|4\n|\n|t:|1795608167\n|move|p2a: Dondozo|Undertow|p1a: Mudsdale\n|-supereffective|p1a: Mudsdale\n|-damage|p1a: Mudsdale|0 fnt\n|faint|p1a: Mudsdale\n|\n|-heal|p2a: Dondozo|79/100|[from] item: Leftovers\n|upkeep\n|\n|t:|1795608167\n|switch|p1a: Milotic|Milotic, L83, F|100/100\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1795608175
+}
