@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-147-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Easy",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆Guvila\n|t:|1795616253\n|gametype|singles\n|player|p1|Bunny Easy|bunny.png|1237\n|player|p2|Guvila|170|1245\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795616253\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Mandibuzz|Mandibuzz, L85, F|100/100\n|switch|p2a: Banette|Banette, L93, M|100/100\n|turn|1\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1795616260\n|move|p1a: Mandibuzz|Carrion Feast|p2a: Banette\n|-supereffective|p2a: Banette\n|-damage|p2a: Banette|45/100\n|-start|p1a: Mandibuzz|Disable|Carrion Feast|[from] ability: Cursed Body|[of] p2a: Banette\n|move|p2a: Banette|Parting Shot|p1a: Mandibuzz\n|-unboost|p1a: Mandibuzz|atk|1\n|-unboost|p1a: Mandibuzz|spa|1\n|\n|t:|1795616274\n|switch|p2a: Zacian|Zacian-Crowned, L64|100/100|[from] Parting Shot\n|-ability|p2a: Zacian|Intrepid Sword|boost\n|-boost|p2a: Zacian|atk|1\n|\n|upkeep\n|turn|2\n|\n|t:|1795616280\n|-terastallize|p1a: Mandibuzz|Steel\n|move|p2a: Zacian|Swords Dance|p2a: Zacian\n|-boost|p2a: Zacian|atk|2\n|move|p1a: Mandibuzz|Defog|p2a: Zacian\n|-unboost|p2a: Zacian|evasion|1\n|\n|upkeep\n|turn|3\n|\n|t:|1795616288\n|move|p2a: Zacian|Close Combat|p1a: Mandibuzz\n|-supereffective|p1a: Mandibuzz\n|-damage|p1a: Mandibuzz|1/100\n|-unboost|p2a: Zacian|def|1\n|-unboost|p2a: Zacian|spd|1\n|move|p1a: Mandibuzz|Roost|p1a: Mandibuzz\n|-heal|p1a: Mandibuzz|51/100\n|\n|upkeep\n|turn|4\n|\n|t:|1795616296\n|move|p2a: Zacian|Close Combat|p1a: Mandibuzz\n|-supereffective|p1a: Mandibuzz\n|-damage|p1a: Mandibuzz|0 fnt\n|-unboost|p2a: Zacian|def|1\n|-unboost|p2a: Zacian|spd|1\n|faint|p1a: Mandibuzz\n|\n|upkeep\n|\n|t:|1795616296\n|switch|p1a: Weezing|Weezing-Galar, L86, F|100/100\n|turn|5\n|\n|t:|1795616304\n|move|p2a: Zacian|Behemoth Blade|p1a: Weezing\n|-supereffective|p1a: Weezing\n|-damage|p1a: Weezing|0 fnt\n|faint|p1a: Weezing\n|\n|upkeep\n|\n|t:|1795616304\n|switch|p1a: Iron Thorns|Iron Thorns, L83|100/100\n|-enditem|p1a: Iron Thorns|Booster Energy\n|-activate|p1a: Iron Thorns|ability: Quark Drive|[fromitem]\n|-start|p1a: Iron Thorns|quarkdriveatk\n|turn|6\n",
+	"inputlog": null,
+	"uploadtime": 1795616316
+}
