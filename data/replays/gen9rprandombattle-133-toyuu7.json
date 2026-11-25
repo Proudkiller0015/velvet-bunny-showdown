@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-133-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Easy",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆Guvila\n|t:|1795611961\n|gametype|singles\n|player|p1|Bunny Easy|bunny.png|1241\n|player|p2|Guvila|170|1224\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795611961\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Spectrier|Spectrier, L75|274/274\n|switch|p2a: Brambleghast|Brambleghast, L88, M|240/240\n|turn|1\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1795611969\n|-terastallize|p1a: Spectrier|Fairy\n|move|p1a: Spectrier|Shadow Ball|p2a: Brambleghast\n|-supereffective|p2a: Brambleghast\n|-damage|p2a: Brambleghast|0 fnt\n|faint|p2a: Brambleghast\n|-ability|p1a: Spectrier|Grim Neigh|boost\n|-boost|p1a: Spectrier|spa|1\n|-damage|p1a: Spectrier|247/274|[from] item: Life Orb\n|\n|upkeep\n|\n|t:|1795611979\n|switch|p2a: Arceus|Arceus-Poison, L70|284/284\n|turn|2\n|\n|t:|1795611984\n|move|p1a: Spectrier|Shadow Ball|p2a: Arceus\n|-damage|p2a: Arceus|111/284\n|-unboost|p2a: Arceus|spd|1\n|-damage|p1a: Spectrier|220/274|[from] item: Life Orb\n|move|p2a: Arceus|Swords Dance|p2a: Arceus\n|-boost|p2a: Arceus|atk|2\n|\n|upkeep\n|turn|3\n|\n|t:|1795611993\n|move|p1a: Spectrier|Shadow Ball|p2a: Arceus\n|-damage|p2a: Arceus|0 fnt\n|faint|p2a: Arceus\n|-ability|p1a: Spectrier|Grim Neigh|boost\n|-boost|p1a: Spectrier|spa|1\n|-damage|p1a: Spectrier|193/274|[from] item: Life Orb\n|\n|upkeep\n|-message|Guvila forfeited.\n|\n|win|Bunny Easy\n",
+	"inputlog": ">start {\"formatid\":\"gen9rprandombattle\",\"seed\":\"sodium,6e41e1e8ca5f72b477803df5c2a5b72d\",\"rated\":\"Rated battle\"}\n>player p1 {\"name\":\"Bunny Easy\",\"avatar\":\"bunny.png\",\"rating\":1241,\"seed\":\"sodium,ca5d59f9ff835f21cdaea1043edd064c\"}\n>player p2 {\"name\":\"Guvila\",\"avatar\":\"170\",\"rating\":1224,\"seed\":\"sodium,04928dbd9a22907dbc5750b5db3c63cf\"}\n>chat ☆Bunny Easy|Good luck! Playing on **easy**.\n>p1 move shadowball terastallize\n>p2 move spikes\n>p2 switch 3\n>p1 move shadowball\n>p2 move swordsdance\n>p1 move shadowball\n>p2 move gunkshot\n>forcelose p2",
+	"uploadtime": 1795611996
+}
