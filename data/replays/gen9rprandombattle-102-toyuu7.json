@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-102-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Normal",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Normal\n|j|☆Guvila\n|t:|1795605956\n|gametype|singles\n|player|p1|Bunny Normal|bunny.png|1264\n|player|p2|Guvila|170|1226\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795605956\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Cinccino|Cinccino, L83, F|100/100\n|switch|p2a: Florges|Florges-Blue, L85, F|100/100\n|turn|1\n|c|☆Bunny Normal|Good luck! Playing on **normal**.\n|\n|t:|1795605962\n|move|p1a: Cinccino|Triple Axel|p2a: Florges|[miss]\n|-miss|p1a: Cinccino|p2a: Florges\n|move|p2a: Florges|Calm Mind|p2a: Florges\n|-boost|p2a: Florges|spa|1\n|-boost|p2a: Florges|spd|1\n|\n|upkeep\n|turn|2\n|\n|t:|1795605968\n|move|p1a: Cinccino|Tail Slap|p2a: Florges\n|-damage|p2a: Florges|84/100\n|-damage|p2a: Florges|66/100\n|-damage|p2a: Florges|50/100\n|-damage|p2a: Florges|31/100\n|-damage|p2a: Florges|14/100\n|-hitcount|p2a: Florges|5\n|move|p2a: Florges|Calm Mind|p2a: Florges\n|-boost|p2a: Florges|spa|1\n|-boost|p2a: Florges|spd|1\n|\n|-heal|p2a: Florges|20/100|[from] item: Leftovers\n|upkeep\n|turn|3\n|\n|t:|1795605980\n|move|p1a: Cinccino|Triple Axel|p2a: Florges|[miss]\n|-miss|p1a: Cinccino|p2a: Florges\n|move|p2a: Florges|Moonblast|p1a: Cinccino\n|-damage|p1a: Cinccino|0 fnt\n|faint|p1a: Cinccino\n|\n|-heal|p2a: Florges|26/100|[from] item: Leftovers\n|upkeep\n|\n|t:|1795605980\n|switch|p1a: Dodrio|Dodrio, L85, M|100/100\n|turn|4\n|\n|t:|1795605992\n|move|p1a: Dodrio|Double-Edge|p2a: Florges\n|-damage|p2a: Florges|0 fnt\n|faint|p2a: Florges\n|-damage|p1a: Dodrio|91/100|[from] Recoil\n|\n|upkeep\n|\n|t:|1795606002\n|switch|p2a: Braviary|Braviary-Hisui, L85, M|100/100\n|turn|5\n|\n|t:|1795606007\n|move|p1a: Dodrio|Double-Edge|p2a: Braviary\n|-damage|p2a: Braviary|20/100\n|-damage|p1a: Dodrio|55/100|[from] Recoil\n|move|p2a: Braviary|Psychic|p1a: Dodrio\n|-damage|p1a: Dodrio|0 fnt\n|faint|p1a: Dodrio\n|\n|upkeep\n|\n|t:|1795606007\n|switch|p1a: Baxcalibur|Baxcalibur, L75, F|100/100\n|turn|6\n",
+	"inputlog": null,
+	"uploadtime": 1795606014
+}
