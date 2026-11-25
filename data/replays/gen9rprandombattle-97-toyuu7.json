@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-97-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Normal",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Normal\n|j|☆Guvila\n|t:|1795604699\n|gametype|singles\n|badge|p1|bronze|gen9rprandombattle|3-3\n|player|p1|Bunny Normal|bunny.png|1309\n|player|p2|Guvila|170|1135\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795604699\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Cyclizar|Cyclizar, L84, F|100/100\n|switch|p2a: Wyrdeer|Wyrdeer, L87, F|100/100\n|-ability|p2a: Wyrdeer|Intimidate|boost\n|-unboost|p1a: Cyclizar|atk|1\n|turn|1\n|c|☆Bunny Normal|Good luck! Playing on **normal**.\n|\n|t:|1795604715\n|switch|p2a: Swalot|Swalot, L90, M|100/100\n|move|p1a: Cyclizar|Draco Meteor|p2a: Swalot\n|-damage|p2a: Swalot|61/100\n|-unboost|p1a: Cyclizar|spa|2\n|\n|-heal|p2a: Swalot|67/100|[from] item: Leftovers\n|upkeep\n|turn|2\n|\n|t:|1795604726\n|switch|p1a: Mew|Mew, L82|100/100\n|move|p2a: Swalot|Swords Dance|p2a: Swalot\n|-boost|p2a: Swalot|atk|2\n|\n|-heal|p2a: Swalot|73/100|[from] item: Leftovers\n|upkeep\n|turn|3\n|\n|t:|1795604735\n|move|p1a: Mew|Psychic Fangs|p2a: Swalot\n|-supereffective|p2a: Swalot\n|-damage|p2a: Swalot|1/100\n|-damage|p1a: Mew|91/100|[from] item: Life Orb\n|move|p2a: Swalot|Knock Off|p1a: Mew\n|-supereffective|p1a: Mew\n|-damage|p1a: Mew|8/100\n|-enditem|p1a: Mew|Life Orb|[from] move: Knock Off|[of] p2a: Swalot\n|\n|-heal|p2a: Swalot|8/100|[from] item: Leftovers\n|upkeep\n|turn|4\n|\n|t:|1795604745\n|move|p1a: Mew|Psychic Fangs|p2a: Swalot\n|-supereffective|p2a: Swalot\n|-damage|p2a: Swalot|0 fnt\n|faint|p2a: Swalot\n|\n|upkeep\n|\n|t:|1795604753\n|switch|p2a: Grimmsnarl|Grimmsnarl, L83, M|100/100\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1795604754
+}
