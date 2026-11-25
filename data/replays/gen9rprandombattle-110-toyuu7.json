@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-110-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Easy",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆Guvila\n|t:|1795607612\n|gametype|singles\n|player|p1|Bunny Easy|bunny.png|1116\n|player|p2|Guvila|170|1252\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795607613\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Sunflora|Sunflora, M|100/100\n|switch|p2a: Darkrai|Darkrai, L77|100/100\n|turn|1\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1795607640\n|move|p2a: Darkrai|Nasty Plot|p2a: Darkrai\n|-boost|p2a: Darkrai|spa|2\n|move|p1a: Sunflora|Solar Nectar|p2a: Darkrai\n|-damage|p2a: Darkrai|12/100\n|\n|upkeep\n|turn|2\n|\n|t:|1795607646\n|-terastallize|p1a: Sunflora|Grass\n|move|p2a: Darkrai|Sludge Bomb|p1a: Sunflora\n|-supereffective|p1a: Sunflora\n|-damage|p1a: Sunflora|0 fnt\n|faint|p1a: Sunflora\n|-damage|p2a: Darkrai|2/100|[from] item: Life Orb\n|\n|upkeep\n|\n|t:|1795607646\n|switch|p1a: Deoxys|Deoxys-Attack, L72|100/100\n|-ability|p1a: Deoxys|Pressure\n|turn|3\n|\n|t:|1795607657\n|move|p1a: Deoxys|Psycho Boost|p2a: Darkrai\n|-immune|p2a: Darkrai\n|move|p2a: Darkrai|Dark Pulse|p1a: Deoxys\n|-supereffective|p1a: Deoxys\n|-damage|p1a: Deoxys|0 fnt\n|faint|p1a: Deoxys\n|-damage|p2a: Darkrai|0 fnt|[from] item: Life Orb\n|faint|p2a: Darkrai\n|\n|upkeep\n|\n|t:|1795607671\n|switch|p1a: Slowbro|Slowbro-Galar, L87, F|100/100\n|switch|p2a: Chi-Yu|Chi-Yu, L77|100/100\n|-ability|p2a: Chi-Yu|Beads of Ruin\n|turn|4\n|\n|t:|1795607677\n|move|p2a: Chi-Yu|Nasty Plot|p2a: Chi-Yu\n|-boost|p2a: Chi-Yu|spa|2\n|move|p1a: Slowbro|Psychic|p2a: Chi-Yu\n|-immune|p2a: Chi-Yu\n|\n|upkeep\n|turn|5\n|\n|t:|1795607682\n|move|p2a: Chi-Yu|Dark Pulse|p1a: Slowbro\n|-supereffective|p1a: Slowbro\n|-damage|p1a: Slowbro|0 fnt\n|faint|p1a: Slowbro\n|\n|upkeep\n|\n|t:|1795607682\n|switch|p1a: Golurk|Golurk, L87|100/100\n|turn|6\n|\n|t:|1795607689\n|move|p2a: Chi-Yu|Dark Pulse|p1a: Golurk\n|-supereffective|p1a: Golurk\n|-damage|p1a: Golurk|0 fnt\n|faint|p1a: Golurk\n|\n|upkeep\n|\n|t:|1795607689\n|switch|p1a: Reshiram|Reshiram, L76|100/100\n|-ability|p1a: Reshiram|Turboblaze\n|turn|7\n",
+	"inputlog": null,
+	"uploadtime": 1795607695
+}
