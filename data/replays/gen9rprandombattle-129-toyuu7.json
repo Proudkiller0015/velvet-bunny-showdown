@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-129-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Easy",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆Guvila\n|t:|1795611594\n|gametype|singles\n|player|p1|Bunny Easy|bunny.png|1224\n|player|p2|Guvila|170|1241\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795611595\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Luxray|Luxray, L88, M|284/284\n|switch|p2a: Furret|Furret, L94, M|312/312\n|-item|p1a: Luxray|Flame Orb|[from] ability: Frisk|[of] p2a: Furret\n|turn|1\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1795611603\n|move|p2a: Furret|Tidy Up|p2a: Furret\n|-boost|p2a: Furret|atk|1\n|-boost|p2a: Furret|spe|1\n|move|p1a: Luxray|Knock Off|p2a: Furret\n|-damage|p2a: Furret|152/312\n|-enditem|p2a: Furret|Life Orb|[from] move: Knock Off|[of] p1a: Luxray\n|\n|-status|p1a: Luxray|brn|[from] item: Flame Orb\n|upkeep\n|turn|2\n|\n|t:|1795611616\n|switch|p2a: Flygon|Flygon, L82, M|265/265\n|move|p1a: Luxray|Knock Off|p2a: Flygon\n|-damage|p2a: Flygon|30/265\n|-enditem|p2a: Flygon|Choice Scarf|[from] move: Knock Off|[of] p1a: Luxray\n|\n|-damage|p1a: Luxray|267/284 brn|[from] brn\n|upkeep\n|turn|3\n|\n|t:|1795611625\n|-terastallize|p1a: Luxray|Normal\n|move|p2a: Flygon|Earthquake|p1a: Luxray\n|-damage|p1a: Luxray|164/284 brn\n|move|p1a: Luxray|Facade|p2a: Flygon\n|-damage|p2a: Flygon|0 fnt\n|faint|p2a: Flygon\n|\n|-damage|p1a: Luxray|147/284 brn|[from] brn\n|upkeep\n|-message|Guvila forfeited.\n|\n|win|Bunny Easy\n",
+	"inputlog": ">start {\"formatid\":\"gen9rprandombattle\",\"seed\":\"sodium,e122bdb5f8ebb585e0644ec72778c6cc\",\"rated\":\"Rated battle\"}\n>player p1 {\"name\":\"Bunny Easy\",\"avatar\":\"bunny.png\",\"rating\":1224,\"seed\":\"sodium,328b0fc58196f7c70d650109f0ea4c56\"}\n>player p2 {\"name\":\"Guvila\",\"avatar\":\"170\",\"rating\":1241,\"seed\":\"sodium,608a52ac57c57e11a0b26c43d67fec6f\"}\n>chat ☆Bunny Easy|Good luck! Playing on **easy**.\n>p1 move knockoff\n>p2 move tidyup\n>p1 move knockoff\n>p2 switch 3\n>p1 move facade terastallize\n>p2 move earthquake\n>forcelose p2",
+	"uploadtime": 1795611631
+}
