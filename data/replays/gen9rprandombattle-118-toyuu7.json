@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-118-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Easy",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆Guvila\n|t:|1795609442\n|gametype|singles\n|player|p1|Bunny Easy|bunny.png|1150\n|player|p2|Guvila|170|1266\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795609442\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Venusaur|Venusaur, L84, F|100/100\n|switch|p2a: Slither Wing|Slither Wing, L81|100/100\n|turn|1\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1795609449\n|move|p1a: Venusaur|Sludge Bomb|p2a: Slither Wing\n|-damage|p2a: Slither Wing|68/100\n|move|p2a: Slither Wing|Will-O-Wisp|p1a: Venusaur\n|-status|p1a: Venusaur|brn\n|\n|-damage|p1a: Venusaur|94/100 brn|[from] brn\n|upkeep\n|turn|2\n|\n|t:|1795609459\n|move|p1a: Venusaur|Sludge Bomb|p2a: Slither Wing\n|-damage|p2a: Slither Wing|36/100\n|move|p2a: Slither Wing|U-turn|p1a: Venusaur\n|-damage|p1a: Venusaur|58/100 brn\n|\n|t:|1795609473\n|-end|p2a: Slither Wing|Protosynthesis|[silent]\n|switch|p2a: Flamigo|Flamigo, L82, M|100/100|[from] U-turn\n|\n|-heal|p1a: Venusaur|64/100 brn|[from] item: Leftovers\n|-damage|p1a: Venusaur|58/100 brn|[from] brn\n|upkeep\n|turn|3\n|\n|t:|1795609481\n|move|p2a: Flamigo|Brave Bird|p1a: Venusaur\n|-supereffective|p1a: Venusaur\n|-damage|p1a: Venusaur|0 fnt\n|faint|p1a: Venusaur\n|-damage|p2a: Flamigo|82/100|[from] Recoil\n|\n|upkeep\n|\n|t:|1795609481\n|switch|p1a: Vespiquen|Vespiquen, L99, F|100/100\n|-ability|p1a: Vespiquen|Pressure\n|turn|4\n|\n|t:|1795609494\n|switch|p2a: Incineroar|Incineroar, L82, F|100/100\n|-ability|p2a: Incineroar|Intimidate|boost\n|-unboost|p1a: Vespiquen|atk|1\n|-terastallize|p1a: Vespiquen|Steel\n|move|p1a: Vespiquen|Hurricane|p2a: Incineroar|[miss]\n|-miss|p1a: Vespiquen|p2a: Incineroar\n|\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1795609495
+}
