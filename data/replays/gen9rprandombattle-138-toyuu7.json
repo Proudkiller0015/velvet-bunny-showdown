@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-138-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Easy",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆Guvila\n|t:|1795614494\n|gametype|singles\n|player|p1|Bunny Easy|bunny.png|1270\n|player|p2|Guvila|170|1195\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795614494\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Cramorant|Cramorant, L86, F|261/261\n|switch|p2a: Klawf|Klawf, L90, F|272/272\n|turn|1\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1795614501\n|-terastallize|p1a: Cramorant|Ground\n|move|p1a: Cramorant|Brave Bird|p2a: Klawf\n|-resisted|p2a: Klawf\n|-damage|p2a: Klawf|222/272\n|-damage|p1a: Cramorant|244/261|[from] Recoil\n|move|p2a: Klawf|Crag Hammer|p1a: Cramorant\n|-resisted|p1a: Cramorant\n|-damage|p1a: Cramorant|143/261\n|-damage|p2a: Klawf|195/272|[from] item: Life Orb\n|\n|upkeep\n|turn|2\n|\n|t:|1795614517\n|switch|p2a: Flapple|Flapple, L88, F|266/266\n|move|p1a: Cramorant|Brave Bird|p2a: Flapple\n|-supereffective|p2a: Flapple\n|-damage|p2a: Flapple|18/266\n|-damage|p1a: Cramorant|61/261|[from] Recoil\n|\n|upkeep\n|turn|3\n|\n|t:|1795614525\n|move|p1a: Cramorant|Brave Bird|p2a: Flapple\n|-supereffective|p2a: Flapple\n|-damage|p2a: Flapple|0 fnt\n|faint|p2a: Flapple\n|-damage|p1a: Cramorant|55/261|[from] Recoil\n|\n|upkeep\n|-message|Guvila forfeited.\n|\n|win|Bunny Easy\n",
+	"inputlog": ">start {\"formatid\":\"gen9rprandombattle\",\"seed\":\"sodium,54661b8acede2f2f33940145b8de8af4\",\"rated\":\"Rated battle\"}\n>player p1 {\"name\":\"Bunny Easy\",\"avatar\":\"bunny.png\",\"rating\":1270,\"seed\":\"sodium,80cbf5b219fa0f51b0f3025676a9e23d\"}\n>player p2 {\"name\":\"Guvila\",\"avatar\":\"170\",\"rating\":1195,\"seed\":\"sodium,f8ba6795a993dbf1a8b313f46531065e\"}\n>chat ☆Bunny Easy|Good luck! Playing on **easy**.\n>p1 move bravebird terastallize\n>p2 move craghammer\n>p1 move bravebird\n>p2 switch 3\n>p1 move bravebird\n>p2 move gravapple\n>forcelose p2",
+	"uploadtime": 1795614529
+}
