@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-115-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Easy",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆Guvila\n|t:|1795608468\n|gametype|singles\n|player|p1|Bunny Easy|bunny.png|1130\n|player|p2|Guvila|170|1267\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795608468\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Illumise|Illumise, L91, F|100/100\n|switch|p2a: Snorlax|Snorlax, L82, M|100/100\n|turn|1\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1795608476\n|move|p1a: Illumise|Bug Buzz|p2a: Snorlax\n|-damage|p2a: Snorlax|79/100\n|-unboost|p2a: Snorlax|spd|1\n|move|p2a: Snorlax|Body Slam|p1a: Illumise\n|-damage|p1a: Illumise|64/100\n|\n|-heal|p2a: Snorlax|85/100|[from] item: Leftovers\n|upkeep\n|turn|2\n|\n|t:|1795608484\n|move|p1a: Illumise|Bug Buzz|p2a: Snorlax\n|-damage|p2a: Snorlax|57/100\n|move|p2a: Snorlax|Body Slam|p1a: Illumise\n|-damage|p1a: Illumise|30/100\n|-status|p1a: Illumise|par\n|\n|-heal|p2a: Snorlax|63/100|[from] item: Leftovers\n|upkeep\n|turn|3\n|\n|t:|1795608491\n|move|p1a: Illumise|Bug Buzz|p2a: Snorlax\n|-damage|p2a: Snorlax|33/100\n|move|p2a: Snorlax|Body Slam|p1a: Illumise\n|-damage|p1a: Illumise|0 fnt\n|faint|p1a: Illumise\n|\n|-heal|p2a: Snorlax|39/100|[from] item: Leftovers\n|upkeep\n|\n|t:|1795608491\n|switch|p1a: Orthworm|Orthworm, L88, F|100/100\n|turn|4\n|\n|t:|1795608503\n|move|p1a: Orthworm|Rest|p1a: Orthworm\n|-fail|p1a: Orthworm|heal\n|move|p2a: Snorlax|Rest|p2a: Snorlax\n|-status|p2a: Snorlax|slp|[from] move: Rest\n|-heal|p2a: Snorlax|100/100 slp|[silent]\n|\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1795608515
+}
