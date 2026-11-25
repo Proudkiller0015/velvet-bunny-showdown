@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-104-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Normal",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Normal\n|j|☆Guvila\n|t:|1795606371\n|gametype|singles\n|player|p1|Bunny Normal|bunny.png|1230\n|player|p2|Guvila|170|1260\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795606371\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Shiftry|Shiftry, L89, M|100/100\n|switch|p2a: Gardevoir|Gardevoir, L83, F|100/100\n|-ability|p2a: Gardevoir|Wind Rider|Trace|[from] ability: Trace|[of] p1a: Shiftry\n|turn|1\n|c|☆Bunny Normal|Good luck! Playing on **normal**.\n|\n|t:|1795606387\n|switch|p2a: Staraptor|Staraptor, L79, M|100/100\n|move|p1a: Shiftry|Leaf Storm|p2a: Staraptor\n|-resisted|p2a: Staraptor\n|-damage|p2a: Staraptor|51/100\n|-unboost|p1a: Shiftry|spa|2\n|-damage|p1a: Shiftry|91/100|[from] item: Life Orb\n|\n|upkeep\n|turn|2\n|\n|t:|1795606396\n|-terastallize|p1a: Shiftry|Poison\n|move|p2a: Staraptor|Brave Bird|p1a: Shiftry\n|-damage|p1a: Shiftry|27/100\n|-damage|p2a: Staraptor|27/100|[from] Recoil\n|move|p1a: Shiftry|Carrion Feast|p2a: Staraptor\n|-damage|p2a: Staraptor|0 fnt\n|-heal|p1a: Shiftry|38/100|[from] drain|[of] p2a: Staraptor\n|faint|p2a: Staraptor\n|-damage|p1a: Shiftry|28/100|[from] item: Life Orb\n|\n|upkeep\n|\n|t:|1795606407\n|switch|p2a: Gardevoir|Gardevoir, L83, F|100/100\n|-ability|p2a: Gardevoir|Wind Rider|Trace|[from] ability: Trace|[of] p1a: Shiftry\n|turn|3\n|\n|t:|1795606414\n|move|p2a: Gardevoir|Hypno Whirl|p1a: Shiftry\n|-supereffective|p1a: Shiftry\n|-damage|p1a: Shiftry|0 fnt\n|faint|p1a: Shiftry\n|\n|upkeep\n|\n|t:|1795606414\n|switch|p1a: Greninja|Greninja, L80, M|100/100\n|turn|4\n|\n|t:|1795606426\n|switch|p2a: Quaquaval|Quaquaval, L79, M|100/100\n|move|p1a: Greninja|Gunk Shot|p2a: Quaquaval|[miss]\n|-miss|p1a: Greninja|p2a: Quaquaval\n|\n|upkeep\n|turn|5\n|\n|t:|1795606433\n|move|p1a: Greninja|Gunk Shot|p2a: Quaquaval\n|-damage|p2a: Quaquaval|55/100\n|-damage|p1a: Greninja|91/100|[from] item: Life Orb\n|move|p2a: Quaquaval|Swords Dance|p2a: Quaquaval\n|-boost|p2a: Quaquaval|atk|2\n|\n|upkeep\n|turn|6\n",
+	"inputlog": null,
+	"uploadtime": 1795606434
+}
