@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-255-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Normal",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Normal\n|j|☆Guvila\n|t:|1795731676\n|gametype|singles\n|badge|p2|gold|gen9rprandombattle|1-1\n|player|p1|Bunny Normal|bunny.png|1231\n|player|p2|Guvila|265|1394\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795731676\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Kingdra|Kingdra, L84, F|100/100\n|switch|p2a: Cloyster|Cloyster, L80, M|100/100\n|turn|1\n|l|☆Bunny Normal\n|player|p1|\n|j|☆Bunny Normal\n|player|p1|Bunny Normal|bunny.png|\n|c|☆Bunny Normal|Good luck! Playing on **normal**.\n|\n|t:|1795731701\n|switch|p2a: Enamorus|Enamorus-Therian, L83, F|100/100\n|-terastallize|p1a: Kingdra|Steel\n|move|p1a: Kingdra|Iron Head|p2a: Enamorus\n|-supereffective|p2a: Enamorus\n|-damage|p2a: Enamorus|47/100\n|\n|upkeep\n|turn|2\n|\n|t:|1795731713\n|switch|p2a: Passimian|Passimian, L83, M|100/100\n|move|p1a: Kingdra|Iron Head|p2a: Passimian\n|-damage|p2a: Passimian|75/100\n|\n|upkeep\n|turn|3\n|\n|t:|1795731723\n|move|p1a: Kingdra|Undertow|p2a: Passimian\n|-damage|p2a: Passimian|32/100\n|move|p2a: Passimian|Close Combat|p1a: Kingdra\n|-supereffective|p1a: Kingdra\n|-damage|p1a: Kingdra|0 fnt\n|-unboost|p2a: Passimian|def|1\n|-unboost|p2a: Passimian|spd|1\n|faint|p1a: Kingdra\n|\n|upkeep\n|\n|t:|1795731723\n|switch|p1a: Salazzle|Salazzle, L83, F|100/100\n|turn|4\n|\n|t:|1795731753\n|switch|p2a: Stonjourner|Stonjourner, L91, F|100/100\n|move|p1a: Salazzle|Fire Blast|p2a: Stonjourner\n|-resisted|p2a: Stonjourner\n|-crit|p2a: Stonjourner\n|-damage|p2a: Stonjourner|38/100\n|\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1795731754
+}
