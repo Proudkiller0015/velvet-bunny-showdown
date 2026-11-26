@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-187-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Easy",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆Guvila\n|t:|1795691018\n|gametype|singles\n|badge|p2|bronze|gen9rprandombattle|3-3\n|player|p1|Bunny Easy|bunny.png|1147\n|player|p2|Guvila|265|1321\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795691018\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Zangoose|Zangoose, L85, F|100/100\n|switch|p2a: Gardevoir|Gardevoir, L83, M|100/100\n|-ability|p2a: Gardevoir|Toxic Boost|Trace|[from] ability: Trace|[of] p1a: Zangoose\n|turn|1\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1795691041\n|switch|p2a: Froslass|Froslass, L87, F|100/100\n|move|p1a: Zangoose|Swords Dance|p1a: Zangoose\n|-boost|p1a: Zangoose|atk|2\n|\n|-status|p1a: Zangoose|tox|[from] item: Toxic Orb\n|upkeep\n|turn|2\n|\n|t:|1795691050\n|move|p2a: Froslass|Spikes|p1a: Zangoose\n|-sidestart|p1: Bunny Easy|Spikes\n|move|p1a: Zangoose|Close Combat|p2a: Froslass\n|-immune|p2a: Froslass\n|\n|-damage|p1a: Zangoose|94/100 tox|[from] psn\n|upkeep\n|turn|3\n|\n|t:|1795691057\n|move|p2a: Froslass|Triple Axel|p1a: Zangoose\n|-damage|p1a: Zangoose|84/100 tox\n|-damage|p1a: Zangoose|66/100 tox\n|-damage|p1a: Zangoose|37/100 tox\n|-hitcount|p1a: Zangoose|3\n|move|p1a: Zangoose|Swords Dance|p1a: Zangoose\n|-boost|p1a: Zangoose|atk|2\n|\n|-damage|p1a: Zangoose|25/100 tox|[from] psn\n|upkeep\n|turn|4\n|\n|t:|1795691067\n|move|p2a: Froslass|Triple Axel|p1a: Zangoose\n|-damage|p1a: Zangoose|15/100 tox\n|-damage|p1a: Zangoose|0 fnt\n|faint|p1a: Zangoose\n|-hitcount|p1: Zangoose|2\n|\n|upkeep\n|\n|t:|1795691067\n|switch|p1a: Chi-Yu|Chi-Yu, L77|100/100\n|-damage|p1a: Chi-Yu|88/100|[from] Spikes\n|-ability|p1a: Chi-Yu|Beads of Ruin\n|turn|5\n|\n|t:|1795691083\n|switch|p2a: Azumarill|Azumarill, L82, F|100/100\n|move|p1a: Chi-Yu|Overheat|p2a: Azumarill\n|-resisted|p2a: Azumarill\n|-damage|p2a: Azumarill|63/100\n|-unboost|p1a: Chi-Yu|spa|2\n|\n|upkeep\n|turn|6\n",
+	"inputlog": null,
+	"uploadtime": 1795691085
+}
