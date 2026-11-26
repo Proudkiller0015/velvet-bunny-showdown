@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-217-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Easy",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆Guvila\n|t:|1795712049\n|gametype|singles\n|badge|p1|bronze|gen9rprandombattle|3-3\n|player|p1|Bunny Easy|bunny.png|1308\n|player|p2|Guvila|266|1248\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795712050\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Wo-Chien|Wo-Chien, L83|100/100\n|switch|p2a: Snorlax|Snorlax, L82, M|100/100\n|-ability|p1a: Wo-Chien|Tablets of Ruin\n|turn|1\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1795712067\n|switch|p2a: Flamigo|Flamigo, L82, F|100/100\n|move|p1a: Wo-Chien|Protect||[still]\n|-fail|p1a: Wo-Chien\n|\n|upkeep\n|turn|2\n|\n|t:|1795712073\n|-terastallize|p1a: Wo-Chien|Poison\n|move|p2a: Flamigo|Close Combat|p1a: Wo-Chien\n|-resisted|p1a: Wo-Chien\n|-crit|p1a: Wo-Chien\n|-damage|p1a: Wo-Chien|61/100\n|-unboost|p2a: Flamigo|def|1\n|-unboost|p2a: Flamigo|spd|1\n|move|p1a: Wo-Chien|Knock Off|p2a: Flamigo\n|-resisted|p2a: Flamigo\n|-damage|p2a: Flamigo|70/100\n|-enditem|p2a: Flamigo|Choice Band|[from] move: Knock Off|[of] p1a: Wo-Chien\n|\n|-heal|p1a: Wo-Chien|67/100|[from] item: Leftovers\n|upkeep\n|turn|3\n|\n|t:|1795712093\n|switch|p2a: Hypno|Hypno, L95, F|100/100\n|move|p1a: Wo-Chien|Giga Drain|p2a: Hypno\n|-damage|p2a: Hypno|82/100\n|-heal|p1a: Wo-Chien|77/100|[from] drain|[of] p2a: Hypno\n|\n|-heal|p2a: Hypno|88/100|[from] item: Leftovers\n|-heal|p1a: Wo-Chien|84/100|[from] item: Leftovers\n|upkeep\n|turn|4\n|\n|t:|1795712103\n|move|p2a: Hypno|Hypno Whirl|p1a: Wo-Chien\n|-supereffective|p1a: Wo-Chien\n|-damage|p1a: Wo-Chien|29/100\n|-start|p1a: Wo-Chien|confusion\n|-activate|p1a: Wo-Chien|confusion\n|-damage|p1a: Wo-Chien|21/100|[from] confusion\n|\n|-heal|p2a: Hypno|94/100|[from] item: Leftovers\n|-heal|p1a: Wo-Chien|27/100|[from] item: Leftovers\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1795712108
+}
