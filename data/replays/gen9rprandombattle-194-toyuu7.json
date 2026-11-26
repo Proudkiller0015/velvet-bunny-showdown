@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-194-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Easy",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆Guvila\n|t:|1795694807\n|gametype|singles\n|player|p1|Bunny Easy|bunny.png|1203\n|player|p2|Guvila|265|1304\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795694808\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Volcanion|Volcanion, L79|100/100\n|switch|p2a: Toucannon|Toucannon, L88, M|100/100\n|turn|1\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1795694821\n|-terastallize|p1a: Volcanion|Fire\n|move|p2a: Toucannon|Boomburst|p1a: Volcanion\n|-damage|p1a: Volcanion|62/100\n|move|p1a: Volcanion|Flamethrower|p2a: Toucannon\n|-damage|p2a: Toucannon|44/100\n|\n|upkeep\n|turn|2\n|\n|t:|1795694829\n|move|p2a: Toucannon|U-turn|p1a: Volcanion\n|-resisted|p1a: Volcanion\n|-crit|p1a: Volcanion\n|-damage|p1a: Volcanion|48/100\n|\n|t:|1795694842\n|switch|p2a: Staraptor|Staraptor, L79, F|100/100|[from] U-turn\n|move|p1a: Volcanion|Steam Eruption|p2a: Staraptor\n|-damage|p2a: Staraptor|26/100\n|\n|upkeep\n|turn|3\n|\n|t:|1795694849\n|move|p2a: Staraptor|Brave Bird|p1a: Volcanion\n|-damage|p1a: Volcanion|0 fnt\n|faint|p1a: Volcanion\n|-damage|p2a: Staraptor|11/100|[from] Recoil\n|\n|upkeep\n|\n|t:|1795694849\n|switch|p1a: Crawdaunt|Crawdaunt, L84, F|100/100\n|turn|4\n|\n|t:|1795694858\n|move|p2a: Staraptor|Brave Bird|p1a: Crawdaunt\n|-damage|p1a: Crawdaunt|8/100\n|-damage|p2a: Staraptor|0 fnt|[from] Recoil\n|faint|p2a: Staraptor\n|move|p1a: Crawdaunt|Crabhammer|p2: Staraptor|[notarget]\n|-fail|p1a: Crawdaunt\n|\n|upkeep\n|\n|t:|1795694867\n|switch|p2a: Heracross|Heracross, L80, M|100/100\n|turn|5\n|\n|t:|1795694870\n|move|p2a: Heracross|Facade|p1a: Crawdaunt\n|-damage|p1a: Crawdaunt|0 fnt\n|faint|p1a: Crawdaunt\n|\n|-status|p2a: Heracross|brn|[from] item: Flame Orb\n|upkeep\n|\n|t:|1795694870\n|switch|p1a: Incineroar|Incineroar, L82, M|100/100\n|-ability|p1a: Incineroar|Intimidate|boost\n|-unboost|p2a: Heracross|atk|1\n|turn|6\n",
+	"inputlog": null,
+	"uploadtime": 1795694886
+}
