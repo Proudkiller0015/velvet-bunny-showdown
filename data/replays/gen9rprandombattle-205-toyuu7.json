@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-205-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Easy",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆Guvila\n|t:|1795702009\n|gametype|singles\n|badge|p2|bronze|gen9rprandombattle|3-3\n|player|p1|Bunny Easy|bunny.png|1202\n|player|p2|Guvila|265|1329\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795702010\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Muk|Muk-Alola, L82, F|100/100\n|switch|p2a: Grumpig|Grumpig, L92, M|100/100\n|turn|1\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1795702025\n|switch|p2a: Toxicroak|Toxicroak, L84, F|100/100\n|move|p1a: Muk|Knock Off|p2a: Toxicroak\n|-resisted|p2a: Toxicroak\n|-damage|p2a: Toxicroak|77/100\n|-enditem|p2a: Toxicroak|Life Orb|[from] move: Knock Off|[of] p1a: Muk\n|\n|upkeep\n|turn|2\n|\n|t:|1795702033\n|move|p2a: Toxicroak|Swords Dance|p2a: Toxicroak\n|-boost|p2a: Toxicroak|atk|2\n|move|p1a: Muk|Knock Off|p2a: Toxicroak\n|-resisted|p2a: Toxicroak\n|-damage|p2a: Toxicroak|61/100\n|\n|upkeep\n|turn|3\n|\n|t:|1795702039\n|move|p2a: Toxicroak|Earthquake|p1a: Muk\n|-supereffective|p1a: Muk\n|-damage|p1a: Muk|0 fnt\n|faint|p1a: Muk\n|\n|upkeep\n|\n|t:|1795702039\n|switch|p1a: Grumpig|Grumpig, L92, F|100/100\n|turn|4\n|\n|t:|1795702046\n|move|p1a: Grumpig|Nasty Plot|p1a: Grumpig\n|-boost|p1a: Grumpig|spa|2\n|move|p2a: Toxicroak|Gunk Shot|p1a: Grumpig\n|-damage|p1a: Grumpig|5/100\n|-status|p1a: Grumpig|psn\n|\n|-heal|p1a: Grumpig|11/100 psn|[from] item: Leftovers\n|-damage|p1a: Grumpig|0 fnt|[from] psn\n|faint|p1a: Grumpig\n|upkeep\n|\n|t:|1795702046\n|switch|p1a: Landorus|Landorus-Therian, L76, M|100/100\n|-ability|p1a: Landorus|Intimidate|boost\n|-unboost|p2a: Toxicroak|atk|1\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1795702047
+}
