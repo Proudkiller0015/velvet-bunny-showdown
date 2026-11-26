@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-258-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"chgabiru",
+		"Velvet Bunny"
+	],
+	"rating": null,
+	"log": "|j|☆chgabiru\n|j|☆Velvet Bunny\n|t:|1795736012\n|gametype|singles\n|player|p1|chgabiru|266|\n|player|p2|Velvet Bunny|bunny.png|\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795736012\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Tsareena|Tsareena, L87, F|267/267\n|switch|p2a: Tornadus|Tornadus-Therian, L79, M|254/254\n|turn|1\n|c|☆Velvet Bunny|Good luck! Playing on **normal**. (PM me to change it.)\n|-message|chgabiru forfeited.\n|\n|win|Velvet Bunny\n",
+	"inputlog": ">start {\"formatid\":\"gen9rprandombattle\",\"seed\":\"sodium,c2281980d6945adb1c383f41528ccc82\"}\n>player p1 {\"name\":\"chgabiru\",\"avatar\":\"266\",\"rating\":0,\"seed\":\"sodium,8b955161bccbc83fadaf19ba29e44719\"}\n>player p2 {\"name\":\"Velvet Bunny\",\"avatar\":\"bunny.png\",\"rating\":0,\"seed\":\"sodium,87f1b5500771c34c31a4ad99f9cad24b\"}\n>chat ☆Velvet Bunny|Good luck! Playing on **normal**. (PM me to change it.)\n>forcelose p1",
+	"uploadtime": 1795736019
+}
