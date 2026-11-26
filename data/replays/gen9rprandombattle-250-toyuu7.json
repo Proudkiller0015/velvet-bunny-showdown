@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-250-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Normal",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Normal\n|j|☆Guvila\n|t:|1795731063\n|gametype|singles\n|badge|p2|gold|gen9rprandombattle|1-1\n|player|p1|Bunny Normal|bunny.png|1252\n|player|p2|Guvila|265|1368\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795731063\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Ambipom|Ambipom, L84, M|100/100\n|switch|p2a: Milotic|Milotic, L83, M|100/100\n|turn|1\n|c|☆Bunny Normal|Good luck! Playing on **normal**.\n|\n|t:|1795731075\n|switch|p2a: Falinks|Falinks, L84|100/100\n|-terastallize|p1a: Ambipom|Normal\n|move|p1a: Ambipom|Double-Edge|p2a: Falinks\n|-damage|p2a: Falinks|29/100\n|-damage|p1a: Ambipom|78/100|[from] Recoil\n|\n|upkeep\n|turn|2\n|\n|t:|1795731085\n|move|p1a: Ambipom|Double-Edge|p2a: Falinks\n|-damage|p2a: Falinks|0 fnt\n|faint|p2a: Falinks\n|-damage|p1a: Ambipom|70/100|[from] Recoil\n|\n|upkeep\n|\n|t:|1795731097\n|switch|p2a: Incineroar|Incineroar, L82, F|100/100\n|-ability|p2a: Incineroar|Intimidate|boost\n|-unboost|p1a: Ambipom|atk|1\n|turn|3\n|\n|t:|1795731102\n|switch|p1a: Garganacl|Garganacl, L80, M|100/100\n|move|p2a: Incineroar|Swords Dance|p2a: Incineroar\n|-boost|p2a: Incineroar|atk|2\n|\n|upkeep\n|turn|4\n|\n|t:|1795731118\n|switch|p2a: Meowscarada|Meowscarada, L78, F|100/100\n|move|p1a: Garganacl|Salt Cure|p2a: Meowscarada\n|-damage|p2a: Meowscarada|78/100\n|-start|p2a: Meowscarada|Salt Cure\n|\n|-damage|p2a: Meowscarada|66/100|[from] Salt Cure\n|upkeep\n|turn|5\n|\n|t:|1795731127\n|switch|p1a: Conkeldurr|Conkeldurr, L80, M|100/100\n|move|p2a: Meowscarada|Flower Trick|p1a: Conkeldurr\n|-start|p2a: Meowscarada|typechange|Grass|[from] ability: Protean\n|-crit|p1a: Conkeldurr\n|-damage|p1a: Conkeldurr|57/100\n|-damage|p2a: Meowscarada|56/100|[from] item: Life Orb\n|\n|-damage|p2a: Meowscarada|44/100|[from] Salt Cure\n|-status|p1a: Conkeldurr|brn|[from] item: Flame Orb\n|upkeep\n|turn|6\n",
+	"inputlog": null,
+	"uploadtime": 1795731131
+}
