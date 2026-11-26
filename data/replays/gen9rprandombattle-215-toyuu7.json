@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-215-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Easy",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆Guvila\n|t:|1795711755\n|gametype|singles\n|player|p1|Bunny Easy|bunny.png|1278\n|player|p2|Guvila|266|1278\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795711755\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Mightyena|Mightyena, L96, F|100/100\n|switch|p2a: Grafaiai|Grafaiai, L86, M|100/100\n|-ability|p1a: Mightyena|Intimidate|boost\n|-unboost|p2a: Grafaiai|atk|1\n|turn|1\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1795711778\n|move|p2a: Grafaiai|Swords Dance|p2a: Grafaiai\n|-boost|p2a: Grafaiai|atk|2\n|move|p1a: Mightyena|Jaw Lock|p2a: Grafaiai\n|-damage|p2a: Grafaiai|46/100\n|-activate|p1a: Mightyena|trapped\n|-activate|p2a: Grafaiai|trapped\n|\n|upkeep\n|turn|2\n|\n|t:|1795711785\n|move|p2a: Grafaiai|Low Kick|p1a: Mightyena\n|-supereffective|p1a: Mightyena\n|-damage|p1a: Mightyena|34/100\n|-damage|p2a: Grafaiai|36/100|[from] item: Life Orb\n|move|p1a: Mightyena|Jaw Lock|p2a: Grafaiai\n|-damage|p2a: Grafaiai|0 fnt\n|faint|p2a: Grafaiai\n|\n|upkeep\n|\n|t:|1795711795\n|switch|p2a: Iron Valiant|Iron Valiant, L78|100/100\n|turn|3\n|\n|t:|1795711800\n|move|p2a: Iron Valiant|Velvet Press|p1a: Mightyena\n|-supereffective|p1a: Mightyena\n|-damage|p1a: Mightyena|0 fnt\n|faint|p1a: Mightyena\n|-damage|p2a: Iron Valiant|91/100|[from] item: Life Orb\n|\n|upkeep\n|\n|t:|1795711800\n|switch|p1a: Latias|Latias, L79, F|100/100\n|turn|4\n|\n|t:|1795711808\n|-terastallize|p1a: Latias|Steel\n|move|p2a: Iron Valiant|Knock Off|p1a: Latias\n|-damage|p1a: Latias|59/100\n|-enditem|p1a: Latias|Soul Dew|[from] move: Knock Off|[of] p2a: Iron Valiant\n|-damage|p2a: Iron Valiant|81/100|[from] item: Life Orb\n|move|p1a: Latias|Draco Meteor|p2a: Iron Valiant\n|-immune|p2a: Iron Valiant\n|\n|upkeep\n|turn|5\n|\n|t:|1795711819\n|move|p2a: Iron Valiant|Close Combat|p1a: Latias\n|-supereffective|p1a: Latias\n|-damage|p1a: Latias|0 fnt\n|-unboost|p2a: Iron Valiant|def|1\n|-unboost|p2a: Iron Valiant|spd|1\n|faint|p1a: Latias\n|-damage|p2a: Iron Valiant|71/100|[from] item: Life Orb\n|\n|upkeep\n|\n|t:|1795711819\n|switch|p1a: Scream Tail|Scream Tail, L84|100/100\n|turn|6\n",
+	"inputlog": null,
+	"uploadtime": 1795711828
+}
