@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-236-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Easy",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆Guvila\n|t:|1795716645\n|gametype|singles\n|badge|p2|gold|gen9rprandombattle|1-1\n|player|p1|Bunny Easy|bunny.png|1162\n|player|p2|Guvila|266|1388\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795716646\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Serperior|Serperior, L79, F|100/100\n|switch|p2a: Groudon|Groudon, L72|100/100\n|-weather|SunnyDay|[from] ability: Drought|[of] p2a: Groudon\n|turn|1\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1795716655\n|move|p1a: Serperior|Tera Blast|p2a: Groudon\n|-damage|p2a: Groudon|77/100\n|-damage|p1a: Serperior|91/100|[from] item: Life Orb\n|move|p2a: Groudon|Heat Crash|p1a: Serperior\n|-supereffective|p1a: Serperior\n|-damage|p1a: Serperior|0 fnt\n|faint|p1a: Serperior\n|\n|-weather|SunnyDay|[upkeep]\n|upkeep\n|\n|t:|1795716655\n|switch|p1a: Magcargo|Magcargo, L95, M|100/100\n|turn|2\n|\n|t:|1795716669\n|move|p2a: Groudon|Precipice Blades|p1a: Magcargo\n|-supereffective|p1a: Magcargo\n|-damage|p1a: Magcargo|0 fnt\n|faint|p1a: Magcargo\n|\n|-weather|SunnyDay|[upkeep]\n|upkeep\n|\n|t:|1795716669\n|switch|p1a: Hawlucha|Hawlucha, L80, F|100/100\n|turn|3\n|\n|t:|1795716677\n|move|p1a: Hawlucha|Throat Chop|p2a: Groudon\n|-damage|p2a: Groudon|62/100\n|-start|p2a: Groudon|Throat Chop|[silent]\n|-damage|p1a: Hawlucha|84/100|[from] item: Rocky Helmet|[of] p2a: Groudon\n|move|p2a: Groudon|Precipice Blades|p1a: Hawlucha\n|-immune|p1a: Hawlucha\n|\n|-weather|SunnyDay|[upkeep]\n|upkeep\n|turn|4\n|\n|t:|1795716685\n|move|p1a: Hawlucha|Brave Bird|p2a: Groudon\n|-damage|p2a: Groudon|31/100\n|-damage|p1a: Hawlucha|68/100|[from] item: Rocky Helmet|[of] p2a: Groudon\n|-damage|p1a: Hawlucha|57/100|[from] Recoil\n|move|p2a: Groudon|Heat Crash|p1a: Hawlucha\n|-damage|p1a: Hawlucha|0 fnt\n|faint|p1a: Hawlucha\n|\n|-weather|SunnyDay|[upkeep]\n|-end|p2a: Groudon|Throat Chop|[silent]\n|upkeep\n|\n|t:|1795716685\n|switch|p1a: Barraskewda|Barraskewda, L81, M|100/100\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1795716688
+}
