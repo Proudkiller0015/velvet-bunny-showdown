@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-220-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Easy",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆Guvila\n|t:|1795712571\n|gametype|singles\n|player|p1|Bunny Easy|bunny.png|1286\n|player|p2|Guvila|266|1270\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795712571\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Dewgong|Dewgong, L94, F|100/100\n|switch|p2a: Drifblim|Drifblim, L86, F|100/100\n|turn|1\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1795712584\n|switch|p2a: Tauros|Tauros-Paldea-Aqua, L81, M|100/100\n|move|p1a: Dewgong|Wish|p1a: Dewgong\n|\n|upkeep\n|turn|2\n|\n|t:|1795712592\n|move|p2a: Tauros|Bulk Up|p2a: Tauros\n|-boost|p2a: Tauros|atk|1\n|-boost|p2a: Tauros|def|1\n|move|p1a: Dewgong|Wish||[still]\n|-fail|p1a: Dewgong\n|\n|upkeep\n|turn|3\n|\n|t:|1795712597\n|move|p2a: Tauros|Bulk Up|p2a: Tauros\n|-boost|p2a: Tauros|atk|1\n|-boost|p2a: Tauros|def|1\n|move|p1a: Dewgong|Scald|p2a: Tauros\n|-resisted|p2a: Tauros\n|-damage|p2a: Tauros|79/100\n|-status|p2a: Tauros|brn\n|\n|-damage|p2a: Tauros|73/100 brn|[from] brn\n|upkeep\n|turn|4\n|\n|t:|1795712606\n|move|p2a: Tauros|Bulk Up|p2a: Tauros\n|-boost|p2a: Tauros|atk|1\n|-boost|p2a: Tauros|def|1\n|move|p1a: Dewgong|Scald|p2a: Tauros\n|-resisted|p2a: Tauros\n|-damage|p2a: Tauros|52/100 brn\n|\n|-damage|p2a: Tauros|46/100 brn|[from] brn\n|upkeep\n|-enditem|p2a: Tauros|Sitrus Berry|[eat]\n|-heal|p2a: Tauros|71/100 brn|[from] item: Sitrus Berry\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1795712608
+}
