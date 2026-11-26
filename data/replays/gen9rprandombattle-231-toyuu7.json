@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-231-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Easy",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆Guvila\n|t:|1795715568\n|gametype|singles\n|badge|p2|silver|gen9rprandombattle|2-2\n|player|p1|Bunny Easy|bunny.png|1220\n|player|p2|Guvila|266|1336\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795715568\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Zarude|Zarude-Dada, L77|100/100\n|switch|p2a: Heatran|Heatran, L79, M|100/100\n|-item|p2a: Heatran|Air Balloon\n|turn|1\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1795715577\n|move|p1a: Zarude|Knock Off|p2a: Heatran\n|-damage|p2a: Heatran|65/100\n|-enditem|p2a: Heatran|Air Balloon\n|move|p2a: Heatran|Magma Storm|p1a: Zarude\n|-supereffective|p1a: Zarude\n|-damage|p1a: Zarude|14/100\n|-activate|p1a: Zarude|move: Magma Storm|[of] p2a: Heatran\n|\n|-heal|p1a: Zarude|21/100|[from] item: Leftovers\n|-damage|p1a: Zarude|8/100|[from] move: Magma Storm|[partiallytrapped]\n|upkeep\n|turn|2\n|\n|t:|1795715587\n|move|p1a: Zarude|Power Whip|p2a: Heatran|[miss]\n|-miss|p1a: Zarude|p2a: Heatran\n|move|p2a: Heatran|Magma Storm|p1a: Zarude\n|-supereffective|p1a: Zarude\n|-damage|p1a: Zarude|0 fnt\n|faint|p1a: Zarude\n|\n|upkeep\n|\n|t:|1795715587\n|switch|p1a: Bruxish|Bruxish, L85, F|100/100\n|turn|3\n|\n|t:|1795715599\n|switch|p2a: Shaymin|Shaymin-Sky, L73|100/100\n|move|p1a: Bruxish|Swords Dance|p1a: Bruxish\n|-boost|p1a: Bruxish|atk|2\n|\n|upkeep\n|turn|4\n|\n|t:|1795715608\n|-terastallize|p1a: Bruxish|Psychic\n|move|p2a: Shaymin|Seed Flare|p1a: Bruxish\n|-damage|p1a: Bruxish|17/100\n|-unboost|p1a: Bruxish|spd|2\n|move|p1a: Bruxish|Wave Crash|p2a: Shaymin\n|-resisted|p2a: Shaymin\n|-damage|p2a: Shaymin|13/100\n|-damage|p1a: Bruxish|0 fnt|[from] Recoil\n|faint|p1a: Bruxish\n|\n|upkeep\n|\n|t:|1795715608\n|switch|p1a: Squawkabilly|Squawkabilly, L85, F|100/100\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1795715608
+}
