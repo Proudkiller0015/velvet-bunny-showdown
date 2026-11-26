@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-246-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Normal",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Normal\n|j|☆Guvila\n|t:|1795730548\n|gametype|singles\n|badge|p2|gold|gen9rprandombattle|1-1\n|player|p1|Bunny Normal|bunny.png|1238\n|player|p2|Guvila|265|1385\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795730548\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Sandy Shocks|Sandy Shocks, L80|100/100\n|switch|p2a: Tropius|Tropius, L91, F|100/100\n|turn|1\n|c|☆Bunny Normal|Good luck! Playing on **normal**.\n|\n|t:|1795730567\n|-end|p1a: Sandy Shocks|Protosynthesis|[silent]\n|switch|p1a: Cetitan|Cetitan, L82, F|100/100\n|move|p2a: Tropius|Dragon Dance|p2a: Tropius\n|-boost|p2a: Tropius|atk|1\n|-boost|p2a: Tropius|spe|1\n|\n|upkeep\n|turn|2\n|\n|t:|1795730584\n|switch|p2a: Hitmonlee|Hitmonlee, L85, M|100/100\n|-terastallize|p1a: Cetitan|Ice\n|move|p1a: Cetitan|Rime Cleaver|p2a: Hitmonlee\n|-damage|p2a: Hitmonlee|13/100\n|\n|upkeep\n|turn|3\n|\n|t:|1795730592\n|move|p2a: Hitmonlee|Drain Punch|p1a: Cetitan\n|-supereffective|p1a: Cetitan\n|-damage|p1a: Cetitan|13/100\n|-heal|p2a: Hitmonlee|94/100|[from] drain|[of] p1a: Cetitan\n|-enditem|p1a: Cetitan|Sitrus Berry|[eat]\n|-heal|p1a: Cetitan|38/100|[from] item: Sitrus Berry\n|move|p1a: Cetitan|Rime Cleaver|p2a: Hitmonlee\n|-damage|p2a: Hitmonlee|7/100\n|\n|upkeep\n|turn|4\n|\n|t:|1795730601\n|move|p2a: Hitmonlee|Drain Punch|p1a: Cetitan\n|-supereffective|p1a: Cetitan\n|-damage|p1a: Cetitan|0 fnt\n|-heal|p2a: Hitmonlee|41/100|[from] drain|[of] p1a: Cetitan\n|faint|p1a: Cetitan\n|\n|upkeep\n|\n|t:|1795730601\n|switch|p1a: Passimian|Passimian, L83, M|100/100\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1795730611
+}
