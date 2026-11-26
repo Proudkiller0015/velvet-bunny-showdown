@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-218-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Easy",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆Guvila\n|t:|1795712326\n|gametype|singles\n|player|p1|Bunny Easy|bunny.png|1290\n|player|p2|Guvila|266|1266\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795712326\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Glaceon|Glaceon, L80, M|100/100\n|switch|p2a: Feraligatr|Feraligatr, L79, M|100/100\n|-weather|Snowscape|[from] ability: Diamond Dust|[of] p1a: Glaceon\n|turn|1\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1795712335\n|-terastallize|p1a: Glaceon|Ice\n|move|p1a: Glaceon|Blizzard|p2a: Feraligatr\n|-resisted|p2a: Feraligatr\n|-crit|p2a: Feraligatr\n|-damage|p2a: Feraligatr|46/100\n|-status|p2a: Feraligatr|frz\n|cant|p2a: Feraligatr|frz\n|\n|-weather|Snowscape|[upkeep]\n|upkeep\n|turn|2\n|\n|t:|1795712344\n|move|p1a: Glaceon|Blizzard|p2a: Feraligatr\n|-resisted|p2a: Feraligatr\n|-damage|p2a: Feraligatr|8/100 frz\n|cant|p2a: Feraligatr|frz\n|\n|-weather|Snowscape|[upkeep]\n|upkeep\n|turn|3\n|\n|t:|1795712350\n|move|p1a: Glaceon|Blizzard|p2a: Feraligatr\n|-resisted|p2a: Feraligatr\n|-crit|p2a: Feraligatr\n|-damage|p2a: Feraligatr|0 fnt\n|faint|p2a: Feraligatr\n|\n|-weather|Snowscape|[upkeep]\n|upkeep\n|\n|t:|1795712358\n|switch|p2a: Orthworm|Orthworm, L88, F|100/100\n|turn|4\n|\n|t:|1795712362\n|move|p1a: Glaceon|Blizzard|p2a: Orthworm\n|-resisted|p2a: Orthworm\n|-damage|p2a: Orthworm|52/100\n|move|p2a: Orthworm|Iron Tail|p1a: Glaceon\n|-supereffective|p1a: Glaceon\n|-crit|p1a: Glaceon\n|-damage|p1a: Glaceon|23/100\n|\n|-weather|Snowscape|[upkeep]\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1795712368
+}
