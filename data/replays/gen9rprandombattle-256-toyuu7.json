@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-256-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Normal",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Normal\n|j|☆Guvila\n|t:|1795731843\n|gametype|singles\n|badge|p2|gold|gen9rprandombattle|1-1\n|player|p1|Bunny Normal|bunny.png|1254\n|player|p2|Guvila|265|1365\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795731844\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Baxcalibur|Baxcalibur, L75, M|100/100\n|switch|p2a: Sandaconda|Sandaconda, L84, M|100/100\n|turn|1\n|c|☆Bunny Normal|Good luck! Playing on **normal**.\n|\n|t:|1795731854\n|move|p1a: Baxcalibur|Icicle Crash|p2a: Sandaconda\n|-supereffective|p2a: Sandaconda\n|-damage|p2a: Sandaconda|7/100\n|move|p2a: Sandaconda|Glare|p1a: Baxcalibur\n|-status|p1a: Baxcalibur|par\n|\n|-heal|p2a: Sandaconda|13/100|[from] item: Leftovers\n|upkeep\n|turn|2\n|\n|t:|1795731862\n|move|p2a: Sandaconda|Stone Edge|p1a: Baxcalibur\n|-supereffective|p1a: Baxcalibur\n|-damage|p1a: Baxcalibur|41/100 par\n|cant|p1a: Baxcalibur|par\n|\n|-heal|p2a: Sandaconda|19/100|[from] item: Leftovers\n|upkeep\n|turn|3\n|\n|t:|1795731869\n|move|p2a: Sandaconda|Stone Edge|p1a: Baxcalibur\n|-supereffective|p1a: Baxcalibur\n|-damage|p1a: Baxcalibur|0 fnt\n|faint|p1a: Baxcalibur\n|\n|-heal|p2a: Sandaconda|25/100|[from] item: Leftovers\n|upkeep\n|\n|t:|1795731869\n|switch|p1a: Flapple|Flapple, L88, M|100/100\n|turn|4\n|\n|t:|1795731880\n|move|p1a: Flapple|Grav Apple|p2a: Sandaconda\n|-supereffective|p2a: Sandaconda\n|-damage|p2a: Sandaconda|0 fnt\n|faint|p2a: Sandaconda\n|\n|upkeep\n|\n|t:|1795731890\n|switch|p2a: Chi-Yu|Chi-Yu, L77|100/100\n|-ability|p2a: Chi-Yu|Beads of Ruin\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1795731894
+}
