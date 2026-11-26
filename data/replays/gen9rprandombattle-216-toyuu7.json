@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-216-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Easy",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆Guvila\n|t:|1795712010\n|gametype|singles\n|player|p1|Bunny Easy|bunny.png|1294\n|player|p2|Guvila|266|1262\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795712010\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Blissey|Blissey, L85, F|572/572\n|switch|p2a: Manaphy|Manaphy, L78|284/284\n|turn|1\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1795712027\n|switch|p2a: Lumineon|Lumineon, L93, F|279/279\n|move|p1a: Blissey|Thunder Wave|p2a: Lumineon\n|-status|p2a: Lumineon|par\n|\n|upkeep\n|turn|2\n|\n|t:|1795712034\n|move|p1a: Blissey|Soft-Boiled||[still]\n|-fail|p1a: Blissey|heal\n|move|p2a: Lumineon|Encore|p1a: Blissey\n|-start|p1a: Blissey|Encore\n|\n|upkeep\n|turn|3\n|-message|Guvila forfeited.\n|\n|win|Bunny Easy\n",
+	"inputlog": ">start {\"formatid\":\"gen9rprandombattle\",\"seed\":\"sodium,203808b06ec48e5af9d77a77adc12c0a\",\"rated\":\"Rated battle\"}\n>player p1 {\"name\":\"Bunny Easy\",\"avatar\":\"bunny.png\",\"rating\":1294,\"seed\":\"sodium,b0f307b7a0ccafad2228a67da7f9796f\"}\n>player p2 {\"name\":\"Guvila\",\"avatar\":\"266\",\"rating\":1262,\"seed\":\"sodium,821f470027642e560de6c780c682cc23\"}\n>chat ☆Bunny Easy|Good luck! Playing on **easy**.\n>p1 move thunderwave\n>p2 switch 5\n>p1 move softboiled\n>p2 move encore\n>forcelose p2",
+	"uploadtime": 1795712045
+}
