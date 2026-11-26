@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-222-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Easy",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆Guvila\n|t:|1795712935\n|gametype|singles\n|player|p1|Bunny Easy|bunny.png|1254\n|player|p2|Guvila|266|1302\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795712935\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Hoopa|Hoopa-Unbound, L80|100/100\n|switch|p2a: Glastrier|Glastrier, L86|100/100\n|turn|1\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1795712959\n|move|p1a: Hoopa|Gunk Shot|p2a: Glastrier\n|-damage|p2a: Glastrier|71/100\n|move|p2a: Glastrier|Icicle Crash|p1a: Hoopa\n|-damage|p1a: Hoopa|4/100\n|\n|upkeep\n|turn|2\n|\n|t:|1795712965\n|move|p1a: Hoopa|Gunk Shot|p2a: Glastrier\n|-damage|p2a: Glastrier|46/100\n|-status|p2a: Glastrier|psn\n|move|p2a: Glastrier|Icicle Crash|p1a: Hoopa\n|-damage|p1a: Hoopa|0 fnt\n|faint|p1a: Hoopa\n|-ability|p2a: Glastrier|Chilling Neigh|boost\n|-boost|p2a: Glastrier|atk|1\n|\n|-damage|p2a: Glastrier|33/100 psn|[from] psn\n|upkeep\n|\n|t:|1795712965\n|switch|p1a: Zacian|Zacian-Crowned, L64|100/100\n|-ability|p1a: Zacian|Intrepid Sword|boost\n|-boost|p1a: Zacian|atk|1\n|turn|3\n|\n|t:|1795712980\n|move|p1a: Zacian|Play Rough|p2a: Glastrier\n|-damage|p2a: Glastrier|5/100 psn\n|move|p2a: Glastrier|Icicle Crash|p1a: Zacian|[miss]\n|-miss|p2a: Glastrier|p1a: Zacian\n|\n|-damage|p2a: Glastrier|0 fnt|[from] psn\n|faint|p2a: Glastrier\n|upkeep\n|\n|t:|1795712998\n|switch|p2a: Toxtricity|Toxtricity, L82, M|100/100\n|turn|4\n|\n|t:|1795713002\n|move|p1a: Zacian|Behemoth Blade|p2a: Toxtricity\n|-resisted|p2a: Toxtricity\n|-damage|p2a: Toxtricity|71/100\n|move|p2a: Toxtricity|Shift Gear|p2a: Toxtricity\n|-boost|p2a: Toxtricity|spe|2\n|-boost|p2a: Toxtricity|atk|1\n|\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1795713008
+}
