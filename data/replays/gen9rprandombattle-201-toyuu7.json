@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-201-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Easy",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆Guvila\n|t:|1795701184\n|gametype|singles\n|badge|p2|bronze|gen9rprandombattle|3-3\n|player|p1|Bunny Easy|bunny.png|1201\n|player|p2|Guvila|265|1317\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795701184\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Palafin|Palafin, L77, M|100/100\n|switch|p2a: Comfey|Comfey, L85, M|100/100\n|turn|1\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1795701195\n|move|p1a: Palafin|Jet Punch|p2a: Comfey\n|-damage|p2a: Comfey|84/100\n|move|p2a: Comfey|Calm Mind|p2a: Comfey\n|-boost|p2a: Comfey|spa|1\n|-boost|p2a: Comfey|spd|1\n|\n|-heal|p2a: Comfey|90/100|[from] item: Leftovers\n|upkeep\n|turn|2\n|\n|t:|1795701202\n|move|p1a: Palafin|Jet Punch|p2a: Comfey\n|-damage|p2a: Comfey|73/100\n|move|p2a: Comfey|Calm Mind|p2a: Comfey\n|-boost|p2a: Comfey|spa|1\n|-boost|p2a: Comfey|spd|1\n|\n|-heal|p2a: Comfey|79/100|[from] item: Leftovers\n|upkeep\n|turn|3\n|\n|t:|1795701208\n|move|p2a: Comfey|Calm Mind|p2a: Comfey\n|-boost|p2a: Comfey|spa|1\n|-boost|p2a: Comfey|spd|1\n|move|p1a: Palafin|Bulk Up|p1a: Palafin\n|-boost|p1a: Palafin|atk|1\n|-boost|p1a: Palafin|def|1\n|\n|-heal|p2a: Comfey|85/100|[from] item: Leftovers\n|upkeep\n|turn|4\n|\n|t:|1795701216\n|move|p1a: Palafin|Jet Punch|p2a: Comfey\n|-damage|p2a: Comfey|57/100\n|move|p2a: Comfey|Calm Mind|p2a: Comfey\n|-boost|p2a: Comfey|spa|1\n|-boost|p2a: Comfey|spd|1\n|\n|-heal|p2a: Comfey|63/100|[from] item: Leftovers\n|upkeep\n|turn|5\n|\n|t:|1795701223\n|move|p2a: Comfey|Calm Mind|p2a: Comfey\n|-boost|p2a: Comfey|spa|1\n|-boost|p2a: Comfey|spd|1\n|move|p1a: Palafin|Ice Punch|p2a: Comfey\n|-damage|p2a: Comfey|40/100\n|\n|-heal|p2a: Comfey|47/100|[from] item: Leftovers\n|upkeep\n|turn|6\n",
+	"inputlog": null,
+	"uploadtime": 1795701227
+}
