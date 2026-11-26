@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-196-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Easy",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆Guvila\n|t:|1795695099\n|gametype|singles\n|badge|p2|bronze|gen9rprandombattle|3-3\n|player|p1|Bunny Easy|bunny.png|1176\n|player|p2|Guvila|265|1326\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795695100\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Weavile|Weavile, L79, F|100/100\n|switch|p2a: Uxie|Uxie, L83|100/100\n|turn|1\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1795695107\n|-terastallize|p1a: Weavile|Dark\n|move|p1a: Weavile|Knock Off|p2a: Uxie\n|-supereffective|p2a: Uxie\n|-damage|p2a: Uxie|13/100\n|-enditem|p2a: Uxie|Leftovers|[from] move: Knock Off|[of] p1a: Weavile\n|move|p2a: Uxie|Stealth Rock|p1a: Weavile\n|-sidestart|p1: Bunny Easy|move: Stealth Rock\n|\n|upkeep\n|turn|2\n|\n|t:|1795695115\n|move|p1a: Weavile|Ice Shard|p2a: Uxie\n|-damage|p2a: Uxie|0 fnt\n|faint|p2a: Uxie\n|\n|upkeep\n|\n|t:|1795695120\n|switch|p2a: Mienshao|Mienshao, L83, F|100/100\n|turn|3\n|\n|t:|1795695124\n|move|p1a: Weavile|Swords Dance|p1a: Weavile\n|-boost|p1a: Weavile|atk|2\n|move|p2a: Mienshao|Swords Dance|p2a: Mienshao\n|-boost|p2a: Mienshao|atk|2\n|\n|upkeep\n|turn|4\n|\n|t:|1795695130\n|move|p1a: Weavile|Knock Off|p2a: Mienshao\n|-resisted|p2a: Mienshao\n|-damage|p2a: Mienshao|24/100\n|-enditem|p2a: Mienshao|Life Orb|[from] move: Knock Off|[of] p1a: Weavile\n|move|p2a: Mienshao|Close Combat|p1a: Weavile\n|-supereffective|p1a: Weavile\n|-damage|p1a: Weavile|0 fnt\n|-unboost|p2a: Mienshao|def|1\n|-unboost|p2a: Mienshao|spd|1\n|faint|p1a: Weavile\n|\n|upkeep\n|\n|t:|1795695130\n|switch|p1a: Exeggutor|Exeggutor-Alola, L89, M|100/100\n|-damage|p1a: Exeggutor|88/100|[from] Stealth Rock\n|turn|5\n|\n|t:|1795695144\n|move|p2a: Mienshao|Poison Jab|p1a: Exeggutor\n|-supereffective|p1a: Exeggutor\n|-damage|p1a: Exeggutor|1/100\n|move|p1a: Exeggutor|Draco Meteor|p2a: Mienshao\n|-damage|p2a: Mienshao|0 fnt\n|-unboost|p1a: Exeggutor|spa|2\n|faint|p2a: Mienshao\n|\n|upkeep\n",
+	"inputlog": null,
+	"uploadtime": 1795695146
+}
