@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-190-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Easy",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆Guvila\n|t:|1795691782\n|gametype|singles\n|badge|p2|gold|gen9rprandombattle|1-1\n|player|p1|Bunny Easy|bunny.png|1119\n|player|p2|Guvila|265|1345\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795691782\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Klefki|Klefki, L84, F|100/100\n|switch|p2a: Deoxys|Deoxys-Attack, L72|100/100\n|-ability|p2a: Deoxys|Pressure\n|turn|1\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1795691794\n|move|p2a: Deoxys|Knock Off|p1a: Klefki\n|-resisted|p1a: Klefki\n|-damage|p1a: Klefki|76/100\n|-enditem|p1a: Klefki|Leftovers|[from] move: Knock Off|[of] p2a: Deoxys\n|-damage|p2a: Deoxys|91/100|[from] item: Life Orb\n|move|p1a: Klefki|Play Rough|p2a: Deoxys\n|-damage|p2a: Deoxys|0 fnt\n|faint|p2a: Deoxys\n|\n|upkeep\n|\n|t:|1795691813\n|switch|p2a: Walking Wake|Walking Wake, L79|100/100\n|turn|2\n|\n|t:|1795691819\n|move|p2a: Walking Wake|Sunny Day|p2a: Walking Wake\n|-weather|SunnyDay\n|-activate|p2a: Walking Wake|ability: Protosynthesis\n|-start|p2a: Walking Wake|protosynthesisspa\n|move|p1a: Klefki|Play Rough|p2a: Walking Wake\n|-supereffective|p2a: Walking Wake\n|-damage|p2a: Walking Wake|37/100\n|\n|-weather|SunnyDay|[upkeep]\n|upkeep\n|turn|3\n|\n|t:|1795691828\n|move|p1a: Klefki|Magnet Rise|p1a: Klefki\n|-start|p1a: Klefki|Magnet Rise\n|move|p2a: Walking Wake|Flamethrower|p1a: Klefki\n|-supereffective|p1a: Klefki\n|-damage|p1a: Klefki|0 fnt\n|faint|p1a: Klefki\n|-damage|p2a: Walking Wake|27/100|[from] item: Life Orb\n|\n|-weather|SunnyDay|[upkeep]\n|upkeep\n|\n|t:|1795691828\n|switch|p1a: Kingdra|Kingdra, L84, F|100/100\n|turn|4\n|\n|t:|1795691838\n|move|p2a: Walking Wake|Draco Meteor|p1a: Kingdra\n|-supereffective|p1a: Kingdra\n|-damage|p1a: Kingdra|0 fnt\n|-unboost|p2a: Walking Wake|spa|2\n|faint|p1a: Kingdra\n|-damage|p2a: Walking Wake|17/100|[from] item: Life Orb\n|\n|-weather|SunnyDay|[upkeep]\n|upkeep\n|\n|t:|1795691838\n|switch|p1a: Necrozma|Necrozma-Dawn-Wings, L76|100/100\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1795691845
+}
