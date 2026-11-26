@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-221-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Easy",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆Guvila\n|t:|1795712757\n|gametype|singles\n|player|p1|Bunny Easy|bunny.png|1269\n|player|p2|Guvila|266|1287\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795712757\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Cryogonal|Cryogonal, L89|100/100\n|switch|p2a: Scizor|Scizor, L79, F|100/100\n|turn|1\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1795712763\n|-terastallize|p1a: Cryogonal|Poison\n|move|p1a: Cryogonal|Freeze-Dry|p2a: Scizor\n|-resisted|p2a: Scizor\n|-damage|p2a: Scizor|79/100\n|move|p2a: Scizor|Close Combat|p1a: Cryogonal\n|-resisted|p1a: Cryogonal\n|-damage|p1a: Cryogonal|66/100\n|-unboost|p2a: Scizor|def|1\n|-unboost|p2a: Scizor|spd|1\n|\n|upkeep\n|turn|2\n|\n|t:|1795712785\n|switch|p2a: Slowking|Slowking-Galar, L85, M|100/100\n|move|p1a: Cryogonal|Freeze-Dry|p2a: Slowking\n|-damage|p2a: Slowking|86/100\n|\n|upkeep\n|turn|3\n|\n|t:|1795712792\n|move|p1a: Cryogonal|Freeze-Dry|p2a: Slowking\n|-damage|p2a: Slowking|71/100\n|move|p2a: Slowking|Psychic Noise|p1a: Cryogonal\n|-supereffective|p1a: Cryogonal\n|-damage|p1a: Cryogonal|23/100\n|-start|p1a: Cryogonal|move: Heal Block\n|\n|upkeep\n|turn|4\n|\n|t:|1795712801\n|move|p1a: Cryogonal|Freeze-Dry|p2a: Slowking\n|-damage|p2a: Slowking|55/100\n|move|p2a: Slowking|Psychic Noise|p1a: Cryogonal\n|-supereffective|p1a: Cryogonal\n|-damage|p1a: Cryogonal|0 fnt\n|faint|p1a: Cryogonal\n|\n|upkeep\n|\n|t:|1795712801\n|switch|p1a: Shiftry|Shiftry, L89, F|100/100\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1795712808
+}
