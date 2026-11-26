@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-213-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Easy",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆Guvila\n|t:|1795703403\n|gametype|singles\n|badge|p2|bronze|gen9rprandombattle|3-3\n|player|p1|Bunny Easy|bunny.png|1241\n|player|p2|Guvila|265|1315\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795703403\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Comfey|Comfey, L85, F|100/100\n|switch|p2a: Hitmonchan|Hitmonchan, L87, M|100/100\n|turn|1\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1795703411\n|move|p1a: Comfey|Solar Nectar|p2a: Hitmonchan\n|-damage|p2a: Hitmonchan|83/100\n|move|p2a: Hitmonchan|Swords Dance|p2a: Hitmonchan\n|-boost|p2a: Hitmonchan|atk|2\n|\n|upkeep\n|turn|2\n|\n|t:|1795703418\n|move|p1a: Comfey|Velvet Press|p2a: Hitmonchan\n|-supereffective|p2a: Hitmonchan\n|-damage|p2a: Hitmonchan|11/100\n|move|p2a: Hitmonchan|Drain Punch|p1a: Comfey\n|-resisted|p1a: Comfey\n|-damage|p1a: Comfey|40/100\n|-heal|p2a: Hitmonchan|41/100|[from] drain|[of] p1a: Comfey\n|-damage|p2a: Hitmonchan|32/100|[from] item: Life Orb\n|\n|-heal|p1a: Comfey|47/100|[from] item: Leftovers\n|upkeep\n|turn|3\n|\n|t:|1795703427\n|move|p1a: Comfey|Velvet Press|p2a: Hitmonchan\n|-supereffective|p2a: Hitmonchan\n|-damage|p2a: Hitmonchan|0 fnt\n|faint|p2a: Hitmonchan\n|\n|-heal|p1a: Comfey|53/100|[from] item: Leftovers\n|upkeep\n|\n|t:|1795703435\n|switch|p2a: Illumise|Illumise, L91, F|100/100\n|turn|4\n|\n|t:|1795703438\n|move|p2a: Illumise|Thunder Wave|p1a: Comfey\n|-status|p1a: Comfey|par\n|move|p1a: Comfey|Velvet Press|p2a: Illumise\n|-damage|p2a: Illumise|69/100\n|\n|-heal|p1a: Comfey|59/100 par|[from] item: Leftovers\n|upkeep\n|turn|5\n|\n|t:|1795703446\n|move|p2a: Illumise|Bug Buzz|p1a: Comfey\n|-resisted|p1a: Comfey\n|-damage|p1a: Comfey|44/100 par\n|move|p1a: Comfey|Velvet Press|p2a: Illumise\n|-crit|p2a: Illumise\n|-damage|p2a: Illumise|18/100\n|\n|-heal|p1a: Comfey|50/100 par|[from] item: Leftovers\n|upkeep\n|turn|6\n",
+	"inputlog": null,
+	"uploadtime": 1795703447
+}
