@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-232-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Easy",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆Guvila\n|t:|1795715779\n|gametype|singles\n|badge|p2|gold|gen9rprandombattle|1-1\n|player|p1|Bunny Easy|bunny.png|1209\n|player|p2|Guvila|266|1347\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795715780\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Bellossom|Bellossom, L84, F|100/100\n|switch|p2a: Ceruledge|Ceruledge, L78, F|100/100\n|turn|1\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1795715790\n|-terastallize|p1a: Bellossom|Poison\n|move|p2a: Ceruledge|Swords Dance|p2a: Ceruledge\n|-boost|p2a: Ceruledge|atk|2\n|move|p1a: Bellossom|Sludge Bomb|p2a: Ceruledge\n|-resisted|p2a: Ceruledge\n|-damage|p2a: Ceruledge|84/100\n|\n|upkeep\n|turn|2\n|\n|t:|1795715797\n|move|p2a: Ceruledge|Swords Dance|p2a: Ceruledge\n|-boost|p2a: Ceruledge|atk|2\n|move|p1a: Bellossom|Sludge Bomb|p2a: Ceruledge\n|-resisted|p2a: Ceruledge\n|-damage|p2a: Ceruledge|65/100\n|\n|upkeep\n|turn|3\n|\n|t:|1795715804\n|move|p2a: Ceruledge|Swords Dance|p2a: Ceruledge\n|-boost|p2a: Ceruledge|atk|2\n|move|p1a: Bellossom|Sludge Bomb|p2a: Ceruledge\n|-resisted|p2a: Ceruledge\n|-damage|p2a: Ceruledge|45/100\n|\n|upkeep\n|turn|4\n|\n|t:|1795715811\n|move|p2a: Ceruledge|Bitter Blade|p1a: Bellossom\n|-damage|p1a: Bellossom|0 fnt\n|-heal|p2a: Ceruledge|99/100|[from] drain|[of] p1a: Bellossom\n|faint|p1a: Bellossom\n|\n|upkeep\n|\n|t:|1795715811\n|switch|p1a: Torkoal|Torkoal, L88, M|100/100\n|-weather|SunnyDay|[from] ability: Drought|[of] p1a: Torkoal\n|turn|5\n|\n|t:|1795715820\n|move|p2a: Ceruledge|Poltergeist|p1a: Torkoal\n|-activate|p1a: Torkoal|move: Poltergeist|Heavy-Duty Boots\n|-damage|p1a: Torkoal|0 fnt\n|faint|p1a: Torkoal\n|\n|-weather|SunnyDay|[upkeep]\n|upkeep\n|\n|t:|1795715820\n|switch|p1a: Arceus|Arceus-Flying, L69|100/100\n|turn|6\n",
+	"inputlog": null,
+	"uploadtime": 1795715828
+}
