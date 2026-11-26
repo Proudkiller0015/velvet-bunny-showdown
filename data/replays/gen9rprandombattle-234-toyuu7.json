@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-234-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Easy",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆Guvila\n|t:|1795716239\n|gametype|singles\n|badge|p2|gold|gen9rprandombattle|1-1\n|player|p1|Bunny Easy|bunny.png|1185\n|player|p2|Guvila|266|1368\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795716239\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Pachirisu|Pachirisu, L96, M|100/100\n|switch|p2a: Electivire|Electivire, L84, M|100/100\n|turn|1\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1795716253\n|move|p1a: Pachirisu|Discharge|p2a: Electivire\n|-ability|p2a: Electivire|Motor Drive|boost\n|-boost|p2a: Electivire|spe|1\n|move|p2a: Electivire|Earthquake|p1a: Pachirisu\n|-supereffective|p1a: Pachirisu\n|-damage|p1a: Pachirisu|21/100\n|-damage|p2a: Electivire|91/100|[from] item: Life Orb\n|\n|upkeep\n|turn|2\n|\n|t:|1795716261\n|-terastallize|p1a: Pachirisu|Flying\n|move|p2a: Electivire|Earthquake|p1a: Pachirisu\n|-immune|p1a: Pachirisu\n|move|p1a: Pachirisu|Discharge|p2a: Electivire\n|-ability|p2a: Electivire|Motor Drive|boost\n|-boost|p2a: Electivire|spe|1\n|\n|upkeep\n|turn|3\n|\n|t:|1795716269\n|move|p2a: Electivire|Ice Punch|p1a: Pachirisu\n|-supereffective|p1a: Pachirisu\n|-damage|p1a: Pachirisu|0 fnt\n|faint|p1a: Pachirisu\n|-damage|p2a: Electivire|81/100|[from] item: Life Orb\n|\n|upkeep\n|\n|t:|1795716269\n|switch|p1a: Stantler|Stantler, L92, F|100/100\n|-ability|p1a: Stantler|Intimidate|boost\n|-unboost|p2a: Electivire|atk|1\n|turn|4\n|\n|t:|1795716279\n|move|p2a: Electivire|Bulk Up|p2a: Electivire\n|-boost|p2a: Electivire|atk|1\n|-boost|p2a: Electivire|def|1\n|move|p1a: Stantler|Body Slam|p2a: Electivire\n|-damage|p2a: Electivire|48/100\n|\n|upkeep\n|turn|5\n|\n|t:|1795716286\n|move|p2a: Electivire|Bulk Up|p2a: Electivire\n|-boost|p2a: Electivire|atk|1\n|-boost|p2a: Electivire|def|1\n|move|p1a: Stantler|Earthquake|p2a: Electivire\n|-supereffective|p2a: Electivire\n|-damage|p2a: Electivire|7/100\n|\n|upkeep\n|turn|6\n",
+	"inputlog": null,
+	"uploadtime": 1795716288
+}
