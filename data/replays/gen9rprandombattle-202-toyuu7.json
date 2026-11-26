@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-202-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Easy",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆Guvila\n|t:|1795701361\n|gametype|singles\n|badge|p2|bronze|gen9rprandombattle|3-3\n|player|p1|Bunny Easy|bunny.png|1190\n|player|p2|Guvila|265|1327\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795701361\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Wugtrio|Wugtrio, L91, M|100/100\n|switch|p2a: Skeledirge|Skeledirge, L79, M|100/100\n|turn|1\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1795701387\n|switch|p2a: Smeargle|Smeargle, L95, F|100/100\n|move|p1a: Wugtrio|Liquidation|p2a: Smeargle\n|-damage|p2a: Smeargle|7/100\n|-damage|p1a: Wugtrio|91/100|[from] item: Life Orb\n|\n|upkeep\n|turn|2\n|\n|t:|1795701394\n|move|p1a: Wugtrio|Liquidation|p2a: Smeargle\n|-damage|p2a: Smeargle|0 fnt\n|faint|p2a: Smeargle\n|-damage|p1a: Wugtrio|81/100|[from] item: Life Orb\n|\n|upkeep\n|\n|t:|1795701403\n|switch|p2a: Primarina|Primarina, L83, F|100/100\n|turn|3\n|\n|t:|1795701406\n|move|p1a: Wugtrio|Scald|p2a: Primarina\n|-resisted|p2a: Primarina\n|-damage|p2a: Primarina|88/100\n|-damage|p1a: Wugtrio|71/100|[from] item: Life Orb\n|move|p2a: Primarina|Moonblast|p1a: Wugtrio\n|-damage|p1a: Wugtrio|0 fnt\n|faint|p1a: Wugtrio\n|\n|upkeep\n|\n|t:|1795701406\n|switch|p1a: Venomoth|Venomoth, L84, M|100/100\n|turn|4\n|\n|t:|1795701421\n|switch|p2a: Skeledirge|Skeledirge, L79, M|100/100\n|move|p1a: Venomoth|Sludge Wave|p2a: Skeledirge\n|-resisted|p2a: Skeledirge\n|-damage|p2a: Skeledirge|64/100\n|\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1795701427
+}
