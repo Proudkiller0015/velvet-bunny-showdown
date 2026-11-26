@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-238-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Easy",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆Guvila\n|t:|1795716968\n|gametype|singles\n|badge|p2|gold|gen9rprandombattle|1-1\n|player|p1|Bunny Easy|bunny.png|1145\n|player|p2|Guvila|266|1405\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795716968\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Scizor|Scizor, L79, F|100/100\n|switch|p2a: Alomomola|Alomomola, L87, F|100/100\n|turn|1\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1795716984\n|switch|p2a: Dachsbun|Dachsbun, L92, F|100/100\n|move|p1a: Scizor|Close Combat|p2a: Dachsbun\n|-resisted|p2a: Dachsbun\n|-damage|p2a: Dachsbun|79/100\n|-unboost|p1a: Scizor|def|1\n|-unboost|p1a: Scizor|spd|1\n|\n|-heal|p2a: Dachsbun|85/100|[from] item: Leftovers\n|upkeep\n|turn|2\n|\n|t:|1795716994\n|move|p2a: Dachsbun|Yawn|p1a: Scizor\n|-start|p1a: Scizor|move: Yawn|[of] p2a: Dachsbun\n|move|p1a: Scizor|Close Combat|p2a: Dachsbun\n|-resisted|p2a: Dachsbun\n|-damage|p2a: Dachsbun|65/100\n|-unboost|p1a: Scizor|def|1\n|-unboost|p1a: Scizor|spd|1\n|\n|-heal|p2a: Dachsbun|71/100|[from] item: Leftovers\n|upkeep\n|turn|3\n|\n|t:|1795717013\n|switch|p2a: Rhyperior|Rhyperior, L82, M|100/100\n|move|p1a: Scizor|Close Combat|p2a: Rhyperior\n|-supereffective|p2a: Rhyperior\n|-damage|p2a: Rhyperior|47/100\n|-unboost|p1a: Scizor|def|1\n|-unboost|p1a: Scizor|spd|1\n|\n|-end|p1a: Scizor|move: Yawn|[silent]\n|-status|p1a: Scizor|slp\n|upkeep\n|turn|4\n|\n|t:|1795717024\n|cant|p1a: Scizor|slp\n|move|p2a: Rhyperior|Earthquake|p1a: Scizor\n|-damage|p1a: Scizor|0 fnt\n|faint|p1a: Scizor\n|\n|upkeep\n|\n|t:|1795717025\n|switch|p1a: Hoopa|Hoopa, L85|100/100\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1795717028
+}
