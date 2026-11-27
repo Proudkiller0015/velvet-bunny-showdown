@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-263-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Easy",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆Guvila\n|t:|1795775979\n|gametype|singles\n|badge|p2|gold|gen9rprandombattle|1-1\n|player|p1|Bunny Easy|bunny.png|1173\n|player|p2|Guvila|101|1410\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795775979\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Rabsca|Rabsca, L91, M|100/100\n|switch|p2a: Golurk|Golurk, L87|100/100\n|turn|1\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1795775987\n|move|p2a: Golurk|Poltergeist|p1a: Rabsca\n|-activate|p1a: Rabsca|move: Poltergeist|Heavy-Duty Boots\n|-supereffective|p1a: Rabsca\n|-damage|p1a: Rabsca|0 fnt\n|faint|p1a: Rabsca\n|-damage|p2a: Golurk|91/100|[from] item: Life Orb\n|\n|upkeep\n|\n|t:|1795775987\n|switch|p1a: Raging Bolt|Raging Bolt, L78|100/100\n|turn|2\n|\n|t:|1795775997\n|move|p1a: Raging Bolt|Draco Meteor|p2a: Golurk\n|-damage|p2a: Golurk|39/100\n|-unboost|p1a: Raging Bolt|spa|2\n|move|p2a: Golurk|Earthquake|p1a: Raging Bolt\n|-supereffective|p1a: Raging Bolt\n|-damage|p1a: Raging Bolt|0 fnt\n|faint|p1a: Raging Bolt\n|-end|p1a: Raging Bolt|Protosynthesis|[silent]\n|-damage|p2a: Golurk|29/100|[from] item: Life Orb\n|\n|upkeep\n|\n|t:|1795775997\n|switch|p1a: Lumineon|Lumineon, L93, F|100/100\n|turn|3\n|\n|t:|1795776009\n|move|p1a: Lumineon|Ice Beam|p2a: Golurk\n|-supereffective|p2a: Golurk\n|-damage|p2a: Golurk|0 fnt\n|faint|p2a: Golurk\n|-damage|p1a: Lumineon|91/100|[from] item: Life Orb\n|\n|upkeep\n|\n|t:|1795776022\n|switch|p2a: Meowstic|Meowstic, L89, M|100/100\n|turn|4\n|\n|t:|1795776026\n|-terastallize|p1a: Lumineon|Water\n|move|p2a: Meowstic|Thunder Wave|p1a: Lumineon\n|-status|p1a: Lumineon|par\n|move|p1a: Lumineon|Undertow|p2a: Meowstic\n|-damage|p2a: Meowstic|48/100\n|-damage|p1a: Lumineon|81/100 par|[from] item: Life Orb\n|\n|upkeep\n|turn|5\n|\n|t:|1795776035\n|move|p2a: Meowstic|Light Screen|p2a: Meowstic\n|-sidestart|p2: Guvila|move: Light Screen\n|move|p1a: Lumineon|Undertow|p2a: Meowstic\n|-damage|p2a: Meowstic|21/100\n|-damage|p1a: Lumineon|71/100 par|[from] item: Life Orb\n|\n|upkeep\n|turn|6\n",
+	"inputlog": null,
+	"uploadtime": 1795776036
+}
