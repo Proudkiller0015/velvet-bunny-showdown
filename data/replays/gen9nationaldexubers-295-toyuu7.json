@@ -1,0 +1,12 @@
+{
+	"id": "gen9nationaldexubers-295-toyuu7",
+	"format": "[Gen 9] National Dex Ubers",
+	"players": [
+		"Bunny Easy",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆Guvila\n|t:|1795800359\n|gametype|singles\n|badge|p2|silver|gen9nationaldexubers|2-2\n|player|p1|Bunny Easy|bunny.png|1077\n|player|p2|Guvila|169|1183\n|gen|9\n|tier|[Gen 9] National Dex Ubers\n|rated|\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Endless Battle Clause: Forcing endless battles is banned\n|rule|Species Clause: Limit one of each Pokémon\n|rule|OHKO Clause: OHKO moves are banned\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Evasion Moves Clause: Evasion moves are banned\n|rule|Evasion Items Clause: Evasion items are banned\n|rule|Mega Rayquaza Clause: You cannot mega evolve Rayquaza\n|clearpoke\n|poke|p1|Arceus|\n|poke|p1|Glimmora, F|\n|poke|p1|Ribombee, F|\n|poke|p1|Ho-Oh|\n|poke|p1|Dondozo, F|\n|poke|p1|Necrozma-Dusk-Mane|\n|poke|p2|Garchomp, F|\n|poke|p2|Spiritomb, M|\n|poke|p2|Milotic, M|\n|poke|p2|Roserade, F|\n|poke|p2|Lucario, F|\n|poke|p2|Togekiss, M|\n|teampreview\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1795800367\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Ribombee|Ribombee, F|100/100\n|switch|p2a: Roserade|Roserade, F|100/100\n|turn|1\n|\n|t:|1795800373\n|move|p1a: Ribombee|Moonblast|p2a: Roserade\n|-resisted|p2a: Roserade\n|-damage|p2a: Roserade|80/100\n|move|p2a: Roserade|Sleep Powder|p1a: Ribombee|[miss]\n|-miss|p2a: Roserade|p1a: Ribombee\n|\n|upkeep\n|turn|2\n|\n|t:|1795800380\n|move|p1a: Ribombee|Bug Buzz|p2a: Roserade\n|-damage|p2a: Roserade|43/100\n|move|p2a: Roserade|Sleep Powder|p1a: Ribombee\n|-status|p1a: Ribombee|slp|[from] move: Sleep Powder\n|\n|upkeep\n|turn|3\n|\n|t:|1795800387\n|cant|p1a: Ribombee|slp\n|move|p2a: Roserade|Toxic Spikes|p1a: Ribombee\n|-sidestart|p1: Bunny Easy|move: Toxic Spikes\n|\n|upkeep\n|turn|4\n|\n|t:|1795800392\n|cant|p1a: Ribombee|slp\n|move|p2a: Roserade|Sludge Bomb|p1a: Ribombee\n|-supereffective|p1a: Ribombee\n|-enditem|p1a: Ribombee|Focus Sash\n|-damage|p1a: Ribombee|1/100 slp\n|\n|upkeep\n|turn|5\n|\n|t:|1795800398\n|-terastallize|p1a: Ribombee|Steel\n|cant|p1a: Ribombee|slp\n|move|p2a: Roserade|Sludge Bomb|p1a: Ribombee\n|-immune|p1a: Ribombee\n|\n|upkeep\n|turn|6\n",
+	"inputlog": null,
+	"uploadtime": 1795800400
+}
