@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-290-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Easy",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆Guvila\n|t:|1795798902\n|gametype|singles\n|badge|p2|bronze|gen9rprandombattle|3-3\n|player|p1|Bunny Easy|bunny.png|1272\n|player|p2|Guvila|169|1326\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795798902\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Drifblim|Drifblim, L86, M|100/100\n|switch|p2a: Porygon2|Porygon2, L81|100/100\n|-ability|p2a: Porygon2|Download|boost\n|-boost|p2a: Porygon2|atk|1\n|turn|1\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1795798924\n|move|p1a: Drifblim|Air Slash|p2a: Porygon2\n|-damage|p2a: Porygon2|82/100\n|cant|p2a: Porygon2|flinch\n|\n|upkeep\n|turn|2\n|\n|t:|1795798929\n|move|p1a: Drifblim|Shadow Ball|p2a: Porygon2\n|-immune|p2a: Porygon2\n|move|p2a: Porygon2|Thunder Wave|p1a: Drifblim\n|-status|p1a: Drifblim|par\n|\n|upkeep\n|turn|3\n|\n|t:|1795798936\n|move|p2a: Porygon2|Velvet Press|p1a: Drifblim\n|-damage|p1a: Drifblim|81/100 par\n|move|p1a: Drifblim|Air Slash|p2a: Porygon2\n|-damage|p2a: Porygon2|63/100\n|\n|upkeep\n|turn|4\n|\n|t:|1795798941\n|move|p2a: Porygon2|Velvet Press|p1a: Drifblim\n|-crit|p1a: Drifblim\n|-damage|p1a: Drifblim|55/100 par\n|move|p1a: Drifblim|Shadow Ball|p2a: Porygon2\n|-immune|p2a: Porygon2\n|\n|upkeep\n|turn|5\n|\n|t:|1795798955\n|switch|p2a: Arbok|Arbok, L87, F|100/100\n|-ability|p2a: Arbok|Intimidate|boost\n|-unboost|p1a: Drifblim|atk|1\n|-terastallize|p1a: Drifblim|Steel\n|move|p1a: Drifblim|Shadow Ball|p2a: Arbok\n|-damage|p2a: Arbok|67/100\n|\n|-heal|p2a: Arbok|73/100|[from] item: Leftovers\n|upkeep\n|turn|6\n",
+	"inputlog": null,
+	"uploadtime": 1795798960
+}
