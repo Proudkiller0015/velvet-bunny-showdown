@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-275-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Easy",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆Guvila\n|t:|1795780329\n|gametype|singles\n|badge|p2|gold|gen9rprandombattle|1-1\n|player|p1|Bunny Easy|bunny.png|1221\n|player|p2|Guvila|101|1390\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795780330\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Politoed|Politoed, L88, F|100/100\n|switch|p2a: Gallade|Gallade, L80, M|100/100\n|-weather|RainDance|[from] ability: Drizzle|[of] p1a: Politoed\n|turn|1\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1795780340\n|-terastallize|p1a: Politoed|Water\n|move|p2a: Gallade|Agility|p2a: Gallade\n|-boost|p2a: Gallade|spe|2\n|move|p1a: Politoed|Undertow|p2a: Gallade\n|-damage|p2a: Gallade|30/100\n|\n|-weather|RainDance|[upkeep]\n|upkeep\n|turn|2\n|\n|t:|1795780351\n|move|p2a: Gallade|Sacred Sword|p1a: Politoed\n|-damage|p1a: Politoed|21/100\n|-damage|p2a: Gallade|20/100|[from] item: Life Orb\n|move|p1a: Politoed|Undertow|p2a: Gallade\n|-damage|p2a: Gallade|0 fnt\n|faint|p2a: Gallade\n|\n|-weather|RainDance|[upkeep]\n|upkeep\n|\n|t:|1795780366\n|switch|p2a: Lurantis|Lurantis, L87, F|100/100\n|turn|3\n|\n|t:|1795780369\n|move|p1a: Politoed|Undertow|p2a: Lurantis\n|-resisted|p2a: Lurantis\n|-crit|p2a: Lurantis\n|-damage|p2a: Lurantis|61/100\n|-boost|p2a: Lurantis|spe|1\n|move|p2a: Lurantis|Leaf Storm|p1a: Politoed\n|-supereffective|p1a: Politoed\n|-damage|p1a: Politoed|0 fnt\n|-boost|p2a: Lurantis|spa|2\n|faint|p1a: Politoed\n|\n|-weather|RainDance|[upkeep]\n|upkeep\n|\n|t:|1795780369\n|switch|p1a: Metagross|Metagross, L79|100/100\n|turn|4\n|\n|t:|1795780392\n|move|p2a: Lurantis|Knock Off|p1a: Metagross\n|-supereffective|p1a: Metagross\n|-damage|p1a: Metagross|51/100\n|-enditem|p1a: Metagross|Choice Band|[from] move: Knock Off|[of] p2a: Lurantis\n|move|p1a: Metagross|Psychic Fangs|p2a: Lurantis\n|-damage|p2a: Lurantis|21/100\n|\n|-weather|RainDance|[upkeep]\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1795780397
+}
