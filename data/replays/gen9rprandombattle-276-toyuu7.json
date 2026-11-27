@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-276-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Easy",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆Guvila\n|t:|1795785255\n|gametype|singles\n|badge|p2|gold|gen9rprandombattle|1-1\n|player|p1|Bunny Easy|bunny.png|1213\n|player|p2|Guvila|101|1401\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795785256\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Meowscarada|Meowscarada, L78, M|100/100\n|switch|p2a: Slither Wing|Slither Wing, L81|100/100\n|turn|1\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1795785323\n|move|p2a: Slither Wing|U-turn|p1a: Meowscarada\n|-supereffective|p1a: Meowscarada\n|-crit|p1a: Meowscarada\n|-enditem|p1a: Meowscarada|Focus Sash\n|-damage|p1a: Meowscarada|1/100\n|\n|t:|1795785334\n|-end|p2a: Slither Wing|Protosynthesis|[silent]\n|switch|p2a: Chien-Pao|Chien-Pao, L72|100/100|[from] U-turn\n|-ability|p2a: Chien-Pao|Sword of Ruin\n|move|p1a: Meowscarada|Flower Trick|p2a: Chien-Pao\n|-start|p1a: Meowscarada|typechange|Grass|[from] ability: Protean\n|-crit|p2a: Chien-Pao\n|-damage|p2a: Chien-Pao|39/100\n|\n|upkeep\n|turn|2\n|\n|t:|1795785344\n|move|p1a: Meowscarada|Flower Trick|p2a: Chien-Pao\n|-crit|p2a: Chien-Pao\n|-damage|p2a: Chien-Pao|0 fnt\n|faint|p2a: Chien-Pao\n|\n|upkeep\n|\n|t:|1795785355\n|switch|p2a: Inteleon|Inteleon, L81, F|100/100\n|turn|3\n|\n|t:|1795785359\n|move|p2a: Inteleon|Ice Beam|p1a: Meowscarada\n|-supereffective|p1a: Meowscarada\n|-damage|p1a: Meowscarada|0 fnt\n|faint|p1a: Meowscarada\n|\n|upkeep\n|\n|t:|1795785359\n|switch|p1a: Arceus|Arceus-Bug, L73|100/100\n|turn|4\n|\n|t:|1795785369\n|switch|p2a: Slither Wing|Slither Wing, L81|100/100\n|move|p1a: Arceus|Earth Power|p2a: Slither Wing\n|-resisted|p2a: Slither Wing\n|-damage|p2a: Slither Wing|90/100\n|\n|upkeep\n|turn|5\n|\n|t:|1795785377\n|-terastallize|p1a: Arceus|Ground\n|move|p2a: Slither Wing|Flare Blitz|p1a: Arceus\n|-damage|p1a: Arceus|71/100\n|-damage|p2a: Slither Wing|79/100|[from] Recoil\n|move|p1a: Arceus|Earth Power|p2a: Slither Wing\n|-resisted|p2a: Slither Wing\n|-damage|p2a: Slither Wing|65/100\n|\n|upkeep\n|turn|6\n",
+	"inputlog": null,
+	"uploadtime": 1795785377
+}
