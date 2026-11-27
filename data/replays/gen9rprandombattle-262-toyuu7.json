@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-262-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Easy",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆Guvila\n|t:|1795775769\n|gametype|singles\n|badge|p2|gold|gen9rprandombattle|1-1\n|player|p1|Bunny Easy|bunny.png|1183\n|player|p2|Guvila|101|1401\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795775769\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Incineroar|Incineroar, L82, F|100/100\n|switch|p2a: Spectrier|Spectrier, L75|100/100\n|-ability|p1a: Incineroar|Intimidate|boost\n|-unboost|p2a: Spectrier|atk|1\n|turn|1\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1795775781\n|switch|p2a: Drednaw|Drednaw, L81, F|100/100\n|move|p1a: Incineroar|Overheat|p2a: Drednaw|[miss]\n|-miss|p1a: Incineroar|p2a: Drednaw\n|\n|upkeep\n|turn|2\n|\n|t:|1795775789\n|-terastallize|p1a: Incineroar|Fighting\n|move|p2a: Drednaw|Shell Smash|p2a: Drednaw\n|-unboost|p2a: Drednaw|def|1\n|-unboost|p2a: Drednaw|spd|1\n|-boost|p2a: Drednaw|atk|2\n|-boost|p2a: Drednaw|spa|2\n|-boost|p2a: Drednaw|spe|2\n|-enditem|p2a: Drednaw|White Herb\n|-clearnegativeboost|p2a: Drednaw|[silent]\n|move|p1a: Incineroar|Overheat|p2a: Drednaw\n|-resisted|p2a: Drednaw\n|-damage|p2a: Drednaw|88/100\n|-unboost|p1a: Incineroar|spa|2\n|\n|upkeep\n|turn|3\n|\n|t:|1795775801\n|move|p2a: Drednaw|Liquidation|p1a: Incineroar\n|-damage|p1a: Incineroar|31/100\n|move|p1a: Incineroar|Overheat|p2a: Drednaw\n|-resisted|p2a: Drednaw\n|-damage|p2a: Drednaw|81/100\n|-unboost|p1a: Incineroar|spa|2\n|\n|upkeep\n|turn|4\n|\n|t:|1795775808\n|move|p2a: Drednaw|Liquidation|p1a: Incineroar\n|-damage|p1a: Incineroar|0 fnt\n|faint|p1a: Incineroar\n|\n|upkeep\n|\n|t:|1795775808\n|switch|p1a: Iron Leaves|Iron Leaves, L80|100/100\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1795775816
+}
