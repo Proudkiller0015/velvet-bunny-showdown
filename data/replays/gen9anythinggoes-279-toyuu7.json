@@ -1,0 +1,12 @@
+{
+	"id": "gen9anythinggoes-279-toyuu7",
+	"format": "[Gen 9] Anything Goes",
+	"players": [
+		"Bunny Easy",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆Guvila\n|t:|1795787191\n|gametype|singles\n|badge|p1|gold|gen9anythinggoes|1-1\n|badge|p2|silver|gen9anythinggoes|2-2\n|player|p1|Bunny Easy|bunny.png|1045\n|player|p2|Guvila|101|1000\n|gen|9\n|tier|[Gen 9] Anything Goes\n|rated|\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Endless Battle Clause: Forcing endless battles is banned\n|clearpoke\n|poke|p1|Arceus-Rock|\n|poke|p1|Clodsire, F|\n|poke|p1|Deoxys-Speed|\n|poke|p1|Ho-Oh|\n|poke|p1|Kyurem-Black|\n|poke|p1|Glimmora, F|\n|poke|p2|Greninja-*, F|\n|poke|p2|Zoroark, M|\n|poke|p2|Lucario, F|\n|poke|p2|Infernape, M|\n|poke|p2|Ninetales, F|\n|poke|p2|Garchomp, F|\n|teampreview\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1795787210\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Deoxys|Deoxys-Speed|100/100\n|switch|p2a: Kurama|Ninetales, F|100/100\n|-ability|p1a: Deoxys|Pressure\n|-weather|SunnyDay|[from] ability: Drought|[of] p2a: Kurama\n|turn|1\n|\n|t:|1795787219\n|-terastallize|p1a: Deoxys|Psychic\n|move|p1a: Deoxys|Future Sight|p2a: Kurama\n|-start|p1a: Deoxys|move: Future Sight\n|move|p2a: Kurama|Will-O-Wisp|p1a: Deoxys\n|-status|p1a: Deoxys|brn\n|\n|-weather|SunnyDay|[upkeep]\n|-damage|p1a: Deoxys|94/100 brn|[from] brn\n|upkeep\n|turn|2\n|\n|t:|1795787227\n|move|p1a: Deoxys|Focus Blast|p2a: Kurama\n|-damage|p2a: Kurama|60/100\n|-damage|p1a: Deoxys|84/100 brn|[from] item: Life Orb\n|move|p2a: Kurama|Flamethrower|p1a: Deoxys\n|-damage|p1a: Deoxys|29/100 brn\n|\n|-weather|SunnyDay|[upkeep]\n|-damage|p1a: Deoxys|22/100 brn|[from] brn\n|upkeep\n|turn|3\n|\n|t:|1795787237\n|move|p1a: Deoxys|Focus Blast|p2a: Kurama\n|-damage|p2a: Kurama|19/100\n|-damage|p1a: Deoxys|12/100 brn|[from] item: Life Orb\n|move|p2a: Kurama|Flamethrower|p1a: Deoxys\n|-damage|p1a: Deoxys|0 fnt\n|faint|p1a: Deoxys\n|\n|-weather|SunnyDay|[upkeep]\n|-end|p2a: Kurama|move: Future Sight\n|-damage|p2a: Kurama|0 fnt\n|faint|p2a: Kurama\n|upkeep\n|\n|t:|1795787250\n|switch|p1a: Glimmora|Glimmora, F|100/100\n|switch|p2a: Naruto|Greninja, F|100/100\n|turn|4\n|\n|t:|1795787256\n|move|p2a: Naruto|Hydro Pump|p1a: Glimmora|[miss]\n|-start|p2a: Naruto|typechange|Water|[from] ability: Protean\n|-miss|p2a: Naruto|p1a: Glimmora\n|move|p1a: Glimmora|Dazzling Gleam|p2a: Naruto\n|-damage|p2a: Naruto|62/100\n|\n|-weather|SunnyDay|[upkeep]\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1795787258
+}
