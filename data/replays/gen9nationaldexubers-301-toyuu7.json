@@ -1,0 +1,12 @@
+{
+	"id": "gen9nationaldexubers-301-toyuu7",
+	"format": "[Gen 9] National Dex Ubers",
+	"players": [
+		"Bunny Easy",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆Guvila\n|t:|1795801754\n|gametype|singles\n|badge|p1|bronze|gen9nationaldexubers|3-3\n|badge|p2|silver|gen9nationaldexubers|2-2\n|player|p1|Bunny Easy|bunny.png|1157\n|player|p2|Guvila|serena|1188\n|gen|9\n|tier|[Gen 9] National Dex Ubers\n|rated|\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Endless Battle Clause: Forcing endless battles is banned\n|rule|Species Clause: Limit one of each Pokémon\n|rule|OHKO Clause: OHKO moves are banned\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Evasion Moves Clause: Evasion moves are banned\n|rule|Evasion Items Clause: Evasion items are banned\n|rule|Mega Rayquaza Clause: You cannot mega evolve Rayquaza\n|clearpoke\n|poke|p1|Glimmora, M|\n|poke|p1|Rayquaza|\n|poke|p1|Hatterene, F|\n|poke|p1|Chansey, F|\n|poke|p1|Arceus-Dark|\n|poke|p1|Lunala|\n|poke|p2|Delphox, F|\n|poke|p2|Sylveon, F|\n|poke|p2|Absol, M|\n|poke|p2|Milotic, F|\n|poke|p2|Talonflame, M|\n|poke|p2|Gardevoir, F|\n|teampreview\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1795801769\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Arceus|Arceus-Dark|100/100\n|switch|p2a: Milotic|Milotic, F|100/100\n|turn|1\n|\n|t:|1795801787\n|switch|p2a: Sylveon|Sylveon, F|100/100\n|move|p1a: Arceus|Dark Pulse|p2a: Sylveon\n|-resisted|p2a: Sylveon\n|-damage|p2a: Sylveon|88/100\n|\n|-heal|p2a: Sylveon|94/100|[from] item: Leftovers\n|upkeep\n|turn|2\n|\n|t:|1795801810\n|move|p1a: Arceus|Dark Pulse|p2a: Sylveon\n|-resisted|p2a: Sylveon\n|-crit|p2a: Sylveon\n|-damage|p2a: Sylveon|75/100\n|move|p2a: Sylveon|Hyper Voice|p1a: Arceus\n|-supereffective|p1a: Arceus\n|-damage|p1a: Arceus|53/100\n|\n|-heal|p2a: Sylveon|81/100|[from] item: Leftovers\n|upkeep\n|turn|3\n|\n|t:|1795801822\n|-terastallize|p1a: Arceus|Ghost\n|move|p1a: Arceus|Dark Pulse|p2a: Sylveon\n|-resisted|p2a: Sylveon\n|-damage|p2a: Sylveon|68/100\n|move|p2a: Sylveon|Wish|p2a: Sylveon\n|\n|-heal|p2a: Sylveon|74/100|[from] item: Leftovers\n|upkeep\n|turn|4\n|\n|t:|1795801834\n|move|p1a: Arceus|Dark Pulse|p2a: Sylveon\n|-resisted|p2a: Sylveon\n|-damage|p2a: Sylveon|60/100\n|move|p2a: Sylveon|Hyper Voice|p1a: Arceus\n|-damage|p1a: Arceus|28/100\n|\n|-heal|p2a: Sylveon|100/100|[from] move: Wish|[wisher] Sylveon\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1795801840
+}
