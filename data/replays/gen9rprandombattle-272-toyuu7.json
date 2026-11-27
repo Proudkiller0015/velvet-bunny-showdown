@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-272-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Easy",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆Guvila\n|t:|1795779579\n|gametype|singles\n|badge|p2|gold|gen9rprandombattle|1-1\n|player|p1|Bunny Easy|bunny.png|1218\n|player|p2|Guvila|101|1394\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795779579\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Sawsbuck|Sawsbuck-Autumn, L88, F|100/100\n|switch|p2a: Perrserker|Perrserker, L89, M|100/100\n|turn|1\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1795779610\n|-terastallize|p1a: Sawsbuck|Normal\n|move|p1a: Sawsbuck|Double-Edge|p2a: Perrserker\n|-resisted|p2a: Perrserker\n|-damage|p2a: Perrserker|58/100\n|-damage|p1a: Sawsbuck|87/100|[from] Recoil\n|-damage|p1a: Sawsbuck|77/100|[from] item: Life Orb\n|move|p2a: Perrserker|Close Combat|p1a: Sawsbuck\n|-supereffective|p1a: Sawsbuck\n|-damage|p1a: Sawsbuck|0 fnt\n|-unboost|p2a: Perrserker|def|1\n|-unboost|p2a: Perrserker|spd|1\n|faint|p1a: Sawsbuck\n|-damage|p2a: Perrserker|48/100|[from] item: Life Orb\n|\n|upkeep\n|\n|t:|1795779610\n|switch|p1a: Blaziken|Blaziken, L76, M|100/100\n|turn|2\n|\n|t:|1795779639\n|move|p1a: Blaziken|Swords Dance|p1a: Blaziken\n|-boost|p1a: Blaziken|atk|2\n|move|p2a: Perrserker|Close Combat|p1a: Blaziken\n|-damage|p1a: Blaziken|3/100\n|-unboost|p2a: Perrserker|def|1\n|-unboost|p2a: Perrserker|spd|1\n|-damage|p2a: Perrserker|39/100|[from] item: Life Orb\n|\n|-ability|p1a: Blaziken|Speed Boost|boost\n|-boost|p1a: Blaziken|spe|1\n|upkeep\n|turn|3\n|\n|t:|1795779650\n|move|p1a: Blaziken|Flare Blitz|p2a: Perrserker\n|-supereffective|p2a: Perrserker\n|-damage|p2a: Perrserker|0 fnt\n|faint|p2a: Perrserker\n|-damage|p1a: Blaziken|0 fnt|[from] Recoil\n|faint|p1a: Blaziken\n|\n|upkeep\n|\n|t:|1795779658\n|switch|p1a: Moltres|Moltres-Galar, L79|100/100\n|switch|p2a: Swanna|Swanna, L89, M|100/100\n|turn|4\n|\n|t:|1795779670\n|switch|p2a: Decidueye|Decidueye-Hisui, L87, M|100/100\n|move|p1a: Moltres|Hurricane|p2a: Decidueye|[miss]\n|-miss|p1a: Moltres|p2a: Decidueye\n|\n|upkeep\n|turn|5\n",
+	"inputlog": null,
+	"uploadtime": 1795779677
+}
