@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-266-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Easy",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆Guvila\n|t:|1795776571\n|gametype|singles\n|badge|p2|gold|gen9rprandombattle|1-1\n|player|p1|Bunny Easy|bunny.png|1199\n|player|p2|Guvila|101|1400\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795776571\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Klawf|Klawf, L90, M|272/272\n|switch|p2a: Jumpluff|Jumpluff, L87, F|271/271\n|turn|1\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|\n|t:|1795776592\n|switch|p2a: Tauros|Tauros-Paldea-Aqua, L81, M|252/252\n|move|p1a: Klawf|Crag Hammer|p2a: Tauros\n|-resisted|p2a: Tauros\n|-damage|p2a: Tauros|183/252\n|-damage|p1a: Klawf|245/272|[from] item: Life Orb\n|\n|upkeep\n|turn|2\n|\n|t:|1795776600\n|-terastallize|p1a: Klawf|Water\n|move|p2a: Tauros|Bulk Up|p2a: Tauros\n|-boost|p2a: Tauros|atk|1\n|-boost|p2a: Tauros|def|1\n|move|p1a: Klawf|High Horsepower|p2a: Tauros\n|-crit|p2a: Tauros\n|-damage|p2a: Tauros|37/252\n|-enditem|p2a: Tauros|Sitrus Berry|[eat]\n|-heal|p2a: Tauros|100/252|[from] item: Sitrus Berry\n|-damage|p1a: Klawf|218/272|[from] item: Life Orb\n|\n|upkeep\n|turn|3\n|-message|Guvila forfeited.\n|\n|win|Bunny Easy\n",
+	"inputlog": ">start {\"formatid\":\"gen9rprandombattle\",\"seed\":\"sodium,de5974f032aae9b8e2ebc2a4d6f327ba\",\"rated\":\"Rated battle\"}\n>player p1 {\"name\":\"Bunny Easy\",\"avatar\":\"bunny.png\",\"rating\":1199,\"seed\":\"sodium,60e7bfc9b883f43eb83404482597ede5\"}\n>player p2 {\"name\":\"Guvila\",\"avatar\":\"101\",\"rating\":1400,\"seed\":\"sodium,7c6ef74df71b085f192083423025a43b\"}\n>chat ☆Bunny Easy|Good luck! Playing on **easy**.\n>p1 move craghammer\n>p2 switch 5\n>p1 move highhorsepower terastallize\n>p2 move bulkup\n>forcelose p2",
+	"uploadtime": 1795776620
+}
