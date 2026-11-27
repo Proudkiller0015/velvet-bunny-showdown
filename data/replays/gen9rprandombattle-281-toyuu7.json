@@ -1,0 +1,12 @@
+{
+	"id": "gen9rprandombattle-281-toyuu7",
+	"format": "[Gen 9] RP Random Battle",
+	"players": [
+		"Bunny Easy",
+		"Guvila"
+	],
+	"rating": null,
+	"log": "|j|☆Bunny Easy\n|j|☆Guvila\n|t:|1795788331\n|gametype|singles\n|badge|p2|gold|gen9rprandombattle|1-1\n|player|p1|Bunny Easy|bunny.png|1229\n|player|p2|Guvila|101|1380\n|gen|9\n|tier|[Gen 9] RP Random Battle\n|rated|\n|rule|Species Clause: Limit one of each Pokémon\n|rule|HP Percentage Mod: HP is shown in percentages\n|rule|Sleep Clause Mod: Limit one foe put to sleep\n|rule|Illusion Level Mod: Illusion disguises the Pokémon's true level\n|\n|t:|1795788331\n|teamsize|p1|6\n|teamsize|p2|6\n|start\n|switch|p1a: Munkidori|Munkidori, L79, M|269/269\n|switch|p2a: Araquanid|Araquanid, L82, F|246/246\n|turn|1\n|c|☆Bunny Easy|Good luck! Playing on **easy**.\n|-message|Guvila forfeited.\n|\n|win|Bunny Easy\n",
+	"inputlog": ">start {\"formatid\":\"gen9rprandombattle\",\"seed\":\"sodium,e78b7c96bf600bff57883678c678f66a\",\"rated\":\"Rated battle\"}\n>player p1 {\"name\":\"Bunny Easy\",\"avatar\":\"bunny.png\",\"rating\":1229,\"seed\":\"sodium,569833e92bf0aebfd0783824ee854713\"}\n>player p2 {\"name\":\"Guvila\",\"avatar\":\"101\",\"rating\":1380,\"seed\":\"sodium,90c2a4ee07625708c63fdcaf3c7341a6\"}\n>chat ☆Bunny Easy|Good luck! Playing on **easy**.\n>forcelose p2",
+	"uploadtime": 1795788334
+}
